@@ -115,6 +115,7 @@ final class TokenType
     public const T_DEPRECATED   = 399;
     public const T_REQUIRE_ONCE = 459;
     public const T_YIELD        = 460;
+    public const T_TRAIT        = 461;
     public const T_ELSEIF       = 452;
     public const T_INTERNAL     = 453;
 

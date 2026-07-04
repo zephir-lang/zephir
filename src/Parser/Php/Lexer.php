@@ -47,6 +47,7 @@ final class Lexer
         'as'           => TokenType::T_AS,
         'interface'    => TokenType::T_INTERFACE,
         'class'        => TokenType::T_CLASS,
+        'trait'        => TokenType::T_TRAIT,
         'extends'      => TokenType::T_EXTENDS,
         'implements'   => TokenType::T_IMPLEMENTS,
         'internal'     => TokenType::T_INTERNAL,
@@ -536,7 +537,7 @@ final class Lexer
         $this->activeChar += strlen($lexeme);
         $this->tOpcode = $kw;
 
-        if ($kw === TokenType::T_CLASS) {
+        if ($kw === TokenType::T_CLASS || $kw === TokenType::T_TRAIT) {
             $this->classLine = $this->activeLine;
             $this->classChar = $this->activeChar;
         } elseif ($kw === TokenType::T_FUNCTION) {

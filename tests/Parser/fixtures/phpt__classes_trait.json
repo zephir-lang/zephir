@@ -1,0 +1,226 @@
+[
+    {
+        "type": "namespace",
+        "name": "Test",
+        "file": "phpt__classes_trait.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "trait",
+        "name": "Greeter",
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "greeting",
+                    "default": {
+                        "type": "string",
+                        "value": "hello",
+                        "file": "phpt__classes_trait.zep",
+                        "line": 5,
+                        "char": 28
+                    },
+                    "file": "phpt__classes_trait.zep",
+                    "line": 7,
+                    "char": 6
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "greet",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "name",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "phpt__classes_trait.zep",
+                            "line": 9,
+                            "char": 35
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "concat",
+                                "left": {
+                                    "type": "concat",
+                                    "left": {
+                                        "type": "property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "phpt__classes_trait.zep",
+                                            "line": 11,
+                                            "char": 15
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "greeting",
+                                            "file": "phpt__classes_trait.zep",
+                                            "line": 11,
+                                            "char": 25
+                                        },
+                                        "file": "phpt__classes_trait.zep",
+                                        "line": 11,
+                                        "char": 25
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": " ",
+                                        "file": "phpt__classes_trait.zep",
+                                        "line": 11,
+                                        "char": 29
+                                    },
+                                    "file": "phpt__classes_trait.zep",
+                                    "line": 11,
+                                    "char": 29
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "name",
+                                    "file": "phpt__classes_trait.zep",
+                                    "line": 11,
+                                    "char": 35
+                                },
+                                "file": "phpt__classes_trait.zep",
+                                "line": 11,
+                                "char": 35
+                            },
+                            "file": "phpt__classes_trait.zep",
+                            "line": 12,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "phpt__classes_trait.zep",
+                                "line": 10,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "phpt__classes_trait.zep",
+                        "line": 10,
+                        "char": 2
+                    },
+                    "file": "phpt__classes_trait.zep",
+                    "line": 9,
+                    "last-line": 14,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "shout",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "HI",
+                                "file": "phpt__classes_trait.zep",
+                                "line": 16,
+                                "char": 12
+                            },
+                            "file": "phpt__classes_trait.zep",
+                            "line": 17,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "phpt__classes_trait.zep",
+                                "line": 15,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "phpt__classes_trait.zep",
+                        "line": 15,
+                        "char": 2
+                    },
+                    "file": "phpt__classes_trait.zep",
+                    "line": 14,
+                    "last-line": 19,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "label",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "phpt__classes_trait.zep",
+                                "line": 19,
+                                "char": 44
+                            }
+                        ],
+                        "void": 0,
+                        "file": "phpt__classes_trait.zep",
+                        "line": 19,
+                        "char": 44
+                    },
+                    "file": "phpt__classes_trait.zep",
+                    "line": 19,
+                    "last-line": 20,
+                    "char": 25
+                }
+            ],
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "STEP",
+                    "default": {
+                        "type": "int",
+                        "value": "2",
+                        "file": "phpt__classes_trait.zep",
+                        "line": 7,
+                        "char": 16
+                    },
+                    "file": "phpt__classes_trait.zep",
+                    "line": 9,
+                    "char": 7
+                }
+            ],
+            "file": "phpt__classes_trait.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__classes_trait.zep",
+        "line": 3,
+        "char": 5
+    }
+]

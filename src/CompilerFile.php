@@ -137,7 +137,7 @@ final class CompilerFile implements FileInterface
     {
         $code = $this->generateCodeHeadersPre($this->classDefinition);
 
-        if ('class' == $this->classDefinition->getType()) {
+        if (!$this->classDefinition->isInterface()) {
             $code .= '#include <Zend/zend_operators.h>' . PHP_EOL;
             $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
             $code .= '#include <Zend/zend_interfaces.h>' . PHP_EOL;
@@ -266,6 +266,55 @@ final class CompilerFile implements FileInterface
         if (count($interfaceDefinitions) > 0) {
             $classDefinition->setImplementedInterfaceDefinitions($interfaceDefinitions);
         }
+
+        /**
+         * Resolve used trait names to their Definitions. Unlike interfaces,
+         * unresolved traits are hard errors: the merge needs the trait's AST,
+         * so a missing trait cannot degrade to a runtime lookup.
+         */
+        $traitDefinitions = [];
+        foreach ($classDefinition->getUsedTraits() as $traitName) {
+            if ($compiler->isTrait($traitName)) {
+                $traitDefinitions[strtolower($traitName)] = $compiler->getClassDefinition($traitName);
+                continue;
+            }
+
+            if ($compiler->isClass($traitName) || $compiler->isInterface($traitName)) {
+                throw new CompilerException(
+                    sprintf(
+                        '"%s" cannot be used as a trait on "%s": it is %s',
+                        $traitName,
+                        $classDefinition->getCompleteName(),
+                        $compiler->isClass($traitName) ? 'a class' : 'an interface'
+                    ),
+                    $this->originalNode
+                );
+            }
+
+            if (trait_exists($traitName, false)) {
+                throw new CompilerException(
+                    sprintf(
+                        'PHP trait "%s" cannot be used by "%s": traits must be declared within the extension',
+                        $traitName,
+                        $classDefinition->getCompleteName()
+                    ),
+                    $this->originalNode
+                );
+            }
+
+            throw new CompilerException(
+                sprintf(
+                    'Cannot locate trait "%s" when processing `use` on "%s"',
+                    $traitName,
+                    $classDefinition->getCompleteName()
+                ),
+                $this->originalNode
+            );
+        }
+
+        if (count($traitDefinitions) > 0) {
+            $classDefinition->setUsedTraitDefinitions($traitDefinitions);
+        }
     }
 
     /**
@@ -344,6 +393,7 @@ final class CompilerFile implements FileInterface
             switch ($topStatement['type']) {
                 case 'class':
                 case Definition::TYPE_INTERFACE:
+                case Definition::TYPE_TRAIT:
                     if ($interface || $class) {
                         throw new CompilerException('More than one class defined in the same file', $topStatement);
                     }
@@ -718,14 +768,15 @@ final class CompilerFile implements FileInterface
         $name        = null;
         $class       = false;
         $interface   = false;
+        $trait       = false;
         $lastComment = null;
 
         foreach ($ir as $topStatement) {
             switch ($topStatement['type']) {
                 case 'class':
-                    if ($class || $interface) {
+                    if ($class || $interface || $trait) {
                         throw new CompilerException(
-                            'More than one class/interface defined in the same file',
+                            'More than one class/interface/trait defined in the same file',
                             $topStatement
                         );
                     }
@@ -737,9 +788,9 @@ final class CompilerFile implements FileInterface
                     break;
 
                 case Definition::TYPE_INTERFACE:
-                    if ($class || $interface) {
+                    if ($class || $interface || $trait) {
                         throw new CompilerException(
-                            'More than one class/interface defined in the same file',
+                            'More than one class/interface/trait defined in the same file',
                             $topStatement
                         );
                     }
@@ -750,10 +801,24 @@ final class CompilerFile implements FileInterface
                     $lastComment        = null;
                     break;
 
-                case 'use':
-                    if ($interface || $class) {
+                case Definition::TYPE_TRAIT:
+                    if ($class || $interface || $trait) {
                         throw new CompilerException(
-                            'Aliasing must be done before declaring any class or interface',
+                            'More than one class/interface/trait defined in the same file',
+                            $topStatement
+                        );
+                    }
+                    $trait = true;
+                    $name  = $topStatement['name'];
+                    $this->preCompileTrait($compilationContext, $namespace, $topStatement, $lastComment);
+                    $this->originalNode = $topStatement;
+                    $lastComment        = null;
+                    break;
+
+                case 'use':
+                    if ($interface || $class || $trait) {
+                        throw new CompilerException(
+                            'Aliasing must be done before declaring any class, interface or trait',
                             $topStatement
                         );
                     }
@@ -779,9 +844,9 @@ final class CompilerFile implements FileInterface
             }
         }
 
-        if (!$class && !$interface) {
+        if (!$class && !$interface && !$trait) {
             throw new CompilerException(
-                'Every file must contain at least a class or an interface',
+                'Every file must contain at least a class, an interface or a trait',
                 $topStatement ?? null
             );
         }
@@ -855,69 +920,10 @@ final class CompilerFile implements FileInterface
         }
 
         if (isset($topStatement['definition'])) {
-            $definition = $topStatement['definition'];
-
-            if (isset($definition['properties'])) {
-                foreach ($definition['properties'] as $property) {
-                    /**
-                     * Add property to the definition
-                     */
-                    $classDefinition->addProperty(
-                        new Property(
-                            $classDefinition,
-                            $property['visibility'],
-                            $property['name'],
-                            $property['default'] ?? null,
-                            $property['docblock'] ?? null,
-                            $property
-                        )
-                    );
-
-                    /**
-                     * Check and process shortcuts
-                     */
-                    if (isset($property['shortcuts'])) {
-                        $this->processShortcuts($property, $classDefinition);
-                    }
-                }
-            }
-
-            /**
-             * Register constants
-             */
-            if (isset($definition['constants'])) {
-                foreach ($definition['constants'] as $constant) {
-                    $classDefinition->addConstant(
-                        new Constant(
-                            $constant['name'],
-                            $constant['default'] ?? null,
-                            $constant['docblock'] ?? null
-                        )
-                    );
-                }
-            }
-
-            /**
-             * Register methods
-             */
-            if (isset($definition['methods'])) {
-                foreach ($definition['methods'] as $method) {
-                    $classDefinition->addMethod(
-                        new Method(
-                            $classDefinition,
-                            $method['visibility'],
-                            $method['name'],
-                            isset($method['parameters']) ? new Parameters($method['parameters']) : null,
-                            isset($method['statements']) ? new StatementsBlock($method['statements']) : null,
-                            $method['docblock'] ?? null,
-                            $method['return-type'] ?? null,
-                            $method
-                        ),
-                        $method
-                    );
-                }
-            }
+            $this->registerDefinitionMembers($classDefinition, $topStatement['definition']);
         }
+
+        $classDefinition->setUsedTraits($this->extractUsedTraits($topStatement));
 
         $this->classDefinition = $classDefinition;
 
@@ -930,6 +936,154 @@ final class CompilerFile implements FileInterface
          * Run pre-compilation passes
          */
         $classDefinition->preCompile($compilationContext);
+    }
+
+    /**
+     * Creates a definition for a trait. Traits take no modifiers and cannot
+     * extend or implement (enforced by the parser grammar). The raw AST node
+     * is stored right away — trait members are re-instantiated from it into
+     * each using class before code generation.
+     */
+    public function preCompileTrait(
+        CompilationContext $compilationContext,
+        string $namespace,
+        array $topStatement,
+        ?array $docblock = null,
+    ): void {
+        $classDefinition = new Definition($namespace, $topStatement['name']);
+        $classDefinition->setIsExternal($this->external);
+        $classDefinition->setType(Definition::TYPE_TRAIT);
+        $classDefinition->setOriginalNode($topStatement);
+
+        if (is_array($docblock)) {
+            $classDefinition->setDocBlock($docblock['value']);
+        }
+
+        if (isset($topStatement['definition'])) {
+            /**
+             * Array/object property defaults need a create_object initializer,
+             * which the engine does not carry over when a PHP userland class
+             * binds the trait — the property would silently become null there.
+             * Reject them until traits get a userland-safe initializer.
+             */
+            foreach ($topStatement['definition']['properties'] ?? [] as $property) {
+                $defaultType = $property['default']['type'] ?? null;
+                if ('array' === $defaultType || 'empty-array' === $defaultType) {
+                    throw new CompilerException(
+                        sprintf(
+                            'Property "%s" of trait "%s" cannot have an array default value',
+                            $property['name'],
+                            $classDefinition->getCompleteName()
+                        ),
+                        $property
+                    );
+                }
+            }
+
+            $this->registerDefinitionMembers($classDefinition, $topStatement['definition']);
+        }
+
+        $classDefinition->setUsedTraits($this->extractUsedTraits($topStatement));
+
+        $this->classDefinition = $classDefinition;
+
+        /**
+         * Assign current class definition to the compilation context
+         */
+        $compilationContext->classDefinition = $classDefinition;
+
+        /**
+         * Run pre-compilation passes
+         */
+        $classDefinition->preCompile($compilationContext);
+    }
+
+    /**
+     * Builds Property/Constant/Method objects from a parsed `definition` node
+     * and registers them on the given class/trait definition. Public so the
+     * TraitMerger can re-instantiate trait members into a using class with
+     * identical construction semantics.
+     */
+    public function registerDefinitionMembers(Definition $classDefinition, array $definition): void
+    {
+        if (isset($definition['properties'])) {
+            foreach ($definition['properties'] as $property) {
+                /**
+                 * Add property to the definition
+                 */
+                $classDefinition->addProperty(
+                    new Property(
+                        $classDefinition,
+                        $property['visibility'],
+                        $property['name'],
+                        $property['default'] ?? null,
+                        $property['docblock'] ?? null,
+                        $property
+                    )
+                );
+
+                /**
+                 * Check and process shortcuts
+                 */
+                if (isset($property['shortcuts'])) {
+                    $this->processShortcuts($property, $classDefinition);
+                }
+            }
+        }
+
+        /**
+         * Register constants
+         */
+        if (isset($definition['constants'])) {
+            foreach ($definition['constants'] as $constant) {
+                $classDefinition->addConstant(
+                    new Constant(
+                        $constant['name'],
+                        $constant['default'] ?? null,
+                        $constant['docblock'] ?? null
+                    )
+                );
+            }
+        }
+
+        /**
+         * Register methods
+         */
+        if (isset($definition['methods'])) {
+            foreach ($definition['methods'] as $method) {
+                $classDefinition->addMethod(
+                    new Method(
+                        $classDefinition,
+                        $method['visibility'],
+                        $method['name'],
+                        isset($method['parameters']) ? new Parameters($method['parameters']) : null,
+                        isset($method['statements']) ? new StatementsBlock($method['statements']) : null,
+                        $method['docblock'] ?? null,
+                        $method['return-type'] ?? null,
+                        $method
+                    ),
+                    $method
+                );
+            }
+        }
+    }
+
+    /**
+     * Collects fully-qualified trait names from a class/trait node's in-body
+     * `use` statements.
+     *
+     * @return string[]
+     */
+    private function extractUsedTraits(array $topStatement): array
+    {
+        $names = [];
+        foreach ($topStatement['definition']['uses'] ?? [] as $useStatement) {
+            foreach ($useStatement['traits'] as $traitReference) {
+                $names[] = $this->getFullName($traitReference['value']);
+            }
+        }
+
+        return $names;
     }
 
     /**

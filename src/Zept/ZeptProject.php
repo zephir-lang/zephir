@@ -28,7 +28,7 @@ namespace Zephir\Zept;
 final class ZeptProject
 {
     private const NAMESPACE_RE = '/^\s*namespace\s+([A-Za-z_][A-Za-z0-9_]*(?:\\\\[A-Za-z_][A-Za-z0-9_]*)*)\s*;/m';
-    private const TYPE_RE      = '/\b(?:final\s+|abstract\s+)*(?:class|interface)\s+([A-Za-z_][A-Za-z0-9_]*)/';
+    private const TYPE_RE      = '/\b(?:final\s+|abstract\s+)*(?:class|interface|trait)\s+([A-Za-z_][A-Za-z0-9_]*)/';
 
     public function __construct(private ZeptFile $zept)
     {
@@ -91,7 +91,7 @@ final class ZeptProject
         if (preg_match(self::TYPE_RE, $source, $m) !== 1) {
             throw ZeptParseException::in(
                 $this->zept->test,
-                'every --FILE-- must declare a class or interface'
+                'every --FILE-- must declare a class, interface or trait'
             );
         }
 

@@ -1,0 +1,66 @@
+[
+    {
+        "type": "namespace",
+        "name": "Test",
+        "file": "phpt__classes_trait_all_caps.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "trait",
+        "name": "CSV",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "parse",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__classes_trait_all_caps.zep",
+                                "line": 7,
+                                "char": 11
+                            },
+                            "file": "phpt__classes_trait_all_caps.zep",
+                            "line": 8,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "phpt__classes_trait_all_caps.zep",
+                                "line": 6,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "phpt__classes_trait_all_caps.zep",
+                        "line": 6,
+                        "char": 2
+                    },
+                    "file": "phpt__classes_trait_all_caps.zep",
+                    "line": 5,
+                    "last-line": 9,
+                    "char": 16
+                }
+            ],
+            "file": "phpt__classes_trait_all_caps.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__classes_trait_all_caps.zep",
+        "line": 3,
+        "char": 5
+    }
+]

@@ -52,6 +52,7 @@ final class Definition extends AbstractDefinition
 {
     public const TYPE_CLASS     = 'class';
     public const TYPE_INTERFACE = 'interface';
+    public const TYPE_TRAIT     = 'trait';
 
     /**
      * Contains "abstract" in the definition
@@ -104,6 +105,24 @@ final class Definition extends AbstractDefinition
     protected array $interfaces = [];
 
     protected bool $isBundled = false;
+
+    /**
+     * Fully-qualified trait names used via in-class `use` statements
+     */
+    protected array $usedTraits = [];
+
+    /**
+     * Resolved trait Definitions, keyed by lowercased fully-qualified name
+     *
+     * @var Definition[]
+     */
+    protected array $usedTraitDefinitions = [];
+
+    /**
+     * Names of members copied in from used traits, so stub generation can
+     * skip them: ['methods' => string[], 'properties' => string[], 'constants' => string[]]
+     */
+    protected array $mergedMemberNames = ['methods' => [], 'properties' => [], 'constants' => []];
 
     /**
      * @var Method[]
@@ -500,6 +519,11 @@ final class Definition extends AbstractDefinition
                         $this->getSCName($namespace)
                     ) . ', ' . $methodEntry . ', ' . $flags . ');'
                 );
+            } elseif ($this->isTrait()) {
+                $codePrinter->output(
+                    'ZEPHIR_REGISTER_TRAIT(' . $this->getNCNamespace() . ', ' . $this->getName(
+                    ) . ', ' . $namespace . ', ' . strtolower($this->getSCName($namespace)) . ', ' . $methodEntry . ');'
+                );
             } else {
                 $codePrinter->output(
                     'ZEPHIR_REGISTER_INTERFACE(' . $this->getNCNamespace() . ', ' . $this->getName(
@@ -606,7 +630,7 @@ final class Definition extends AbstractDefinition
             );
         }
 
-        if (!$this->isAbstract() && !$this->isInterface()) {
+        if (!$this->isAbstract() && !$this->isInterface() && !$this->isTrait()) {
             /**
              * Interfaces in extended classes may have
              */
@@ -647,7 +671,7 @@ final class Definition extends AbstractDefinition
                 $codePrinter->outputDocBlock($docBlock);
             }
 
-            if (self::TYPE_CLASS === $this->getType()) {
+            if (!$this->isInterface()) {
                 if (!$method->isInternal()) {
                     $codePrinter->output(
                         'PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName(
@@ -692,7 +716,7 @@ final class Definition extends AbstractDefinition
         $codePrinter->output('ZEPHIR_INIT_CLASS(' . $this->getCNamespace() . '_' . $this->getName() . ');');
         $codePrinter->outputBlankLine();
 
-        if (self::TYPE_CLASS === $this->getType() && count($methods) > 0) {
+        if (!$this->isInterface() && count($methods) > 0) {
             foreach ($methods as $method) {
                 if (!$method->isInternal()) {
                     $codePrinter->output(
@@ -737,7 +761,7 @@ final class Definition extends AbstractDefinition
             );
 
             foreach ($methods as $method) {
-                if (self::TYPE_CLASS === $this->getType()) {
+                if (!$this->isInterface()) {
                     if (!$method->isInternal()) {
                         $richFormat = $method->isReturnTypesHintDetermined() && $method->areReturnTypesCompatible();
 
@@ -1278,6 +1302,11 @@ final class Definition extends AbstractDefinition
         return Definition::TYPE_INTERFACE === $this->type;
     }
 
+    public function isTrait(): bool
+    {
+        return Definition::TYPE_TRAIT === $this->type;
+    }
+
     /**
      * Pre-compiles a class/interface gathering method information required by other methods.
      *
@@ -1291,7 +1320,7 @@ final class Definition extends AbstractDefinition
          * Pre-Compile methods
          */
         foreach ($this->methods as $method) {
-            if (self::TYPE_CLASS === $this->getType() && !$method->isAbstract()) {
+            if (!$this->isInterface() && !$method->isAbstract()) {
                 $method->preCompile($compilationContext);
             }
         }
@@ -1362,6 +1391,48 @@ final class Definition extends AbstractDefinition
     }
 
     /**
+     * @param string[] $usedTraits Fully-qualified trait names
+     */
+    public function setUsedTraits(array $usedTraits): void
+    {
+        $this->usedTraits = $usedTraits;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getUsedTraits(): array
+    {
+        return $this->usedTraits;
+    }
+
+    /**
+     * @param Definition[] $usedTraitDefinitions Keyed by lowercased fully-qualified name
+     */
+    public function setUsedTraitDefinitions(array $usedTraitDefinitions): void
+    {
+        $this->usedTraitDefinitions = $usedTraitDefinitions;
+    }
+
+    /**
+     * @return Definition[]
+     */
+    public function getUsedTraitDefinitions(): array
+    {
+        return $this->usedTraitDefinitions;
+    }
+
+    public function addMergedMemberName(string $bucket, string $name): void
+    {
+        $this->mergedMemberNames[$bucket][] = $name;
+    }
+
+    public function getMergedMemberNames(): array
+    {
+        return $this->mergedMemberNames;
+    }
+
+    /**
      * Sets if the class is final.
      */
     public function setIsAbstract(bool $abstract): void
@@ -1407,6 +1478,11 @@ final class Definition extends AbstractDefinition
     public function setOriginalNode(array $originalNode): void
     {
         $this->originalNode = $originalNode;
+    }
+
+    public function getOriginalNode(): array
+    {
+        return $this->originalNode;
     }
 
     /**

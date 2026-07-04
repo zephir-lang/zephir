@@ -56,7 +56,7 @@ trait CompilerTrait
         $code .= PHP_EOL;
         $code .= '#include "kernel/main.h"' . PHP_EOL;
 
-        if ('class' === $classDefinition->getType()) {
+        if (!$classDefinition->isInterface()) {
             foreach ($compilationContext->headersManager->get() as $header => $one) {
                 $code .= '#include "' . $header . '.h"' . PHP_EOL;
             }

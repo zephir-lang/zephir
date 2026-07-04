@@ -1,0 +1,42 @@
+--TEST--
+Traits: trait composing another trait, consumed by Zephir and PHP classes (issue #504)
+--FILE--
+namespace Stub;
+
+trait Hello
+{
+	public function hello() -> string
+	{
+		return "hello";
+	}
+}
+--FILE--
+namespace Stub;
+
+trait HelloWorld
+{
+	use Hello;
+
+	public function helloWorld() -> string
+	{
+		return this->hello() . " world";
+	}
+}
+--FILE--
+namespace Stub;
+
+class Greeting
+{
+	use HelloWorld;
+}
+--USAGE--
+$g = new \Stub\Greeting();
+echo $g->hello(), "\n";
+echo $g->helloWorld(), "\n";
+class PhpGreeting { use \Stub\HelloWorld; }
+$p = new PhpGreeting();
+echo $p->helloWorld(), "\n";
+--EXPECT--
+hello
+hello world
+hello world

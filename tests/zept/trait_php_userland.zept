@@ -1,0 +1,35 @@
+--TEST--
+Traits: Zephir-declared trait consumed by a PHP userland class (issue #504)
+--FILE--
+namespace Stub;
+
+trait Greeter
+{
+	protected greeting = "hello";
+
+	public function greet(string name) -> string
+	{
+		return this->greeting . " " . name;
+	}
+
+	public static function shout(string name) -> string
+	{
+		return strtoupper(name);
+	}
+}
+--USAGE--
+var_dump(trait_exists('Stub\Greeter'));
+var_dump((new ReflectionClass('Stub\Greeter'))->isTrait());
+class PhpGreeter {
+    use \Stub\Greeter;
+}
+$g = new PhpGreeter();
+echo $g->greet("world"), "\n";
+echo PhpGreeter::shout("hi"), "\n";
+var_dump(in_array('Stub\Greeter', class_uses('PhpGreeter')));
+--EXPECT--
+bool(true)
+bool(true)
+hello world
+HI
+bool(true)
