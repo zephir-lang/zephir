@@ -13,27 +13,22 @@ declare(strict_types=1);
 
 namespace Zephir\Statements;
 
+use Zephir\Class\Definition\GeneratorTransformer;
+use Zephir\Class\Method\Method;
 use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 
 /**
- * Statement-level handler for `yield` AST nodes emitted by the parser.
+ * Suspension point of a generator step method (issue #1849).
  *
- * The Zephir compiler does not yet generate code for generator methods.
- * PHP's `ZEND_YIELD` opcode runs only inside `ZEND_USER_FUNCTION` op_arrays,
- * and Zephir methods compile to `ZEND_INTERNAL_FUNCTION` (a plain C function
- * pointer) which has no opcode VM frame to suspend. Bridging the two
- * requires synthesizing a PHP source body for generator methods and
- * `zend_compile_string()`-ing it at `MINIT` so the engine treats the body
- * as a user function. That work is tracked separately.
+ * A generator method's body compiles inside a hidden internal "step"
+ * function (see GeneratorTransformer). Each `yield` publishes the key/value
+ * pair on the <Ns>\Generator object, saves every suspendable local into the
+ * object's slots, releases the memory frame and returns; the resume label
+ * right after it is the target of the step's dispatch switch.
  *
- * This handler exists so that:
- *   - parser-accepted `yield` syntax produces a precise, located diagnostic
- *     instead of the previous noisy "Unsupported statement" fallout,
- *   - the statement dispatch table covers the type, keeping
- *     `StatementFactory::isSupported('yield')` honest.
- *
- * @see https://github.com/zephir-lang/zephir/issues/1849
+ * Grammar forms: `yield;` (NULL value, auto key), `yield expr;` (auto key),
+ * `yield key, value;`.
  */
 final class YieldStatement extends StatementAbstract
 {
@@ -42,12 +37,51 @@ final class YieldStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext): void
     {
-        throw new CompilerException(
-            "'yield' is parsed but code generation for generator methods is not yet implemented. "
-            . 'Place generator logic in a plain PHP file and load it through the extensions '
-            . "'extra-classes' / 'extra-sources' configuration as a workaround. "
-            . 'See https://github.com/zephir-lang/zephir/issues/1849',
+        $method = $compilationContext->currentMethod;
+        if (!$method instanceof Method || !$method->isGeneratorStep()) {
+            throw new CompilerException(
+                "'yield' is only supported inside class or trait methods; functions and closures "
+                . 'cannot be generators yet. See https://github.com/zephir-lang/zephir/issues/1849',
+                $this->statement
+            );
+        }
+
+        if ($compilationContext->insideTryCatch > 0) {
+            throw new CompilerException(
+                "'yield' inside a try/catch block is not supported yet. "
+                . 'See https://github.com/zephir-lang/zephir/issues/1849',
+                $this->statement
+            );
+        }
+
+        $compilationContext->headersManager->add('kernel/generator');
+
+        $codePrinter = $compilationContext->codePrinter;
+        $genVariable = $compilationContext->symbolTable->getVariableForRead(
+            GeneratorTransformer::GEN_PARAM,
+            $compilationContext,
             $this->statement
         );
+        $gen = $compilationContext->backend->getVariableCode($genVariable);
+
+        $keyCode = isset($this->statement['key'])
+            ? GeneratorZvalResolver::resolve($this->statement['key'], $compilationContext)
+            : 'NULL';
+
+        $valueAst  = $this->statement['value'] ?? $this->statement['expr'] ?? null;
+        $valueCode = null !== $valueAst
+            ? GeneratorZvalResolver::resolve($valueAst, $compilationContext)
+            : 'NULL';
+
+        $state = $method->allocateYieldPoint();
+
+        $codePrinter->output(
+            'zephir_generator_yield(' . $gen . ', ' . $keyCode . ', ' . $valueCode . ', ' . $state . ');'
+        );
+        /* Expanded post-compile with the per-slot save sequence (Method::generatorSaveCode). */
+        $codePrinter->output('//%ZEPHIR_GEN_SAVE%');
+        $codePrinter->output('ZEPHIR_MM_RESTORE();');
+        $codePrinter->output('return;');
+        $codePrinter->output('zephir_yield_resume_' . $state . ':;');
     }
 }

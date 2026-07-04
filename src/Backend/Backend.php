@@ -19,6 +19,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
 use Zephir\Config;
+use Zephir\Detectors\YieldDetector;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\FunctionDefinition;
@@ -1221,7 +1222,31 @@ class Backend
             ) . '", ' . $statement['line'] . ');'
         );
 
-        if ($mayBeArray) {
+        /**
+         * ZEND_HASH_FOREACH macros keep their cursor in block-scoped locals,
+         * which a generator resume `goto` would jump past (undefined
+         * behavior). When the loop body of a generator step contains a
+         * yield, iterate position-based over a snapshot instead: the
+         * snapshot zval and the HashPosition are plain function-scope
+         * locals the suspension machinery can save/restore, and the
+         * snapshot matches PHP's by-value foreach semantics. Issue #1849.
+         */
+        if (
+            $mayBeArray
+            && $compilationContext->currentMethod?->isGeneratorStep()
+            && isset($statement['statements'])
+            && (new YieldDetector())->detect($statement['statements'])
+        ) {
+            $this->forStatementSuspendableArray(
+                $exprVariable,
+                $keyVariable,
+                $variable,
+                $emitTypeWrapper,
+                $statement,
+                $statementBlock,
+                $compilationContext
+            );
+        } elseif ($mayBeArray) {
             $tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
             $tempVariable->setIsDoublePointer(true);
 
@@ -1408,6 +1433,96 @@ class Backend
         /* Since we do not observe, still do cleanup */
         $variable?->initVariant($compilationContext);
         $keyVariable?->initVariant($compilationContext);
+    }
+
+    /**
+     * Suspension-safe `for k, v in <array>` used inside generator step
+     * bodies whose loop contains a yield (issue #1849): a HashPosition
+     * cursor over a snapshot zval. Both live at function scope and are
+     * saved/restored by the generator slot machinery; the current entry is
+     * copied into the user variables and the cursor advanced *before* the
+     * body runs, so `continue`, `break` and suspension all behave.
+     */
+    private function forStatementSuspendableArray(
+        Variable $exprVariable,
+        ?Variable $keyVariable,
+        ?Variable $variable,
+        bool $emitTypeWrapper,
+        $statement,
+        $statementBlock,
+        CompilationContext $compilationContext
+    ): void {
+        $codePrinter = $compilationContext->codePrinter;
+        $symbolTable = $compilationContext->symbolTable;
+
+        $symbolTable->mustGrownStack(true);
+
+        if ($emitTypeWrapper) {
+            $codePrinter->output('if (Z_TYPE_P(' . $this->getVariableCode($exprVariable) . ') == IS_ARRAY) {');
+            $codePrinter->increaseLevel();
+        }
+
+        /* getTempVariableForWrite() already emits the (N)VAR init. */
+        $snapVariable = $symbolTable->getTempVariableForWrite('variable', $compilationContext);
+        $snapCode = $this->getVariableCode($snapVariable);
+        $codePrinter->output('ZVAL_COPY(' . $snapCode . ', ' . $this->getVariableCode($exprVariable) . ');');
+
+        $positionVariable = $symbolTable->addTemp('HashPosition', $compilationContext);
+        $position         = '&' . $positionVariable->getName();
+
+        $currentVariable = $symbolTable->addTemp('variable', $compilationContext);
+        $currentVariable->setIsDoublePointer(true);
+        $current = $currentVariable->getName();
+
+        $hash    = 'Z_ARRVAL_P(' . $snapCode . ')';
+        $reverse = !empty($statement['reverse']);
+
+        $codePrinter->output(
+            'zend_hash_internal_pointer_' . ($reverse ? 'end' : 'reset') . '_ex(' . $hash . ', ' . $position . ');'
+        );
+        $codePrinter->output('while (1) {');
+        $codePrinter->increaseLevel();
+        $codePrinter->output($current . ' = zend_hash_get_current_data_ex(' . $hash . ', ' . $position . ');');
+        $codePrinter->output('if (' . $current . ' == NULL) {');
+        $codePrinter->output("\t" . 'break;');
+        $codePrinter->output('}');
+
+        if ($keyVariable instanceof Variable) {
+            $keyVariable->initVariant($compilationContext);
+            $codePrinter->output(
+                'zend_hash_get_current_key_zval_ex(' . $hash . ', '
+                . $this->getVariableCode($keyVariable) . ', ' . $position . ');'
+            );
+        }
+
+        if ($variable instanceof Variable) {
+            $variable->initVariant($compilationContext);
+            $codePrinter->output(
+                'ZVAL_COPY(' . $this->getVariableCode($variable) . ', ' . $current . ');'
+            );
+        }
+
+        $codePrinter->output(
+            'zend_hash_move_' . ($reverse ? 'backwards' : 'forward') . '_ex(' . $hash . ', ' . $position . ');'
+        );
+
+        if (isset($statement['statements'])) {
+            $statementBlock->isLoop(true);
+            if (isset($statement['key'])) {
+                $statementBlock->getMutateGatherer()->increaseMutations($statement['key']);
+            }
+            $statementBlock->getMutateGatherer()->increaseMutations($statement['value']);
+            $statementBlock->compile($compilationContext);
+        }
+
+        $codePrinter->decreaseLevel();
+        $codePrinter->output('}');
+
+        if ($emitTypeWrapper) {
+            /* Leave the `if (Z_TYPE... == IS_ARRAY) {` open: the object
+             * branch that follows emits its own `} else {` and final `}`. */
+            $codePrinter->decreaseLevel();
+        }
     }
 
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable): ?string

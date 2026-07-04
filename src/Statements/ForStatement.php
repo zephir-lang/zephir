@@ -19,6 +19,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Detectors\ForValueUseDetector;
 use Zephir\Detectors\WriteDetector;
+use Zephir\Detectors\YieldDetector;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
@@ -231,6 +232,23 @@ class ForStatement extends StatementAbstract
      */
     public function compileIterator(array $exprRaw, CompilationContext $compilationContext): void
     {
+        /**
+         * A raw zend_object_iterator * cannot be saved across a generator
+         * suspension; see issue #1849.
+         */
+        if (
+            $compilationContext->currentMethod?->isGeneratorStep()
+            && isset($this->statement['statements'])
+            && (new YieldDetector())->detect($this->statement['statements'])
+        ) {
+            throw new CompilerException(
+                "'yield' inside `for ... in iterator(...)` is not supported: the underlying "
+                . 'zend_object_iterator cannot be suspended. Iterate the object directly '
+                . '(`for x in obj`) or materialize it into an array first.',
+                $this->statement
+            );
+        }
+
         $iteratorVariable = $compilationContext->symbolTable->getTempVariableForWrite(
             'zend_object_iterator',
             $compilationContext

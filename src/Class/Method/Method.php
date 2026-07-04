@@ -18,6 +18,7 @@ use Zephir\Branch;
 use Zephir\BranchManager;
 use Zephir\Cache\Manager;
 use Zephir\Class\Definition\Definition;
+use Zephir\Class\Definition\GeneratorTransformer;
 use Zephir\Class\Entry as ClassEntry;
 use Zephir\Code\Printer;
 use Zephir\CompilationContext;
@@ -149,6 +150,19 @@ class Method
      * Cached generator-detection result. Populated lazily by isGenerator().
      */
     protected ?bool $isGenerator = null;
+
+    /**
+     * Generator split roles (issue #1849). A generator method is split by
+     * GeneratorTransformer into a visible "creator" (returns the kernel
+     * <Ns>\Generator object) and a hidden internal "step" method holding the
+     * original body compiled as a resumable state machine.
+     */
+    protected ?Method $generatorStep    = null;
+    protected ?Method $generatorCreator = null;
+    /**
+     * Number of yield suspension points allocated while compiling a step body.
+     */
+    protected int $yieldPoints = 0;
 
     public function __construct(
         protected ?Definition $classDefinition = null,
@@ -938,6 +952,39 @@ class Method
         }
 
         /**
+         * Generator step bodies always use a memory frame, and the creator's
+         * parameters become plain locals restored from the generator object's
+         * slots (the creator seeds slot i with parameter i).
+         */
+        if ($this->isGeneratorStep()) {
+            $symbolTable->mustGrownStack(true);
+            $compilationContext->headersManager->add('kernel/generator');
+
+            foreach ($this->getGeneratorCreator()->getCreatorParametersForStep() as $parameter) {
+                $paramVar = new Variable(
+                    $this->generatorParamLocalType($parameter),
+                    $parameter['name'],
+                    $compilationContext->branchManager->getCurrentBranch()
+                );
+                $paramVar->setIsInitialized(true, $compilationContext);
+                /* external => declared even when unused; do NOT combine with
+                 * setLocalOnly() — external+localOnly means "local static". */
+                $paramVar->setIsExternal(true);
+
+                if (isset($parameter['cast'])) {
+                    $paramVar->setDynamicTypes('object');
+                    $paramVar->setClassTypes($compilationContext->getFullName($parameter['cast']['value']));
+                } elseif ('variable' === $paramVar->getType()) {
+                    $paramVar->setDynamicTypes('undefined');
+                } else {
+                    $paramVar->setDynamicTypes($paramVar->getType());
+                }
+
+                $symbolTable->addRawVariable($paramVar);
+            }
+        }
+
+        /**
          * Parameters has an additional extra mutation.
          */
         if ($this->localContext instanceof LocalContextPass && $this->parameters instanceof Parameters) {
@@ -1233,6 +1280,26 @@ class Method
              * Compile the statements block as a 'root' branch
              */
             $this->statements->compile($compilationContext, false, Branch::TYPE_ROOT);
+        }
+
+        /**
+         * Generator step: prepend the resume dispatch (restore suspended
+         * locals from the generator object, then jump to the yield point).
+         * preOutput() prepends, so this lands right before the body and
+         * after every later-preOutput'ed preamble section.
+         */
+        if ($this->isGeneratorStep()) {
+            $codePrinter->preOutput($this->generatorDispatchCode($compilationContext));
+        }
+
+        /**
+         * Generator creator: the visible method's body is replaced by
+         * "create the <Ns>\Generator object, seed it with the parameters,
+         * return it". Parameter fetching/coercion above runs unchanged, so
+         * argument errors surface at call time exactly like PHP generators.
+         */
+        if ($this->isGeneratorCreator()) {
+            $this->generatorCreatorCode($compilationContext);
         }
 
         /**
@@ -1731,9 +1798,14 @@ class Method
 
         /**
          * ZEND_PARSE_PARAMETERS
+         *
+         * Generator steps skip it: they are invoked C-to-C by the kernel with
+         * the resuming caller's execute_data, whose argument frame has no
+         * relation to the step's own parameter (the generator object arrives
+         * via the trailing _ext pointer).
          */
         $tempCodePrinter = new Printer();
-        if ($this->parameters instanceof Parameters && $this->parameters->count() > 0) {
+        if ($this->parameters instanceof Parameters && $this->parameters->count() > 0 && !$this->isGeneratorStep()) {
             // Do not declare variable when it is not needed.
             if ($this->parameters->hasNullableParameters()) {
                 $tempCodePrinter->output("\t" . 'bool is_null_true = 1;');
@@ -1800,6 +1872,19 @@ class Method
                 !$this->hasChildReturnStatementType($statement) &&
                 !('switch' === $lastType && $this->switchAlwaysReturns($statement))
             ) {
+                if ($this->isGeneratorStep()) {
+                    /* Falling off the end finishes the generator (getReturn() => NULL). */
+                    $genVariable = $compilationContext->symbolTable->getVariableForRead(
+                        GeneratorTransformer::GEN_PARAM,
+                        $compilationContext
+                    );
+                    $codePrinter->output(
+                        "\t" . 'zephir_generator_finish('
+                        . $compilationContext->backend->getVariableCode($genVariable)
+                        . ', NULL);'
+                    );
+                }
+
                 if ($symbolTable->getMustGrownStack()) {
                     $compilationContext->headersManager->add('kernel/memory');
                     $codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
@@ -1824,6 +1909,24 @@ class Method
          * Remove macros that grow/restore the memory frame stack if it wasn't used.
          */
         $code = $this->removeMemoryStackReferences($symbolTable, $codePrinter->getOutput());
+
+        /**
+         * Generator step post-processing:
+         *  - expand every yield-point save marker with the per-slot save
+         *    sequence (the full local set is only known now);
+         *  - make first-init macros resume-safe: restored locals are already
+         *    observed in the fresh frame, so plain INIT/observe would
+         *    double-observe (debug builds abort) or leak.
+         */
+        if ($this->isGeneratorStep()) {
+            $code = str_replace(
+                '//%ZEPHIR_GEN_SAVE%',
+                $this->generatorSaveCode($compilationContext),
+                $code
+            );
+            $code = str_replace('ZEPHIR_INIT_VAR(', 'ZEPHIR_INIT_NVAR(', $code);
+            $code = str_replace('zephir_memory_observe(', 'ZEPHIR_OBS_NVAR(', $code);
+        }
 
         /**
          * Remove unused this_ptr variable.
@@ -2456,6 +2559,345 @@ class Method
     }
 
     /**
+     * Raw method AST node (used by generator diagnostics for file/line info).
+     */
+    public function getExpression(): array
+    {
+        return $this->expression ?: [];
+    }
+
+    /**
+     * Marks this method as a generator creator and wires its hidden step
+     * method. The creator keeps signature/arginfo but compiles to
+     * "return new <Ns>\Generator(...)": its statements are detached (they
+     * move to the step method).
+     */
+    public function setGeneratorStep(Method $step): void
+    {
+        $this->generatorStep = $step;
+        $this->statements    = null;
+    }
+
+    public function setGeneratorCreator(Method $creator): void
+    {
+        $this->generatorCreator = $creator;
+    }
+
+    public function isGeneratorCreator(): bool
+    {
+        return $this->generatorStep instanceof Method;
+    }
+
+    public function isGeneratorStep(): bool
+    {
+        return $this->generatorCreator instanceof Method;
+    }
+
+    public function getGeneratorStep(): ?Method
+    {
+        return $this->generatorStep;
+    }
+
+    public function getGeneratorCreator(): ?Method
+    {
+        return $this->generatorCreator;
+    }
+
+    /**
+     * Allocates the next 1-based yield suspension point while compiling a
+     * generator step body (called by YieldStatement).
+     */
+    public function allocateYieldPoint(): int
+    {
+        return ++$this->yieldPoints;
+    }
+
+    public function getYieldPoints(): int
+    {
+        return $this->yieldPoints;
+    }
+
+    /**
+     * Parameters of the creator method in declaration order: they occupy the
+     * generator object's slots [0..P-1] (seeded by the creator, restored by
+     * the step's dispatch block).
+     */
+    public function getCreatorParametersForStep(): array
+    {
+        return $this->parameters instanceof Parameters ? $this->parameters->getParameters() : [];
+    }
+
+    /**
+     * Local variable type used inside the step body for a creator parameter.
+     * The creator boxes every argument into a zval slot, so native-string
+     * and cast parameters become plain zvals here.
+     */
+    private function generatorParamLocalType(array $parameter): string
+    {
+        if (!empty($parameter['variadic']) || isset($parameter['cast'])) {
+            return 'variable';
+        }
+
+        return match ($parameter['data-type'] ?? 'variable') {
+            'int', 'uint', 'long', 'ulong', 'char', 'uchar',
+            'double', 'bool', 'array', 'string' => $parameter['data-type'],
+            default                             => 'variable',
+        };
+    }
+
+    /**
+     * How a local is preserved across a suspension: boxed zval copy, boxed
+     * scalar, or not at all (null). Cache pointers (fcall/ce/function/property
+     * caches) are deliberately not saved — their `= NULL` declaration
+     * initializers rerun on every step invocation, costing one re-lookup.
+     */
+    private function generatorSlotClass(Variable $variable): ?string
+    {
+        static $skipNames = [
+            'this_ptr',
+            'return_value',
+            'return_value_ptr',
+            'ZEPHIR_LAST_CALL_STATUS',
+            'ZEPHIR_METHOD_GLOBALS_PTR',
+            GeneratorTransformer::GEN_PARAM,
+            GeneratorTransformer::GEN_PARAM . '_sub',
+        ];
+
+        if (in_array($variable->getName(), $skipNames, true)) {
+            return null;
+        }
+        if (
+            $variable->isSuperGlobal()
+            || $variable->isLocalStatic()
+            || $variable->isDoublePointer()
+            || $variable->isNativeString()
+            /* Non-tracked temps are statement-scoped by construction and are
+             * (re)initialized with plain ZVAL_* macros: restoring a value
+             * into them would leak it on the next in-place overwrite. */
+            || !$variable->isMemoryTracked()
+        ) {
+            return null;
+        }
+
+        return match ($variable->getType()) {
+            'variable', 'string', 'array', 'null', 'mixed'                   => 'zval',
+            'int', 'uint', 'long', 'ulong', 'char', 'uchar', 'zend_ulong',
+            'HashPosition'                                                   => 'long',
+            'double'                                                         => 'double',
+            'bool', 'zephir_ce_guard'                                        => 'bool',
+            default                                                          => null,
+        };
+    }
+
+    /**
+     * Slot index map for the step's symbol table: creator parameters keep
+     * their declaration index, every other suspendable local follows in
+     * name order (deterministic regeneration).
+     *
+     * @var array<string, array{index: int, class: ?string, var: ?Variable}>
+     */
+    private array $generatorSlots = [];
+
+    private function generatorBuildSlotMap(CompilationContext $compilationContext): void
+    {
+        $this->generatorSlots = [];
+        $symbolTable          = $compilationContext->symbolTable;
+        $index                = 0;
+
+        foreach ($this->getGeneratorCreator()->getCreatorParametersForStep() as $parameter) {
+            $variable = $symbolTable->getVariable($parameter['name']);
+
+            $this->generatorSlots[$parameter['name']] = [
+                'index' => $index++,
+                'class' => $variable instanceof Variable ? $this->generatorSlotClass($variable) : null,
+                'var'   => $variable,
+            ];
+        }
+
+        $variables = $symbolTable->getVariables();
+        ksort($variables, SORT_STRING);
+        foreach ($variables as $name => $variable) {
+            if (!$variable instanceof Variable || isset($this->generatorSlots[$name])) {
+                continue;
+            }
+            if ($variable->getNumberUses() <= 0 && !$variable->isExternal()) {
+                continue; // never declared
+            }
+            $class = $this->generatorSlotClass($variable);
+            if (null === $class) {
+                continue;
+            }
+            $this->generatorSlots[$name] = ['index' => $index++, 'class' => $class, 'var' => $variable];
+        }
+    }
+
+    /**
+     * The resume dispatch block injected between the method preamble and the
+     * body: restore every suspendable local from its slot (UNDEF slots are
+     * skipped), then jump to the suspension point recorded in the generator.
+     */
+    private function generatorDispatchCode(CompilationContext $compilationContext): string
+    {
+        $this->generatorBuildSlotMap($compilationContext);
+
+        $genVariable = $compilationContext->symbolTable->getVariableForRead(
+            GeneratorTransformer::GEN_PARAM,
+            $compilationContext
+        );
+        $gen = $compilationContext->backend->getVariableCode($genVariable);
+
+        $lines   = [];
+        $lines[] = "\t" . '/* Generator resume dispatch (issue #1849) */';
+        $lines[] = "\t" . 'zephir_generator_slots_ensure(' . $gen . ', ' . count($this->generatorSlots) . ');';
+
+        foreach ($this->generatorSlots as $slot) {
+            if (null === $slot['class'] || !$slot['var'] instanceof Variable) {
+                continue;
+            }
+            $lines[] = "\t" . $this->generatorRestoreLine($slot, $gen, $compilationContext);
+        }
+
+        if ($this->yieldPoints > 0) {
+            $lines[] = "\t" . 'switch (zephir_generator_get_state(' . $gen . ')) {';
+            for ($n = 1; $n <= $this->yieldPoints; ++$n) {
+                $lines[] = "\t\t" . 'case ' . $n . ': goto zephir_yield_resume_' . $n . ';';
+            }
+            $lines[] = "\t\t" . 'default: break;';
+            $lines[] = "\t" . '}';
+        }
+
+        return implode(PHP_EOL, $lines);
+    }
+
+    private function generatorRestoreLine(array $slot, string $gen, CompilationContext $compilationContext): string
+    {
+        /** @var Variable $variable */
+        $variable = $slot['var'];
+        $index    = $slot['index'];
+        $slotExpr = 'zephir_generator_slot(' . $gen . ', ' . $index . ')';
+
+        switch ($slot['class']) {
+            case 'zval':
+                return 'ZEPHIR_GEN_RESTORE_ZVAL('
+                    . $gen . ', ' . $index . ', '
+                    . $compilationContext->backend->getVariableCode($variable) . ');';
+
+            case 'long':
+                [, $cType] = $compilationContext->backend->getTypeDefinition($variable->getType());
+
+                return 'if (Z_TYPE_P(' . $slotExpr . ') != IS_UNDEF) { '
+                    . $variable->getName() . ' = (' . $cType . ') Z_LVAL_P(' . $slotExpr . '); }';
+
+            case 'double':
+                return 'if (Z_TYPE_P(' . $slotExpr . ') != IS_UNDEF) { '
+                    . $variable->getName() . ' = Z_DVAL_P(' . $slotExpr . '); }';
+
+            case 'bool':
+                return 'if (Z_TYPE_P(' . $slotExpr . ') != IS_UNDEF) { '
+                    . $variable->getName() . ' = (Z_TYPE_P(' . $slotExpr . ') == IS_TRUE); }';
+        }
+
+        return '';
+    }
+
+    /**
+     * The per-slot save sequence substituted for every yield point's
+     * //%ZEPHIR_GEN_SAVE% marker once the full symbol table is known.
+     * zval saves are copies: the frame's reference is released by the
+     * ZEPHIR_MM_RESTORE() that follows the marker, leaving the slot as the
+     * single owner while suspended.
+     */
+    private function generatorSaveCode(CompilationContext $compilationContext): string
+    {
+        $genVariable = $compilationContext->symbolTable->getVariableForRead(
+            GeneratorTransformer::GEN_PARAM,
+            $compilationContext
+        );
+        $gen = $compilationContext->backend->getVariableCode($genVariable);
+
+        $lines = [];
+        foreach ($this->generatorSlots as $slot) {
+            if (null === $slot['class'] || !$slot['var'] instanceof Variable) {
+                continue;
+            }
+            /** @var Variable $variable */
+            $variable = $slot['var'];
+            $index    = $slot['index'];
+
+            $lines[] = match ($slot['class']) {
+                'zval'   => 'zephir_generator_slot_set(' . $gen . ', ' . $index . ', '
+                    . $compilationContext->backend->getVariableCode($variable) . ');',
+                'long'   => 'zephir_generator_slot_set_long(' . $gen . ', ' . $index . ', (zend_long) '
+                    . $variable->getName() . ');',
+                'double' => 'zephir_generator_slot_set_double(' . $gen . ', ' . $index . ', '
+                    . $variable->getName() . ');',
+                'bool'   => 'zephir_generator_slot_set_bool(' . $gen . ', ' . $index . ', (int) '
+                    . $variable->getName() . ');',
+            };
+        }
+
+        return implode(PHP_EOL . "\t\t", $lines);
+    }
+
+    /**
+     * Body of a generator creator: parameter fetching/coercion above runs
+     * unchanged; here the <Ns>\Generator object is created, seeded with the
+     * (already coerced) arguments and returned.
+     */
+    private function generatorCreatorCode(CompilationContext $compilationContext): void
+    {
+        $codePrinter = $compilationContext->codePrinter;
+        $symbolTable = $compilationContext->symbolTable;
+
+        $compilationContext->headersManager->add('kernel/generator');
+
+        $thisArg = 'NULL';
+        if (!$this->isStatic()) {
+            /* The symbol is named 'this' (low name this_ptr); reading it marks
+             * the getThis() preamble line as required. */
+            $thisVariable = $symbolTable->getVariableForRead('this', $compilationContext);
+            $thisVariable->setUsed(true);
+            $thisArg = 'this_ptr';
+        }
+
+        $parameters = $this->getCreatorParametersForStep();
+
+        $codePrinter->output(
+            "\t" . 'zephir_generator_create(return_value, ' . $thisArg . ', '
+            . $this->classDefinition->getClassEntry($compilationContext) . ', '
+            . $this->generatorStep->getInternalName() . ', '
+            . count($parameters) . ');'
+        );
+
+        foreach ($parameters as $index => $parameter) {
+            $variable = $symbolTable->getVariableForRead($parameter['name'], $compilationContext);
+
+            $codePrinter->output("\t" . $this->generatorSeedLine($variable, (int)$index, $compilationContext));
+        }
+
+        $codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
+        $codePrinter->output("\t" . 'return;');
+    }
+
+    private function generatorSeedLine(Variable $variable, int $index, CompilationContext $compilationContext): string
+    {
+        $name = $variable->getName();
+
+        if ($variable->isNativeString()) {
+            return 'zephir_generator_slot_set_str(return_value, ' . $index . ', ' . $name . ');';
+        }
+
+        return match ($variable->getType()) {
+            'int', 'uint', 'long', 'ulong', 'char', 'uchar', 'zend_ulong'
+                     => 'zephir_generator_slot_set_long(return_value, ' . $index . ', (zend_long) ' . $name . ');',
+            'double' => 'zephir_generator_slot_set_double(return_value, ' . $index . ', ' . $name . ');',
+            'bool'   => 'zephir_generator_slot_set_bool(return_value, ' . $index . ', (int) ' . $name . ');',
+            default  => 'zephir_generator_slot_set(return_value, ' . $index . ', '
+                . $compilationContext->backend->getVariableCode($variable) . ');',
+        };
+    }
+
+    /**
      * Checks whether the method is an initializer.
      */
     public function isInitializer(): bool
@@ -2626,8 +3068,12 @@ class Method
              * This pass checks for zval variables than can be potentially
              * used without allocating memory and track it
              * these variables are stored in the stack
+             *
+             * Generator step bodies skip it: suspension moves locals into the
+             * generator object, so stack-only allocation assumptions no
+             * longer hold across yield points.
              */
-            if ($compilationContext->config->get('local-context-pass', 'optimizations')) {
+            if (!$this->isGeneratorStep() && $compilationContext->config->get('local-context-pass', 'optimizations')) {
                 $localContext = new LocalContextPass();
                 $localContext->pass($this->statements);
             }
@@ -2635,8 +3081,12 @@ class Method
             /**
              * This pass tries to infer types for dynamic variables
              * replacing them by low level variables
+             *
+             * Also skipped for generator step bodies: values that cross a
+             * yield point are boxed/unboxed through the generator object, so
+             * conservative dynamic typing is the safe default.
              */
-            if ($compilationContext->config->get('static-type-inference', 'optimizations')) {
+            if (!$this->isGeneratorStep() && $compilationContext->config->get('static-type-inference', 'optimizations')) {
                 $typeInference = new StaticTypeInference();
                 $typeInference->pass($this->statements);
                 if ($compilationContext->config->get('static-type-inference-second-pass', 'optimizations')) {
