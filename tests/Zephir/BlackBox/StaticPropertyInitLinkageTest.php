@@ -63,9 +63,11 @@ ZEP);
         $result = $this->runZephir('generate --no-ansi', $this->projectDir);
         $this->assertSame(0, $result['exitCode'], $result['stdout'] . $result['stderr']);
 
-        $header  = (string) file_get_contents($this->projectDir . '/ext/stub/staticprop.zep.h');
-        $source  = (string) file_get_contents($this->projectDir . '/ext/stub/staticprop.zep.c');
-        $project = (string) file_get_contents($this->projectDir . '/ext/stub.c');
+        // Normalize CRLF→LF: on Windows the generated files use CRLF, which would
+        // leave a stray \r before every `$`-anchored line end and defeat the regexes.
+        $header  = str_replace("\r\n", "\n", (string) file_get_contents($this->projectDir . '/ext/stub/staticprop.zep.h'));
+        $source  = str_replace("\r\n", "\n", (string) file_get_contents($this->projectDir . '/ext/stub/staticprop.zep.c'));
+        $project = str_replace("\r\n", "\n", (string) file_get_contents($this->projectDir . '/ext/stub.c'));
 
         // The definition still lives in the class .c.
         $this->assertMatchesRegularExpression(
