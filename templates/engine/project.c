@@ -77,8 +77,7 @@ static void php_zephir_init_module_globals(zend_%PROJECT_LOWER%_globals *%PROJEC
 	%INIT_MODULE_GLOBALS%
 }
 
-%REQ_INITIALIZER_HEADERS%
-static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
+%REQ_INITIALIZER_HEADERS%static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
 {
 	zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals_ptr;
 	%PROJECT_LOWER%_globals_ptr = ZEPHIR_VGLOBAL;

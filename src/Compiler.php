@@ -811,7 +811,9 @@ final class Compiler
             ),
             '%MOD_INITIALIZERS%'     => $modInitializers,
             '%MOD_DESTRUCTORS%'      => $modDestructors,
-            '%REQ_INITIALIZER_HEADERS%' => implode(PHP_EOL, $this->internalInitializerHeaders),
+            '%REQ_INITIALIZER_HEADERS%' => $this->internalInitializerHeaders === []
+                ? ''
+                : implode(PHP_EOL, $this->internalInitializerHeaders) . PHP_EOL,
             '%REQ_INITIALIZERS%'     => implode(
                 PHP_EOL . "\t",
                 array_merge($this->internalInitializers, [$reqInitializers])
