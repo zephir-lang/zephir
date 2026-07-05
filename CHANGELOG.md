@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Fixed
 - Pure-PHP parser parity: a closure-arrow (`x => expr`) now requires a bare identifier on the left, matching the C parser grammar `yield "k" => 2;` and `let f = "x" => 2;` are syntax errors again instead of being mis-parsed [#1849](https://github.com/zephir-lang/zephir/issues/1849)
+- A static property initialized with an array literal no longer breaks single-file (concatenated) builds: the `zephir_init_static_properties_<Class>()` initializer is now forward-declared at file scope in the project `.c` instead of the per-class header, keeping its declaration and definition in one translation unit so their linkage cannot mismatch (`static` vs non-`static`) [#2601](https://github.com/zephir-lang/zephir/issues/2601)
 
 ## [1.0.0] - 2026-07-01
 
