@@ -309,4 +309,28 @@ class Bench
         }
         return total;
     }
+
+    /**
+     * `for i in 0..n` over the `..` range operator (#2433). Compiles to an
+     * integer counting loop; previously it materialised an n-element array.
+     * Paired with sumRangeFn (explicit range() call) and the pure-PHP baseline
+     * so the report shows the operator now matches range() and pure PHP.
+     */
+    public function sumRangeOperator(long n) -> long
+    {
+        long i = 0, total = 0;
+        for i in 0..n {
+            let total += i;
+        }
+        return total;
+    }
+
+    public function sumRangeFn(long n) -> long
+    {
+        long i = 0, total = 0;
+        for i in range(0, n) {
+            let total += i;
+        }
+        return total;
+    }
 }

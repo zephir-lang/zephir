@@ -988,6 +988,78 @@ PHP_METHOD(Stub_Bench, sumViaArray)
 	RETURN_MM_LONG(total);
 }
 
+/**
+ * `for i in 0..n` over the `..` range operator (#2433). Compiles to an
+ * integer counting loop; previously it materialised an n-element array.
+ * Paired with sumRangeFn (explicit range() call) and the pure-PHP baseline
+ * so the report shows the operator now matches range() and pure PHP.
+ */
+PHP_METHOD(Stub_Bench, sumRangeOperator)
+{
+	zend_long _1;
+	zend_bool _0;
+	zval *n_param = NULL;
+	long n, i, total, _2;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &n_param);
+	i = 0;
+	total = 0;
+	_2 = n;
+	_1 = 0;
+	_0 = 0;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			i = _1;
+			total += i;
+		}
+	}
+	RETURN_LONG(total);
+}
+
+PHP_METHOD(Stub_Bench, sumRangeFn)
+{
+	zend_long _1;
+	zend_bool _0;
+	zval *n_param = NULL;
+	long n, i, total, _2;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &n_param);
+	i = 0;
+	total = 0;
+	_2 = n;
+	_1 = 0;
+	_0 = 0;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			i = _1;
+			total += i;
+		}
+	}
+	RETURN_LONG(total);
+}
+
 void zep_Stub_Bench_zephir_gen_step_generatorRange(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext )
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
