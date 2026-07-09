@@ -308,7 +308,7 @@ class Generator
                     }
                 }
 
-                $paramStr .= '$' . $parameter['name'];
+                $paramStr .= (!empty($parameter['variadic']) ? '...' : '') . '$' . $parameter['name'];
 
                 if (isset($parameter['default'])) {
                     $paramStr .= ' = ' . $this->wrapPHPValue($parameter);

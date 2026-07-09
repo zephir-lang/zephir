@@ -337,6 +337,61 @@ class GeneratorTest extends TestCase
     }
 
     /**
+     * A variadic parameter (`string ...many`) must be emitted with the `...`
+     * spread in the generated signature, and a source docblock `@param string
+     * ...$many` must be preserved without an auto-generated duplicate `@param
+     * string $many` being appended.
+     */
+    public function testShouldBuildVariadicParameter(): void
+    {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
+        $methodParamsDefinition = [
+            [
+                'type'      => 'parameter',
+                'name'      => 'delimiter',
+                'const'     => 0,
+                'data-type' => 'string',
+                'mandatory' => 1,
+            ],
+            [
+                'type'      => 'parameter',
+                'name'      => 'many',
+                'const'     => 0,
+                'data-type' => 'string',
+                'mandatory' => 0,
+                'variadic'  => 1,
+            ],
+        ];
+
+        $aliasManager = new AliasManager();
+        $this->classDefinition->setAliasManager($aliasManager);
+
+        $method = new Method(
+            $this->classDefinition,
+            ['public'],
+            'concat',
+            new Parameters($methodParamsDefinition),
+            null,
+            "/**\n * @param string \$delimiter\n * @param string ...\$many\n *\n * @return string\n */"
+        );
+
+        $buildMethod = $this->getMethod('buildMethod');
+        $actual      = $buildMethod->invokeArgs($this->testClass, [$method, false, '    ']);
+
+        // Signature: the variadic spread must be present.
+        $this->assertStringContainsString('string $delimiter', $actual);
+        $this->assertStringContainsString('string ...$many', $actual);
+
+        // Docblock: the source variadic @param is preserved and NOT duplicated
+        // by an auto-generated `@param string $many`.
+        $this->assertStringContainsString('@param string ...$many', $actual);
+        $this->assertStringNotContainsString('@param string $many', $actual);
+    }
+
+    /**
      * Regression coverage for issue #2428: when a method declares more than one
      * class in its return type union (e.g. `-> <Model> | <Row> | null`), every
      * class must appear in the generated signature. Previously only the first
