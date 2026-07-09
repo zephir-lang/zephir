@@ -159,8 +159,9 @@ final class CompilerFile implements FileInterface
 
         /**
          * Validate `use Foo\Bar` FQCNs now that every file in the extension
-         * has been preCompiled — intra-extension classes are guaranteed to
-         * be in $compiler->isClass()/isInterface() at this point.
+         * has been preCompiled — intra-extension classes, interfaces and
+         * traits are guaranteed to be in
+         * $compiler->isClass()/isInterface()/isTrait() at this point.
          *
          * @see https://github.com/zephir-lang/zephir/issues/2435.
          */
@@ -170,6 +171,7 @@ final class CompilerFile implements FileInterface
                 if (
                     $compiler->isClass($fqcn)
                     || $compiler->isInterface($fqcn)
+                    || $compiler->isTrait($fqcn)
                     || $compiler->isBundledClass($fqcn)
                     || $compiler->isBundledInterface($fqcn)
                     || class_exists($fqcn, false)

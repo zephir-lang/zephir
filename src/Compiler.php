@@ -135,6 +135,14 @@ final class Compiler
      * Used for static property initialization.
      */
     private array          $internalInitializers = [];
+    /**
+     * Forward declarations for the static-property initializers, emitted at
+     * file scope in project.c instead of the per-class header. Keeps the
+     * declaration and definition on the same translation unit so a single-file
+     * (concatenated) build cannot end up with a static definition and a
+     * non-static header prototype. See #2601.
+     */
+    private array          $internalInitializerHeaders = [];
     private static bool    $loadedPrototypes     = false;
     /**
      * Proper-case root namespace of the first generator method found, or null
@@ -803,6 +811,9 @@ final class Compiler
             ),
             '%MOD_INITIALIZERS%'     => $modInitializers,
             '%MOD_DESTRUCTORS%'      => $modDestructors,
+            '%REQ_INITIALIZER_HEADERS%' => $this->internalInitializerHeaders === []
+                ? ''
+                : implode(PHP_EOL, $this->internalInitializerHeaders) . PHP_EOL,
             '%REQ_INITIALIZERS%'     => implode(
                 PHP_EOL . "\t",
                 array_merge($this->internalInitializers, [$reqInitializers])
@@ -1120,6 +1131,9 @@ final class Compiler
                     $methods[] = '[' . $method->getName() . ':' . implode('-', $method->getVisibility()) . ']';
                     if ($method->isInitializer() && $method->isStatic()) {
                         $this->internalInitializers[] = "\t" . $method->getName() . '();';
+                        // File-scope forward declaration (mirror of Backend::getInternalSignature
+                        // for the static initializer). Emitted in project.c, not the class header.
+                        $this->internalInitializerHeaders[] = 'void ' . $method->getName() . '();';
                     }
                 }
 

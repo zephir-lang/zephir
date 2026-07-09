@@ -723,7 +723,11 @@ final class Definition extends AbstractDefinition
                         'PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName(
                         ) . ');'
                     );
-                } else {
+                } elseif (!($method->isInitializer() && $method->isStatic())) {
+                    // The static-property initializer prototype is intentionally NOT emitted
+                    // here. It is declared at file scope in project.c instead, so a single-file
+                    // (concatenated) build keeps its declaration and definition on the same
+                    // translation unit and cannot mismatch linkage. See #2601.
                     $internalSignature = $compilationContext->backend->getInternalSignature(
                         $method,
                         $compilationContext
