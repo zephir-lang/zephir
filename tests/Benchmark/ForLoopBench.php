@@ -93,4 +93,28 @@ final class ForLoopBench
             $sum += (int) $v;
         }
     }
+
+    /**
+     * `for i in 0..n` over the `..` range operator (#2433), now an integer
+     * counting loop. Paired with the explicit range() form and the pure-PHP
+     * baseline: all three should be in the same ballpark, and far ahead of the
+     * old array-materialising path the operator used to take.
+     */
+    public function benchZephirForOverRangeOperator(): void
+    {
+        $this->stub->sumRangeOperator(1000);
+    }
+
+    public function benchZephirForOverRangeFunction(): void
+    {
+        $this->stub->sumRangeFn(1000);
+    }
+
+    public function benchPhpForOverRange(): void
+    {
+        $total = 0;
+        for ($i = 0; $i <= 1000; $i++) {
+            $total += $i;
+        }
+    }
 }
