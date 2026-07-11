@@ -35,10 +35,15 @@ PHP_METHOD(Stub_Exception, testRuntimePropertyFetch)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&message_zv);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("message", 7, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(message)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&message_zv, message);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("message"), &message_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 29, &message_zv);
 }
 

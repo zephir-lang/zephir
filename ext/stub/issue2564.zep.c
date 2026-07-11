@@ -40,6 +40,19 @@ PHP_METHOD(Stub_Issue2564, __construct)
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_BOOL(&__$false, 0);
 	ZVAL_NULL(&__$null);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	static zend_string *_zephir_prop_2 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("cipher", 6, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("useSigning", 10, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_2)) {
+		_zephir_prop_2 = zend_string_init("padFactory", 10, 1);
+	}
+
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 3)
 		Z_PARAM_OPTIONAL
@@ -71,13 +84,13 @@ PHP_METHOD(Stub_Issue2564, __construct)
 		padFactory = &padFactory_sub;
 		padFactory = &__$null;
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("cipher"), &cipher_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 53, &cipher_zv);
 	if (useSigning) {
-		zephir_update_property_zval(this_ptr, ZEND_STRL("useSigning"), &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 54, &__$true);
 	} else {
-		zephir_update_property_zval(this_ptr, ZEND_STRL("useSigning"), &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 54, &__$false);
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("padFactory"), padFactory);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 55, padFactory);
 	ZEPHIR_MM_RESTORE();
 }
 

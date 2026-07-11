@@ -74,11 +74,16 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, setSomeVar)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&someVar_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("someVar", 7, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(someVar)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &someVar);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("someVar"), someVar);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 81, someVar);
 	RETURN_THISW();
 }
 
@@ -101,6 +106,11 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, setSomeArrayVar)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&someArrayVar);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("someArrayVar", 12, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		ZEPHIR_Z_PARAM_ARRAY(someArrayVar, someArrayVar_param)
 	ZEND_PARSE_PARAMETERS_END();
@@ -108,7 +118,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, setSomeArrayVar)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &someArrayVar_param);
 	zephir_get_arrval(&someArrayVar, someArrayVar_param);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("someArrayVar"), &someArrayVar);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 82, &someArrayVar);
 	RETURN_THIS();
 }
 
@@ -139,11 +149,16 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, setSomeNull)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&param_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("someNull", 8, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &param);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("someNull"), param);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 83, param);
 }
 
 /**

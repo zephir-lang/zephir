@@ -333,4 +333,21 @@ class Bench
         }
         return total;
     }
+
+    /**
+     * Builds an (n+1) x (n+1) matrix via `let output[i][j] = 1` in nested
+     * loops (the issue #1884 shape). Isolates the multi-dimensional array
+     * write cost; paired with a pure-PHP nested-`for` baseline in the bench.
+     */
+    public function buildMatrix(long n) -> array
+    {
+        var output = [], i = 0, j = 0;
+        for i in range(0, n) {
+            let output[i] = [];
+            for j in range(0, n) {
+                let output[i][j] = 1;
+            }
+        }
+        return output;
+    }
 }

@@ -997,6 +997,14 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableStdClass)
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("p1", 2, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("p2", 2, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -1005,10 +1013,10 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableStdClass)
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "v1");
-	zephir_update_property_zval(&uids, ZEND_STRL("p1"), &_0);
+	zephir_update_property_zval_cached(&uids, _zephir_prop_0, 0, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "v2");
-	zephir_update_property_zval(&uids, ZEND_STRL("p2"), &_0);
+	zephir_update_property_zval_cached(&uids, _zephir_prop_1, 0, &_0);
 	zephir_get_arrval(&_1, &uids);
 	ZEPHIR_CPY_WRT(&uids, &_1);
 	RETURN_CCTOR(&uids);

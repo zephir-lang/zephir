@@ -57,23 +57,31 @@ PHP_METHOD(Stub_Statements, testPropertyAcccessAvoidTmpReuse)
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_6);
 	ZVAL_UNDEF(&_7);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("tmp2", 4, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("tmp1", 4, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("tmp2"), PH_NOISY_CC | PH_READONLY);
-	zephir_read_property(&_1, this_ptr, ZEND_STRL("tmp1"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 114, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 115, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&result1);
 	zephir_fast_strpos(&result1, &_0, &_1, 0 );
-	zephir_read_property(&_2, this_ptr, ZEND_STRL("tmp2"), PH_NOISY_CC | PH_READONLY);
-	zephir_read_property(&_3, this_ptr, ZEND_STRL("tmp1"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 114, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_1, 115, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&result2);
 	zephir_fast_strpos(&result2, &_2, &_3, 0 );
-	zephir_read_property(&_4, this_ptr, ZEND_STRL("tmp2"), PH_NOISY_CC | PH_READONLY);
-	zephir_read_property(&_5, this_ptr, ZEND_STRL("tmp1"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_4, this_ptr, _zephir_prop_0, 114, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_5, this_ptr, _zephir_prop_1, 115, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&result3);
 	zephir_fast_strpos(&result3, &_4, &_5, 0 );
-	zephir_read_property(&_6, this_ptr, ZEND_STRL("tmp2"), PH_NOISY_CC | PH_READONLY);
-	zephir_read_property(&_7, this_ptr, ZEND_STRL("tmp1"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_0, 114, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_7, this_ptr, _zephir_prop_1, 115, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&result4);
 	zephir_fast_strpos(&result4, &_6, &_7, 0 );
 	ZEPHIR_MM_RESTORE();
@@ -161,6 +169,27 @@ PHP_METHOD(Stub_Statements, test544Issue)
 	ZVAL_UNDEF(&_13$$4);
 	ZVAL_UNDEF(&_14$$5);
 	ZVAL_UNDEF(&_15$$5);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	static zend_string *_zephir_prop_2 = NULL;
+	static zend_string *_zephir_prop_3 = NULL;
+	static zend_string *_zephir_prop_4 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("totalSteps", 10, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("width", 5, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_2)) {
+		_zephir_prop_2 = zend_string_init("filledChar", 10, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_3)) {
+		_zephir_prop_3 = zend_string_init("arrow", 5, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_4)) {
+		_zephir_prop_4 = zend_string_init("unfilledChar", 12, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(step)
 	ZEND_PARSE_PARAMETERS_END();
@@ -172,35 +201,35 @@ PHP_METHOD(Stub_Statements, test544Issue)
 		RETURN_MM_NULL();
 	}
 	step = Z_LVAL_P(step_param);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("totalSteps"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 116, PH_NOISY_CC | PH_READONLY);
 	if (ZEPHIR_GT_LONG(&_0, step)) {
-		zephir_read_property(&_2$$3, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
-		zephir_read_property(&_3$$3, this_ptr, ZEND_STRL("totalSteps"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_1, 117, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 116, PH_NOISY_CC | PH_READONLY);
 		filledWidth = (long) ((zephir_safe_div_long_zval(((zephir_get_numberval(&_2$$3) - 1)), &_3$$3) * step));
-		zephir_read_property(&_4$$3, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_1, 117, PH_NOISY_CC | PH_READONLY);
 		unfilledWidth = (((zephir_get_numberval(&_4$$3) - 1)) - filledWidth);
-		zephir_read_property(&_5$$3, this_ptr, ZEND_STRL("filledChar"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_5$$3, this_ptr, _zephir_prop_2, 118, PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_6$$3, filledWidth);
 		ZEPHIR_CALL_FUNCTION(&_7$$3, "str_repeat", &_8, 29, &_5$$3, &_6$$3);
 		zephir_check_call_status();
-		zephir_read_property(&_6$$3, this_ptr, ZEND_STRL("arrow"), PH_NOISY_CC | PH_READONLY);
-		zephir_read_property(&_9$$3, this_ptr, ZEND_STRL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_6$$3, this_ptr, _zephir_prop_3, 119, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_9$$3, this_ptr, _zephir_prop_4, 120, PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_10$$3, unfilledWidth);
 		ZEPHIR_CALL_FUNCTION(&_11$$3, "str_repeat", &_8, 29, &_9$$3, &_10$$3);
 		zephir_check_call_status();
 		ZEPHIR_CONCAT_VVV(return_value, &_7$$3, &_6$$3, &_11$$3);
 		RETURN_MM();
 	} else {
-		zephir_read_property(&_1, this_ptr, ZEND_STRL("totalSteps"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 116, PH_NOISY_CC | PH_READONLY);
 		if (ZEPHIR_IS_LONG_IDENTICAL(&_1, step)) {
-			zephir_read_property(&_12$$4, this_ptr, ZEND_STRL("filledChar"), PH_NOISY_CC | PH_READONLY);
-			zephir_read_property(&_13$$4, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_12$$4, this_ptr, _zephir_prop_2, 118, PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_13$$4, this_ptr, _zephir_prop_1, 117, PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 29, &_12$$4, &_13$$4);
 			zephir_check_call_status();
 			RETURN_MM();
 		} else {
-			zephir_read_property(&_14$$5, this_ptr, ZEND_STRL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
-			zephir_read_property(&_15$$5, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_14$$5, this_ptr, _zephir_prop_4, 120, PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_15$$5, this_ptr, _zephir_prop_1, 117, PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 29, &_14$$5, &_15$$5);
 			zephir_check_call_status();
 			RETURN_MM();
@@ -229,6 +258,27 @@ PHP_METHOD(Stub_Statements, test544IssueWithVariable)
 	ZVAL_UNDEF(&_11$$4);
 	ZVAL_UNDEF(&_12$$5);
 	ZVAL_UNDEF(&_13$$5);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	static zend_string *_zephir_prop_2 = NULL;
+	static zend_string *_zephir_prop_3 = NULL;
+	static zend_string *_zephir_prop_4 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("totalSteps", 10, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("width", 5, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_2)) {
+		_zephir_prop_2 = zend_string_init("filledChar", 10, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_3)) {
+		_zephir_prop_3 = zend_string_init("arrow", 5, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_4)) {
+		_zephir_prop_4 = zend_string_init("unfilledChar", 12, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(step)
 	ZEND_PARSE_PARAMETERS_END();
@@ -240,33 +290,33 @@ PHP_METHOD(Stub_Statements, test544IssueWithVariable)
 		RETURN_MM_NULL();
 	}
 	step = Z_LVAL_P(step_param);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("totalSteps"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 116, PH_NOISY_CC | PH_READONLY);
 	totalSteps = zephir_get_numberval(&_0);
 	if (step < totalSteps) {
-		zephir_read_property(&_1$$3, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_1, 117, PH_NOISY_CC | PH_READONLY);
 		filledWidth = (long) ((zephir_safe_div_long_long(((zephir_get_numberval(&_1$$3) - 1)), totalSteps) * step));
-		zephir_read_property(&_2$$3, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_1, 117, PH_NOISY_CC | PH_READONLY);
 		unfilledWidth = (((zephir_get_numberval(&_2$$3) - 1)) - filledWidth);
-		zephir_read_property(&_3$$3, this_ptr, ZEND_STRL("filledChar"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_2, 118, PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_4$$3, filledWidth);
 		ZEPHIR_CALL_FUNCTION(&_5$$3, "str_repeat", &_6, 29, &_3$$3, &_4$$3);
 		zephir_check_call_status();
-		zephir_read_property(&_4$$3, this_ptr, ZEND_STRL("arrow"), PH_NOISY_CC | PH_READONLY);
-		zephir_read_property(&_7$$3, this_ptr, ZEND_STRL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_3, 119, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_7$$3, this_ptr, _zephir_prop_4, 120, PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_8$$3, unfilledWidth);
 		ZEPHIR_CALL_FUNCTION(&_9$$3, "str_repeat", &_6, 29, &_7$$3, &_8$$3);
 		zephir_check_call_status();
 		ZEPHIR_CONCAT_VVV(return_value, &_5$$3, &_4$$3, &_9$$3);
 		RETURN_MM();
 	} else if (step == totalSteps) {
-		zephir_read_property(&_10$$4, this_ptr, ZEND_STRL("filledChar"), PH_NOISY_CC | PH_READONLY);
-		zephir_read_property(&_11$$4, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_10$$4, this_ptr, _zephir_prop_2, 118, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_11$$4, this_ptr, _zephir_prop_1, 117, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 29, &_10$$4, &_11$$4);
 		zephir_check_call_status();
 		RETURN_MM();
 	} else {
-		zephir_read_property(&_12$$5, this_ptr, ZEND_STRL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
-		zephir_read_property(&_13$$5, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_12$$5, this_ptr, _zephir_prop_4, 120, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_13$$5, this_ptr, _zephir_prop_1, 117, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 29, &_12$$5, &_13$$5);
 		zephir_check_call_status();
 		RETURN_MM();

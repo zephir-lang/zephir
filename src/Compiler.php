@@ -21,6 +21,7 @@ use RecursiveIteratorIterator;
 use ReflectionClass;
 use ReflectionException;
 use Zephir\Backend\Backend;
+use Zephir\Cache\PropertyCacheSlots;
 use Zephir\Backend\FcallManagerInterface;
 use Zephir\Backend\StringsManager;
 use Zephir\Class\Definition\Definition;
@@ -165,6 +166,10 @@ final class Compiler
         $this->logger        = new NullLogger();
         $this->stringManager = new StringsManager();
         $this->fcallManager  = $this->backend->getFcallManager();
+
+        // Fresh inline-property-cache slot numbering per compilation run
+        // (keeps slot indices stable/deterministic per build).
+        PropertyCacheSlots::reset();
 
         try {
             $this->assertRequiredExtensionsIsPresent();

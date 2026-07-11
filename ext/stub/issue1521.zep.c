@@ -32,6 +32,10 @@ PHP_METHOD(Stub_Issue1521, test)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("params", 6, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -39,7 +43,7 @@ PHP_METHOD(Stub_Issue1521, test)
 	zephir_create_array(&_0, 2, 0);
 	add_assoc_stringl_ex(&_0, SL("merchantNumber"), SL("0818217122"));
 	add_assoc_stringl_ex(&_0, SL("zero"), SL("0"));
-	zephir_update_property_zval(this_ptr, ZEND_STRL("params"), &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 42, &_0);
 	RETURN_MM_MEMBER(getThis(), "params");
 }
 

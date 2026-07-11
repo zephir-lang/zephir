@@ -42,11 +42,16 @@ PHP_METHOD(Stub_Unsettest, has)
 
 	ZVAL_UNDEF(&key_sub);
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("property", 8, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(key)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &key);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("property"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 125, PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_array_isset_value(&_0, key));
 }
 
@@ -72,12 +77,17 @@ PHP_METHOD(Stub_Unsettest, testUnsetValueFromProperty)
 
 	ZVAL_UNDEF(&key_sub);
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("property", 8, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(key)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &key);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("property"), key);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("property"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 125, PH_NOISY_CC | PH_READONLY);
 	zephir_array_unset(&_0, key, PH_SEPARATE);
 }
 
@@ -134,6 +144,18 @@ PHP_METHOD(Stub_Unsettest, testStdClassUnset)
 	ZVAL_UNDEF(&simpleObject);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	static zend_string *_zephir_prop_2 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("property1", 9, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("property2", 9, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_2)) {
+		_zephir_prop_2 = zend_string_init("property3", 9, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -141,14 +163,14 @@ PHP_METHOD(Stub_Unsettest, testStdClassUnset)
 	object_init(&simpleObject);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 12345);
-	zephir_update_property_zval(&simpleObject, ZEND_STRL("property1"), &_0);
+	zephir_update_property_zval_cached(&simpleObject, _zephir_prop_0, 0, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "test");
-	zephir_update_property_zval(&simpleObject, ZEND_STRL("property2"), &_1);
+	zephir_update_property_zval_cached(&simpleObject, _zephir_prop_1, 0, &_1);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 12345);
-	zephir_update_property_zval(&simpleObject, ZEND_STRL("property3"), &_0);
+	zephir_update_property_zval_cached(&simpleObject, _zephir_prop_2, 0, &_0);
 	zephir_unset_property(&simpleObject, "property2");
 	RETURN_CCTOR(&simpleObject);
 }

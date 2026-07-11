@@ -324,14 +324,40 @@ class ObjectProperty
                     case 'char':
                     case 'uchar':
                         $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context, true);
-                        $context->backend->assignLong($tempVariable, $variableVariable, $context);
+                        if (null !== ($assignMacro = $this->arithmeticAssignMacro($statement['operator']))) {
+                            $context->headersManager->add('kernel/operators');
+                            $resolvedVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
+                            $context->backend->assignLong($resolvedVariable, $variableVariable, $context);
+                            $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
+                            $codePrinter->output(sprintf(
+                                '%s(%s, %s)',
+                                $assignMacro,
+                                $context->backend->getVariableCode($tempVariable),
+                                $context->backend->getVariableCode($resolvedVariable)
+                            ));
+                        } else {
+                            $context->backend->assignLong($tempVariable, $variableVariable, $context);
+                        }
                         $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
                         $tempVariable->setIdle(true);
                         break;
 
                     case 'double':
                         $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context, true);
-                        $context->backend->assignDouble($tempVariable, $variableVariable, $context);
+                        if (null !== ($assignMacro = $this->arithmeticAssignMacro($statement['operator']))) {
+                            $context->headersManager->add('kernel/operators');
+                            $resolvedVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
+                            $context->backend->assignDouble($resolvedVariable, $variableVariable, $context);
+                            $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
+                            $codePrinter->output(sprintf(
+                                '%s(%s, %s)',
+                                $assignMacro,
+                                $context->backend->getVariableCode($tempVariable),
+                                $context->backend->getVariableCode($resolvedVariable)
+                            ));
+                        } else {
+                            $context->backend->assignDouble($tempVariable, $variableVariable, $context);
+                        }
                         $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
                         $tempVariable->setIdle(true);
                         break;
@@ -365,8 +391,30 @@ class ObjectProperty
                             $codePrinter->output(
                                 'zephir_concat_function(' . $rhsCode . ', ' . $tempCode . ', ' . $rhsCode . ');'
                             );
+                            $context->backend->updateProperty($symbolVariable, $propertyName, $variableVariable, $context);
+                        } elseif (null !== ($assignMacro = $this->arithmeticAssignMacro($statement['operator']))) {
+                            /**
+                             * Arithmetic compound-assign (+=, -=, *=) with a
+                             * variable operand: read the current property, apply
+                             * the operator, then write it back. Without this the
+                             * read was dropped and the property was overwritten
+                             * with the right-hand side (arithmetic sibling of the
+                             * #2063 concat-assign bug).
+                             */
+                            $context->headersManager->add('kernel/operators');
+                            $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context);
+                            $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
+                            $codePrinter->output(sprintf(
+                                '%s(%s, %s)',
+                                $assignMacro,
+                                $context->backend->getVariableCode($tempVariable),
+                                $context->backend->getVariableCode($variableVariable)
+                            ));
+                            $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
+                            $tempVariable->setIdle(true);
+                        } else {
+                            $context->backend->updateProperty($symbolVariable, $propertyName, $variableVariable, $context);
                         }
-                        $context->backend->updateProperty($symbolVariable, $propertyName, $variableVariable, $context);
                         $this->checkVariableTemporal($symbolVariable);
                         break;
 
@@ -378,6 +426,24 @@ class ObjectProperty
             default:
                 throw new Exception("Unknown type {$expression->getType()}", $statement);
         }
+    }
+
+    /**
+     * Maps an arithmetic compound-assignment operator to its kernel macro, or
+     * null when the operator is not an arithmetic compound-assign. Shared by
+     * the variable-operand object-property assign paths so `+= $var` / `-= $var`
+     * / `*= $var` read-modify-write instead of silently overwriting the
+     * property with the right-hand side (the arithmetic equivalent of the
+     * concat-assign bug fixed in issue #2063).
+     */
+    private function arithmeticAssignMacro(string $operator): ?string
+    {
+        return match ($operator) {
+            'add-assign' => 'ZEPHIR_ADD_ASSIGN',
+            'sub-assign' => 'ZEPHIR_SUB_ASSIGN',
+            'mul-assign' => 'ZEPHIR_MUL_ASSIGN',
+            default      => null,
+        };
     }
 
     /**

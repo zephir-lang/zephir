@@ -66,6 +66,9 @@ static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER
 	/* Static cache */
 	memset(%PROJECT_LOWER%_globals->scache, '\0', sizeof(zephir_fcall_cache_entry*) * ZEPHIR_MAX_CACHE_SLOTS);
 
+	/* Inline property cache (per-request reset defeats stale-ce/ABA reuse) */
+	memset(%PROJECT_LOWER%_globals->pcache, '\0', sizeof(void*) * ZEPHIR_MAX_PROPERTY_CACHE_SLOTS * ZEPHIR_PROPERTY_CACHE_SLOT_SIZE);
+
 	%INIT_GLOBALS%
 }
 
