@@ -31,9 +31,13 @@ PHP_METHOD(stub_18__closure, __invoke)
 
 	ZVAL_UNDEF(&prefix);
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("property1873", 12, 1);
+	}
 	zephir_read_static_property_ce(&prefix, stub_18__closure_ce, SL("prefix"), PH_NOISY_CC);
 
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("property1873"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 129, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CONCAT_VSV(return_value, &prefix, ":", &_0);
 	return;
 }

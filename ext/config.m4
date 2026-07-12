@@ -34,6 +34,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/oo/scopes/scopetesterinterface.zep.c
 	stub/ooimpl/zbeginning.zep.c
 	stub/properties/publicproperties.zep.c
+	stub/propertycache.zep.c
 	stub/args/single/integer.zep.c
 	stub/args/single/str.zep.c
 	stub/args/single/strmixed.zep.c
@@ -157,6 +158,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/methodabstract.zep.c
 	stub/methodargs.zep.c
 	stub/methodswithdefaultvalues.zep.c
+	stub/multidimarray.zep.c
 	stub/namespaces/a/b/sub.zep.c
 	stub/namespaces/classentry.zep.c
 	stub/nativearray.zep.c
@@ -226,6 +228,8 @@ if test "$PHP_STUB" = "yes"; then
 	stub/properties/staticpropertyarray.zep.c
 	stub/properties/staticprotectedproperties.zep.c
 	stub/properties/staticpublicproperties.zep.c
+	stub/propertycachechild.zep.c
+	stub/propertycachemagic.zep.c
 	stub/quantum.zep.c
 	stub/range.zep.c
 	stub/references.zep.c

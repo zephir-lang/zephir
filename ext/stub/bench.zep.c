@@ -50,16 +50,24 @@ PHP_METHOD(Stub_Bench, __construct)
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("propA", 5, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("propB", 5, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 42);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("propA"), &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 20, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "hello");
-	zephir_update_property_zval(this_ptr, ZEND_STRL("propB"), &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 21, &_1);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -303,6 +311,11 @@ PHP_METHOD(Stub_Bench, propertyReadLoop)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0$$3);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("propA", 5, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(n)
 	ZEND_PARSE_PARAMETERS_END();
@@ -316,7 +329,7 @@ PHP_METHOD(Stub_Bench, propertyReadLoop)
 			break;
 		}
 		ZEPHIR_OBS_NVAR(&_0$$3);
-		zephir_read_property(&_0$$3, this_ptr, ZEND_STRL("propA"), PH_NOISY_CC);
+		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 20, PH_NOISY_CC);
 		sum += zephir_get_intval(&_0$$3);
 		i++;
 	}
@@ -1058,6 +1071,79 @@ PHP_METHOD(Stub_Bench, sumRangeFn)
 		}
 	}
 	RETURN_LONG(total);
+}
+
+/**
+ * Builds an (n+1) x (n+1) matrix via `let output[i][j] = 1` in nested
+ * loops (the issue #1884 shape). Isolates the multi-dimensional array
+ * write cost; paired with a pure-PHP nested-`for` baseline in the bench.
+ */
+PHP_METHOD(Stub_Bench, buildMatrix)
+{
+	zend_long _1, _5$$3;
+	zend_bool _0, _4$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *n_param = NULL, output, i, j, _3$$3, _7$$4;
+	long n, _2, _6$$3;
+
+	ZVAL_UNDEF(&output);
+	ZVAL_UNDEF(&i);
+	ZVAL_UNDEF(&j);
+	ZVAL_UNDEF(&_3$$3);
+	ZVAL_UNDEF(&_7$$4);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &n_param);
+	ZEPHIR_INIT_VAR(&output);
+	array_init(&output);
+	ZEPHIR_INIT_VAR(&i);
+	ZVAL_LONG(&i, 0);
+	ZEPHIR_INIT_VAR(&j);
+	ZVAL_LONG(&j, 0);
+	_2 = n;
+	_1 = 0;
+	_0 = 0;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			ZEPHIR_INIT_NVAR(&i);
+			ZVAL_LONG(&i, _1);
+			ZEPHIR_INIT_NVAR(&_3$$3);
+			array_init(&_3$$3);
+			zephir_array_update_zval(&output, &i, &_3$$3, PH_COPY | PH_SEPARATE);
+			_6$$3 = n;
+			_5$$3 = 0;
+			_4$$3 = 0;
+			if (_5$$3 <= _6$$3) {
+				while (1) {
+					if (_4$$3) {
+						_5$$3++;
+						if (!(_5$$3 <= _6$$3)) {
+							break;
+						}
+					} else {
+						_4$$3 = 1;
+					}
+					ZEPHIR_INIT_NVAR(&j);
+					ZVAL_LONG(&j, _5$$3);
+					ZEPHIR_INIT_NVAR(&_7$$4);
+					ZVAL_LONG(&_7$$4, 1);
+					zephir_array_update_multi(&output, &_7$$4, SL("zz"), 2, &i, &j);
+				}
+			}
+		}
+	}
+	RETURN_CCTOR(&output);
 }
 
 void zep_Stub_Bench_zephir_gen_step_generatorRange(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext )

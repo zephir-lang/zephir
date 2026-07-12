@@ -35,11 +35,16 @@ PHP_METHOD(Stub_FetchTest, setValues)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&values_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("values", 6, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(values)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &values);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("values"), values);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 32, values);
 	RETURN_THISW();
 }
 
@@ -237,6 +242,11 @@ PHP_METHOD(Stub_FetchTest, hasValue)
 	ZVAL_UNDEF(&name_sub);
 	ZVAL_UNDEF(&_POST);
 	ZVAL_UNDEF(&_0$$4);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("values", 6, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(name)
 	ZEND_PARSE_PARAMETERS_END();
@@ -245,7 +255,7 @@ PHP_METHOD(Stub_FetchTest, hasValue)
 	if (zephir_array_isset_value(&_POST, name)) {
 		RETURN_BOOL(1);
 	} else {
-		zephir_read_property(&_0$$4, this_ptr, ZEND_STRL("values"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_0$$4, this_ptr, _zephir_prop_0, 32, PH_NOISY_CC | PH_READONLY);
 		if (zephir_array_isset_value(&_0$$4, name)) {
 			RETURN_BOOL(1);
 		}
@@ -263,6 +273,11 @@ PHP_METHOD(Stub_FetchTest, getValue)
 	ZVAL_UNDEF(&_POST);
 	ZVAL_UNDEF(&value);
 	ZVAL_UNDEF(&_0$$3);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("values", 6, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(name)
 	ZEND_PARSE_PARAMETERS_END();
@@ -273,7 +288,7 @@ PHP_METHOD(Stub_FetchTest, getValue)
 	zephir_memory_observe(&value);
 	if (!(zephir_array_isset_fetch(&value, &_POST, name, 0))) {
 		ZEPHIR_OBS_NVAR(&value);
-		zephir_read_property(&_0$$3, this_ptr, ZEND_STRL("values"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 32, PH_NOISY_CC | PH_READONLY);
 		if (!(zephir_array_isset_fetch(&value, &_0$$3, name, 0))) {
 			RETURN_MM_NULL();
 		}

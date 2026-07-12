@@ -285,6 +285,10 @@ void zep_Stub_Generators_zephir_gen_step_countTo(int ht, zend_execute_data *exec
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2$$3);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("sideEffects", 11, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_gen = zephir_gen_ext;
@@ -298,10 +302,10 @@ void zep_Stub_Generators_zephir_gen_step_countTo(int ht, zend_execute_data *exec
 		default: break;
 	}
 	i = 1;
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("sideEffects"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC | PH_READONLY);
 	ZVAL_UNDEF(&_1);
 	ZVAL_LONG(&_1, (zephir_get_numberval(&_0) + 1));
-	zephir_update_property_zval(this_ptr, ZEND_STRL("sideEffects"), &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_1);
 	while (1) {
 		if (!(i <= n)) {
 			break;
@@ -875,6 +879,10 @@ void zep_Stub_Generators_zephir_gen_step_overItems(int ht, zend_execute_data *ex
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_4);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("items", 5, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_gen = zephir_gen_ext;
@@ -890,7 +898,7 @@ void zep_Stub_Generators_zephir_gen_step_overItems(int ht, zend_execute_data *ex
 		case 2: goto zephir_yield_resume_2;
 		default: break;
 	}
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("items"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 34, PH_NOISY_CC | PH_READONLY);
 	zephir_is_iterable(&_0, 0, "stub/generators.zep", 103);
 	if (Z_TYPE_P(&_0) == IS_ARRAY) {
 		ZEPHIR_INIT_NVAR(&_1);

@@ -35,14 +35,22 @@ PHP_METHOD(Stub_Issue2385, __construct)
 
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("assignedNull", 12, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("assignedValue", 13, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_update_property_zval(this_ptr, ZEND_STRL("assignedNull"), &__$null);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 49, &__$null);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "set");
-	zephir_update_property_zval(this_ptr, ZEND_STRL("assignedValue"), &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 50, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 

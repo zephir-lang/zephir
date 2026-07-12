@@ -29,10 +29,15 @@ PHP_METHOD(Stub_Invokes_InvokeProtectedComplex, __construct)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&text_zv);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("text", 4, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(text)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&text_zv, text);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("text"), &text_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 39, &text_zv);
 }
 

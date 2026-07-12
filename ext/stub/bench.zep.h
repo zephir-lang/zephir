@@ -29,6 +29,7 @@ PHP_METHOD(Stub_Bench, sumViaGenerator);
 PHP_METHOD(Stub_Bench, sumViaArray);
 PHP_METHOD(Stub_Bench, sumRangeOperator);
 PHP_METHOD(Stub_Bench, sumRangeFn);
+PHP_METHOD(Stub_Bench, buildMatrix);
 void zep_Stub_Bench_zephir_gen_step_generatorRange(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext );
 void zep_Stub_Bench_zephir_gen_step_generatorOverArray(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext );
 
@@ -136,6 +137,10 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_sumrangefn, 0, 1, IS_
 	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_buildmatrix, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bench_zephir_gen_step_generatorrange, 0, 0, 1)
 	ZEND_ARG_INFO(0, zephir_gen)
 ZEND_END_ARG_INFO()
@@ -171,5 +176,6 @@ PHP_ME(Stub_Bench, __construct, arginfo_stub_bench___construct, ZEND_ACC_PUBLIC|
 	PHP_ME(Stub_Bench, sumViaArray, arginfo_stub_bench_sumviaarray, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, sumRangeOperator, arginfo_stub_bench_sumrangeoperator, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, sumRangeFn, arginfo_stub_bench_sumrangefn, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, buildMatrix, arginfo_stub_bench_buildmatrix, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

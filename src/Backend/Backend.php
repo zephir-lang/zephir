@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Backend;
 
+use Zephir\Cache\PropertyCacheSlots;
 use Zephir\Class\Method\Method;
 use Zephir\Code\Printer;
 use Zephir\CompilationContext;
@@ -1129,15 +1130,66 @@ class Backend
             return;
         }
 
-        $template = 'zephir_read_property(%s, %s, ZEND_STRL("%s"), %s);';
         /* Are we going to init default object property value? */
         if ($context->currentMethod && $context->currentMethod->isInitializer()) {
-            $template = 'zephir_read_property_ex(%s, %s, ZEND_STRL("%s"), %s);';
+            $context->codePrinter->output(
+                sprintf('zephir_read_property_ex(%s, %s, ZEND_STRL("%s"), %s);', $symbol, $variableCode, $property, $flags)
+            );
+
+            return;
         }
 
+        /*
+         * Cached read: pass a method-scope interned zend_string for the name
+         * (no per-call alloc). cache_slot 0 = uncached in Stage 1; Stage 2
+         * threads a real inline-cache slot here.
+         */
+        $nameSlot  = $this->internedPropertyName((string) $property, $context);
+        $cacheSlot = $this->propertyCacheSlot($variableVariable, (string) $property, $context);
         $context->codePrinter->output(
-            sprintf($template, $symbol, $variableCode, $property, $flags)
+            sprintf('zephir_read_property_cached(%s, %s, %s, %d, %s);', $symbol, $variableCode, $nameSlot, $cacheSlot, $flags)
         );
+    }
+
+    /**
+     * Registers (once per property name per method) a method-scope interned
+     * zend_string slot for a compile-time-known object-property name and
+     * returns its C variable. The `static` declaration and lazy init are
+     * emitted at function scope by Method::compile() so the reference is valid
+     * from any nested block. Mirrors the isset `_fast` slot, hoisted to
+     * function scope. See property-access optimization (issue #1884 follow-up).
+     */
+    private function internedPropertyName(string $key, CompilationContext $context): string
+    {
+        if (!isset($context->propertyNameCache[$key])) {
+            $context->propertyNameCache[$key] = '_zephir_prop_' . $context->propertyNameCacheCounter++;
+        }
+
+        return $context->propertyNameCache[$key];
+    }
+
+    /**
+     * Returns the project-global inline-cache slot index for an object
+     * property access, or 0 (uncached) when it should not be cached.
+     *
+     * Only `this->prop` is cached: it is near-monomorphic (this_ptr is the
+     * compiling class or a subclass, whose ce the engine re-validates), so a
+     * slot keyed by (compiling-class, property) stays warm and correct.
+     * Accesses on other objects stay uncached to avoid mis-keyed sharing.
+     * See https://github.com/zephir-lang/zephir/issues/1902.
+     */
+    private function propertyCacheSlot(Variable $objectVariable, string $key, CompilationContext $context): int
+    {
+        if ('this' !== $objectVariable->getRealName()) {
+            return 0;
+        }
+
+        $className = $context->classDefinition?->getCompleteName();
+        if (empty($className)) {
+            return 0;
+        }
+
+        return PropertyCacheSlots::getSlot($className, $key);
     }
 
     /**
@@ -2243,14 +2295,23 @@ class Backend
             return;
         }
 
-        $template = 'zephir_update_property_zval(%s, ZEND_STRL("%s"), %s);';
         /* Are we going to init default object property value? */
         if ($context->currentMethod && $context->currentMethod->isInitializer()) {
-            $template = 'zephir_update_property_zval_ex(%s, ZEND_STRL("%s"), %s);';
+            $context->codePrinter->output(
+                sprintf('zephir_update_property_zval_ex(%s, ZEND_STRL("%s"), %s);', $this->getVariableCode($variable), $property, $value)
+            );
+
+            return;
         }
 
+        /*
+         * Cached write: method-scope interned zend_string name, cache_slot 0
+         * (uncached) in Stage 1; Stage 2 threads a real inline-cache slot.
+         */
+        $nameSlot  = $this->internedPropertyName((string) $property, $context);
+        $cacheSlot = $this->propertyCacheSlot($variable, (string) $property, $context);
         $context->codePrinter->output(
-            sprintf($template, $this->getVariableCode($variable), $property, $value)
+            sprintf('zephir_update_property_zval_cached(%s, %s, %d, %s);', $this->getVariableCode($variable), $nameSlot, $cacheSlot, $value)
         );
     }
 

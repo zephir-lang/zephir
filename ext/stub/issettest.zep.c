@@ -148,11 +148,15 @@ PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty1)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&g);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("s", 1, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_memory_observe(&g);
-	zephir_read_property(&g, this_ptr, ZEND_STRL("s"), PH_NOISY_CC);
+	zephir_read_property_cached(&g, this_ptr, _zephir_prop_0, 40, PH_NOISY_CC);
 	if (zephir_array_isset_value_string(&g, SL("a"))) {
 		RETURN_MM_BOOL(1);
 	}
@@ -166,6 +170,11 @@ PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty2)
 
 	ZVAL_UNDEF(&inp_sub);
 	ZVAL_UNDEF(&g);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("s", 1, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(inp)
 	ZEND_PARSE_PARAMETERS_END();
@@ -173,7 +182,7 @@ PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty2)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &inp);
 	zephir_memory_observe(&g);
-	zephir_read_property(&g, inp, ZEND_STRL("s"), PH_NOISY_CC);
+	zephir_read_property_cached(&g, inp, _zephir_prop_0, 0, PH_NOISY_CC);
 	if (zephir_array_isset_value_string(&g, SL("a"))) {
 		RETURN_MM_BOOL(1);
 	}

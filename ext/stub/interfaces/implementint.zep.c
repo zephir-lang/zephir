@@ -33,13 +33,18 @@ PHP_METHOD(Stub_Interfaces_ImplementInt, set)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("val", 3, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(val)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &val_param);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, val);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("val"), &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 35, &_0);
 }
 
 PHP_METHOD(Stub_Interfaces_ImplementInt, get)

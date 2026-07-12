@@ -47,6 +47,15 @@ PHP_METHOD(Stub_ConstantParameterDefault, __construct)
 
 	ZVAL_UNDEF(&cipher);
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("cipher", 6, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("rounds", 6, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(0, 2)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(cipher_param)
@@ -65,10 +74,10 @@ PHP_METHOD(Stub_ConstantParameterDefault, __construct)
 		rounds = 12;
 	} else {
 		}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("cipher"), &cipher);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 26, &cipher);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, rounds);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("rounds"), &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 27, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 

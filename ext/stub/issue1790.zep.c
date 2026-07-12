@@ -39,14 +39,19 @@ PHP_METHOD(Stub_Issue1790, setStringProp)
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_BOOL(&__$false, 0);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("flag", 4, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
 	if (ZEPHIR_GT_LONG(value, 5)) {
-		zephir_update_property_zval(this_ptr, ZEND_STRL("flag"), &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 43, &__$true);
 	} else {
-		zephir_update_property_zval(this_ptr, ZEND_STRL("flag"), &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 43, &__$false);
 	}
 }
 

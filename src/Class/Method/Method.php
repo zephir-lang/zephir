@@ -1029,6 +1029,12 @@ class Method
         $compilationContext->issetPropertyCache        = [];
         $compilationContext->issetPropertyCacheCounter = 0;
 
+        /**
+         * Reset per-method cached-property-access interned-string cache.
+         */
+        $compilationContext->propertyNameCache        = [];
+        $compilationContext->propertyNameCacheCounter = 0;
+
         if ($this->parameters instanceof Parameters) {
             /**
              * Round 1. Create variables in parameters in the symbol table.
@@ -1839,6 +1845,29 @@ class Method
         }
 
         $codePrinter->preOutput($tempCodePrinter->getOutput());
+
+        /**
+         * Emit method-scope interned zend_string slots for cached property
+         * access (see Backend::internedPropertyName). Declared at function
+         * scope — all `static` decls first, then the lazy inits — so a
+         * reference from any nested block is valid. Prepended here so it sits
+         * just below the variable declarations added just after this.
+         */
+        if (!empty($compilationContext->propertyNameCache)) {
+            $slotPrinter = new Printer();
+            foreach ($compilationContext->propertyNameCache as $slotVar) {
+                $slotPrinter->output("\t" . 'static zend_string *' . $slotVar . ' = NULL;');
+            }
+            foreach ($compilationContext->propertyNameCache as $slotName => $slotVar) {
+                $slotPrinter->output("\t" . 'if (UNEXPECTED(!' . $slotVar . ')) {');
+                $slotPrinter->output(
+                    "\t\t" . $slotVar . ' = zend_string_init("' . addslashes($slotName) . '", '
+                    . strlen($slotName) . ', 1);'
+                );
+                $slotPrinter->output("\t" . '}');
+            }
+            $codePrinter->preOutput($slotPrinter->getOutput());
+        }
 
         /**
          * Generate the variable definition for variables used.
