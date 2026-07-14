@@ -98,6 +98,23 @@ class Property
 
             case 'array':
             case 'empty-array':
+                if ($this->classDefinition->isTrait() && !$this->isStatic()) {
+                    /**
+                     * A trait cannot use the runtime create_object initializer to
+                     * build an array default: it is not carried over when a PHP
+                     * userland class binds the trait. Materialize a persistent
+                     * immutable array on the trait ce instead, so native trait
+                     * binding copies it — matching PHP semantics [#2607].
+                     */
+                    $compilationContext->backend->declareArrayProperty(
+                        $this->getName(),
+                        $this->defaultValue,
+                        $this->getVisibilityAccessor(),
+                        $compilationContext
+                    );
+                    break;
+                }
+
                 $this->initializeArray();
             // no break
             case 'null':

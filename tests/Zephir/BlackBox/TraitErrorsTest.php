@@ -193,14 +193,23 @@ final class TraitErrorsTest extends TestCase
         $this->assertStringContainsString('Cannot instantiate trait', $stderr);
     }
 
-    public function testFailsOnComplexPropertyDefaultInTrait(): void
+    public function testAllowsArrayPropertyDefaultInTrait(): void
     {
         [$exitCode, $stderr] = $this->generateProject('traitarrayprop', [
-            'a.zep' => "namespace Traitarrayprop;\n\ntrait A\n{\n    protected items = [];\n}\n",
+            'a.zep' => "namespace Traitarrayprop;\n\ntrait A\n{\n    protected items = [1, 2, 3];\n}\n",
+        ]);
+
+        $this->assertSame(0, $exitCode, $stderr);
+    }
+
+    public function testFailsOnStaticArrayPropertyDefaultInTrait(): void
+    {
+        [$exitCode, $stderr] = $this->generateProject('traitstaticarrayprop', [
+            'a.zep' => "namespace Traitstaticarrayprop;\n\ntrait A\n{\n    public static items = [1, 2, 3];\n}\n",
         ]);
 
         $this->assertSame(1, $exitCode);
-        $this->assertStringContainsString('array', $stderr);
+        $this->assertStringContainsString('Static property', $stderr);
         $this->assertStringContainsString('trait', $stderr);
     }
 }

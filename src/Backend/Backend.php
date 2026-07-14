@@ -948,6 +948,37 @@ class Backend
     }
 
     /**
+     * Emits a class property whose default value is an array literal, built into
+     * a persistent immutable array on the class entry (see
+     * zephir_declare_property_array). Used for trait properties so PHP's native
+     * trait binding carries the default into userland classes that `use` them.
+     *
+     * @param string $visibility ZEND_ACC_* accessor string for the property
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2607
+     */
+    public function declareArrayProperty(string $name, array $node, string $visibility, CompilationContext $context): void
+    {
+        $ce      = $context->classDefinition->getClassEntry($context);
+        $printer = $context->codePrinter;
+        $counter = 0;
+        $lines   = [];
+
+        $rootVar = $this->buildConstantArray($node, $lines, $counter);
+
+        $printer->output('{');
+        $printer->increaseLevel();
+        foreach ($lines as $line) {
+            $printer->output($line);
+        }
+        $printer->output(
+            sprintf('zephir_declare_property_array(%s, SL("%s"), &%s, %s);', $ce, $name, $rootVar, $visibility)
+        );
+        $printer->decreaseLevel();
+        $printer->output('}');
+    }
+
+    /**
      * Recursively emits C that builds an array literal AST node into a fresh
      * local zval, returning the name of that zval. Used for array class
      * constants which must be materialized in the class initializer.

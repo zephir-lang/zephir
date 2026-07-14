@@ -44,4 +44,38 @@ final class UserlandTraitTest extends TestCase
         $this->assertSame('zephir', $object->getName());
         $this->assertContains('Stub\Traits\Nameable', class_uses($object));
     }
+
+    /**
+     * The array default declared on the trait must be carried into a PHP
+     * userland class by native trait binding (issue #2607) — this is the
+     * exact case the old compile-time guard forbade.
+     */
+    public function testArrayPropertyDefaultIsCarriedIntoUserlandClass(): void
+    {
+        $object = new class {
+            use \Stub\Traits\Nameable;
+        };
+
+        $this->assertSame([1, 2, 3], $object->getTags());
+        $this->assertSame(['a' => 1, 'b' => [2, 3]], $object->getMeta());
+    }
+
+    /**
+     * Two independent instances must not share the array default (copy-on-write,
+     * identical to a native PHP array property default).
+     */
+    public function testArrayPropertyDefaultIsNotSharedBetweenInstances(): void
+    {
+        $klass = new class {
+            use \Stub\Traits\Nameable;
+        };
+
+        $a = new $klass();
+        $b = new $klass();
+
+        $a->addTag(4);
+
+        $this->assertSame([1, 2, 3, 4], $a->getTags());
+        $this->assertSame([1, 2, 3], $b->getTags());
+    }
 }
