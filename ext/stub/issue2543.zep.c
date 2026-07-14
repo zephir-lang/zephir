@@ -48,13 +48,18 @@ PHP_METHOD(Stub_Issue2543, setVarIntPositive)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("varIntPositive", 14, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(varIntPositive)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &varIntPositive_param);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, varIntPositive);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("varIntPositive"), &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 51, &_0);
 	RETURN_THISW();
 }
 
@@ -74,11 +79,16 @@ PHP_METHOD(Stub_Issue2543, setLabel)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&label_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("label", 5, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(label)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &label);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("label"), label);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 52, label);
 	RETURN_THISW();
 }
 

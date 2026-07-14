@@ -9,7 +9,7 @@ if test "$PHP_STUB" = "yes"; then
 	fi
 
 	AC_DEFINE(HAVE_STUB, 1, [Whether you have Stub])
-	stub_sources="stub.c kernel/main.c kernel/memory.c kernel/exception.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c stub/invokes/abstractprotected.zep.c
+	stub_sources="stub.c kernel/main.c kernel/memory.c kernel/exception.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c kernel/generator.c stub/invokes/abstractprotected.zep.c
 	stub/testinterface.zep.c
 	stub/oo/extend/exception.zep.c
 	stub/issue2165/issueextendinterface.zep.c
@@ -34,6 +34,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/oo/scopes/scopetesterinterface.zep.c
 	stub/ooimpl/zbeginning.zep.c
 	stub/properties/publicproperties.zep.c
+	stub/propertycache.zep.c
 	stub/args/single/integer.zep.c
 	stub/args/single/str.zep.c
 	stub/args/single/strmixed.zep.c
@@ -90,6 +91,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/functional.zep.c
 	stub/functionexists.zep.c
 	stub/functions.zep.c
+	stub/generators.zep.c
 	stub/geometry.zep.c
 	stub/globals.zep.c
 	stub/globals/env.zep.c
@@ -156,6 +158,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/methodabstract.zep.c
 	stub/methodargs.zep.c
 	stub/methodswithdefaultvalues.zep.c
+	stub/multidimarray.zep.c
 	stub/namespaces/a/b/sub.zep.c
 	stub/namespaces/classentry.zep.c
 	stub/nativearray.zep.c
@@ -225,6 +228,8 @@ if test "$PHP_STUB" = "yes"; then
 	stub/properties/staticpropertyarray.zep.c
 	stub/properties/staticprotectedproperties.zep.c
 	stub/properties/staticpublicproperties.zep.c
+	stub/propertycachechild.zep.c
+	stub/propertycachemagic.zep.c
 	stub/quantum.zep.c
 	stub/range.zep.c
 	stub/references.zep.c
@@ -250,6 +255,9 @@ if test "$PHP_STUB" = "yes"; then
 	stub/strings.zep.c
 	stub/stubs.zep.c
 	stub/ternary.zep.c
+	stub/traits/counter.zep.c
+	stub/traits/counteruser.zep.c
+	stub/traits/nameable.zep.c
 	stub/trytest.zep.c
 	stub/typehinting/testabstract.zep.c
 	stub/typeinstances.zep.c
@@ -297,7 +305,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/30__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
-	for dir in "stub stub/args/single stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/typehinting stub/types"; do
+	for dir in "stub stub/args/single stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/traits stub/typehinting stub/types"; do
 		PHP_ADD_BUILD_DIR([$ext_builddir/$dir])
 	done
 	PHP_SUBST(STUB_SHARED_LIBADD)

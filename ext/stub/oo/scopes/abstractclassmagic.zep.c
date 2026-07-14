@@ -38,6 +38,11 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("setCount", 8, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(name)
 		Z_PARAM_ZVAL(value)
@@ -45,10 +50,10 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 	value = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&name_zv, name);
 	zephir_update_property_zval_zval(this_ptr, &name_zv, value);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("setCount"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 76, PH_NOISY_CC | PH_READONLY);
 	ZVAL_UNDEF(&_1);
 	ZVAL_LONG(&_1, (zephir_get_numberval(&_0) + 1));
-	zephir_update_property_zval(this_ptr, ZEND_STRL("setCount"), &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 76, &_1);
 }
 
 PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __get)

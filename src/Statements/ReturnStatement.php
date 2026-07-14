@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Statements;
 
 use ReflectionException;
+use Zephir\Class\Definition\GeneratorTransformer;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
@@ -43,6 +44,17 @@ final class ReturnStatement extends StatementAbstract
         $statement = $this->statement;
 
         $codePrinter = $compilationContext->codePrinter;
+
+        /**
+         * Inside a generator step body, `return` finishes the generator: the
+         * value feeds getReturn() and the step function simply exits (its C
+         * return_value is unused). See issue #1849.
+         */
+        if ($compilationContext->currentMethod?->isGeneratorStep()) {
+            $this->compileGeneratorFinish($compilationContext);
+
+            return;
+        }
 
         if (isset($statement['expr'])) {
             $currentMethod = $compilationContext->currentMethod;
@@ -456,5 +468,31 @@ final class ReturnStatement extends StatementAbstract
             'array' => 'IS_ARRAY',
             default => null,
         };
+    }
+
+    /**
+     * `return [expr];` inside a generator step: store the getReturn() payload
+     * on the generator object, mark it finished, release the frame and exit.
+     */
+    private function compileGeneratorFinish(CompilationContext $compilationContext): void
+    {
+        $codePrinter = $compilationContext->codePrinter;
+
+        $compilationContext->headersManager->add('kernel/generator');
+
+        $genVariable = $compilationContext->symbolTable->getVariableForRead(
+            GeneratorTransformer::GEN_PARAM,
+            $compilationContext,
+            $this->statement
+        );
+        $gen = $compilationContext->backend->getVariableCode($genVariable);
+
+        $valueCode = isset($this->statement['expr'])
+            ? GeneratorZvalResolver::resolve($this->statement['expr'], $compilationContext)
+            : 'NULL';
+
+        $codePrinter->output('zephir_generator_finish(' . $gen . ', ' . $valueCode . ');');
+        $codePrinter->output('ZEPHIR_MM_RESTORE();');
+        $codePrinter->output('return;');
     }
 }

@@ -118,6 +118,7 @@ class MethodDocBlock extends DocBlock
                     | :\s*[\\\\\w|]+
                 )*
             )\s*
+            (?P<variadic>\.\.\.)?
             (?P<dollar>\$)?
             (?P<name>[a-z_][a-z0-9_]*)?\s*
             (?P<description>(.|\s)*)?

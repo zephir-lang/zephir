@@ -1,0 +1,116 @@
+--TEST--
+Generators (#1849): yield inside every loop form — for-in array (keys, reverse, nested, snapshot semantics), range(), switch, and consuming a generator with a Zephir for loop.
+--FILE--
+namespace Zept;
+
+class Loops
+{
+    public items = [];
+
+    public function arr(array items)
+    {
+        var k, v;
+        for k, v in items {
+            yield k, v;
+        }
+    }
+
+    public function arrReverse(array items)
+    {
+        var v;
+        for v in reverse items {
+            yield v;
+        }
+    }
+
+    public function nested(array matrix)
+    {
+        var row, x;
+        for row in matrix {
+            for x in row {
+                yield x;
+            }
+        }
+    }
+
+    public function overItems()
+    {
+        var v;
+        for v in this->items {
+            yield v;
+        }
+    }
+
+    public function range4(int n)
+    {
+        int i;
+        for i in range(1, n) {
+            yield i;
+        }
+    }
+
+    public function viaSwitch(int mode)
+    {
+        switch mode {
+            case 1:
+                yield "one";
+                break;
+            default:
+                yield "other";
+        }
+    }
+
+    public function relay(<\Iterator> it)
+    {
+        var v;
+        for v in it {
+            yield v;
+        }
+    }
+}
+--USAGE--
+$l = new Zept\Loops();
+
+$out = [];
+foreach ($l->arr(["a" => 1, 5 => 2, "c" => 3]) as $k => $v) { $out[] = var_export($k, true) . ":" . $v; }
+echo implode(",", $out), "\n";
+
+$g1 = $l->arr([1, 2]);
+$g2 = $l->arr([3, 4]);
+echo $g1->current(), $g2->current(), $g1->send(0), $g2->send(0), "\n";
+
+$out = [];
+foreach ($l->arrReverse([1, 2, 3]) as $v) { $out[] = $v; }
+echo implode(",", $out), "\n";
+
+$out = [];
+foreach ($l->nested([[1, 2], [3], [4, 5]]) as $v) { $out[] = $v; }
+echo implode(",", $out), "\n";
+
+$l->items = [1, 2, 3];
+$g = $l->overItems();
+echo $g->current(), "\n";
+$l->items = [9];
+$out = [];
+foreach ($g as $v) { $out[] = $v; }
+echo implode(",", $out), "\n";
+
+$out = [];
+foreach ($l->range4(4) as $v) { $out[] = $v; }
+echo implode(",", $out), "\n";
+
+echo $l->viaSwitch(1)->current(), " ", $l->viaSwitch(2)->current(), "\n";
+
+$out = [];
+foreach ($l->relay($l->range4(3)) as $k => $v) { $out[] = $k . "=>" . $v; }
+echo implode(",", $out), "\n";
+--EXPECT--
+'a':1,5:2,'c':3
+1324
+3,2,1
+1,2,3,4,5
+1
+1,2,3
+1,2,3,4
+one other
+0=>1,1=>2,2=>3

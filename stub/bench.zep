@@ -248,4 +248,106 @@ class Bench
         }
         return sum;
     }
+
+    /**
+     * Generator (yield) workloads — issue #1849. Each producer is paired
+     * with an array producer of identical shape so the benchmarks compare
+     * lazy suspension against eager materialization, plus an Iterator relay.
+     */
+    public function generatorRange(long n)
+    {
+        long i = 1;
+        while i <= n {
+            yield i;
+            let i = i + 1;
+        }
+    }
+
+    public function arrayRange(long n) -> array
+    {
+        array result = [];
+        long i = 1;
+        while i <= n {
+            let result[] = i;
+            let i = i + 1;
+        }
+        return result;
+    }
+
+    /**
+     * Generator relaying an array: exercises the suspension-safe
+     * HashPosition/snapshot for-in codegen (one suspension per element).
+     */
+    public function generatorOverArray(array items)
+    {
+        var v;
+        for v in items {
+            yield v;
+        }
+    }
+
+    /**
+     * Produce and consume entirely inside the extension: the C-to-C cost of
+     * one suspension+resume per element, no PHP userland in the loop.
+     */
+    public function sumViaGenerator(long n) -> long
+    {
+        var v;
+        long total = 0;
+        for v in this->generatorRange(n) {
+            let total += (long) v;
+        }
+        return total;
+    }
+
+    public function sumViaArray(long n) -> long
+    {
+        var v;
+        long total = 0;
+        for v in this->arrayRange(n) {
+            let total += (long) v;
+        }
+        return total;
+    }
+
+    /**
+     * `for i in 0..n` over the `..` range operator (#2433). Compiles to an
+     * integer counting loop; previously it materialised an n-element array.
+     * Paired with sumRangeFn (explicit range() call) and the pure-PHP baseline
+     * so the report shows the operator now matches range() and pure PHP.
+     */
+    public function sumRangeOperator(long n) -> long
+    {
+        long i = 0, total = 0;
+        for i in 0..n {
+            let total += i;
+        }
+        return total;
+    }
+
+    public function sumRangeFn(long n) -> long
+    {
+        long i = 0, total = 0;
+        for i in range(0, n) {
+            let total += i;
+        }
+        return total;
+    }
+
+    /**
+     * Builds an (n+1) x (n+1) matrix via `let output[i][j] = 1` in nested
+     * loops (the issue #1884 shape). Isolates the multi-dimensional array
+     * write cost; paired with a pure-PHP nested-`for` baseline in the bench.
+     */
+    public function buildMatrix(long n) -> array
+    {
+        var output = [], i = 0, j = 0;
+        for i in range(0, n) {
+            let output[i] = [];
+            for j in range(0, n) {
+                let output[i][j] = 1;
+            }
+        }
+        return output;
+    }
 }

@@ -14,8 +14,11 @@
 #define PHP_STUB_VERSION     "1.0.0"
 #define PHP_STUB_EXTNAME     "stub"
 #define PHP_STUB_AUTHOR      "Phalcon Team and contributors"
-#define PHP_STUB_ZEPVERSION  "0.23.0-$Id$"
+#define PHP_STUB_ZEPVERSION  "1.1.0-$Id$"
 #define PHP_STUB_DESCRIPTION "Description <b>test</b> for<br/>Test Extension."
+
+#define ZEPHIR_GENERATOR_ENABLED 1
+#define ZEPHIR_GENERATOR_NAMESPACE "Stub"
 
 typedef struct _zephir_struct_db { 
 	zend_bool my_setting_1;
@@ -43,6 +46,9 @@ ZEND_BEGIN_MODULE_GLOBALS(stub)
 	HashTable *fcache;
 
 	zephir_fcall_cache_entry *scache[ZEPHIR_MAX_CACHE_SLOTS];
+
+	/* Inline property cache slots (issue #1902): [ce, offset, prop_info] per site */
+	void *pcache[ZEPHIR_MAX_PROPERTY_CACHE_SLOTS * ZEPHIR_PROPERTY_CACHE_SLOT_SIZE];
 
 	/* Cache enabled */
 	unsigned int cache_enabled;

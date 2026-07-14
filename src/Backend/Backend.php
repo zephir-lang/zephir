@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Zephir\Backend;
 
+use Zephir\Cache\PropertyCacheSlots;
 use Zephir\Class\Method\Method;
 use Zephir\Code\Printer;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
 use Zephir\Config;
+use Zephir\Detectors\YieldDetector;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\FunctionDefinition;
@@ -1128,15 +1130,66 @@ class Backend
             return;
         }
 
-        $template = 'zephir_read_property(%s, %s, ZEND_STRL("%s"), %s);';
         /* Are we going to init default object property value? */
         if ($context->currentMethod && $context->currentMethod->isInitializer()) {
-            $template = 'zephir_read_property_ex(%s, %s, ZEND_STRL("%s"), %s);';
+            $context->codePrinter->output(
+                sprintf('zephir_read_property_ex(%s, %s, ZEND_STRL("%s"), %s);', $symbol, $variableCode, $property, $flags)
+            );
+
+            return;
         }
 
+        /*
+         * Cached read: pass a method-scope interned zend_string for the name
+         * (no per-call alloc). cache_slot 0 = uncached in Stage 1; Stage 2
+         * threads a real inline-cache slot here.
+         */
+        $nameSlot  = $this->internedPropertyName((string) $property, $context);
+        $cacheSlot = $this->propertyCacheSlot($variableVariable, (string) $property, $context);
         $context->codePrinter->output(
-            sprintf($template, $symbol, $variableCode, $property, $flags)
+            sprintf('zephir_read_property_cached(%s, %s, %s, %d, %s);', $symbol, $variableCode, $nameSlot, $cacheSlot, $flags)
         );
+    }
+
+    /**
+     * Registers (once per property name per method) a method-scope interned
+     * zend_string slot for a compile-time-known object-property name and
+     * returns its C variable. The `static` declaration and lazy init are
+     * emitted at function scope by Method::compile() so the reference is valid
+     * from any nested block. Mirrors the isset `_fast` slot, hoisted to
+     * function scope. See property-access optimization (issue #1884 follow-up).
+     */
+    private function internedPropertyName(string $key, CompilationContext $context): string
+    {
+        if (!isset($context->propertyNameCache[$key])) {
+            $context->propertyNameCache[$key] = '_zephir_prop_' . $context->propertyNameCacheCounter++;
+        }
+
+        return $context->propertyNameCache[$key];
+    }
+
+    /**
+     * Returns the project-global inline-cache slot index for an object
+     * property access, or 0 (uncached) when it should not be cached.
+     *
+     * Only `this->prop` is cached: it is near-monomorphic (this_ptr is the
+     * compiling class or a subclass, whose ce the engine re-validates), so a
+     * slot keyed by (compiling-class, property) stays warm and correct.
+     * Accesses on other objects stay uncached to avoid mis-keyed sharing.
+     * See https://github.com/zephir-lang/zephir/issues/1902.
+     */
+    private function propertyCacheSlot(Variable $objectVariable, string $key, CompilationContext $context): int
+    {
+        if ('this' !== $objectVariable->getRealName()) {
+            return 0;
+        }
+
+        $className = $context->classDefinition?->getCompleteName();
+        if (empty($className)) {
+            return 0;
+        }
+
+        return PropertyCacheSlots::getSlot($className, $key);
     }
 
     /**
@@ -1221,7 +1274,31 @@ class Backend
             ) . '", ' . $statement['line'] . ');'
         );
 
-        if ($mayBeArray) {
+        /**
+         * ZEND_HASH_FOREACH macros keep their cursor in block-scoped locals,
+         * which a generator resume `goto` would jump past (undefined
+         * behavior). When the loop body of a generator step contains a
+         * yield, iterate position-based over a snapshot instead: the
+         * snapshot zval and the HashPosition are plain function-scope
+         * locals the suspension machinery can save/restore, and the
+         * snapshot matches PHP's by-value foreach semantics. Issue #1849.
+         */
+        if (
+            $mayBeArray
+            && $compilationContext->currentMethod?->isGeneratorStep()
+            && isset($statement['statements'])
+            && (new YieldDetector())->detect($statement['statements'])
+        ) {
+            $this->forStatementSuspendableArray(
+                $exprVariable,
+                $keyVariable,
+                $variable,
+                $emitTypeWrapper,
+                $statement,
+                $statementBlock,
+                $compilationContext
+            );
+        } elseif ($mayBeArray) {
             $tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
             $tempVariable->setIsDoublePointer(true);
 
@@ -1408,6 +1485,96 @@ class Backend
         /* Since we do not observe, still do cleanup */
         $variable?->initVariant($compilationContext);
         $keyVariable?->initVariant($compilationContext);
+    }
+
+    /**
+     * Suspension-safe `for k, v in <array>` used inside generator step
+     * bodies whose loop contains a yield (issue #1849): a HashPosition
+     * cursor over a snapshot zval. Both live at function scope and are
+     * saved/restored by the generator slot machinery; the current entry is
+     * copied into the user variables and the cursor advanced *before* the
+     * body runs, so `continue`, `break` and suspension all behave.
+     */
+    private function forStatementSuspendableArray(
+        Variable $exprVariable,
+        ?Variable $keyVariable,
+        ?Variable $variable,
+        bool $emitTypeWrapper,
+        $statement,
+        $statementBlock,
+        CompilationContext $compilationContext
+    ): void {
+        $codePrinter = $compilationContext->codePrinter;
+        $symbolTable = $compilationContext->symbolTable;
+
+        $symbolTable->mustGrownStack(true);
+
+        if ($emitTypeWrapper) {
+            $codePrinter->output('if (Z_TYPE_P(' . $this->getVariableCode($exprVariable) . ') == IS_ARRAY) {');
+            $codePrinter->increaseLevel();
+        }
+
+        /* getTempVariableForWrite() already emits the (N)VAR init. */
+        $snapVariable = $symbolTable->getTempVariableForWrite('variable', $compilationContext);
+        $snapCode = $this->getVariableCode($snapVariable);
+        $codePrinter->output('ZVAL_COPY(' . $snapCode . ', ' . $this->getVariableCode($exprVariable) . ');');
+
+        $positionVariable = $symbolTable->addTemp('HashPosition', $compilationContext);
+        $position         = '&' . $positionVariable->getName();
+
+        $currentVariable = $symbolTable->addTemp('variable', $compilationContext);
+        $currentVariable->setIsDoublePointer(true);
+        $current = $currentVariable->getName();
+
+        $hash    = 'Z_ARRVAL_P(' . $snapCode . ')';
+        $reverse = !empty($statement['reverse']);
+
+        $codePrinter->output(
+            'zend_hash_internal_pointer_' . ($reverse ? 'end' : 'reset') . '_ex(' . $hash . ', ' . $position . ');'
+        );
+        $codePrinter->output('while (1) {');
+        $codePrinter->increaseLevel();
+        $codePrinter->output($current . ' = zend_hash_get_current_data_ex(' . $hash . ', ' . $position . ');');
+        $codePrinter->output('if (' . $current . ' == NULL) {');
+        $codePrinter->output("\t" . 'break;');
+        $codePrinter->output('}');
+
+        if ($keyVariable instanceof Variable) {
+            $keyVariable->initVariant($compilationContext);
+            $codePrinter->output(
+                'zend_hash_get_current_key_zval_ex(' . $hash . ', '
+                . $this->getVariableCode($keyVariable) . ', ' . $position . ');'
+            );
+        }
+
+        if ($variable instanceof Variable) {
+            $variable->initVariant($compilationContext);
+            $codePrinter->output(
+                'ZVAL_COPY(' . $this->getVariableCode($variable) . ', ' . $current . ');'
+            );
+        }
+
+        $codePrinter->output(
+            'zend_hash_move_' . ($reverse ? 'backwards' : 'forward') . '_ex(' . $hash . ', ' . $position . ');'
+        );
+
+        if (isset($statement['statements'])) {
+            $statementBlock->isLoop(true);
+            if (isset($statement['key'])) {
+                $statementBlock->getMutateGatherer()->increaseMutations($statement['key']);
+            }
+            $statementBlock->getMutateGatherer()->increaseMutations($statement['value']);
+            $statementBlock->compile($compilationContext);
+        }
+
+        $codePrinter->decreaseLevel();
+        $codePrinter->output('}');
+
+        if ($emitTypeWrapper) {
+            /* Leave the `if (Z_TYPE... == IS_ARRAY) {` open: the object
+             * branch that follows emits its own `} else {` and final `}`. */
+            $codePrinter->decreaseLevel();
+        }
     }
 
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable): ?string
@@ -2128,14 +2295,23 @@ class Backend
             return;
         }
 
-        $template = 'zephir_update_property_zval(%s, ZEND_STRL("%s"), %s);';
         /* Are we going to init default object property value? */
         if ($context->currentMethod && $context->currentMethod->isInitializer()) {
-            $template = 'zephir_update_property_zval_ex(%s, ZEND_STRL("%s"), %s);';
+            $context->codePrinter->output(
+                sprintf('zephir_update_property_zval_ex(%s, ZEND_STRL("%s"), %s);', $this->getVariableCode($variable), $property, $value)
+            );
+
+            return;
         }
 
+        /*
+         * Cached write: method-scope interned zend_string name, cache_slot 0
+         * (uncached) in Stage 1; Stage 2 threads a real inline-cache slot.
+         */
+        $nameSlot  = $this->internedPropertyName((string) $property, $context);
+        $cacheSlot = $this->propertyCacheSlot($variable, (string) $property, $context);
         $context->codePrinter->output(
-            sprintf($template, $this->getVariableCode($variable), $property, $value)
+            sprintf('zephir_update_property_zval_cached(%s, %s, %d, %s);', $this->getVariableCode($variable), $nameSlot, $cacheSlot, $value)
         );
     }
 

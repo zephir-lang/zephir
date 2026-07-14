@@ -35,13 +35,22 @@ PHP_METHOD(Stub_Oo_OoConstructParams, __construct)
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("a", 1, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("b", 1, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("b"), b);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 64, a);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 65, b);
 }
 
 PHP_METHOD(Stub_Oo_OoConstructParams, getA)

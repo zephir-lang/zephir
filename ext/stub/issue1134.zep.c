@@ -36,6 +36,11 @@ PHP_METHOD(Stub_Issue1134, __construct)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&config);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("data", 4, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		ZEPHIR_Z_PARAM_ARRAY(config, config_param)
@@ -49,7 +54,7 @@ PHP_METHOD(Stub_Issue1134, __construct)
 	} else {
 		zephir_get_arrval(&config, config_param);
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("data"), &config);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 41, &config);
 	ZEPHIR_MM_RESTORE();
 }
 

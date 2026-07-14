@@ -19,6 +19,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Detectors\ForValueUseDetector;
 use Zephir\Detectors\WriteDetector;
+use Zephir\Detectors\YieldDetector;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
@@ -57,6 +58,32 @@ class ForStatement extends StatementAbstract
                 if (false !== $status) {
                     return;
                 }
+            }
+        }
+
+        /*
+         * The `..` / `...` range operators desugar to `range(left, right)`. Route
+         * them through the same integer counting-loop codegen as an explicit
+         * `range()` call so `for i in 0..n` does not materialise an intermediate
+         * array. If compileRange() bails (non-int-compatible bounds, e.g. char or
+         * float ranges), fall through to the generic array path below. See #2433.
+         */
+        if ('irange' === $exprRaw['type'] || 'erange' === $exprRaw['type']) {
+            $rangeExpr = [
+                'type'       => 'fcall',
+                'name'       => 'range',
+                'parameters' => [
+                    ['parameter' => $exprRaw['left']],
+                    ['parameter' => $exprRaw['right']],
+                ],
+                'file'       => $this->statement['file'],
+                'line'       => $this->statement['line'],
+                'char'       => $this->statement['char'],
+            ];
+
+            $status = $this->compileRange($rangeExpr, $compilationContext);
+            if (false !== $status) {
+                return;
             }
         }
 
@@ -231,6 +258,23 @@ class ForStatement extends StatementAbstract
      */
     public function compileIterator(array $exprRaw, CompilationContext $compilationContext): void
     {
+        /**
+         * A raw zend_object_iterator * cannot be saved across a generator
+         * suspension; see issue #1849.
+         */
+        if (
+            $compilationContext->currentMethod?->isGeneratorStep()
+            && isset($this->statement['statements'])
+            && (new YieldDetector())->detect($this->statement['statements'])
+        ) {
+            throw new CompilerException(
+                "'yield' inside `for ... in iterator(...)` is not supported: the underlying "
+                . 'zend_object_iterator cannot be suspended. Iterate the object directly '
+                . '(`for x in obj`) or materialize it into an array first.',
+                $this->statement
+            );
+        }
+
         $iteratorVariable = $compilationContext->symbolTable->getTempVariableForWrite(
             'zend_object_iterator',
             $compilationContext

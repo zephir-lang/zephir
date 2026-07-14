@@ -17,6 +17,8 @@
 #define PHP_%PROJECT_UPPER%_ZEPVERSION  "%PROJECT_ZEPVERSION%"
 #define PHP_%PROJECT_UPPER%_DESCRIPTION "%PROJECT_DESCRIPTION%"
 
+%GENERATOR_DEFINES%
+
 %EXTENSION_STRUCT_GLOBALS%
 
 ZEND_BEGIN_MODULE_GLOBALS(%PROJECT_LOWER%)
@@ -27,6 +29,9 @@ ZEND_BEGIN_MODULE_GLOBALS(%PROJECT_LOWER%)
 	HashTable *fcache;
 
 	zephir_fcall_cache_entry *scache[ZEPHIR_MAX_CACHE_SLOTS];
+
+	/* Inline property cache slots (issue #1902): [ce, offset, prop_info] per site */
+	void *pcache[ZEPHIR_MAX_PROPERTY_CACHE_SLOTS * ZEPHIR_PROPERTY_CACHE_SLOT_SIZE];
 
 	/* Cache enabled */
 	unsigned int cache_enabled;

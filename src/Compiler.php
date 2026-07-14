@@ -21,9 +21,11 @@ use RecursiveIteratorIterator;
 use ReflectionClass;
 use ReflectionException;
 use Zephir\Backend\Backend;
+use Zephir\Cache\PropertyCacheSlots;
 use Zephir\Backend\FcallManagerInterface;
 use Zephir\Backend\StringsManager;
 use Zephir\Class\Definition\Definition;
+use Zephir\Class\Definition\TraitMerger;
 use Zephir\Code\ArgInfoDefinition;
 use Zephir\Code\Builder\Struct;
 use Zephir\Code\Printer;
@@ -134,7 +136,21 @@ final class Compiler
      * Used for static property initialization.
      */
     private array          $internalInitializers = [];
+    /**
+     * Forward declarations for the static-property initializers, emitted at
+     * file scope in project.c instead of the per-class header. Keeps the
+     * declaration and definition on the same translation unit so a single-file
+     * (concatenated) build cannot end up with a static definition and a
+     * non-static header prototype. See #2601.
+     */
+    private array          $internalInitializerHeaders = [];
     private static bool    $loadedPrototypes     = false;
+    /**
+     * Proper-case root namespace of the first generator method found, or null
+     * when the project contains no `yield`. Enables the kernel generator
+     * runtime (ZEPHIR_GENERATOR_ENABLED) and names the <Ns>\Generator class.
+     */
+    private ?string        $generatorNamespace   = null;
     private ?string        $optimizersPath;
     private ?string        $prototypesPath;
     private StringsManager $stringManager;
@@ -151,6 +167,10 @@ final class Compiler
         $this->stringManager = new StringsManager();
         $this->fcallManager  = $this->backend->getFcallManager();
 
+        // Fresh inline-property-cache slot numbering per compilation run
+        // (keeps slot indices stable/deterministic per build).
+        PropertyCacheSlots::reset();
+
         try {
             $this->assertRequiredExtensionsIsPresent();
         } catch (RuntimeException $e) {
@@ -166,6 +186,24 @@ final class Compiler
     {
         $this->definitions[$classDefinition->getCompleteName()]    = $classDefinition;
         $this->anonymousFiles[$classDefinition->getCompleteName()] = $file;
+    }
+
+    /**
+     * Records that the project contains at least one generator method, so the
+     * kernel <Ns>\Generator runtime must be compiled in and registered.
+     *
+     * @param string $properCaseNamespace root namespace in source case, e.g. "Stub"
+     */
+    public function markGeneratorsInUse(string $properCaseNamespace): void
+    {
+        if (null === $this->generatorNamespace) {
+            $this->generatorNamespace = $properCaseNamespace;
+        }
+    }
+
+    public function getGeneratorNamespace(): ?string
+    {
+        return $this->generatorNamespace;
     }
 
     /**
@@ -632,6 +670,7 @@ final class Compiler
                     . $classDefinition->getName()
                     . ');';
             } else {
+                /* Interfaces AND traits: both must register before any class init */
                 $interfaceEntries[$dependencyRank][] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
                 $interfaceInits[$dependencyRank][]   = 'ZEPHIR_INIT('
                     . $classDefinition->getCNamespace()
@@ -777,6 +816,9 @@ final class Compiler
             ),
             '%MOD_INITIALIZERS%'     => $modInitializers,
             '%MOD_DESTRUCTORS%'      => $modDestructors,
+            '%REQ_INITIALIZER_HEADERS%' => $this->internalInitializerHeaders === []
+                ? ''
+                : implode(PHP_EOL, $this->internalInitializerHeaders) . PHP_EOL,
             '%REQ_INITIALIZERS%'     => implode(
                 PHP_EOL . "\t",
                 array_merge($this->internalInitializers, [$reqInitializers])
@@ -875,6 +917,7 @@ final class Compiler
             '%PROJECT_ZEPVERSION%'       => Zephir::VERSION,
             '%EXTENSION_GLOBALS%'        => $globalCode,
             '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct,
+            '%GENERATOR_DEFINES%'        => $this->generatorDefines(),
         ];
 
         foreach ($toReplace as $mark => $replace) {
@@ -885,6 +928,31 @@ final class Compiler
         unset($content);
 
         return $needConfigure;
+    }
+
+    /**
+     * Emits the defines enabling the kernel generator runtime when the
+     * project contains generator methods; empty otherwise (the runtime is
+     * then compiled out entirely).
+     */
+    private function generatorDefines(): string
+    {
+        if (null === $this->generatorNamespace) {
+            return '';
+        }
+
+        $generatorClass = strtolower($this->generatorNamespace . '\\Generator');
+        foreach ($this->definitions as $completeName => $definition) {
+            if (strtolower((string)$completeName) === $generatorClass) {
+                throw new CompilerException(
+                    'Class "' . $completeName . '" collides with the compiler-provided generator '
+                    . 'runtime class registered for `yield` support. Rename the class.'
+                );
+            }
+        }
+
+        return '#define ZEPHIR_GENERATOR_ENABLED 1' . PHP_EOL
+            . '#define ZEPHIR_GENERATOR_NAMESPACE "' . addslashes($this->generatorNamespace) . '"';
     }
 
     /**
@@ -934,6 +1002,25 @@ final class Compiler
          */
         foreach ($this->files as $compileFile) {
             $compileFile->checkDependencies($this);
+        }
+
+        /**
+         * Round 2.5. Copy trait members into every definition that uses them.
+         * All definitions exist and trait names are resolved, but nothing has
+         * consumed member tables yet — the only safe point to merge (#504).
+         */
+        $traitMergeContext           = new CompilationContext();
+        $traitMergeContext->compiler = $this;
+        $traitMergeContext->config   = $this->config;
+        $traitMergeContext->logger   = $this->logger;
+        $traitMergeContext->backend  = $this->backend;
+
+        $traitMerger = new TraitMerger($this->files, $traitMergeContext);
+        foreach ($this->files as $compileFile) {
+            $classDefinition = $compileFile->getClassDefinition();
+            if ($classDefinition !== null) {
+                $traitMerger->merge($classDefinition);
+            }
         }
 
         /**
@@ -1049,6 +1136,9 @@ final class Compiler
                     $methods[] = '[' . $method->getName() . ':' . implode('-', $method->getVisibility()) . ']';
                     if ($method->isInitializer() && $method->isStatic()) {
                         $this->internalInitializers[] = "\t" . $method->getName() . '();';
+                        // File-scope forward declaration (mirror of Backend::getInternalSignature
+                        // for the static initializer). Emitted in project.c, not the class header.
+                        $this->internalInitializerHeaders[] = 'void ' . $method->getName() . '();';
                     }
                 }
 
@@ -1461,6 +1551,20 @@ final class Compiler
         foreach ($this->externalDependencies as $namespace => $location) {
             if (preg_match('#^' . $namespace . '\\\\#i', $className)) {
                 return $this->loadExternalClass($className, $location);
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Allows checking if a trait is part of the compiled extension.
+     */
+    public function isTrait(string $className): bool
+    {
+        foreach ($this->definitions as $key => $value) {
+            if (!strcasecmp($key, $className) && Definition::TYPE_TRAIT === $value->getType()) {
+                return true;
             }
         }
 

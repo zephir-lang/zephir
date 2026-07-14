@@ -94,7 +94,7 @@ final class ZeptProjectTest extends TestCase
     public function testThrowsWhenFileHasNoTypeDeclaration(): void
     {
         $this->expectException(ZeptParseException::class);
-        $this->expectExceptionMessage('class or interface');
+        $this->expectExceptionMessage('class, interface or trait');
 
         (new ZeptProject($this->zept(['namespace Zept;'])))->sources();
     }

@@ -34,13 +34,17 @@ PHP_METHOD(Stub_Constructors_Issue1803, Issue1803)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("value", 5, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "Value that won't be updated on class init");
-	zephir_update_property_zval(this_ptr, ZEND_STRL("value"), &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 1, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 

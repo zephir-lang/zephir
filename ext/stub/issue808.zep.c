@@ -71,6 +71,15 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetSelective)
 	ZVAL_UNDEF(&toRemove_sub);
 	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("keep", 4, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("remove", 6, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(toRemove)
 	ZEND_PARSE_PARAMETERS_END();
@@ -82,10 +91,10 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetSelective)
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "keep_value");
-	zephir_update_property_zval(&obj, ZEND_STRL("keep"), &_0);
+	zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "remove_value");
-	zephir_update_property_zval(&obj, ZEND_STRL("remove"), &_0);
+	zephir_update_property_zval_cached(&obj, _zephir_prop_1, 0, &_0);
 	zephir_unset_property_zval(&obj, toRemove);
 	RETURN_CCTOR(&obj);
 }
@@ -103,6 +112,10 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetStringKey)
 
 	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("name", 4, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -111,7 +124,7 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetStringKey)
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "value");
-	zephir_update_property_zval(&obj, ZEND_STRL("name"), &_0);
+	zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_0);
 	zephir_unset_property(&obj, "name");
 	static zend_string *_zephir_isset_0 = NULL;
 	if (UNEXPECTED(!_zephir_isset_0)) {
@@ -134,6 +147,11 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetNonExistentProperty)
 	ZVAL_UNDEF(&propertyName_sub);
 	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("keep", 4, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(propertyName)
 	ZEND_PARSE_PARAMETERS_END();
@@ -145,7 +163,7 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetNonExistentProperty)
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "keep_value");
-	zephir_update_property_zval(&obj, ZEND_STRL("keep"), &_0);
+	zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_0);
 	zephir_unset_property_zval(&obj, propertyName);
 	RETURN_CCTOR(&obj);
 }

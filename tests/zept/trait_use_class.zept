@@ -1,0 +1,57 @@
+--TEST--
+Traits: Zephir class using a Zephir trait — methods, property, constant, static, abstract (issue #504)
+--FILE--
+namespace Stub;
+
+trait Counter
+{
+	protected count = 0;
+
+	const STEP = 2;
+
+	public function increment() -> int
+	{
+		let this->count = this->count + self::STEP;
+		return this->count;
+	}
+
+	public static function describe() -> string
+	{
+		return "counter";
+	}
+
+	abstract public function label() -> string;
+
+	public function tagged() -> string
+	{
+		return this->label() . ":" . strval(this->count);
+	}
+}
+--FILE--
+namespace Stub;
+
+class CounterUser
+{
+	use Counter;
+
+	public function label() -> string
+	{
+		return "c";
+	}
+}
+--USAGE--
+$c = new \Stub\CounterUser();
+var_dump($c->increment());
+var_dump($c->increment());
+var_dump(\Stub\CounterUser::describe());
+var_dump($c->tagged());
+var_dump(\Stub\CounterUser::STEP);
+var_dump(class_uses('Stub\CounterUser'));
+--EXPECT--
+int(2)
+int(4)
+string(7) "counter"
+string(3) "c:4"
+int(2)
+array(0) {
+}

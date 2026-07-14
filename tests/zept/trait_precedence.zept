@@ -1,0 +1,46 @@
+--TEST--
+Traits: precedence — own class method beats trait; trait method beats inherited parent method (issue #504)
+--FILE--
+namespace Stub;
+
+trait Speaker
+{
+	public function speak() -> string
+	{
+		return "trait";
+	}
+
+	public function shout() -> string
+	{
+		return "TRAIT";
+	}
+}
+--FILE--
+namespace Stub;
+
+class SpeakerBase
+{
+	public function speak() -> string
+	{
+		return "parent";
+	}
+}
+--FILE--
+namespace Stub;
+
+class SpeakerChild extends SpeakerBase
+{
+	use Speaker;
+
+	public function shout() -> string
+	{
+		return "CLASS";
+	}
+}
+--USAGE--
+$s = new \Stub\SpeakerChild();
+echo $s->speak(), "\n";
+echo $s->shout(), "\n";
+--EXPECT--
+trait
+CLASS

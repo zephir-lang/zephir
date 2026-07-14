@@ -117,6 +117,20 @@ class CompilationContext
      */
     public int $issetPropertyCacheCounter = 0;
     /**
+     * Per-method map of property name => method-scope interned zend_string
+     * slot variable, for cached object-property read/write. The slot decls
+     * and lazy init are emitted at function scope by Method::compile() (not
+     * inline) so a reference is valid from any nested block. Reset on entry
+     * to each method. See property-access optimization (issue #1884 follow-up).
+     *
+     * @var array<string, string>
+     */
+    public array $propertyNameCache = [];
+    /**
+     * Counter feeding unique identifiers for propertyNameCache slots.
+     */
+    public int $propertyNameCacheCounter = 0;
+    /**
      * Global logger.
      */
     public ?LoggerInterface $logger = null;

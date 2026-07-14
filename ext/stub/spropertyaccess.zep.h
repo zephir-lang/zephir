@@ -10,7 +10,6 @@ PHP_METHOD(Stub_SPropertyAccess, mutateStringVarInsideCycle);
 PHP_METHOD(Stub_SPropertyAccess, mutateIntVarInsideCycle);
 PHP_METHOD(Stub_SPropertyAccess, mutateDoubleVarInsideCycle);
 PHP_METHOD(Stub_SPropertyAccess, mutateArrayVarInsideCycle);
-void zephir_init_static_properties_Stub_SPropertyAccess();
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_spropertyaccess___construct, 0, 0, 0)
 ZEND_END_ARG_INFO()

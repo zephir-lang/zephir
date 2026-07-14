@@ -1,0 +1,86 @@
+[
+    {
+        "type": "namespace",
+        "name": "Test",
+        "file": "phpt__classes_use_trait_docblock.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Foo",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "m",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__classes_use_trait_docblock.zep",
+                                "line": 12,
+                                "char": 11
+                            },
+                            "file": "phpt__classes_use_trait_docblock.zep",
+                            "line": 13,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "phpt__classes_use_trait_docblock.zep",
+                                "line": 11,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "phpt__classes_use_trait_docblock.zep",
+                        "line": 11,
+                        "char": 2
+                    },
+                    "file": "phpt__classes_use_trait_docblock.zep",
+                    "line": 10,
+                    "last-line": 14,
+                    "char": 16
+                }
+            ],
+            "uses": [
+                {
+                    "type": "use-trait",
+                    "traits": [
+                        {
+                            "type": "variable",
+                            "value": "Counter",
+                            "file": "phpt__classes_use_trait_docblock.zep",
+                            "line": 8,
+                            "char": 13
+                        }
+                    ],
+                    "docblock": "**\n\t * Adds counting behavior.\n\t *",
+                    "file": "phpt__classes_use_trait_docblock.zep",
+                    "line": 10,
+                    "char": 7
+                }
+            ],
+            "file": "phpt__classes_use_trait_docblock.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__classes_use_trait_docblock.zep",
+        "line": 3,
+        "char": 5
+    }
+]

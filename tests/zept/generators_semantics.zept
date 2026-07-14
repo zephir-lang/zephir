@@ -1,0 +1,64 @@
+--TEST--
+Generators (#1849): explicit/mixed keys with PHP array-append auto-key rule, bare yield, getReturn(), send(). EXPECT produced by the equivalent PHP generators.
+--FILE--
+namespace Zept;
+
+class Sem
+{
+    public function keysMix()
+    {
+        yield "a", 1;
+        yield 10, 2;
+        yield 3;
+        yield "z", 4;
+        yield 5;
+    }
+
+    public function bare()
+    {
+        yield;
+        yield;
+    }
+
+    public function withReturn()
+    {
+        yield 1;
+        return "done";
+    }
+
+    public function three()
+    {
+        yield 1;
+        yield 2;
+        yield 3;
+    }
+}
+--USAGE--
+$s = new Zept\Sem();
+
+foreach ($s->keysMix() as $k => $v) { echo var_export($k, true), "=>", $v, "\n"; }
+
+foreach ($s->bare() as $k => $v) { echo $k, "=>", var_export($v, true), "\n"; }
+
+$g = $s->withReturn();
+try { $g->getReturn(); } catch (\Exception $e) { echo get_class($e), ": ", $e->getMessage(), "\n"; }
+foreach ($g as $v) {}
+echo var_export($g->getReturn(), true), "\n";
+
+$g = $s->three();
+echo var_export($g->send("x"), true), "\n";
+echo var_export($g->send("y"), true), "\n";
+echo var_export($g->current(), true), "\n";
+--EXPECT--
+'a'=>1
+10=>2
+11=>3
+'z'=>4
+12=>5
+0=>NULL
+1=>NULL
+Exception: Cannot get return value of a generator that hasn't returned
+'done'
+2
+3
+3

@@ -25,6 +25,7 @@ use Zephir\Exception;
 use function addslashes;
 use function array_diff;
 use function array_key_exists;
+use function array_map;
 use function file_put_contents;
 use function implode;
 use function in_array;
@@ -36,6 +37,7 @@ use function realpath;
 use function sprintf;
 use function str_ireplace;
 use function str_replace;
+use function strtolower;
 use function trim;
 use function ucfirst;
 
@@ -179,10 +181,30 @@ class Generator
         $source .= PHP_EOL . '{' . PHP_EOL;
 
         /**
+         * Trait `use` lines. Members merged in from those traits are skipped
+         * below — the stub reads like the original source, with the trait
+         * providing them.
+         */
+        if ($usedTraits = $class->getUsedTraits()) {
+            foreach ($usedTraits as $traitName) {
+                $source .= $indent . 'use \\' . trim($traitName, '\\') . ';' . PHP_EOL;
+            }
+
+            $source .= PHP_EOL;
+        }
+
+        $mergedMembers = $class->getMergedMemberNames();
+        $mergedMethods = array_map('strtolower', $mergedMembers['methods']);
+
+        /**
          * Build Class constants
          */
         $constants = [];
         foreach ($class->getConstants() as $constant) {
+            if (in_array($constant->getName(), $mergedMembers['constants'], true)) {
+                continue;
+            }
+
             $constants[] = $this->buildConstant($constant, $indent) . PHP_EOL;
         }
 
@@ -194,6 +216,10 @@ class Generator
          */
         $properties = [];
         foreach ($class->getProperties() as $property) {
+            if (in_array($property->getName(), $mergedMembers['properties'], true)) {
+                continue;
+            }
+
             $properties[] = $this->buildProperty($property, $indent) . PHP_EOL;
         }
 
@@ -206,6 +232,10 @@ class Generator
         $methods = [];
         foreach ($class->getMethods() as $method) {
             if ($method->isInternal()) {
+                continue;
+            }
+
+            if (in_array(strtolower($method->getName()), $mergedMethods, true)) {
                 continue;
             }
 
@@ -278,7 +308,7 @@ class Generator
                     }
                 }
 
-                $paramStr .= '$' . $parameter['name'];
+                $paramStr .= (!empty($parameter['variadic']) ? '...' : '') . '$' . $parameter['name'];
 
                 if (isset($parameter['default'])) {
                     $paramStr .= ' = ' . $this->wrapPHPValue($parameter);

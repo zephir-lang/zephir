@@ -6,6 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-07-14
+
+### Added
+- Implemented generator (`yield`) support: methods containing `yield;` / `yield expr;` / `yield key, value;` now compile to lazy generators returning an extension-scoped `<Namespace>\Generator` object (`\Iterator` + `send()` + `getReturn()`) with PHP-identical laziness, auto-key, rewind and exhaustion semantics. Suspension works across `while`/`loop`/`if`/`switch`, `for in <array>` (snapshot iteration), `range()` and object iteration; `yield` inside `try/catch`, `for ... in iterator(...)`, closures and functions is rejected at compile time. PHP's `\Generator` is final, so declare `-> <\Iterator>`, `-> <\Traversable>` or omit the return type [#1849](https://github.com/zephir-lang/zephir/issues/1849)
+- Added trait support: `trait Name { }` and import inside classes/traits. Zephir traits compile to real `ZEND_ACC_TRAIT` class entries, so PHP userland can `use` them [#504](https://github.com/zephir-lang/zephir/issues/504)
+
+### Changed
+- Multi-dimensional array assignments (`let a[i][j] = v`) now skip a redundant final-offset hash lookup in `zephir_array_update_multi_ex` (three hash operations per write down to two), making tight-loop matrix builds ~15–20% faster (measured via `tests/Benchmark/MultiDimArrayBench.php`) [#1884](https://github.com/zephir-lang/zephir/issues/1884)
+- Object property reads and writes on `this` with a compile-time-known name now reuse a per-method interned `zend_string` for the name and a per-request inline property cache slot (`zephir_read_property_cached` / `zephir_update_property_zval_cached`), instead of allocating a `zend_string` and re-resolving the property offset by hash lookup on every access. This takes `this->prop` reads from ~0.44× to ~1.35× of native PHP throughput — now faster than interpreted PHP (measured via `tests/Benchmark/PropertyAccessBench.php`) [#1902](https://github.com/zephir-lang/zephir/issues/1902)
+
+### Fixed
+- Fixed arithmetic compound-assignment (`+=`, `-=`, `*=`) on an object property overwriting the property instead of accumulating when the right-hand side is a variable (e.g. `let this->total += delta;` compiled to `let this->total = delta;`, dropping the read). The current property value is now read, the operator applied, then written back — matching the already-correct literal-operand path. Arithmetic sibling of the concat-assign fix [#2063](https://github.com/zephir-lang/zephir/issues/2063); found while adding the property inline-cache [#1902](https://github.com/zephir-lang/zephir/issues/1902)
+- Pure-PHP parser parity: a closure-arrow (`x => expr`) now requires a bare identifier on the left, matching the C parser grammar `yield "k" => 2;` and `let f = "x" => 2;` are syntax errors again instead of being mis-parsed [#1849](https://github.com/zephir-lang/zephir/issues/1849)
+- `for` loops over the `..`/`...` range operators (`for i in 0..n`) now compile to an integer counting loop instead of materializing an intermediate array, matching the existing `for i in range(...)` optimization; this also lets a typed `int` loop variable be used with `..`, which previously failed to compile [#2433](https://github.com/zephir-lang/zephir/issues/2433)
+- A static property initialized with an array literal no longer breaks single-file (concatenated) builds: the `zephir_init_static_properties_<Class>()` initializer is now forward-declared at file scope in the project `.c` instead of the per-class header, keeping its declaration and definition in one translation unit so their linkage cannot mismatch (`static` vs non-`static`) [#2601](https://github.com/zephir-lang/zephir/issues/2601)
+
 ## [1.0.0] - 2026-07-01
 
 ### Added

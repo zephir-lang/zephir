@@ -36,6 +36,8 @@ zend_class_entry *stub_extendedinterface_ce;
 zend_class_entry *stub_integration_psr_http_message_messageinterfaceex_ce;
 zend_class_entry *stub_interfaces_interfacestaticmethod_ce;
 zend_class_entry *stub_ooimpl_abeginning_ce;
+zend_class_entry *stub_traits_counter_ce;
+zend_class_entry *stub_traits_nameable_ce;
 zend_class_entry *stub_invokes_abstractprotected_ce;
 zend_class_entry *stub_oo_extend_exception_ce;
 zend_class_entry *stub_oo_extend_db_exception_ce;
@@ -53,6 +55,7 @@ zend_class_entry *stub_oo_extend_db_query_exception_ce;
 zend_class_entry *stub_oo_oodynamica_ce;
 zend_class_entry *stub_oo_scopes_hasprivatemethod_ce;
 zend_class_entry *stub_properties_publicproperties_ce;
+zend_class_entry *stub_propertycache_ce;
 zend_class_entry *stub_0__closure_ce;
 zend_class_entry *stub_10__closure_ce;
 zend_class_entry *stub_11__closure_ce;
@@ -138,6 +141,7 @@ zend_class_entry *stub_fortytwo_ce;
 zend_class_entry *stub_functional_ce;
 zend_class_entry *stub_functionexists_ce;
 zend_class_entry *stub_functions_ce;
+zend_class_entry *stub_generators_ce;
 zend_class_entry *stub_geometry_ce;
 zend_class_entry *stub_globals_ce;
 zend_class_entry *stub_globals_env_ce;
@@ -202,6 +206,7 @@ zend_class_entry *stub_mcallinternal_ce;
 zend_class_entry *stub_methodabstract_ce;
 zend_class_entry *stub_methodargs_ce;
 zend_class_entry *stub_methodswithdefaultvalues_ce;
+zend_class_entry *stub_multidimarray_ce;
 zend_class_entry *stub_namespaces_a_b_sub_ce;
 zend_class_entry *stub_namespaces_classentry_ce;
 zend_class_entry *stub_nativearray_ce;
@@ -270,6 +275,8 @@ zend_class_entry *stub_properties_staticprivateproperties_ce;
 zend_class_entry *stub_properties_staticpropertyarray_ce;
 zend_class_entry *stub_properties_staticprotectedproperties_ce;
 zend_class_entry *stub_properties_staticpublicproperties_ce;
+zend_class_entry *stub_propertycachechild_ce;
+zend_class_entry *stub_propertycachemagic_ce;
 zend_class_entry *stub_quantum_ce;
 zend_class_entry *stub_range_ce;
 zend_class_entry *stub_references_ce;
@@ -295,6 +302,7 @@ zend_class_entry *stub_statements_ce;
 zend_class_entry *stub_strings_ce;
 zend_class_entry *stub_stubs_ce;
 zend_class_entry *stub_ternary_ce;
+zend_class_entry *stub_traits_counteruser_ce;
 zend_class_entry *stub_trytest_ce;
 zend_class_entry *stub_typehinting_testabstract_ce;
 zend_class_entry *stub_typeinstances_ce;
@@ -342,6 +350,8 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Integration_Psr_Http_Message_MessageInterfaceEx);
 	ZEPHIR_INIT(Stub_Interfaces_InterfaceStaticMethod);
 	ZEPHIR_INIT(Stub_OoImpl_ABeginning);
+	ZEPHIR_INIT(Stub_Traits_Counter);
+	ZEPHIR_INIT(Stub_Traits_Nameable);
 	ZEPHIR_INIT(Stub_Invokes_AbstractProtected);
 	ZEPHIR_INIT(Stub_Oo_Extend_Exception);
 	ZEPHIR_INIT(Stub_Oo_Extend_Db_Exception);
@@ -359,6 +369,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Oo_OoDynamicA);
 	ZEPHIR_INIT(Stub_Oo_Scopes_HasPrivateMethod);
 	ZEPHIR_INIT(Stub_Properties_PublicProperties);
+	ZEPHIR_INIT(Stub_PropertyCache);
 	ZEPHIR_INIT(Stub_Args_Single_Integer);
 	ZEPHIR_INIT(Stub_Args_Single_Str);
 	ZEPHIR_INIT(Stub_Args_Single_StrMixed);
@@ -413,6 +424,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_FunctionExists);
 	ZEPHIR_INIT(Stub_Functional);
 	ZEPHIR_INIT(Stub_Functions);
+	ZEPHIR_INIT(Stub_Generators);
 	ZEPHIR_INIT(Stub_Geometry);
 	ZEPHIR_INIT(Stub_Globals);
 	ZEPHIR_INIT(Stub_Globals_Env);
@@ -477,6 +489,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_MethodAbstract);
 	ZEPHIR_INIT(Stub_MethodArgs);
 	ZEPHIR_INIT(Stub_MethodsWithDefaultValues);
+	ZEPHIR_INIT(Stub_MultiDimArray);
 	ZEPHIR_INIT(Stub_Namespaces_A_B_Sub);
 	ZEPHIR_INIT(Stub_Namespaces_ClassEntry);
 	ZEPHIR_INIT(Stub_NativeArray);
@@ -545,6 +558,8 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Properties_StaticPropertyArray);
 	ZEPHIR_INIT(Stub_Properties_StaticProtectedProperties);
 	ZEPHIR_INIT(Stub_Properties_StaticPublicProperties);
+	ZEPHIR_INIT(Stub_PropertyCacheChild);
+	ZEPHIR_INIT(Stub_PropertyCacheMagic);
 	ZEPHIR_INIT(Stub_Quantum);
 	ZEPHIR_INIT(Stub_Range);
 	ZEPHIR_INIT(Stub_References);
@@ -570,6 +585,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Strings);
 	ZEPHIR_INIT(Stub_Stubs);
 	ZEPHIR_INIT(Stub_Ternary);
+	ZEPHIR_INIT(Stub_Traits_CounterUser);
 	ZEPHIR_INIT(Stub_TryTest);
 	ZEPHIR_INIT(Stub_TypeHinting_TestAbstract);
 	ZEPHIR_INIT(Stub_TypeInstances);
@@ -645,6 +661,9 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
 	/* Static cache */
 	memset(stub_globals->scache, '\0', sizeof(zephir_fcall_cache_entry*) * ZEPHIR_MAX_CACHE_SLOTS);
 
+	/* Inline property cache (per-request reset defeats stale-ce/ABA reuse) */
+	memset(stub_globals->pcache, '\0', sizeof(void*) * ZEPHIR_MAX_PROPERTY_CACHE_SLOTS * ZEPHIR_PROPERTY_CACHE_SLOT_SIZE);
+
 	
 	stub_globals->db.my_setting_2 = 100;
 	stub_globals->db.my_setting_3 = 7.5;
@@ -669,6 +688,8 @@ static void php_zephir_init_module_globals(zend_stub_globals *stub_globals)
 	
 }
 
+void zephir_init_static_properties_Stub_Properties_StaticPropertyArray();
+void zephir_init_static_properties_Stub_SPropertyAccess();
 static PHP_RINIT_FUNCTION(stub)
 {
 	zend_stub_globals *stub_globals_ptr;
@@ -708,7 +729,7 @@ static PHP_MINFO_FUNCTION(stub)
 		php_info_print_table_start();
 	php_info_print_table_header(2, "Test Extension support", "Value");
 	php_info_print_table_row(2, "Lifecycle hooks", "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks.");
-	php_info_print_table_row(2, "Static Analysis", "Test extensions' compiler provides static analysis of the compiled code.");
+	php_info_print_table_row(2, "Static Analysis", "Test extensions&#039; compiler provides static analysis of the compiled code.");
 	php_info_print_table_end();
 	php_info_print_table_start();
 	php_info_print_table_header(2, "Test variable", "Value");
