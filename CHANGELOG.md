@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-07-14
+
 ### Added
 - Implemented generator (`yield`) support: methods containing `yield;` / `yield expr;` / `yield key, value;` now compile to lazy generators returning an extension-scoped `<Namespace>\Generator` object (`\Iterator` + `send()` + `getReturn()`) with PHP-identical laziness, auto-key, rewind and exhaustion semantics. Suspension works across `while`/`loop`/`if`/`switch`, `for in <array>` (snapshot iteration), `range()` and object iteration; `yield` inside `try/catch`, `for ... in iterator(...)`, closures and functions is rejected at compile time. PHP's `\Generator` is final, so declare `-> <\Iterator>`, `-> <\Traversable>` or omit the return type [#1849](https://github.com/zephir-lang/zephir/issues/1849)
 - Added trait support: `trait Name { }` and import inside classes/traits. Zephir traits compile to real `ZEND_ACC_TRAIT` class entries, so PHP userland can `use` them [#504](https://github.com/zephir-lang/zephir/issues/504)
