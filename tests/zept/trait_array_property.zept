@@ -1,0 +1,40 @@
+--TEST--
+Traits: array property default carried into a PHP userland class (issue #2607)
+--FILE--
+namespace Stub;
+
+trait ArrayHolder
+{
+	protected opts = [1, 2, 3];
+
+	protected blanks = [];
+
+	protected nested = ["a": 1, "b": [2, 3]];
+
+	public function getOpts() -> array
+	{
+		return this->opts;
+	}
+
+	public function getBlanks() -> array
+	{
+		return this->blanks;
+	}
+
+	public function getNested() -> array
+	{
+		return this->nested;
+	}
+}
+--USAGE--
+class PhpHolder {
+    use \Stub\ArrayHolder;
+}
+$h = new PhpHolder();
+echo json_encode($h->getOpts()), "\n";
+echo json_encode($h->getBlanks()), "\n";
+echo json_encode($h->getNested()), "\n";
+--EXPECT--
+[1,2,3]
+[]
+{"a":1,"b":[2,3]}

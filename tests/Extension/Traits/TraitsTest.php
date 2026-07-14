@@ -36,6 +36,13 @@ final class TraitsTest extends TestCase
         $this->assertSame(2, CounterUser::STEP);
     }
 
+    public function testTraitArrayPropertyDefaultIsMerged(): void
+    {
+        $counter = new CounterUser();
+
+        $this->assertSame([10, 20], $counter->getSteps());
+    }
+
     public function testAbstractTraitMethodIsSatisfiedByClass(): void
     {
         $counter = new CounterUser();
