@@ -28,6 +28,10 @@ PHP_METHOD(Stub_Constants, testStringDelimiterConstantDoubleQuoted);
 PHP_METHOD(Stub_Constants, testStringConstantWithVars);
 PHP_METHOD(Stub_Constants, testStringPropertyWithVarsAssigned);
 PHP_METHOD(Stub_Constants, testStringPropertyWithVarsGet);
+PHP_METHOD(Stub_Constants, testClassSelf);
+PHP_METHOD(Stub_Constants, testClassStatic);
+PHP_METHOD(Stub_Constants, testClassParent);
+PHP_METHOD(Stub_Constants, testClassName);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_constants_getpropwsvarsget, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -104,6 +108,18 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_constants_teststringpropertywithvarsget, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_constants_testclassself, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_constants_testclassstatic, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_constants_testclassparent, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_constants_testclassname, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_constants_method_entry) {
 PHP_ME(Stub_Constants, getPropWsVarsGet, arginfo_stub_constants_getpropwsvarsget, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Constants, getPropertyC1, arginfo_stub_constants_getpropertyc1, ZEND_ACC_PUBLIC)
@@ -130,5 +146,9 @@ PHP_ME(Stub_Constants, testStringDelimiterConstantDoubleQuoted, arginfo_stub_con
 PHP_ME(Stub_Constants, testStringConstantWithVars, arginfo_stub_constants_teststringconstantwithvars, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Constants, testStringPropertyWithVarsAssigned, arginfo_stub_constants_teststringpropertywithvarsassigned, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Constants, testStringPropertyWithVarsGet, arginfo_stub_constants_teststringpropertywithvarsget, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Constants, testClassSelf, arginfo_stub_constants_testclassself, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Constants, testClassStatic, arginfo_stub_constants_testclassstatic, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Constants, testClassParent, arginfo_stub_constants_testclassparent, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Constants, testClassName, arginfo_stub_constants_testclassname, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

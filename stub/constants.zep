@@ -142,4 +142,24 @@ class Constants extends ConstantsParent
 	{
 		return this->propWsVarsGet;
 	}
+
+	public function testClassSelf()
+	{
+		return self::class;
+	}
+
+	public function testClassStatic()
+	{
+		return static::class;
+	}
+
+	public function testClassParent()
+	{
+		return parent::class;
+	}
+
+	public function testClassName()
+	{
+		return Constants::class;
+	}
 }

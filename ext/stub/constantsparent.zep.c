@@ -12,11 +12,12 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_ConstantsParent)
 {
-	ZEPHIR_REGISTER_CLASS(Stub, ConstantsParent, stub, constantsparent, NULL, 0);
+	ZEPHIR_REGISTER_CLASS(Stub, ConstantsParent, stub, constantsparent, stub_constantsparent_method_entry, 0);
 
 	zephir_declare_class_constant_null(stub_constantsparent_ce, SL("P1"));
 
@@ -31,5 +32,18 @@ ZEPHIR_INIT_CLASS(Stub_ConstantsParent)
 	zephir_declare_class_constant_string(stub_constantsparent_ce, SL("P6"), "test");
 
 	return SUCCESS;
+}
+
+PHP_METHOD(Stub_ConstantsParent, testStaticClassInherited)
+{
+
+	zephir_get_called_class(return_value);
+	return;
+}
+
+PHP_METHOD(Stub_ConstantsParent, testSelfClassInherited)
+{
+
+	RETURN_STRING("Stub\\ConstantsParent");
 }
 

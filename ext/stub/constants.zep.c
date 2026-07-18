@@ -251,3 +251,28 @@ PHP_METHOD(Stub_Constants, testStringPropertyWithVarsGet)
 	RETURN_MEMBER(getThis(), "propWsVarsGet");
 }
 
+PHP_METHOD(Stub_Constants, testClassSelf)
+{
+
+	RETURN_STRING("Stub\\Constants");
+}
+
+PHP_METHOD(Stub_Constants, testClassStatic)
+{
+
+	zephir_get_called_class(return_value);
+	return;
+}
+
+PHP_METHOD(Stub_Constants, testClassParent)
+{
+
+	RETURN_STRING("Stub\\ConstantsParent");
+}
+
+PHP_METHOD(Stub_Constants, testClassName)
+{
+
+	RETURN_STRING("Stub\\Constants");
+}
+

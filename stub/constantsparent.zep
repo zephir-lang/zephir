@@ -14,4 +14,14 @@ class ConstantsParent
 	const P5 = 10.25;
 
 	const P6 = "test";
+
+	public function testStaticClassInherited()
+	{
+		return static::class;
+	}
+
+	public function testSelfClassInherited()
+	{
+		return self::class;
+	}
 }
