@@ -2413,6 +2413,18 @@ final class PhpParser
             $this->syntaxError();
         }
 
+        // class::class / self::class / static::class / parent::class magic constant.
+        // `class` is a reserved keyword (T_CLASS), so it never reaches expectNameToken();
+        // emit it as a static-constant-access node with the member value "class", which
+        // StaticConstantAccess resolves to the fully-qualified class name. See #2527.
+        if ($this->check(TokenType::T_CLASS)) {
+            $this->advance();
+            $classLiteral  = $this->literalFromToken(TokenType::T_IDENTIFIER, $this->syntheticToken($className));
+            $memberLiteral = $this->literalFromToken(TokenType::T_IDENTIFIER, $this->syntheticToken('class'));
+
+            return $this->expr('static-constant-access', $classLiteral, $memberLiteral, null);
+        }
+
         $member     = $this->expectNameToken();
         $memberType = $member->opcode;
 
