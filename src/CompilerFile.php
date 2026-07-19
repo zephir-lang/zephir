@@ -1027,6 +1027,7 @@ final class CompilerFile implements FileInterface
                         $property['data-type'] ?? null,
                         $property['cast'] ?? null,
                         !empty($property['nullable']),
+                        $property['data-types'] ?? null,
                     )
                 );
 

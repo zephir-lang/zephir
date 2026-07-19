@@ -261,6 +261,7 @@
 #include "stub/types/maybe.zep.h"
 #include "stub/types/mixedtype.zep.h"
 #include "stub/types/obj.zep.h"
+#include "stub/types/unions.zep.h"
 #include "stub/unknownclass.zep.h"
 #include "stub/unreachableloop.zep.h"
 #include "stub/unsettest.zep.h"

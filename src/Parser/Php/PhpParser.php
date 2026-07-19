@@ -772,6 +772,21 @@ final class PhpParser
             $cast = $this->parseCast();
         }
 
+        // Union type (issue #2613): `type | type | ...` before the name. A
+        // leading `?` folds into an explicit `null` member so the whole type is
+        // carried uniformly in `data-types`.
+        $dataTypes = null;
+        if (($type !== null || $cast !== null) && $this->check(TokenType::T_BITWISE_OR)) {
+            $dataTypes = [$type !== null ? ['data-type' => $type] : ['cast' => $cast]];
+            while ($this->accept(TokenType::T_BITWISE_OR)) {
+                $dataTypes[] = $this->parseUnionTypeMember();
+            }
+            if ($nullable === 1) {
+                $dataTypes[] = ['data-type' => 'null'];
+                $nullable    = 0;
+            }
+        }
+
         $name = $this->expectNameToken();
 
         $default   = null;
@@ -789,14 +804,18 @@ final class PhpParser
             'type'       => 'property',
             'name'       => $this->remap((string) $name->value),
         ];
-        if ($type !== null) {
-            $node['data-type'] = $type;
-        }
-        if ($cast !== null) {
-            $node['cast'] = $cast;
-        }
-        if ($nullable === 1) {
-            $node['nullable'] = 1;
+        if ($dataTypes !== null) {
+            $node['data-types'] = $dataTypes;
+        } else {
+            if ($type !== null) {
+                $node['data-type'] = $type;
+            }
+            if ($cast !== null) {
+                $node['cast'] = $cast;
+            }
+            if ($nullable === 1) {
+                $node['nullable'] = 1;
+            }
         }
         if ($default !== null) {
             $node['default'] = $default;
@@ -995,7 +1014,18 @@ final class PhpParser
             $cast = $this->parseCast();
         }
 
-        if ($type !== null && $this->accept(TokenType::T_NOT)) {
+        // Union type (issue #2613): `type | type | ...` in a parameter position.
+        // Represented as an internal `variable` (mixed zval) plus a `data-types`
+        // member list; the engine enforces the union via the arg-info type mask.
+        $dataTypes = null;
+        if (($type !== null || $cast !== null) && $this->check(TokenType::T_BITWISE_OR)) {
+            $dataTypes = [$type !== null ? ['data-type' => $type] : ['cast' => $cast]];
+            while ($this->accept(TokenType::T_BITWISE_OR)) {
+                $dataTypes[] = $this->parseUnionTypeMember();
+            }
+        }
+
+        if ($dataTypes === null && $type !== null && $this->accept(TokenType::T_NOT)) {
             $mandatory = 1;
         }
         if ($this->accept(TokenType::T_EXCLUSIVE_RANGE)) {
@@ -1016,14 +1046,18 @@ final class PhpParser
             'name' => $this->remap((string) $name->value),
             'const' => $const,
         ];
-        if ($type !== null) {
+        if ($dataTypes !== null) {
+            $node['data-type']  = 'variable';
+            $node['mandatory']  = 0;
+            $node['data-types'] = $dataTypes;
+        } elseif ($type !== null) {
             $node['data-type'] = $type;
             $node['mandatory'] = $mandatory;
         } else {
             $node['data-type'] = 'variable';
             $node['mandatory'] = 0;
         }
-        if ($cast !== null) {
+        if ($dataTypes === null && $cast !== null) {
             $node['cast'] = $cast;
         }
         if ($default !== null) {
@@ -1038,6 +1072,30 @@ final class PhpParser
         }
 
         return $node;
+    }
+
+    /**
+     * Parse a single member of a union type declaration (issue #2613): a
+     * builtin/array scalar keyword, the `null`/`false` keywords, or a `<Class>`
+     * cast. Returns `['data-type' => <name>]` or `['cast' => <castNode>]`,
+     * mirroring the shape of return-type items so both parser backends agree.
+     */
+    private function parseUnionTypeMember(): array
+    {
+        if (isset(self::TYPE_NAMES[$this->peekType()])) {
+            return ['data-type' => self::TYPE_NAMES[$this->advance()->opcode]];
+        }
+        if ($this->accept(TokenType::T_NULL)) {
+            return ['data-type' => 'null'];
+        }
+        if ($this->accept(TokenType::T_FALSE)) {
+            return ['data-type' => 'false'];
+        }
+        if ($this->check(TokenType::T_LESS)) {
+            return ['cast' => $this->parseCast()];
+        }
+
+        $this->syntaxError();
     }
 
     /**

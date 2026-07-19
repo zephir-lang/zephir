@@ -1036,6 +1036,55 @@ class Backend
     }
 
     /**
+     * Declare a union-typed class property that includes at least one class
+     * member (issue #2613), e.g. `<A> | <B>` or `string | <Foo>`. The scalar
+     * and null members are collapsed into `$typeMask`; the class members are
+     * emitted as a C string array so the engine builds the object part of the
+     * union (single class, or a zend_type_list for two or more).
+     */
+    public function declareTypedPropertyUnion(string $name, ?array $default, string $visibility, string $typeMask, array $classNames, CompilationContext $context): void
+    {
+        $ce      = $context->classDefinition->getClassEntry($context);
+        $printer = $context->codePrinter;
+        $counter = 0;
+        $lines   = [];
+
+        if (null === $default) {
+            $rootVar = '_zc0';
+            $lines[] = 'zval _zc0;';
+            $lines[] = 'ZVAL_UNDEF(&_zc0);';
+        } elseif (in_array($default['type'], ['array', 'empty-array'], true)) {
+            $rootVar = $this->buildConstantArray($default, $lines, $counter);
+        } else {
+            $rootVar = '_zc0';
+            $lines[] = 'zval _zc0;';
+            $lines[] = $this->typedScalarInit('_zc0', $default);
+        }
+
+        $literals = array_map(static fn (string $cn): string => '"' . $cn . '"', $classNames);
+
+        $printer->output('{');
+        $printer->increaseLevel();
+        foreach ($lines as $line) {
+            $printer->output($line);
+        }
+        $printer->output('const char *_zut[] = { ' . implode(', ', $literals) . ' };');
+        $printer->output(
+            sprintf(
+                'zephir_declare_typed_property_union(%s, SL("%s"), &%s, %s, %s, _zut, %d);',
+                $ce,
+                $name,
+                $rootVar,
+                $visibility,
+                '' === $typeMask ? '0' : $typeMask,
+                count($classNames)
+            )
+        );
+        $printer->decreaseLevel();
+        $printer->output('}');
+    }
+
+    /**
      * Renders the ZVAL_* initializer for a scalar typed-property default.
      */
     private function typedScalarInit(string $var, array $default): string

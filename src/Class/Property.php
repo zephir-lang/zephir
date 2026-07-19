@@ -48,6 +48,7 @@ class Property
         protected ?string $dataType = null,
         protected ?array $cast = null,
         protected bool $nullable = false,
+        protected ?array $dataTypes = null,
     ) {
         $this->checkVisibility($visibility, $name, $original);
 
@@ -91,6 +92,10 @@ class Property
      */
     public function compile(CompilationContext $compilationContext): void
     {
+        if ($this->dataTypes !== null && $this->emitTypedUnion($compilationContext)) {
+            return;
+        }
+
         if (($this->dataType !== null || $this->cast !== null) && $this->emitTyped($compilationContext)) {
             return;
         }
@@ -187,6 +192,89 @@ class Property
                 : $mayBe;
         }
 
+        $default = $this->resolveTypedDefault();
+
+        $compilationContext->backend->declareTypedProperty(
+            $this->getName(),
+            $default,
+            $this->getVisibilityAccessor(),
+            $typeMask,
+            $className,
+            $compilationContext
+        );
+
+        return true;
+    }
+
+    /**
+     * Emits a union typed-property declaration (issue #2613), e.g.
+     * `int | float num` or `int | string | null note`. Every member's
+     * `MAY_BE_*` bit is OR-ed into a single PHP type mask that the engine
+     * enforces on write. Returns false (untyped fallback) if any member is not
+     * PHP-expressible as a mask bit.
+     *
+     * @throws CompilerException
+     */
+    private function emitTypedUnion(CompilationContext $compilationContext): bool
+    {
+        $maskBits   = [];
+        $classNames = [];
+
+        foreach ($this->dataTypes as $member) {
+            if (isset($member['cast'])) {
+                $classNames[] = Entry::escape($compilationContext->getFullName($member['cast']['value']));
+                continue;
+            }
+
+            $dataType = $member['data-type'] ?? null;
+            $mayBe    = match ($dataType) {
+                'null'   => 'MAY_BE_NULL',
+                'false'  => 'MAY_BE_FALSE',
+                'object' => 'MAY_BE_OBJECT',
+                default  => self::MAY_BE[$dataType] ?? null,
+            };
+            if (null === $mayBe) {
+                return false;
+            }
+            $maskBits[] = $mayBe;
+        }
+
+        $maskBits = array_values(array_unique($maskBits));
+        $default  = $this->resolveTypedDefault();
+
+        if ([] !== $classNames) {
+            $compilationContext->backend->declareTypedPropertyUnion(
+                $this->getName(),
+                $default,
+                $this->getVisibilityAccessor(),
+                [] === $maskBits ? '0' : implode('|', $maskBits),
+                $classNames,
+                $compilationContext
+            );
+
+            return true;
+        }
+
+        $compilationContext->backend->declareTypedProperty(
+            $this->getName(),
+            $default,
+            $this->getVisibilityAccessor(),
+            implode('|', $maskBits),
+            null,
+            $compilationContext
+        );
+
+        return true;
+    }
+
+    /**
+     * Resolves and validates a typed property's default value. Returns null for
+     * an uninitialized (IS_UNDEF) property when no explicit default is given.
+     *
+     * @throws CompilerException
+     */
+    private function resolveTypedDefault(): ?array
+    {
         // A typed property with no explicit default is uninitialized (IS_UNDEF),
         // not null — the constructor's null-coercion must not leak here.
         $default = isset($this->original['default']) ? $this->defaultValue : null;
@@ -204,16 +292,7 @@ class Property
             );
         }
 
-        $compilationContext->backend->declareTypedProperty(
-            $this->getName(),
-            $default,
-            $this->getVisibilityAccessor(),
-            $typeMask,
-            $className,
-            $compilationContext
-        );
-
-        return true;
+        return $default;
     }
 
     /**
