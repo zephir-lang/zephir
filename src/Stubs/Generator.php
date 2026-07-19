@@ -405,8 +405,38 @@ class Generator
             $visibility = 'static ' . $visibility;
         }
 
-        $source   = $indent . $visibility . ' $' . $property->getName();
-        $original = $property->getOriginal();
+        $original = $property->getOriginal() ?? [];
+
+        /**
+         * Emit the PHP type hint for typed properties (#2608), mirroring the
+         * parameter renderer's Zephir->PHP coercions and alias resolution.
+         * Unlike a parameter, a property states nullability explicitly with a
+         * leading `?`, so it is read from the AST `nullable` flag rather than
+         * inferred from a `= null` default.
+         */
+        $nullable   = !empty($original['nullable']);
+        $typePrefix = '';
+        if (isset($original['cast'])) {
+            $aliasManager = $property->getClassDefinition()->getAliasManager();
+            $cast         = $aliasManager->isAlias($original['cast']['value'])
+                ? '\\' . $aliasManager->getAlias($original['cast']['value'])
+                : $original['cast']['value'];
+            $typePrefix   = ($nullable ? '?' : '') . $cast . ' ';
+        } elseif (isset($original['data-type']) && 'array' === $original['data-type']) {
+            $typePrefix = ($nullable ? '?' : '') . 'array ';
+        } elseif (isset($original['data-type'])) {
+            if (in_array($original['data-type'], ['bool', 'boolean'])) {
+                $typePrefix = ($nullable ? '?' : '') . 'bool ';
+            } elseif ('double' === $original['data-type']) {
+                $typePrefix = ($nullable ? '?' : '') . 'float ';
+            } elseif (in_array($original['data-type'], ['int', 'uint', 'long', 'ulong', 'uchar'])) {
+                $typePrefix = ($nullable ? '?' : '') . 'int ';
+            } elseif (in_array($original['data-type'], ['char', 'string'])) {
+                $typePrefix = ($nullable ? '?' : '') . 'string ';
+            }
+        }
+
+        $source = $indent . $visibility . ' ' . $typePrefix . '$' . $property->getName();
 
         if (isset($original['default'])) {
             $source .= ' = ' . $this->wrapPHPValue([
