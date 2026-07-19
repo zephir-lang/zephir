@@ -1,0 +1,44 @@
+--TEST--
+Union parameter types: `int | float` parses and is reported as a union by Reflection; the passed value keeps its runtime type (#2613)
+--FILE--
+namespace Stub\Union;
+
+class Params
+{
+    public function kind(int|float value) -> string
+    {
+        return typeof value;
+    }
+
+    public function pick(string|<Params> value) -> string
+    {
+        return typeof value;
+    }
+}
+--USAGE--
+$c = "Stub\\Union\\Params";
+
+$t = (new ReflectionMethod($c, "kind"))->getParameters()[0]->getType();
+$names = [];
+foreach ($t->getTypes() as $x) {
+    $names[] = $x->getName();
+}
+sort($names);
+echo "kind=", implode("|", $names), " union=", ($t instanceof ReflectionUnionType) ? "yes" : "no", "\n";
+
+$t2 = (new ReflectionMethod($c, "pick"))->getParameters()[0]->getType();
+$names2 = [];
+foreach ($t2->getTypes() as $x) {
+    $names2[] = $x->getName();
+}
+sort($names2);
+echo "pick=", implode("|", $names2), "\n";
+
+$o = new $c();
+echo "int=", $o->kind(5), "\n";
+echo "float=", $o->kind(2.5), "\n";
+--EXPECT--
+kind=float|int union=yes
+pick=Stub\Union\Params|string
+int=integer
+float=double

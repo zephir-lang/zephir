@@ -1,0 +1,54 @@
+--TEST--
+Union typed properties with class members: class|scalar and multi-class (zend_type_list) unions, reflected and enforced (#2613)
+--FILE--
+namespace Stub\UnionProps;
+
+class Other
+{
+    public v = 1;
+}
+--FILE--
+namespace Stub\UnionProps;
+
+class Holder
+{
+    public string|<Other> tag = "hi";
+    public <Other>|<Holder> either;
+}
+--USAGE--
+$ns = "Stub\\UnionProps\\";
+$names = function ($t) {
+    $n = [];
+    foreach ($t->getTypes() as $x) {
+        $n[] = $x->getName();
+    }
+    sort($n);
+    return implode("|", $n);
+};
+
+$c  = $ns . "Holder";
+$oc = $ns . "Other";
+
+echo "tag=", $names((new ReflectionProperty($c, "tag"))->getType()), "\n";
+echo "either=", $names((new ReflectionProperty($c, "either"))->getType()), "\n";
+
+$o = new $c();
+echo "tag0=", $o->tag, "\n";
+$o->tag = new $oc();
+echo "tag2=", get_class($o->tag), "\n";
+$o->either = new $oc();
+echo "either0=", get_class($o->either), "\n";
+
+try {
+    $o->either = 5;
+    echo "no-error\n";
+} catch (\TypeError $e) {
+    echo "either-enforced\n";
+}
+--EXPECT--
+tag=Stub\UnionProps\Other|string
+either=Stub\UnionProps\Holder|Stub\UnionProps\Other
+tag0=hi
+tag2=Stub\UnionProps\Other
+either0=Stub\UnionProps\Other
+either-enforced

@@ -204,6 +204,11 @@ class ArgInfoDefinition
                 continue;
             }
 
+            if (!empty($parameter['data-types'])) {
+                $this->emitUnionArgInfo($parameter);
+                continue;
+            }
+
             switch ("$flag:" . $parameter['data-type']) {
                 case '0:array':
                 case '1:array':
@@ -309,6 +314,92 @@ class ArgInfoDefinition
                     break;
             }
         }
+    }
+
+    /**
+     * Emit arg-info for a union-typed parameter (issue #2613), e.g.
+     * `int | float bar`. The parameter is an internal `variable` (mixed zval),
+     * so no hand-written coercion is generated; instead a PHP type mask is
+     * emitted and the engine enforces every member at the call boundary — the
+     * parameter mirror of the union return types built in richRenderStart().
+     *
+     * Scalar-only unions use ZEND_ARG_TYPE_MASK; unions containing at least one
+     * named class use ZEND_ARG_OBJ_TYPE_MASK with a `Class1|Class2` list plus
+     * any scalar bits. A member that has no expressible mask bit makes the whole
+     * type undeterminable, so the parameter degrades to an untyped ZEND_ARG_INFO.
+     */
+    private function emitUnionArgInfo(array $parameter): void
+    {
+        $mayBe      = $this->functionLike->getMayBeArgTypes();
+        $maskBits   = [];
+        $classNames = [];
+
+        foreach ($parameter['data-types'] as $member) {
+            if (isset($member['cast'])) {
+                $classNames[] = Entry::escape(
+                    $this->compilationContext->getFullName($member['cast']['value'])
+                );
+                continue;
+            }
+
+            $dataType = $member['data-type'] ?? null;
+            if ('null' === $dataType) {
+                $maskBits[] = 'MAY_BE_NULL';
+                continue;
+            }
+            if ('object' === $dataType) {
+                $maskBits[] = 'MAY_BE_OBJECT';
+                continue;
+            }
+            if (!isset($mayBe[$dataType])) {
+                // Not PHP-expressible as a mask bit: emit an untyped arg.
+                $this->codePrinter->output(
+                    sprintf(
+                        "\tZEND_ARG_INFO(%d, %s)",
+                        $this->passByReference($parameter),
+                        $parameter['name']
+                    )
+                );
+
+                return;
+            }
+            $maskBits[] = $mayBe[$dataType];
+        }
+
+        // A `null` default also permits null.
+        if ($this->allowNull($parameter)) {
+            $maskBits[] = 'MAY_BE_NULL';
+        }
+
+        $maskBits = array_values(array_unique($maskBits));
+        $default  = isset($parameter['default'])
+            ? '"' . ($this->foldConstantDefault($parameter['default'])['value'] ?? 'null') . '"'
+            : 'NULL';
+
+        if ([] !== $classNames) {
+            $this->codePrinter->output(
+                sprintf(
+                    "\tZEND_ARG_OBJ_TYPE_MASK(%d, %s, %s, %s, %s)",
+                    $this->passByReference($parameter),
+                    $parameter['name'],
+                    implode('|', $classNames),
+                    [] === $maskBits ? '0' : implode('|', $maskBits),
+                    $default
+                )
+            );
+
+            return;
+        }
+
+        $this->codePrinter->output(
+            sprintf(
+                "\tZEND_ARG_TYPE_MASK(%d, %s, %s, %s)",
+                $this->passByReference($parameter),
+                $parameter['name'],
+                [] === $maskBits ? '0' : implode('|', $maskBits),
+                $default
+            )
+        );
     }
 
     private function emitVariadicArgInfo(array $parameter): void
