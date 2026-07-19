@@ -757,6 +757,21 @@ final class PhpParser
 
     private function parseProperty(array $visibility, ?Token $docblock): array
     {
+        // Optional type declaration (issue #2608), mirroring parameters:
+        // `?` marks the type nullable, then either a builtin/array type keyword
+        // or a `<Class>` cast, before the property name.
+        $type     = null;
+        $cast     = null;
+        $nullable = 0;
+        if ($this->accept(TokenType::T_QUESTION)) {
+            $nullable = 1;
+        }
+        if (isset(self::TYPE_NAMES[$this->peekType()])) {
+            $type = self::TYPE_NAMES[$this->advance()->opcode];
+        } elseif ($this->check(TokenType::T_LESS)) {
+            $cast = $this->parseCast();
+        }
+
         $name = $this->expectNameToken();
 
         $default   = null;
@@ -774,6 +789,15 @@ final class PhpParser
             'type'       => 'property',
             'name'       => $this->remap((string) $name->value),
         ];
+        if ($type !== null) {
+            $node['data-type'] = $type;
+        }
+        if ($cast !== null) {
+            $node['cast'] = $cast;
+        }
+        if ($nullable === 1) {
+            $node['nullable'] = 1;
+        }
         if ($default !== null) {
             $node['default'] = $default;
         }

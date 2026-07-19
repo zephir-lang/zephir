@@ -228,6 +228,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/properties/staticpropertyarray.zep.c
 	stub/properties/staticprotectedproperties.zep.c
 	stub/properties/staticpublicproperties.zep.c
+	stub/properties/typedproperties.zep.c
 	stub/propertycachechild.zep.c
 	stub/propertycachemagic.zep.c
 	stub/quantum.zep.c

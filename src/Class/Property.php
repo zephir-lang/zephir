@@ -15,6 +15,7 @@ namespace Zephir\Class;
 
 use ReflectionException;
 use Zephir\Class\Definition\Definition;
+use Zephir\Class\Entry;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
@@ -44,6 +45,9 @@ class Property
         protected ?array $defaultValue,
         protected ?string $docBlock = null,
         protected ?array $original = null,
+        protected ?string $dataType = null,
+        protected ?array $cast = null,
+        protected bool $nullable = false,
     ) {
         $this->checkVisibility($visibility, $name, $original);
 
@@ -87,6 +91,10 @@ class Property
      */
     public function compile(CompilationContext $compilationContext): void
     {
+        if (($this->dataType !== null || $this->cast !== null) && $this->emitTyped($compilationContext)) {
+            return;
+        }
+
         switch ($this->defaultValue['type']) {
             case 'long':
             case 'int':
@@ -135,6 +143,77 @@ class Property
             default:
                 throw new CompilerException('Unknown default type: ' . $this->defaultValue['type'], $this->original);
         }
+    }
+
+    /**
+     * Zephir declared type => PHP type-mask flag for typed properties (#2608).
+     * Mirrors Method::$mayBeArgTypes; untypable types (variable/callable/
+     * resource) are absent and fall back to an untyped property.
+     */
+    private const MAY_BE = [
+        'int'    => 'MAY_BE_LONG',
+        'uint'   => 'MAY_BE_LONG',
+        'long'   => 'MAY_BE_LONG',
+        'ulong'  => 'MAY_BE_LONG',
+        'char'   => 'MAY_BE_LONG',
+        'uchar'  => 'MAY_BE_LONG',
+        'double' => 'MAY_BE_DOUBLE',
+        'bool'   => 'MAY_BE_BOOL',
+        'string' => 'MAY_BE_STRING',
+        'array'  => 'MAY_BE_ARRAY',
+        'object' => 'MAY_BE_OBJECT',
+        'mixed'  => 'MAY_BE_ANY',
+    ];
+
+    /**
+     * Emits a typed-property declaration (#2608). Returns false to fall back to
+     * a plain untyped property when the declared type is not PHP-expressible.
+     *
+     * @throws CompilerException
+     */
+    private function emitTyped(CompilationContext $compilationContext): bool
+    {
+        if ($this->cast !== null) {
+            $className = Entry::escape($compilationContext->getFullName($this->cast['value']));
+            $typeMask  = $this->nullable ? 'MAY_BE_NULL' : '0';
+        } else {
+            $mayBe = self::MAY_BE[$this->dataType] ?? null;
+            if (null === $mayBe) {
+                return false;
+            }
+            $className = null;
+            $typeMask  = $this->nullable && 'MAY_BE_ANY' !== $mayBe
+                ? $mayBe . '|MAY_BE_NULL'
+                : $mayBe;
+        }
+
+        // A typed property with no explicit default is uninitialized (IS_UNDEF),
+        // not null — the constructor's null-coercion must not leak here.
+        $default = isset($this->original['default']) ? $this->defaultValue : null;
+
+        if (
+            null !== $default
+            && !in_array($default['type'], [
+                'int', 'long', 'uint', 'ulong', 'double', 'float',
+                'bool', 'string', 'char', 'istring', 'null', 'array', 'empty-array',
+            ], true)
+        ) {
+            throw new CompilerException(
+                'Unsupported default value for typed property "' . $this->name . '": ' . $default['type'],
+                $this->original
+            );
+        }
+
+        $compilationContext->backend->declareTypedProperty(
+            $this->getName(),
+            $default,
+            $this->getVisibilityAccessor(),
+            $typeMask,
+            $className,
+            $compilationContext
+        );
+
+        return true;
     }
 
     /**
