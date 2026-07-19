@@ -223,6 +223,7 @@
 #include "stub/properties/staticpropertyarray.zep.h"
 #include "stub/properties/staticprotectedproperties.zep.h"
 #include "stub/properties/staticpublicproperties.zep.h"
+#include "stub/properties/typedproperties.zep.h"
 #include "stub/propertycachechild.zep.h"
 #include "stub/propertycachemagic.zep.h"
 #include "stub/quantum.zep.h"

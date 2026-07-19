@@ -1023,7 +1023,10 @@ final class CompilerFile implements FileInterface
                         $property['name'],
                         $property['default'] ?? null,
                         $property['docblock'] ?? null,
-                        $property
+                        $property,
+                        $property['data-type'] ?? null,
+                        $property['cast'] ?? null,
+                        !empty($property['nullable']),
                     )
                 );
 

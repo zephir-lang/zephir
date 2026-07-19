@@ -1,0 +1,67 @@
+--TEST--
+Typed class properties: types reported by Reflection, defaults, uninitialized class type, enforcement (#2608)
+--FILE--
+namespace Stub\Typed;
+
+class Target
+{
+    public id = 1;
+}
+--FILE--
+namespace Stub\Typed;
+
+class TypedProps
+{
+    public array orgs = [];
+    protected bool valid = false;
+    public int counter = 7;
+    public double ratio = 1.5;
+    public string label = "hi";
+    private ?string val = "";
+    public ?int maybeNum = null;
+    public <Target> friend;
+    public ?<Target> maybeFriend = null;
+
+    public function getVal() -> string | null
+    {
+        return this->val;
+    }
+}
+--USAGE--
+$c = "Stub\\Typed\\TypedProps";
+$o = new $c();
+foreach (["orgs", "valid", "counter", "ratio", "label", "val", "maybeNum", "friend", "maybeFriend"] as $p) {
+    echo $p, "=", (string) (new ReflectionProperty($c, $p))->getType(), "\n";
+}
+echo "orgs=", var_export($o->orgs, true), "\n";
+echo "counter=", $o->counter, "\n";
+echo "ratio=", $o->ratio, "\n";
+echo "label=", $o->label, "\n";
+echo "val=", var_export($o->getVal(), true), "\n";
+echo "maybeNum=", var_export($o->maybeNum, true), "\n";
+echo "friend_init=", (new ReflectionProperty($c, "friend"))->isInitialized($o) ? "Y" : "n", "\n";
+try {
+    $o->counter = [];
+    echo "no-error\n";
+} catch (\TypeError $e) {
+    echo "int-enforced\n";
+}
+--EXPECT--
+orgs=array
+valid=bool
+counter=int
+ratio=float
+label=string
+val=?string
+maybeNum=?int
+friend=Stub\Typed\Target
+maybeFriend=?Stub\Typed\Target
+orgs=array (
+)
+counter=7
+ratio=1.5
+label=hi
+val=''
+maybeNum=NULL
+friend_init=n
+int-enforced

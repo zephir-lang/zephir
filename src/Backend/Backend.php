@@ -979,6 +979,83 @@ class Backend
     }
 
     /**
+     * Emits a typed class property declaration (issue #2608).
+     *
+     * Builds the default value into a fresh local zval — array via
+     * {@see buildConstantArray()}, scalars via ZVAL_*, and a missing default as
+     * ZVAL_UNDEF (uninitialized) — then hands it to the kernel wrapper which
+     * makes it persistent and calls the engine's zend_declare_typed_property.
+     *
+     * @param string      $name       property name
+     * @param array|null  $default    default AST node, or null for uninitialized
+     * @param string      $visibility ZEND_ACC_* accessor string
+     * @param string      $typeMask   MAY_BE_* expression (e.g. "MAY_BE_STRING|MAY_BE_NULL")
+     * @param string|null $className  escaped FQCN for a class type, or null
+     */
+    public function declareTypedProperty(string $name, ?array $default, string $visibility, string $typeMask, ?string $className, CompilationContext $context): void
+    {
+        $ce      = $context->classDefinition->getClassEntry($context);
+        $printer = $context->codePrinter;
+        $counter = 0;
+        $lines   = [];
+
+        if (null === $default) {
+            $rootVar = '_zc0';
+            $lines[] = 'zval _zc0;';
+            $lines[] = 'ZVAL_UNDEF(&_zc0);';
+        } elseif (in_array($default['type'], ['array', 'empty-array'], true)) {
+            $rootVar = $this->buildConstantArray($default, $lines, $counter);
+        } else {
+            $rootVar = '_zc0';
+            $lines[] = 'zval _zc0;';
+            $lines[] = $this->typedScalarInit('_zc0', $default);
+        }
+
+        $classArg = null === $className
+            ? 'NULL, 0'
+            : sprintf('SL("%s")', $className);
+
+        $printer->output('{');
+        $printer->increaseLevel();
+        foreach ($lines as $line) {
+            $printer->output($line);
+        }
+        $printer->output(
+            sprintf(
+                'zephir_declare_typed_property(%s, SL("%s"), &%s, %s, %s, %s);',
+                $ce,
+                $name,
+                $rootVar,
+                $visibility,
+                $typeMask,
+                $classArg
+            )
+        );
+        $printer->decreaseLevel();
+        $printer->output('}');
+    }
+
+    /**
+     * Renders the ZVAL_* initializer for a scalar typed-property default.
+     */
+    private function typedScalarInit(string $var, array $default): string
+    {
+        return match ($default['type']) {
+            'int', 'long', 'uint', 'ulong' => sprintf('ZVAL_LONG(&%s, %s);', $var, $default['value']),
+            'double', 'float'              => sprintf('ZVAL_DOUBLE(&%s, %s);', $var, $default['value']),
+            'bool'                         => sprintf('ZVAL_BOOL(&%s, %s);', $var, 'true' === $default['value'] ? '1' : '0'),
+            'null'                         => sprintf('ZVAL_NULL(&%s);', $var),
+            'char', 'string', 'istring'    => sprintf(
+                'ZVAL_STRINGL(&%s, "%s", %d);',
+                $var,
+                Name::addSlashes((string) $default['value']),
+                strlen((string) $default['value'])
+            ),
+            default => throw new CompilerException('Unsupported typed property default: ' . $default['type']),
+        };
+    }
+
+    /**
      * Recursively emits C that builds an array literal AST node into a fresh
      * local zval, returning the name of that zval. Used for array class
      * constants which must be materialized in the class initializer.
