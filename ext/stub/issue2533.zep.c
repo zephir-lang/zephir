@@ -33,8 +33,8 @@ ZEPHIR_INIT_CLASS(Stub_Issue2533)
 	{
 		zval _zc0;
 		array_init_size(&_zc0, 3);
-		add_assoc_long_ex(&_zc0, "a", 1, 1);
-		add_assoc_long_ex(&_zc0, "b", 1, 2);
+		add_assoc_long_ex(&_zc0, SL("a"), 1);
+		add_assoc_long_ex(&_zc0, SL("b"), 2);
 		zephir_declare_class_constant_array(stub_issue2533_ce, SL("MAP"), &_zc0);
 	}
 
@@ -48,7 +48,7 @@ ZEPHIR_INIT_CLASS(Stub_Issue2533)
 		add_next_index_zval(&_zc0, &_zc1);
 		zval _zc2;
 		array_init_size(&_zc2, 2);
-		add_assoc_stringl_ex(&_zc2, "k", 1, "v", 1);
+		add_assoc_stringl_ex(&_zc2, SL("k"), SL("v"));
 		add_next_index_zval(&_zc0, &_zc2);
 		zephir_declare_class_constant_array(stub_issue2533_ce, SL("NESTED"), &_zc0);
 	}

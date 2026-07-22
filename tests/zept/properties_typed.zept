@@ -17,6 +17,7 @@ class TypedProps
     public int counter = 7;
     public double ratio = 1.5;
     public string label = "hi";
+    public string defaultFormatter = "Phalcon\\Logger\\Formatter\\Line";
     private ?string val = "";
     public ?int maybeNum = null;
     public <Target> friend;
@@ -30,13 +31,14 @@ class TypedProps
 --USAGE--
 $c = "Stub\\Typed\\TypedProps";
 $o = new $c();
-foreach (["orgs", "valid", "counter", "ratio", "label", "val", "maybeNum", "friend", "maybeFriend"] as $p) {
+foreach (["orgs", "valid", "counter", "ratio", "label", "defaultFormatter", "val", "maybeNum", "friend", "maybeFriend"] as $p) {
     echo $p, "=", (string) (new ReflectionProperty($c, $p))->getType(), "\n";
 }
 echo "orgs=", var_export($o->orgs, true), "\n";
 echo "counter=", $o->counter, "\n";
 echo "ratio=", $o->ratio, "\n";
 echo "label=", $o->label, "\n";
+echo "fmt=", $o->defaultFormatter, "|", strlen($o->defaultFormatter), "\n";
 echo "val=", var_export($o->getVal(), true), "\n";
 echo "maybeNum=", var_export($o->maybeNum, true), "\n";
 echo "friend_init=", (new ReflectionProperty($c, "friend"))->isInitialized($o) ? "Y" : "n", "\n";
@@ -52,6 +54,7 @@ valid=bool
 counter=int
 ratio=float
 label=string
+defaultFormatter=string
 val=?string
 maybeNum=?int
 friend=Stub\Typed\Target
@@ -61,6 +64,7 @@ orgs=array (
 counter=7
 ratio=1.5
 label=hi
+fmt=Phalcon\Logger\Formatter\Line|29
 val=''
 maybeNum=NULL
 friend_init=n

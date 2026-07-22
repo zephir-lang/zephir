@@ -45,6 +45,7 @@ final class TypedPropertiesTest extends TestCase
             ['counter', 'int', false],
             ['ratio', 'float', false],
             ['label', 'string', false],
+            ['defaultFormatter', 'string', false],
             ['val', '?string', true],
             ['maybeNum', '?int', true],
             ['friend', PublicProperties::class, false],
@@ -60,6 +61,10 @@ final class TypedPropertiesTest extends TestCase
         $this->assertSame(7, $test->counter);
         $this->assertSame(1.5, $test->ratio);
         $this->assertSame('hi', $test->label);
+        // #2617: a typed-string default with escape sequences (backslashes) must
+        // keep the decoded runtime length, not the source-escaped byte count.
+        $this->assertSame('Phalcon\Logger\Formatter\Line', $test->getDefaultFormatter());
+        $this->assertSame(29, strlen($test->getDefaultFormatter()));
         $this->assertSame('', $test->getVal());
         $this->assertNull($test->maybeNum);
         $this->assertNull($test->maybeFriend);

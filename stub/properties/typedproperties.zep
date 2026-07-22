@@ -16,6 +16,8 @@ class TypedProperties
 
 	public string label = "hi";
 
+	protected string defaultFormatter = "Phalcon\\Logger\\Formatter\\Line";
+
 	private ?string val = "";
 
 	public ?int maybeNum = null;
@@ -32,5 +34,10 @@ class TypedProperties
 	public function getMaybeNum() -> int | null
 	{
 		return this->maybeNum;
+	}
+
+	public function getDefaultFormatter() -> string
+	{
+		return this->defaultFormatter;
 	}
 }
