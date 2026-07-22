@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Class and trait properties can now declare a type, mirroring PHP's typed properties: builtin (`int`, `bool`, `double`, `string`, `array`, `object`), nullable (`?string`), and class types (`<My\Class>`, `?<My\Class>`). The type is emitted via `zend_declare_typed_property`, so Reflection reports it and the engine enforces it; a typed property with no default is uninitialized (`public <Foo> conn;`) rather than `null`, matching PHP [#2608](https://github.com/zephir-lang/zephir/issues/2608)
 - Added union types (`int | float`) on method/function parameters and class/trait properties (e.g. `public int|float foo;`, `function f(float|int bar) -> int|float`). Reflection reports a `ReflectionUnionType`; union properties are engine-enforced on write (scalar, `null`/`false`, and one or more `<Class>` members), while a union parameter binds as a mixed value carrying its declared arg-info type mask. Union return types were already supported [#2613](https://github.com/zephir-lang/zephir/issues/2613)
 
+### Fixed
+- Fixed typed-property and array-class-constant string defaults containing escape sequences (e.g. `protected string x = "A\\B\\C"`) being emitted with the wrong byte length: the length was `strlen()` of the source-escaped PHP value (a `\\` counted as two bytes) while the C string literal is shorter, so the runtime string was over-long and corrupted with trailing garbage bytes. The length is now measured by the C compiler (`SL()` / `sizeof`), correct for every escape sequence [#2617](https://github.com/zephir-lang/zephir/issues/2617)
+
 ## [1.1.0] - 2026-07-14
 
 ### Added

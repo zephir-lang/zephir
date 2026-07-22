@@ -36,12 +36,12 @@ ZEPHIR_INIT_CLASS(Stub_Traits_Nameable)
 	{
 		zval _zc0;
 		array_init_size(&_zc0, 3);
-		add_assoc_long_ex(&_zc0, "a", 1, 1);
+		add_assoc_long_ex(&_zc0, SL("a"), 1);
 		zval _zc1;
 		array_init_size(&_zc1, 3);
 		add_next_index_long(&_zc1, 2);
 		add_next_index_long(&_zc1, 3);
-		add_assoc_zval_ex(&_zc0, "b", 1, &_zc1);
+		add_assoc_zval_ex(&_zc0, SL("b"), &_zc1);
 		zephir_declare_property_array(stub_traits_nameable_ce, SL("meta"), &_zc0, ZEND_ACC_PROTECTED);
 	}
 

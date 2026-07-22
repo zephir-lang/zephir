@@ -1094,14 +1094,27 @@ class Backend
             'double', 'float'              => sprintf('ZVAL_DOUBLE(&%s, %s);', $var, $default['value']),
             'bool'                         => sprintf('ZVAL_BOOL(&%s, %s);', $var, 'true' === $default['value'] ? '1' : '0'),
             'null'                         => sprintf('ZVAL_NULL(&%s);', $var),
-            'char', 'string', 'istring'    => sprintf(
-                'ZVAL_STRINGL(&%s, "%s", %d);',
-                $var,
-                Name::addSlashes((string) $default['value']),
-                strlen((string) $default['value'])
-            ),
+            'char', 'string', 'istring'    => $this->zvalStringInit($var, (string) $default['value']),
             default => throw new CompilerException('Unsupported typed property default: ' . $default['type']),
         };
+    }
+
+    /**
+     * Renders a `ZVAL_STRINGL` initializer whose length is measured by the C
+     * compiler via `sizeof(literal) - 1` (exactly what the `SL()` macro expands
+     * to). `strlen()` on the PHP-side value over-counts escape sequences — a
+     * source `"\\"` is two PHP chars but one emitted byte — which corrupted the
+     * runtime string. `sizeof()` counts the bytes the compiler actually emits,
+     * correct for every escape (and any embedded NUL). `SL()` cannot be nested
+     * inside the `ZVAL_STRINGL` macro (the preprocessor counts the macro's args
+     * before expanding `SL`, so its hidden comma yields "one arg given"), so the
+     * length is spelled out. See #2617.
+     */
+    private function zvalStringInit(string $var, string $value): string
+    {
+        $literal = Name::addSlashes($value);
+
+        return sprintf('ZVAL_STRINGL(&%s, "%s", sizeof("%s") - 1);', $var, $literal, $literal);
     }
 
     /**
@@ -1151,8 +1164,9 @@ class Backend
             'bool'                           => ['bool', 'true' === $value['value'] ? '1' : '0'],
             'null'                           => ['null', ''],
             'char', 'string', 'istring'      => [
+                // SL() delegates the byte count to the C compiler; see #2617.
                 'stringl',
-                sprintf('"%s", %d', Name::addSlashes((string) $value['value']), strlen((string) $value['value'])),
+                sprintf('SL("%s")', Name::addSlashes((string) $value['value'])),
             ],
             default                          => throw new CompilerException(
                 'Unsupported array constant element type: ' . $value['type']
@@ -1179,11 +1193,11 @@ class Backend
         $keyValue = (string) $key['value'];
 
         return sprintf(
-            'add_assoc_%s_ex(&%s, "%s", %d%s);',
+            // SL() delegates the key byte count to the C compiler; see #2617.
+            'add_assoc_%s_ex(&%s, SL("%s")%s);',
             $func,
             $var,
             Name::addSlashes($keyValue),
-            strlen($keyValue),
             $tail
         );
     }

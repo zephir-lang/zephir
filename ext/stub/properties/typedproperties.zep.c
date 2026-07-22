@@ -48,13 +48,19 @@ ZEPHIR_INIT_CLASS(Stub_Properties_TypedProperties)
 
 	{
 		zval _zc0;
-		ZVAL_STRINGL(&_zc0, "hi", 2);
+		ZVAL_STRINGL(&_zc0, "hi", sizeof("hi") - 1);
 		zephir_declare_typed_property(stub_properties_typedproperties_ce, SL("label"), &_zc0, ZEND_ACC_PUBLIC, MAY_BE_STRING, NULL, 0);
 	}
 
 	{
 		zval _zc0;
-		ZVAL_STRINGL(&_zc0, "", 0);
+		ZVAL_STRINGL(&_zc0, "Phalcon\\Logger\\Formatter\\Line", sizeof("Phalcon\\Logger\\Formatter\\Line") - 1);
+		zephir_declare_typed_property(stub_properties_typedproperties_ce, SL("defaultFormatter"), &_zc0, ZEND_ACC_PROTECTED, MAY_BE_STRING, NULL, 0);
+	}
+
+	{
+		zval _zc0;
+		ZVAL_STRINGL(&_zc0, "", sizeof("") - 1);
 		zephir_declare_typed_property(stub_properties_typedproperties_ce, SL("val"), &_zc0, ZEND_ACC_PRIVATE, MAY_BE_STRING|MAY_BE_NULL, NULL, 0);
 	}
 
@@ -89,5 +95,11 @@ PHP_METHOD(Stub_Properties_TypedProperties, getMaybeNum)
 {
 
 	RETURN_MEMBER(getThis(), "maybeNum");
+}
+
+PHP_METHOD(Stub_Properties_TypedProperties, getDefaultFormatter)
+{
+
+	RETURN_MEMBER_TYPED(getThis(), "defaultFormatter", IS_STRING);
 }
 
