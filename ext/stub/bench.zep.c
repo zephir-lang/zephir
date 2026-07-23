@@ -1146,6 +1146,204 @@ PHP_METHOD(Stub_Bench, buildMatrix)
 	RETURN_CCTOR(&output);
 }
 
+/**
+ * Array `+=` union with a literal right-hand side (issue #1280). Compiler
+ * path: emits zephir_add_function(&a, &a, &<literal>), an in-place union.
+ * `a` is reset each step so the measured cost is one fixed-size union.
+ */
+PHP_METHOD(Stub_Bench, addAssignUnionLiteral)
+{
+	zval _4$$3;
+	zend_long _1;
+	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *count_param = NULL, a, _3$$3;
+	long count, i, _2;
+
+	ZVAL_UNDEF(&a);
+	ZVAL_UNDEF(&_3$$3);
+	ZVAL_UNDEF(&_4$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(count)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &count_param);
+	i = 0;
+	_2 = count;
+	_1 = 1;
+	_0 = 0;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			i = _1;
+			ZEPHIR_INIT_NVAR(&a);
+			zephir_create_array(&a, 5, 0);
+			ZEPHIR_INIT_NVAR(&_3$$3);
+			ZVAL_LONG(&_3$$3, 1);
+			zephir_array_fast_append(&a, &_3$$3);
+			ZEPHIR_INIT_NVAR(&_3$$3);
+			ZVAL_LONG(&_3$$3, 2);
+			zephir_array_fast_append(&a, &_3$$3);
+			ZEPHIR_INIT_NVAR(&_3$$3);
+			ZVAL_LONG(&_3$$3, 3);
+			zephir_array_fast_append(&a, &_3$$3);
+			ZEPHIR_INIT_NVAR(&_3$$3);
+			ZVAL_LONG(&_3$$3, 4);
+			zephir_array_fast_append(&a, &_3$$3);
+			ZEPHIR_INIT_NVAR(&_3$$3);
+			ZVAL_LONG(&_3$$3, 5);
+			zephir_array_fast_append(&a, &_3$$3);
+			ZEPHIR_INIT_NVAR(&_4$$3);
+			zephir_create_array(&_4$$3, 5, 0);
+			ZEPHIR_INIT_NVAR(&_3$$3);
+			ZVAL_LONG(&_3$$3, 6);
+			zephir_array_fast_append(&_4$$3, &_3$$3);
+			ZEPHIR_INIT_NVAR(&_3$$3);
+			ZVAL_LONG(&_3$$3, 7);
+			zephir_array_fast_append(&_4$$3, &_3$$3);
+			ZEPHIR_INIT_NVAR(&_3$$3);
+			ZVAL_LONG(&_3$$3, 8);
+			zephir_array_fast_append(&_4$$3, &_3$$3);
+			add_assoc_long_ex(&_4$$3, SL("k1"), 1);
+			add_assoc_long_ex(&_4$$3, SL("k2"), 2);
+			zephir_add_function(&a, &a, &_4$$3);
+		}
+	}
+	ZEPHIR_MM_RESTORE();
+}
+
+/**
+ * Array `+=` union with an untyped `var += var` right-hand side (#1280).
+ * Runtime path: the ZEPHIR_ADD_ASSIGN macro dispatches to an in-place
+ * hash merge. Same fixed-size union per step as addAssignUnionLiteral.
+ */
+PHP_METHOD(Stub_Bench, addAssignUnionVar)
+{
+	zend_long _2;
+	zend_bool _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *count_param = NULL, a, b, _0, _4$$3;
+	long count, i, _3;
+
+	ZVAL_UNDEF(&a);
+	ZVAL_UNDEF(&b);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_4$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(count)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &count_param);
+	i = 0;
+	ZEPHIR_INIT_VAR(&b);
+	zephir_create_array(&b, 5, 0);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, 6);
+	zephir_array_fast_append(&b, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_LONG(&_0, 7);
+	zephir_array_fast_append(&b, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_LONG(&_0, 8);
+	zephir_array_fast_append(&b, &_0);
+	add_assoc_long_ex(&b, SL("k1"), 1);
+	add_assoc_long_ex(&b, SL("k2"), 2);
+	_3 = count;
+	_2 = 1;
+	_1 = 0;
+	if (_2 <= _3) {
+		while (1) {
+			if (_1) {
+				_2++;
+				if (!(_2 <= _3)) {
+					break;
+				}
+			} else {
+				_1 = 1;
+			}
+			i = _2;
+			ZEPHIR_INIT_NVAR(&a);
+			zephir_create_array(&a, 5, 0);
+			ZEPHIR_INIT_NVAR(&_4$$3);
+			ZVAL_LONG(&_4$$3, 1);
+			zephir_array_fast_append(&a, &_4$$3);
+			ZEPHIR_INIT_NVAR(&_4$$3);
+			ZVAL_LONG(&_4$$3, 2);
+			zephir_array_fast_append(&a, &_4$$3);
+			ZEPHIR_INIT_NVAR(&_4$$3);
+			ZVAL_LONG(&_4$$3, 3);
+			zephir_array_fast_append(&a, &_4$$3);
+			ZEPHIR_INIT_NVAR(&_4$$3);
+			ZVAL_LONG(&_4$$3, 4);
+			zephir_array_fast_append(&a, &_4$$3);
+			ZEPHIR_INIT_NVAR(&_4$$3);
+			ZVAL_LONG(&_4$$3, 5);
+			zephir_array_fast_append(&a, &_4$$3);
+			ZEPHIR_ADD_ASSIGN(&a, &b);
+		}
+	}
+	ZEPHIR_MM_RESTORE();
+}
+
+/**
+ * Array `+=` accumulation via untyped `var += var`: grows `a` by one key
+ * per step. Confirms the macro merges in place (O(n) amortized) instead of
+ * duplicating the accumulator each step.
+ */
+PHP_METHOD(Stub_Bench, addAssignAccumulate)
+{
+	zend_long _1;
+	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *count_param = NULL, a, b, _3$$3;
+	long count, i, _2;
+
+	ZVAL_UNDEF(&a);
+	ZVAL_UNDEF(&b);
+	ZVAL_UNDEF(&_3$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(count)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &count_param);
+	i = 0;
+	ZEPHIR_INIT_VAR(&a);
+	array_init(&a);
+	_2 = count;
+	_1 = 1;
+	_0 = 0;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			i = _1;
+			ZEPHIR_INIT_NVAR(&b);
+			array_init(&b);
+			ZEPHIR_INIT_NVAR(&_3$$3);
+			ZVAL_LONG(&_3$$3, i);
+			zephir_array_update_long(&b, i, &_3$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+			ZEPHIR_ADD_ASSIGN(&a, &b);
+		}
+	}
+	RETURN_CCTOR(&a);
+}
+
 void zep_Stub_Bench_zephir_gen_step_generatorRange(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext )
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;

@@ -390,6 +390,64 @@ class Assign
 		return num;
 	}
 
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/1280
+	 */
+	public function testAssign45()
+	{
+		var a = [0];
+		let a += [1, 2];
+
+		return a;
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/1280
+	 */
+	public function testAssign46()
+	{
+		array a = [1, 2];
+		let a += [3, 4, 5];
+
+		return a;
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/1280
+	 */
+	public function testAssign47()
+	{
+		var a = ["a": 1];
+		array b = ["a": 99, "b": 2];
+		let a += b;
+
+		return a;
+	}
+
+	/**
+	 * Untyped var += var where both hold arrays.
+	 *
+	 * @link https://github.com/zephir-lang/zephir/issues/1280
+	 */
+	public function testAssign48()
+	{
+		var a = [0], b = [1, 2];
+		let a += b;
+
+		return a;
+	}
+
+	/**
+	 * Guard: untyped var += var on scalars still adds numerically.
+	 */
+	public function testAssign49()
+	{
+		var a = 5, b = 3;
+		let a += b;
+
+		return a;
+	}
+
 	public function testPropertyAssign1()
 	{
 		let this->testVar = 1;
