@@ -189,6 +189,19 @@ class Variable
                 }
                 break;
 
+            case 'add-assign':
+                /* PHP array union in place: a = a + rhs. zephir_add_function forwards to the
+                   engine add_function, which handles result == op1 for arrays (SEPARATE_ARRAY
+                   + zend_hash_merge), keeping left-hand keys without renumbering. */
+                $compilationContext->headersManager->add('kernel/operators');
+                $symbolVariable->setMustInitNull(true);
+                $compilationContext->symbolTable->mustGrownStack(true);
+                $symbolVariable->setDynamicTypes('array');
+                $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                $value  = $compilationContext->backend->resolveValue($resolvedExpr, $compilationContext);
+                $codePrinter->output('zephir_add_function(' . $symbol . ', ' . $symbol . ', ' . $value . ');');
+                break;
+
             default:
                 throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
         }

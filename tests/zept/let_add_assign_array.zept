@@ -1,0 +1,67 @@
+--TEST--
+let add-assign on arrays performs PHP array union (issue #1280)
+--FILE--
+namespace Stub;
+
+class LetAddAssignArray
+{
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1280
+     */
+    public function issue1280() -> array
+    {
+        var a = [0];
+        let a += [1, 2];
+
+        return a;
+    }
+
+    public function arrayTypedLhs() -> array
+    {
+        array a = [1, 2];
+        let a += [3, 4, 5];
+
+        return a;
+    }
+
+    public function arrayVarRhs() -> array
+    {
+        var a = ["a": 1];
+        array b = ["a": 99, "b": 2];
+        let a += b;
+
+        return a;
+    }
+
+    public function untypedVarBoth() -> array
+    {
+        var a = [0], b = [1, 2];
+        let a += b;
+
+        return a;
+    }
+}
+--USAGE--
+$class = new \Stub\LetAddAssignArray();
+echo var_export($class->issue1280(), true), "\n";
+echo var_export($class->arrayTypedLhs(), true), "\n";
+echo var_export($class->arrayVarRhs(), true), "\n";
+echo var_export($class->untypedVarBoth(), true), "\n";
+--EXPECT--
+array (
+  0 => 0,
+  1 => 2,
+)
+array (
+  0 => 1,
+  1 => 2,
+  2 => 5,
+)
+array (
+  'a' => 1,
+  'b' => 2,
+)
+array (
+  0 => 0,
+  1 => 2,
+)
