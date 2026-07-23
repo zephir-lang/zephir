@@ -31,6 +31,8 @@ use function trim;
  */
 class MethodDocBlock extends DocBlock
 {
+    use TypeRenderer;
+
     private AliasManager $aliasManager;
 
     private Method $classMethod;
@@ -298,7 +300,18 @@ class MethodDocBlock extends DocBlock
         }
 
         foreach ($parameters as $parameter) {
-            if (isset($parameter['cast'])) {
+            if (!empty($parameter['data-types'])) {
+                /**
+                 * Union parameter types (#2613) must read identically in the
+                 * `@param` docblock and in the method signature, so reuse the
+                 * signature's union renderer. A union with nothing mappable
+                 * (e.g. a `var`-only union) falls back to `mixed`.
+                 */
+                $type = $this->buildUnionType($parameter['data-types'], $aliasManager);
+                if ('' === $type) {
+                    $type = 'mixed';
+                }
+            } elseif (isset($parameter['cast'])) {
                 if ($aliasManager->isAlias($parameter['cast']['value'])) {
                     $type = '\\' . $aliasManager->getAlias($parameter['cast']['value']);
                 } else {
@@ -319,6 +332,7 @@ class MethodDocBlock extends DocBlock
              */
             if (
                 'mixed' !== $type
+                && empty($parameter['data-types'])
                 && isset($parameter['default']['type'])
                 && 'null' === $parameter['default']['type']
             ) {

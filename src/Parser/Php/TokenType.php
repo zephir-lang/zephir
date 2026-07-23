@@ -118,6 +118,7 @@ final class TokenType
     public const T_TRAIT        = 461;
     public const T_ELSEIF       = 452;
     public const T_INTERNAL     = 453;
+    public const T_READONLY     = 462;
 
     /*
      * Single-character operators. The id IS the ASCII code of the character,

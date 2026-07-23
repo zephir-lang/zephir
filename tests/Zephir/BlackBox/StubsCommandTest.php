@@ -99,6 +99,8 @@ final class StubsCommandTest extends TestCase
             'Issue 2092 return type for type-hinted object' => ['Issue_2092.php'],
             'Issue 2428 multi-class union return type' => ['Issue_2428.php'],
             'Issue 2608 typed properties' => ['Issue_2608.php'],
+            'Issue 2613 union params and properties' => ['Issue_2613.php'],
+            'Issue 2614 readonly properties' => ['Issue_2614.php'],
         ];
     }
 

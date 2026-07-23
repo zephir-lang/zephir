@@ -51,6 +51,7 @@ class Property
         protected ?array $dataTypes = null,
     ) {
         $this->checkVisibility($visibility, $name, $original);
+        $this->checkReadOnly();
 
         if (!is_array($this->defaultValue)) {
             $this->defaultValue          = [];
@@ -80,6 +81,40 @@ class Property
             throw new CompilerException(
                 "Property '$name' cannot be 'protected' and 'private' at the same time",
                 $original
+            );
+        }
+    }
+
+    /**
+     * Validates PHP's readonly-property rules (issue #2614): a readonly
+     * property must be typed, cannot declare a default value and cannot be
+     * static. Mirrors the fatal errors the PHP compiler raises for the same
+     * constructs, so the write-once guarantee stays enforceable by the engine.
+     */
+    public function checkReadOnly(): void
+    {
+        if (!in_array('readonly', $this->visibility, true)) {
+            return;
+        }
+
+        if (in_array('static', $this->visibility, true)) {
+            throw new CompilerException(
+                "Readonly property '$this->name' cannot be static",
+                $this->original
+            );
+        }
+
+        if (null === $this->dataType && null === $this->cast && null === $this->dataTypes) {
+            throw new CompilerException(
+                "Readonly property '$this->name' must have a type",
+                $this->original
+            );
+        }
+
+        if (isset($this->original['default'])) {
+            throw new CompilerException(
+                "Readonly property '$this->name' cannot have a default value",
+                $this->original
             );
         }
     }
@@ -371,6 +406,10 @@ class Property
                     $modifiers['ZEND_ACC_STATIC'] = true;
                     break;
 
+                case 'readonly':
+                    $modifiers['ZEND_ACC_READONLY'] = true;
+                    break;
+
                 default:
                     throw new Exception('Unknown modifier ' . $visibility);
             }
@@ -409,6 +448,14 @@ class Property
     public function isStatic(): bool
     {
         return in_array('static', $this->visibility);
+    }
+
+    /**
+     * Checks whether the property is readonly (issue #2614).
+     */
+    public function isReadOnly(): bool
+    {
+        return in_array('readonly', $this->visibility);
     }
 
     /**
