@@ -59,6 +59,7 @@ final class Lexer
         'deprecated'   => TokenType::T_DEPRECATED,
         'final'        => TokenType::T_FINAL,
         'abstract'     => TokenType::T_ABSTRACT,
+        'readonly'     => TokenType::T_READONLY,
         'function'     => TokenType::T_FUNCTION,
         'fn'           => TokenType::T_FUNCTION,
         'let'          => TokenType::T_LET,

@@ -110,6 +110,7 @@ final class PhpParser
         TokenType::T_DEPRECATED => 'deprecated',
         TokenType::T_ABSTRACT   => 'abstract',
         TokenType::T_FINAL      => 'final',
+        TokenType::T_READONLY   => 'readonly',
     ];
 
     /**

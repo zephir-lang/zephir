@@ -47,6 +47,8 @@ use const PHP_VERSION_ID;
 
 class Generator
 {
+    use TypeRenderer;
+
     /**
      * Not php visible style variants.
      */
@@ -286,7 +288,18 @@ class Generator
                     && 'null' === $parameter['default']['type'];
 
                 $paramStr = '';
-                if (isset($parameter['cast'])) {
+                if (!empty($parameter['data-types'])) {
+                    /**
+                     * Union parameter types (#2613) arrive as an ordered
+                     * `data-types` list (with `data-type` set to `variable`),
+                     * so they must be handled before the single-type branches
+                     * or the hint is silently dropped.
+                     */
+                    $union = $this->buildUnionType($parameter['data-types'], $aliasManager);
+                    if ('' !== $union) {
+                        $paramStr .= $union . ' ';
+                    }
+                } elseif (isset($parameter['cast'])) {
                     if ($aliasManager->isAlias($parameter['cast']['value'])) {
                         $cast = '\\' . $aliasManager->getAlias($parameter['cast']['value']);
                     } else {
@@ -405,6 +418,16 @@ class Generator
             $visibility = 'static ' . $visibility;
         }
 
+        /**
+         * Readonly properties (#2614) carry the modifier in the property's
+         * visibility list; PHP spells it after the visibility keyword, e.g.
+         * `public readonly int $id`. Without this the stub drops `readonly`
+         * and mis-describes a write-once property as writable.
+         */
+        if ($property->isReadOnly()) {
+            $visibility .= ' readonly';
+        }
+
         $original = $property->getOriginal() ?? [];
 
         /**
@@ -412,11 +435,19 @@ class Generator
          * parameter renderer's Zephir->PHP coercions and alias resolution.
          * Unlike a parameter, a property states nullability explicitly with a
          * leading `?`, so it is read from the AST `nullable` flag rather than
-         * inferred from a `= null` default.
+         * inferred from a `= null` default. Union properties (#2613) carry an
+         * ordered `data-types` list instead of a single `data-type`/`cast`;
+         * `null` is a union member there, so the `?` shorthand does not apply.
          */
         $nullable   = !empty($original['nullable']);
         $typePrefix = '';
-        if (isset($original['cast'])) {
+        if (!empty($original['data-types'])) {
+            $union      = $this->buildUnionType(
+                $original['data-types'],
+                $property->getClassDefinition()->getAliasManager()
+            );
+            $typePrefix = '' === $union ? '' : $union . ' ';
+        } elseif (isset($original['cast'])) {
             $aliasManager = $property->getClassDefinition()->getAliasManager();
             $cast         = $aliasManager->isAlias($original['cast']['value'])
                 ? '\\' . $aliasManager->getAlias($original['cast']['value'])
