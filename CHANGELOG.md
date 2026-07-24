@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Fixed
 - Fixed typed-property and array-class-constant string defaults containing escape sequences (e.g. `protected string x = "A\\B\\C"`) being emitted with the wrong byte length: the length was `strlen()` of the source-escaped PHP value (a `\\` counted as two bytes) while the C string literal is shorter, so the runtime string was over-long and corrupted with trailing garbage bytes. The length is now measured by the C compiler (`SL()` / `sizeof`), correct for every escape sequence [#2617](https://github.com/zephir-lang/zephir/issues/2617)
+- Fixed the `Zephir version has changed` warning firing on every rebuild: the version-cache directory existence check used `is_file()` on a path that is always a directory, so the check never matched and the warning degraded to "warn whenever the project was already built". It now fires only on a genuine version change and names the old and new versions [#2621](https://github.com/zephir-lang/zephir/issues/2621)
 
 ## [1.1.0] - 2026-07-14
 
