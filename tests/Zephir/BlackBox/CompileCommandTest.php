@@ -56,6 +56,9 @@ final class CompileCommandTest extends TestCase
             "/^CFLAGS='-O2 -fvisibility=hidden -Wparentheses( -flto)? -DZEPHIR_RELEASE=1'/m",
             $contents,
         );
+        // Without --with-php-config the build keeps resolving php-config through
+        // the PATH, exactly as it did before the option existed.
+        $this->assertStringNotContainsString('--with-php-config', $contents);
     }
 
     public function testCompileExtensionInDevelopmentMode(): void
