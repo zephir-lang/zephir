@@ -27,6 +27,9 @@ final class PhpToolchainTest extends TestCase
 {
     private string $prefix = '';
 
+    /** @var list<string> */
+    private array $linksToCleanup = [];
+
     protected function setUp(): void
     {
         $this->prefix = sys_get_temp_dir() . '/zephir-toolchain-' . uniqid('', true);
@@ -34,6 +37,11 @@ final class PhpToolchainTest extends TestCase
 
     protected function tearDown(): void
     {
+        foreach ($this->linksToCleanup as $link) {
+            @unlink($link);
+        }
+        $this->linksToCleanup = [];
+
         if ($this->prefix !== '') {
             $this->removeRecursively($this->prefix);
         }
@@ -62,9 +70,40 @@ final class PhpToolchainTest extends TestCase
 
         $toolchain = PhpToolchain::fromPhpConfig($phpConfig);
 
-        $this->assertSame(escapeshellarg($this->prefix . '/phpize'), $toolchain->phpizeCommand());
+        // Physical paths: the temporary directory is itself a symlink on macOS
+        // (/var/folders -> /private/var/folders).
         $this->assertSame(
-            ' --with-php-config=' . escapeshellarg($phpConfig),
+            escapeshellarg($this->physicalPrefix() . '/phpize'),
+            $toolchain->phpizeCommand(),
+        );
+        $this->assertSame(
+            ' --with-php-config=' . escapeshellarg($this->physicalPrefix() . '/php-config'),
+            $toolchain->configureOption(),
+        );
+    }
+
+    /**
+     * `configure` runs from inside ext/ and bakes the given path into
+     * ext/Makefile, so the toolchain must report where the tools physically
+     * live rather than the symlink it was reached through.
+     */
+    public function testSymlinkedPrefixResolvesToThePhysicalPath(): void
+    {
+        $this->skipOnWindows();
+        $this->createPrefix();
+
+        $link = $this->prefix . '-link';
+        symlink($this->prefix, $link);
+        $this->linksToCleanup[] = $link;
+
+        $toolchain = PhpToolchain::fromPhpConfig($link . '/php-config');
+
+        $this->assertSame(
+            escapeshellarg($this->physicalPrefix() . '/phpize'),
+            $toolchain->phpizeCommand(),
+        );
+        $this->assertSame(
+            ' --with-php-config=' . escapeshellarg($this->physicalPrefix() . '/php-config'),
             $toolchain->configureOption(),
         );
     }
@@ -88,11 +127,11 @@ final class PhpToolchainTest extends TestCase
         }
 
         $this->assertSame(
-            ' --with-php-config=' . escapeshellarg(realpath($this->prefix) . '/php-config'),
+            ' --with-php-config=' . escapeshellarg($this->physicalPrefix() . '/php-config'),
             $toolchain->configureOption(),
         );
         $this->assertSame(
-            escapeshellarg(realpath($this->prefix) . '/phpize'),
+            escapeshellarg($this->physicalPrefix() . '/phpize'),
             $toolchain->phpizeCommand(),
         );
     }
@@ -149,13 +188,20 @@ final class PhpToolchainTest extends TestCase
         unlink($this->prefix . '/phpize');
 
         $this->expectException(CompilerException::class);
-        $this->expectExceptionMessage($this->prefix . '/phpize');
+        $this->expectExceptionMessage($this->physicalPrefix() . '/phpize');
 
         PhpToolchain::fromPhpConfig($phpConfig);
     }
 
+    /**
+     * On Windows the platform guard fires first for every value, so the
+     * value-specific message only exists elsewhere. See
+     * testEveryValueIsRejectedOnWindows for the Windows side.
+     */
     public function testValuelessOptionIsRejected(): void
     {
+        $this->skipOnWindows();
+
         $this->expectException(CompilerException::class);
         $this->expectExceptionMessage('The "--with-php-config" option requires a value.');
 
@@ -165,13 +211,20 @@ final class PhpToolchainTest extends TestCase
 
     public function testEmptyValueIsRejected(): void
     {
+        $this->skipOnWindows();
+
         $this->expectException(CompilerException::class);
         $this->expectExceptionMessage('The "--with-php-config" option requires a value.');
 
         PhpToolchain::fromPhpConfig('   ');
     }
 
-    public function testOptionIsRejectedOnWindows(): void
+    /**
+     * @dataProvider windowsValueProvider
+     *
+     * @param mixed $value
+     */
+    public function testEveryValueIsRejectedOnWindows($value): void
     {
         if (!Os::isWindows()) {
             $this->markTestSkipped('The Windows-only rejection path needs Windows.');
@@ -180,7 +233,16 @@ final class PhpToolchainTest extends TestCase
         $this->expectException(CompilerException::class);
         $this->expectExceptionMessage('PHP_DEVPACK');
 
-        PhpToolchain::fromPhpConfig('C:\\php\\php-config');
+        PhpToolchain::fromPhpConfig($value);
+    }
+
+    public function windowsValueProvider(): array
+    {
+        return [
+            'existing path'  => ['C:\\php\\php-config'],
+            'no value given' => [true],
+            'empty value'    => ['   '],
+        ];
     }
 
     /**
@@ -199,6 +261,14 @@ final class PhpToolchainTest extends TestCase
         }
 
         return $this->prefix . '/php-config';
+    }
+
+    /**
+     * The prefix with every symlink resolved, which is what the toolchain reports.
+     */
+    private function physicalPrefix(): string
+    {
+        return realpath($this->prefix) ?: $this->prefix;
     }
 
     private function skipOnWindows(): void
