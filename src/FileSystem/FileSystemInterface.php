@@ -57,6 +57,17 @@ interface FileSystemInterface
     public function getHashFile(string $algorithm, string $sourceFile, bool $useCache = false): string;
 
     /**
+     * Returns the name of the most recent cache version directory that is
+     * not the current one, or null when there is no previous version.
+     */
+    public function getPreviousVersion(): ?string;
+
+    /**
+     * Returns the current cache version identifier.
+     */
+    public function getVersion(): string;
+
+    /**
      * Initialize the filesystem.
      */
     public function initialize();

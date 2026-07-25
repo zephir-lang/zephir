@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\FileSystem;
 
+use DirectoryIterator;
 use FilesystemIterator;
 use Generator;
 use RecursiveDirectoryIterator;
@@ -106,12 +107,11 @@ class HardDisk implements FileSystemInterface
     public function exists(string $path): bool
     {
         if ('.' === $path || empty($path)) {
-            $path = $this->localPath;
-        } else {
-            $path = "{$this->localPath}/{$path}";
+            // The version container itself is a directory, not a file.
+            return is_dir($this->basePath . DIRECTORY_SEPARATOR . $this->localPath);
         }
 
-        return is_file($this->basePath . DIRECTORY_SEPARATOR . $path);
+        return is_file($this->basePath . DIRECTORY_SEPARATOR . "{$this->localPath}/{$path}");
     }
 
     public function file(string $path): array
@@ -154,6 +154,47 @@ class HardDisk implements FileSystemInterface
         }
 
         return file_get_contents($cacheFile);
+    }
+
+    /**
+     * Returns the name of the most recent cache version directory that is
+     * not the current one, or null when there is no previous version.
+     */
+    public function getPreviousVersion(): ?string
+    {
+        if (!is_dir($this->basePath)) {
+            return null;
+        }
+
+        $previous = null;
+        $latest   = -1;
+
+        foreach (new DirectoryIterator($this->basePath) as $entry) {
+            if ($entry->isDot() || !$entry->isDir()) {
+                continue;
+            }
+
+            $name = $entry->getFilename();
+            if ($name === $this->localPath) {
+                continue;
+            }
+
+            $mtime = $entry->getMTime();
+            if ($mtime > $latest) {
+                $latest   = $mtime;
+                $previous = $name;
+            }
+        }
+
+        return $previous;
+    }
+
+    /**
+     * Returns the current cache version identifier.
+     */
+    public function getVersion(): string
+    {
+        return $this->localPath;
     }
 
     /**

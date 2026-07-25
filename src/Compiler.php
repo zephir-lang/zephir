@@ -2038,9 +2038,18 @@ final class Compiler
 
         if (!$this->filesystem->exists('.')) {
             if (!$this->checkIfPhpized()) {
-                $this->logger->info(
-                    'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project'
-                );
+                $previousVersion = $this->filesystem->getPreviousVersion();
+                if (null !== $previousVersion) {
+                    $this->logger->info(sprintf(
+                        'Zephir version changed (%s -> %s), use "zephir fullclean" to perform a full clean of the project',
+                        $previousVersion,
+                        $this->filesystem->getVersion()
+                    ));
+                } else {
+                    $this->logger->info(
+                        'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project'
+                    );
+                }
             }
 
             $this->filesystem->makeDirectory('.');
