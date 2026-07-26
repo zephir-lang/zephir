@@ -123,6 +123,26 @@ class ObjectDynamicProperty
                 );
                 break;
 
+            // A char is a native numeric byte, stored as its integer value; see #1629.
+            case 'char':
+            case 'uchar':
+                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext
+                );
+                $compilationContext->backend->assignLong(
+                    $tempVariable,
+                    $resolvedExpr->getCharCode(),
+                    $compilationContext
+                );
+                $compilationContext->backend->updateProperty(
+                    $symbolVariable,
+                    $propertyVariableName,
+                    $tempVariable,
+                    $compilationContext
+                );
+                break;
+
             case 'string':
                 $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                     'variable',

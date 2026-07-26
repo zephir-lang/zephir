@@ -179,13 +179,14 @@ class ObjectProperty
                 break;
 
             case 'char':
+            case 'uchar':
                 $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context);
                 switch ($statement['operator']) {
                     case 'assign':
                         $tempVariable->initNonReferenced($context);
                         $context->backend->assignLong(
                             $tempVariable,
-                            '\'' . $expression->getBooleanCode() . '\'',
+                            $expression->getCharCode(),
                             $context
                         );
                         break;

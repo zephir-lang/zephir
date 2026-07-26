@@ -44,7 +44,7 @@ PHP_METHOD(Stub_Cast, testCharCastFromVariableChar)
 {
 	char a, _0;
 	a = 'A';
-	_0 = a;
+	_0 = (char) a;
 	RETURN_LONG((unsigned char) _0);
 }
 

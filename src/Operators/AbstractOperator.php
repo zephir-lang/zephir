@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Zephir\Operators;
 
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\Traits\VariablesTrait;
+use Zephir\Types\TypeRegistry;
 use Zephir\Variable\Variable;
 
 use function is_object;
@@ -28,6 +30,24 @@ abstract class AbstractOperator
     protected bool      $literalOnly       = true;
     protected string    $operator;
     protected bool      $readOnly          = false;
+
+    /**
+     * Rewrites a `char`/`uchar` expression so its code is a valid C expression
+     * (see CompiledExpression::getCharCode()), letting it take part in integer
+     * arithmetic and comparisons. Any other expression is returned untouched.
+     */
+    protected function quoteCharLiteral(CompiledExpression $expression, ?array $original = null): CompiledExpression
+    {
+        if (!TypeRegistry::isChar($expression->getType())) {
+            return $expression;
+        }
+
+        return new CompiledExpression(
+            $expression->getType(),
+            $expression->getCharCode(),
+            $original ?? $expression->getOriginal()
+        );
+    }
 
     /**
      * Returns the expected variable for assignment or creates a temporary variable to

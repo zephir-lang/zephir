@@ -112,6 +112,7 @@
 #include "stub/issue1404.zep.h"
 #include "stub/issue1521.zep.h"
 #include "stub/issue1628.zep.h"
+#include "stub/issue1629.zep.h"
 #include "stub/issue1706.zep.h"
 #include "stub/issue1790.zep.h"
 #include "stub/issue2030.zep.h"

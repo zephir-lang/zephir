@@ -284,7 +284,10 @@ class ArrayIndex
                 );
                 break;
 
+            // A char is a native numeric byte, stored as its integer value --
+            // consistent with `let a = [ch]` (#1988). See #1629.
             case 'char':
+            case 'uchar':
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                     'variable',
                     $compilationContext,
@@ -292,7 +295,7 @@ class ArrayIndex
                 );
                 $compilationContext->backend->assignLong(
                     $symbolVariable,
-                    '\'' . $resolvedExpr->getCode() . '\'',
+                    $resolvedExpr->getCharCode(),
                     $compilationContext
                 );
                 break;
@@ -363,6 +366,9 @@ class ArrayIndex
                     case 'uint':
                     case 'long':
                     case 'ulong':
+                    // A char is a native numeric byte; see #1629.
+                    case 'char':
+                    case 'uchar':
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                             'variable',
                             $compilationContext,

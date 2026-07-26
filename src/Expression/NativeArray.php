@@ -193,6 +193,9 @@ class NativeArray
 
                         case Types::T_ARRAY:
                         case Types::T_VARIABLE:
+                        // A char is boxed by getArrayValue(); see #1629.
+                        case Types::T_CHAR:
+                        case Types::T_UCHAR:
                             $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                             $compilationContext->backend->updateArray(
                                 $symbolVariable,
@@ -265,6 +268,9 @@ class NativeArray
 
                         case Types::T_ARRAY:
                         case Types::T_VARIABLE:
+                        // A char is boxed by getArrayValue(); see #1629.
+                        case Types::T_CHAR:
+                        case Types::T_UCHAR:
                             $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                             $compilationContext->backend->updateArray(
                                 $symbolVariable,
@@ -315,6 +321,9 @@ class NativeArray
                                     break;
 
                                 case Types::T_VARIABLE:
+                                // A char is boxed by getArrayValue(); see #1629.
+                                case Types::T_CHAR:
+                                case Types::T_UCHAR:
                                     $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                     $compilationContext->backend->updateArray(
                                         $symbolVariable,
@@ -386,11 +395,14 @@ class NativeArray
                                     break;
 
                                 case Types::T_VARIABLE:
+                                // A char is boxed by getArrayValue(); see #1629.
+                                case Types::T_CHAR:
+                                case Types::T_UCHAR:
                                     $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                     $compilationContext->backend->updateArray(
                                         $symbolVariable,
                                         $resolvedExprKey,
-                                        $resolvedExpr,
+                                        $valueVariable,
                                         $compilationContext
                                     );
                                     $this->checkVariableTemporal($valueVariable);
@@ -411,6 +423,9 @@ class NativeArray
                                 case Types::T_NULL:
                                 case Types::T_VARIABLE:
                                 case Types::T_BOOL:
+                                // A char is boxed by getArrayValue(); see #1629.
+                                case Types::T_CHAR:
+                                case Types::T_UCHAR:
                                     $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                     $compilationContext->backend->updateArray(
                                         $symbolVariable,
@@ -477,7 +492,7 @@ class NativeArray
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                 $compilationContext->backend->assignLong(
                     $tempVar,
-                    '\'' . $exprCompiled->getCode() . '\'',
+                    $exprCompiled->getCharCode(),
                     $compilationContext
                 );
 

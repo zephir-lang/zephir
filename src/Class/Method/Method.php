@@ -764,6 +764,9 @@ class Method
                 return '';
 
             case 'char':
+            case 'uchar':
+                // zephir_get_charval() yields a long; the declared C type
+                // (char / unsigned char) narrows it to the byte. See #1629.
                 return "\t" . $parameter['name'] . ' = zephir_get_charval(' . $parameterCode . ');' . PHP_EOL;
 
             case 'bool':

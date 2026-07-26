@@ -290,8 +290,15 @@ class NativeArrayAccess
         Variable $variableVariable,
         CompilationContext $compilationContext
     ): CompiledExpression {
+        /**
+         * A string offset read is PHP's `$s[$i]`, whose value is a 1-char string.
+         * When the destination is a zval we must box it as one; when it is a
+         * native C scalar we write the raw byte straight in. See #1629.
+         */
+        $boxAsString = $this->needsStringBoxing();
+
         if ($this->expecting) {
-            if ($this->expectingVariable) {
+            if ($this->expectingVariable && !$boxAsString) {
                 $symbolVariable = $this->expectingVariable;
                 if ('char' != $symbolVariable->getType() && 'uchar' != $symbolVariable->getType()) {
                     $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
@@ -358,6 +365,49 @@ class NativeArrayAccess
                 );
         }
 
+        if ($boxAsString) {
+            $stringVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext,
+                $expression
+            );
+            $compilationContext->backend->assignChar($stringVariable, $symbolVariable, $compilationContext);
+
+            return new CompiledExpression('variable', $stringVariable->getName(), $expression);
+        }
+
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
+    }
+
+    /**
+     * Whether the byte read out of the string has to be boxed into a 1-char
+     * string zval rather than handed over as a raw C byte.
+     *
+     * It does when the destination is dynamic (`var`) or `string`, and when
+     * there is no destination variable at all -- `let a[] = s[i]`, `f(s[i])`,
+     * `echo s[i]`. It does not for a native scalar destination (`char`, `int`,
+     * `double`, ...), which wants the byte, nor for `return_value`: a method
+     * declaring `-> char` carries an `IS_LONG` arg-info, so returning a string
+     * there would be a TypeError.
+     */
+    private function needsStringBoxing(): bool
+    {
+        if (!$this->expecting) {
+            return false;
+        }
+
+        if (null === $this->expectingVariable) {
+            return true;
+        }
+
+        if ('return_value' === $this->expectingVariable->getName()) {
+            return false;
+        }
+
+        return in_array(
+            $this->expectingVariable->getType(),
+            ['variable', 'mixed', 'string', 'istring'],
+            true
+        );
     }
 }

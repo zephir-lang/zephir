@@ -51,7 +51,7 @@ class CastOperator extends AbstractOperator
 
                     case Types::T_CHAR:
                     case Types::T_UCHAR:
-                        return new CompiledExpression('int', "'{$resolved->getCode()}'", $expression);
+                        return new CompiledExpression('int', $resolved->getCharCode(), $expression);
 
                     case Types::T_INT:
                         return new CompiledExpression('int', $resolved->getCode(), $expression);
@@ -170,7 +170,7 @@ class CastOperator extends AbstractOperator
                     case Types::T_UCHAR:
                         return new CompiledExpression(
                             'long',
-                            "(long) '{$resolved->getCode()}'",
+                            '(long) ' . $resolved->getCharCode(),
                             $expression
                         );
 
@@ -257,7 +257,7 @@ class CastOperator extends AbstractOperator
                     case Types::T_UCHAR:
                         return new CompiledExpression(
                             'double',
-                            "(double) '{$resolved->getCode()}'",
+                            '(double) ' . $resolved->getCharCode(),
                             $expression
                         );
 
@@ -352,7 +352,7 @@ class CastOperator extends AbstractOperator
                     case Types::T_UCHAR:
                         return new CompiledExpression(
                             'bool',
-                            "(zend_bool) '{$resolved->getCode()}'",
+                            '(zend_bool) ' . $resolved->getCharCode(),
                             $expression
                         );
 
@@ -405,12 +405,18 @@ class CastOperator extends AbstractOperator
 
 
             case Types::T_CHAR:
+            case Types::T_UCHAR:
                 switch ($resolved->getType()) {
                     case Types::T_UCHAR:
-                        return new CompiledExpression('uchar', "'{$resolved->getCode()}'", $expression);
-
                     case Types::T_CHAR:
-                        return new CompiledExpression('char', "'{$resolved->getCode()}'", $expression);
+                        /**
+                         * Char to char is a relabel. getCharCode() yields a valid
+                         * C expression for both a literal character and something
+                         * like ZEPHIR_GLOBAL(x), so the result no longer needs
+                         * quoting downstream — which is what used to produce
+                         * `ZVAL_LONG(&x, ''a'')`.
+                         */
+                        return new CompiledExpression($expression['left'], $resolved->getCharCode(), $expression);
 
                     case Types::T_VARIABLE:
                     case Types::T_MIXED:
@@ -422,23 +428,31 @@ class CastOperator extends AbstractOperator
                         );
 
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
-                            'char',
+                            $expression['left'],
                             $compilationContext
                         );
 
+                        $cType = Types::T_UCHAR === $expression['left'] ? 'unsigned char' : 'char';
+
                         switch ($symbolVariable->getType()) {
-                            // TODO: uchar
                             case Types::T_CHAR:
+                            case Types::T_UCHAR:
                                 $compilationContext->codePrinter->output(
-                                    sprintf('%s = %s;', $tempVariable->getName(), $symbolVariable->getName())
+                                    sprintf(
+                                        '%s = (%s) %s;',
+                                        $tempVariable->getName(),
+                                        $cType,
+                                        $symbolVariable->getName()
+                                    )
                                 );
                                 break;
                             default:
                                 $variableCode = $compilationContext->backend->getVariableCode($symbolVariable);
                                 $compilationContext->codePrinter->output(
                                     sprintf(
-                                        '%s = (char) zephir_get_intval(%s);',
+                                        '%s = (%s) zephir_get_intval(%s);',
                                         $tempVariable->getName(),
+                                        $cType,
                                         $variableCode
                                     )
                                 );
@@ -472,16 +486,16 @@ class CastOperator extends AbstractOperator
 
                         switch ($resolvedVariable->getType()) {
                             case Types::T_CHAR:
+                            case Types::T_UCHAR:
                                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                                     'string',
                                     $compilationContext
                                 );
 
-                                $symbol       = $compilationContext->backend->getVariableCode($symbolVariable);
-                                $resolvedCode = $compilationContext->backend->getVariableCode($resolvedVariable);
-
-                                $compilationContext->codePrinter->output(
-                                    sprintf('ZVAL_STRINGL(%s, %s, 1);', $symbol, $resolvedCode)
+                                $compilationContext->backend->assignChar(
+                                    $symbolVariable,
+                                    $resolvedVariable,
+                                    $compilationContext
                                 );
 
                                 return new CompiledExpression(

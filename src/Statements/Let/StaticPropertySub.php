@@ -121,7 +121,7 @@ class StaticPropertySub
                 );
                 $compilationContext->backend->assignLong(
                     $tempVariable,
-                    '\'' . $resolvedExpr->getCode() . '\'',
+                    $resolvedExpr->getCharCode(),
                     $compilationContext
                 );
                 $compilationContext->backend->$method(

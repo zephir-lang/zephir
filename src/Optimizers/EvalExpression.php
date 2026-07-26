@@ -138,7 +138,7 @@ class EvalExpression
 
             case 'char':
             case 'uchar':
-                return $compiledExpression->getCode();
+                return $compiledExpression->getCharCode();
 
             case 'bool':
                 $code = $compiledExpression->getBooleanCode();

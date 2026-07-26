@@ -46,11 +46,11 @@ PHP_METHOD(Stub_Issue2385, __construct)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 49, &__$null);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 50, &__$null);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "set");
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 50, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 51, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 
