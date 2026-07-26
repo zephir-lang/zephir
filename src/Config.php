@@ -97,6 +97,7 @@ class Config implements ArrayAccess, JsonSerializable
             'invalid-typeof-comparison'          => true,
             'conditional-initialization'         => true,
             'deprecated-strict-type'             => true,
+            'missing-optimizer'                  => false,
         ],
         'optimizations' => [
             'static-type-inference'             => true,

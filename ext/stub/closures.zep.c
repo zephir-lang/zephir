@@ -541,7 +541,7 @@ PHP_METHOD(Stub_Closures, issue2321ArrayMapPrivate)
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	zephir_create_closure_ex(&_0, this_ptr, stub_22__closure_ce, SL("__invoke"));
-	ZEPHIR_RETURN_CALL_FUNCTION("array_map", NULL, 13, &_0, &values);
+	ZEPHIR_RETURN_CALL_FUNCTION("array_map", NULL, 15, &_0, &values);
 	zephir_check_call_status();
 	RETURN_MM();
 }

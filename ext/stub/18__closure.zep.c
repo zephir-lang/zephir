@@ -37,7 +37,7 @@ PHP_METHOD(stub_18__closure, __invoke)
 	}
 	zephir_read_static_property_ce(&prefix, stub_18__closure_ce, SL("prefix"), PH_NOISY_CC);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 129, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 134, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CONCAT_VSV(return_value, &prefix, ":", &_0);
 	return;
 }

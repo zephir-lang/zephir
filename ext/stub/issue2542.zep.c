@@ -18,7 +18,7 @@ ZEPHIR_INIT_CLASS(Stub_Issue2542)
 {
 	ZEPHIR_REGISTER_CLASS(Stub, Issue2542, stub, issue2542, NULL, 0);
 
-	zephir_declare_class_constant_long(stub_issue2542_ce, SL("VERSION_ID"), 80030);
+	zephir_declare_class_constant_long(stub_issue2542_ce, SL("VERSION_ID"), 80506);
 
 	zephir_declare_class_constant_long(stub_issue2542_ce, SL("INT_SIZE"), 8);
 

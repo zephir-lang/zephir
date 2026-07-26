@@ -100,21 +100,7 @@ class FunctionCall extends Call
             return true;
         }
 
-        $internalName = ['f__' . $functionName];
-        if (isset($context->classDefinition)) {
-            $lowerNamespace = strtolower($context->classDefinition->getNamespace());
-            $prefix         = 'f_' . str_replace('\\', '_', $lowerNamespace);
-
-            $internalName[] = $prefix . '_' . $functionName;
-        }
-
-        foreach ($internalName as $name) {
-            if (isset($context->compiler->functionDefinitions[$name])) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->isUserlandZephirFunction($functionName, $context);
     }
 
     /**
@@ -143,6 +129,20 @@ class FunctionCall extends Call
     }
 
     /**
+     * Checks whether a specialized optimizer exists for the function.
+     *
+     * Note this says nothing about whether the optimizer accepts a particular call:
+     * an optimizer may decline call forms it does not handle (an unsupported arity,
+     * for instance), in which case the call still falls back to a runtime call.
+     *
+     * @throws Exception
+     */
+    public function hasOptimizer(string $funcName): bool
+    {
+        return false !== $this->resolveOptimizer($funcName);
+    }
+
+    /**
      * Checks if the function is a built-in provided by Zephir.
      */
     public function isBuiltInFunction(string $functionName): bool
@@ -165,6 +165,28 @@ class FunctionCall extends Call
             'get_class_lower' => true,
             default           => false,
         };
+    }
+
+    /**
+     * Checks if the function is defined in Zephir code being compiled.
+     */
+    public function isUserlandZephirFunction(string $functionName, CompilationContext $context): bool
+    {
+        $internalName = ['f__' . $functionName];
+        if (isset($context->classDefinition)) {
+            $lowerNamespace = strtolower($context->classDefinition->getNamespace());
+            $prefix         = 'f_' . str_replace('\\', '_', $lowerNamespace);
+
+            $internalName[] = $prefix . '_' . $functionName;
+        }
+
+        foreach ($internalName as $name) {
+            if (isset($context->compiler->functionDefinitions[$name])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -331,6 +353,13 @@ class FunctionCall extends Call
                 ['nonexistent-function', $expression]
             );
         }
+
+        /**
+         * Reaching this point means no optimizer handled the call, so it will be
+         * dispatched by name through the Zend function table at runtime. Report it
+         * as an optimization opportunity, once per function name.
+         */
+        $this->warnMissingOptimizer($funcName, $exists, $expression, $compilationContext);
 
         /**
          * Static variables can be passed using local variables saving memory if the function is read only
@@ -630,49 +659,115 @@ class FunctionCall extends Call
      */
     protected function optimize(string $funcName, array $expression, Call $call, CompilationContext $compilationContext)
     {
-        $optimizer = false;
-
-        /**
-         * Check if the optimizer is already cached
-         */
-        if (!isset(self::$optimizers[$funcName])) {
-            $camelizeFunctionName = Name::camelize($funcName);
-
-            /**
-             * Check every optimizer directory for an optimizer
-             */
-            foreach (self::$optimizerDirectories as $directory) {
-                $path      = $directory . DIRECTORY_SEPARATOR . $camelizeFunctionName . 'Optimizer.php';
-                $className = 'Zephir\Optimizers\FunctionCall\\' . $camelizeFunctionName . 'Optimizer';
-
-                if (file_exists($path)) {
-                    if (!class_exists($className, false)) {
-                        require_once $path;
-                    }
-
-                    if (!class_exists($className, false)) {
-                        throw new Exception("Class {$className} cannot be loaded");
-                    }
-
-                    $optimizer = new $className();
-
-                    if (!($optimizer instanceof OptimizerAbstract)) {
-                        throw new Exception("Class {$className} must be instance of OptimizerAbstract");
-                    }
-
-                    break;
-                }
-            }
-
-            self::$optimizers[$funcName] = $optimizer;
-        } else {
-            $optimizer = self::$optimizers[$funcName];
-        }
+        $optimizer = $this->resolveOptimizer($funcName);
 
         if ($optimizer) {
             return $optimizer->optimize($expression, $call, $compilationContext);
         }
 
         return false;
+    }
+
+    /**
+     * Reports a call that falls back to a runtime PHP function call.
+     *
+     * Deliberately not gated on whether an optimizer *file* exists: an optimizer may
+     * decline call forms it does not handle, and those calls are precisely the ones a
+     * reader cannot spot in the source. Any call reaching here has already failed to
+     * be optimized, whatever the reason.
+     *
+     * @throws Exception
+     */
+    private function warnMissingOptimizer(
+        string $funcName,
+        bool $exists,
+        array $expression,
+        CompilationContext $compilationContext,
+    ): void {
+        $compiler = $compilationContext->compiler;
+
+        // A function that does not exist is already reported as nonexistent-function,
+        // and a Zephir built-in is never dispatched through the function table.
+        if (null === $compiler || !$exists || $this->isBuiltInFunction($funcName)) {
+            return;
+        }
+
+        // Functions written in Zephir are compiled into the extension; no optimizer
+        // can exist for them.
+        if ($this->isUserlandZephirFunction($funcName, $compilationContext)) {
+            return;
+        }
+
+        if (isset($compiler->reportedMissingOptimizers[$funcName])) {
+            return;
+        }
+
+        $compiler->reportedMissingOptimizers[$funcName] = true;
+
+        $message = $this->hasOptimizer($funcName)
+            ? 'Call to "%s" is not optimized: its optimizer does not handle this call form, '
+              . 'so the call is dispatched through the Zend function table at runtime'
+            : 'Function "%s" has no Zephir optimizer, so the call is dispatched through '
+              . 'the Zend function table at runtime';
+
+        $compilationContext->logger->warning(
+            sprintf($message, $funcName),
+            ['missing-optimizer', $expression]
+        );
+    }
+
+    /**
+     * Finds the specialized optimizer for a function, if one exists.
+     *
+     * Resolution is by filename convention only: `Name::camelize($funcName) . 'Optimizer.php'`
+     * in any registered optimizer directory.
+     *
+     * @throws Exception
+     */
+    private function resolveOptimizer(string $funcName): OptimizerAbstract|false
+    {
+        if (isset(self::$optimizers[$funcName])) {
+            return self::$optimizers[$funcName];
+        }
+
+        $optimizer            = false;
+        $camelizeFunctionName = Name::camelize($funcName);
+
+        /**
+         * Check every optimizer directory for an optimizer
+         */
+        foreach (self::$optimizerDirectories as $directory) {
+            $path      = $directory . DIRECTORY_SEPARATOR . $camelizeFunctionName . 'Optimizer.php';
+            $className = 'Zephir\Optimizers\FunctionCall\\' . $camelizeFunctionName . 'Optimizer';
+
+            if (file_exists($path)) {
+                if (!class_exists($className, false)) {
+                    require_once $path;
+                }
+
+                if (!class_exists($className, false)) {
+                    throw new Exception("Class {$className} cannot be loaded");
+                }
+
+                $optimizer = new $className();
+
+                if (!($optimizer instanceof OptimizerAbstract)) {
+                    throw new Exception("Class {$className} must be instance of OptimizerAbstract");
+                }
+
+                break;
+            }
+        }
+
+        /**
+         * Optimizer directories are registered inside Compiler::generate(), so a lookup
+         * can happen before any directory is known. Caching that miss would hide every
+         * optimizer for the rest of the process.
+         */
+        if ([] !== self::$optimizerDirectories) {
+            self::$optimizers[$funcName] = $optimizer;
+        }
+
+        return $optimizer;
     }
 }
