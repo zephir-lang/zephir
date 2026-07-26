@@ -271,6 +271,7 @@ zend_class_entry *stub_properties_privateproperties_ce;
 zend_class_entry *stub_properties_propertyarray_ce;
 zend_class_entry *stub_properties_propertyupdate_ce;
 zend_class_entry *stub_properties_protectedproperties_ce;
+zend_class_entry *stub_properties_readonlyproperties_ce;
 zend_class_entry *stub_properties_staticprivateproperties_ce;
 zend_class_entry *stub_properties_staticpropertyarray_ce;
 zend_class_entry *stub_properties_staticprotectedproperties_ce;
@@ -556,6 +557,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Properties_PropertyArray);
 	ZEPHIR_INIT(Stub_Properties_PropertyUpdate);
 	ZEPHIR_INIT(Stub_Properties_ProtectedProperties);
+	ZEPHIR_INIT(Stub_Properties_ReadonlyProperties);
 	ZEPHIR_INIT(Stub_Properties_StaticPrivateProperties);
 	ZEPHIR_INIT(Stub_Properties_StaticPropertyArray);
 	ZEPHIR_INIT(Stub_Properties_StaticProtectedProperties);
@@ -733,7 +735,7 @@ static PHP_MINFO_FUNCTION(stub)
 		php_info_print_table_start();
 	php_info_print_table_header(2, "Test Extension support", "Value");
 	php_info_print_table_row(2, "Lifecycle hooks", "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks.");
-	php_info_print_table_row(2, "Static Analysis", "Test extensions' compiler provides static analysis of the compiled code.");
+	php_info_print_table_row(2, "Static Analysis", "Test extensions&#039; compiler provides static analysis of the compiled code.");
 	php_info_print_table_end();
 	php_info_print_table_start();
 	php_info_print_table_header(2, "Test variable", "Value");

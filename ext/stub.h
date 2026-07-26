@@ -219,6 +219,7 @@
 #include "stub/properties/propertyarray.zep.h"
 #include "stub/properties/propertyupdate.zep.h"
 #include "stub/properties/protectedproperties.zep.h"
+#include "stub/properties/readonlyproperties.zep.h"
 #include "stub/properties/staticprivateproperties.zep.h"
 #include "stub/properties/staticpropertyarray.zep.h"
 #include "stub/properties/staticprotectedproperties.zep.h"

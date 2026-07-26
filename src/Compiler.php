@@ -112,6 +112,13 @@ final class Compiler
      * @var FunctionDefinition[]
      */
     public array  $functionDefinitions = [];
+    /**
+     * Function names already reported by the `missing-optimizer` warning, so the
+     * report stays one line per function instead of one per call site.
+     *
+     * @var array<string, true>
+     */
+    public array  $reportedMissingOptimizers = [];
     private array $anonymousFiles      = [];
     private array $compiledFiles       = [];
     private array $constants           = [];

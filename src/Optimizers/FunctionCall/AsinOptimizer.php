@@ -16,11 +16,11 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Optimizers\MathOptimizer;
 
 /**
- * ASinOptimizer.
+ * AsinOptimizer.
  *
  * Optimizes calls to 'asin' using internal function
  */
-class ASinOptimizer extends MathOptimizer
+class AsinOptimizer extends MathOptimizer
 {
     protected string $zephirMethod = 'asin';
 }

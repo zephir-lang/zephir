@@ -399,4 +399,81 @@ class Bench
         }
         return a;
     }
+
+    /**
+     * count() with a single argument (#2468). CountOptimizer inlines
+     * zephir_fast_count_int, so no Zend function-table dispatch happens.
+     */
+    public function countOptimizedLoop(array! arr, long n) -> long
+    {
+        long i = 0, sum = 0;
+        while i < n {
+            let sum += count(arr);
+            let i++;
+        }
+        return sum;
+    }
+
+    /**
+     * count() with an explicit COUNT_NORMAL (0) mode argument (#2468). Same
+     * result as countOptimizedLoop, but CountOptimizer declines on arity, so
+     * this compiles to a runtime ZEPHIR_CALL_FUNCTION. The delta between the
+     * two subjects is pure call-dispatch overhead.
+     */
+    public function countUnoptimizedLoop(array! arr, long n) -> long
+    {
+        long i = 0, sum = 0;
+        while i < n {
+            let sum += count(arr, 0);
+            let i++;
+        }
+        return sum;
+    }
+
+    /**
+     * implode() with a glue argument (#2468): ImplodeOptimizer inlines
+     * zephir_fast_join.
+     */
+    public function implodeOptimizedLoop(array! arr, long n) -> string
+    {
+        var out = "";
+        long i = 0;
+        while i < n {
+            let out = implode("", arr);
+            let i++;
+        }
+        return out;
+    }
+
+    /**
+     * implode() without a glue argument (#2468). Produces the same string as
+     * implodeOptimizedLoop, but the optimizer requires exactly two parameters,
+     * so this falls back to a runtime call.
+     */
+    public function implodeUnoptimizedLoop(array! arr, long n) -> string
+    {
+        var out = "";
+        long i = 0;
+        while i < n {
+            let out = implode(arr);
+            let i++;
+        }
+        return out;
+    }
+
+    /**
+     * acos() over a double-typed local. Reachable optimizer => a bare libm
+     * acos() call is emitted inline; unreachable (Linux, before the
+     * ACosOptimizer rename) => runtime ZEPHIR_CALL_FUNCTION.
+     */
+    public function acosLoop(long n) -> double
+    {
+        double x = 0.5, sum = 0.0;
+        long i = 0;
+        while i < n {
+            let sum += acos(x);
+            let i++;
+        }
+        return sum;
+    }
 }

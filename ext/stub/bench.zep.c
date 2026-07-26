@@ -23,6 +23,8 @@
 #include "kernel/concat.h"
 #include "kernel/main.h"
 #include "kernel/generator.h"
+#include "kernel/string.h"
+#include "math.h"
 
 
 /**
@@ -1342,6 +1344,182 @@ PHP_METHOD(Stub_Bench, addAssignAccumulate)
 		}
 	}
 	RETURN_CCTOR(&a);
+}
+
+/**
+ * count() with a single argument (#2468). CountOptimizer inlines
+ * zephir_fast_count_int, so no Zend function-table dispatch happens.
+ */
+PHP_METHOD(Stub_Bench, countOptimizedLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	long n, i, sum;
+	zval *arr_param = NULL, *n_param = NULL;
+	zval arr;
+
+	ZVAL_UNDEF(&arr);
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		ZEPHIR_Z_PARAM_ARRAY(arr, arr_param)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 2, 0, &arr_param, &n_param);
+	ZEPHIR_OBS_COPY_OR_DUP(&arr, arr_param);
+	i = 0;
+	sum = 0;
+	while (1) {
+		if (!(i < n)) {
+			break;
+		}
+		sum += zephir_fast_count_int(&arr);
+		i++;
+	}
+	RETURN_MM_LONG(sum);
+}
+
+/**
+ * count() with an explicit COUNT_NORMAL (0) mode argument (#2468). Same
+ * result as countOptimizedLoop, but CountOptimizer declines on arity, so
+ * this compiles to a runtime ZEPHIR_CALL_FUNCTION. The delta between the
+ * two subjects is pure call-dispatch overhead.
+ */
+PHP_METHOD(Stub_Bench, countUnoptimizedLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zephir_fcall_cache_entry *_2 = NULL;
+	long n, i, sum;
+	zval *arr_param = NULL, *n_param = NULL, _0$$3, _1$$3;
+	zval arr;
+
+	ZVAL_UNDEF(&arr);
+	ZVAL_UNDEF(&_0$$3);
+	ZVAL_UNDEF(&_1$$3);
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		ZEPHIR_Z_PARAM_ARRAY(arr, arr_param)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 2, 0, &arr_param, &n_param);
+	ZEPHIR_OBS_COPY_OR_DUP(&arr, arr_param);
+	i = 0;
+	sum = 0;
+	while (1) {
+		if (!(i < n)) {
+			break;
+		}
+		ZVAL_LONG(&_0$$3, 0);
+		ZEPHIR_CALL_FUNCTION(&_1$$3, "count", &_2, 12, &arr, &_0$$3);
+		zephir_check_call_status();
+		sum += zephir_get_numberval(&_1$$3);
+		i++;
+	}
+	RETURN_MM_LONG(sum);
+}
+
+/**
+ * implode() with a glue argument (#2468): ImplodeOptimizer inlines
+ * zephir_fast_join.
+ */
+PHP_METHOD(Stub_Bench, implodeOptimizedLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	long n, i;
+	zval *arr_param = NULL, *n_param = NULL, out;
+	zval arr;
+
+	ZVAL_UNDEF(&arr);
+	ZVAL_UNDEF(&out);
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		ZEPHIR_Z_PARAM_ARRAY(arr, arr_param)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 2, 0, &arr_param, &n_param);
+	ZEPHIR_OBS_COPY_OR_DUP(&arr, arr_param);
+	ZEPHIR_INIT_VAR(&out);
+	ZVAL_STRING(&out, "");
+	i = 0;
+	while (1) {
+		if (!(i < n)) {
+			break;
+		}
+		ZEPHIR_INIT_NVAR(&out);
+		zephir_fast_join_str(&out, SL(""), &arr);
+		i++;
+	}
+	RETURN_CCTOR(&out);
+}
+
+/**
+ * implode() without a glue argument (#2468). Produces the same string as
+ * implodeOptimizedLoop, but the optimizer requires exactly two parameters,
+ * so this falls back to a runtime call.
+ */
+PHP_METHOD(Stub_Bench, implodeUnoptimizedLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zephir_fcall_cache_entry *_0 = NULL;
+	long n, i;
+	zval *arr_param = NULL, *n_param = NULL, out;
+	zval arr;
+
+	ZVAL_UNDEF(&arr);
+	ZVAL_UNDEF(&out);
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		ZEPHIR_Z_PARAM_ARRAY(arr, arr_param)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 2, 0, &arr_param, &n_param);
+	ZEPHIR_OBS_COPY_OR_DUP(&arr, arr_param);
+	ZEPHIR_INIT_VAR(&out);
+	ZVAL_STRING(&out, "");
+	i = 0;
+	while (1) {
+		if (!(i < n)) {
+			break;
+		}
+		ZEPHIR_CALL_FUNCTION(&out, "implode", &_0, 13, &arr);
+		zephir_check_call_status();
+		i++;
+	}
+	RETURN_CCTOR(&out);
+}
+
+/**
+ * acos() over a double-typed local. Reachable optimizer => a bare libm
+ * acos() call is emitted inline; unreachable (Linux, before the
+ * ACosOptimizer rename) => runtime ZEPHIR_CALL_FUNCTION.
+ */
+PHP_METHOD(Stub_Bench, acosLoop)
+{
+	double x, sum;
+	zval *n_param = NULL, _0$$3;
+	long n, i;
+
+	ZVAL_UNDEF(&_0$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &n_param);
+	x =  (0.5);
+	sum =  (0.0);
+	i = 0;
+	while (1) {
+		if (!(i < n)) {
+			break;
+		}
+		ZVAL_DOUBLE(&_0$$3, x);
+		sum +=  (acos(x));
+		i++;
+	}
+	RETURN_DOUBLE(sum);
 }
 
 void zep_Stub_Bench_zephir_gen_step_generatorRange(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext )

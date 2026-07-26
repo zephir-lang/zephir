@@ -33,6 +33,11 @@ PHP_METHOD(Stub_Bench, buildMatrix);
 PHP_METHOD(Stub_Bench, addAssignUnionLiteral);
 PHP_METHOD(Stub_Bench, addAssignUnionVar);
 PHP_METHOD(Stub_Bench, addAssignAccumulate);
+PHP_METHOD(Stub_Bench, countOptimizedLoop);
+PHP_METHOD(Stub_Bench, countUnoptimizedLoop);
+PHP_METHOD(Stub_Bench, implodeOptimizedLoop);
+PHP_METHOD(Stub_Bench, implodeUnoptimizedLoop);
+PHP_METHOD(Stub_Bench, acosLoop);
 void zep_Stub_Bench_zephir_gen_step_generatorRange(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext );
 void zep_Stub_Bench_zephir_gen_step_generatorOverArray(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext );
 
@@ -158,6 +163,30 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_addassignaccumulate, 
 	ZEND_ARG_TYPE_INFO(0, count, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_countoptimizedloop, 0, 2, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, arr, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_countunoptimizedloop, 0, 2, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, arr, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_implodeoptimizedloop, 0, 2, IS_STRING, 0)
+	ZEND_ARG_ARRAY_INFO(0, arr, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_implodeunoptimizedloop, 0, 2, IS_STRING, 0)
+	ZEND_ARG_ARRAY_INFO(0, arr, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_acosloop, 0, 1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bench_zephir_gen_step_generatorrange, 0, 0, 1)
 	ZEND_ARG_INFO(0, zephir_gen)
 ZEND_END_ARG_INFO()
@@ -197,5 +226,10 @@ PHP_ME(Stub_Bench, __construct, arginfo_stub_bench___construct, ZEND_ACC_PUBLIC|
 	PHP_ME(Stub_Bench, addAssignUnionLiteral, arginfo_stub_bench_addassignunionliteral, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, addAssignUnionVar, arginfo_stub_bench_addassignunionvar, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, addAssignAccumulate, arginfo_stub_bench_addassignaccumulate, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, countOptimizedLoop, arginfo_stub_bench_countoptimizedloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, countUnoptimizedLoop, arginfo_stub_bench_countunoptimizedloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, implodeOptimizedLoop, arginfo_stub_bench_implodeoptimizedloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, implodeUnoptimizedLoop, arginfo_stub_bench_implodeunoptimizedloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, acosLoop, arginfo_stub_bench_acosloop, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

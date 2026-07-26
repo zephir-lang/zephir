@@ -224,6 +224,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/properties/propertyarray.zep.c
 	stub/properties/propertyupdate.zep.c
 	stub/properties/protectedproperties.zep.c
+	stub/properties/readonlyproperties.zep.c
 	stub/properties/staticprivateproperties.zep.c
 	stub/properties/staticpropertyarray.zep.c
 	stub/properties/staticprotectedproperties.zep.c
