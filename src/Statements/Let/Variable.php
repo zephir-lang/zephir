@@ -264,7 +264,7 @@ class Variable
             case 'uchar':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = ((\'' . $resolvedExpr->getCode() . '\') ? 1 : 0);');
+                        $codePrinter->output($variable . ' = ((' . $resolvedExpr->getCharCode() . ') ? 1 : 0);');
                         break;
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr);
@@ -292,6 +292,9 @@ class Variable
                     case 'uint':
                     case 'long':
                     case 'ulong':
+                    // A char is a native numeric byte; see #1629.
+                    case 'char':
+                    case 'uchar':
                         switch ($statement['operator']) {
                             case 'assign':
                                 $codePrinter->output($variable . ' = ((' . $itemVariable->getName() . ') ? 1 : 0);');
@@ -398,6 +401,22 @@ class Variable
                 );
                 break;
 
+            // A char literal is a native numeric byte; see #1629.
+            case 'char':
+            case 'uchar':
+                $this->doNumericAssignmentLong(
+                    $statement,
+                    $codePrinter,
+                    $variable,
+                    new CompiledExpression(
+                        $resolvedExpr->getType(),
+                        $resolvedExpr->getCharCode(),
+                        $resolvedExpr->getOriginal()
+                    ),
+                    '(double)'
+                );
+                break;
+
             case 'bool':
                 switch ($statement['operator']) {
                     case 'assign':
@@ -433,6 +452,9 @@ class Variable
                     case 'long':
                     case 'ulong':
                     case 'bool':
+                    // A char is a native numeric byte; see #1629.
+                    case 'char':
+                    case 'uchar':
                         $this->doNumericAssignmentVar(
                             $statement,
                             $codePrinter,
@@ -542,7 +564,7 @@ class Variable
             case 'char':
             case 'uchar':
                 $operator = OperatorResolver::resolveChar($statement['operator'], $statement, $resolvedExpr);
-                $codePrinter->output($variable . $operator . '\'' . $resolvedExpr->getCode() . '\';');
+                $codePrinter->output($variable . $operator . $resolvedExpr->getCharCode() . ';');
                 break;
 
             case 'double':
@@ -773,7 +795,7 @@ class Variable
                         if ($resolvedExpr->getCode()) {
                             $compilationContext->backend->assignString(
                                 $symbolVariable,
-                                $resolvedExpr->getCode(),
+                                Name::addSlashes($resolvedExpr->getCode()),
                                 $compilationContext
                             );
                         } else {
@@ -808,13 +830,13 @@ class Variable
                         switch ($statement['operator']) {
                             case 'assign':
                                 $symbolVariable->initVariant($compilationContext);
-                                $compilationContext->headersManager->add('kernel/string');
-                                // FIXME: Most likely this code is outdated and no longer works.
                                 $codePrinter->output(
-                                    'Z_STRLEN_P(' . $variable . ') = zephir_spprintf(&Z_STRVAL_P(' . $variable . '), 0, "%ld", ' . $itemVariable->getName(
-                                    ) . ');'
+                                    sprintf(
+                                        'ZVAL_STR(%s, zend_long_to_str(%s));',
+                                        $compilationContext->backend->getVariableCode($symbolVariable),
+                                        $itemVariable->getName()
+                                    )
                                 );
-                                $codePrinter->output('Z_TYPE_P(' . $variable . ') = IS_STRING;');
                                 break;
 
                             case 'concat-assign':
@@ -834,13 +856,11 @@ class Variable
                         switch ($statement['operator']) {
                             case 'assign':
                                 $symbolVariable->initVariant($compilationContext);
-                                $compilationContext->headersManager->add('kernel/string');
-                                // FIXME: Most likely this code is outdated and no longer works.
-                                $codePrinter->output(
-                                    'Z_STRLEN_P(' . $variable . ') = zephir_spprintf(&Z_STRVAL_P(' . $variable . '), 0, "%c", ' . $itemVariable->getName(
-                                    ) . ');'
+                                $compilationContext->backend->assignChar(
+                                    $symbolVariable,
+                                    $itemVariable,
+                                    $compilationContext
                                 );
-                                $codePrinter->output('Z_TYPE_P(' . $variable . ') = IS_STRING;');
                                 break;
 
                             case 'concat-assign':
@@ -1051,7 +1071,7 @@ class Variable
                             $symbolVariable->initVariant($compilationContext);
                             $compilationContext->backend->assignLong(
                                 $symbolVariable,
-                                '\'' . $resolvedExpr->getCode() . '\'',
+                                $resolvedExpr->getCharCode(),
                                 $compilationContext
                             );
                         }

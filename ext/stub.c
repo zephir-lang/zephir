@@ -165,6 +165,7 @@ zend_class_entry *stub_issue1134_ce;
 zend_class_entry *stub_issue1404_ce;
 zend_class_entry *stub_issue1521_ce;
 zend_class_entry *stub_issue1628_ce;
+zend_class_entry *stub_issue1629_ce;
 zend_class_entry *stub_issue1706_ce;
 zend_class_entry *stub_issue1790_ce;
 zend_class_entry *stub_issue2030_ce;
@@ -451,6 +452,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Issue1404);
 	ZEPHIR_INIT(Stub_Issue1521);
 	ZEPHIR_INIT(Stub_Issue1628);
+	ZEPHIR_INIT(Stub_Issue1629);
 	ZEPHIR_INIT(Stub_Issue1706);
 	ZEPHIR_INIT(Stub_Issue1790);
 	ZEPHIR_INIT(Stub_Issue2030);
@@ -694,6 +696,7 @@ static void php_zephir_init_module_globals(zend_stub_globals *stub_globals)
 	
 }
 
+void zephir_init_static_properties_Stub_Issue1629();
 void zephir_init_static_properties_Stub_Properties_StaticPropertyArray();
 void zephir_init_static_properties_Stub_SPropertyAccess();
 static PHP_RINIT_FUNCTION(stub)
@@ -704,6 +707,7 @@ static PHP_RINIT_FUNCTION(stub)
 	php_zephir_init_globals(stub_globals_ptr);
 	zephir_initialize_memory(stub_globals_ptr);
 
+		zephir_init_static_properties_Stub_Issue1629();
 		zephir_init_static_properties_Stub_Properties_StaticPropertyArray();
 		zephir_init_static_properties_Stub_SPropertyAccess();
 	

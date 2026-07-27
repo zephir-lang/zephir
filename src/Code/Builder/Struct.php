@@ -143,13 +143,18 @@ class Struct
      */
     protected function convertToCType(string $type): string
     {
+        // Mirrors Backend::getTypeDefinition(): `uint`, `ulong` and `uchar` are
+        // Zephir type names, not C ones, and have to be spelled out. See #1629.
         return match ($type) {
-            'boolean', 'bool'                                => 'zend_bool',
-            'hash'                                           => 'HashTable* ',
+            'boolean', 'bool'               => 'zend_bool',
+            'hash'                          => 'HashTable* ',
             // Use a plain C string pointer for struct globals to align with STD_PHP_INI_ENTRY expectations
-            'string'                                         => 'char *',
-            'int', 'uint', 'long', 'char', 'uchar', 'double' => $type,
-            default                                          => throw new InvalidArgumentException(
+            'string'                        => 'char *',
+            'uint'                          => 'zend_ulong',
+            'ulong'                         => 'unsigned long',
+            'uchar'                         => 'unsigned char',
+            'int', 'long', 'char', 'double' => $type,
+            default                         => throw new InvalidArgumentException(
                 'Unknown global type: ' . $type
             ),
         };

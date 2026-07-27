@@ -1,0 +1,2966 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue1629.zep",
+        "line": 10,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1629\n *\n * A string offset read (`s[i]`) is PHP's `$s[$i]`: a 1-char string. It boxes as\n * one whenever it crosses into a zval. A declared `char`\/`uchar` variable is a\n * native numeric byte instead (it does arithmetic), so boxing that yields its\n * integer value -- see `Chars::arrayOfChars()` and #1988.\n *",
+        "file": "stub__issue1629.zep",
+        "line": 11,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue1629",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "parts",
+                    "default": {
+                        "type": "empty-array",
+                        "file": "stub__issue1629.zep",
+                        "line": 13,
+                        "char": 22
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 15,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "staticParts",
+                    "default": {
+                        "type": "empty-array",
+                        "file": "stub__issue1629.zep",
+                        "line": 15,
+                        "char": 35
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 19,
+                    "char": 3
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "stringTarget",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 20,
+                            "char": 46
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 20,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "string",
+                            "variables": [
+                                {
+                                    "variable": "ch",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 22,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 23,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "ch",
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 23,
+                                            "char": 20
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 23,
+                                            "char": 23
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 23,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 23,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 24,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "ch",
+                                "file": "stub__issue1629.zep",
+                                "line": 24,
+                                "char": 12
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 25,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * Case 1: a `string` target. Used to emit dead PHP-5 C that gcc rejected.\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 21,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 21,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 20,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "charTarget",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 31,
+                            "char": 44
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 31,
+                            "char": 52
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "char",
+                            "variables": [
+                                {
+                                    "variable": "ch",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 33,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 34,
+                            "char": 7
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "pieces",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 34,
+                                        "char": 20
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 34,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 36,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "ch",
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 36,
+                                            "char": 20
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 36,
+                                            "char": 23
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 36,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 36,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 37,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "pieces",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "ch",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 37,
+                                        "char": 20
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 37,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 39,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "pieces",
+                                "file": "stub__issue1629.zep",
+                                "line": 39,
+                                "char": 16
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 40,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * Case 2: a declared `char` boxed into an array keeps its byte value.\n\t * Used to fail with \"Unknown type: char\".\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 32,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 32,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 31,
+                    "last-line": 45,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "rebuild",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 46,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 48,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "max",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 48,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 49,
+                            "char": 7
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "pieces",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 49,
+                                        "char": 20
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 49,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 51,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "max",
+                                    "expr": {
+                                        "type": "sub",
+                                        "left": {
+                                            "type": "fcall",
+                                            "name": "strlen",
+                                            "call-type": 1,
+                                            "parameters": [
+                                                {
+                                                    "parameter": {
+                                                        "type": "variable",
+                                                        "value": "keyspace",
+                                                        "file": "stub__issue1629.zep",
+                                                        "line": 51,
+                                                        "char": 28
+                                                    },
+                                                    "file": "stub__issue1629.zep",
+                                                    "line": 51,
+                                                    "char": 28
+                                                }
+                                            ],
+                                            "file": "stub__issue1629.zep",
+                                            "line": 51,
+                                            "char": 30
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 51,
+                                            "char": 33
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 51,
+                                        "char": 33
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 51,
+                                    "char": 33
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 53,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 53,
+                                            "char": 19
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 53,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "max",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 53,
+                                            "char": 24
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 53,
+                                        "char": 24
+                                    }
+                                ],
+                                "file": "stub__issue1629.zep",
+                                "line": 53,
+                                "char": 26
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable-append",
+                                            "operator": "assign",
+                                            "variable": "pieces",
+                                            "expr": {
+                                                "type": "array-access",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "keyspace",
+                                                    "file": "stub__issue1629.zep",
+                                                    "line": 54,
+                                                    "char": 27
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "i",
+                                                    "file": "stub__issue1629.zep",
+                                                    "line": 54,
+                                                    "char": 29
+                                                },
+                                                "file": "stub__issue1629.zep",
+                                                "line": 54,
+                                                "char": 30
+                                            },
+                                            "file": "stub__issue1629.zep",
+                                            "line": 54,
+                                            "char": 30
+                                        }
+                                    ],
+                                    "file": "stub__issue1629.zep",
+                                    "line": 55,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 57,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "implode",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 57,
+                                            "char": 18
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 57,
+                                        "char": 18
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "pieces",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 57,
+                                            "char": 26
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 57,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__issue1629.zep",
+                                "line": 57,
+                                "char": 27
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 58,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * Case 3: append the offset read straight into an array, then implode.\n\t * Used to fail with \"Unknown type: uchar\".\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 47,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 47,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 46,
+                    "last-line": 62,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "varTarget",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 63,
+                            "char": 43
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 63,
+                            "char": 51
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "ch",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 65,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 66,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "ch",
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 66,
+                                            "char": 20
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 66,
+                                            "char": 23
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 66,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 66,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 67,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "ch",
+                                "file": "stub__issue1629.zep",
+                                "line": 67,
+                                "char": 12
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 68,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * The workaround the reporter settled on -- must match PHP's `$s[$i]`.\n\t *",
+                    "file": "stub__issue1629.zep",
+                    "line": 63,
+                    "last-line": 72,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "intTarget",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 73,
+                            "char": 43
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 73,
+                            "char": 51
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "c",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 75,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 76,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "c",
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 76,
+                                            "char": 19
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 76,
+                                            "char": 22
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 76,
+                                        "char": 23
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 76,
+                                    "char": 23
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 77,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "c",
+                                "file": "stub__issue1629.zep",
+                                "line": 77,
+                                "char": 11
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 78,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * A native-typed target still reads the raw byte (unchanged).\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 74,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 74,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 73,
+                    "last-line": 80,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "arrayIndexTarget",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 80,
+                            "char": 50
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 80,
+                            "char": 58
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "pieces",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 82,
+                                        "char": 20
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 82,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 83,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "array-index",
+                                    "operator": "assign",
+                                    "variable": "pieces",
+                                    "index-expr": [
+                                        {
+                                            "type": "int",
+                                            "value": "3",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 83,
+                                            "char": 15
+                                        }
+                                    ],
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 83,
+                                            "char": 27
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 83,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 83,
+                                        "char": 31
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 83,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 84,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "pieces",
+                                "file": "stub__issue1629.zep",
+                                "line": 84,
+                                "char": 16
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 85,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 81,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 81,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 80,
+                    "last-line": 87,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "propertyAppendTarget",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 87,
+                            "char": 54
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 87,
+                            "char": 62
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "parts",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 89,
+                                        "char": 23
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 89,
+                                    "char": 23
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 90,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property-append",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "parts",
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 90,
+                                            "char": 31
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 90,
+                                            "char": 34
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 90,
+                                        "char": 35
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 90,
+                                    "char": 35
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 91,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 91,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "parts",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 91,
+                                    "char": 21
+                                },
+                                "file": "stub__issue1629.zep",
+                                "line": 91,
+                                "char": 21
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 92,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 88,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 88,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 87,
+                    "last-line": 94,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "propertyIndexTarget",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 94,
+                            "char": 53
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 94,
+                            "char": 61
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "parts",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 96,
+                                        "char": 23
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 96,
+                                    "char": 23
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 97,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property-array-index",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "parts",
+                                    "index-expr": [
+                                        {
+                                            "type": "string",
+                                            "value": "k",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 97,
+                                            "char": 20
+                                        }
+                                    ],
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 97,
+                                            "char": 32
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 97,
+                                            "char": 35
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 97,
+                                        "char": 36
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 97,
+                                    "char": 36
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 98,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 98,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "parts",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 98,
+                                    "char": 21
+                                },
+                                "file": "stub__issue1629.zep",
+                                "line": 98,
+                                "char": 21
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 99,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 95,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 95,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 94,
+                    "last-line": 101,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "staticIndexTarget",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 101,
+                            "char": 58
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 101,
+                            "char": 66
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "staticParts",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 103,
+                                        "char": 29
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 103,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 104,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property-array-index",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "staticParts",
+                                    "index-expr": [
+                                        {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 104,
+                                            "char": 26
+                                        }
+                                    ],
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 104,
+                                            "char": 38
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 104,
+                                            "char": 41
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 104,
+                                        "char": 42
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 104,
+                                    "char": 42
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 105,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 105,
+                                    "char": 27
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "staticParts",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 105,
+                                    "char": 27
+                                },
+                                "file": "stub__issue1629.zep",
+                                "line": 105,
+                                "char": 27
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 106,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 102,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 102,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 101,
+                    "last-line": 108,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "staticAppendTarget",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 108,
+                            "char": 59
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 108,
+                            "char": 67
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "staticParts",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 110,
+                                        "char": 29
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 110,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 111,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property-append",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "staticParts",
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 111,
+                                            "char": 37
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 111,
+                                            "char": 40
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 111,
+                                        "char": 41
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 111,
+                                    "char": 41
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 112,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 112,
+                                    "char": 27
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "staticParts",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 112,
+                                    "char": 27
+                                },
+                                "file": "stub__issue1629.zep",
+                                "line": 112,
+                                "char": 27
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 113,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 109,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 109,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 108,
+                    "last-line": 118,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "charToStringTarget",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 119,
+                            "char": 52
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 119,
+                            "char": 60
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "char",
+                            "variables": [
+                                {
+                                    "variable": "ch",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 121,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 122,
+                            "char": 8
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "string",
+                            "variables": [
+                                {
+                                    "variable": "out",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 122,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 124,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "ch",
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 124,
+                                            "char": 20
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 124,
+                                            "char": 23
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 124,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 124,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 125,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "out",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "ch",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 125,
+                                        "char": 15
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 125,
+                                    "char": 15
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 127,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "out",
+                                "file": "stub__issue1629.zep",
+                                "line": 127,
+                                "char": 13
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 128,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * A declared `char` assigned to a `string` target: the string-typed left\n\t * hand side asks for the character, not the byte.\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 120,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 120,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 119,
+                    "last-line": 132,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "intToStringTarget",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "n",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "42",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 135,
+                                        "char": 13
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 135,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 136,
+                            "char": 8
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "string",
+                            "variables": [
+                                {
+                                    "variable": "out",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 136,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 138,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "out",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "n",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 138,
+                                        "char": 14
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 138,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 140,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "out",
+                                "file": "stub__issue1629.zep",
+                                "line": 140,
+                                "char": 13
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 141,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * Sibling of the same dead PHP-5 codegen: an `int` assigned to a `string`.\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 134,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 134,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 133,
+                    "last-line": 143,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "castStringOfChar",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 143,
+                            "char": 50
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 143,
+                            "char": 58
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "char",
+                            "variables": [
+                                {
+                                    "variable": "ch",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 145,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 146,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "ch",
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 146,
+                                            "char": 20
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 146,
+                                            "char": 23
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 146,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 146,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 147,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "cast",
+                                "left": "string",
+                                "right": {
+                                    "type": "variable",
+                                    "value": "ch",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 147,
+                                    "char": 21
+                                },
+                                "file": "stub__issue1629.zep",
+                                "line": 147,
+                                "char": 21
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 148,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 144,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 144,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 143,
+                    "last-line": 150,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "castStringOfOffset",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 150,
+                            "char": 52
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 150,
+                            "char": 60
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "string",
+                            "variables": [
+                                {
+                                    "variable": "out",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 152,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 153,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "out",
+                                    "expr": {
+                                        "type": "cast",
+                                        "left": "string",
+                                        "right": {
+                                            "type": "array-access",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "keyspace",
+                                                "file": "stub__issue1629.zep",
+                                                "line": 153,
+                                                "char": 30
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "nb",
+                                                "file": "stub__issue1629.zep",
+                                                "line": 153,
+                                                "char": 33
+                                            },
+                                            "file": "stub__issue1629.zep",
+                                            "line": 153,
+                                            "char": 34
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 153,
+                                        "char": 34
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 153,
+                                    "char": 34
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 154,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "out",
+                                "file": "stub__issue1629.zep",
+                                "line": 154,
+                                "char": 13
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 155,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 151,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 151,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 150,
+                    "last-line": 157,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "castCharOfVar",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 157,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "cast",
+                                "left": "char",
+                                "right": {
+                                    "type": "variable",
+                                    "value": "value",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 159,
+                                    "char": 22
+                                },
+                                "file": "stub__issue1629.zep",
+                                "line": 159,
+                                "char": 22
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 160,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "char",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 158,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 158,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 157,
+                    "last-line": 162,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "castUcharOfVar",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 162,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "cast",
+                                "left": "uchar",
+                                "right": {
+                                    "type": "variable",
+                                    "value": "value",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 164,
+                                    "char": 23
+                                },
+                                "file": "stub__issue1629.zep",
+                                "line": 164,
+                                "char": 23
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 165,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "uchar",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 163,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 163,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 162,
+                    "last-line": 167,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "ucharParam",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "uchar",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 167,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "out",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 169,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 170,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "out",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "value",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 170,
+                                        "char": 18
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 170,
+                                    "char": 18
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 171,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "out",
+                                "file": "stub__issue1629.zep",
+                                "line": 171,
+                                "char": 13
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 172,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 168,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 168,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 167,
+                    "last-line": 174,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "keyedCharArray",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 174,
+                            "char": 48
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 174,
+                            "char": 56
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "char",
+                            "variables": [
+                                {
+                                    "variable": "ch",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 176,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 177,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "ch",
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 177,
+                                            "char": 20
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 177,
+                                            "char": 23
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 177,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 177,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 178,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "array",
+                                "left": [
+                                    {
+                                        "key": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 178,
+                                            "char": 12
+                                        },
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "ch",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 178,
+                                            "char": 16
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 178,
+                                        "char": 16
+                                    },
+                                    {
+                                        "key": {
+                                            "type": "string",
+                                            "value": "k",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 178,
+                                            "char": 19
+                                        },
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "ch",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 178,
+                                            "char": 23
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 178,
+                                        "char": 23
+                                    }
+                                ],
+                                "file": "stub__issue1629.zep",
+                                "line": 178,
+                                "char": 24
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 179,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 175,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 175,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 174,
+                    "last-line": 181,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "doubleFromChar",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 181,
+                            "char": 48
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 181,
+                            "char": 56
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "char",
+                            "variables": [
+                                {
+                                    "variable": "ch",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 183,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 184,
+                            "char": 8
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "double",
+                            "variables": [
+                                {
+                                    "variable": "d",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 184,
+                                    "char": 11
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 186,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "ch",
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 186,
+                                            "char": 20
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 186,
+                                            "char": 23
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 186,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 186,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 187,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "d",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "ch",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 187,
+                                        "char": 13
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 187,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 189,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "d",
+                                "file": "stub__issue1629.zep",
+                                "line": 189,
+                                "char": 11
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 190,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "double",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 182,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 182,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 181,
+                    "last-line": 192,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "boolFromChar",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "keyspace",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 192,
+                            "char": 46
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "nb",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1629.zep",
+                            "line": 192,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "char",
+                            "variables": [
+                                {
+                                    "variable": "ch",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 194,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 195,
+                            "char": 6
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "bool",
+                            "variables": [
+                                {
+                                    "variable": "b",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 195,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 197,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "ch",
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "keyspace",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 197,
+                                            "char": 20
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "nb",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 197,
+                                            "char": 23
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 197,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 197,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 198,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "b",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "ch",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 198,
+                                        "char": 13
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 198,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 200,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "stub__issue1629.zep",
+                                "line": 200,
+                                "char": 11
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 201,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 193,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 193,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 192,
+                    "last-line": 205,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "dynamicFromCharCast",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "dyn",
+                                    "file": "stub__issue1629.zep",
+                                    "line": 208,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 212,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "dyn",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "seed",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 212,
+                                        "char": 17
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 212,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 213,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "dyn",
+                                    "expr": {
+                                        "type": "cast",
+                                        "left": "char",
+                                        "right": {
+                                            "type": "char",
+                                            "value": "a",
+                                            "file": "stub__issue1629.zep",
+                                            "line": 213,
+                                            "char": 22
+                                        },
+                                        "file": "stub__issue1629.zep",
+                                        "line": 213,
+                                        "char": 22
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 213,
+                                    "char": 22
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 215,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "dyn",
+                                "file": "stub__issue1629.zep",
+                                "line": 215,
+                                "char": 13
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 216,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * A char cast assigned to a dynamic variable used to emit `ZVAL_LONG(&x, ''a'')`.\n\t *",
+                    "file": "stub__issue1629.zep",
+                    "line": 206,
+                    "last-line": 220,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnCharLiteral",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "char",
+                                "value": "a",
+                                "file": "stub__issue1629.zep",
+                                "line": 223,
+                                "char": 12
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 224,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * A bare char literal returned directly used to emit `(unsigned char) (a)`.\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "char",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 222,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 222,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 221,
+                    "last-line": 226,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "appendCharLiteral",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "pieces",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 228,
+                                        "char": 20
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 228,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 229,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "pieces",
+                                    "expr": {
+                                        "type": "char",
+                                        "value": "a",
+                                        "file": "stub__issue1629.zep",
+                                        "line": 229,
+                                        "char": 20
+                                    },
+                                    "file": "stub__issue1629.zep",
+                                    "line": 229,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__issue1629.zep",
+                            "line": 230,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "pieces",
+                                "file": "stub__issue1629.zep",
+                                "line": 230,
+                                "char": 16
+                            },
+                            "file": "stub__issue1629.zep",
+                            "line": 231,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue1629.zep",
+                                "line": 227,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1629.zep",
+                        "line": 227,
+                        "char": 2
+                    },
+                    "file": "stub__issue1629.zep",
+                    "line": 226,
+                    "last-line": 232,
+                    "char": 16
+                }
+            ],
+            "file": "stub__issue1629.zep",
+            "line": 11,
+            "char": 5
+        },
+        "file": "stub__issue1629.zep",
+        "line": 11,
+        "char": 5
+    }
+]

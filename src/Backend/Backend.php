@@ -551,6 +551,33 @@ class Backend
         return $this->assignHelper('ZVAL_BOOL', $this->getVariableCode($variable), $value, $context, $useCodePrinter);
     }
 
+    /**
+     * Boxes a native C byte (a `char`/`uchar` variable, or a raw C char
+     * expression) into a 1-character PHP string.
+     *
+     * This cannot go through assignHelper(): it unwraps a Variable to its bare
+     * name, which would emit `ZVAL_STRING(&s, ch)` — passing a `char` where a
+     * `const char *` is expected. The byte's address is what ZVAL_STRINGL needs.
+     */
+    public function assignChar(
+        Variable $variable,
+        $value,
+        CompilationContext $context,
+        bool $useCodePrinter = true
+    ): string {
+        $output = sprintf(
+            'ZVAL_STRINGL(%s, &%s, 1);',
+            $this->getVariableCode($variable),
+            $value instanceof Variable ? $value->getName() : $value
+        );
+
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+
+        return $output;
+    }
+
     public function assignDouble(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
     {
         return $this->assignHelper('ZVAL_DOUBLE', $this->getVariableCode($variable), $value, $context, $useCodePrinter);

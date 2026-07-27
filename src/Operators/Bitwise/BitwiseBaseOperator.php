@@ -54,6 +54,10 @@ class BitwiseBaseOperator extends AbstractOperator
         $rightExpr->setReadOnly(true);
         $right = $rightExpr->compile($compilationContext);
 
+        // A char literal's bare character is not valid C on its own.
+        $left  = $this->quoteCharLiteral($left, $expression['left']);
+        $right = $this->quoteCharLiteral($right, $expression['right']);
+
         switch ($left->getType()) {
             case 'int':
             case 'uint':

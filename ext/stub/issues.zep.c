@@ -40,7 +40,7 @@ PHP_METHOD(Stub_Issues, setAdapter)
 		Z_PARAM_ZVAL(adapter)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &adapter);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 57, adapter);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 58, adapter);
 }
 
 PHP_METHOD(Stub_Issues, someMethod)
@@ -63,7 +63,7 @@ PHP_METHOD(Stub_Issues, someMethod)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &methodName);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 57, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 58, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_RETURN_CALL_METHOD_ZVAL(&_0, methodName, NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();

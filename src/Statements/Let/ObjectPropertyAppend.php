@@ -129,6 +129,7 @@ class ObjectPropertyAppend
                 break;
 
             case 'char':
+            case 'uchar':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
                     'variable',
                     $compilationContext,
@@ -136,7 +137,7 @@ class ObjectPropertyAppend
                 );
                 $compilationContext->backend->assignLong(
                     $tempVariable,
-                    '\'' . $resolvedExpr->getCode() . '\'',
+                    $resolvedExpr->getCharCode(),
                     $compilationContext
                 );
                 $compilationContext->backend->assignArrayProperty(
@@ -237,6 +238,7 @@ class ObjectPropertyAppend
                     case 'long':
                     case 'uint':
                     case 'char':
+                    case 'uchar':
                         $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
                             'variable',
                             $compilationContext,

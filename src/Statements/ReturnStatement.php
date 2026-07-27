@@ -249,7 +249,9 @@ final class ReturnStatement extends StatementAbstract
                 case Types::T_UCHAR:
                     // Issue #1291: a char holds a single byte. Cast to unsigned
                     // char to avoid sign extension when the value exceeds 127.
-                    $codePrinter->output('RETURN_MM_LONG((unsigned char) (' . $resolvedExpr->getCode() . '));');
+                    // The code is the bare character, so quote it as a C char
+                    // literal — same as every other char-literal consumer.
+                    $codePrinter->output('RETURN_MM_LONG((unsigned char) (' . $resolvedExpr->getCharCode() . '));');
                     break;
 
                 case Types::T_BOOL:

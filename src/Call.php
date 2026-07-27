@@ -260,12 +260,10 @@ class Call
                                 $compilationContext,
                                 $expression
                             );
-                            $codePrinter->output(
-                                sprintf(
-                                    'ZVAL_STRINGL(&%s, &%s, 1);',
-                                    $parameterVariable->getName(),
-                                    $compiledExpression->getCode()
-                                )
+                            $compilationContext->backend->assignChar(
+                                $parameterVariable,
+                                $compiledExpression->getCode(),
+                                $compilationContext
                             );
 
                             $this->temporalVariables[] = $parameterVariable;
@@ -522,12 +520,10 @@ class Call
                             // A C char is a single byte; wrap it into a length-1 zend_string
                             // so the call site receives a zval and the callee can re-extract
                             // the byte via zephir_get_charval().
-                            $codePrinter->output(
-                                sprintf(
-                                    'ZVAL_STRINGL(&%s, &%s, 1);',
-                                    $parameterTempVariable->getName(),
-                                    $parameterVariable->getName()
-                                )
+                            $compilationContext->backend->assignChar(
+                                $parameterTempVariable,
+                                $parameterVariable,
+                                $compilationContext
                             );
 
                             $this->temporalVariables[] = $parameterTempVariable;

@@ -377,13 +377,14 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                         break;
 
                     case 'char':
+                    case 'uchar':
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                             'variable',
                             $compilationContext
                         );
                         $compilationContext->backend->assignLong(
                             $tempVariable,
-                            '\'' . $resolvedExpr->getCode() . '\'',
+                            $resolvedExpr->getCharCode(),
                             $compilationContext
                         );
                         $compilationContext->backend->assignArrayProperty(

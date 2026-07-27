@@ -135,13 +135,17 @@ class ComparisonBaseOperator extends AbstractOperator
                 }
 
 
+            case 'char':
+            case 'uchar':
+                // Quote the bare character, then compare it as a number.
+                $left = $this->quoteCharLiteral($left, $expression['left']);
+                // no break
+
             case 'int':
             case 'uint':
             case 'long':
             case 'double':
             case 'ulong':
-            case 'char':
-            case 'uchar':
                 switch ($right->getType()) {
                     case 'null':
                         return new CompiledExpression('bool', $left->getCode() . ' ' . $this->operator, $expression);
