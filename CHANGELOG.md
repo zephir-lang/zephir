@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-07-27
+
 ### Added
 - Added the `::class` magic constant: `self::class`, `parent::class` and `ClassName::class` resolve to the fully-qualified class name at compile time, and `static::class` resolves to the called class at runtime (late static binding) [#2527](https://github.com/zephir-lang/zephir/issues/2527)
 - Trait properties can now have array default values (e.g. `trait T { public opts = [1, 2, 3]; }`, including empty, keyed and nested arrays). The default is materialized as a persistent immutable array on the trait's class entry, so it is carried into both Zephir classes and PHP userland classes that `use` the trait, matching native PHP trait semantics. Static array defaults on traits remain rejected (Zephir resolves `self::` in a trait to the trait itself, so each using class could not get its own copy) [#2607](https://github.com/zephir-lang/zephir/issues/2607)
