@@ -7,6 +7,8 @@ trait Counter
 {
 	protected count = 0;
 
+	protected steps = [10, 20];
+
 	const STEP = 2;
 
 	public function increment() -> int
@@ -25,5 +27,10 @@ trait Counter
 	public function tagged() -> string
 	{
 		return this->label() . ":" . strval(this->count);
+	}
+
+	public function getSteps() -> array
+	{
+		return this->steps;
 	}
 }

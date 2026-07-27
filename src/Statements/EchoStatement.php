@@ -53,7 +53,7 @@ class EchoStatement extends StatementAbstract
 
                 case 'char':
                 case 'uchar':
-                    $compilationContext->codePrinter->output('php_printf("%c", \'' . $resolvedExpr->getCode() . '\');');
+                    $compilationContext->codePrinter->output('php_printf("%c", ' . $resolvedExpr->getCharCode() . ');');
                     break;
 
                 case 'long':

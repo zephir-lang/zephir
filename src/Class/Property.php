@@ -15,6 +15,7 @@ namespace Zephir\Class;
 
 use ReflectionException;
 use Zephir\Class\Definition\Definition;
+use Zephir\Class\Entry;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
@@ -44,8 +45,13 @@ class Property
         protected ?array $defaultValue,
         protected ?string $docBlock = null,
         protected ?array $original = null,
+        protected ?string $dataType = null,
+        protected ?array $cast = null,
+        protected bool $nullable = false,
+        protected ?array $dataTypes = null,
     ) {
         $this->checkVisibility($visibility, $name, $original);
+        $this->checkReadOnly();
 
         if (!is_array($this->defaultValue)) {
             $this->defaultValue          = [];
@@ -80,6 +86,40 @@ class Property
     }
 
     /**
+     * Validates PHP's readonly-property rules (issue #2614): a readonly
+     * property must be typed, cannot declare a default value and cannot be
+     * static. Mirrors the fatal errors the PHP compiler raises for the same
+     * constructs, so the write-once guarantee stays enforceable by the engine.
+     */
+    public function checkReadOnly(): void
+    {
+        if (!in_array('readonly', $this->visibility, true)) {
+            return;
+        }
+
+        if (in_array('static', $this->visibility, true)) {
+            throw new CompilerException(
+                "Readonly property '$this->name' cannot be static",
+                $this->original
+            );
+        }
+
+        if (null === $this->dataType && null === $this->cast && null === $this->dataTypes) {
+            throw new CompilerException(
+                "Readonly property '$this->name' must have a type",
+                $this->original
+            );
+        }
+
+        if (isset($this->original['default'])) {
+            throw new CompilerException(
+                "Readonly property '$this->name' cannot have a default value",
+                $this->original
+            );
+        }
+    }
+
+    /**
      * Produce the code to register a property.
      *
      * @throws Exception
@@ -87,6 +127,14 @@ class Property
      */
     public function compile(CompilationContext $compilationContext): void
     {
+        if ($this->dataTypes !== null && $this->emitTypedUnion($compilationContext)) {
+            return;
+        }
+
+        if (($this->dataType !== null || $this->cast !== null) && $this->emitTyped($compilationContext)) {
+            return;
+        }
+
         switch ($this->defaultValue['type']) {
             case 'long':
             case 'int':
@@ -98,6 +146,23 @@ class Property
 
             case 'array':
             case 'empty-array':
+                if ($this->classDefinition->isTrait() && !$this->isStatic()) {
+                    /**
+                     * A trait cannot use the runtime create_object initializer to
+                     * build an array default: it is not carried over when a PHP
+                     * userland class binds the trait. Materialize a persistent
+                     * immutable array on the trait ce instead, so native trait
+                     * binding copies it — matching PHP semantics [#2607].
+                     */
+                    $compilationContext->backend->declareArrayProperty(
+                        $this->getName(),
+                        $this->defaultValue,
+                        $this->getVisibilityAccessor(),
+                        $compilationContext
+                    );
+                    break;
+                }
+
                 $this->initializeArray();
             // no break
             case 'null':
@@ -118,6 +183,151 @@ class Property
             default:
                 throw new CompilerException('Unknown default type: ' . $this->defaultValue['type'], $this->original);
         }
+    }
+
+    /**
+     * Zephir declared type => PHP type-mask flag for typed properties (#2608).
+     * Mirrors Method::$mayBeArgTypes; untypable types (variable/callable/
+     * resource) are absent and fall back to an untyped property.
+     */
+    private const MAY_BE = [
+        'int'    => 'MAY_BE_LONG',
+        'uint'   => 'MAY_BE_LONG',
+        'long'   => 'MAY_BE_LONG',
+        'ulong'  => 'MAY_BE_LONG',
+        'char'   => 'MAY_BE_LONG',
+        'uchar'  => 'MAY_BE_LONG',
+        'double' => 'MAY_BE_DOUBLE',
+        'bool'   => 'MAY_BE_BOOL',
+        'string' => 'MAY_BE_STRING',
+        'array'  => 'MAY_BE_ARRAY',
+        'object' => 'MAY_BE_OBJECT',
+        'mixed'  => 'MAY_BE_ANY',
+    ];
+
+    /**
+     * Emits a typed-property declaration (#2608). Returns false to fall back to
+     * a plain untyped property when the declared type is not PHP-expressible.
+     *
+     * @throws CompilerException
+     */
+    private function emitTyped(CompilationContext $compilationContext): bool
+    {
+        if ($this->cast !== null) {
+            $className = Entry::escape($compilationContext->getFullName($this->cast['value']));
+            $typeMask  = $this->nullable ? 'MAY_BE_NULL' : '0';
+        } else {
+            $mayBe = self::MAY_BE[$this->dataType] ?? null;
+            if (null === $mayBe) {
+                return false;
+            }
+            $className = null;
+            $typeMask  = $this->nullable && 'MAY_BE_ANY' !== $mayBe
+                ? $mayBe . '|MAY_BE_NULL'
+                : $mayBe;
+        }
+
+        $default = $this->resolveTypedDefault();
+
+        $compilationContext->backend->declareTypedProperty(
+            $this->getName(),
+            $default,
+            $this->getVisibilityAccessor(),
+            $typeMask,
+            $className,
+            $compilationContext
+        );
+
+        return true;
+    }
+
+    /**
+     * Emits a union typed-property declaration (issue #2613), e.g.
+     * `int | float num` or `int | string | null note`. Every member's
+     * `MAY_BE_*` bit is OR-ed into a single PHP type mask that the engine
+     * enforces on write. Returns false (untyped fallback) if any member is not
+     * PHP-expressible as a mask bit.
+     *
+     * @throws CompilerException
+     */
+    private function emitTypedUnion(CompilationContext $compilationContext): bool
+    {
+        $maskBits   = [];
+        $classNames = [];
+
+        foreach ($this->dataTypes as $member) {
+            if (isset($member['cast'])) {
+                $classNames[] = Entry::escape($compilationContext->getFullName($member['cast']['value']));
+                continue;
+            }
+
+            $dataType = $member['data-type'] ?? null;
+            $mayBe    = match ($dataType) {
+                'null'   => 'MAY_BE_NULL',
+                'false'  => 'MAY_BE_FALSE',
+                'object' => 'MAY_BE_OBJECT',
+                default  => self::MAY_BE[$dataType] ?? null,
+            };
+            if (null === $mayBe) {
+                return false;
+            }
+            $maskBits[] = $mayBe;
+        }
+
+        $maskBits = array_values(array_unique($maskBits));
+        $default  = $this->resolveTypedDefault();
+
+        if ([] !== $classNames) {
+            $compilationContext->backend->declareTypedPropertyUnion(
+                $this->getName(),
+                $default,
+                $this->getVisibilityAccessor(),
+                [] === $maskBits ? '0' : implode('|', $maskBits),
+                $classNames,
+                $compilationContext
+            );
+
+            return true;
+        }
+
+        $compilationContext->backend->declareTypedProperty(
+            $this->getName(),
+            $default,
+            $this->getVisibilityAccessor(),
+            implode('|', $maskBits),
+            null,
+            $compilationContext
+        );
+
+        return true;
+    }
+
+    /**
+     * Resolves and validates a typed property's default value. Returns null for
+     * an uninitialized (IS_UNDEF) property when no explicit default is given.
+     *
+     * @throws CompilerException
+     */
+    private function resolveTypedDefault(): ?array
+    {
+        // A typed property with no explicit default is uninitialized (IS_UNDEF),
+        // not null — the constructor's null-coercion must not leak here.
+        $default = isset($this->original['default']) ? $this->defaultValue : null;
+
+        if (
+            null !== $default
+            && !in_array($default['type'], [
+                'int', 'long', 'uint', 'ulong', 'double', 'float',
+                'bool', 'string', 'char', 'istring', 'null', 'array', 'empty-array',
+            ], true)
+        ) {
+            throw new CompilerException(
+                'Unsupported default value for typed property "' . $this->name . '": ' . $default['type'],
+                $this->original
+            );
+        }
+
+        return $default;
     }
 
     /**
@@ -196,6 +406,10 @@ class Property
                     $modifiers['ZEND_ACC_STATIC'] = true;
                     break;
 
+                case 'readonly':
+                    $modifiers['ZEND_ACC_READONLY'] = true;
+                    break;
+
                 default:
                     throw new Exception('Unknown modifier ' . $visibility);
             }
@@ -234,6 +448,14 @@ class Property
     public function isStatic(): bool
     {
         return in_array('static', $this->visibility);
+    }
+
+    /**
+     * Checks whether the property is readonly (issue #2614).
+     */
+    public function isReadOnly(): bool
+    {
+        return in_array('readonly', $this->visibility);
     }
 
     /**

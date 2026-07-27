@@ -1,0 +1,102 @@
+--TEST--
+Issue #1629: a string offset read yields a 1-char string in dynamic contexts, while a declared char stays a byte
+--FILE--
+namespace Stub;
+
+class Issue1629
+{
+	/**
+	 * Case 1 of the issue: a `string` target receiving a string offset read.
+	 * Used to emit dead PHP-5 C (Z_STRLEN_P/zephir_spprintf) that gcc rejected.
+	 */
+	public function stringTarget(string keyspace, int nb) -> string
+	{
+		string ch;
+		let ch = keyspace[nb];
+		return ch;
+	}
+
+	/**
+	 * The workaround the reporter settled on. PHP's $s[$i] is a 1-char string,
+	 * so a dynamic target must see one too (it used to see the byte value).
+	 */
+	public function varTarget(string keyspace, int nb)
+	{
+		var ch;
+		let ch = keyspace[nb];
+		return ch;
+	}
+
+	/**
+	 * Case 3 of the issue: append the offset read straight into an array, then
+	 * implode. Used to fail with "Unknown type: uchar".
+	 */
+	public function rebuild(string keyspace) -> string
+	{
+		int i, max;
+		array pieces = [];
+
+		let max = strlen(keyspace) - 1;
+
+		for i in range(0, max) {
+			let pieces[] = keyspace[i];
+		}
+
+		return implode("", pieces);
+	}
+
+	/**
+	 * Case 2 of the issue: a declared `char` is a native numeric byte (it does
+	 * arithmetic), so boxing it yields its integer value -- consistent with
+	 * `let a = [ch]` (#1988). Used to fail with "Unknown type: char".
+	 */
+	public function charTarget(string keyspace, int nb) -> array
+	{
+		char ch;
+		array pieces = [];
+
+		let ch = keyspace[nb];
+		let pieces[] = ch;
+
+		return pieces;
+	}
+
+	/**
+	 * Explicit conversion for the native-byte direction.
+	 */
+	public function charToString(string keyspace, int nb) -> string
+	{
+		char ch;
+		string out;
+
+		let ch = keyspace[nb];
+		let out = (string) ch;
+
+		return out;
+	}
+
+	/**
+	 * A native-typed target still reads the raw byte (unchanged behavior).
+	 */
+	public function intTarget(string keyspace, int nb) -> int
+	{
+		int c;
+		let c = keyspace[nb];
+		return c;
+	}
+}
+--USAGE--
+$t = new \Stub\Issue1629();
+echo json_encode($t->stringTarget("zephir", 1)), "\n";
+echo json_encode($t->varTarget("zephir", 1)), "\n";
+echo json_encode($t->rebuild("zephir")), "\n";
+echo json_encode($t->charTarget("zephir", 1)), "\n";
+echo json_encode($t->charToString("zephir", 1)), "\n";
+echo json_encode($t->intTarget("zephir", 1)), "\n";
+--EXPECT--
+"e"
+"e"
+"zephir"
+[101]
+"e"
+101

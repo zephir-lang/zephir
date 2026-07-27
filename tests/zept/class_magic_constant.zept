@@ -1,0 +1,60 @@
+--TEST--
+::class magic constant: self/static/parent/ClassName::class incl. inherited late static binding (issue #2527)
+--FILE--
+namespace Stub;
+
+class ClassMagicParent
+{
+	public function pStatic()
+	{
+		return static::class;
+	}
+
+	public function pSelf()
+	{
+		return self::class;
+	}
+}
+--FILE--
+namespace Stub;
+
+class ClassMagic extends ClassMagicParent
+{
+	public function cSelf()
+	{
+		return self::class;
+	}
+
+	public function cStatic()
+	{
+		return static::class;
+	}
+
+	public function cParent()
+	{
+		return parent::class;
+	}
+
+	public function cName()
+	{
+		return ClassMagic::class;
+	}
+}
+--USAGE--
+$test = new \Stub\ClassMagic();
+
+echo var_export($test->cSelf(), true), "\n";
+echo var_export($test->cStatic(), true), "\n";
+echo var_export($test->cParent(), true), "\n";
+echo var_export($test->cName(), true), "\n";
+
+// inherited methods: static:: binds to the called (child) class, self:: stays lexical (parent)
+echo var_export($test->pStatic(), true), "\n";
+echo var_export($test->pSelf(), true), "\n";
+--EXPECT--
+'Stub\\ClassMagic'
+'Stub\\ClassMagic'
+'Stub\\ClassMagicParent'
+'Stub\\ClassMagic'
+'Stub\\ClassMagic'
+'Stub\\ClassMagicParent'

@@ -551,6 +551,33 @@ class Backend
         return $this->assignHelper('ZVAL_BOOL', $this->getVariableCode($variable), $value, $context, $useCodePrinter);
     }
 
+    /**
+     * Boxes a native C byte (a `char`/`uchar` variable, or a raw C char
+     * expression) into a 1-character PHP string.
+     *
+     * This cannot go through assignHelper(): it unwraps a Variable to its bare
+     * name, which would emit `ZVAL_STRING(&s, ch)` — passing a `char` where a
+     * `const char *` is expected. The byte's address is what ZVAL_STRINGL needs.
+     */
+    public function assignChar(
+        Variable $variable,
+        $value,
+        CompilationContext $context,
+        bool $useCodePrinter = true
+    ): string {
+        $output = sprintf(
+            'ZVAL_STRINGL(%s, &%s, 1);',
+            $this->getVariableCode($variable),
+            $value instanceof Variable ? $value->getName() : $value
+        );
+
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+
+        return $output;
+    }
+
     public function assignDouble(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
     {
         return $this->assignHelper('ZVAL_DOUBLE', $this->getVariableCode($variable), $value, $context, $useCodePrinter);
@@ -948,6 +975,176 @@ class Backend
     }
 
     /**
+     * Emits a class property whose default value is an array literal, built into
+     * a persistent immutable array on the class entry (see
+     * zephir_declare_property_array). Used for trait properties so PHP's native
+     * trait binding carries the default into userland classes that `use` them.
+     *
+     * @param string $visibility ZEND_ACC_* accessor string for the property
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2607
+     */
+    public function declareArrayProperty(string $name, array $node, string $visibility, CompilationContext $context): void
+    {
+        $ce      = $context->classDefinition->getClassEntry($context);
+        $printer = $context->codePrinter;
+        $counter = 0;
+        $lines   = [];
+
+        $rootVar = $this->buildConstantArray($node, $lines, $counter);
+
+        $printer->output('{');
+        $printer->increaseLevel();
+        foreach ($lines as $line) {
+            $printer->output($line);
+        }
+        $printer->output(
+            sprintf('zephir_declare_property_array(%s, SL("%s"), &%s, %s);', $ce, $name, $rootVar, $visibility)
+        );
+        $printer->decreaseLevel();
+        $printer->output('}');
+    }
+
+    /**
+     * Emits a typed class property declaration (issue #2608).
+     *
+     * Builds the default value into a fresh local zval — array via
+     * {@see buildConstantArray()}, scalars via ZVAL_*, and a missing default as
+     * ZVAL_UNDEF (uninitialized) — then hands it to the kernel wrapper which
+     * makes it persistent and calls the engine's zend_declare_typed_property.
+     *
+     * @param string      $name       property name
+     * @param array|null  $default    default AST node, or null for uninitialized
+     * @param string      $visibility ZEND_ACC_* accessor string
+     * @param string      $typeMask   MAY_BE_* expression (e.g. "MAY_BE_STRING|MAY_BE_NULL")
+     * @param string|null $className  escaped FQCN for a class type, or null
+     */
+    public function declareTypedProperty(string $name, ?array $default, string $visibility, string $typeMask, ?string $className, CompilationContext $context): void
+    {
+        $ce      = $context->classDefinition->getClassEntry($context);
+        $printer = $context->codePrinter;
+        $counter = 0;
+        $lines   = [];
+
+        if (null === $default) {
+            $rootVar = '_zc0';
+            $lines[] = 'zval _zc0;';
+            $lines[] = 'ZVAL_UNDEF(&_zc0);';
+        } elseif (in_array($default['type'], ['array', 'empty-array'], true)) {
+            $rootVar = $this->buildConstantArray($default, $lines, $counter);
+        } else {
+            $rootVar = '_zc0';
+            $lines[] = 'zval _zc0;';
+            $lines[] = $this->typedScalarInit('_zc0', $default);
+        }
+
+        $classArg = null === $className
+            ? 'NULL, 0'
+            : sprintf('SL("%s")', $className);
+
+        $printer->output('{');
+        $printer->increaseLevel();
+        foreach ($lines as $line) {
+            $printer->output($line);
+        }
+        $printer->output(
+            sprintf(
+                'zephir_declare_typed_property(%s, SL("%s"), &%s, %s, %s, %s);',
+                $ce,
+                $name,
+                $rootVar,
+                $visibility,
+                $typeMask,
+                $classArg
+            )
+        );
+        $printer->decreaseLevel();
+        $printer->output('}');
+    }
+
+    /**
+     * Declare a union-typed class property that includes at least one class
+     * member (issue #2613), e.g. `<A> | <B>` or `string | <Foo>`. The scalar
+     * and null members are collapsed into `$typeMask`; the class members are
+     * emitted as a C string array so the engine builds the object part of the
+     * union (single class, or a zend_type_list for two or more).
+     */
+    public function declareTypedPropertyUnion(string $name, ?array $default, string $visibility, string $typeMask, array $classNames, CompilationContext $context): void
+    {
+        $ce      = $context->classDefinition->getClassEntry($context);
+        $printer = $context->codePrinter;
+        $counter = 0;
+        $lines   = [];
+
+        if (null === $default) {
+            $rootVar = '_zc0';
+            $lines[] = 'zval _zc0;';
+            $lines[] = 'ZVAL_UNDEF(&_zc0);';
+        } elseif (in_array($default['type'], ['array', 'empty-array'], true)) {
+            $rootVar = $this->buildConstantArray($default, $lines, $counter);
+        } else {
+            $rootVar = '_zc0';
+            $lines[] = 'zval _zc0;';
+            $lines[] = $this->typedScalarInit('_zc0', $default);
+        }
+
+        $literals = array_map(static fn (string $cn): string => '"' . $cn . '"', $classNames);
+
+        $printer->output('{');
+        $printer->increaseLevel();
+        foreach ($lines as $line) {
+            $printer->output($line);
+        }
+        $printer->output('const char *_zut[] = { ' . implode(', ', $literals) . ' };');
+        $printer->output(
+            sprintf(
+                'zephir_declare_typed_property_union(%s, SL("%s"), &%s, %s, %s, _zut, %d);',
+                $ce,
+                $name,
+                $rootVar,
+                $visibility,
+                '' === $typeMask ? '0' : $typeMask,
+                count($classNames)
+            )
+        );
+        $printer->decreaseLevel();
+        $printer->output('}');
+    }
+
+    /**
+     * Renders the ZVAL_* initializer for a scalar typed-property default.
+     */
+    private function typedScalarInit(string $var, array $default): string
+    {
+        return match ($default['type']) {
+            'int', 'long', 'uint', 'ulong' => sprintf('ZVAL_LONG(&%s, %s);', $var, $default['value']),
+            'double', 'float'              => sprintf('ZVAL_DOUBLE(&%s, %s);', $var, $default['value']),
+            'bool'                         => sprintf('ZVAL_BOOL(&%s, %s);', $var, 'true' === $default['value'] ? '1' : '0'),
+            'null'                         => sprintf('ZVAL_NULL(&%s);', $var),
+            'char', 'string', 'istring'    => $this->zvalStringInit($var, (string) $default['value']),
+            default => throw new CompilerException('Unsupported typed property default: ' . $default['type']),
+        };
+    }
+
+    /**
+     * Renders a `ZVAL_STRINGL` initializer whose length is measured by the C
+     * compiler via `sizeof(literal) - 1` (exactly what the `SL()` macro expands
+     * to). `strlen()` on the PHP-side value over-counts escape sequences — a
+     * source `"\\"` is two PHP chars but one emitted byte — which corrupted the
+     * runtime string. `sizeof()` counts the bytes the compiler actually emits,
+     * correct for every escape (and any embedded NUL). `SL()` cannot be nested
+     * inside the `ZVAL_STRINGL` macro (the preprocessor counts the macro's args
+     * before expanding `SL`, so its hidden comma yields "one arg given"), so the
+     * length is spelled out. See #2617.
+     */
+    private function zvalStringInit(string $var, string $value): string
+    {
+        $literal = Name::addSlashes($value);
+
+        return sprintf('ZVAL_STRINGL(&%s, "%s", sizeof("%s") - 1);', $var, $literal, $literal);
+    }
+
+    /**
      * Recursively emits C that builds an array literal AST node into a fresh
      * local zval, returning the name of that zval. Used for array class
      * constants which must be materialized in the class initializer.
@@ -994,8 +1191,9 @@ class Backend
             'bool'                           => ['bool', 'true' === $value['value'] ? '1' : '0'],
             'null'                           => ['null', ''],
             'char', 'string', 'istring'      => [
+                // SL() delegates the byte count to the C compiler; see #2617.
                 'stringl',
-                sprintf('"%s", %d', Name::addSlashes((string) $value['value']), strlen((string) $value['value'])),
+                sprintf('SL("%s")', Name::addSlashes((string) $value['value'])),
             ],
             default                          => throw new CompilerException(
                 'Unsupported array constant element type: ' . $value['type']
@@ -1022,11 +1220,11 @@ class Backend
         $keyValue = (string) $key['value'];
 
         return sprintf(
-            'add_assoc_%s_ex(&%s, "%s", %d%s);',
+            // SL() delegates the key byte count to the C compiler; see #2617.
+            'add_assoc_%s_ex(&%s, SL("%s")%s);',
             $func,
             $var,
             Name::addSlashes($keyValue),
-            strlen($keyValue),
             $tail
         );
     }

@@ -350,4 +350,130 @@ class Bench
         }
         return output;
     }
+
+    /**
+     * Array `+=` union with a literal right-hand side (issue #1280). Compiler
+     * path: emits zephir_add_function(&a, &a, &<literal>), an in-place union.
+     * `a` is reset each step so the measured cost is one fixed-size union.
+     */
+    public function addAssignUnionLiteral(long count) -> void
+    {
+        var a;
+        long i = 0;
+        for i in 1..count {
+            let a = [1, 2, 3, 4, 5];
+            let a += [6, 7, 8, "k1": 1, "k2": 2];
+        }
+    }
+
+    /**
+     * Array `+=` union with an untyped `var += var` right-hand side (#1280).
+     * Runtime path: the ZEPHIR_ADD_ASSIGN macro dispatches to an in-place
+     * hash merge. Same fixed-size union per step as addAssignUnionLiteral.
+     */
+    public function addAssignUnionVar(long count) -> void
+    {
+        var a, b;
+        long i = 0;
+        let b = [6, 7, 8, "k1": 1, "k2": 2];
+        for i in 1..count {
+            let a = [1, 2, 3, 4, 5];
+            let a += b;
+        }
+    }
+
+    /**
+     * Array `+=` accumulation via untyped `var += var`: grows `a` by one key
+     * per step. Confirms the macro merges in place (O(n) amortized) instead of
+     * duplicating the accumulator each step.
+     */
+    public function addAssignAccumulate(long count) -> array
+    {
+        var a, b;
+        long i = 0;
+        let a = [];
+        for i in 1..count {
+            let b = [];
+            let b[i] = i;
+            let a += b;
+        }
+        return a;
+    }
+
+    /**
+     * count() with a single argument (#2468). CountOptimizer inlines
+     * zephir_fast_count_int, so no Zend function-table dispatch happens.
+     */
+    public function countOptimizedLoop(array! arr, long n) -> long
+    {
+        long i = 0, sum = 0;
+        while i < n {
+            let sum += count(arr);
+            let i++;
+        }
+        return sum;
+    }
+
+    /**
+     * count() with an explicit COUNT_NORMAL (0) mode argument (#2468). Same
+     * result as countOptimizedLoop, but CountOptimizer declines on arity, so
+     * this compiles to a runtime ZEPHIR_CALL_FUNCTION. The delta between the
+     * two subjects is pure call-dispatch overhead.
+     */
+    public function countUnoptimizedLoop(array! arr, long n) -> long
+    {
+        long i = 0, sum = 0;
+        while i < n {
+            let sum += count(arr, 0);
+            let i++;
+        }
+        return sum;
+    }
+
+    /**
+     * implode() with a glue argument (#2468): ImplodeOptimizer inlines
+     * zephir_fast_join.
+     */
+    public function implodeOptimizedLoop(array! arr, long n) -> string
+    {
+        var out = "";
+        long i = 0;
+        while i < n {
+            let out = implode("", arr);
+            let i++;
+        }
+        return out;
+    }
+
+    /**
+     * implode() without a glue argument (#2468). Produces the same string as
+     * implodeOptimizedLoop, but the optimizer requires exactly two parameters,
+     * so this falls back to a runtime call.
+     */
+    public function implodeUnoptimizedLoop(array! arr, long n) -> string
+    {
+        var out = "";
+        long i = 0;
+        while i < n {
+            let out = implode(arr);
+            let i++;
+        }
+        return out;
+    }
+
+    /**
+     * acos() over a double-typed local. Reachable optimizer => a bare libm
+     * acos() call is emitted inline; unreachable (Linux, before the
+     * ACosOptimizer rename) => runtime ZEPHIR_CALL_FUNCTION.
+     */
+    public function acosLoop(long n) -> double
+    {
+        double x = 0.5, sum = 0.0;
+        long i = 0;
+        while i < n {
+            let sum += acos(x);
+            let i++;
+        }
+        return sum;
+    }
 }

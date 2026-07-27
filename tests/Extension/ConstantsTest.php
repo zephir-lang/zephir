@@ -87,6 +87,22 @@ final class ConstantsTest extends TestCase
     }
 
     /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2527
+     */
+    public function testClassMagicConstant(): void
+    {
+        $this->assertSame('Stub\Constants', $this->test->testClassSelf());
+        $this->assertSame('Stub\Constants', $this->test->testClassStatic());
+        $this->assertSame('Stub\ConstantsParent', $this->test->testClassParent());
+        $this->assertSame('Stub\Constants', $this->test->testClassName());
+
+        // Inherited methods: static::class binds to the called (child) class at
+        // runtime (late static binding); self::class stays lexical (parent).
+        $this->assertSame('Stub\Constants', $this->test->testStaticClassInherited());
+        $this->assertSame('Stub\ConstantsParent', $this->test->testSelfClassInherited());
+    }
+
+    /**
      * @issue https://github.com/zephir-lang/zephir/issues/1571
      */
     public function testStringDelimiterAsConstDoubleQuoted(): void

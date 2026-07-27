@@ -21,4 +21,12 @@ namespace Zephir;
  */
 class LiteralCompiledExpression extends CompiledExpression
 {
+    /**
+     * A literal `char`/`uchar` holds the bare character, which is not valid C
+     * on its own — quote it as a C character constant.
+     */
+    public function getCharCode(): string
+    {
+        return "'" . $this->code . "'";
+    }
 }

@@ -480,7 +480,7 @@ PHP_METHOD(Stub_Strings, strToHex)
 		ZVAL_STRINGL(&_2$$3, &_1$$3, 1);
 		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 115, &_2$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 17, &_3$$3);
+		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 19, &_3$$3);
 		zephir_check_call_status();
 		zephir_concat_self(&ret, &_5$$3);
 		i++;

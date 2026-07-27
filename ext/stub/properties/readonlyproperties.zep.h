@@ -1,0 +1,19 @@
+
+extern zend_class_entry *stub_properties_readonlyproperties_ce;
+
+ZEPHIR_INIT_CLASS(Stub_Properties_ReadonlyProperties);
+
+PHP_METHOD(Stub_Properties_ReadonlyProperties, __construct);
+PHP_METHOD(Stub_Properties_ReadonlyProperties, getFlag);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_properties_readonlyproperties___construct, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_properties_readonlyproperties_getflag, 0, 0, _IS_BOOL, 0)
+ZEND_END_ARG_INFO()
+
+ZEPHIR_INIT_FUNCS(stub_properties_readonlyproperties_method_entry) {
+PHP_ME(Stub_Properties_ReadonlyProperties, __construct, arginfo_stub_properties_readonlyproperties___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+	PHP_ME(Stub_Properties_ReadonlyProperties, getFlag, arginfo_stub_properties_readonlyproperties_getflag, ZEND_ACC_PUBLIC)
+	PHP_FE_END
+};

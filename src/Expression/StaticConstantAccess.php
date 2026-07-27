@@ -20,6 +20,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Name;
 use Zephir\Variable\Variable;
 
 use function gettype;
@@ -81,6 +82,41 @@ class StaticConstantAccess
                     $classDefinition = $classDefinition->getExtendsClassDefinition();
                 }
             }
+        }
+
+        /**
+         * The `::class` postfix is not a real constant: it resolves to the
+         * fully-qualified class name. `self`/`parent`/explicit names fold to a
+         * compile-time string literal (exactly like `__CLASS__`); `static::class`
+         * needs runtime late static binding via the called scope. See #2527.
+         */
+        if ('class' === $constant) {
+            if ('static' === $className) {
+                if ($this->expecting && $this->expectingVariable) {
+                    $symbolVariable = $this->expectingVariable;
+                    $symbolVariable->initVariant($compilationContext);
+                } else {
+                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                        'variable',
+                        $compilationContext,
+                        $expression
+                    );
+                }
+
+                $symbolVariable->setDynamicTypes('string');
+                $compilationContext->headersManager->add('kernel/object');
+                $compilationContext->codePrinter->output(
+                    'zephir_get_called_class(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');'
+                );
+
+                return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+            }
+
+            return new CompiledExpression(
+                'string',
+                Name::addSlashes($classDefinition->getCompleteName()),
+                $expression
+            );
         }
 
         /**

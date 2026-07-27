@@ -1,0 +1,45 @@
+--TEST--
+Union typed properties: reported as unions by Reflection, engine-enforced on write, scalar + nullable (#2613)
+--FILE--
+namespace Stub\UnionProps;
+
+class Bag
+{
+    public int|float num = 1;
+    public int|string|null note = null;
+}
+--USAGE--
+$c = "Stub\\UnionProps\\Bag";
+$names = function ($t) {
+    $n = [];
+    foreach ($t->getTypes() as $x) {
+        $n[] = $x->getName();
+    }
+    sort($n);
+    return implode("|", $n);
+};
+
+$o = new $c();
+echo "num=", $names((new ReflectionProperty($c, "num"))->getType()), "\n";
+echo "note=", $names((new ReflectionProperty($c, "note"))->getType()), "\n";
+
+$o->num = 2;
+echo "num_int=", $o->num, "\n";
+$o->num = 2.5;
+echo "num_float=", $o->num, "\n";
+$o->note = "x";
+echo "note_str=", $o->note, "\n";
+
+try {
+    $o->num = [];
+    echo "no-error\n";
+} catch (\TypeError $e) {
+    echo "num-enforced\n";
+}
+--EXPECT--
+num=float|int
+note=int|null|string
+num_int=2
+num_float=2.5
+note_str=x
+num-enforced

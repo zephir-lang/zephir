@@ -103,6 +103,34 @@ class VariableAppend
                         $tempVariable->setIdle(true);
                         break;
 
+                    case 'char':
+                    case 'uchar':
+                        /**
+                         * A char is a native numeric byte, so it is appended as
+                         * its integer value -- consistent with `let a = [ch]`
+                         * (see Chars::arrayOfChars() and #1988). Use
+                         * `(string) ch` for the 1-char string. See #1629.
+                         */
+                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                            'variable',
+                            $compilationContext,
+                            $statement
+                        );
+                        $compilationContext->backend->assignLong(
+                            $tempVariable,
+                            $resolvedExpr->getCharCode(),
+                            $compilationContext
+                        );
+                        $compilationContext->backend->addArrayEntry(
+                            $symbolVariable,
+                            null,
+                            $tempVariable,
+                            $compilationContext,
+                            $statement
+                        );
+                        $tempVariable->setIdle(true);
+                        break;
+
                     case 'double':
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                             'variable',
@@ -193,6 +221,9 @@ class VariableAppend
                             case 'int':
                             case 'uint':
                             case 'long':
+                            // A char is a native numeric byte; see #1629.
+                            case 'char':
+                            case 'uchar':
                                 $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                                     'variable',
                                     $compilationContext,

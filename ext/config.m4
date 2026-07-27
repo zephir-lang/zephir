@@ -117,6 +117,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue1404.zep.c
 	stub/issue1521.zep.c
 	stub/issue1628.zep.c
+	stub/issue1629.zep.c
 	stub/issue1706.zep.c
 	stub/issue1790.zep.c
 	stub/issue2030.zep.c
@@ -224,10 +225,12 @@ if test "$PHP_STUB" = "yes"; then
 	stub/properties/propertyarray.zep.c
 	stub/properties/propertyupdate.zep.c
 	stub/properties/protectedproperties.zep.c
+	stub/properties/readonlyproperties.zep.c
 	stub/properties/staticprivateproperties.zep.c
 	stub/properties/staticpropertyarray.zep.c
 	stub/properties/staticprotectedproperties.zep.c
 	stub/properties/staticpublicproperties.zep.c
+	stub/properties/typedproperties.zep.c
 	stub/propertycachechild.zep.c
 	stub/propertycachemagic.zep.c
 	stub/quantum.zep.c
@@ -265,6 +268,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/types/maybe.zep.c
 	stub/types/mixedtype.zep.c
 	stub/types/obj.zep.c
+	stub/types/unions.zep.c
 	stub/unknownclass.zep.c
 	stub/unreachableloop.zep.c
 	stub/unsettest.zep.c

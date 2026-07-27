@@ -93,6 +93,11 @@ final class AssignTest extends TestCase
             [43,             'testAssign42', 86],
             [1,              'testAssign43', 2],
             [1,              'testAssign44', 41],
+            [[0, 2],                 'testAssign45'],
+            [[1, 2, 5],              'testAssign46'],
+            [['a' => 1, 'b' => 2],   'testAssign47'],
+            [[0, 2],                 'testAssign48'],
+            [8,                      'testAssign49'],
         ];
     }
 

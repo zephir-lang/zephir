@@ -28,6 +28,20 @@ class CompiledExpression implements TypeAwareInterface
     }
 
     /**
+     * Returns the code of a `char`/`uchar` expression as a valid C expression.
+     *
+     * A char-typed expression carries either a bare literal character (see
+     * LiteralCompiledExpression, which quotes it) or code that is already a
+     * valid C expression, such as `ZEPHIR_GLOBAL(my_char_setting)`. Consumers
+     * must not quote a char code themselves — only the expression knows which
+     * of the two it holds. See #1629.
+     */
+    public function getCharCode(): string
+    {
+        return (string) $this->code;
+    }
+
+    /**
      * Returns a C representation for a boolean constant.
      */
     public function getBooleanCode(): mixed

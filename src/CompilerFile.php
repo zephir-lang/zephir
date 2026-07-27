@@ -963,17 +963,20 @@ final class CompilerFile implements FileInterface
 
         if (isset($topStatement['definition'])) {
             /**
-             * Array/object property defaults need a create_object initializer,
-             * which the engine does not carry over when a PHP userland class
-             * binds the trait — the property would silently become null there.
-             * Reject them until traits get a userland-safe initializer.
+             * An *instance* array/empty-array property default is materialized as a
+             * persistent immutable array on the trait ce (see Property::compile), so
+             * PHP's native trait binding carries it into every using class. A *static*
+             * one cannot be made PHP-identical here: Zephir resolves `self::` inside a
+             * trait method to the trait ce itself, so each using class would not get
+             * its own copy — so static array defaults on traits stay rejected [#2607].
              */
             foreach ($topStatement['definition']['properties'] ?? [] as $property) {
                 $defaultType = $property['default']['type'] ?? null;
-                if ('array' === $defaultType || 'empty-array' === $defaultType) {
+                $isArray     = 'array' === $defaultType || 'empty-array' === $defaultType;
+                if ($isArray && in_array('static', $property['visibility'] ?? [], true)) {
                     throw new CompilerException(
                         sprintf(
-                            'Property "%s" of trait "%s" cannot have an array default value',
+                            'Static property "%s" of trait "%s" cannot have an array default value',
                             $property['name'],
                             $classDefinition->getCompleteName()
                         ),
@@ -1020,7 +1023,11 @@ final class CompilerFile implements FileInterface
                         $property['name'],
                         $property['default'] ?? null,
                         $property['docblock'] ?? null,
-                        $property
+                        $property,
+                        $property['data-type'] ?? null,
+                        $property['cast'] ?? null,
+                        !empty($property['nullable']),
+                        $property['data-types'] ?? null,
                     )
                 );
 

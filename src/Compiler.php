@@ -112,6 +112,13 @@ final class Compiler
      * @var FunctionDefinition[]
      */
     public array  $functionDefinitions = [];
+    /**
+     * Function names already reported by the `missing-optimizer` warning, so the
+     * report stays one line per function instead of one per call site.
+     *
+     * @var array<string, true>
+     */
+    public array  $reportedMissingOptimizers = [];
     private array $anonymousFiles      = [];
     private array $compiledFiles       = [];
     private array $constants           = [];
@@ -299,11 +306,15 @@ final class Compiler
     /**
      * Compiles the extension without installing it.
      *
+     * @param PhpToolchain|null $toolchain PHP build tools to compile against.
+     *                                     Defaults to the ones in the `PATH`.
+     *
      * @throws Exception
      */
-    public function compile(bool $development = false, ?int $jobs = null): void
+    public function compile(bool $development = false, ?int $jobs = null, ?PhpToolchain $toolchain = null): void
     {
-        $jobs = $jobs ?: 2;
+        $jobs      = $jobs ?: 2;
+        $toolchain = $toolchain ?? PhpToolchain::default();
 
         /**
          * Get global namespace.
@@ -383,16 +394,19 @@ final class Compiler
             $this->logger->info('Preparing configuration file...');
             exec('cd ext && configure --enable-' . $extensionName);
         } else {
-            exec('cd ext && make clean && phpize --clean', $output, $exit);
+            $phpize = $toolchain->phpizeCommand();
+
+            exec('cd ext && make clean && ' . $phpize . ' --clean', $output, $exit);
             $this->logger->info('Preparing for PHP compilation...');
-            exec('cd ext && phpize', $output, $exit);
+            exec('cd ext && ' . $phpize, $output, $exit);
             $this->logger->info('Preparing configuration file...');
 
             exec(
                 'cd ext && export CC="gcc" && export CFLAGS="' .
                 $this->getGccFlags($development) .
                 '" && ./configure --enable-' .
-                $extensionName
+                $extensionName .
+                $toolchain->configureOption()
             );
         }
 
@@ -2038,9 +2052,18 @@ final class Compiler
 
         if (!$this->filesystem->exists('.')) {
             if (!$this->checkIfPhpized()) {
-                $this->logger->info(
-                    'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project'
-                );
+                $previousVersion = $this->filesystem->getPreviousVersion();
+                if (null !== $previousVersion) {
+                    $this->logger->info(sprintf(
+                        'Zephir version changed (%s -> %s), use "zephir fullclean" to perform a full clean of the project',
+                        $previousVersion,
+                        $this->filesystem->getVersion()
+                    ));
+                } else {
+                    $this->logger->info(
+                        'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project'
+                    );
+                }
             }
 
             $this->filesystem->makeDirectory('.');

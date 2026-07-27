@@ -49,6 +49,11 @@ PHP_METHOD(Stub_Assign, testAssign41);
 PHP_METHOD(Stub_Assign, testAssign42);
 PHP_METHOD(Stub_Assign, testAssign43);
 PHP_METHOD(Stub_Assign, testAssign44);
+PHP_METHOD(Stub_Assign, testAssign45);
+PHP_METHOD(Stub_Assign, testAssign46);
+PHP_METHOD(Stub_Assign, testAssign47);
+PHP_METHOD(Stub_Assign, testAssign48);
+PHP_METHOD(Stub_Assign, testAssign49);
 PHP_METHOD(Stub_Assign, testPropertyAssign1);
 PHP_METHOD(Stub_Assign, testPropertyAssign2);
 PHP_METHOD(Stub_Assign, testPropertyIncr1);
@@ -239,6 +244,21 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_assign_testassign44, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, num, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_assign_testassign45, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_assign_testassign46, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_assign_testassign47, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_assign_testassign48, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_assign_testassign49, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_assign_testpropertyassign1, 0, 0, 0)
@@ -452,6 +472,11 @@ PHP_ME(Stub_Assign, getMyArray, arginfo_stub_assign_getmyarray, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Assign, testAssign42, arginfo_stub_assign_testassign42, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Assign, testAssign43, arginfo_stub_assign_testassign43, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Assign, testAssign44, arginfo_stub_assign_testassign44, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Assign, testAssign45, arginfo_stub_assign_testassign45, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Assign, testAssign46, arginfo_stub_assign_testassign46, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Assign, testAssign47, arginfo_stub_assign_testassign47, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Assign, testAssign48, arginfo_stub_assign_testassign48, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Assign, testAssign49, arginfo_stub_assign_testassign49, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Assign, testPropertyAssign1, arginfo_stub_assign_testpropertyassign1, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Assign, testPropertyAssign2, arginfo_stub_assign_testpropertyassign2, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Assign, testPropertyIncr1, arginfo_stub_assign_testpropertyincr1, ZEND_ACC_PUBLIC)

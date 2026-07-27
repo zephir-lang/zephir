@@ -16,11 +16,11 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Optimizers\MathOptimizer;
 
 /**
- * ACosOptimizer.
+ * AcosOptimizer.
  *
  * Optimizes calls to 'acos' using internal function
  */
-class ACosOptimizer extends MathOptimizer
+class AcosOptimizer extends MathOptimizer
 {
     protected string $zephirMethod = 'acos';
 }

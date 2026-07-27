@@ -27,6 +27,7 @@ use Zephir\Logger\Formatter\CompilerFormatter;
 use Zephir\Os;
 use Zephir\Parser\Manager;
 use Zephir\Parser\Parser;
+use Zephir\PhpToolchain;
 use Zephir\Zephir;
 
 if (PHP_SAPI !== 'cli' && PHP_SAPI !== 'phpdbg') {
@@ -123,6 +124,14 @@ $devMode = isset($params['dev']);
 $trace = isset($params['trace']);
 $jobs = $params['jobs'] ?? $params['j'] ?? null;
 $jobs = $jobs ? (int)$jobs : null;
+
+/**
+ * Selects the PHP installation the extension is built against. Kept as the raw
+ * parameter value here; PhpToolchain validates it where the build happens.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/1834
+ */
+$phpConfig = $params['with-php-config'] ?? null;
 $command = $params[0] ?? 'help';
 
 switch ($command) {
@@ -196,6 +205,11 @@ a debug configuration.
 In some cases, we would like to get production ready extension even if the PHP binary was
 compiled in a debug configuration. Use <comment>--no-dev</comment> option to achieve this behavior.
 
+Options:
+      --with-php-config=PATH  Build against the PHP installation this php-config belongs to
+                              (phpize is taken from the same directory). Defaults to the
+                              php-config found in the PATH. Not available on Windows.
+
 EOT);
             exit(0);
         }
@@ -204,7 +218,7 @@ EOT);
             exit(1);
         }
 
-        if (!compile($devMode, $jobs)) {
+        if (!compile($devMode, $jobs, $phpConfig)) {
             exit(1);
         }
 
@@ -259,11 +273,18 @@ a debug configuration.
 In some cases, we would like to get production ready extension even if the PHP binary was
 compiled in a debug configuration. Use <comment>--no-dev</comment> option to achieve this behavior.
 
+Options:
+      --with-php-config=PATH  Build against the PHP installation this php-config belongs to
+                              (phpize is taken from the same directory). Defaults to the
+                              php-config found in the PATH. Not available on Windows.
+
 EOT);
             exit(0);
         }
 
-        compile($devMode, $jobs);
+        if (!compile($devMode, $jobs, $phpConfig)) {
+            exit(1);
+        }
 
         break;
 
@@ -277,6 +298,9 @@ Usage:
   fullclean
 
 Options:
+      --with-php-config=PATH  Clean with the phpize belonging to this php-config's PHP
+                              installation. Defaults to the phpize found in the PATH.
+                              Not available on Windows.
   -h, --help     Print this help message
 
 HELP);
@@ -284,12 +308,16 @@ HELP);
         }
 
         try {
+            // Validated before looking at ext/ so an unusable path is reported
+            // even when there is nothing to clean.
+            $toolchain = PhpToolchain::fromPhpConfig($phpConfig);
+
             if (is_dir('ext')) {
                 if (Os::isWindows()) {
                     system('cd ext && phpize --clean');
                 } else {
                     system('cd ext && make clean > /dev/null 2>&1');
-                    system('cd ext && phpize --clean > /dev/null');
+                    system('cd ext && ' . $toolchain->phpizeCommand() . ' --clean > /dev/null');
                 }
 
                 // Remove recursive .dep files inside the ext directory
@@ -303,6 +331,10 @@ HELP);
                     }
                 }
             }
+        } catch (CompilerException $e) {
+            fwrite(STDERR, $e->getMessage() . PHP_EOL);
+
+            exit(1);
         } catch (FileSystemException $e) {
             fwrite(
                 STDERR,
@@ -363,6 +395,15 @@ NOTE: This command may require root password on Linux/Unit systems.
 
 EOT);
             exit(0);
+        }
+
+        if (null !== $phpConfig) {
+            // The toolchain is baked into ext/Makefile by configure, so installing
+            // cannot retarget it. Say so instead of pretending the option applied.
+            $logger->warning(
+                'The "--with-php-config" option only applies to "zephir compile"; '
+                . 'it is ignored here because "install" reuses the configured ext/Makefile.'
+            );
         }
 
         install($devMode);
@@ -553,7 +594,11 @@ MSG);
     return true;
 }
 
-function compile(bool $development = false, ?int $jobs = null): bool
+/**
+ * @param mixed $phpConfig Path to the php-config of the PHP installation to
+ *                         build against, or null for the one in the PATH.
+ */
+function compile(bool $development = false, ?int $jobs = null, mixed $phpConfig = null): bool
 {
     global $compiler;
 
@@ -561,6 +606,7 @@ function compile(bool $development = false, ?int $jobs = null): bool
         $compiler->compile(
             $development,
             $jobs,
+            PhpToolchain::fromPhpConfig($phpConfig),
         );
         return true;
     } catch (CompilerException $e) {
