@@ -286,85 +286,49 @@ void zephir_substr(zval *return_value, zval *str, long f, long l, int flags)
 {
 	zval copy;
 	int use_copy = 0;
-	int str_len;
+	size_t str_len;
 
+	/* Matches PHP's scalar coercion: null -> "", false -> "", true -> "1" */
 	if (Z_TYPE_P(str) != IS_STRING) {
-
-		if (Z_TYPE_P(str) == IS_NULL || Z_TYPE_P(str) == IS_TRUE || Z_TYPE_P(str) == IS_FALSE) {
-			RETURN_FALSE;
-		}
-
-		if (Z_TYPE_P(str) != IS_STRING) {
-			use_copy = zend_make_printable_zval(str, &copy);
-			if (use_copy) {
-				str = &copy;
-			}
+		use_copy = zend_make_printable_zval(str, &copy);
+		if (use_copy) {
+			str = &copy;
 		}
 	}
 
 	str_len = Z_STRLEN_P(str);
-	if ((flags & ZEPHIR_SUBSTR_NO_LENGTH) == ZEPHIR_SUBSTR_NO_LENGTH) {
-		l = str_len;
-	}
 
-	if ((l < 0 && -l > str_len)) {
-		if (use_copy) {
-			zval_dtor(str);
-		}
-		RETURN_FALSE;
-	} else {
-		if (l > str_len) {
-			l = str_len;
-		}
-	}
-
-	if (f > str_len) {
-		if (use_copy) {
-			zval_dtor(str);
-		}
-		RETURN_FALSE;
-	} else {
-		if (f < 0 && -f > str_len) {
-			f = 0;
-		}
-	}
-
-	if (l < 0 && (l + str_len - f) < 0) {
-		if (use_copy) {
-			zval_dtor(str);
-		}
-		RETURN_FALSE;
-	}
-
-	/* if "from" position is negative, count start position from the end
-	 * of the string
+	/* Mirrors PHP_FUNCTION(substr) in php-src ext/standard/string.c (PHP >= 8.0):
+	 * out-of-range offsets and lengths are clamped, never rejected. The size_t
+	 * casts are deliberate - they keep the negation well defined at LONG_MIN.
+	 *
+	 * "from" is clamped first; "length" is then resolved against the *clamped*
+	 * "from", which is what makes negative lengths collapse to an empty string
+	 * instead of failing.
 	 */
 	if (f < 0) {
-		f = str_len + f;
-		if (f < 0) {
+		if (-(size_t) f > str_len) {
 			f = 0;
+		} else {
+			f = (long) str_len + f;
 		}
-	}
-
-	/* if "length" position is negative, set it to the length
-	 * needed to stop that many chars from the end of the string
-	 */
-	if (l < 0) {
-		l = (str_len - f) + l;
-		if (l < 0) {
-			l = 0;
-		}
-	}
-
-	if (f >= str_len) {
+	} else if ((size_t) f > str_len) {
 		if (use_copy) {
 			zval_dtor(str);
 		}
-		RETURN_FALSE;
+		RETURN_EMPTY_STRING();
 	}
 
-	if ((f + l) > str_len) {
-		l = str_len - f;
+	if ((flags & ZEPHIR_SUBSTR_NO_LENGTH) == ZEPHIR_SUBSTR_NO_LENGTH) {
+		l = (long) str_len - f;
+	} else if (l < 0) {
+		if (-(size_t) l > str_len - (size_t) f) {
+			l = 0;
+		} else {
+			l = (long) str_len - f + l;
+		}
+	} else if ((size_t) l > str_len - (size_t) f) {
+		l = (long) str_len - f;
 	}
 
 	if (!l) {

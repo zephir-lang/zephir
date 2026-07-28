@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+- Fixed `substr()` returning `false` where PHP returns a string. The kernel implementation was a hand-port of PHP 5.6's `substr()` and rejected inputs that PHP clamps: an offset equal to the subject length (`substr("GetPosts", 8)`), an offset past the end, any offset into an empty subject (`substr("", 0)`), and a negative length larger than the subject (`substr("abcdef", 0, -10)`) all returned `false`. Non-string scalars were rejected outright instead of being coerced. The kernel now mirrors PHP 8's clamping, so `substr()` never returns `false`, and `null`, `false` and `true` coerce to `""`, `""` and `"1"` as they do in PHP
+
 ## [1.2.0] - 2026-07-27
 
 ### Added

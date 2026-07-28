@@ -30,13 +30,19 @@ echo var_export($test->testThreeArguments('123abc', 0, 3), true), "\n";
 echo var_export($test->testThreeArguments('abcdef', 1, -3), true), "\n";
 echo var_export($test->testThreeArguments('abcdef', -2, 0), true), "\n";
 echo var_export($test->testThreeArguments(12345, 1, -1), true), "\n";
+
+// Offset at / past the end, and an oversized negative length: PHP clamps these
+// to "" rather than returning false.
+echo var_export($test->testTwoArguments('GetPosts', 8), true), "\n";
+echo var_export($test->testTwoArguments('GetPosts', 9), true), "\n";
+echo var_export($test->testThreeArguments('abcdef', 0, -10), true), "\n";
 --EXPECT--
-false
-false
-false
-false
-false
-false
+''
+''
+''
+''
+''
+''
 '2345'
 '12345'
 '45'
@@ -54,3 +60,6 @@ false
 'bc'
 ''
 '234'
+''
+''
+''
