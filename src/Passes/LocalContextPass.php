@@ -308,6 +308,31 @@ class LocalContextPass
                 continue;
             }
 
+            /**
+             * Destructuring (`let [a, b] = expr;`) writes to every slot of a
+             * `variables` list instead of a single `variable`. Each slot receives
+             * a zval fetched from the source array, so none of them can be kept
+             * in a native local.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2496
+             */
+            if ('destructure' === $assignment['assign-type']) {
+                if ('variable' === $assignment['expr']['type']) {
+                    $this->markVariableNoLocal($assignment['expr']['value']);
+                }
+
+                foreach ($assignment['variables'] as $slot) {
+                    if (null === $slot) {
+                        continue;
+                    }
+
+                    $this->increaseMutations($slot['value']);
+                    $this->markVariableNoLocal($slot['value']);
+                }
+
+                continue;
+            }
+
             $this->increaseMutations($assignment['variable']);
 
             switch ($assignment['assign-type']) {

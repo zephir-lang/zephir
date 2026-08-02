@@ -265,7 +265,7 @@ PHP_METHOD(Stub_Issue1629, propertyAppendTarget)
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 43, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 45, &_0);
 	_1 = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRINGL(&_2, &_1, 1);
@@ -302,7 +302,7 @@ PHP_METHOD(Stub_Issue1629, propertyIndexTarget)
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 43, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 45, &_0);
 	_1 = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRINGL(&_2, &_1, 1);

@@ -1,0 +1,73 @@
+--TEST--
+Destructuring assignment: let [a, b, c] = expr, skipped slots, RHS evaluated once (issue #2496)
+--FILE--
+namespace Zept;
+
+class Destructuring
+{
+	protected calls = 0;
+
+	public function pair() -> array
+	{
+		let this->calls = this->calls + 1;
+
+		return [10, 20];
+	}
+
+	public function calls() -> int
+	{
+		return this->calls;
+	}
+
+	public function basic(array input) -> array
+	{
+		var a, b, c;
+
+		let [a, b, c] = input;
+
+		return [a, b, c];
+	}
+
+	public function skipped(array input) -> array
+	{
+		var a, c;
+
+		let [a, , c] = input;
+
+		return [a, c];
+	}
+
+	public function fromCall() -> array
+	{
+		var a, b;
+
+		let [a, b] = this->pair();
+
+		return [a, b];
+	}
+
+	public function missing() -> array
+	{
+		var a, b, c;
+
+		let [a, b, c] = [1, 2];
+
+		return [a, b, c];
+	}
+}
+--USAGE--
+$d = new Zept\Destructuring();
+
+echo json_encode($d->basic([1, 2, 3])), "\n";
+echo json_encode($d->skipped([1, 2, 3])), "\n";
+echo json_encode($d->fromCall()), "\n";
+// the right-hand side is evaluated exactly once, however many slots there are
+echo "calls=", $d->calls(), "\n";
+// a slot past the end of the source array is null, as in PHP's list()
+echo json_encode($d->missing()), "\n";
+--EXPECT--
+[1,2,3]
+[1,3]
+[10,20]
+calls=1
+[1,2,null]

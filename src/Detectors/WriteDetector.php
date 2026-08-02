@@ -242,6 +242,22 @@ class WriteDetector
                 continue;
             }
 
+            /**
+             * Destructuring (`let [a, b] = expr;`) writes to every slot of its
+             * `variables` list instead of a single `variable`.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2496
+             */
+            if ('destructure' === $assignment['assign-type']) {
+                foreach ($assignment['variables'] as $slot) {
+                    if (null !== $slot) {
+                        $this->increaseMutations($slot['value']);
+                    }
+                }
+
+                continue;
+            }
+
             $this->increaseMutations($assignment['variable']);
             if (self::DETECT_VALUE_IN_ASSIGNMENT == ($this->detectionFlags & self::DETECT_VALUE_IN_ASSIGNMENT)) {
                 if (isset($assignment['expr'])) {

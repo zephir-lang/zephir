@@ -50,7 +50,13 @@ class LetStatement extends StatementAbstract
                 $assignment = $this->resolveNestedObjectProperty($assignment, $compilationContext);
             }
 
-            $variable = $assignment['variable'];
+            /**
+             * Destructuring (`let [a, b] = expr;`) writes to several targets, so
+             * it carries a `variables` list instead of a single `variable`.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2496
+             */
+            $variable = $assignment['variable'] ?? null;
 
             /**
              * Get the symbol from the symbol table if necessary
@@ -60,6 +66,7 @@ class LetStatement extends StatementAbstract
                 'static-property-append',
                 'static-property-array-index',
                 'static-property-array-index-append',
+                'destructure',
                 'dynamic-variable-string'          => null,
                 'array-index',
                 'variable-append',
