@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+- Added destructuring assignment: `let [a, b, c] = expr;` assigns consecutive array elements to several variables at once, and `let [a, , c] = expr;` skips slots. The right-hand side is evaluated exactly once, a slot past the end of the source array is `null` (as in PHP's `list()`), and a non-array source is rejected at compile time. Nested (`let [[a, b], c] = expr;`) and keyed destructuring are not supported [#2496](https://github.com/zephir-lang/zephir/issues/2496)
+
 ## [1.2.0] - 2026-07-27
 
 ### Added

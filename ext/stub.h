@@ -65,6 +65,7 @@
 #include "stub/constantsinterfaceb.zep.h"
 #include "stub/constructors/issue1803.zep.h"
 #include "stub/declaretest.zep.h"
+#include "stub/destructure.zep.h"
 #include "stub/diinterface.zep.h"
 #include "stub/echoes.zep.h"
 #include "stub/emptytest.zep.h"

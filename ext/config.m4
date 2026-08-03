@@ -70,6 +70,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/constantsinterfaceb.zep.c
 	stub/constructors/issue1803.zep.c
 	stub/declaretest.zep.c
+	stub/destructure.zep.c
 	stub/diinterface.zep.c
 	stub/echoes.zep.c
 	stub/emptytest.zep.c

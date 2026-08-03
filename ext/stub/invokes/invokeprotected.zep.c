@@ -38,6 +38,6 @@ PHP_METHOD(Stub_Invokes_InvokeProtected, __construct)
 		Z_PARAM_STR(text)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&text_zv, text);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 38, &text_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 40, &text_zv);
 }
 

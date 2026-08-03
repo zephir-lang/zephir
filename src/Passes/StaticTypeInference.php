@@ -443,6 +443,20 @@ class StaticTypeInference
                     $this->markVariable($assignment['variable'], 'variable');
                     break;
 
+                /**
+                 * Every slot of a destructuring assignment receives a zval
+                 * fetched from the source array.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2496
+                 */
+                case 'destructure':
+                    foreach ($assignment['variables'] as $slot) {
+                        if (null !== $slot) {
+                            $this->markVariable($slot['value'], 'variable');
+                        }
+                    }
+                    break;
+
                 default:
                     // echo $assignment['assign-type'];
             }
