@@ -125,17 +125,23 @@ final class PrecompiledHeaderTest extends TestCase
      * The path ends up in a Makefile recipe, which make expands and hands to a
      * shell unquoted. `Zephir::VERSION` carries an unexpanded `$Id$`, so the
      * per-version cache container is exactly the wrong place for it.
+     *
+     * The paths are POSIX literals rather than this test's own project dir: a
+     * prelude only ever reaches a `make` recipe where it is pre-compiled, and
+     * on Windows `sys_get_temp_dir()` hands back a backslashed path that the
+     * rule under test rejects, correctly, for being unquotable.
+     *
+     * @see \Zephir\Test\FileSystem\HardDiskTest::testShouldReturnUnversionedPathBesideTheContainer
+     *      Covers where the prelude lands.
      */
     public function testPreludeLivesOutsideThePerVersionContainer(): void
     {
-        $this->createCompiler();
-
         $this->assertTrue(
-            Compiler::isShellSafePath($this->projectDir . '/.zephir/' . Compiler::PCH_HEADER),
+            Compiler::isShellSafePath('/home/dev/project/.zephir/' . Compiler::PCH_HEADER),
             'The prelude path has to survive a Makefile recipe.'
         );
         $this->assertFalse(
-            Compiler::isShellSafePath($this->projectDir . '/.zephir/1.2.0-$Id$/zephir_pch.h'),
+            Compiler::isShellSafePath('/home/dev/project/.zephir/1.2.0-$Id$/zephir_pch.h'),
             'A path with a make variable reference in it must be rejected.'
         );
     }
