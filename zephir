@@ -206,6 +206,8 @@ In some cases, we would like to get production ready extension even if the PHP b
 compiled in a debug configuration. Use <comment>--no-dev</comment> option to achieve this behavior.
 
 Options:
+  -j, --jobs=N                Compile N translation units at once. Defaults to one per
+                              processor.
       --with-php-config=PATH  Build against the PHP installation this php-config belongs to
                               (phpize is taken from the same directory). Defaults to the
                               php-config found in the PATH. Not available on Windows.
@@ -222,7 +224,7 @@ EOT);
             exit(1);
         }
 
-        install($devMode);
+        install($devMode, $jobs);
 
         break;
 
@@ -274,6 +276,8 @@ In some cases, we would like to get production ready extension even if the PHP b
 compiled in a debug configuration. Use <comment>--no-dev</comment> option to achieve this behavior.
 
 Options:
+  -j, --jobs=N                Compile N translation units at once. Defaults to one per
+                              processor.
       --with-php-config=PATH  Build against the PHP installation this php-config belongs to
                               (phpize is taken from the same directory). Defaults to the
                               php-config found in the PATH. Not available on Windows.
@@ -393,6 +397,10 @@ compiled in a debug configuration. Use <comment>--no-dev</comment> option to ach
 
 NOTE: This command may require root password on Linux/Unit systems.
 
+Options:
+  -j, --jobs=N                Compile N translation units at once, for the case where there
+                              is anything left to build. Defaults to one per processor.
+
 EOT);
             exit(0);
         }
@@ -406,7 +414,7 @@ EOT);
             );
         }
 
-        install($devMode);
+        install($devMode, $jobs);
 
         break;
 
@@ -615,12 +623,12 @@ function compile(bool $development = false, ?int $jobs = null, mixed $phpConfig 
     }
 }
 
-function install(bool $development = false): bool
+function install(bool $development = false, ?int $jobs = null): bool
 {
     global $compiler, $config;
 
     try {
-        $compiler->install($development);
+        $compiler->install($development, $jobs);
     } catch (NotImplementedException|CompilerException|Exception $e) {
         fwrite(STDERR, $e->getMessage() . PHP_EOL);
 
