@@ -55,6 +55,50 @@ final class HardDiskTest extends TestCase
         $this->assertInstanceOf(HardDisk::class, $hardDisk);
     }
 
+    public function testShouldReturnAbsolutePathOfAnEntry(): void
+    {
+        $hardDisk = new HardDisk($this->tempDir, 'test');
+
+        $this->assertSame(
+            $this->tempDir . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'zephir_pch.h',
+            $hardDisk->path('zephir_pch.h')
+        );
+    }
+
+    public function testShouldReturnContainerPathForAnEmptyEntry(): void
+    {
+        $hardDisk = new HardDisk($this->tempDir, 'test');
+
+        $this->assertSame($this->tempDir . DIRECTORY_SEPARATOR . 'test', $hardDisk->path());
+    }
+
+    public function testShouldReturnUnversionedPathBesideTheContainer(): void
+    {
+        $hardDisk = new HardDisk($this->tempDir, 'test');
+
+        $this->assertSame(
+            $this->tempDir . DIRECTORY_SEPARATOR . 'pch/zephir_pch.h',
+            $hardDisk->path('pch/zephir_pch.h', false)
+        );
+    }
+
+    /**
+     * The pre-compiled header lives beside the per-version containers and is
+     * hundreds of megabytes, so a clean has to reclaim it too.
+     */
+    public function testShouldCleanUnversionedEntriesAsWell(): void
+    {
+        $hardDisk = new HardDisk($this->tempDir, 'test');
+        $hardDisk->makeDirectory('.');
+        mkdir($this->tempDir . '/pch', 0755, true);
+        file_put_contents($this->tempDir . '/pch/zephir_pch.h.gch', 'object');
+
+        $hardDisk->clean();
+
+        $this->assertDirectoryDoesNotExist($this->tempDir . '/pch');
+        $this->assertDirectoryDoesNotExist($this->tempDir . '/test');
+    }
+
     public function testShouldThrowExceptionForEmptyLocalPath(): void
     {
         $this->expectException(InvalidArgumentException::class);

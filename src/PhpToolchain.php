@@ -122,6 +122,17 @@ final class PhpToolchain
     }
 
     /**
+     * The php-config command, ready for interpolation into a shell command.
+     *
+     * Falls back to the one in the `PATH` for the default toolchain, which is
+     * the same php-config `configure` would pick up.
+     */
+    public function phpConfigCommand(): string
+    {
+        return null === $this->phpConfig ? 'php-config' : escapeshellarg($this->phpConfig);
+    }
+
+    /**
      * The phpize command, ready for interpolation into a shell command.
      */
     public function phpizeCommand(): string
