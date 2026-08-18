@@ -228,11 +228,11 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
 	if ((zephir_file_exists(&_1) == SUCCESS)) {
 		zephir_read_property_cached(&_2$$4, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_CALL_FUNCTION(&_3$$4, "realpath", NULL, 81, &_2$$4);
+		ZEPHIR_CALL_FUNCTION(&_3$$4, "realpath", NULL, 82, &_2$$4);
 		zephir_check_call_status();
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 70, &_3$$4);
 		zephir_read_property_cached(&_4$$4, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_CALL_FUNCTION(&imageinfo, "getimagesize", NULL, 82, &_4$$4);
+		ZEPHIR_CALL_FUNCTION(&imageinfo, "getimagesize", NULL, 83, &_4$$4);
 		zephir_check_call_status();
 		if (zephir_is_true(&imageinfo)) {
 			zephir_array_fetch_long(&_5$$5, &imageinfo, 0, PH_NOISY | PH_READONLY, "stub/oo/oodestruct.zep", 62);
@@ -350,7 +350,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 		zephir_check_call_status();
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 75, &_37$$13);
 		zephir_read_property_cached(&_35$$13, this_ptr, _zephir_prop_6, 75, PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_CALL_FUNCTION(NULL, "imagealphablending", NULL, 83, &_35$$13, &__$true);
+		ZEPHIR_CALL_FUNCTION(NULL, "imagealphablending", NULL, 84, &_35$$13, &__$true);
 		zephir_check_call_status();
 		zephir_read_property_cached(&_36$$13, this_ptr, _zephir_prop_6, 75, PH_NOISY_CC | PH_READONLY);
 		ZVAL_BOOL(&_38$$13, 1);
@@ -448,7 +448,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 	ZVAL_STRING(&_4, "2.0.1");
 	ZEPHIR_INIT_VAR(&_5);
 	ZVAL_STRING(&_5, ">=");
-	ZEPHIR_CALL_FUNCTION(&_6, "version_compare", NULL, 73, &version, &_4, &_5);
+	ZEPHIR_CALL_FUNCTION(&_6, "version_compare", NULL, 74, &version, &_4, &_5);
 	zephir_check_call_status();
 	if (UNEXPECTED(!zephir_is_true(&_6))) {
 		ZEPHIR_INIT_VAR(&_7$$5);
@@ -514,13 +514,13 @@ PHP_METHOD(Stub_Oo_OoDestruct, getVersion)
 	ZVAL_NULL(&version);
 	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_STRING(&_3, "GD_VERSION");
-	ZEPHIR_CALL_FUNCTION(&_4, "defined", NULL, 84, &_3);
+	ZEPHIR_CALL_FUNCTION(&_4, "defined", NULL, 85, &_3);
 	zephir_check_call_status();
 	if (zephir_is_true(&_4)) {
 		ZEPHIR_INIT_NVAR(&version);
 		ZEPHIR_GET_CONSTANT(&version, "GD_VERSION");
 	} else {
-		ZEPHIR_CALL_FUNCTION(&info, "gd_info", NULL, 85);
+		ZEPHIR_CALL_FUNCTION(&info, "gd_info", NULL, 86);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&matches);
 		ZVAL_NULL(&matches);

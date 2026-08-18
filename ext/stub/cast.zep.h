@@ -76,6 +76,20 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableString);
 PHP_METHOD(Stub_Cast, testArrayCastFromVariableStdClass);
 PHP_METHOD(Stub_Cast, testIssue828);
 PHP_METHOD(Stub_Cast, testObjectCastThenReassign);
+PHP_METHOD(Stub_Cast, issue1841ToInt);
+PHP_METHOD(Stub_Cast, issue1841ToUnsigned);
+PHP_METHOD(Stub_Cast, issue1841ToLong);
+PHP_METHOD(Stub_Cast, issue1841ToFloat);
+PHP_METHOD(Stub_Cast, issue1841ToBool);
+PHP_METHOD(Stub_Cast, issue1841ToChar);
+PHP_METHOD(Stub_Cast, issue1841ToString);
+PHP_METHOD(Stub_Cast, issue1841ToStringFromArray);
+PHP_METHOD(Stub_Cast, issue1841ToArray);
+PHP_METHOD(Stub_Cast, issue1841ToObject);
+PHP_METHOD(Stub_Cast, issue1841ToVar);
+PHP_METHOD(Stub_Cast, issue1841CastKeepsOperandIntact);
+PHP_METHOD(Stub_Cast, issue1841DeclarationInitializers);
+PHP_METHOD(Stub_Cast, issue1841Helper);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_testcharcastfromchar, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -298,6 +312,61 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_testobjectcastthenreassign, 0, 0, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841toint, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_INFO(0, dyn)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841tounsigned, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_INFO(0, dyn)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841tolong, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_INFO(0, dyn)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841tofloat, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_INFO(0, dyn)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841tobool, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_INFO(0, dyn)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841tochar, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_INFO(0, dyn)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841tostring, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_INFO(0, dyn)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841tostringfromarray, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841toarray, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_INFO(0, dyn)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841toobject, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_INFO(0, dyn)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841tovar, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_INFO(0, dyn)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841castkeepsoperandintact, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841declarationinitializers, 0, 2, IS_ARRAY, 0)
+	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, b, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_issue1841helper, 0, 0, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_cast_method_entry) {
 	PHP_ME(Stub_Cast, testCharCastFromChar, arginfo_stub_cast_testcharcastfromchar, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Cast, testCharCastFromVariableChar, arginfo_stub_cast_testcharcastfromvariablechar, ZEND_ACC_PUBLIC)
@@ -372,5 +441,19 @@ PHP_ME(Stub_Cast, testObjectCastFromString, arginfo_stub_cast_testobjectcastfrom
 	PHP_ME(Stub_Cast, testArrayCastFromVariableStdClass, arginfo_stub_cast_testarraycastfromvariablestdclass, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Cast, testIssue828, arginfo_stub_cast_testissue828, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Cast, testObjectCastThenReassign, arginfo_stub_cast_testobjectcastthenreassign, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841ToInt, arginfo_stub_cast_issue1841toint, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841ToUnsigned, arginfo_stub_cast_issue1841tounsigned, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841ToLong, arginfo_stub_cast_issue1841tolong, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841ToFloat, arginfo_stub_cast_issue1841tofloat, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841ToBool, arginfo_stub_cast_issue1841tobool, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841ToChar, arginfo_stub_cast_issue1841tochar, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841ToString, arginfo_stub_cast_issue1841tostring, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841ToStringFromArray, arginfo_stub_cast_issue1841tostringfromarray, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841ToArray, arginfo_stub_cast_issue1841toarray, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841ToObject, arginfo_stub_cast_issue1841toobject, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841ToVar, arginfo_stub_cast_issue1841tovar, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841CastKeepsOperandIntact, arginfo_stub_cast_issue1841castkeepsoperandintact, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841DeclarationInitializers, arginfo_stub_cast_issue1841declarationinitializers, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, issue1841Helper, arginfo_stub_cast_issue1841helper, ZEND_ACC_PRIVATE)
 	PHP_FE_END
 };

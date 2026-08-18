@@ -135,6 +135,7 @@ class Variable implements TypeAwareInterface
     {
         switch ($this->type) {
             case 'char':
+            case 'uchar':
             case 'boolean':
             case 'bool':
             case 'int':

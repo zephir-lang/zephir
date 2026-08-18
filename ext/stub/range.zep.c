@@ -45,7 +45,7 @@ PHP_METHOD(Stub_Range, inclusive1)
 
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, 10);
-	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 93, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 94, &_0, &_1);
 	zephir_check_call_status();
 	zephir_get_arrval(&_3, &_2);
 	RETURN_CTOR(&_3);
@@ -67,7 +67,7 @@ PHP_METHOD(Stub_Range, exclusive1)
 
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, 10);
-	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 93, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 94, &_0, &_1);
 	zephir_check_call_status();
 	zephir_get_arrval(&_3, &_2);
 	RETURN_CTOR(&_3);
@@ -304,7 +304,7 @@ PHP_METHOD(Stub_Range, loopChars)
 	ZVAL_STRING(&_0, "a");
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "e");
-	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 93, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 94, &_0, &_1);
 	zephir_check_call_status();
 	zephir_get_arrval(&_3, &_2);
 	zephir_is_iterable(&_3, 0, "stub/range.zep", 89);
