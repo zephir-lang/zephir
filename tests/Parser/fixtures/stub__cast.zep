@@ -530,4 +530,400 @@ class Cast
 
         return data;
     }
+
+    /**
+     * Every cast target has to accept every source form, not just the handful
+     * of literal types the cast operator used to enumerate. Each method below
+     * walks one target across: literals, native-typed locals, an `array` local,
+     * a compound expression, a method call and a genuinely dynamic parameter.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1841
+     */
+    public function issue1841ToInt(var dyn) -> array
+    {
+        int i = 5;
+        long l = 6;
+        double d = 5.5;
+        bool b = true;
+        string s = "12abc";
+        char c = 'z';
+        array arr = [1, 2];
+
+        return [
+            (int) 5,
+            (int) 5.5,
+            (int) true,
+            (int) false,
+            (int) null,
+            (int) "12abc",
+            (int) 'z',
+            (int) [1, 2],
+            (int) [],
+            (int) i,
+            (int) l,
+            (int) d,
+            (int) b,
+            (int) s,
+            (int) c,
+            (int) arr,
+            (int) (i + 1),
+            (int) dyn,
+            (int) this->issue1841Helper()
+        ];
+    }
+
+    /**
+     * `uint`/`ulong` had no branch at all, so every source failed to compile.
+     * Only non-negative values are exercised: the C width of `unsigned long`
+     * differs between LP64 and LLP64, so wraparound is not portable.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1841
+     */
+    public function issue1841ToUnsigned(var dyn) -> array
+    {
+        int i = 5;
+        double d = 5.5;
+        string s = "12abc";
+        char c = 'z';
+
+        return [
+            (uint) 5,
+            (uint) 5.5,
+            (uint) true,
+            (uint) null,
+            (uint) "12abc",
+            (uint) 'z',
+            (uint) i,
+            (uint) d,
+            (uint) s,
+            (uint) c,
+            (uint) dyn,
+            (ulong) 5,
+            (ulong) 5.5,
+            (ulong) true,
+            (ulong) null,
+            (ulong) "12abc",
+            (ulong) i,
+            (ulong) c,
+            (ulong) dyn
+        ];
+    }
+
+    /**
+     * @see https://github.com/zephir-lang/zephir/issues/1841
+     */
+    public function issue1841ToLong(var dyn) -> array
+    {
+        int i = 5;
+        long l = 6;
+        double d = 5.5;
+        bool b = true;
+        string s = "12abc";
+        char c = 'z';
+        array arr = [1, 2];
+
+        return [
+            (long) 5,
+            (long) 5.5,
+            (long) true,
+            (long) null,
+            (long) "12abc",
+            (long) 'z',
+            (long) [1, 2],
+            (long) i,
+            (long) l,
+            (long) d,
+            (long) b,
+            (long) s,
+            (long) c,
+            (long) arr,
+            (long) (i + 1),
+            (long) dyn,
+            (long) this->issue1841Helper()
+        ];
+    }
+
+    /**
+     * @see https://github.com/zephir-lang/zephir/issues/1841
+     */
+    public function issue1841ToFloat(var dyn) -> array
+    {
+        int i = 5;
+        long l = 6;
+        double d = 5.5;
+        bool b = true;
+        string s = "12abc";
+        char c = 'z';
+        array arr = [1, 2];
+
+        return [
+            (float) 5,
+            (float) 5.5,
+            (float) true,
+            (float) false,
+            (float) null,
+            (float) "5.5abc",
+            (float) 'z',
+            (float) [1, 2],
+            (float) [],
+            (float) i,
+            (float) l,
+            (float) d,
+            (float) b,
+            (float) s,
+            (float) c,
+            (float) arr,
+            (float) (i + 1),
+            (float) dyn,
+            (float) this->issue1841Helper()
+        ];
+    }
+
+    /**
+     * A C cast truncates, so `(bool) 0.4` must not go through one: PHP treats
+     * every non-zero double as true.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1841
+     */
+    public function issue1841ToBool(var dyn) -> array
+    {
+        int i = 5;
+        long l = 6;
+        double d = 5.5;
+        bool b = true;
+        string s = "12abc";
+        string zero = "0";
+        char c = 'z';
+        array arr = [1, 2];
+
+        return [
+            (bool) 1,
+            (bool) 0,
+            (bool) 0.4,
+            (bool) 0.0,
+            (bool) true,
+            (bool) false,
+            (bool) null,
+            (bool) "0",
+            (bool) "",
+            (bool) "abc",
+            (bool) 'z',
+            (bool) [1, 2],
+            (bool) [],
+            (bool) i,
+            (bool) l,
+            (bool) d,
+            (bool) b,
+            (bool) s,
+            (bool) zero,
+            (bool) c,
+            (bool) arr,
+            (bool) dyn,
+            (bool) this->issue1841Helper()
+        ];
+    }
+
+    /**
+     * Zephir's `char`/`uchar` is a byte, so a cast to it follows `(int)` and
+     * boxes as the integer byte value — PHP has no character type.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1629
+     * @see https://github.com/zephir-lang/zephir/issues/1841
+     */
+    public function issue1841ToChar(var dyn) -> array
+    {
+        int i = 5;
+        char c = 'z';
+        string s = "65";
+
+        return [
+            (char) 65,
+            (char) 'z',
+            (char) 122.9,
+            (char) true,
+            (char) null,
+            (char) "A",
+            (char) "65",
+            (char) i,
+            (char) c,
+            (char) s,
+            (char) dyn,
+            (char) 321,
+            (uchar) 65,
+            (uchar) 'z',
+            (uchar) 200,
+            (uchar) null,
+            (uchar) i,
+            (uchar) c,
+            (uchar) dyn
+        ];
+    }
+
+    /**
+     * @see https://github.com/zephir-lang/zephir/issues/1841
+     */
+    public function issue1841ToString(var dyn) -> array
+    {
+        int i = 5;
+        long l = 6;
+        double d = 5.5;
+        bool b = true;
+        string s = "12abc";
+        char c = 'z';
+
+        return [
+            (string) 5,
+            (string) 5.0,
+            (string) 5.5,
+            (string) true,
+            (string) false,
+            (string) null,
+            (string) "abc",
+            (string) 'z',
+            (string) i,
+            (string) l,
+            (string) d,
+            (string) b,
+            (string) s,
+            (string) c,
+            (string) (i + 1),
+            (string) dyn,
+            (string) this->issue1841Helper()
+        ];
+    }
+
+    /**
+     * Kept apart from issue1841ToString(): PHP raises "Array to string
+     * conversion" here, so the caller has to silence it.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1841
+     */
+    public function issue1841ToStringFromArray() -> array
+    {
+        array arr = [1, 2];
+
+        return [
+            (string) [1, 2],
+            (string) arr
+        ];
+    }
+
+    /**
+     * @see https://github.com/zephir-lang/zephir/issues/1841
+     */
+    public function issue1841ToArray(var dyn) -> array
+    {
+        int i = 5;
+        string s = "12abc";
+        char c = 'z';
+        array arr = [1, 2];
+
+        return [
+            (array) 5,
+            (array) 5.5,
+            (array) true,
+            (array) null,
+            (array) "abc",
+            (array) 'z',
+            (array) [1, 2],
+            (array) [],
+            (array) i,
+            (array) s,
+            (array) c,
+            (array) arr,
+            (array) dyn
+        ];
+    }
+
+    /**
+     * @see https://github.com/zephir-lang/zephir/issues/1841
+     */
+    public function issue1841ToObject(var dyn) -> array
+    {
+        int i = 5;
+        string s = "abc";
+        char c = 'z';
+
+        return [
+            (object) 5,
+            (object) null,
+            (object) [1, 2],
+            (object) "x",
+            (object) 'z',
+            (object) i,
+            (object) s,
+            (object) c,
+            (object) dyn
+        ];
+    }
+
+    /**
+     * `var` accepts anything, so `(var)` is a no-op that has to preserve the
+     * value and its type rather than fail with "Cannot cast: X to variable".
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1841
+     */
+    public function issue1841ToVar(var dyn) -> array
+    {
+        int i = 5;
+        string s = "abc";
+        char c = 'z';
+        array arr = [1, 2];
+
+        return [
+            (var) 5,
+            (var) 5.5,
+            (var) true,
+            (var) null,
+            (var) "abc",
+            (var) 'z',
+            (var) [1, 2],
+            (var) i,
+            (var) s,
+            (var) c,
+            (var) arr,
+            (var) dyn
+        ];
+    }
+
+    /**
+     * `(array)`/`(object)` lower to kernel conversions that run in place, so
+     * casting a variable used to overwrite that variable as a side effect.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1841
+     */
+    public function issue1841CastKeepsOperandIntact(var value) -> array
+    {
+        var asArray, asObject;
+
+        let asArray = (array) value;
+        let asObject = (object) value;
+
+        return [value, asArray, asObject];
+    }
+
+    /**
+     * The reported symptoms: a cast (or a parenthesized expression) used as a
+     * variable declaration's default value reached the assignment as the AST
+     * node type, failing with "Unknown type: cast" / "Unknown type: list".
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1841
+     */
+    public function issue1841DeclarationInitializers(int a, int b) -> array
+    {
+        var x = (int) (a - b);
+        float y = (a - b);
+        int z = (int) (a * b);
+        var s = (string) (a + b);
+        var n = (int) (string) a;
+        var u = (uint) (a + b);
+        var w = (ulong) (a + b);
+
+        return [x, y, z, s, n, u, w];
+    }
+
+    private function issue1841Helper() -> int
+    {
+        return 3;
+    }
 }

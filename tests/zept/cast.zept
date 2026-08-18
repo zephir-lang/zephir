@@ -424,6 +424,207 @@ class Cast
 
         return data;
     }
+
+    public function issue1841ToInt(var dyn) -> array
+    {
+        int i = 5;
+        long l = 6;
+        double d = 5.5;
+        bool b = true;
+        string s = "12abc";
+        char c = 'z';
+        array arr = [1, 2];
+
+        return [
+            (int) 5,
+            (int) 5.5,
+            (int) true,
+            (int) null,
+            (int) "12abc",
+            (int) 'z',
+            (int) [1, 2],
+            (int) i,
+            (int) l,
+            (int) d,
+            (int) b,
+            (int) s,
+            (int) c,
+            (int) arr,
+            (int) (i + 1),
+            (int) dyn
+        ];
+    }
+
+    public function issue1841ToUnsigned(var dyn) -> array
+    {
+        int i = 5;
+        char c = 'z';
+
+        return [
+            (uint) 5,
+            (uint) 5.5,
+            (uint) "12abc",
+            (uint) i,
+            (uint) c,
+            (uint) dyn,
+            (ulong) 5,
+            (ulong) "12abc",
+            (ulong) i,
+            (ulong) dyn
+        ];
+    }
+
+    public function issue1841ToFloat(var dyn) -> array
+    {
+        long l = 6;
+        string s = "12abc";
+        array arr = [1, 2];
+
+        return [
+            (float) 5,
+            (float) "5.5abc",
+            (float) 'z',
+            (float) l,
+            (float) s,
+            (float) arr,
+            (float) dyn
+        ];
+    }
+
+    public function issue1841ToBool(var dyn) -> array
+    {
+        double d = 5.5;
+        string zero = "0";
+        array arr = [1, 2];
+
+        return [
+            (bool) 0.4,
+            (bool) 0.0,
+            (bool) null,
+            (bool) "0",
+            (bool) "abc",
+            (bool) [1, 2],
+            (bool) [],
+            (bool) d,
+            (bool) zero,
+            (bool) arr,
+            (bool) dyn
+        ];
+    }
+
+    public function issue1841ToChar(var dyn) -> array
+    {
+        int i = 5;
+        char c = 'z';
+
+        return [
+            (char) 65,
+            (char) 'z',
+            (char) 122.9,
+            (char) null,
+            (char) "65",
+            (char) i,
+            (char) c,
+            (char) dyn,
+            (uchar) 200,
+            (uchar) c
+        ];
+    }
+
+    public function issue1841ToString(var dyn) -> array
+    {
+        int i = 5;
+        double d = 5.5;
+        string s = "12abc";
+        char c = 'z';
+
+        return [
+            (string) 5,
+            (string) 5.0,
+            (string) true,
+            (string) false,
+            (string) null,
+            (string) "abc",
+            (string) 'z',
+            (string) i,
+            (string) d,
+            (string) s,
+            (string) c,
+            (string) (i + 1),
+            (string) dyn
+        ];
+    }
+
+    public function issue1841ToArray(var dyn) -> array
+    {
+        string s = "12abc";
+        array arr = [1, 2];
+
+        return [
+            (array) 5,
+            (array) null,
+            (array) "abc",
+            (array) [1, 2],
+            (array) s,
+            (array) arr,
+            (array) dyn
+        ];
+    }
+
+    public function issue1841ToObject(var dyn) -> array
+    {
+        int i = 5;
+
+        return [
+            (object) 5,
+            (object) null,
+            (object) [1, 2],
+            (object) i,
+            (object) dyn
+        ];
+    }
+
+    public function issue1841ToVar(var dyn) -> array
+    {
+        int i = 5;
+        array arr = [1, 2];
+
+        return [
+            (var) 5,
+            (var) 5.5,
+            (var) true,
+            (var) null,
+            (var) "abc",
+            (var) 'z',
+            (var) [1, 2],
+            (var) i,
+            (var) arr,
+            (var) dyn
+        ];
+    }
+
+    public function issue1841CastKeepsOperandIntact(var value) -> array
+    {
+        var asArray, asObject;
+
+        let asArray = (array) value;
+        let asObject = (object) value;
+
+        return [value, asArray, asObject];
+    }
+
+    public function issue1841DeclarationInitializers(int a, int b) -> array
+    {
+        var x = (int) (a - b);
+        float y = (a - b);
+        int z = (int) (a * b);
+        var s = (string) (a + b);
+        var n = (int) (string) a;
+        var u = (uint) (a + b);
+        var w = (ulong) (a + b);
+
+        return [x, y, z, s, n, u, w];
+    }
 }
 --USAGE--
 $test = new \Stub\Cast();
@@ -494,6 +695,19 @@ echo var_export($test->testArrayCastFromVariableString(), true), "\n";
 echo var_export($test->testArrayCastFromVariableStdClass(), true), "\n";
 echo var_export($test->testIssue828(), true), "\n";
 echo var_export($test->testObjectCastThenReassign(), true), "\n";
+// Issue #1841: every cast target accepts every source form.
+// (string) of an array warns to stderr; only stdout is compared.
+echo json_encode($test->issue1841ToInt('7abc')), "\n";
+echo json_encode($test->issue1841ToUnsigned('7abc')), "\n";
+echo json_encode($test->issue1841ToFloat('7abc')), "\n";
+echo json_encode($test->issue1841ToBool('7abc')), "\n";
+echo json_encode($test->issue1841ToChar('7abc')), "\n";
+echo json_encode($test->issue1841ToString('7abc')), "\n";
+echo json_encode($test->issue1841ToArray('7abc')), "\n";
+echo json_encode($test->issue1841ToObject('7abc')), "\n";
+echo json_encode($test->issue1841ToVar('7abc')), "\n";
+echo json_encode($test->issue1841CastKeepsOperandIntact(5)), "\n";
+echo json_encode($test->issue1841DeclarationInitializers(7, 3)), "\n";
 --EXPECT--
 97
 65
@@ -591,3 +805,14 @@ array (
   5 => 0,
 )
 'reassigned'
+[5,5,1,0,12,122,1,5,6,5,1,12,122,1,6,7]
+[5,5,12,5,122,7,5,12,5,7]
+[5,5.5,122,6,12,1,7]
+[true,false,false,false,true,true,false,true,false,true,true]
+[65,122,122,0,65,5,122,7,200,122]
+["5","5","1","","","abc","z","5","5.5","12abc","z","6","7abc"]
+[[5],[],["abc"],[1,2],["12abc"],[1,2],["7abc"]]
+[{"scalar":5},{},{"0":1,"1":2},{"scalar":5},{"scalar":"7abc"}]
+[5,5.5,true,null,"abc",122,[1,2],5,[1,2],"7abc"]
+[5,[5],{"scalar":5}]
+[4,4,21,"10",7,10,10]

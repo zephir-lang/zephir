@@ -90,7 +90,7 @@ PHP_METHOD(Stub_Issue2428, classUnion)
 	} else {
 		ZEPHIR_INIT_NVAR(&_0);
 		object_init_ex(&_0, spl_ce_ArrayObject);
-		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 57);
+		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 58);
 		zephir_check_call_status();
 	}
 	RETURN_CCTOR(&_0);

@@ -137,6 +137,13 @@ class Closure
             );
         }
 
+        /**
+         * A closure's return type belongs to the synthetic `__invoke`, so it
+         * flows through the ordinary method path: arg-info, docblock and engine
+         * enforcement all come for free.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/1841
+         */
         $classMethod = new Method(
             $classDefinition,
             ['public', 'final'],
@@ -144,7 +151,7 @@ class Closure
             $parameters,
             new StatementsBlock($block),
             null,
-            null,
+            $expression['return-type'] ?? null,
             $expression,
             $staticVariables
         );

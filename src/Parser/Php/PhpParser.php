@@ -2349,9 +2349,16 @@ final class PhpParser
     }
 
     /**
-     * Closure expression: function([params]) [use (captures)] { [statements] }.
+     * Closure expression:
+     * function([params]) [use (captures)] [-> returnType] { [statements] }.
      * (`fn` is lexed as the same FUNCTION token.) Builds {type:closure,
-     * left:params?, right:statements?, use:captures?, ...}.
+     * left:params?, right:statements?, use:captures?, return-type:?, ...}.
+     *
+     * The return type is parsed before the body but emitted after `use`, which
+     * is the order xx_ret_closure() adds the keys in — the parity fixtures are
+     * byte-compared JSON dumps, so key order is load-bearing.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1841
      */
     private function parseClosure(): array
     {
@@ -2368,6 +2375,11 @@ final class PhpParser
             $this->expect(TokenType::T_PARENTHESES_CLOSE);
         }
 
+        $returnType = null;
+        if ($this->accept(TokenType::T_ARROW)) {
+            $returnType = $this->parseReturnType();
+        }
+
         $statements = $this->parseBlock();
 
         $node = ['type' => 'closure'];
@@ -2379,6 +2391,9 @@ final class PhpParser
         }
         if ($use !== null) {
             $node['use'] = $use;
+        }
+        if ($returnType !== null) {
+            $node['return-type'] = $returnType;
         }
         $node['file'] = $this->file;
         $node['line'] = $this->line();

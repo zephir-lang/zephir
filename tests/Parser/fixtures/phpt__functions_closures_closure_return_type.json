@@ -1,0 +1,482 @@
+[
+    {
+        "type": "function",
+        "name": "forms",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "closure",
+                            "return-type": {
+                                "type": "return-type",
+                                "list": [
+                                    {
+                                        "type": "return-type-parameter",
+                                        "data-type": "int",
+                                        "mandatory": 0,
+                                        "file": "phpt__functions_closures_closure_return_type.zep",
+                                        "line": 2,
+                                        "char": 29
+                                    }
+                                ],
+                                "void": 0,
+                                "file": "phpt__functions_closures_closure_return_type.zep",
+                                "line": 2,
+                                "char": 29
+                            },
+                            "file": "phpt__functions_closures_closure_return_type.zep",
+                            "line": 2,
+                            "char": 32
+                        },
+                        "file": "phpt__functions_closures_closure_return_type.zep",
+                        "line": 2,
+                        "char": 32
+                    }
+                ],
+                "file": "phpt__functions_closures_closure_return_type.zep",
+                "line": 3,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "b",
+                        "expr": {
+                            "type": "closure",
+                            "use": [
+                                {
+                                    "type": "parameter",
+                                    "name": "x",
+                                    "const": 0,
+                                    "data-type": "variable",
+                                    "mandatory": 0,
+                                    "reference": 0,
+                                    "file": "phpt__functions_closures_closure_return_type.zep",
+                                    "line": 3,
+                                    "char": 28
+                                }
+                            ],
+                            "return-type": {
+                                "type": "return-type",
+                                "list": [
+                                    {
+                                        "type": "return-type-parameter",
+                                        "data-type": "string",
+                                        "mandatory": 0,
+                                        "file": "phpt__functions_closures_closure_return_type.zep",
+                                        "line": 3,
+                                        "char": 40
+                                    }
+                                ],
+                                "void": 0,
+                                "file": "phpt__functions_closures_closure_return_type.zep",
+                                "line": 3,
+                                "char": 40
+                            },
+                            "file": "phpt__functions_closures_closure_return_type.zep",
+                            "line": 3,
+                            "char": 43
+                        },
+                        "file": "phpt__functions_closures_closure_return_type.zep",
+                        "line": 3,
+                        "char": 43
+                    }
+                ],
+                "file": "phpt__functions_closures_closure_return_type.zep",
+                "line": 4,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "c",
+                        "expr": {
+                            "type": "closure",
+                            "right": [
+                                {
+                                    "type": "return",
+                                    "file": "phpt__functions_closures_closure_return_type.zep",
+                                    "line": 4,
+                                    "char": 40
+                                }
+                            ],
+                            "return-type": {
+                                "type": "return-type",
+                                "void": 1,
+                                "file": "phpt__functions_closures_closure_return_type.zep",
+                                "line": 4,
+                                "char": 30
+                            },
+                            "file": "phpt__functions_closures_closure_return_type.zep",
+                            "line": 4,
+                            "char": 41
+                        },
+                        "file": "phpt__functions_closures_closure_return_type.zep",
+                        "line": 4,
+                        "char": 41
+                    }
+                ],
+                "file": "phpt__functions_closures_closure_return_type.zep",
+                "line": 5,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "d",
+                        "expr": {
+                            "type": "closure",
+                            "right": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "phpt__functions_closures_closure_return_type.zep",
+                                        "line": 5,
+                                        "char": 50
+                                    },
+                                    "file": "phpt__functions_closures_closure_return_type.zep",
+                                    "line": 5,
+                                    "char": 52
+                                }
+                            ],
+                            "use": [
+                                {
+                                    "type": "parameter",
+                                    "name": "x",
+                                    "const": 0,
+                                    "data-type": "variable",
+                                    "mandatory": 0,
+                                    "reference": 0,
+                                    "file": "phpt__functions_closures_closure_return_type.zep",
+                                    "line": 5,
+                                    "char": 28
+                                }
+                            ],
+                            "return-type": {
+                                "type": "return-type",
+                                "list": [
+                                    {
+                                        "type": "return-type-parameter",
+                                        "data-type": "array",
+                                        "mandatory": 0,
+                                        "file": "phpt__functions_closures_closure_return_type.zep",
+                                        "line": 5,
+                                        "char": 39
+                                    }
+                                ],
+                                "void": 0,
+                                "file": "phpt__functions_closures_closure_return_type.zep",
+                                "line": 5,
+                                "char": 39
+                            },
+                            "file": "phpt__functions_closures_closure_return_type.zep",
+                            "line": 5,
+                            "char": 53
+                        },
+                        "file": "phpt__functions_closures_closure_return_type.zep",
+                        "line": 5,
+                        "char": 53
+                    }
+                ],
+                "file": "phpt__functions_closures_closure_return_type.zep",
+                "line": 6,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "e",
+                        "expr": {
+                            "type": "closure",
+                            "left": [
+                                {
+                                    "type": "parameter",
+                                    "name": "p",
+                                    "const": 0,
+                                    "data-type": "variable",
+                                    "mandatory": 0,
+                                    "reference": 0,
+                                    "file": "phpt__functions_closures_closure_return_type.zep",
+                                    "line": 6,
+                                    "char": 21
+                                }
+                            ],
+                            "return-type": {
+                                "type": "return-type",
+                                "list": [
+                                    {
+                                        "type": "return-type-parameter",
+                                        "data-type": "bool",
+                                        "mandatory": 0,
+                                        "file": "phpt__functions_closures_closure_return_type.zep",
+                                        "line": 6,
+                                        "char": 31
+                                    }
+                                ],
+                                "void": 0,
+                                "file": "phpt__functions_closures_closure_return_type.zep",
+                                "line": 6,
+                                "char": 31
+                            },
+                            "file": "phpt__functions_closures_closure_return_type.zep",
+                            "line": 6,
+                            "char": 34
+                        },
+                        "file": "phpt__functions_closures_closure_return_type.zep",
+                        "line": 6,
+                        "char": 34
+                    }
+                ],
+                "file": "phpt__functions_closures_closure_return_type.zep",
+                "line": 7,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "f",
+                        "expr": {
+                            "type": "closure",
+                            "left": [
+                                {
+                                    "type": "parameter",
+                                    "name": "p",
+                                    "const": 0,
+                                    "data-type": "variable",
+                                    "mandatory": 0,
+                                    "reference": 0,
+                                    "file": "phpt__functions_closures_closure_return_type.zep",
+                                    "line": 7,
+                                    "char": 21
+                                }
+                            ],
+                            "use": [
+                                {
+                                    "type": "parameter",
+                                    "name": "x",
+                                    "const": 0,
+                                    "data-type": "variable",
+                                    "mandatory": 0,
+                                    "reference": 0,
+                                    "file": "phpt__functions_closures_closure_return_type.zep",
+                                    "line": 7,
+                                    "char": 29
+                                }
+                            ],
+                            "return-type": {
+                                "type": "return-type",
+                                "list": [
+                                    {
+                                        "type": "return-type-parameter",
+                                        "data-type": "double",
+                                        "mandatory": 0,
+                                        "file": "phpt__functions_closures_closure_return_type.zep",
+                                        "line": 7,
+                                        "char": 41
+                                    }
+                                ],
+                                "void": 0,
+                                "file": "phpt__functions_closures_closure_return_type.zep",
+                                "line": 7,
+                                "char": 41
+                            },
+                            "file": "phpt__functions_closures_closure_return_type.zep",
+                            "line": 7,
+                            "char": 44
+                        },
+                        "file": "phpt__functions_closures_closure_return_type.zep",
+                        "line": 7,
+                        "char": 44
+                    }
+                ],
+                "file": "phpt__functions_closures_closure_return_type.zep",
+                "line": 8,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "g",
+                        "expr": {
+                            "type": "closure",
+                            "left": [
+                                {
+                                    "type": "parameter",
+                                    "name": "p",
+                                    "const": 0,
+                                    "data-type": "variable",
+                                    "mandatory": 0,
+                                    "reference": 0,
+                                    "file": "phpt__functions_closures_closure_return_type.zep",
+                                    "line": 8,
+                                    "char": 21
+                                }
+                            ],
+                            "right": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "phpt__functions_closures_closure_return_type.zep",
+                                        "line": 8,
+                                        "char": 47
+                                    },
+                                    "file": "phpt__functions_closures_closure_return_type.zep",
+                                    "line": 8,
+                                    "char": 49
+                                }
+                            ],
+                            "return-type": {
+                                "type": "return-type",
+                                "list": [
+                                    {
+                                        "type": "return-type-parameter",
+                                        "data-type": "int",
+                                        "mandatory": 0,
+                                        "file": "phpt__functions_closures_closure_return_type.zep",
+                                        "line": 8,
+                                        "char": 29
+                                    },
+                                    {
+                                        "type": "return-type-parameter",
+                                        "data-type": "string",
+                                        "mandatory": 0,
+                                        "file": "phpt__functions_closures_closure_return_type.zep",
+                                        "line": 8,
+                                        "char": 37
+                                    }
+                                ],
+                                "void": 0,
+                                "file": "phpt__functions_closures_closure_return_type.zep",
+                                "line": 8,
+                                "char": 37
+                            },
+                            "file": "phpt__functions_closures_closure_return_type.zep",
+                            "line": 8,
+                            "char": 50
+                        },
+                        "file": "phpt__functions_closures_closure_return_type.zep",
+                        "line": 8,
+                        "char": 50
+                    }
+                ],
+                "file": "phpt__functions_closures_closure_return_type.zep",
+                "line": 9,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "h",
+                        "expr": {
+                            "type": "closure",
+                            "left": [
+                                {
+                                    "type": "parameter",
+                                    "name": "p",
+                                    "const": 0,
+                                    "data-type": "variable",
+                                    "mandatory": 0,
+                                    "reference": 0,
+                                    "file": "phpt__functions_closures_closure_return_type.zep",
+                                    "line": 9,
+                                    "char": 21
+                                }
+                            ],
+                            "right": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "null",
+                                        "file": "phpt__functions_closures_closure_return_type.zep",
+                                        "line": 9,
+                                        "char": 62
+                                    },
+                                    "file": "phpt__functions_closures_closure_return_type.zep",
+                                    "line": 9,
+                                    "char": 64
+                                }
+                            ],
+                            "use": [
+                                {
+                                    "type": "parameter",
+                                    "name": "x",
+                                    "const": 0,
+                                    "data-type": "variable",
+                                    "mandatory": 0,
+                                    "reference": 0,
+                                    "file": "phpt__functions_closures_closure_return_type.zep",
+                                    "line": 9,
+                                    "char": 29
+                                }
+                            ],
+                            "return-type": {
+                                "type": "return-type",
+                                "list": [
+                                    {
+                                        "type": "return-type-parameter",
+                                        "cast": {
+                                            "type": "variable",
+                                            "value": "\\ArrayObject",
+                                            "file": "phpt__functions_closures_closure_return_type.zep",
+                                            "line": 9,
+                                            "char": 49
+                                        },
+                                        "collection": 0,
+                                        "file": "phpt__functions_closures_closure_return_type.zep",
+                                        "line": 9,
+                                        "char": 49
+                                    }
+                                ],
+                                "void": 0,
+                                "file": "phpt__functions_closures_closure_return_type.zep",
+                                "line": 9,
+                                "char": 49
+                            },
+                            "file": "phpt__functions_closures_closure_return_type.zep",
+                            "line": 9,
+                            "char": 65
+                        },
+                        "file": "phpt__functions_closures_closure_return_type.zep",
+                        "line": 9,
+                        "char": 65
+                    }
+                ],
+                "file": "phpt__functions_closures_closure_return_type.zep",
+                "line": 10,
+                "char": 1
+            }
+        ],
+        "file": "phpt__functions_closures_closure_return_type.zep",
+        "line": 9,
+        "char": 17
+    }
+]

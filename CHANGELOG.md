@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Added
+- Anonymous functions can now declare a return type: `function (a) -> int { }`, including after a `use (...)` clause (`function () use (base) -> string { }`), and with `void`, union (`int|string`) and `<Class>` types. The type is declared on the closure's `__invoke`, so Reflection reports it. Requires Zephir Parser 2.6.0 [#1841](https://github.com/zephir-lang/zephir/issues/1841)
 - Added destructuring assignment: `let [a, b, c] = expr;` assigns consecutive array elements to several variables at once, and `let [a, , c] = expr;` skips slots. The right-hand side is evaluated exactly once, a slot past the end of the source array is `null` (as in PHP's `list()`), and a non-array source is rejected at compile time. Nested (`let [[a, b], c] = expr;`) and keyed destructuring are not supported [#2496](https://github.com/zephir-lang/zephir/issues/2496)
+
+### Fixed
+- Casts now accept every source type. The cast operator enumerated sources per target, so more than half of all combinations failed with `Cannot cast: X to Y` — among them `(string) 5`, `(string) "abc"`, `(array) 5`, `(bool) []`, `(char) 65`, `(int)` of a `long`, and every use of `(uint)`, `(ulong)`, `(uchar)` and `(var)`. Results match PHP, including `(bool) 0.4` being `true` where a C cast would truncate it to `false` [#1841](https://github.com/zephir-lang/zephir/issues/1841)
+- Fixed `(array)` and `(object)` casts overwriting the variable being cast: both lower to kernel conversions that run in place, so `let b = (array) a` turned `a` itself into an array [#1841](https://github.com/zephir-lang/zephir/issues/1841)
 
 ## [1.2.0] - 2026-07-27
 
