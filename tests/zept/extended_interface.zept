@@ -1,9 +1,9 @@
 --TEST--
-An interface extending \IteratorAggregate and \Countable is reported as such via Reflection (port of tests/Extension/ExtendedInterfaceTest.php)
+An interface extending Zend and PHP-extension interfaces is reported as such via Reflection (port of tests/Extension/ExtendedInterfaceTest.php)
 --FILE--
 namespace Stub;
 
-interface ExtendedInterface extends \IteratorAggregate, \Countable
+interface ExtendedInterface extends \IteratorAggregate, \Countable, \JsonSerializable, \SplObserver
 {
 
 }
@@ -12,7 +12,11 @@ $reflection = new \ReflectionClass(\Stub\ExtendedInterface::class);
 echo var_export($reflection->isInterface(), true), "\n";
 echo var_export(in_array('IteratorAggregate', $reflection->getInterfaceNames()), true), "\n";
 echo var_export(in_array('Countable', $reflection->getInterfaceNames()), true), "\n";
+echo var_export(in_array('JsonSerializable', $reflection->getInterfaceNames()), true), "\n";
+echo var_export(in_array('SplObserver', $reflection->getInterfaceNames()), true), "\n";
 --EXPECT--
+true
+true
 true
 true
 true

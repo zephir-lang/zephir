@@ -26,4 +26,19 @@ final class ExtendedInterfaceTest extends TestCase
         $this->assertContains('IteratorAggregate', $reflection->getInterfaceNames());
         $this->assertContains('Countable', $reflection->getInterfaceNames());
     }
+
+    /**
+     * Unlike the Zend interfaces above, these two live in PHP extension
+     * headers, so the generated interface C only compiles once those headers
+     * are included alongside the `zend_class_implements()` calls.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2427
+     */
+    public function testShouldExtendsInterfacesFromPhpExtensions(): void
+    {
+        $reflection = new \ReflectionClass(ExtendedInterface::class);
+
+        $this->assertContains('JsonSerializable', $reflection->getInterfaceNames());
+        $this->assertContains('SplObserver', $reflection->getInterfaceNames());
+    }
 }

@@ -10,6 +10,8 @@
 #include <Zend/zend_exceptions.h>
 
 #include "kernel/main.h"
+#include "ext/json/php_json.h"
+#include "ext/spl/spl_observer.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_ExtendedInterface)
@@ -18,6 +20,8 @@ ZEPHIR_INIT_CLASS(Stub_ExtendedInterface)
 
 	zend_class_implements(stub_extendedinterface_ce, 1, zend_ce_aggregate);
 	zend_class_implements(stub_extendedinterface_ce, 1, zend_ce_countable);
+	zend_class_implements(stub_extendedinterface_ce, 1, php_json_serializable_ce);
+	zend_class_implements(stub_extendedinterface_ce, 1, spl_ce_SplObserver);
 	return SUCCESS;
 }
 
