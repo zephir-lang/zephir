@@ -719,8 +719,8 @@ class BitwiseBaseOperator extends AbstractOperator
         /*
          * Return value will be always int
          */
-        $left  = $this->literalToNumber($expression['left']['value']);
-        $right = $this->literalToNumber($expression['right']['value']);
+        $left  = self::literalToNumber($expression['left']['value']);
+        $right = self::literalToNumber($expression['right']['value']);
 
         return match ($this->operator) {
             '&'     => new CompiledExpression('int', $left & $right, $expression),

@@ -793,7 +793,9 @@ final class PhpParser
         $default   = null;
         $shortcuts = null;
         if ($this->accept(TokenType::T_ASSIGN)) {
-            $default = $this->parseLiteralExpr();
+            // A property default is a full expression (`public size = 1024 * 8;`);
+            // the compiler folds it to a literal. See zephir#2061.
+            $default = $this->parseExpr(0);
         }
         if ($this->check(TokenType::T_BRACKET_OPEN)) {
             $shortcuts = $this->parsePropertyShortcuts();
@@ -875,7 +877,9 @@ final class PhpParser
         $this->expect(TokenType::T_CONST);
         $name = $this->expectNameToken();
         $this->expect(TokenType::T_ASSIGN);
-        $default = $this->parseLiteralExpr();
+        // A constant initializer is a full expression (`const A = -0x7f - 1;`);
+        // the compiler folds it to a literal. See zephir#2061.
+        $default = $this->parseExpr(0);
         $this->expect(TokenType::T_DOTCOMMA);
 
         $node = [
@@ -2843,7 +2847,7 @@ final class PhpParser
         return $node;
     }
 
-    /* ----- literal-expr (property/const/parameter defaults) ------------- */
+    /* ----- literal-expr (parameter defaults, literal array values) ------- */
 
     private function parseLiteralExpr(): array
     {

@@ -469,9 +469,15 @@ class Generator
 
         $source = $indent . $visibility . ' ' . $typePrefix . '$' . $property->getName();
 
+        /**
+         * Whether there *is* a default is only visible on the original AST (a
+         * typed property with no default is uninitialized, not null), but the
+         * value to render is the folded one — an expression default such as
+         * `public size = 1024 * 8;` has no PHP spelling as an AST node [#2061].
+         */
         if (isset($original['default'])) {
             $source .= ' = ' . $this->wrapPHPValue([
-                    'default' => $original['default'],
+                    'default' => $property->getDefaultValue(),
                 ]);
         }
 

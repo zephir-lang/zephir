@@ -1,0 +1,800 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2061.zep",
+        "line": 8,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Expression initializers in declaration position.\n *\n * @see https:\/\/github.com\/zephir-lang\/zephir\/issues\/2061\n *",
+        "file": "stub__issue2061.zep",
+        "line": 9,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2061",
+        "abstract": 0,
+        "final": 1,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "size",
+                    "default": {
+                        "type": "mul",
+                        "left": {
+                            "type": "int",
+                            "value": "1024",
+                            "file": "stub__issue2061.zep",
+                            "line": 37,
+                            "char": 21
+                        },
+                        "right": {
+                            "type": "int",
+                            "value": "8",
+                            "file": "stub__issue2061.zep",
+                            "line": 37,
+                            "char": 25
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 37,
+                        "char": 25
+                    },
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__issue2061.zep",
+                            "line": 37,
+                            "char": 31
+                        }
+                    ],
+                    "file": "stub__issue2061.zep",
+                    "line": 38,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "mask",
+                    "default": {
+                        "type": "bitwise_shiftleft",
+                        "left": {
+                            "type": "int",
+                            "value": "0xff",
+                            "file": "stub__issue2061.zep",
+                            "line": 38,
+                            "char": 25
+                        },
+                        "right": {
+                            "type": "int",
+                            "value": "8",
+                            "file": "stub__issue2061.zep",
+                            "line": 38,
+                            "char": 29
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 38,
+                        "char": 29
+                    },
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__issue2061.zep",
+                            "line": 38,
+                            "char": 35
+                        }
+                    ],
+                    "file": "stub__issue2061.zep",
+                    "line": 39,
+                    "char": 7
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "total",
+                    "data-type": "int",
+                    "default": {
+                        "type": "add",
+                        "left": {
+                            "type": "int",
+                            "value": "2",
+                            "file": "stub__issue2061.zep",
+                            "line": 39,
+                            "char": 23
+                        },
+                        "right": {
+                            "type": "int",
+                            "value": "3",
+                            "file": "stub__issue2061.zep",
+                            "line": 39,
+                            "char": 27
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 39,
+                        "char": 27
+                    },
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__issue2061.zep",
+                            "line": 39,
+                            "char": 33
+                        }
+                    ],
+                    "file": "stub__issue2061.zep",
+                    "line": 40,
+                    "char": 7
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "label",
+                    "default": {
+                        "type": "concat",
+                        "left": {
+                            "type": "string",
+                            "value": "a",
+                            "file": "stub__issue2061.zep",
+                            "line": 40,
+                            "char": 19
+                        },
+                        "right": {
+                            "type": "string",
+                            "value": "\/b",
+                            "file": "stub__issue2061.zep",
+                            "line": 40,
+                            "char": 24
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 40,
+                        "char": 24
+                    },
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__issue2061.zep",
+                            "line": 40,
+                            "char": 30
+                        }
+                    ],
+                    "file": "stub__issue2061.zep",
+                    "line": 41,
+                    "char": 1
+                }
+            ],
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "INT8_MIN",
+                    "default": {
+                        "type": "sub",
+                        "left": {
+                            "type": "int",
+                            "value": "-0x7f",
+                            "file": "stub__issue2061.zep",
+                            "line": 12,
+                            "char": 25
+                        },
+                        "right": {
+                            "type": "int",
+                            "value": "1",
+                            "file": "stub__issue2061.zep",
+                            "line": 12,
+                            "char": 28
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 12,
+                        "char": 28
+                    },
+                    "docblock": "** The declaration from the issue report *",
+                    "file": "stub__issue2061.zep",
+                    "line": 13,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "INT8_MAX",
+                    "default": {
+                        "type": "int",
+                        "value": "0x7f",
+                        "file": "stub__issue2061.zep",
+                        "line": 13,
+                        "char": 23
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 14,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "INT16_MIN",
+                    "default": {
+                        "type": "sub",
+                        "left": {
+                            "type": "int",
+                            "value": "-0x7fff",
+                            "file": "stub__issue2061.zep",
+                            "line": 14,
+                            "char": 28
+                        },
+                        "right": {
+                            "type": "int",
+                            "value": "1",
+                            "file": "stub__issue2061.zep",
+                            "line": 14,
+                            "char": 31
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 14,
+                        "char": 31
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 15,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "INT16_MAX",
+                    "default": {
+                        "type": "int",
+                        "value": "0x7fff",
+                        "file": "stub__issue2061.zep",
+                        "line": 15,
+                        "char": 26
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 17,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "KB",
+                    "default": {
+                        "type": "int",
+                        "value": "1024",
+                        "file": "stub__issue2061.zep",
+                        "line": 17,
+                        "char": 17
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 18,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "MB",
+                    "default": {
+                        "type": "mul",
+                        "left": {
+                            "type": "int",
+                            "value": "1024",
+                            "file": "stub__issue2061.zep",
+                            "line": 18,
+                            "char": 18
+                        },
+                        "right": {
+                            "type": "int",
+                            "value": "1024",
+                            "file": "stub__issue2061.zep",
+                            "line": 18,
+                            "char": 24
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 18,
+                        "char": 24
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 19,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "MASK",
+                    "default": {
+                        "type": "bitwise_or",
+                        "left": {
+                            "type": "bitwise_shiftleft",
+                            "left": {
+                                "type": "int",
+                                "value": "0xff",
+                                "file": "stub__issue2061.zep",
+                                "line": 19,
+                                "char": 21
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "8",
+                                "file": "stub__issue2061.zep",
+                                "line": 19,
+                                "char": 25
+                            },
+                            "file": "stub__issue2061.zep",
+                            "line": 19,
+                            "char": 25
+                        },
+                        "right": {
+                            "type": "int",
+                            "value": "0x0f",
+                            "file": "stub__issue2061.zep",
+                            "line": 19,
+                            "char": 31
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 19,
+                        "char": 31
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 20,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "INVERTED",
+                    "default": {
+                        "type": "bitwise_not",
+                        "left": {
+                            "type": "int",
+                            "value": "0",
+                            "file": "stub__issue2061.zep",
+                            "line": 20,
+                            "char": 21
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 20,
+                        "char": 21
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 21,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "RATIO",
+                    "default": {
+                        "type": "div",
+                        "left": {
+                            "type": "list",
+                            "left": {
+                                "type": "add",
+                                "left": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__issue2061.zep",
+                                    "line": 21,
+                                    "char": 19
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "4",
+                                    "file": "stub__issue2061.zep",
+                                    "line": 21,
+                                    "char": 22
+                                },
+                                "file": "stub__issue2061.zep",
+                                "line": 21,
+                                "char": 22
+                            },
+                            "file": "stub__issue2061.zep",
+                            "line": 21,
+                            "char": 24
+                        },
+                        "right": {
+                            "type": "int",
+                            "value": "2",
+                            "file": "stub__issue2061.zep",
+                            "line": 21,
+                            "char": 27
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 21,
+                        "char": 27
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 22,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "REMAINDER",
+                    "default": {
+                        "type": "mod",
+                        "left": {
+                            "type": "int",
+                            "value": "7",
+                            "file": "stub__issue2061.zep",
+                            "line": 22,
+                            "char": 22
+                        },
+                        "right": {
+                            "type": "int",
+                            "value": "3",
+                            "file": "stub__issue2061.zep",
+                            "line": 22,
+                            "char": 25
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 22,
+                        "char": 25
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 24,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "NAME",
+                    "default": {
+                        "type": "concat",
+                        "left": {
+                            "type": "string",
+                            "value": "issue",
+                            "file": "stub__issue2061.zep",
+                            "line": 24,
+                            "char": 21
+                        },
+                        "right": {
+                            "type": "string",
+                            "value": "2061",
+                            "file": "stub__issue2061.zep",
+                            "line": 24,
+                            "char": 27
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 24,
+                        "char": 27
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 25,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "PATH",
+                    "default": {
+                        "type": "concat",
+                        "left": {
+                            "type": "static-constant-access",
+                            "left": {
+                                "type": "variable",
+                                "value": "self",
+                                "file": "stub__issue2061.zep",
+                                "line": 25,
+                                "char": 26
+                            },
+                            "right": {
+                                "type": "variable",
+                                "value": "NAME",
+                                "file": "stub__issue2061.zep",
+                                "line": 25,
+                                "char": 26
+                            },
+                            "file": "stub__issue2061.zep",
+                            "line": 25,
+                            "char": 26
+                        },
+                        "right": {
+                            "type": "string",
+                            "value": "\/limits",
+                            "file": "stub__issue2061.zep",
+                            "line": 25,
+                            "char": 35
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 25,
+                        "char": 35
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 27,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "DOUBLED",
+                    "default": {
+                        "type": "mul",
+                        "left": {
+                            "type": "static-constant-access",
+                            "left": {
+                                "type": "variable",
+                                "value": "self",
+                                "file": "stub__issue2061.zep",
+                                "line": 27,
+                                "char": 27
+                            },
+                            "right": {
+                                "type": "variable",
+                                "value": "KB",
+                                "file": "stub__issue2061.zep",
+                                "line": 27,
+                                "char": 27
+                            },
+                            "file": "stub__issue2061.zep",
+                            "line": 27,
+                            "char": 27
+                        },
+                        "right": {
+                            "type": "int",
+                            "value": "2",
+                            "file": "stub__issue2061.zep",
+                            "line": 27,
+                            "char": 30
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 27,
+                        "char": 30
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 28,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "FROM_ENV",
+                    "default": {
+                        "type": "mul",
+                        "left": {
+                            "type": "constant",
+                            "value": "PHP_INT_SIZE",
+                            "file": "stub__issue2061.zep",
+                            "line": 28,
+                            "char": 32
+                        },
+                        "right": {
+                            "type": "int",
+                            "value": "8",
+                            "file": "stub__issue2061.zep",
+                            "line": 28,
+                            "char": 35
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 28,
+                        "char": 35
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 30,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "FLAG",
+                    "default": {
+                        "type": "less",
+                        "left": {
+                            "type": "int",
+                            "value": "1",
+                            "file": "stub__issue2061.zep",
+                            "line": 30,
+                            "char": 17
+                        },
+                        "right": {
+                            "type": "int",
+                            "value": "2",
+                            "file": "stub__issue2061.zep",
+                            "line": 30,
+                            "char": 20
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 30,
+                        "char": 20
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 31,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "NEGATED",
+                    "default": {
+                        "type": "not",
+                        "left": {
+                            "type": "bool",
+                            "value": "false",
+                            "file": "stub__issue2061.zep",
+                            "line": 31,
+                            "char": 24
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 31,
+                        "char": 24
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 32,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "WORD",
+                    "default": {
+                        "type": "ternary",
+                        "left": {
+                            "type": "equals",
+                            "left": {
+                                "type": "constant",
+                                "value": "PHP_INT_SIZE",
+                                "file": "stub__issue2061.zep",
+                                "line": 32,
+                                "char": 29
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "8",
+                                "file": "stub__issue2061.zep",
+                                "line": 32,
+                                "char": 33
+                            },
+                            "file": "stub__issue2061.zep",
+                            "line": 32,
+                            "char": 33
+                        },
+                        "right": {
+                            "type": "int",
+                            "value": "64",
+                            "file": "stub__issue2061.zep",
+                            "line": 32,
+                            "char": 38
+                        },
+                        "extra": {
+                            "type": "int",
+                            "value": "32",
+                            "file": "stub__issue2061.zep",
+                            "line": 32,
+                            "char": 42
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 32,
+                        "char": 42
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 33,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "FALLBACK",
+                    "default": {
+                        "type": "short-ternary",
+                        "left": {
+                            "type": "int",
+                            "value": "0",
+                            "file": "stub__issue2061.zep",
+                            "line": 33,
+                            "char": 21
+                        },
+                        "extra": {
+                            "type": "int",
+                            "value": "42",
+                            "file": "stub__issue2061.zep",
+                            "line": 33,
+                            "char": 26
+                        },
+                        "file": "stub__issue2061.zep",
+                        "line": 33,
+                        "char": 26
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 35,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "NUMBERS",
+                    "default": {
+                        "type": "array",
+                        "left": [
+                            {
+                                "value": {
+                                    "type": "add",
+                                    "left": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__issue2061.zep",
+                                        "line": 35,
+                                        "char": 21
+                                    },
+                                    "right": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__issue2061.zep",
+                                        "line": 35,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue2061.zep",
+                                    "line": 35,
+                                    "char": 24
+                                },
+                                "file": "stub__issue2061.zep",
+                                "line": 35,
+                                "char": 24
+                            },
+                            {
+                                "value": {
+                                    "type": "mul",
+                                    "left": {
+                                        "type": "int",
+                                        "value": "2",
+                                        "file": "stub__issue2061.zep",
+                                        "line": 35,
+                                        "char": 28
+                                    },
+                                    "right": {
+                                        "type": "int",
+                                        "value": "2",
+                                        "file": "stub__issue2061.zep",
+                                        "line": 35,
+                                        "char": 31
+                                    },
+                                    "file": "stub__issue2061.zep",
+                                    "line": 35,
+                                    "char": 31
+                                },
+                                "file": "stub__issue2061.zep",
+                                "line": 35,
+                                "char": 31
+                            },
+                            {
+                                "key": {
+                                    "type": "string",
+                                    "value": "sum",
+                                    "file": "stub__issue2061.zep",
+                                    "line": 35,
+                                    "char": 36
+                                },
+                                "value": {
+                                    "type": "add",
+                                    "left": {
+                                        "type": "int",
+                                        "value": "3",
+                                        "file": "stub__issue2061.zep",
+                                        "line": 35,
+                                        "char": 40
+                                    },
+                                    "right": {
+                                        "type": "int",
+                                        "value": "4",
+                                        "file": "stub__issue2061.zep",
+                                        "line": 35,
+                                        "char": 43
+                                    },
+                                    "file": "stub__issue2061.zep",
+                                    "line": 35,
+                                    "char": 43
+                                },
+                                "file": "stub__issue2061.zep",
+                                "line": 35,
+                                "char": 43
+                            }
+                        ],
+                        "file": "stub__issue2061.zep",
+                        "line": 35,
+                        "char": 44
+                    },
+                    "file": "stub__issue2061.zep",
+                    "line": 37,
+                    "char": 7
+                }
+            ],
+            "file": "stub__issue2061.zep",
+            "line": 9,
+            "char": 11
+        },
+        "file": "stub__issue2061.zep",
+        "line": 9,
+        "char": 11
+    }
+]

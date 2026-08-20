@@ -22,6 +22,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
+use Zephir\Expression\ConstantExpressionEvaluator;
 use Zephir\Name;
 use Zephir\StatementsBlock;
 use Zephir\Types\Types;
@@ -127,6 +128,17 @@ class Property
      */
     public function compile(CompilationContext $compilationContext): void
     {
+        /**
+         * A default may be a full expression (`public size = 1024 * 8;`); reduce
+         * it to a literal before any emitter looks at its type [#2061].
+         */
+        if (ConstantExpressionEvaluator::needsFolding($this->defaultValue)) {
+            $this->defaultValue = (new ConstantExpressionEvaluator())->fold(
+                $this->defaultValue,
+                $compilationContext
+            );
+        }
+
         if ($this->dataTypes !== null && $this->emitTypedUnion($compilationContext)) {
             return;
         }
@@ -352,6 +364,18 @@ class Property
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * The default value as the emitters see it: normalized, and folded to a
+     * literal when it was written as an expression [#2061].
+     *
+     * A property with no default reports `null` here, so callers that must tell
+     * "no default" from "= null" have to gate on `getOriginal()['default']`.
+     */
+    public function getDefaultValue(): array
+    {
+        return $this->defaultValue;
     }
 
     public function getOriginal(): ?array

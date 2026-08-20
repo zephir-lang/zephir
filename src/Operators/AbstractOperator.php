@@ -268,9 +268,13 @@ abstract class AbstractOperator
      * plain decimal/double literals keep their normal numeric semantics (e.g.
      * a leading-zero "052" stays decimal 52, not octal). See #2014.
      *
+     * Static and public so declaration-time folding
+     * ({@see \Zephir\Expression\ConstantExpressionEvaluator}) decodes literals
+     * exactly the same way, from one copy of the rule.
+     *
      * @return int|float
      */
-    protected function literalToNumber(string $value): int|float
+    public static function literalToNumber(string $value): int|float
     {
         if (preg_match('/^-?0x[0-9a-fA-F]+$/', $value)) {
             return intval($value, 16);
