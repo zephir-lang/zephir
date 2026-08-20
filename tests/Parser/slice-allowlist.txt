@@ -251,6 +251,7 @@ stub__issue1628abstract
 stub__issue1706
 stub__issue1790
 stub__issue2030
+stub__issue2061
 stub__issue2063
 stub__issue2165_issue
 stub__issue2165_issueextendinterface

@@ -1,0 +1,80 @@
+--TEST--
+Constant expressions: operators in a class constant initializer and a property default (zephir #2061)
+--FILE--
+namespace Stub;
+
+final class Limits
+{
+	const INT8_MIN = -0x7f - 1;
+	const INT8_MAX = 0x7f;
+	const INT16_MIN = -0x7fff - 1;
+	const MB = 1024 * 1024;
+	const MASK = 0xff << 8 | 0x0f;
+	const INVERTED = ~0;
+	const RATIO = (1 + 4) / 2;
+	const REMAINDER = 7 % 3;
+	const NAME = "issue" . "2061";
+	const PATH = self::NAME . "/limits";
+	const DOUBLED = self::MB / 1024;
+	const FLAG = 1 < 2;
+	const NEGATED = !false;
+	const WORD = PHP_INT_SIZE == 8 ? 64 : 32;
+	const FALLBACK = 0 ?: 42;
+	const NUMBERS = [1 + 1, 2 * 2, "sum": 3 + 4];
+
+	public size = 1024 * 8 { get };
+	protected mask = 0xff << 8 { get };
+	public int total = 2 + 3 { get };
+	public label = "a" . "/b" { get };
+
+	public function withDefault(int size = self::DOUBLED) -> int
+	{
+		return size;
+	}
+}
+--USAGE--
+$limits = new \Stub\Limits();
+
+echo \Stub\Limits::INT8_MIN, "\n";
+echo \Stub\Limits::INT8_MAX, "\n";
+echo \Stub\Limits::INT16_MIN, "\n";
+echo \Stub\Limits::MB, "\n";
+echo \Stub\Limits::MASK, "\n";
+echo \Stub\Limits::INVERTED, "\n";
+echo \Stub\Limits::RATIO, "\n";
+echo \Stub\Limits::REMAINDER, "\n";
+echo \Stub\Limits::NAME, "\n";
+echo \Stub\Limits::PATH, "\n";
+echo \Stub\Limits::DOUBLED, "\n";
+echo json_encode(\Stub\Limits::FLAG), "\n";
+echo json_encode(\Stub\Limits::NEGATED), "\n";
+echo \Stub\Limits::WORD === PHP_INT_SIZE * 8 ? "word ok" : "word bad", "\n";
+echo \Stub\Limits::FALLBACK, "\n";
+echo json_encode(\Stub\Limits::NUMBERS), "\n";
+echo $limits->getSize(), "\n";
+echo $limits->getMask(), "\n";
+echo $limits->getTotal(), "\n";
+echo $limits->getLabel(), "\n";
+echo $limits->withDefault(), "\n";
+--EXPECT--
+-128
+127
+-32768
+1048576
+65295
+-1
+2.5
+1
+issue2061
+issue2061/limits
+1024
+true
+true
+word ok
+42
+{"0":2,"1":4,"sum":7}
+8192
+65280
+5
+a/b
+1024

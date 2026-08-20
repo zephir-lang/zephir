@@ -16,16 +16,22 @@ namespace Zephir\Class;
 use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Exception;
+use Zephir\Exception\CompilerException;
+use Zephir\Expression\ConstantExpressionEvaluator;
 use Zephir\Expression\Constants;
 use Zephir\Expression\StaticConstantAccess;
 
 use function in_array;
+use function sprintf;
 
 /**
  * Represents a class constant
  */
 class Constant
 {
+    /** Guards against a constant whose initializer reads itself. */
+    private bool $folding = false;
+
     public function __construct(
         protected string $name,
         protected array $value,
@@ -118,6 +124,12 @@ class Constant
      */
     public function processValue(CompilationContext $compilationContext): void
     {
+        if (ConstantExpressionEvaluator::needsFolding($this->value)) {
+            $this->foldValue($compilationContext);
+
+            return;
+        }
+
         if ('constant' === $this->value['type']) {
             $compiledExpression = (new Constants())->compile($this->value, $compilationContext);
 
@@ -136,6 +148,35 @@ class Constant
                 'type'  => $compiledExpression->getType(),
                 'value' => $compiledExpression->getCode(),
             ];
+        }
+    }
+
+    /**
+     * Reduces an expression initializer (`const INT8_MIN = -0x7f - 1;`) to a
+     * literal [#2061].
+     *
+     * Folding can re-enter this method through a `self::OTHER` leaf, so a
+     * constant that (transitively) reads itself is reported instead of
+     * recursing until the stack is exhausted.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function foldValue(CompilationContext $compilationContext): void
+    {
+        if ($this->folding) {
+            throw new CompilerException(
+                sprintf('Cyclic reference detected while resolving constant "%s"', $this->name),
+                $this->value
+            );
+        }
+
+        $this->folding = true;
+
+        try {
+            $this->value = (new ConstantExpressionEvaluator())->fold($this->value, $compilationContext);
+        } finally {
+            $this->folding = false;
         }
     }
 }

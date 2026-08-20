@@ -19,10 +19,12 @@ use function version_compare;
 class Manager
 {
     /**
-     * 2.1.0 introduced trait AST nodes. Older parsers silently drop unknown
-     * class members, so accepting them would lose trait `use` statements.
+     * Oldest `ext-zephir_parser` whose grammar covers the syntax this Zephir
+     * accepts. 2.7.0 added expressions in constant initializers and property
+     * defaults (zephir#2061); 2.1.0 had added trait AST nodes (zephir#504).
+     * Raise this in the same change that adds a grammar feature.
      */
-    public const MINIMUM_PARSER_VERSION = '2.1.0';
+    public const MINIMUM_PARSER_VERSION = '2.7.0';
     public const PARSER_HOME_PAGE       = 'https://github.com/zephir-lang/php-zephir-parser';
 
     public function __construct(protected Parser $parser)
@@ -50,10 +52,15 @@ class Manager
 
     /**
      * Whether a loaded C-extension parser is recent enough to serve as the
-     * fast path. Extensions older than {@see MINIMUM_PARSER_VERSION} predate
-     * trait AST nodes and silently drop unknown class members, so using them
-     * would lose trait `use` statements without any error — the built-in
-     * pure-PHP parser must take over instead.
+     * fast path. An extension older than {@see MINIMUM_PARSER_VERSION} cannot
+     * parse everything this Zephir accepts, so the built-in pure-PHP parser
+     * must take over instead — it always matches the compiler it ships with.
+     *
+     * Both failure modes an outdated extension produces are covered by this:
+     * silently dropping AST it does not know (2.0.x lost trait `use`
+     * statements, zephir#504) and rejecting valid source outright (anything
+     * before 2.7.0 reports a syntax error for an expression in a constant
+     * initializer or property default, zephir#2061).
      *
      * @param string|null $version `phpversion('zephir_parser')` or null when not loaded
      */
