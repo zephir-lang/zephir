@@ -50,16 +50,21 @@ trait CompilerTrait
 
     protected function generateClassHeadersPost(
         string $code,
-        ?Definition $classDefinition,
         CompilationContext $compilationContext
     ): void {
         $code .= PHP_EOL;
         $code .= '#include "kernel/main.h"' . PHP_EOL;
 
-        if (!$classDefinition->isInterface()) {
-            foreach ($compilationContext->headersManager->get() as $header => $one) {
-                $code .= '#include "' . $header . '.h"' . PHP_EOL;
-            }
+        /**
+         * Every definition type needs these, interfaces included: an interface
+         * `extends` list is emitted as `zend_class_implements()` calls, so a
+         * bundled interface declared in an extension header (`php_json`,
+         * `spl_*`, ...) needs that header here or its class entry is undeclared.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2427
+         */
+        foreach ($compilationContext->headersManager->get() as $header => $one) {
+            $code .= '#include "' . $header . '.h"' . PHP_EOL;
         }
 
         if (count($this->headerCBlocks) > 0) {

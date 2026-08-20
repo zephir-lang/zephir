@@ -145,7 +145,7 @@ final class CompilerFile implements FileInterface
             $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
         }
 
-        $this->generateClassHeadersPost($code, $this->classDefinition, $compilationContext);
+        $this->generateClassHeadersPost($code, $compilationContext);
     }
 
     /**

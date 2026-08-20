@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Fixed
 - Casts now accept every source type. The cast operator enumerated sources per target, so more than half of all combinations failed with `Cannot cast: X to Y` — among them `(string) 5`, `(string) "abc"`, `(array) 5`, `(bool) []`, `(char) 65`, `(int)` of a `long`, and every use of `(uint)`, `(ulong)`, `(uchar)` and `(var)`. Results match PHP, including `(bool) 0.4` being `true` where a C cast would truncate it to `false` [#1841](https://github.com/zephir-lang/zephir/issues/1841)
 - Fixed `(array)` and `(object)` casts overwriting the variable being cast: both lower to kernel conversions that run in place, so `let b = (array) a` turned `a` itself into an array [#1841](https://github.com/zephir-lang/zephir/issues/1841)
+- Fixed an interface `extends`ing a bundled interface declared in a PHP extension header (e.g. `interface I extends \JsonSerializable, \SeekableIterator`) failing to compile with `'php_json_serializable_ce' undeclared`. The required `#include`s were collected but then discarded for interface files, so the emitted `zend_class_implements()` calls referenced undeclared class entries [#2427](https://github.com/zephir-lang/zephir/issues/2427)
 
 ## [1.2.0] - 2026-07-27
 
