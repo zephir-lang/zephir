@@ -1,0 +1,42 @@
+--TEST--
+A method inherited through a parent interface resolves and dispatches (issue #2635)
+--FILE--
+namespace Stub;
+
+interface Inner
+{
+    public function go() -> string;
+}
+--FILE--
+namespace Stub;
+
+interface Outer extends Inner
+{
+}
+--FILE--
+namespace Stub;
+
+abstract class Base implements Outer
+{
+    public function run() -> string
+    {
+        return this->go();
+    }
+}
+--FILE--
+namespace Stub;
+
+class Impl extends Base
+{
+    public function go() -> string
+    {
+        return "inner";
+    }
+}
+--USAGE--
+$impl = new \Stub\Impl();
+echo $impl->run(), "\n";
+echo json_encode(in_array('Stub\\Inner', class_implements($impl))), "\n";
+--EXPECT--
+inner
+true
