@@ -24,7 +24,9 @@
 
 
 zend_class_entry *stub_testinterface_ce;
+zend_class_entry *stub_issue2635_inner_ce;
 zend_class_entry *stub_issue2165_issueextendinterface_ce;
+zend_class_entry *stub_issue2635_outer_ce;
 zend_class_entry *stub_interfaces_interfaceint_ce;
 zend_class_entry *stub_interfaces_interfaceintsignature_ce;
 zend_class_entry *stub_issue2165_issueinterface_ce;
@@ -50,6 +52,7 @@ zend_class_entry *stub_issue1628abstract_ce;
 zend_class_entry *stub_issue2324_ce;
 zend_class_entry *stub_issue2505_ce;
 zend_class_entry *stub_issue2537_ce;
+zend_class_entry *stub_issue2635_base_ce;
 zend_class_entry *stub_oo_abstractstatic_ce;
 zend_class_entry *stub_oo_extend_db_query_exception_ce;
 zend_class_entry *stub_oo_oodynamica_ce;
@@ -191,6 +194,8 @@ zend_class_entry *stub_issue2546_ce;
 zend_class_entry *stub_issue2564_ce;
 zend_class_entry *stub_issue2564padfactory_ce;
 zend_class_entry *stub_issue2565_ce;
+zend_class_entry *stub_issue2635_caller_ce;
+zend_class_entry *stub_issue2635_impl_ce;
 zend_class_entry *stub_issue663_ce;
 zend_class_entry *stub_issue808_ce;
 zend_class_entry *stub_issue820_ce;
@@ -344,7 +349,9 @@ static PHP_MINIT_FUNCTION(stub)
 	REGISTER_INI_ENTRIES();
 	zephir_module_init();
 	ZEPHIR_INIT(Stub_TestInterface);
+	ZEPHIR_INIT(Stub_Issue2635_Inner);
 	ZEPHIR_INIT(Stub_Issue2165_IssueExtendInterface);
+	ZEPHIR_INIT(Stub_Issue2635_Outer);
 	ZEPHIR_INIT(Stub_Interfaces_InterfaceInt);
 	ZEPHIR_INIT(Stub_Interfaces_InterfaceIntSignature);
 	ZEPHIR_INIT(Stub_Issue2165_IssueInterface);
@@ -370,6 +377,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Issue2324);
 	ZEPHIR_INIT(Stub_Issue2505);
 	ZEPHIR_INIT(Stub_Issue2537);
+	ZEPHIR_INIT(Stub_Issue2635_Base);
 	ZEPHIR_INIT(Stub_Oo_AbstractStatic);
 	ZEPHIR_INIT(Stub_Oo_Extend_Db_Query_Exception);
 	ZEPHIR_INIT(Stub_Oo_OoDynamicA);
@@ -480,6 +488,8 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Issue2564);
 	ZEPHIR_INIT(Stub_Issue2564PadFactory);
 	ZEPHIR_INIT(Stub_Issue2565);
+	ZEPHIR_INIT(Stub_Issue2635_Caller);
+	ZEPHIR_INIT(Stub_Issue2635_Impl);
 	ZEPHIR_INIT(Stub_Issue663);
 	ZEPHIR_INIT(Stub_Issue808);
 	ZEPHIR_INIT(Stub_Issue820);

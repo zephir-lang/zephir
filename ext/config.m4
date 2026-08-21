@@ -11,8 +11,10 @@ if test "$PHP_STUB" = "yes"; then
 	AC_DEFINE(HAVE_STUB, 1, [Whether you have Stub])
 	stub_sources="stub.c kernel/main.c kernel/memory.c kernel/exception.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c kernel/generator.c stub/invokes/abstractprotected.zep.c
 	stub/testinterface.zep.c
+	stub/issue2635/inner.zep.c
 	stub/oo/extend/exception.zep.c
 	stub/issue2165/issueextendinterface.zep.c
+	stub/issue2635/outer.zep.c
 	stub/oo/extend/db/exception.zep.c
 	stub/scallparent.zep.c
 	stub/constantsparent.zep.c
@@ -26,6 +28,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2324.zep.c
 	stub/issue2505.zep.c
 	stub/issue2537.zep.c
+	stub/issue2635/base.zep.c
 	stub/methodinterface.zep.c
 	stub/oo/abstractstatic.zep.c
 	stub/oo/extend/db/query/exception.zep.c
@@ -143,6 +146,8 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2564.zep.c
 	stub/issue2564padfactory.zep.c
 	stub/issue2565.zep.c
+	stub/issue2635/caller.zep.c
+	stub/issue2635/impl.zep.c
 	stub/issue663.zep.c
 	stub/issue808.zep.c
 	stub/issue820.zep.c
@@ -311,7 +316,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/30__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
-	for dir in "stub stub/args/single stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/traits stub/typehinting stub/types"; do
+	for dir in "stub stub/args/single stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/issue2635 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/traits stub/typehinting stub/types"; do
 		PHP_ADD_BUILD_DIR([$ext_builddir/$dir])
 	done
 	PHP_SUBST(STUB_SHARED_LIBADD)
