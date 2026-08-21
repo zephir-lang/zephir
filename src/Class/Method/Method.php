@@ -704,6 +704,13 @@ class Method
     /**
      * Assigns a zval value to a static low-level type.
      *
+     * Types that ZEND_PARSE_PARAMETERS populates directly into the native local
+     * (`int`, `long`, `bool`) normally need nothing emitted here. Internal
+     * methods are the exception: they run no ZPP block at all, because they are
+     * called C-to-C with the *caller's* execute_data and receive their own
+     * arguments through the trailing `_ext` pointers instead (see #2021). For
+     * those, the conversion has to be emitted explicitly.
+     *
      * @throws CompilerException
      */
     public function assignZvalValue(array $parameter, CompilationContext $compilationContext): string
@@ -760,6 +767,10 @@ class Method
             case 'uint':
             case 'long':
             case 'ulong':
+                if ($this->isInternal()) {
+                    return "\t" . $parameter['name'] . ' = zephir_get_intval(' . $parameterCode . ');' . PHP_EOL;
+                }
+
                 // Value already passed in `Z_PARAM_LONG()`
                 return '';
 
@@ -770,7 +781,11 @@ class Method
                 return "\t" . $parameter['name'] . ' = zephir_get_charval(' . $parameterCode . ');' . PHP_EOL;
 
             case 'bool':
-                //return "\t" . $parameter['name'] . ' = zephir_get_boolval(' . $parameterCode . ');' . PHP_EOL;
+                if ($this->isInternal()) {
+                    return "\t" . $parameter['name'] . ' = zephir_get_boolval(' . $parameterCode . ');' . PHP_EOL;
+                }
+
+                // Value already passed in `Z_PARAM_BOOL()`
                 return '';
 
             case 'double':
@@ -1102,7 +1117,17 @@ class Method
                                 : PHP_INT_MAX;
 
                             $defaultType = $parameter['default']['type'] ?? null;
-                            $canUseNativeString = $mutations <= 1
+
+                            /**
+                             * Internal methods are excluded: the native-string
+                             * strategy sources the zend_string * from the
+                             * caller's frame (Z_PARAM_STR, or ZEND_CALL_ARG for
+                             * mixed methods), which an internal method does not
+                             * own. They take the zval path so the trailing _ext
+                             * pointer stays the single source of truth (#2021).
+                             */
+                            $canUseNativeString = !$this->isInternal()
+                                && $mutations <= 1
                                 && (!isset($parameter['default']) || $defaultType === 'string' || $defaultType === 'null');
 
                             $symbol = $symbolTable->addVariable(
@@ -1812,9 +1837,21 @@ class Method
          * the resuming caller's execute_data, whose argument frame has no
          * relation to the step's own parameter (the generator object arrives
          * via the trailing _ext pointer).
+         *
+         * Internal methods skip it for exactly the same reason: the
+         * ZEPHIR_CALL_INTERNAL_METHOD_P* macros pass the caller's execute_data
+         * straight through and hand the real arguments over as trailing _ext
+         * pointers. Parsing that frame read the caller's arguments instead of
+         * the callee's, and crashed outright whenever the two arities differed
+         * (#2021).
          */
         $tempCodePrinter = new Printer();
-        if ($this->parameters instanceof Parameters && $this->parameters->count() > 0 && !$this->isGeneratorStep()) {
+        if (
+            $this->parameters instanceof Parameters
+            && $this->parameters->count() > 0
+            && !$this->isGeneratorStep()
+            && !$this->isInternal()
+        ) {
             // Do not declare variable when it is not needed.
             if ($this->parameters->hasNullableParameters()) {
                 $tempCodePrinter->output("\t" . 'bool is_null_true = 1;');
@@ -3351,20 +3388,53 @@ class Method
                 return $this;
             }
 
+            /**
+             * A method with no body of its own cannot be turned into a C
+             * function. The twin's visibility is just `internal`, so it does not
+             * inherit `isAbstract()` and would be emitted as a body-less
+             * function that silently returns nothing. Generator creators are the
+             * same shape: GeneratorTransformer moves the body into a step and
+             * nulls the statements before this runs, and the twin carries no
+             * generator step, so it would return null instead of a Generator.
+             */
+            if ($this->isAbstract() || null === $this->statements || $this->isGeneratorCreator()) {
+                return $this;
+            }
+
             $optimizedName = $this->getName() . '_zephir_internal_call';
 
+            /**
+             * `static` has to be carried over: the twin's body is compiled with
+             * a static context iff the method it copies had one. Visibility
+             * itself is irrelevant to an internal method (it is deliberately
+             * left out of the method_entry) but `static` is not.
+             */
             $visibility = ['internal'];
+            if ($this->isStatic()) {
+                $visibility[] = 'static';
+            }
 
-            $statements = null;
-            if ($this->statements) {
-                $statements = new StatementsBlock(json_decode(json_encode($this->statements->getStatements()), true));
+            $statements = new StatementsBlock(
+                json_decode(json_encode($this->statements->getStatements()), true)
+            );
+
+            /**
+             * The twin gets its own Parameters instance: fetchParameters()
+             * appends to the required/optional lists without ever resetting
+             * them, so sharing the original's instance made the twin see every
+             * parameter twice and emit each conversion twice — a leak for
+             * `string` and `array` parameters, which allocate.
+             */
+            $parameters = null;
+            if ($this->parameters instanceof Parameters) {
+                $parameters = new Parameters($this->parameters->getParameters());
             }
 
             $optimizedMethod                = new self(
                 $classDefinition,
                 $visibility,
                 $optimizedName,
-                $this->parameters,
+                $parameters,
                 $statements,
                 $this->docblock,
                 null,
