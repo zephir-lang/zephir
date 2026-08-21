@@ -15,6 +15,7 @@ namespace Zephir;
 
 use ReflectionException;
 use ReflectionMethod;
+use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
@@ -819,14 +820,39 @@ class MethodCall extends Call
 
         // Generate the code according to the call type
         if (self::CALL_NORMAL == $type || self::CALL_DYNAMIC_STRING == $type) {
-            $realMethod = $this->getRealCalledMethod($compilationContext, $variableVariable, $methodName);
+            [$numberPoly, $resolvedMethod, $receiverDefinition] = $this->getRealCalledMethod(
+                $compilationContext,
+                $variableVariable,
+                $methodName
+            );
 
             $isInternal = false;
-            if (is_object($realMethod[1])) {
-                $realMethod[1] = $realMethod[1]->getOptimizedMethod();
-                $method        = $realMethod[1];
-                $isInternal    = $realMethod[1]->isInternal();
-                if ($isInternal && $realMethod[0] > 1) {
+            if (is_object($resolvedMethod)) {
+                $method = $resolvedMethod;
+
+                /**
+                 * A method declared `internal` in Zephir source is deliberately
+                 * kept out of the class' method_entry, so there is no PHP-level
+                 * method to dispatch to and a direct call is the only option.
+                 *
+                 * The twin that `internal-call-transformation` generates is a
+                 * different matter: substituting it is only correct where PHP
+                 * would not have dispatched virtually in the first place.
+                 */
+                if (
+                    !$method->isInternal()
+                    && $this->isStaticallyDispatched(
+                        $method,
+                        $receiverDefinition,
+                        $numberPoly,
+                        $compilationContext
+                    )
+                ) {
+                    $method = $method->getOptimizedMethod();
+                }
+
+                $isInternal = $method->isInternal();
+                if ($isInternal && $numberPoly > 1) {
                     throw new CompilerException(
                         "Cannot resolve method: '" . $expression['name'] . "' in polymorphic variable",
                         $expression
@@ -941,6 +967,11 @@ class MethodCall extends Call
     /**
      * Examine internal class information and returns the method called.
      *
+     * @return array{0: int, 1: Method|null, 2: Definition|null} Number of
+     *         candidate classes, the resolved method, and the class the method
+     *         was resolved *through* (which is not necessarily the class that
+     *         declares it, since resolution walks the `extends` chain).
+     *
      * @throws ReflectionException
      */
     private function getRealCalledMethod(
@@ -952,12 +983,14 @@ class MethodCall extends Call
 
         $numberPoly = 0;
         $method     = null;
+        $receiver   = null;
 
         if ('this' == $caller->getRealName()) {
             $classDefinition = $compilationContext->classDefinition;
             if ($classDefinition->hasMethod($methodName)) {
                 ++$numberPoly;
-                $method = $classDefinition->getMethod($methodName);
+                $method   = $classDefinition->getMethod($methodName);
+                $receiver = $classDefinition;
             }
         } else {
             $classTypes = $caller->getClassTypes();
@@ -983,12 +1016,73 @@ class MethodCall extends Call
 
                     if ($classDefinition->hasMethod($methodName) && !$classDefinition->isInterface()) {
                         ++$numberPoly;
-                        $method = $classDefinition->getMethod($methodName);
+                        $method   = $classDefinition->getMethod($methodName);
+                        $receiver = $classDefinition;
                     }
                 }
             }
         }
 
-        return [$numberPoly, $method];
+        return [$numberPoly, $method, $receiver];
+    }
+
+    /**
+     * Whether PHP itself resolves this call without consulting the receiver's
+     * class. That is the precondition for replacing the call with a direct call
+     * to the method's own C function, which is what the
+     * `internal-call-transformation` optimization does.
+     *
+     * `obj->m()` is a virtual call: any subclass may override `m` — including a
+     * userland PHP class extending a Zephir one, which no amount of
+     * whole-program analysis of the extension can see. Only three premises make
+     * the target static, and the engine enforces each of them itself
+     * (ZEND_ACC_FINAL, ZEND_ACC_PRIVATE, ZEND_ACC_FINAL_CLASS):
+     *
+     *  - the method is final, so nothing can override it;
+     *  - the method is private to the class being compiled, so a same-named
+     *    method in a subclass is a separate method rather than an override;
+     *  - the receiver is `this` and its class is final, so the runtime class is
+     *    exactly the class being compiled.
+     *
+     * A class type declared on a variable is deliberately *not* accepted as
+     * proof of the receiver's class: `let v = <Vector> x` and declared return
+     * types assert a class without verifying it.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2021
+     */
+    private function isStaticallyDispatched(
+        Method $method,
+        ?Definition $receiver,
+        int $numberPoly,
+        CompilationContext $compilationContext
+    ): bool {
+        /**
+         * Resolution collected more than one candidate class (a variable
+         * declared with several class types) and kept only the last match, so
+         * the receiver's class — and with it the target — is unknown.
+         */
+        if (1 !== $numberPoly) {
+            return false;
+        }
+
+        if ($method->isFinal()) {
+            return true;
+        }
+
+        $scope = $compilationContext->classDefinition;
+
+        if ($method->isPrivate() && $method->getClassDefinition() === $scope) {
+            return true;
+        }
+
+        /**
+         * The class synthesized for a closure is marked final (see
+         * Expression\Closure), yet `this_ptr` inside its `__invoke` is the
+         * *enclosing* object, whose class is not final at all. Finality of a
+         * closure class says nothing about the receiver, so refuse it.
+         */
+        return $receiver === $scope
+            && $receiver->isFinal()
+            && null === $scope->getEnclosingClassDefinition();
     }
 }

@@ -1,0 +1,161 @@
+--TEST--
+internal-call-transformation must not bypass virtual dispatch (issue #2021)
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--FILE--
+namespace Stub;
+
+class Vector
+{
+	protected function multiplyMatrix(var b) -> string
+	{
+		return "Vector::multiplyMatrix(" . b . ")";
+	}
+
+	public function multiply(var b) -> string
+	{
+		return this->multiplyMatrix(b);
+	}
+}
+--FILE--
+namespace Stub;
+
+class ColumnVector extends Vector
+{
+	protected function multiplyMatrix(var b) -> string
+	{
+		return "ColumnVector::multiplyMatrix(" . b . ")";
+	}
+}
+--FILE--
+namespace Stub;
+
+/**
+ * Calls that PHP itself resolves statically: a final method, a private method
+ * and a method reached through `self::`. These keep the optimization, so they
+ * are here to prove the fix does not change their result.
+ */
+class Bound
+{
+	final protected function finalStep(var b) -> string
+	{
+		return "final(" . b . ")";
+	}
+
+	private function privateStep(var b) -> string
+	{
+		return "private(" . b . ")";
+	}
+
+	protected function selfStep(var b) -> string
+	{
+		return "self(" . b . ")";
+	}
+
+	public function viaFinal(var b) -> string
+	{
+		return this->finalStep(b);
+	}
+
+	public function viaPrivate(var b) -> string
+	{
+		return this->privateStep(b);
+	}
+
+	public function viaSelf(var b) -> string
+	{
+		return self::selfStep(b);
+	}
+}
+--FILE--
+namespace Stub;
+
+/**
+ * Shapes that must not be turned into a direct call at all: a generator (whose
+ * body has already moved into a step by then) and a static method reached
+ * through `self::`, which PHP resolves statically and so does get the direct
+ * call — but only keeps working if the twin stays static.
+ */
+class Shapes
+{
+	public function numbers()
+	{
+		yield 1;
+		yield 2;
+	}
+
+	final public static function make(var b) -> string
+	{
+		return "made(" . b . ")";
+	}
+
+	public function viaStatic(var b) -> string
+	{
+		return self::make(b);
+	}
+
+	public function collect() -> string
+	{
+		var n; string out = "";
+
+		for n in this->numbers() {
+			let out .= n;
+		}
+
+		return out;
+	}
+}
+--FILE--
+namespace Stub;
+
+final class FinalVector
+{
+	protected function step(var b) -> string
+	{
+		return "FinalVector::step(" . b . ")";
+	}
+
+	public function run(var b) -> string
+	{
+		return this->step(b);
+	}
+}
+--USAGE--
+/**
+ * A PHP subclass overriding a Zephir method: the case that makes any
+ * "no subclass overrides it in this extension" analysis unsound.
+ */
+class PhpVector extends \Stub\Vector
+{
+    protected function multiplyMatrix($b): string
+    {
+        return "PhpVector::multiplyMatrix($b)";
+    }
+}
+
+echo (new \Stub\Vector())->multiply(2), "\n";
+echo (new \Stub\ColumnVector())->multiply(2), "\n";
+echo (new PhpVector())->multiply(2), "\n";
+
+$bound = new \Stub\Bound();
+echo $bound->viaFinal(3), "\n";
+echo $bound->viaPrivate(3), "\n";
+echo $bound->viaSelf(3), "\n";
+
+echo (new \Stub\FinalVector())->run(4), "\n";
+
+$shapes = new \Stub\Shapes();
+echo $shapes->viaStatic(5), "\n";
+echo $shapes->collect(), "\n";
+echo get_class($shapes->numbers()), "\n";
+--EXPECT--
+Vector::multiplyMatrix(2)
+ColumnVector::multiplyMatrix(2)
+PhpVector::multiplyMatrix(2)
+final(3)
+private(3)
+self(3)
+FinalVector::step(4)
+made(5)
+12
+Stub\Generator

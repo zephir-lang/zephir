@@ -46,4 +46,28 @@ final class McallInternalTest extends TestCase
         // Chaining safety: calling again on the returned instance should still yield itself
         $this->assertSame($instance, $returned->issue1956());
     }
+
+    /**
+     * An internal method with parameters must receive its own arguments.
+     *
+     * `g()` takes no arguments of its own and calls `c(long, long)` in a loop.
+     * The internal method used to parse the caller's argument frame, so both of
+     * these crashed the process outright.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/2021
+     */
+    public function testInternalMethodWithParametersReceivesItsOwnArguments(): void
+    {
+        // sum of (i + i) for i in 0..1000 == 2 * 500500
+        $this->assertSame(1001000, (new McallInternal())->g());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2021
+     */
+    public function testInternalMethodReturningDoubleReceivesItsOwnArguments(): void
+    {
+        // sum of i / (i + 1) for i in 0..10000000 == 10000001 - H(10000001)
+        $this->assertEqualsWithDelta(9999984.3046, (new McallInternal())->callFibonacci(), 0.001);
+    }
 }

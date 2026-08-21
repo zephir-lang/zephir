@@ -226,4 +226,85 @@ final class ZeptParserTest extends TestCase
 
         $this->assertSame('<?php if (PHP_INT_SIZE < 8) echo "skip 64-bit only";', $zept->skipif);
     }
+
+    public function testConfigSectionIsDecodedAsAnArray(): void
+    {
+        $raw = <<<'ZEPT'
+            --TEST--
+            non-default compiler configuration
+            --CONFIG--
+            {"optimizations": {"internal-call-transformation": true}}
+            --FILE--
+            namespace Zept; class A {}
+            --USAGE--
+            echo "x";
+            --EXPECT--
+            x
+            ZEPT;
+
+        $zept = $this->parser->parse($raw, 'config.zept');
+
+        $this->assertSame(
+            ['optimizations' => ['internal-call-transformation' => true]],
+            $zept->config
+        );
+    }
+
+    public function testConfigIsNullWhenSectionAbsent(): void
+    {
+        $raw = <<<'ZEPT'
+            --TEST--
+            no config section
+            --FILE--
+            namespace Zept; class A {}
+            --USAGE--
+            echo "x";
+            --EXPECT--
+            x
+            ZEPT;
+
+        $this->assertNull($this->parser->parse($raw, 'noconfig.zept')->config);
+    }
+
+    public function testThrowsOnMalformedConfigJson(): void
+    {
+        $raw = <<<'ZEPT'
+            --TEST--
+            broken config
+            --CONFIG--
+            {"optimizations": }
+            --FILE--
+            namespace Zept; class A {}
+            --USAGE--
+            echo "x";
+            --EXPECT--
+            x
+            ZEPT;
+
+        $this->expectException(ZeptParseException::class);
+        $this->expectExceptionMessage('invalid JSON in --CONFIG-- section');
+
+        $this->parser->parse($raw, 'broken.zept');
+    }
+
+    public function testThrowsWhenConfigIsNotAJsonObject(): void
+    {
+        $raw = <<<'ZEPT'
+            --TEST--
+            config is a list
+            --CONFIG--
+            ["internal-call-transformation"]
+            --FILE--
+            namespace Zept; class A {}
+            --USAGE--
+            echo "x";
+            --EXPECT--
+            x
+            ZEPT;
+
+        $this->expectException(ZeptParseException::class);
+        $this->expectExceptionMessage('--CONFIG-- section must be a JSON object');
+
+        $this->parser->parse($raw, 'list.zept');
+    }
 }

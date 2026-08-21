@@ -1,0 +1,148 @@
+--TEST--
+An internal method receives its own arguments, not the calling method's (issue #2021)
+--FILE--
+namespace Stub;
+
+class InternalParams
+{
+	internal function addLong(long a, long b) -> long
+	{
+		return a + b;
+	}
+
+	internal function addInt(int a, int b) -> int
+	{
+		return a + b;
+	}
+
+	internal function scale(double a, double b) -> double
+	{
+		return a * b;
+	}
+
+	internal function flip(bool a) -> bool
+	{
+		return !a;
+	}
+
+	internal function glue(string a, string b) -> string
+	{
+		return a . b;
+	}
+
+	internal function total(array a) -> long
+	{
+		long sum = 0; var v;
+
+		for v in a {
+			let sum += (long) v;
+		}
+
+		return sum;
+	}
+
+	internal function code(char c) -> long
+	{
+		return c;
+	}
+
+	internal function wrap(var a) -> string
+	{
+		return "[" . a . "]";
+	}
+
+	internal function nameOf(<InternalParams> o) -> string
+	{
+		return get_class(o);
+	}
+
+	/**
+	 * The caller takes no arguments at all: parsing the caller's frame for the
+	 * callee's two parameters is what used to segfault.
+	 */
+	public function fromNoArgs() -> long
+	{
+		return this->addLong(3, 4);
+	}
+
+	/**
+	 * The caller's own argument is deliberately different from what it passes
+	 * on, so reading the caller's frame would produce a different answer
+	 * rather than accidentally the right one.
+	 */
+	public function fromOneArg(long n) -> long
+	{
+		return this->addLong(10, 20);
+	}
+
+	public function forwardsOneArg(long n) -> long
+	{
+		return this->addLong(n, n + 1);
+	}
+
+	public function ints() -> int
+	{
+		return this->addInt(5, 6);
+	}
+
+	public function doubles() -> double
+	{
+		return this->scale(1.5, 4.0);
+	}
+
+	public function bools() -> bool
+	{
+		return this->flip(true);
+	}
+
+	public function strings() -> string
+	{
+		return this->glue("ab", "cd");
+	}
+
+	public function arrays() -> long
+	{
+		return this->total([1, 2, 3, 4]);
+	}
+
+	public function chars() -> long
+	{
+		return this->code('A');
+	}
+
+	public function vars() -> string
+	{
+		return this->wrap(42);
+	}
+
+	public function objects() -> string
+	{
+		return this->nameOf(this);
+	}
+}
+--USAGE--
+$o = new \Stub\InternalParams();
+
+echo $o->fromNoArgs(), "\n";
+echo $o->fromOneArg(999), "\n";
+echo $o->forwardsOneArg(7), "\n";
+echo $o->ints(), "\n";
+echo $o->doubles(), "\n";
+var_export($o->bools());
+echo "\n", $o->strings(), "\n";
+echo $o->arrays(), "\n";
+echo $o->chars(), "\n";
+echo $o->vars(), "\n";
+echo $o->objects(), "\n";
+--EXPECT--
+7
+30
+15
+11
+6
+false
+abcd
+10
+65
+[42]
+Stub\InternalParams

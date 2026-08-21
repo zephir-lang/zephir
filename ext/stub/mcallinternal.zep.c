@@ -47,10 +47,6 @@ void zep_Stub_McallInternal_b(int ht, zend_execute_data *execute_data, zval *ret
 	zval *a, a_sub, *b, b_sub;
 		ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
-	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(a)
-		Z_PARAM_ZVAL(b)
-	ZEND_PARSE_PARAMETERS_END();
 	a = a_ext;
 
 	b = b_ext;
@@ -60,13 +56,12 @@ void zep_Stub_McallInternal_c(int ht, zend_execute_data *execute_data, zval *ret
 {
 	zval *a_param = NULL, *b_param = NULL;
 	long a, b;
-	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_LONG(a)
-		Z_PARAM_LONG(b)
-	ZEND_PARSE_PARAMETERS_END();
 	a_param = a_param_ext;
 
 	b_param = b_param_ext;
+
+	a = zephir_get_intval(a_param);
+	b = zephir_get_intval(b_param);
 	RETURN_LONG((a + b));
 }
 
@@ -199,13 +194,12 @@ void zep_Stub_McallInternal_other(int ht, zend_execute_data *execute_data, zval 
 {
 	zval *a_param = NULL, *b_param = NULL;
 	long a, b;
-	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_LONG(a)
-		Z_PARAM_LONG(b)
-	ZEND_PARSE_PARAMETERS_END();
 	a_param = a_param_ext;
 
 	b_param = b_param_ext;
+
+	a = zephir_get_intval(a_param);
+	b = zephir_get_intval(b_param);
 	RETURN_DOUBLE(zephir_safe_div_long_long(a, b));
 }
 

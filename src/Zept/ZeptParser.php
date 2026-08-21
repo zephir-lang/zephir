@@ -28,6 +28,9 @@ namespace Zephir\Zept;
  *   --EXPECTF--  expected stdout, matched with sprintf-style placeholders
  *   --SKIPIF--   (optional) PHP code; printing "skip ..." skips the test
  *   --INI--      (optional) php.ini directives, one `key=value` per line
+ *   --CONFIG--   (optional) JSON object merged into the project's config.json,
+ *                for tests that need a non-default compiler configuration
+ *                (e.g. `{"optimizations": {"internal-call-transformation": true}}`)
  *
  * Exactly one of --EXPECT-- / --EXPECTF-- is required.
  */
@@ -36,7 +39,7 @@ final class ZeptParser
     private const MARKER = '/^--([A-Z][A-Z0-9_]*)--\s*$/';
 
     /** @var list<string> */
-    private const KNOWN = ['TEST', 'FILE', 'USAGE', 'EXPECT', 'EXPECTF', 'SKIPIF', 'INI'];
+    private const KNOWN = ['TEST', 'FILE', 'USAGE', 'EXPECT', 'EXPECTF', 'SKIPIF', 'INI', 'CONFIG'];
 
     /** Sections that may appear more than once. */
     private const REPEATABLE = ['FILE'];
@@ -81,7 +84,34 @@ final class ZeptParser
             $isFormat,
             isset($sections['SKIPIF']) ? $sections['SKIPIF'][0] : null,
             isset($sections['INI']) ? $sections['INI'][0] : null,
+            isset($sections['CONFIG']) ? $this->decodeConfig($sections['CONFIG'][0], $path) : null,
         );
+    }
+
+    /**
+     * Decode a --CONFIG-- body into the array merged into `config.json`.
+     *
+     * @return array<string, mixed>
+     */
+    private function decodeConfig(string $body, string $path): array
+    {
+        if (trim($body) === '') {
+            throw ZeptParseException::in($path, 'empty --CONFIG-- section; remove it or provide a JSON object');
+        }
+
+        $decoded = json_decode($body, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw ZeptParseException::in(
+                $path,
+                'invalid JSON in --CONFIG-- section: ' . json_last_error_msg()
+            );
+        }
+
+        if (!is_array($decoded) || array_is_list($decoded)) {
+            throw ZeptParseException::in($path, '--CONFIG-- section must be a JSON object');
+        }
+
+        return $decoded;
     }
 
     /**
