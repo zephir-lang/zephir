@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir\Zept;
 
+use stdClass;
+
 /**
  * Parses the `.zept` (Zephir Test) file format.
  *
@@ -99,7 +101,14 @@ final class ZeptParser
             throw ZeptParseException::in($path, 'empty --CONFIG-- section; remove it or provide a JSON object');
         }
 
-        $decoded = json_decode($body, true);
+        /**
+         * Decoded twice on purpose. `json_decode` maps a JSON object to
+         * stdClass and a JSON array to a PHP array, which is the only way to
+         * tell `{"a": 1}` from `["a"]` before both have collapsed into a PHP
+         * array. (`array_is_list()` would say the same thing in one pass, but
+         * it needs PHP 8.1 and this project supports 8.0.)
+         */
+        $probe = json_decode($body);
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw ZeptParseException::in(
                 $path,
@@ -107,11 +116,11 @@ final class ZeptParser
             );
         }
 
-        if (!is_array($decoded) || array_is_list($decoded)) {
+        if (!$probe instanceof stdClass) {
             throw ZeptParseException::in($path, '--CONFIG-- section must be a JSON object');
         }
 
-        return $decoded;
+        return (array) json_decode($body, true);
     }
 
     /**
