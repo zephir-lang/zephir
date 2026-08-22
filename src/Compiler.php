@@ -1118,6 +1118,71 @@ final class Compiler
         }
 
         /**
+         * Load function optimizers.
+         *
+         * This must run before Round 2: the prototypes declare the classes of
+         * extensions that are not loaded in the running PHP. Round 2 validates
+         * `use` statements with `class_exists(..., false)`, so a prototype that
+         * is loaded later makes an optional extension (redis, memcached, ...)
+         * warn as nonexistent. See phalcon/cphalcon#17517.
+         */
+        if (false === self::$loadedPrototypes) {
+            $optimizersPath = $this->resolveOptimizersPath();
+            FunctionCall::addOptimizerDir("{$optimizersPath}/FunctionCall");
+
+            $customOptimizersPaths = $this->config->get('optimizer-dirs');
+            if (is_array($customOptimizersPaths)) {
+                foreach ($customOptimizersPaths as $directory) {
+                    FunctionCall::addOptimizerDir(realpath($directory));
+                }
+            }
+
+            /**
+             * Load additional extension prototypes.
+             */
+            $prototypesPath = $this->resolvePrototypesPath();
+            foreach (new DirectoryIterator($prototypesPath) as $file) {
+                if ($file->isDir() || $file->isDot()) {
+                    continue;
+                }
+
+                // Do not use $file->getRealPath() because it does not work inside phar
+                $realPath  = "{$file->getPath()}/{$file->getFilename()}";
+                $extension = $file->getBasename(".{$file->getExtension()}");
+
+                if (!extension_loaded($extension)) {
+                    require_once $realPath;
+                }
+            }
+
+            /**
+             * Load customer additional extension prototypes.
+             */
+            $prototypeDirs = $this->config->get('prototype-dir');
+            if (is_array($prototypeDirs)) {
+                foreach ($prototypeDirs as $prototype => $prototypeDir) {
+                    /**
+                     * Check if the extension is installed
+                     */
+                    if (!extension_loaded($prototype)) {
+                        $prototypeRealpath = realpath($prototypeDir);
+                        if ($prototypeRealpath) {
+                            foreach (new RecursiveDirectoryIterator($prototypeRealpath) as $file) {
+                                if ($file->isDir()) {
+                                    continue;
+                                }
+
+                                require_once $file->getRealPath();
+                            }
+                        }
+                    }
+                }
+            }
+
+            self::$loadedPrototypes = true;
+        }
+
+        /**
          * Round 2. Check 'extends' and 'implements' dependencies
          */
         foreach ($this->files as $compileFile) {
@@ -1175,65 +1240,6 @@ final class Compiler
         $globals = $this->config->get('globals');
         if (is_array($globals)) {
             $this->setExtensionGlobals($globals);
-        }
-
-        /**
-         * Load function optimizers
-         */
-        if (false === self::$loadedPrototypes) {
-            $optimizersPath = $this->resolveOptimizersPath();
-            FunctionCall::addOptimizerDir("{$optimizersPath}/FunctionCall");
-
-            $customOptimizersPaths = $this->config->get('optimizer-dirs');
-            if (is_array($customOptimizersPaths)) {
-                foreach ($customOptimizersPaths as $directory) {
-                    FunctionCall::addOptimizerDir(realpath($directory));
-                }
-            }
-
-            /**
-             * Load additional extension prototypes.
-             */
-            $prototypesPath = $this->resolvePrototypesPath();
-            foreach (new DirectoryIterator($prototypesPath) as $file) {
-                if ($file->isDir() || $file->isDot()) {
-                    continue;
-                }
-
-                // Do not use $file->getRealPath() because it does not work inside phar
-                $realPath  = "{$file->getPath()}/{$file->getFilename()}";
-                $extension = $file->getBasename(".{$file->getExtension()}");
-
-                if (!extension_loaded($extension)) {
-                    require_once $realPath;
-                }
-            }
-
-            /**
-             * Load customer additional extension prototypes.
-             */
-            $prototypeDirs = $this->config->get('prototype-dir');
-            if (is_array($prototypeDirs)) {
-                foreach ($prototypeDirs as $prototype => $prototypeDir) {
-                    /**
-                     * Check if the extension is installed
-                     */
-                    if (!extension_loaded($prototype)) {
-                        $prototypeRealpath = realpath($prototypeDir);
-                        if ($prototypeRealpath) {
-                            foreach (new RecursiveDirectoryIterator($prototypeRealpath) as $file) {
-                                if ($file->isDir()) {
-                                    continue;
-                                }
-
-                                require_once $file->getRealPath();
-                            }
-                        }
-                    }
-                }
-            }
-
-            self::$loadedPrototypes = true;
         }
 
         /**
