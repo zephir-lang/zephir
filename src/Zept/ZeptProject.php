@@ -28,7 +28,18 @@ namespace Zephir\Zept;
 final class ZeptProject
 {
     private const NAMESPACE_RE = '/^\s*namespace\s+([A-Za-z_][A-Za-z0-9_]*(?:\\\\[A-Za-z_][A-Za-z0-9_]*)*)\s*;/m';
-    private const TYPE_RE      = '/\b(?:final\s+|abstract\s+)*(?:class|interface|trait)\s+([A-Za-z_][A-Za-z0-9_]*)/';
+
+    /**
+     * A declaration has to begin a statement, so it is preceded by a line
+     * start, a `;` or a `}` -- never by prose. `class`, `interface` and `trait`
+     * are ordinary English words, and this pattern is matched against the whole
+     * `--FILE--` body, comments included, taking the first hit. Without the
+     * prefix, "a private method of the class being compiled" in a docblock won
+     * and derived `stub/being.zep`; the case then failed deep in the compiler
+     * with `Unexpected class name 'Stub\Foo' in file: 'stub/being.zep'`, which
+     * says nothing about the comment that caused it.
+     */
+    private const TYPE_RE = '/(?:^|[;}])\s*(?:final\s+|abstract\s+)*(?:class|interface|trait)\s+([A-Za-z_][A-Za-z0-9_]*)/m';
 
     public function __construct(private ZeptFile $zept)
     {
