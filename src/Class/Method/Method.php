@@ -164,6 +164,20 @@ class Method
      */
     protected int $yieldPoints = 0;
 
+    /**
+     * The method name as written in the .zep source.
+     *
+     * The compiler emits copies of a method under a mangled name — the
+     * `internal-call-transformation` twin (`<name>_zephir_internal_call`) and a
+     * generator's step (`zephir_gen_step_<name>`). Those copies are compiled as
+     * methods in their own right, so anything user-visible that reads the
+     * method name — `__FUNCTION__`, `__METHOD__`, compile diagnostics — must
+     * read the declared name instead of the mangled one.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2643
+     */
+    protected ?string $declaredName = null;
+
     public function __construct(
         protected ?Definition $classDefinition = null,
         protected array $visibility = [],
@@ -1481,7 +1495,7 @@ class Method
                             $parameter['name'],
                             $this->getParamDataType($parameter),
                             $this->getClassDefinition()?->getCompleteName() ?? '[unknown]',
-                            $this->getName()
+                            $this->getDeclaredName()
                         ),
                         ['deprecated-strict-type', $parameter]
                     );
@@ -1742,7 +1756,7 @@ class Method
                         . '" declared but not used in '
                         . $completeName
                         . '::'
-                        . $this->getName(),
+                        . $this->getDeclaredName(),
                         ['unused-variable', $variable->getOriginal()]
                     );
                     continue;
@@ -1754,7 +1768,7 @@ class Method
                     . '" declared but not used in '
                     . $completeName
                     . '::'
-                    . $this->getName(),
+                    . $this->getDeclaredName(),
                     ['unused-variable-external', $variable->getOriginal()]
                 );
             }
@@ -1809,7 +1823,7 @@ class Method
                         . '" assigned but not used in '
                         . $completeName
                         . '::'
-                        . $this->getName(),
+                        . $this->getDeclaredName(),
                         ['unused-variable', $expression]
                     );
                 } else {
@@ -1819,7 +1833,7 @@ class Method
                         . '" assigned but not used in '
                         . $completeName
                         . '::'
-                        . $this->getName(),
+                        . $this->getDeclaredName(),
                         ['unused-variable', $variable->getOriginal()]
                     );
                 }
@@ -2273,6 +2287,17 @@ class Method
         }
 
         return implode('|', array_keys($modifiers));
+    }
+
+    /**
+     * Returns the method name as written in the .zep source.
+     *
+     * Same as {@see getName()} unless this method is a compiler-generated copy
+     * of another one, in which case it is the name of the method it copies.
+     */
+    public function getDeclaredName(): string
+    {
+        return $this->declaredName ?? $this->name;
     }
 
     /**
@@ -3242,6 +3267,14 @@ class Method
     }
 
     /**
+     * Records the name of the method this one is a generated copy of.
+     */
+    public function setDeclaredName(string $name): void
+    {
+        $this->declaredName = $name;
+    }
+
+    /**
      * Sets the method name.
      */
     public function setName(string $name): void
@@ -3442,6 +3475,7 @@ class Method
             );
             $optimizedMethod->typeInference = $this->typeInference;
             $optimizedMethod->setReturnTypes($this->returnTypes);
+            $optimizedMethod->setDeclaredName($this->getName());
             $classDefinition->addMethod($optimizedMethod);
         }
 

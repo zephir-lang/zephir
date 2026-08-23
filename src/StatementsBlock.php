@@ -101,7 +101,7 @@ class StatementsBlock
             );
 
             if ($compilationContext->currentMethod) {
-                $where .= sprintf('::%s', $compilationContext->currentMethod->getName());
+                $where .= sprintf('::%s', $compilationContext->currentMethod->getDeclaredName());
             }
         }
 

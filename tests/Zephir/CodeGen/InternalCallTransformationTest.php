@@ -310,6 +310,110 @@ final class InternalCallTransformationTest extends TestCase
 
         $this->assertStringNotContainsString('numbers_zephir_internal_call', $c);
     }
+    /**
+     * `__FUNCTION__`/`__METHOD__` are folded at compile time from the method
+     * being compiled. The twin is compiled as a method in its own right, so the
+     * fold ran a second time against the mangled name and baked it into the
+     * emitted string literal.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2643
+     */
+    public function testMagicConstantsFoldToTheDeclaredName(): void
+    {
+        $c = $this->compileZep(
+            'MagicNames',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                class MagicNames
+                {
+                    private function privateStep() -> string
+                    {
+                        return __FUNCTION__;
+                    }
+
+                    final protected function finalStep() -> string
+                    {
+                        return __FUNCTION__;
+                    }
+
+                    protected static function selfStep() -> string
+                    {
+                        return __METHOD__;
+                    }
+
+                    public function viaPrivate() -> string
+                    {
+                        return this->privateStep();
+                    }
+
+                    public function viaFinal() -> string
+                    {
+                        return this->finalStep();
+                    }
+
+                    public function viaSelf() -> string
+                    {
+                        return self::selfStep();
+                    }
+                }
+                ZEP
+        );
+
+        // The twin must still be emitted: this test is about the folded value,
+        // not about disabling the optimization.
+        $this->assertStringContainsString('privateStep_zephir_internal_call', $c);
+
+        // Quoting is the invariant: the mangled name is legitimate as a C
+        // function name and never legitimate as a string literal.
+        $leaked = "The twin's name reached a folded string literal.\nEmitted C:\n" . $c;
+
+        $this->assertStringNotContainsString('"privateStep_zephir_internal_call"', $c, $leaked);
+        $this->assertStringNotContainsString('"finalStep_zephir_internal_call"', $c, $leaked);
+        $this->assertStringNotContainsString('"MagicNames:selfStep_zephir_internal_call"', $c, $leaked);
+
+        $folded = "The declared name was not folded into the twin's body.\nEmitted C:\n" . $c;
+
+        $this->assertStringContainsString('"privateStep"', $c, $folded);
+        $this->assertStringContainsString('"finalStep"', $c, $folded);
+        $this->assertStringContainsString('"MagicNames:selfStep"', $c, $folded);
+    }
+
+    /**
+     * The same defect without the optimization: GeneratorTransformer moves the
+     * body into a step method named `zephir_gen_step_<name>`, and the fold runs
+     * against the step.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2643
+     */
+    public function testGeneratorStepMagicConstantsFoldToTheDeclaredName(): void
+    {
+        $c = $this->compileZep(
+            'GenNames',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                class GenNames
+                {
+                    public function numbers()
+                    {
+                        yield __FUNCTION__;
+                        yield __METHOD__;
+                    }
+                }
+                ZEP
+        );
+
+        $leaked = "The step's name reached a folded string literal.\nEmitted C:\n" . $c;
+
+        $this->assertStringNotContainsString('"zephir_gen_step_numbers"', $c, $leaked);
+        $this->assertStringNotContainsString('"GenNames:zephir_gen_step_numbers"', $c, $leaked);
+
+        $folded = "The declared name was not folded into the step's body.\nEmitted C:\n" . $c;
+
+        $this->assertStringContainsString('"numbers"', $c, $folded);
+        $this->assertStringContainsString('"GenNames:numbers"', $c, $folded);
+    }
 
     /**
      * Compile a single-class fixture and return the whole emitted `.zep.c`.
