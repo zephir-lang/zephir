@@ -58,6 +58,39 @@ final class ZeptProjectTest extends TestCase
         $this->assertArrayHasKey('zept/speaks.zep', $project->sources());
     }
 
+    public function testIgnoresTheWordClassInProseBeforeTheDeclaration(): void
+    {
+        $project = new ZeptProject($this->zept([
+            "namespace Zept;\n"
+            . "\n"
+            . "/**\n"
+            . " * The direct call is used for a private method of the class being\n"
+            . " * compiled, so this trait of the optimizer is what we exercise.\n"
+            . " */\n"
+            . 'class Greeter {}',
+        ]));
+
+        $this->assertArrayHasKey('zept/greeter.zep', $project->sources());
+    }
+
+    public function testIgnoresADeclarationKeywordInsideALineComment(): void
+    {
+        $project = new ZeptProject($this->zept([
+            "namespace Zept;\n"
+            . "// see the interface Speaks for the contract\n"
+            . 'class Greeter {}',
+        ]));
+
+        $this->assertArrayHasKey('zept/greeter.zep', $project->sources());
+    }
+
+    public function testSupportsADeclarationSharingItsLineWithTheNamespace(): void
+    {
+        $project = new ZeptProject($this->zept(['namespace Zept; final class Greeter {}']));
+
+        $this->assertArrayHasKey('zept/greeter.zep', $project->sources());
+    }
+
     public function testCollectsAllFilesSharingTheNamespace(): void
     {
         $project = new ZeptProject($this->zept([
