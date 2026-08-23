@@ -1,0 +1,60 @@
+--TEST--
+Capturing a string parameter in a closure under internal-call-transformation (issue #2638)
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--FILE--
+namespace Stub;
+
+/**
+ * With internal-call-transformation on, every ordinary method also gets an
+ * internal twin. An internal method cannot use the native `zend_string *`
+ * strategy — both Z_PARAM_STR and ZEND_CALL_ARG read the caller's argument
+ * frame, which it does not own — so a `string` parameter arrives as a zval.
+ * Capturing it in a closure used to box the zval a second time with
+ * ZVAL_STRING() and the extension failed to compile.
+ */
+class Capture
+{
+	public function stringParam(string name) -> <\Closure>
+	{
+		return function () use (name) {
+			return name;
+		};
+	}
+
+	public function stringLocal() -> <\Closure>
+	{
+		string name = "";
+
+		let name = "abc";
+
+		return function () use (name) {
+			return name;
+		};
+	}
+
+	public function stringWithDefault(string name = "fallback") -> <\Closure>
+	{
+		return function () use (name) {
+			return name;
+		};
+	}
+}
+--USAGE--
+use Stub\Capture;
+
+$test = new Capture();
+
+$closure = $test->stringParam('world');
+echo var_export($closure instanceof \Closure, true), "\n";
+echo var_export($closure(), true), "\n";
+
+echo var_export($test->stringLocal()(), true), "\n";
+echo var_export($test->stringWithDefault()(), true), "\n";
+echo var_export($test->stringWithDefault('given')(), true), "\n";
+--EXPECT--
+true
+'world'
+'abc'
+'fallback'
+'given'

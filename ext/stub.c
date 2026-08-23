@@ -83,6 +83,8 @@ zend_class_entry *stub_28__closure_ce;
 zend_class_entry *stub_29__closure_ce;
 zend_class_entry *stub_2__closure_ce;
 zend_class_entry *stub_30__closure_ce;
+zend_class_entry *stub_31__closure_ce;
+zend_class_entry *stub_32__closure_ce;
 zend_class_entry *stub_3__closure_ce;
 zend_class_entry *stub_4__closure_ce;
 zend_class_entry *stub_5__closure_ce;
@@ -646,6 +648,8 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(stub_29__closure);
 	ZEPHIR_INIT(stub_2__closure);
 	ZEPHIR_INIT(stub_30__closure);
+	ZEPHIR_INIT(stub_31__closure);
+	ZEPHIR_INIT(stub_32__closure);
 	ZEPHIR_INIT(stub_3__closure);
 	ZEPHIR_INIT(stub_4__closure);
 	ZEPHIR_INIT(stub_5__closure);

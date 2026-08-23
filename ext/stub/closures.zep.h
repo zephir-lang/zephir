@@ -34,6 +34,8 @@ PHP_METHOD(Stub_Closures, issue2321ProtectedCallback);
 PHP_METHOD(Stub_Closures, issue2321ProtectedUpper);
 PHP_METHOD(Stub_Closures, issue2321ArrayMapPrivate);
 PHP_METHOD(Stub_Closures, issue2321Doubled);
+PHP_METHOD(Stub_Closures, issue2638StringLocalUse);
+PHP_METHOD(Stub_Closures, issue2638StringParamMutatedUse);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_closures_simple1, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -143,6 +145,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_closures_issue2321doubled, 
 	ZEND_ARG_TYPE_INFO(0, val, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2638stringlocaluse, 0, 0, Closure, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2638stringparammutateduse, 0, 1, Closure, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_closures_method_entry) {
 PHP_ME(Stub_Closures, simple1, arginfo_stub_closures_simple1, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Closures, simple2, arginfo_stub_closures_simple2, ZEND_ACC_PUBLIC)
@@ -175,5 +184,7 @@ PHP_ME(Stub_Closures, issue1036Call, arginfo_stub_closures_issue1036call, ZEND_A
 	PHP_ME(Stub_Closures, issue2321ProtectedUpper, arginfo_stub_closures_issue2321protectedupper, ZEND_ACC_PROTECTED)
 	PHP_ME(Stub_Closures, issue2321ArrayMapPrivate, arginfo_stub_closures_issue2321arraymapprivate, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Closures, issue2321Doubled, arginfo_stub_closures_issue2321doubled, ZEND_ACC_PRIVATE)
+	PHP_ME(Stub_Closures, issue2638StringLocalUse, arginfo_stub_closures_issue2638stringlocaluse, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2638StringParamMutatedUse, arginfo_stub_closures_issue2638stringparammutateduse, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

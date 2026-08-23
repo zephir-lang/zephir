@@ -226,4 +226,35 @@ final class ClosureTest extends TestCase
 
         $this->assertSame([2, 4, 6, 8], $test->issue2321ArrayMapPrivate([1, 2, 3, 4]));
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2638
+     *
+     * Capturing a `string` local. Held as a zval, so it used to be boxed a
+     * second time with ZVAL_STRING() and the extension failed to compile.
+     */
+    public function testIssue2638StringLocalUse(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue2638StringLocalUse();
+        $this->assertInstanceOf(\Closure::class, $closure);
+        $this->assertSame('abc', $closure());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2638
+     *
+     * Variant: a `string` parameter reassigned in the body is disqualified
+     * from the native `zend_string *` strategy, so it reaches the capture as
+     * a zval just like a local.
+     */
+    public function testIssue2638StringParamMutatedUse(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue2638StringParamMutatedUse('abc');
+        $this->assertInstanceOf(\Closure::class, $closure);
+        $this->assertSame('abc!', $closure());
+    }
 }
