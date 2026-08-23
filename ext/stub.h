@@ -309,5 +309,7 @@
 #include "stub/28__closure.zep.h"
 #include "stub/29__closure.zep.h"
 #include "stub/30__closure.zep.h"
+#include "stub/31__closure.zep.h"
+#include "stub/32__closure.zep.h"
 
 #endif

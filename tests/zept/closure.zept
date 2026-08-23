@@ -1,5 +1,5 @@
 --TEST--
-Closures: use() capture, closure-this property access/write (#2497/#1873), string capture (#2562), and private/protected callbacks via closure wrappers (#2321) (port of tests/Extension/ClosureTest.php)
+Closures: use() capture, closure-this property access/write (#2497/#1873), string capture as zend_string (#2562) and as a zval (#2638), and private/protected callbacks via closure wrappers (#2321) (port of tests/Extension/ClosureTest.php)
 --FILE--
 namespace Stub;
 
@@ -170,6 +170,26 @@ class Closures
     {
         return val * 2;
     }
+
+    public function issue2638StringLocalUse() -> <\Closure>
+    {
+        string name = "";
+
+        let name = "abc";
+
+        return function () use (name) {
+            return name;
+        };
+    }
+
+    public function issue2638StringParamMutatedUse(string name) -> <\Closure>
+    {
+        let name = name . "!";
+
+        return function () use (name) {
+            return name;
+        };
+    }
 }
 --USAGE--
 use Stub\Closures;
@@ -258,6 +278,18 @@ echo var_export($test->issue2321ProtectedCallback('hello123'), true), "\n";
 // testIssue2321ArrayMapPrivateCallback
 $test = new Closures();
 echo var_export($test->issue2321ArrayMapPrivate([1, 2, 3, 4]), true), "\n";
+
+// testIssue2638StringLocalUse
+$test = new Closures();
+$closure = $test->issue2638StringLocalUse();
+echo var_export($closure instanceof \Closure, true), "\n";
+echo var_export($closure(), true), "\n";
+
+// testIssue2638StringParamMutatedUse
+$test = new Closures();
+$closure = $test->issue2638StringParamMutatedUse('abc');
+echo var_export($closure instanceof \Closure, true), "\n";
+echo var_export($closure(), true), "\n";
 --EXPECT--
 2
 true
@@ -290,3 +322,7 @@ array (
   2 => 6,
   3 => 8,
 )
+true
+'abc'
+true
+'abc!'

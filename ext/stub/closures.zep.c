@@ -20,6 +20,7 @@
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
 #include "kernel/string.h"
+#include "kernel/concat.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Closures)
@@ -354,20 +355,17 @@ PHP_METHOD(Stub_Closures, issue1873PropertyAndUse)
  */
 PHP_METHOD(Stub_Closures, issue2562StringUse)
 {
-	zval name_zv, _0;
+	zval name_zv;
 	zend_string *name = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&name_zv);
-	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
 	zephir_create_closure_ex(return_value, this_ptr, stub_19__closure_ce, SL("__invoke"));
-	ZVAL_UNDEF(&_0);
-	ZVAL_STR(&_0, name);
-	zephir_update_static_property_ce(stub_19__closure_ce, ZEND_STRL("name"), &_0);
+	zephir_update_static_property_ce(stub_19__closure_ce, ZEND_STRL("name"), &name_zv);
 	return;
 }
 
@@ -556,5 +554,62 @@ PHP_METHOD(Stub_Closures, issue2321Doubled)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &val_param);
 	RETURN_LONG((val * 2));
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2638
+ *
+ * Capturing a `string` **local**. Locals never use the native
+ * `zend_string *` strategy, so the capture is already a zval and must
+ * not be boxed again — boxing it emitted `ZVAL_STRING` on a zval, which
+ * does not compile.
+ */
+PHP_METHOD(Stub_Closures, issue2638StringLocalUse)
+{
+	zval name;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+
+	ZVAL_UNDEF(&name);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&name);
+	ZVAL_STRING(&name, "");
+	ZEPHIR_INIT_NVAR(&name);
+	ZVAL_STRING(&name, "abc");
+	zephir_create_closure_ex(return_value, NULL, stub_23__closure_ce, SL("__invoke"));
+	zephir_update_static_property_ce(stub_23__closure_ce, ZEND_STRL("name"), &name);
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2638
+ *
+ * Variant: a `string` **parameter** that is reassigned in the body. Two
+ * mutations disqualify it from the native-string strategy, so it is held
+ * as a zval exactly like a local — the same capture path, reachable
+ * without changing any compiler option.
+ */
+PHP_METHOD(Stub_Closures, issue2638StringParamMutatedUse)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *name_param = NULL;
+	zval name, _0;
+
+	ZVAL_UNDEF(&name);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(name_param)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &name_param);
+	zephir_get_strval(&name, name_param);
+	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_CONCAT_VS(&_0, &name, "!");
+	ZEPHIR_CPY_WRT(&name, &_0);
+	zephir_create_closure_ex(return_value, NULL, stub_24__closure_ce, SL("__invoke"));
+	zephir_update_static_property_ce(stub_24__closure_ce, ZEND_STRL("name"), &name);
+	RETURN_MM();
 }
 
