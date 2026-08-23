@@ -58,7 +58,7 @@ class DeclareStatement extends StatementAbstract
                     if ($parameter['name'] === $varName) {
                         throw new CompilerException(
                             "Variable '" . $varName . "' was already declared as a parameter of method '"
-                            . $compilationContext->currentMethod->getName() . "'",
+                            . $compilationContext->currentMethod->getDeclaredName() . "'",
                             $variable
                         );
                     }

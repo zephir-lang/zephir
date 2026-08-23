@@ -157,13 +157,13 @@ class Constants
                     return new CompiledExpression(
                         'string',
                         $compilationContext->classDefinition->getName(
-                        ) . ':' . $compilationContext->currentMethod->getName(),
+                        ) . ':' . $compilationContext->currentMethod->getDeclaredName(),
                         $expression
                     );
                 case '__FUNCTION__':
                     return new CompiledExpression(
                         'string',
-                        $compilationContext->currentMethod->getName(),
+                        $compilationContext->currentMethod->getDeclaredName(),
                         $expression
                     );
             }
