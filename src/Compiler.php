@@ -397,10 +397,7 @@ final class Compiler
          * Get global namespace.
          */
         $namespace     = str_replace('\\', '_', $this->checkDirectory());
-        $extensionName = $this->config->get('extension-name');
-        if (empty($extensionName) || !is_string($extensionName)) {
-            $extensionName = $namespace;
-        }
+        $extensionName = $this->getExtensionFileName();
 
         $currentDir = getcwd();
         if (file_exists("$currentDir/compile.log")) {
@@ -419,8 +416,8 @@ final class Compiler
          * `modules/<ns>.la`, which is still up to date, so removing just the
          * `.so` leaves the project without one.
          */
-        if ($reconfigure && file_exists("$currentDir/ext/modules/{$namespace}.so")) {
-            unlink("$currentDir/ext/modules/{$namespace}.so");
+        if ($reconfigure && file_exists("$currentDir/ext/modules/{$extensionName}.so")) {
+            unlink("$currentDir/ext/modules/{$extensionName}.so");
         }
 
         if (Os::isWindows()) {
@@ -1336,11 +1333,7 @@ final class Compiler
         /**
          * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files.
          */
-        $namespace     = str_replace('\\', '_', $namespace);
-        $extensionName = $this->config->get('extension-name');
-        if (empty($extensionName) || !is_string($extensionName)) {
-            $extensionName = $namespace;
-        }
+        $extensionName = $this->getExtensionFileName();
 
         $needConfigure = $this->createConfigFiles($extensionName);
         $needConfigure |= $this->createProjectFiles($extensionName);
@@ -1535,6 +1528,24 @@ final class Compiler
     }
 
     /**
+     * The base name of the built extension, without the shared object suffix.
+     *
+     * This is what `ext/modules/` and the extension directory hold, and what a
+     * php.ini `extension=` line names: the configured `extension-name` when the
+     * project sets one, the namespace otherwise.
+     */
+    public function getExtensionFileName(): string
+    {
+        $extensionName = $this->config->get('extension-name');
+
+        if (!empty($extensionName) && is_string($extensionName)) {
+            return $extensionName;
+        }
+
+        return str_replace('\\', '_', (string)$this->config->get('namespace'));
+    }
+
+    /**
      * Returns an extension global by its name.
      */
     public function getExtensionGlobal(string $name): array
@@ -1642,14 +1653,17 @@ final class Compiler
      * @param int|null $jobs Parallel `make` jobs. Defaults to the number of
      *                       processors available.
      *
+     * @return string|null The directory the extension was installed into, or
+     *                     null when that cannot be told.
+     *
      * @throws Exception
      * @throws NotImplementedException
      * @throws CompilerException
      */
-    public function install(bool $development = false, ?int $jobs = null): void
+    public function install(bool $development = false, ?int $jobs = null): ?string
     {
-        // Get global namespace
-        $namespace  = str_replace('\\', '_', $this->checkDirectory());
+        // Validates the project and initializes the internal cache.
+        $this->checkDirectory();
         $currentDir = getcwd();
 
         if (Os::isWindows()) {
@@ -1690,13 +1704,30 @@ final class Compiler
         }, explode('&&', $command));
 
         exec($command, $output, $exit);
-        $fileName = $this->config->get('extension-name') ?: $namespace;
+        $fileName = $this->getExtensionFileName();
 
         if (false === file_exists("{$currentDir}/ext/modules/{$fileName}.so")) {
             throw new CompilerException(
                 'Internal extension compilation failed. Check compile-errors.log for more information.'
             );
         }
+
+        /**
+         * Having the module in `ext/modules` says `make` worked, not that it
+         * was copied anywhere: that is `sudo make install`, and a missing sudo,
+         * a declined password or a read-only extension directory all leave the
+         * build reporting success with nothing installed.
+         */
+        if (0 !== $exit) {
+            throw new CompilerException(sprintf(
+                'Installation failed with exit code %d. Both `make` and `sudo make install` run '
+                . 'here, so either the build or the copy into the PHP extension directory did not '
+                . 'go through. Check compile-errors.log for more information.',
+                $exit
+            ));
+        }
+
+        return $this->resolveExtensionInstallDir($currentDir, $fileName);
     }
 
     /**
@@ -2701,6 +2732,34 @@ final class Compiler
         }
 
         return $value;
+    }
+
+    /**
+     * The directory `make install` copied the extension into, or null when that
+     * cannot be told.
+     *
+     * `configure` bakes the `php-config --extension-dir` of the PHP the
+     * extension was built against into `ext/Makefile`, so the destination is
+     * read from there rather than looked up again: a build retargeted with
+     * `--with-php-config` installs into that PHP's directory and not into the
+     * one belonging to the `php-config` in the PATH.
+     *
+     * The installed file is confirmed to be at the destination instead of being
+     * assumed, because `make install` runs through `sudo` and its outcome is
+     * not what install() checks. Reporting a directory the extension is not in
+     * would be a worse answer than reporting none.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2467
+     */
+    private function resolveExtensionInstallDir(string $currentDir, string $fileName): ?string
+    {
+        $dir = $this->makefileVariable($currentDir . DIRECTORY_SEPARATOR . 'ext', 'EXTENSION_DIR');
+
+        if (null === $dir) {
+            return null;
+        }
+
+        return is_file($dir . DIRECTORY_SEPARATOR . $fileName . '.so') ? $dir : null;
     }
 
     /**
