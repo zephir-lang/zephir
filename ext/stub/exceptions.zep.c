@@ -155,24 +155,24 @@ PHP_METHOD(Stub_Exceptions, testExceptionLiteral)
 		Z_PARAM_STR(type)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&type_zv, type);
-	do {
-		if (ZEPHIR_IS_STRING(&type_zv, "string")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "Test", "stub/exceptions.zep", 56);
-			return;
-		}
-		if (ZEPHIR_IS_STRING(&type_zv, "char")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "t", "stub/exceptions.zep", 58);
-			return;
-		}
-		if (ZEPHIR_IS_STRING(&type_zv, "int")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "123", "stub/exceptions.zep", 60);
-			return;
-		}
-		if (ZEPHIR_IS_STRING(&type_zv, "double")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "123.123", "stub/exceptions.zep", 62);
-			return;
-		}
-	} while(0);
+	if (ZEPHIR_IS_STRING(&type_zv, "string")) { goto zephir_switch_0_clause_0; }
+	if (ZEPHIR_IS_STRING(&type_zv, "char")) { goto zephir_switch_0_clause_1; }
+	if (ZEPHIR_IS_STRING(&type_zv, "int")) { goto zephir_switch_0_clause_2; }
+	if (ZEPHIR_IS_STRING(&type_zv, "double")) { goto zephir_switch_0_clause_3; }
+	goto zephir_switch_0_end;
+	zephir_switch_0_clause_0: ;
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "Test", "stub/exceptions.zep", 56);
+		return;
+	zephir_switch_0_clause_1: ;
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "t", "stub/exceptions.zep", 58);
+		return;
+	zephir_switch_0_clause_2: ;
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "123", "stub/exceptions.zep", 60);
+		return;
+	zephir_switch_0_clause_3: ;
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "123.123", "stub/exceptions.zep", 62);
+		return;
+	zephir_switch_0_end: ;
 
 }
 

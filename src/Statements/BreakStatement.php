@@ -23,10 +23,25 @@ class BreakStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext): void
     {
-        if ($compilationContext->insideCycle || $compilationContext->insideSwitch) {
-            $compilationContext->codePrinter->output('break;');
-        } else {
-            throw new CompilerException("Cannot use 'break' outside of a loop", $this->statement);
+        /**
+         * A `switch` is lowered to labels and jumps, so leaving it means
+         * jumping to its end label rather than emitting a C `break`.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/1704
+         */
+        $endLabel = $compilationContext->useSwitchEndLabel();
+        if (null !== $endLabel) {
+            $compilationContext->codePrinter->output('goto ' . $endLabel . ';');
+
+            return;
         }
+
+        if ($compilationContext->insideCycle) {
+            $compilationContext->codePrinter->output('break;');
+
+            return;
+        }
+
+        throw new CompilerException("Cannot use 'break' outside of a loop", $this->statement);
     }
 }

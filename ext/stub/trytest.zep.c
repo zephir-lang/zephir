@@ -516,5 +516,6 @@ PHP_METHOD(Stub_TryTest, testTry11)
 			ZEPHIR_CPY_WRT(&ex, &_0);
 		}
 	}
+	ZEPHIR_MM_RESTORE();
 }
 
