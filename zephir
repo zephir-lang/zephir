@@ -224,7 +224,9 @@ EOT);
             exit(1);
         }
 
-        install($devMode, $jobs);
+        if (!install($devMode, $jobs)) {
+            exit(1);
+        }
 
         break;
 
@@ -414,7 +416,9 @@ EOT);
             );
         }
 
-        install($devMode, $jobs);
+        if (!install($devMode, $jobs)) {
+            exit(1);
+        }
 
         break;
 
@@ -628,18 +632,31 @@ function install(bool $development = false, ?int $jobs = null): bool
     global $compiler, $config;
 
     try {
-        $compiler->install($development, $jobs);
+        $installedInto = $compiler->install($development, $jobs);
     } catch (NotImplementedException|CompilerException|Exception $e) {
         fwrite(STDERR, $e->getMessage() . PHP_EOL);
 
         return false;
     }
 
-    $success = ['Extension installed.'];
+    /**
+     * Naming the destination saves hunting for it before the extension can be
+     * loaded by hand with `php -d extension=...`. Null means the build was
+     * never configured, or the extension is not where the Makefile says it
+     * should be, in which case there is no path worth printing.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2467
+     */
+    $success = [
+        null === $installedInto
+            ? 'Extension installed.'
+            : sprintf('Extension installed into %s', $installedInto),
+    ];
 
-    $namespace = $config->get('namespace');
-    if (!extension_loaded($namespace)) {
-        $success[] = sprintf('Add "extension=%s.so" to your php.ini', $namespace);
+    if (!extension_loaded($config->get('namespace'))) {
+        // The installed file is named after `extension-name` where the project
+        // configures one, which is not necessarily the namespace.
+        $success[] = sprintf('Add "extension=%s.so" to your php.ini', $compiler->getExtensionFileName());
     }
 
     fwrite(STDOUT, implode(PHP_EOL, $success) . PHP_EOL);
