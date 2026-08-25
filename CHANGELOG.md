@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-08-25
+
 ### Added
 - Anonymous functions can now declare a return type: `function (a) -> int { }`, including after a `use (...)` clause (`function () use (base) -> string { }`), and with `void`, union (`int|string`) and `<Class>` types. The type is declared on the closure's `__invoke`, so Reflection reports it. Requires Zephir Parser 2.6.0 [#1841](https://github.com/zephir-lang/zephir/issues/1841)
 - Class constant initializers and class/trait property defaults accept a full constant expression instead of a single literal, so `const INT8_MIN = -0x7f - 1;`, `const MASK = 0xff << 8 | 0x0f;` and `public size = 1024 * 8;` now compile. Arithmetic, bitwise, concatenation, comparison, logical and ternary operators are supported, as are parentheses, other constants (`self::KB * 2`) and expressions inside array constants; the result is folded to a literal at compile time with PHP's own semantics (`4 / 2` is an `int`, `PHP_INT_MAX + 1` a float). An initializer that is not resolvable at compile time is now rejected by name instead of failing as a syntax error. Parameter defaults are unchanged. The new syntax needs Zephir Parser 2.7.0; an older extension is bypassed in favour of the built-in parser (see below) [#2061](https://github.com/zephir-lang/zephir/issues/2061)
