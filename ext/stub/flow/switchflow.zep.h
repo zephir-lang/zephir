@@ -17,6 +17,11 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch11);
 PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch12);
 PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13);
 PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14);
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch15);
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch16);
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch17);
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch18);
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch19);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_flow_switchflow_testswitch1, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -64,6 +69,24 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_flow_switchflow_testswitch14, 0, 0, 0)
 	ZEND_ARG_INFO(0, result_type)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_flow_switchflow_testswitch15, 0, 1, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_flow_switchflow_testswitch16, 0, 1, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_flow_switchflow_testswitch17, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_flow_switchflow_testswitch18, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_flow_switchflow_testswitch19, 0, 1, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_flow_switchflow_method_entry) {
 	PHP_ME(Stub_Flow_SwitchFlow, testSwitch1, arginfo_stub_flow_switchflow_testswitch1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Flow_SwitchFlow, testSwitch2, arginfo_stub_flow_switchflow_testswitch2, ZEND_ACC_PUBLIC)
@@ -79,5 +102,10 @@ PHP_ME(Stub_Flow_SwitchFlow, testSwitch11, arginfo_stub_flow_switchflow_testswit
 	PHP_ME(Stub_Flow_SwitchFlow, testSwitch12, arginfo_stub_flow_switchflow_testswitch12, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Flow_SwitchFlow, testSwitch13, arginfo_stub_flow_switchflow_testswitch13, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Flow_SwitchFlow, testSwitch14, arginfo_stub_flow_switchflow_testswitch14, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Flow_SwitchFlow, testSwitch15, arginfo_stub_flow_switchflow_testswitch15, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Flow_SwitchFlow, testSwitch16, arginfo_stub_flow_switchflow_testswitch16, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Flow_SwitchFlow, testSwitch17, arginfo_stub_flow_switchflow_testswitch17, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Flow_SwitchFlow, testSwitch18, arginfo_stub_flow_switchflow_testswitch18, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Flow_SwitchFlow, testSwitch19, arginfo_stub_flow_switchflow_testswitch19, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

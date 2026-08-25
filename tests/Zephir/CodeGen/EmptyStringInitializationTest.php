@@ -122,7 +122,7 @@ ZEP;
             'stub/issue2393/decl'
         );
 
-        $beforeSwitch = $this->sliceBetween($c, 'PHP_METHOD(Stub_Issue2393_Decl, getSpecial)', 'do {');
+        $beforeSwitch = $this->sliceBetween($c, 'PHP_METHOD(Stub_Issue2393_Decl, getSpecial)', 'zephir_switch_');
         $this->assertNotSame(
             '',
             $beforeSwitch,
@@ -167,7 +167,7 @@ ZEP;
             'stub/issue2393/lett'
         );
 
-        $beforeSwitch = $this->sliceBetween($c, 'PHP_METHOD(Stub_Issue2393_Lett, getSpecial)', 'do {');
+        $beforeSwitch = $this->sliceBetween($c, 'PHP_METHOD(Stub_Issue2393_Lett, getSpecial)', 'zephir_switch_');
         $this->assertNotSame(
             '',
             $beforeSwitch,

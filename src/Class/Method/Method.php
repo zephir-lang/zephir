@@ -40,6 +40,7 @@ use Zephir\Variable\Variable;
 use function array_diff;
 use function array_key_exists;
 use function array_keys;
+use function array_values;
 use function count;
 use function implode;
 use function in_array;
@@ -59,6 +60,24 @@ use const PHP_EOL;
  */
 class Method
 {
+    /**
+     * Control runs off the end of the statement list and carries on after it.
+     */
+    private const OUTCOME_FALLS = 'falls';
+    /**
+     * Control leaves the enclosing `switch`/loop without leaving the method
+     * (a `break` or a `continue`).
+     */
+    private const OUTCOME_JUMPS = 'jumps';
+    /**
+     * Control leaves the method (a `return` or a `throw`).
+     */
+    private const OUTCOME_RETURNS = 'returns';
+    /**
+     * Statement types that loop, and so can capture a `break`/`continue`.
+     */
+    private const LOOP_TYPES = ['while', 'do-while', 'for', 'loop'];
+
     public bool $optimizable = true;
 
     /**
@@ -1052,6 +1071,8 @@ class Method
          * Reset try/catch and loop counter
          */
         $compilationContext->insideCycle     = 0;
+        $compilationContext->switchTargets   = [];
+        $compilationContext->switchLabelId   = 0;
         $compilationContext->insideTryCatch  = 0;
         $compilationContext->currentTryCatch = 0;
 
@@ -1942,19 +1963,13 @@ class Method
         /**
          * Finalize the method compilation
          */
-        if (is_object($this->statements) && !empty($statement = $this->statements->getLastStatement())) {
+        if (is_object($this->statements) && !empty($this->statements->getLastStatement())) {
             /**
-             * If the last statement is not a 'return' or 'throw' we need to
-             * restore the memory stack if needed.
+             * When control cannot reach the end of the body there is nothing to
+             * restore and no `return` missing. Otherwise the memory stack has to
+             * be restored, and a declared return type is left unsatisfied.
              */
-            $lastType = $this->statements->getLastStatementType();
-
-            if (
-                'return' !== $lastType &&
-                'throw' !== $lastType &&
-                !$this->hasChildReturnStatementType($statement) &&
-                !('switch' === $lastType && $this->switchAlwaysReturns($statement))
-            ) {
+            if (self::OUTCOME_RETURNS !== $this->statementsOutcome($this->statements->getStatements())) {
                 if ($this->isGeneratorStep()) {
                     /* Falling off the end finishes the generator (getReturn() => NULL). */
                     $genVariable = $compilationContext->symbolTable->getVariableForRead(
@@ -2436,53 +2451,15 @@ class Method
     }
 
     /**
-     * Simple method to check if one of the paths are returning the right expected type.
-     */
-    public function hasChildReturnStatementType(array $statement): bool
-    {
-        if (!isset($statement['statements']) || !is_array($statement['statements'])) {
-            return false;
-        }
-
-        if ('if' === $statement['type']) {
-            $ret = false;
-
-            $statements = $statement['statements'];
-            foreach ($statements as $item) {
-                $type = $item['type'] ?? null;
-                if ('return' === $type || 'throw' === $type) {
-                    $ret = true;
-                } else {
-                    $ret = $this->hasChildReturnStatementType($item);
-                }
-            }
-
-            if (!$ret || !isset($statement['else_statements'])) {
-                return false;
-            }
-
-            $statements = $statement['else_statements'];
-        } else {
-            $statements = $statement['statements'];
-        }
-
-        foreach ($statements as $item) {
-            $type = $item['type'] ?? null;
-            if ('return' === $type || 'throw' === $type) {
-                return true;
-            }
-
-            return $this->hasChildReturnStatementType($item);
-        }
-
-        return false;
-    }
-
-    /**
      * Issue #1706: tells whether a `switch` statement is guaranteed to return
-     * (or throw) on every path. This holds when it has a `default` clause, its
-     * last clause always exits, and every clause either always exits or is
-     * empty (falling through to a later clause that exits).
+     * (or throw) on every path.
+     *
+     * Every clause has to end up returning, because any of them can be the one
+     * that matches. A clause that neither returns nor jumps away falls through
+     * into the clause written after it (issue #1704), so it returns exactly
+     * when that next clause does - which leaves the last clause having to
+     * return on its own. Without a `default` clause a non-matching value skips
+     * the whole `switch`, so it is never exhaustive.
      */
     private function switchAlwaysReturns(array $statement): bool
     {
@@ -2490,7 +2467,7 @@ class Method
             return false;
         }
 
-        $clauses    = $statement['clauses'];
+        $clauses    = array_values($statement['clauses']);
         $hasDefault = false;
         foreach ($clauses as $clause) {
             if ('default' === ($clause['type'] ?? null)) {
@@ -2503,53 +2480,240 @@ class Method
             return false;
         }
 
-        $lastIndex = array_key_last($clauses);
-        foreach ($clauses as $index => $clause) {
-            $statements = $clause['statements'] ?? [];
+        /**
+         * Walk backwards so that each clause can be answered against the one
+         * it falls into. Past the last clause control leaves the `switch`
+         * without returning, hence the initial false.
+         */
+        $nextClauseReturns = false;
+        for ($index = count($clauses) - 1; $index >= 0; --$index) {
+            $outcome = $this->statementsOutcome($clauses[$index]['statements'] ?? []);
 
-            if ($this->statementsAlwaysExit($statements)) {
-                continue;
-            }
-
-            // The last clause must exit; otherwise execution falls off the end.
-            // An empty earlier clause is allowed: it falls through to the next.
-            if ($index === $lastIndex || [] !== $statements) {
+            if (self::OUTCOME_JUMPS === $outcome) {
+                /**
+                 * A `break`/`continue` leaves the `switch` without returning,
+                 * so the method can still fall off its end.
+                 */
                 return false;
             }
+
+            if (self::OUTCOME_FALLS === $outcome && !$nextClauseReturns) {
+                return false;
+            }
+
+            $nextClauseReturns = true;
         }
 
         return true;
     }
 
     /**
-     * Tells whether a block of statements is guaranteed to exit the method on
-     * every path (its last reachable statement is a `return`/`throw`, an
-     * exhaustive `if`/`else`, or an exhaustive `switch`).
+     * How control leaves a list of statements, as far as the enclosing method
+     * is concerned.
+     *
+     * The scan stops at the first statement that transfers control
+     * unconditionally, so a dead `break` written after a `return` as padding is
+     * never reached and cannot mask the `return` in front of it.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1704
      */
-    private function statementsAlwaysExit(array $statements): bool
+    private function statementsOutcome(array $statements): string
     {
-        if ([] === $statements) {
-            return false;
+        foreach ($statements as $statement) {
+            $outcome = $this->statementOutcome($statement);
+
+            if (self::OUTCOME_FALLS !== $outcome) {
+                return $outcome;
+            }
         }
 
-        $last = end($statements);
-        $type = $last['type'] ?? null;
+        return self::OUTCOME_FALLS;
+    }
+
+    /**
+     * How control leaves a single statement. Anything that does not transfer
+     * control of its own accord just falls through to the next one.
+     */
+    private function statementOutcome(array $statement): string
+    {
+        $type = $statement['type'] ?? null;
 
         if ('return' === $type || 'throw' === $type) {
-            return true;
+            return self::OUTCOME_RETURNS;
+        }
+
+        if ('break' === $type || 'continue' === $type) {
+            return self::OUTCOME_JUMPS;
         }
 
         if ('if' === $type) {
-            return isset($last['else_statements'])
-                && $this->statementsAlwaysExit($last['statements'] ?? [])
-                && $this->statementsAlwaysExit($last['else_statements']);
+            return $this->ifOutcome($statement);
+        }
+
+        if ('try-catch' === $type) {
+            return $this->tryCatchOutcome($statement);
+        }
+
+        if (in_array($type, self::LOOP_TYPES, true)) {
+            return $this->loopOutcome($statement);
         }
 
         if ('switch' === $type) {
-            return $this->switchAlwaysReturns($last);
+            /**
+             * A `switch` swallows its own `break`s, so it either returns on
+             * every path or control continues after it.
+             */
+            return $this->switchAlwaysReturns($statement)
+                ? self::OUTCOME_RETURNS
+                : self::OUTCOME_FALLS;
+        }
+
+        return self::OUTCOME_FALLS;
+    }
+
+    /**
+     * How control leaves a `try`/`catch`.
+     *
+     * Without `catch` clauses normal flow simply continues with the outcome of
+     * the `try` body. With them every body has to leave the method for the
+     * statement as a whole to do so, because any of them can be the one that
+     * runs.
+     */
+    private function tryCatchOutcome(array $statement): string
+    {
+        $outcomes = [$this->statementsOutcome($statement['statements'] ?? [])];
+
+        foreach ($statement['catches'] ?? [] as $catch) {
+            $outcomes[] = $this->statementsOutcome($catch['statements'] ?? []);
+        }
+
+        if (in_array(self::OUTCOME_JUMPS, $outcomes, true)) {
+            return self::OUTCOME_JUMPS;
+        }
+
+        return in_array(self::OUTCOME_FALLS, $outcomes, true)
+            ? self::OUTCOME_FALLS
+            : self::OUTCOME_RETURNS;
+    }
+
+    /**
+     * How control leaves a loop.
+     *
+     * A loop whose condition is not a constant truth - and every `for`, whose
+     * iterand can be empty - may run zero times, so control just continues
+     * after it. An infinite loop is left only by a `break` that targets it;
+     * without one the code after the loop is unreachable and the sole way out
+     * is a `return`/`throw`.
+     */
+    private function loopOutcome(array $statement): string
+    {
+        if (!$this->isInfiniteLoop($statement)) {
+            return self::OUTCOME_FALLS;
+        }
+
+        return $this->containsLoopBreak($statement['statements'] ?? [])
+            ? self::OUTCOME_FALLS
+            : self::OUTCOME_RETURNS;
+    }
+
+    /**
+     * Tells whether a loop can only be left by jumping out of it: a `loop`, or
+     * a `while`/`do-while` whose condition is a literal truth.
+     */
+    private function isInfiniteLoop(array $statement): bool
+    {
+        $type = $statement['type'] ?? null;
+
+        if ('loop' === $type) {
+            return true;
+        }
+
+        if ('while' !== $type && 'do-while' !== $type) {
+            return false;
+        }
+
+        $expr     = $statement['expr'] ?? [];
+        $exprType = $expr['type'] ?? null;
+
+        if ('bool' === $exprType) {
+            return 'true' === ($expr['value'] ?? null);
+        }
+
+        return 'int' === $exprType && 0 !== (int) ($expr['value'] ?? 0);
+    }
+
+    /**
+     * Tells whether a loop body holds a `break` that targets that loop.
+     *
+     * The walk enters `if` arms and `try`/`catch` bodies, but stops at a nested
+     * loop or `switch`, each of which captures a `break` of its own.
+     */
+    private function containsLoopBreak(array $statements): bool
+    {
+        foreach ($statements as $statement) {
+            $type = $statement['type'] ?? null;
+
+            if ('break' === $type) {
+                return true;
+            }
+
+            if ('if' === $type) {
+                $bodies = [
+                    $statement['statements'] ?? [],
+                    $statement['else_statements'] ?? [],
+                ];
+
+                foreach ($statement['elseif_statements'] ?? [] as $elseIf) {
+                    $bodies[] = $elseIf['statements'] ?? [];
+                }
+            } elseif ('try-catch' === $type) {
+                $bodies = [$statement['statements'] ?? []];
+
+                foreach ($statement['catches'] ?? [] as $catch) {
+                    $bodies[] = $catch['statements'] ?? [];
+                }
+            } else {
+                continue;
+            }
+
+            foreach ($bodies as $body) {
+                if ($this->containsLoopBreak($body)) {
+                    return true;
+                }
+            }
         }
 
         return false;
+    }
+
+    /**
+     * How control leaves an `if` statement, taking every arm into account: the
+     * `if` body, each `elseif` body, and either the `else` body or - when there
+     * is none - the implicit arm on which execution simply continues.
+     *
+     * An arm that jumps out makes the whole statement able to jump out, which
+     * is what stops a `break` hidden in a branch from being mistaken for an
+     * exhaustive clause.
+     */
+    private function ifOutcome(array $statement): string
+    {
+        $arms = [$this->statementsOutcome($statement['statements'] ?? [])];
+
+        foreach ($statement['elseif_statements'] ?? [] as $elseIf) {
+            $arms[] = $this->statementsOutcome($elseIf['statements'] ?? []);
+        }
+
+        $arms[] = isset($statement['else_statements'])
+            ? $this->statementsOutcome($statement['else_statements'])
+            : self::OUTCOME_FALLS;
+
+        if (in_array(self::OUTCOME_JUMPS, $arms, true)) {
+            return self::OUTCOME_JUMPS;
+        }
+
+        return in_array(self::OUTCOME_FALLS, $arms, true)
+            ? self::OUTCOME_FALLS
+            : self::OUTCOME_RETURNS;
     }
 
     /**

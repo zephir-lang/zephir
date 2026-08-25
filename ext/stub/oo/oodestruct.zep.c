@@ -245,42 +245,43 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 			zephir_update_property_zval_cached(this_ptr, _zephir_prop_5, 74, &_8$$5);
 		}
 		zephir_read_property_cached(&_9$$4, this_ptr, _zephir_prop_4, 73, PH_NOISY_CC | PH_READONLY);
-		do {
-			if (ZEPHIR_IS_LONG(&_9$$4, 1)) {
-				zephir_read_property_cached(&_10$$6, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
-				ZEPHIR_CALL_FUNCTION(&_11$$6, "imagecreatefromgif", NULL, 0, &_10$$6);
-				zephir_check_call_status();
-				zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 75, &_11$$6);
-				break;
-			}
-			if (ZEPHIR_IS_LONG(&_9$$4, 2)) {
-				zephir_read_property_cached(&_12$$7, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
-				ZEPHIR_CALL_FUNCTION(&_13$$7, "imagecreatefromjpeg", NULL, 0, &_12$$7);
-				zephir_check_call_status();
-				zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 75, &_13$$7);
-				break;
-			}
-			if (ZEPHIR_IS_LONG(&_9$$4, 3)) {
-				zephir_read_property_cached(&_14$$8, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
-				ZEPHIR_CALL_FUNCTION(&_15$$8, "imagecreatefrompng", NULL, 0, &_14$$8);
-				zephir_check_call_status();
-				zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 75, &_15$$8);
-				break;
-			}
-			if (ZEPHIR_IS_LONG(&_9$$4, 15)) {
-				zephir_read_property_cached(&_16$$9, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
-				ZEPHIR_CALL_FUNCTION(&_17$$9, "imagecreatefromwbmp", NULL, 0, &_16$$9);
-				zephir_check_call_status();
-				zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 75, &_17$$9);
-				break;
-			}
-			if (ZEPHIR_IS_LONG(&_9$$4, 16)) {
-				zephir_read_property_cached(&_18$$10, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
-				ZEPHIR_CALL_FUNCTION(&_19$$10, "imagecreatefromxbm", NULL, 0, &_18$$10);
-				zephir_check_call_status();
-				zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 75, &_19$$10);
-				break;
-			}
+		if (ZEPHIR_IS_LONG(&_9$$4, 1)) { goto zephir_switch_0_clause_0; }
+		if (ZEPHIR_IS_LONG(&_9$$4, 2)) { goto zephir_switch_0_clause_1; }
+		if (ZEPHIR_IS_LONG(&_9$$4, 3)) { goto zephir_switch_0_clause_2; }
+		if (ZEPHIR_IS_LONG(&_9$$4, 15)) { goto zephir_switch_0_clause_3; }
+		if (ZEPHIR_IS_LONG(&_9$$4, 16)) { goto zephir_switch_0_clause_4; }
+		goto zephir_switch_0_clause_5;
+		zephir_switch_0_clause_0: ;
+			zephir_read_property_cached(&_10$$6, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
+			ZEPHIR_CALL_FUNCTION(&_11$$6, "imagecreatefromgif", NULL, 0, &_10$$6);
+			zephir_check_call_status();
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 75, &_11$$6);
+			goto zephir_switch_0_end;
+		zephir_switch_0_clause_1: ;
+			zephir_read_property_cached(&_12$$7, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
+			ZEPHIR_CALL_FUNCTION(&_13$$7, "imagecreatefromjpeg", NULL, 0, &_12$$7);
+			zephir_check_call_status();
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 75, &_13$$7);
+			goto zephir_switch_0_end;
+		zephir_switch_0_clause_2: ;
+			zephir_read_property_cached(&_14$$8, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
+			ZEPHIR_CALL_FUNCTION(&_15$$8, "imagecreatefrompng", NULL, 0, &_14$$8);
+			zephir_check_call_status();
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 75, &_15$$8);
+			goto zephir_switch_0_end;
+		zephir_switch_0_clause_3: ;
+			zephir_read_property_cached(&_16$$9, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
+			ZEPHIR_CALL_FUNCTION(&_17$$9, "imagecreatefromwbmp", NULL, 0, &_16$$9);
+			zephir_check_call_status();
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 75, &_17$$9);
+			goto zephir_switch_0_end;
+		zephir_switch_0_clause_4: ;
+			zephir_read_property_cached(&_18$$10, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
+			ZEPHIR_CALL_FUNCTION(&_19$$10, "imagecreatefromxbm", NULL, 0, &_18$$10);
+			zephir_check_call_status();
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 75, &_19$$10);
+			goto zephir_switch_0_end;
+		zephir_switch_0_clause_5: ;
 			zephir_read_property_cached(&_20$$11, this_ptr, _zephir_prop_5, 74, PH_NOISY_CC | PH_READONLY);
 			if (zephir_is_true(&_20$$11)) {
 				ZEPHIR_INIT_VAR(&_21$$12);
@@ -315,7 +316,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 			zephir_throw_exception_debug(&_25$$11, "stub/oo/oodestruct.zep", 98);
 			ZEPHIR_MM_RESTORE();
 			return;
-		} while(0);
+		zephir_switch_0_end: ;
 
 		zephir_read_property_cached(&_28$$4, this_ptr, _zephir_prop_6, 75, PH_NOISY_CC | PH_READONLY);
 		ZVAL_BOOL(&_29$$4, 1);

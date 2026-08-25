@@ -519,30 +519,30 @@ PHP_METHOD(Stub_Router_Route, reConfigure)
 			ZVAL_NULL(&actionName);
 			ZEPHIR_INIT_VAR(&parts);
 			zephir_fast_explode_str(&parts, SL("::"), paths, LONG_MAX);
-			do {
-				_0$$5 = zephir_fast_count_int(&parts);
-				if (_0$$5 == 3) {
-					ZEPHIR_OBS_NVAR(&moduleName);
-					zephir_array_fetch_long(&moduleName, &parts, 0, PH_NOISY, "stub/router/route.zep", 286);
-					ZEPHIR_OBS_NVAR(&controllerName);
-					zephir_array_fetch_long(&controllerName, &parts, 1, PH_NOISY, "stub/router/route.zep", 287);
-					ZEPHIR_OBS_NVAR(&actionName);
-					zephir_array_fetch_long(&actionName, &parts, 2, PH_NOISY, "stub/router/route.zep", 288);
-					break;
-				}
-				if (_0$$5 == 2) {
-					ZEPHIR_OBS_NVAR(&controllerName);
-					zephir_array_fetch_long(&controllerName, &parts, 0, PH_NOISY, "stub/router/route.zep", 291);
-					ZEPHIR_OBS_NVAR(&actionName);
-					zephir_array_fetch_long(&actionName, &parts, 1, PH_NOISY, "stub/router/route.zep", 292);
-					break;
-				}
-				if (_0$$5 == 1) {
-					ZEPHIR_OBS_NVAR(&controllerName);
-					zephir_array_fetch_long(&controllerName, &parts, 0, PH_NOISY, "stub/router/route.zep", 295);
-					break;
-				}
-			} while(0);
+			_0$$5 = zephir_fast_count_int(&parts);
+			if (_0$$5 == 3) { goto zephir_switch_0_clause_0; }
+			if (_0$$5 == 2) { goto zephir_switch_0_clause_1; }
+			if (_0$$5 == 1) { goto zephir_switch_0_clause_2; }
+			goto zephir_switch_0_end;
+			zephir_switch_0_clause_0: ;
+				ZEPHIR_OBS_NVAR(&moduleName);
+				zephir_array_fetch_long(&moduleName, &parts, 0, PH_NOISY, "stub/router/route.zep", 286);
+				ZEPHIR_OBS_NVAR(&controllerName);
+				zephir_array_fetch_long(&controllerName, &parts, 1, PH_NOISY, "stub/router/route.zep", 287);
+				ZEPHIR_OBS_NVAR(&actionName);
+				zephir_array_fetch_long(&actionName, &parts, 2, PH_NOISY, "stub/router/route.zep", 288);
+				goto zephir_switch_0_end;
+			zephir_switch_0_clause_1: ;
+				ZEPHIR_OBS_NVAR(&controllerName);
+				zephir_array_fetch_long(&controllerName, &parts, 0, PH_NOISY, "stub/router/route.zep", 291);
+				ZEPHIR_OBS_NVAR(&actionName);
+				zephir_array_fetch_long(&actionName, &parts, 1, PH_NOISY, "stub/router/route.zep", 292);
+				goto zephir_switch_0_end;
+			zephir_switch_0_clause_2: ;
+				ZEPHIR_OBS_NVAR(&controllerName);
+				zephir_array_fetch_long(&controllerName, &parts, 0, PH_NOISY, "stub/router/route.zep", 295);
+				goto zephir_switch_0_end;
+			zephir_switch_0_end: ;
 
 			ZEPHIR_INIT_VAR(&routePaths);
 			array_init(&routePaths);

@@ -68,5 +68,6 @@ PHP_METHOD(Stub_ArrayIteratorTest, test)
 	}
 	ZEPHIR_INIT_NVAR(&v);
 	ZEPHIR_INIT_NVAR(&k);
+	ZEPHIR_MM_RESTORE();
 }
 

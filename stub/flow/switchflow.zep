@@ -180,4 +180,113 @@ class SwitchFlow
 
         return ret;
     }
+
+    /**
+     * Issue #1704: PHP fall-through. A clause without `break` runs on into the
+     * next clause's body, and on into `default`.
+     */
+    public function testSwitch15(int a) -> string
+    {
+        string r = "";
+
+        switch a {
+            case 1:
+                let r .= "a";
+            case 2:
+                let r .= "b";
+            default:
+                let r .= "d";
+        }
+
+        return r;
+    }
+
+    /**
+     * Issue #1704: a `default` clause in the middle falls through into the
+     * `case` written after it.
+     */
+    public function testSwitch16(int a) -> string
+    {
+        string r = "";
+
+        switch a {
+            case 1:
+                let r .= "one";
+                break;
+            default:
+                let r .= "def";
+            case 2:
+                let r .= "two";
+        }
+
+        return r;
+    }
+
+    /**
+     * Issue #1704: `continue` inside a `switch` is equivalent to `break`, as
+     * in PHP - the loop body after the `switch` still runs.
+     */
+    public function testSwitch17() -> string
+    {
+        string r = "";
+        var i;
+
+        for i in 0..3 {
+            switch i {
+                case 1:
+                    continue;
+                default:
+                    break;
+            }
+
+            let r .= (string) i;
+        }
+
+        return r;
+    }
+
+    /**
+     * Issue #1704: a `break` inside a loop nested in a clause breaks the loop,
+     * not the `switch`.
+     */
+    public function testSwitch18() -> string
+    {
+        string r = "";
+        int n = 0;
+
+        switch 1 {
+            case 1:
+                while true {
+                    let n++;
+
+                    if n > 2 {
+                        break;
+                    }
+                }
+
+                let r .= "w";
+                let r .= (string) n;
+        }
+
+        return r;
+    }
+
+    /**
+     * Issue #1704: an empty clause falls through into the next body, which
+     * then falls through into `default`.
+     */
+    public function testSwitch19(int a) -> string
+    {
+        string r = "";
+
+        switch a {
+            case 1:
+            case 2:
+                let r .= "x";
+            default:
+                let r .= "y";
+        }
+
+        return r;
+    }
 }
