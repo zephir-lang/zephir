@@ -1,0 +1,125 @@
+--TEST--
+Closure return types: anonymous functions accept `-> type` (scalar, void, union, class, and after a use() clause), which lands on the synthetic __invoke so Reflection reports it exactly as it does for a method (#1841)
+--FILE--
+namespace Stub;
+
+class ClosureReturnType
+{
+    public function scalar()
+    {
+        return function () -> int {
+            return 5;
+        };
+    }
+
+    public function withParams()
+    {
+        return function (a, b) -> string {
+            return a . b;
+        };
+    }
+
+    public function withUse(int base)
+    {
+        return function (int add) use (base) -> int {
+            return base + add;
+        };
+    }
+
+    public function voidReturn()
+    {
+        return function () -> void {
+        };
+    }
+
+    public function unionReturn()
+    {
+        return function (bool flag) -> int|string {
+            if flag {
+                return 1;
+            }
+
+            return "one";
+        };
+    }
+
+    public function classReturn()
+    {
+        return function () -> <\ArrayObject> {
+            return new \ArrayObject([1, 2]);
+        };
+    }
+
+    /**
+     * A closure's return type has to behave exactly like a method's. PHP does
+     * not re-verify an internal function's return value in a release build, so
+     * for both of these the declared type is arg-info metadata and a `var`
+     * flows through unconverted — the point is that they agree.
+     */
+    public function methodPassthrough(var value) -> int
+    {
+        return value;
+    }
+
+    public function closurePassthrough()
+    {
+        return function (var value) -> int {
+            return value;
+        };
+    }
+
+    /**
+     * A closure without a return type must keep working exactly as before.
+     */
+    public function untyped()
+    {
+        return function () {
+            return "no return type";
+        };
+    }
+}
+--USAGE--
+$test = new \Stub\ClosureReturnType();
+
+echo var_export(($test->scalar())(), true), "\n";
+echo var_export(($test->withParams())('a', 'b'), true), "\n";
+echo var_export(($test->withUse(10))(5), true), "\n";
+echo var_export(($test->voidReturn())(), true), "\n";
+echo var_export(($test->unionReturn())(true), true), "\n";
+echo var_export(($test->unionReturn())(false), true), "\n";
+echo var_export(iterator_to_array(($test->classReturn())()), true), "\n";
+echo var_export(($test->untyped())(), true), "\n";
+
+// Reflection sees the type on the closure itself.
+echo (string) (new ReflectionFunction($test->scalar()))->getReturnType(), "\n";
+echo (string) (new ReflectionFunction($test->withParams()))->getReturnType(), "\n";
+echo (string) (new ReflectionFunction($test->voidReturn()))->getReturnType(), "\n";
+echo (string) (new ReflectionFunction($test->unionReturn()))->getReturnType(), "\n";
+echo var_export((new ReflectionFunction($test->untyped()))->hasReturnType(), true), "\n";
+echo (string) (new ReflectionMethod($test, 'methodPassthrough'))->getReturnType(), "\n";
+echo (string) (new ReflectionFunction($test->closurePassthrough()))->getReturnType(), "\n";
+
+// A closure's declared type behaves like a method's, not differently.
+echo var_export($test->methodPassthrough('7'), true), "\n";
+echo var_export(($test->closurePassthrough())('7'), true), "\n";
+--EXPECT--
+5
+'ab'
+15
+NULL
+1
+'one'
+array (
+  0 => 1,
+  1 => 2,
+)
+'no return type'
+int
+string
+void
+string|int
+false
+int
+int
+'7'
+'7'

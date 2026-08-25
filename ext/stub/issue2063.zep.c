@@ -51,10 +51,10 @@ PHP_METHOD(Stub_Issue2063, add)
 	zephir_memory_observe(&value_zv);
 	ZVAL_STR_COPY(&value_zv, value);
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 45, PH_NOISY_CC);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 47, PH_NOISY_CC);
 	SEPARATE_ZVAL(&value_zv);
 	zephir_concat_function(&value_zv, &_0, &value_zv);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 45, &value_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 47, &value_zv);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -80,10 +80,10 @@ PHP_METHOD(Stub_Issue2063, add2)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&value_zv);
 	ZVAL_STR_COPY(&value_zv, value);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 45, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 47, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CONCAT_VV(&_1, &_0, &value_zv);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 45, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 47, &_1);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -102,13 +102,13 @@ PHP_METHOD(Stub_Issue2063, addLiteral)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 45, PH_NOISY_CC);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 47, PH_NOISY_CC);
 	zephir_concat_self_str(&_0, SL("ab"));
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 45, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 47, &_0);
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 45, PH_NOISY_CC);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 47, PH_NOISY_CC);
 	zephir_concat_self_str(&_0, SL("cd"));
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 45, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 47, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 

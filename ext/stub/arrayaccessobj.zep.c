@@ -128,15 +128,17 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetExists)
 
 PHP_METHOD(Stub_ArrayAccessObj, offsetUnset)
 {
-	zval _0;
+	zval _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval offset_sub, obj;
+	zval offset_sub, obj, _0, _2;
 	zval *offset;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_1);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("test", 4, 1);
@@ -150,11 +152,13 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetUnset)
 	zephir_fetch_params(1, 1, 0, &offset);
 	zephir_memory_observe(&obj);
 	zephir_read_property_cached(&obj, this_ptr, _zephir_prop_0, 10, PH_NOISY_CC);
-	zephir_get_arrval(&_0, &obj);
-	ZEPHIR_CPY_WRT(&obj, &_0);
+	ZEPHIR_CPY_WRT(&_0, &obj);
+	zephir_get_arrval(&_1, &_0);
+	ZEPHIR_CPY_WRT(&obj, &_1);
 	zephir_array_unset(&obj, offset, PH_SEPARATE);
-	zephir_convert_to_object(&obj);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 10, &obj);
+	ZEPHIR_CPY_WRT(&_2, &obj);
+	zephir_convert_to_object(&_2);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 10, &_2);
 	ZEPHIR_MM_RESTORE();
 }
 

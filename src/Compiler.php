@@ -45,6 +45,7 @@ use function array_filter;
 use function array_map;
 use function array_merge;
 use function array_unique;
+use function array_values;
 use function asort;
 use function basename;
 use function call_user_func;
@@ -53,6 +54,7 @@ use function class_exists;
 use function count;
 use function defined;
 use function dirname;
+use function escapeshellarg;
 use function exec;
 use function explode;
 use function extension_loaded;
@@ -70,8 +72,10 @@ use function in_array;
 use function interface_exists;
 use function is_array;
 use function is_dir;
+use function is_file;
 use function is_readable;
 use function is_string;
+use function json_encode;
 use function krsort;
 use function md5;
 use function md5_file;
@@ -83,6 +87,7 @@ use function preg_match;
 use function preg_replace;
 use function realpath;
 use function sprintf;
+use function str_contains;
 use function str_replace;
 use function strcasecmp;
 use function strip_tags;
@@ -100,6 +105,8 @@ use const DIRECTORY_SEPARATOR;
 use const INFO_GENERAL;
 use const PHP_EOL;
 use const PHP_INT_SIZE;
+use const PHP_PREFIX;
+use const PHP_VERSION;
 use const ZEND_THREAD_SAFE;
 use const SORT_STRING;
 use const STDERR;
@@ -107,6 +114,61 @@ use const STDERR;
 final class Compiler
 {
     use LoggerAwareTrait;
+
+    /**
+     * Cache entry holding the fingerprint of the toolchain and flags the
+     * current `ext/Makefile` was configured with.
+     */
+    public const BUILD_FINGERPRINT = 'build-fingerprint';
+    /**
+     * Parallel `make` jobs to fall back on when the processor count cannot be
+     * read. Deliberately low: it is what every build used before the count was
+     * detected at all.
+     */
+    public const FALLBACK_JOBS = 2;
+    /**
+     * Cache entry left behind by a `generate()` that changed something
+     * `configure` depends on. It is a file rather than in-memory state because
+     * `zephir generate` and `zephir compile` are separate processes.
+     */
+    public const NEEDS_CONFIGURE = 'needs-configure';
+    /**
+     * Cache entry holding the pre-compiled header prelude. Lives in the cache
+     * directory (git-ignored) rather than in `ext/`, because the companion
+     * `.gch` is well over a hundred megabytes and `ext/` is a tracked
+     * directory in some projects.
+     *
+     * Deliberately outside the per-version container: `Zephir::VERSION` carries
+     * an unexpanded `$Id$` keyword, and this path is handed to `make`, which
+     * would take the `$I` in it for a variable reference.
+     */
+    public const PCH_HEADER = 'pch/zephir_pch.h';
+    /**
+     * Kernel headers baked into the pre-compiled header. Every generated
+     * translation unit includes a subset of these; a header missing from this
+     * list is still compiled normally, it just does not get pre-compiled.
+     */
+    private const PCH_KERNEL_HEADERS = [
+        'main.h',
+        'memory.h',
+        'fcall.h',
+        'operators.h',
+        'object.h',
+        'array.h',
+        'string.h',
+        'concat.h',
+        'math.h',
+        'file.h',
+        'iterator.h',
+        'time.h',
+        'exception.h',
+        'variables.h',
+        'filter.h',
+        'require.h',
+        'debug.h',
+        'backtrace.h',
+        'exit.h',
+    ];
 
     /**
      * @var FunctionDefinition[]
@@ -152,6 +214,19 @@ final class Compiler
      */
     private array          $internalInitializerHeaders = [];
     private static bool    $loadedPrototypes     = false;
+    /**
+     * Outcome of the last preCompileHeaders() in this process: the prelude to
+     * force-include, or null when headers are not pre-compiled. Lets install()
+     * reuse what compile() just built instead of spending another couple of
+     * seconds on an identical `.gch`.
+     */
+    private ?string        $precompiledHeader    = null;
+    /**
+     * Flags the current `.gch` was built with, or null when there is none.
+     * Reusing it is only sound for a build with the very same flags, since
+     * that is all GCC validates a PCH against.
+     */
+    private ?string        $precompiledHeaderBuiltFor = null;
     /**
      * Proper-case root namespace of the first generator method found, or null
      * when the project contains no `yield`. Enables the kernel generator
@@ -306,6 +381,8 @@ final class Compiler
     /**
      * Compiles the extension without installing it.
      *
+     * @param int|null          $jobs      Parallel `make` jobs. Defaults to the
+     *                                     number of processors available.
      * @param PhpToolchain|null $toolchain PHP build tools to compile against.
      *                                     Defaults to the ones in the `PATH`.
      *
@@ -313,17 +390,14 @@ final class Compiler
      */
     public function compile(bool $development = false, ?int $jobs = null, ?PhpToolchain $toolchain = null): void
     {
-        $jobs      = $jobs ?: 2;
+        $jobs      = $this->resolveJobs($jobs);
         $toolchain = $toolchain ?? PhpToolchain::default();
 
         /**
          * Get global namespace.
          */
         $namespace     = str_replace('\\', '_', $this->checkDirectory());
-        $extensionName = $this->config->get('extension-name');
-        if (empty($extensionName) || !is_string($extensionName)) {
-            $extensionName = $namespace;
-        }
+        $extensionName = $this->getExtensionFileName();
 
         $currentDir = getcwd();
         if (file_exists("$currentDir/compile.log")) {
@@ -334,8 +408,16 @@ final class Compiler
             unlink("$currentDir/compile-errors.log");
         }
 
-        if (file_exists("$currentDir/ext/modules/{$namespace}.so")) {
-            unlink("$currentDir/ext/modules/{$namespace}.so");
+        $reconfigure = Os::isWindows() || $this->needsConfigure($development, $toolchain);
+
+        /**
+         * Only dropped when everything is rebuilt anyway. On an incremental
+         * build `make` would not put it back: the module is linked from
+         * `modules/<ns>.la`, which is still up to date, so removing just the
+         * `.so` leaves the project without one.
+         */
+        if ($reconfigure && file_exists("$currentDir/ext/modules/{$extensionName}.so")) {
+            unlink("$currentDir/ext/modules/{$extensionName}.so");
         }
 
         if (Os::isWindows()) {
@@ -393,7 +475,7 @@ final class Compiler
 
             $this->logger->info('Preparing configuration file...');
             exec('cd ext && configure --enable-' . $extensionName);
-        } else {
+        } elseif ($reconfigure) {
             $phpize = $toolchain->phpizeCommand();
 
             exec('cd ext && make clean && ' . $phpize . ' --clean', $output, $exit);
@@ -408,11 +490,26 @@ final class Compiler
                 $extensionName .
                 $toolchain->configureOption()
             );
+
+            $this->filesystem->write(
+                self::BUILD_FINGERPRINT,
+                $this->buildFingerprint($development, $toolchain)
+            );
+
+            if ($this->filesystem->exists(self::NEEDS_CONFIGURE)) {
+                $this->filesystem->delete(self::NEEDS_CONFIGURE);
+            }
+        } else {
+            /**
+             * `generate()` rewrites a `.zep.c` only when its contents changed,
+             * so `make` recompiles exactly the changed translation units.
+             */
+            $this->logger->info('Reusing the existing build configuration, compiling changed files only...');
         }
 
         $currentDir = getcwd();
-        $this->logger->info('Compiling...');
         if (Os::isWindows()) {
+            $this->logger->info('Compiling...');
             exec(
                 'cd ext && nmake 2>' . $currentDir . '\compile-errors.log 1>' .
                 $currentDir . '\compile.log',
@@ -420,9 +517,15 @@ final class Compiler
                 $exit
             );
         } else {
-            $this->preCompileHeaders();
+            $this->logger->info(sprintf('Compiling with %d parallel job(s)...', $jobs));
+            $extraCFlags = $this->makeVariableForPrelude(
+                $this->preCompileHeaders($development, $toolchain),
+                $currentDir . DIRECTORY_SEPARATOR . 'ext'
+            );
+
             exec(
-                'cd ext && (make -s -j' . $jobs . ' 2>' . $currentDir . '/compile-errors.log 1>' .
+                'cd ext && (make -s -j' . $jobs . ' ' . $extraCFlags . ' 2>' . $currentDir .
+                '/compile-errors.log 1>' .
                 $currentDir .
                 '/compile.log)',
                 $output,
@@ -1012,6 +1115,71 @@ final class Compiler
         }
 
         /**
+         * Load function optimizers.
+         *
+         * This must run before Round 2: the prototypes declare the classes of
+         * extensions that are not loaded in the running PHP. Round 2 validates
+         * `use` statements with `class_exists(..., false)`, so a prototype that
+         * is loaded later makes an optional extension (redis, memcached, ...)
+         * warn as nonexistent. See phalcon/cphalcon#17517.
+         */
+        if (false === self::$loadedPrototypes) {
+            $optimizersPath = $this->resolveOptimizersPath();
+            FunctionCall::addOptimizerDir("{$optimizersPath}/FunctionCall");
+
+            $customOptimizersPaths = $this->config->get('optimizer-dirs');
+            if (is_array($customOptimizersPaths)) {
+                foreach ($customOptimizersPaths as $directory) {
+                    FunctionCall::addOptimizerDir(realpath($directory));
+                }
+            }
+
+            /**
+             * Load additional extension prototypes.
+             */
+            $prototypesPath = $this->resolvePrototypesPath();
+            foreach (new DirectoryIterator($prototypesPath) as $file) {
+                if ($file->isDir() || $file->isDot()) {
+                    continue;
+                }
+
+                // Do not use $file->getRealPath() because it does not work inside phar
+                $realPath  = "{$file->getPath()}/{$file->getFilename()}";
+                $extension = $file->getBasename(".{$file->getExtension()}");
+
+                if (!extension_loaded($extension)) {
+                    require_once $realPath;
+                }
+            }
+
+            /**
+             * Load customer additional extension prototypes.
+             */
+            $prototypeDirs = $this->config->get('prototype-dir');
+            if (is_array($prototypeDirs)) {
+                foreach ($prototypeDirs as $prototype => $prototypeDir) {
+                    /**
+                     * Check if the extension is installed
+                     */
+                    if (!extension_loaded($prototype)) {
+                        $prototypeRealpath = realpath($prototypeDir);
+                        if ($prototypeRealpath) {
+                            foreach (new RecursiveDirectoryIterator($prototypeRealpath) as $file) {
+                                if ($file->isDir()) {
+                                    continue;
+                                }
+
+                                require_once $file->getRealPath();
+                            }
+                        }
+                    }
+                }
+            }
+
+            self::$loadedPrototypes = true;
+        }
+
+        /**
          * Round 2. Check 'extends' and 'implements' dependencies
          */
         foreach ($this->files as $compileFile) {
@@ -1069,65 +1237,6 @@ final class Compiler
         $globals = $this->config->get('globals');
         if (is_array($globals)) {
             $this->setExtensionGlobals($globals);
-        }
-
-        /**
-         * Load function optimizers
-         */
-        if (false === self::$loadedPrototypes) {
-            $optimizersPath = $this->resolveOptimizersPath();
-            FunctionCall::addOptimizerDir("{$optimizersPath}/FunctionCall");
-
-            $customOptimizersPaths = $this->config->get('optimizer-dirs');
-            if (is_array($customOptimizersPaths)) {
-                foreach ($customOptimizersPaths as $directory) {
-                    FunctionCall::addOptimizerDir(realpath($directory));
-                }
-            }
-
-            /**
-             * Load additional extension prototypes.
-             */
-            $prototypesPath = $this->resolvePrototypesPath();
-            foreach (new DirectoryIterator($prototypesPath) as $file) {
-                if ($file->isDir() || $file->isDot()) {
-                    continue;
-                }
-
-                // Do not use $file->getRealPath() because it does not work inside phar
-                $realPath  = "{$file->getPath()}/{$file->getFilename()}";
-                $extension = $file->getBasename(".{$file->getExtension()}");
-
-                if (!extension_loaded($extension)) {
-                    require_once $realPath;
-                }
-            }
-
-            /**
-             * Load customer additional extension prototypes.
-             */
-            $prototypeDirs = $this->config->get('prototype-dir');
-            if (is_array($prototypeDirs)) {
-                foreach ($prototypeDirs as $prototype => $prototypeDir) {
-                    /**
-                     * Check if the extension is installed
-                     */
-                    if (!extension_loaded($prototype)) {
-                        $prototypeRealpath = realpath($prototypeDir);
-                        if ($prototypeRealpath) {
-                            foreach (new RecursiveDirectoryIterator($prototypeRealpath) as $file) {
-                                if ($file->isDir()) {
-                                    continue;
-                                }
-
-                                require_once $file->getRealPath();
-                            }
-                        }
-                    }
-                }
-            }
-
-            self::$loadedPrototypes = true;
         }
 
         /**
@@ -1224,11 +1333,7 @@ final class Compiler
         /**
          * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files.
          */
-        $namespace     = str_replace('\\', '_', $namespace);
-        $extensionName = $this->config->get('extension-name');
-        if (empty($extensionName) || !is_string($extensionName)) {
-            $extensionName = $namespace;
-        }
+        $extensionName = $this->getExtensionFileName();
 
         $needConfigure = $this->createConfigFiles($extensionName);
         $needConfigure |= $this->createProjectFiles($extensionName);
@@ -1261,6 +1366,23 @@ final class Compiler
         if ($this->config->get('stubs-run-after-generate', 'stubs')) {
             $this->stubs($fromGenerate);
         }
+
+        /**
+         * Recorded for compile(), which reuses the existing `ext/Makefile`
+         * when nothing that `configure` depends on has changed. Written from
+         * here because `zephir generate` and `zephir compile` are separate
+         * processes; cleared once configure has run.
+         */
+        if ($needConfigure) {
+            $this->filesystem->write(self::NEEDS_CONFIGURE, Zephir::VERSION);
+        }
+
+        /**
+         * Class headers were just rewritten, so whatever `.gch` exists no
+         * longer describes them.
+         */
+        $this->precompiledHeaderBuiltFor = null;
+        $this->precompiledHeader         = null;
 
         return $needConfigure;
     }
@@ -1406,6 +1528,24 @@ final class Compiler
     }
 
     /**
+     * The base name of the built extension, without the shared object suffix.
+     *
+     * This is what `ext/modules/` and the extension directory hold, and what a
+     * php.ini `extension=` line names: the configured `extension-name` when the
+     * project sets one, the namespace otherwise.
+     */
+    public function getExtensionFileName(): string
+    {
+        $extensionName = $this->config->get('extension-name');
+
+        if (!empty($extensionName) && is_string($extensionName)) {
+            return $extensionName;
+        }
+
+        return str_replace('\\', '_', (string)$this->config->get('namespace'));
+    }
+
+    /**
      * Returns an extension global by its name.
      */
     public function getExtensionGlobal(string $name): array
@@ -1467,13 +1607,32 @@ final class Compiler
     }
 
     /**
-     * Returns the php include directories returned by php-config.
+     * Returns the php include directories reported by php-config.
+     *
+     * Falls back to the layout of the running PHP when php-config cannot be
+     * reached, so that callers always get something usable.
      */
-    public function getPhpIncludeDirs(): string
+    public function getPhpIncludeDirs(?PhpToolchain $toolchain = null): string
     {
-        $this->filesystem->system('php-config --includes', 'stdout', 'php-includes');
+        $toolchain ??= PhpToolchain::default();
 
-        return trim($this->filesystem->read('php-includes'));
+        $this->filesystem->system($toolchain->phpConfigCommand() . ' --includes', 'stdout', 'php-includes');
+        $includes = trim($this->filesystem->read('php-includes'));
+
+        if ('' !== $includes) {
+            return $includes;
+        }
+
+        $root = PHP_PREFIX . '/include/php';
+
+        return implode(' ', [
+            '-I' . $root,
+            '-I' . $root . '/main',
+            '-I' . $root . '/TSRM',
+            '-I' . $root . '/Zend',
+            '-I' . $root . '/ext',
+            '-I' . $root . '/ext/date/lib',
+        ]);
     }
 
     /**
@@ -1487,30 +1646,52 @@ final class Compiler
     /**
      * Compiles and installs the extension.
      *
+     * The `make` here is a no-op relink after compile(), but `zephir install`
+     * on its own reaches it with nothing built, in which case it is a full
+     * build and the job count matters as much as it does in compile().
+     *
+     * @param int|null $jobs Parallel `make` jobs. Defaults to the number of
+     *                       processors available.
+     *
+     * @return string|null The directory the extension was installed into, or
+     *                     null when that cannot be told.
+     *
      * @throws Exception
      * @throws NotImplementedException
      * @throws CompilerException
      */
-    public function install(bool $development = false): void
+    public function install(bool $development = false, ?int $jobs = null): ?string
     {
-        // Get global namespace
-        $namespace  = str_replace('\\', '_', $this->checkDirectory());
+        // Validates the project and initializes the internal cache.
+        $this->checkDirectory();
         $currentDir = getcwd();
 
         if (Os::isWindows()) {
             throw new NotImplementedException('Installation is not implemented for Windows yet. Aborting.');
         }
 
-        $this->logger->info('Installing...');
+        $jobs = $this->resolveJobs($jobs);
+
+        $this->logger->info(sprintf('Installing with %d parallel job(s)...', $jobs));
         $gccFlags = $this->getGccFlags($development);
 
+        /**
+         * Same prelude compile() uses. Free when it ran in this process, and
+         * worth the couple of seconds when `zephir install` is on its own and
+         * this `make` turns out to be a real build.
+         */
         $command = strtr(
         // TODO: Sort out with sudo
             'cd ext && export CC="gcc" && export CFLAGS=":cflags" && ' .
-            'make 2>> ":stderr" 1>> ":stdout" && ' .
+            'make -j:jobs :extra 2>> ":stderr" 1>> ":stdout" && ' .
             'sudo make install 2>> ":stderr" 1>> ":stdout"',
             [
                 ':cflags' => $gccFlags,
+                ':jobs'   => (string)$jobs,
+                ':extra'  => $this->makeVariableForPrelude(
+                    $this->preCompileHeaders($development),
+                    $currentDir . DIRECTORY_SEPARATOR . 'ext'
+                ),
                 ':stderr' => "{$currentDir}/compile-errors.log",
                 ':stdout' => "{$currentDir}/compile.log",
             ]
@@ -1523,13 +1704,30 @@ final class Compiler
         }, explode('&&', $command));
 
         exec($command, $output, $exit);
-        $fileName = $this->config->get('extension-name') ?: $namespace;
+        $fileName = $this->getExtensionFileName();
 
         if (false === file_exists("{$currentDir}/ext/modules/{$fileName}.so")) {
             throw new CompilerException(
                 'Internal extension compilation failed. Check compile-errors.log for more information.'
             );
         }
+
+        /**
+         * Having the module in `ext/modules` says `make` worked, not that it
+         * was copied anywhere: that is `sudo make install`, and a missing sudo,
+         * a declined password or a read-only extension directory all leave the
+         * build reporting success with nothing installed.
+         */
+        if (0 !== $exit) {
+            throw new CompilerException(sprintf(
+                'Installation failed with exit code %d. Both `make` and `sudo make install` run '
+                . 'here, so either the build or the copy into the PHP extension directory did not '
+                . 'go through. Check compile-errors.log for more information.',
+                $exit
+            ));
+        }
+
+        return $this->resolveExtensionInstallDir($currentDir, $fileName);
     }
 
     /**
@@ -1702,22 +1900,162 @@ final class Compiler
     }
 
     /**
-     * Pre-compile headers to speed up compilation.
+     * Pre-compiles the header prelude that every generated file includes.
+     *
+     * Each generated `.zep.c` opens with php.h plus `ext.h`, and `ext.h` pulls
+     * in the header of *every* class in the project. A project with N classes
+     * therefore parses N headers N times: for Phalcon that is 1672 headers and
+     * 180k pre-processed lines per translation unit, ~0.9s of the ~0.95s it
+     * takes to compile a median 1.8KB generated file.
+     *
+     * An earlier attempt gave up on GCC pre-compiled headers because a PCH is
+     * only used when it is the first token of the translation unit, which a
+     * generated file's own `#include <php.h>` prevents. A `-include` on the
+     * command line *is* that first token, so the prelude can be pre-compiled
+     * once and force-fed to all of them without touching the sources at all.
+     * The header the sources include a second time is then skipped by its own
+     * include guard.
+     *
+     * Objects come out identical (verified byte-for-byte); everything here is
+     * fail-soft, because a rejected PCH only costs the speed-up. Set
+     * `ZEPHIR_NO_PCH=1` to skip it, e.g. to reclaim the disk the `.gch` takes.
+     *
+     * @return string|null Prelude to force-include, or null to compile without one.
      */
-    public function preCompileHeaders(): void
+    public function preCompileHeaders(bool $development = false, ?PhpToolchain $toolchain = null): ?string
     {
-        // Intentionally left empty.
-        //
-        // Previously this method pre-compiled every kernel/*.h file into a GCC
-        // precompiled header (.gch).  However, GCC can only use a PCH when it
-        // is the *first* #include in a translation unit, which is never the
-        // case for kernel headers (the generated .zep.c files include php.h
-        // and other headers first).  The .gch files therefore provided zero
-        // compilation speed-up while actively causing bugs: because the
-        // headers were compiled *standalone* (without php.h), macros such as
-        // PHP_VERSION_ID were undefined, and the wrong preprocessor branches
-        // were baked into the PCH — leading to -Wincompatible-pointer-types
-        // warnings on PHP 8.5+.
+        if (Os::isWindows()) {
+            // MSVC pre-compiles headers with /Yc + /Yu instead.
+            return null;
+        }
+
+        if (getenv('ZEPHIR_NO_PCH')) {
+            return null;
+        }
+
+        $extPath = getcwd() . DIRECTORY_SEPARATOR . 'ext';
+        $toolchain ??= PhpToolchain::default();
+
+        $prelude = $this->filesystem->path(self::PCH_HEADER, false);
+        $gch     = $prelude . '.gch';
+
+        /**
+         * make expands the recipe and hands it to a shell, unquoted, so a path
+         * a shell would chew on has to be left alone. Losing the speed-up
+         * beats mangling every compile command.
+         */
+        if (!self::isShellSafePath($prelude)) {
+            $this->logger->info('Headers are not pre-compiled: the build path needs quoting');
+
+            return null;
+        }
+
+        if (!is_dir(dirname($prelude))) {
+            mkdir(dirname($prelude), 0755, true);
+        }
+
+        $flags = $this->precompiledHeaderFlags($development, $extPath, $toolchain);
+
+        /**
+         * Already built in this very process, for these very flags — which is
+         * what install() hits right after compile(). Nothing in between
+         * rewrites a header: generate() invalidates this.
+         */
+        if ($flags === $this->precompiledHeaderBuiltFor && (null === $this->precompiledHeader || is_file($gch))) {
+            return $this->precompiledHeader;
+        }
+
+        file_put_contents($prelude, $this->precompiledHeaderSource($this->precompiledKernelHeaders($extPath)));
+
+        /**
+         * A stale .gch would be trusted blindly by GCC, so it is always
+         * rebuilt from the current headers. That costs ~2s against the ~330s
+         * it saves on a project the size of Phalcon.
+         */
+        if (is_file($gch)) {
+            unlink($gch);
+        }
+
+        $this->precompiledHeaderBuiltFor = $flags;
+        $this->precompiledHeader         = null;
+
+        $this->logger->info('Pre-compiling headers...');
+        exec(
+            sprintf('gcc %s -x c-header %s -o %s 2>&1', $flags, escapeshellarg($prelude), escapeshellarg($gch)),
+            $output,
+            $exit
+        );
+
+        if (0 !== $exit || !is_file($gch)) {
+            $this->logger->info('Headers could not be pre-compiled, compiling without them');
+
+            return null;
+        }
+
+        if (!$this->precompiledHeaderIsUsable($prelude, $flags)) {
+            $this->logger->info('Pre-compiled headers were rejected by the compiler, compiling without them');
+            unlink($gch);
+
+            return null;
+        }
+
+        $this->precompiledHeader = $prelude;
+
+        return $prelude;
+    }
+
+    /**
+     * The `make` argument that force-includes the pre-compiled prelude, or an
+     * empty string when there is none to include.
+     *
+     * `EXTRA_CFLAGS` is on every compile line of a phpize Makefile, and the
+     * `-I` keeps the prelude's own `#include "php_ext.h"` resolvable from
+     * outside ext/.
+     */
+    private function makeVariableForPrelude(?string $prelude, string $extPath): string
+    {
+        if (null === $prelude) {
+            return '';
+        }
+
+        return 'EXTRA_CFLAGS=' . escapeshellarg('-include ' . $prelude . ' -I' . $extPath);
+    }
+
+    /**
+     * Whether a path survives being pasted into a Makefile recipe, which make
+     * expands and then hands to `/bin/sh` without quoting anything.
+     */
+    public static function isShellSafePath(string $path): bool
+    {
+        return 1 === preg_match('#^[A-Za-z0-9/._+@:=-]+$#', $path);
+    }
+
+    /**
+     * The prelude source: the header block every generated file opens with,
+     * plus the kernel headers they pick from.
+     *
+     * @param string[] $kernelHeaders Kernel header file names, e.g. `main.h`.
+     *
+     * @see \Zephir\Traits\CompilerTrait::generateCodeHeadersPre() Emitter this mirrors.
+     */
+    public function precompiledHeaderSource(array $kernelHeaders): string
+    {
+        $code = '/* Generated by Zephir to pre-compile the header prelude. Do not edit. */' . PHP_EOL;
+        $code .= '#ifdef HAVE_CONFIG_H' . PHP_EOL;
+        $code .= '#include "ext_config.h"' . PHP_EOL;
+        $code .= '#endif' . PHP_EOL . PHP_EOL;
+        $code .= '#include <php.h>' . PHP_EOL;
+        $code .= '#include "php_ext.h"' . PHP_EOL;
+        $code .= '#include "ext.h"' . PHP_EOL . PHP_EOL;
+        $code .= '#include <Zend/zend_operators.h>' . PHP_EOL;
+        $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
+        $code .= '#include <Zend/zend_interfaces.h>' . PHP_EOL . PHP_EOL;
+
+        foreach ($kernelHeaders as $header) {
+            $code .= '#include "kernel/' . $header . '"' . PHP_EOL;
+        }
+
+        return $code;
     }
 
     /**
@@ -2029,6 +2367,42 @@ final class Compiler
     }
 
     /**
+     * Fingerprint of everything the generated `ext/Makefile` was configured
+     * with. A mismatch means the objects on disk were built for another PHP,
+     * another php-config or other flags, and must not be reused.
+     *
+     * This is what makes skipping `configure` safe when several PHP versions
+     * build the very same project directory in turn.
+     */
+    private function buildFingerprint(bool $development, PhpToolchain $toolchain): string
+    {
+        $phpConfig = $toolchain->phpConfigCommand();
+
+        $this->filesystem->system($phpConfig . ' --version', 'stdout', 'php-config-version');
+        $this->filesystem->system($phpConfig . ' --extension-dir', 'stdout', 'php-extension-dir');
+
+        return self::fingerprintOf([
+            'zephir'        => Zephir::VERSION,
+            'development'   => $development,
+            'gcc-flags'     => $this->getGccFlags($development),
+            'phpize'        => $toolchain->phpizeCommand(),
+            'configure'     => $toolchain->configureOption(),
+            'php-version'   => trim($this->filesystem->read('php-config-version')) ?: PHP_VERSION,
+            'extension-dir' => trim($this->filesystem->read('php-extension-dir')),
+            'zts'           => ZEND_THREAD_SAFE,
+            'int-size'      => PHP_INT_SIZE,
+        ]);
+    }
+
+    /**
+     * Hashes the parts a build fingerprint is made of.
+     */
+    public static function fingerprintOf(array $parts): string
+    {
+        return md5(json_encode($parts));
+    }
+
+    /**
      * Checks if the current directory is a valid Zephir project.
      *
      * @throws Exception
@@ -2128,6 +2502,12 @@ final class Compiler
 
     /**
      * Returns current GCC version.
+     *
+     * The cached and the freshly queried value go through the very same
+     * parsing. They used not to: the cache held the raw `gcc -dumpversion`
+     * output, so a first build parsed `14` into `0.0.0` while every build after
+     * it compared the raw `14`, and the two disagreed about which flags the
+     * project is built with.
      */
     private function getGccVersion(): string
     {
@@ -2135,17 +2515,31 @@ final class Compiler
             return '0.0.0';
         }
 
-        if ($this->filesystem->exists('gcc-version')) {
-            return $this->filesystem->read('gcc-version');
+        if (!$this->filesystem->exists('gcc-version')) {
+            $this->filesystem->system('gcc -dumpversion', 'stdout', 'gcc-version');
         }
 
-        $this->filesystem->system('gcc -dumpversion', 'stdout', 'gcc-version');
-        $lines = $this->filesystem->file('gcc-version');
-        $lines = array_filter($lines);
+        return self::parseGccVersion($this->filesystem->file('gcc-version'));
+    }
 
-        $lastLine = $lines[count($lines) - 1];
-        if (preg_match('/\d+\.\d+\.\d+/', $lastLine, $matches)) {
-            return $matches[0];
+    /**
+     * The version out of `gcc -dumpversion` output, or `0.0.0` when it cannot
+     * be read as one.
+     *
+     * Note that since GCC 7 `-dumpversion` prints the major version alone
+     * (`14`), which is not a version this recognizes; `-dumpfullversion` is the
+     * option that still prints `14.2.0`. Switching to it would turn on the
+     * `-flto` branch of getGccFlags() for every modern toolchain, so it is
+     * left as a deliberate, separate decision.
+     *
+     * @param string[] $lines
+     */
+    public static function parseGccVersion(array $lines): string
+    {
+        foreach (array_filter($lines) as $line) {
+            if (preg_match('/\d+\.\d+\.\d+/', $line, $matches)) {
+                return $matches[0];
+            }
         }
 
         return '0.0.0';
@@ -2219,6 +2613,35 @@ final class Compiler
     }
 
     /**
+     * Whether `phpize` and `configure` have to run, wiping every object file
+     * with them.
+     *
+     * They only have to when something they produce is out of date: a changed
+     * `config.m4` or project file, a class added or removed, a missing
+     * Makefile, or a different toolchain than the objects were built with.
+     * Otherwise the existing Makefile is reused and `make` recompiles just the
+     * translation units whose `.zep.c` actually changed.
+     */
+    private function needsConfigure(bool $development, PhpToolchain $toolchain): bool
+    {
+        if ($this->filesystem->exists(self::NEEDS_CONFIGURE) || $this->checkIfPhpized()) {
+            return true;
+        }
+
+        // A Makefile without config.h means configure never got to the end.
+        if (!is_file('ext' . DIRECTORY_SEPARATOR . 'config.h')) {
+            return true;
+        }
+
+        if (!$this->filesystem->exists(self::BUILD_FINGERPRINT)) {
+            return true;
+        }
+
+        return $this->filesystem->read(self::BUILD_FINGERPRINT)
+            !== $this->buildFingerprint($development, $toolchain);
+    }
+
+    /**
      * Pre-compiles classes creating a CompilerFile definition.
      *
      * @throws IllegalStateException
@@ -2241,6 +2664,211 @@ final class Compiler
             $this->files[$className]       = $compilerFile;
             $this->definitions[$className] = $compilerFile->getClassDefinition();
         }
+    }
+
+    /**
+     * Compiler flags the pre-compiled header is built with.
+     *
+     * A PCH is only accepted for a translation unit compiled with the same
+     * flags, so these are taken from the generated Makefile wherever possible
+     * rather than derived a second time: `CFLAGS` and `INCLUDES` are what its
+     * recipes pass, already fully expanded. The rest of a recipe's compile
+     * line is added here: the extension's own include dirs (`-I.` relative to
+     * ext/), `$(DEFS)`, the `-D_GNU_SOURCE` of `CFLAGS_CLEAN`,
+     * ZEND_COMPILE_DL_EXT, and libtool's -fPIC -DPIC.
+     *
+     * The fallbacks matter only before the project has ever been configured.
+     */
+    private function precompiledHeaderFlags(bool $development, string $extPath, PhpToolchain $toolchain): string
+    {
+        $includes = $this->makefileVariable($extPath, 'INCLUDES') ?? $this->getPhpIncludeDirs($toolchain);
+        $cflags   = $this->makefileVariable($extPath, 'CFLAGS') ?? $this->getGccFlags($development);
+
+        return implode(' ', [
+            '-I' . escapeshellarg($extPath),
+            '-I' . escapeshellarg($extPath . DIRECTORY_SEPARATOR . 'include'),
+            '-I' . escapeshellarg($extPath . DIRECTORY_SEPARATOR . 'main'),
+            $includes,
+            '-DHAVE_CONFIG_H',
+            '-D_GNU_SOURCE',
+            '-DZEND_COMPILE_DL_EXT=1',
+            $cflags,
+            '-fPIC',
+            '-DPIC',
+        ]);
+    }
+
+    /**
+     * A variable of the generated `ext/Makefile`, or null when there is no
+     * Makefile yet or it does not define one.
+     */
+    private function makefileVariable(string $extPath, string $name): ?string
+    {
+        $makefile = $extPath . DIRECTORY_SEPARATOR . 'Makefile';
+
+        if (!is_file($makefile)) {
+            return null;
+        }
+
+        return self::parseMakefileVariable(file_get_contents($makefile), $name);
+    }
+
+    /**
+     * Reads one variable off a Makefile's contents. Only the plain
+     * `NAME = value` form the phpize Makefile uses is understood, and a value
+     * still holding a `$(reference)` is refused rather than passed on
+     * unexpanded.
+     */
+    public static function parseMakefileVariable(string $contents, string $name): ?string
+    {
+        if (!preg_match('/^' . preg_quote($name, '/') . '[ \t]*=[ \t]*(.*)$/m', $contents, $matches)) {
+            return null;
+        }
+
+        $value = trim($matches[1]);
+
+        if ('' === $value || str_contains($value, '$(')) {
+            return null;
+        }
+
+        return $value;
+    }
+
+    /**
+     * The directory `make install` copied the extension into, or null when that
+     * cannot be told.
+     *
+     * `configure` bakes the `php-config --extension-dir` of the PHP the
+     * extension was built against into `ext/Makefile`, so the destination is
+     * read from there rather than looked up again: a build retargeted with
+     * `--with-php-config` installs into that PHP's directory and not into the
+     * one belonging to the `php-config` in the PATH.
+     *
+     * The installed file is confirmed to be at the destination instead of being
+     * assumed, because `make install` runs through `sudo` and its outcome is
+     * not what install() checks. Reporting a directory the extension is not in
+     * would be a worse answer than reporting none.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2467
+     */
+    private function resolveExtensionInstallDir(string $currentDir, string $fileName): ?string
+    {
+        $dir = $this->makefileVariable($currentDir . DIRECTORY_SEPARATOR . 'ext', 'EXTENSION_DIR');
+
+        if (null === $dir) {
+            return null;
+        }
+
+        return is_file($dir . DIRECTORY_SEPARATOR . $fileName . '.so') ? $dir : null;
+    }
+
+    /**
+     * Whether the compiler actually uses the pre-compiled header just built.
+     *
+     * GCC falls back to parsing the headers when it rejects a `.gch`, silently
+     * unless asked with -Winvalid-pch. The probe is a minimal translation unit
+     * shaped like a generated one: same header prelude, force-included PCH.
+     */
+    private function precompiledHeaderIsUsable(string $prelude, string $flags): bool
+    {
+        $probe = $this->filesystem->path('pch/zephir_pch_probe.c', false);
+
+        file_put_contents(
+            $probe,
+            $this->precompiledHeaderSource([]) . PHP_EOL . 'int zephir_pch_probe(void) { return 0; }' . PHP_EOL
+        );
+
+        exec(
+            sprintf(
+                'gcc %s -Winvalid-pch -include %s -c %s -o %s 2>&1',
+                $flags,
+                escapeshellarg($prelude),
+                escapeshellarg($probe),
+                escapeshellarg($probe . '.o')
+            ),
+            $output,
+            $exit
+        );
+
+        unlink($probe);
+        if (is_file($probe . '.o')) {
+            unlink($probe . '.o');
+        }
+
+        // Any diagnostic naming the .gch means it was found but not used.
+        return 0 === $exit && !str_contains(implode(PHP_EOL, $output), '.gch');
+    }
+
+    /**
+     * The kernel headers present in the project, in the order they are
+     * pre-compiled. Headers this Zephir does not know about are left out; they
+     * are still compiled normally by the translation units needing them.
+     *
+     * @return string[]
+     */
+    private function precompiledKernelHeaders(string $extPath): array
+    {
+        $kernelPath = $extPath . DIRECTORY_SEPARATOR . 'kernel' . DIRECTORY_SEPARATOR;
+
+        return array_values(array_filter(
+            self::PCH_KERNEL_HEADERS,
+            static fn(string $header): bool => is_file($kernelPath . $header)
+        ));
+    }
+
+    /**
+     * How many translation units to compile at once.
+     *
+     * The C compilation of an extension is entirely CPU bound — measured at 96%
+     * parallel efficiency on a four-core machine — so an explicit `--jobs`
+     * aside, one job per processor is the right default. Builds used to be
+     * pinned to two jobs no matter how many processors were idle.
+     */
+    private function resolveJobs(?int $jobs): int
+    {
+        if (null !== $jobs && $jobs > 0) {
+            return $jobs;
+        }
+
+        return $this->detectProcessorCount();
+    }
+
+    /**
+     * The number of processors available to this build, or the fallback when no
+     * source can tell.
+     */
+    private function detectProcessorCount(): int
+    {
+        if (Os::isWindows()) {
+            return self::parseProcessorCount((string)getenv('NUMBER_OF_PROCESSORS')) ?: self::FALLBACK_JOBS;
+        }
+
+        // nproc honors the CPU affinity mask, so a build confined to a subset
+        // of the processors does not oversubscribe them.
+        foreach (['nproc', 'getconf _NPROCESSORS_ONLN', 'sysctl -n hw.ncpu'] as $command) {
+            exec($command . ' 2>/dev/null', $output, $exit);
+            $count = 0 === $exit && isset($output[0]) ? self::parseProcessorCount($output[0]) : 0;
+            $output = [];
+
+            if ($count > 0) {
+                return $count;
+            }
+        }
+
+        return self::FALLBACK_JOBS;
+    }
+
+    /**
+     * Reads a processor count off a command's output, or 0 when it does not
+     * hold one.
+     */
+    public static function parseProcessorCount(string $raw): int
+    {
+        if (!preg_match('/^\s*(\d+)/', $raw, $matches)) {
+            return 0;
+        }
+
+        return (int)$matches[1];
     }
 
     /**

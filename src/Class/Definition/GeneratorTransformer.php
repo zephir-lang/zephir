@@ -111,6 +111,7 @@ final class GeneratorTransformer
             $method->getExpression()
         );
 
+        $step->setDeclaredName($method->getName());
         $step->setGeneratorCreator($method);
         $method->setGeneratorStep($step);
 

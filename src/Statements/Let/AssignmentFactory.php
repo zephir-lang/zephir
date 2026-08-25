@@ -45,6 +45,7 @@ final class AssignmentFactory
         'object-property-decr' => ObjectPropertyDecr::class,
         'dynamic-variable' => ExportSymbol::class,
         'dynamic-variable-string' => ExportSymbolString::class,
+        'destructure' => Destructure::class,
     ];
 
     /**
@@ -70,7 +71,8 @@ final class AssignmentFactory
         ReadDetector $readDetector
     ): void {
         $assignType = $assignment['assign-type'];
-        $variable = $assignment['variable'];
+        // Destructuring carries a `variables` list instead of a single `variable`
+        $variable = $assignment['variable'] ?? null;
 
         // Handle static property assignments (special case with operator logic)
         if (in_array($assignType, self::STATIC_PROPERTY_TYPES, true)) {
@@ -112,6 +114,10 @@ final class AssignmentFactory
             case 'dynamic-variable':
             case 'dynamic-variable-string':
                 $handler->assign($symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+                break;
+
+            case 'destructure':
+                $handler->assign($assignment, $resolvedExpr, $compilationContext);
                 break;
 
             default:

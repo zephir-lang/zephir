@@ -24,6 +24,8 @@ use Zephir\Code\Printer;
 use Zephir\Exception\CompilerException;
 use Zephir\Passes\StaticTypeInference;
 
+use function array_key_last;
+use function array_pop;
 use function in_array;
 use function sprintf;
 
@@ -95,9 +97,26 @@ class CompilationContext
      */
     public int $insideCycle = 0;
     /**
-     * Tells if the compilation is being made inside a switch.
+     * Stack of `switch` statements being compiled, innermost last.
+     *
+     * A `switch` is lowered to labels and jumps rather than to a C construct,
+     * so a `break`/`continue` that targets it must `goto` its end label instead
+     * of emitting a C `break`/`continue`. Each entry records that label, the
+     * `insideCycle` depth at the point the `switch` was entered (so a loop
+     * opened inside a clause is recognised as the innermost target), and
+     * whether the end label was actually jumped to.
+     *
+     * @var list<array{label: string, cycleDepth: int, used: bool}>
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1704
      */
-    public int $insideSwitch = 0;
+    public array $switchTargets = [];
+    /**
+     * Counter handing out unique `switch` label ids within one function.
+     *
+     * Reset on entry to each method by Method::compile().
+     */
+    public int $switchLabelId = 0;
     /**
      * Tells if the compilation is being made inside a try/catch block.
      */
@@ -181,6 +200,48 @@ class CompilationContext
         }
 
         return $this->classDefinition->getExtendsClassDefinition();
+    }
+
+    /**
+     * Registers a `switch` as the innermost `break`/`continue` target.
+     */
+    public function pushSwitchTarget(string $endLabel): void
+    {
+        $this->switchTargets[] = [
+            'label'      => $endLabel,
+            'cycleDepth' => $this->insideCycle,
+            'used'       => false,
+        ];
+    }
+
+    /**
+     * Drops the innermost `switch` target and tells whether its end label was
+     * ever jumped to - an unreferenced C label would warn.
+     */
+    public function popSwitchTarget(): bool
+    {
+        $target = array_pop($this->switchTargets);
+
+        return (bool) ($target['used'] ?? false);
+    }
+
+    /**
+     * Label that a `break`/`continue` written at the current position must jump
+     * to, marking it as referenced. NULL when a C `break`/`continue` is the
+     * right emission - that is, when the innermost enclosing construct is a
+     * loop, or when there is no enclosing `switch` at all.
+     */
+    public function useSwitchEndLabel(): ?string
+    {
+        $last = array_key_last($this->switchTargets);
+
+        if (null === $last || $this->switchTargets[$last]['cycleDepth'] !== $this->insideCycle) {
+            return null;
+        }
+
+        $this->switchTargets[$last]['used'] = true;
+
+        return $this->switchTargets[$last]['label'];
     }
 
     /**

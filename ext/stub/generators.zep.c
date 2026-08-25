@@ -302,10 +302,10 @@ void zep_Stub_Generators_zephir_gen_step_countTo(int ht, zend_execute_data *exec
 		default: break;
 	}
 	i = 1;
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 35, PH_NOISY_CC | PH_READONLY);
 	ZVAL_UNDEF(&_1);
 	ZVAL_LONG(&_1, (zephir_get_numberval(&_0) + 1));
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 35, &_1);
 	while (1) {
 		if (!(i <= n)) {
 			break;
@@ -898,7 +898,7 @@ void zep_Stub_Generators_zephir_gen_step_overItems(int ht, zend_execute_data *ex
 		case 2: goto zephir_yield_resume_2;
 		default: break;
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 34, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 36, PH_NOISY_CC | PH_READONLY);
 	zephir_is_iterable(&_0, 0, "stub/generators.zep", 103);
 	if (Z_TYPE_P(&_0) == IS_ARRAY) {
 		ZEPHIR_INIT_NVAR(&_1);
@@ -1032,19 +1032,20 @@ void zep_Stub_Generators_zephir_gen_step_viaSwitch(int ht, zend_execute_data *ex
 		case 2: goto zephir_yield_resume_2;
 		default: break;
 	}
-	do {
-		if (mode == 1) {
-			ZEPHIR_INIT_NVAR(&_0$$3);
-			ZVAL_STRING(&_0$$3, "one");
-			zephir_generator_yield(zephir_gen, NULL, &_0$$3, 1);
-			zephir_generator_slot_set_long(zephir_gen, 0, (zend_long) mode);
+	if (mode == 1) { goto zephir_switch_0_clause_0; }
+	goto zephir_switch_0_clause_1;
+	zephir_switch_0_clause_0: ;
+		ZEPHIR_INIT_NVAR(&_0$$3);
+		ZVAL_STRING(&_0$$3, "one");
+		zephir_generator_yield(zephir_gen, NULL, &_0$$3, 1);
+		zephir_generator_slot_set_long(zephir_gen, 0, (zend_long) mode);
 		zephir_generator_slot_set(zephir_gen, 1, &_0$$3);
 		zephir_generator_slot_set(zephir_gen, 2, &_1$$4);
-			ZEPHIR_MM_RESTORE();
-			return;
-			zephir_yield_resume_1:;
-			break;
-		}
+		ZEPHIR_MM_RESTORE();
+		return;
+		zephir_yield_resume_1:;
+		goto zephir_switch_0_end;
+	zephir_switch_0_clause_1: ;
 		ZEPHIR_INIT_NVAR(&_1$$4);
 		ZVAL_STRING(&_1$$4, "other");
 		zephir_generator_yield(zephir_gen, NULL, &_1$$4, 2);
@@ -1054,7 +1055,7 @@ void zep_Stub_Generators_zephir_gen_step_viaSwitch(int ht, zend_execute_data *ex
 		ZEPHIR_MM_RESTORE();
 		return;
 		zephir_yield_resume_2:;
-	} while(0);
+	zephir_switch_0_end: ;
 
 	zephir_generator_finish(zephir_gen, NULL);
 	ZEPHIR_MM_RESTORE();

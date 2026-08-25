@@ -64,13 +64,14 @@ PHP_METHOD(Stub_ArrayManipulation, arrayFillMany)
  */
 PHP_METHOD(Stub_ArrayManipulation, issue774)
 {
-	zval _1;
-	zval obj, _0;
+	zval _2;
+	zval obj, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
 	static zend_string *_zephir_prop_0 = NULL;
 	static zend_string *_zephir_prop_1 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
@@ -90,8 +91,9 @@ PHP_METHOD(Stub_ArrayManipulation, issue774)
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_update_property_zval_cached(&obj, _zephir_prop_1, 0, &_0);
-	zephir_get_arrval(&_1, &obj);
-	ZEPHIR_CPY_WRT(&obj, &_1);
+	ZEPHIR_CPY_WRT(&_1, &obj);
+	zephir_get_arrval(&_2, &_1);
+	ZEPHIR_CPY_WRT(&obj, &_2);
 	RETURN_CCTOR(&obj);
 }
 

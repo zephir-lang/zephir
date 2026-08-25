@@ -302,4 +302,40 @@ class Closures
     {
         return val * 2;
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2638
+     *
+     * Capturing a `string` **local**. Locals never use the native
+     * `zend_string *` strategy, so the capture is already a zval and must
+     * not be boxed again — boxing it emitted `ZVAL_STRING` on a zval, which
+     * does not compile.
+     */
+    public function issue2638StringLocalUse() -> <\Closure>
+    {
+        string name = "";
+
+        let name = "abc";
+
+        return function () use (name) {
+            return name;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2638
+     *
+     * Variant: a `string` **parameter** that is reassigned in the body. Two
+     * mutations disqualify it from the native-string strategy, so it is held
+     * as a zval exactly like a local — the same capture path, reachable
+     * without changing any compiler option.
+     */
+    public function issue2638StringParamMutatedUse(string name) -> <\Closure>
+    {
+        let name = name . "!";
+
+        return function () use (name) {
+            return name;
+        };
+    }
 }

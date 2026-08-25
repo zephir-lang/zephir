@@ -646,20 +646,24 @@ class Backend
         );
     }
 
+    /**
+     * Assigns a string literal to a zval.
+     *
+     * `$value` is a C string literal body, or null to assign nothing. It is not
+     * a place to pass a Variable: ZVAL_STRING expects a `const char *`, so a
+     * string already held as a zval or as a `zend_string *` has to be routed by
+     * the caller through getVariableCode() instead of boxed here.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2638
+     */
     public function assignString(
         Variable $variable,
         $value,
         CompilationContext $context,
         bool $useCodePrinter = true
     ): string {
-        // A native zend_string * value must be boxed with ZVAL_STR; ZVAL_STRING
-        // expects a const char * and fails to compile otherwise. See #2562.
-        $macro = ($value instanceof Variable && $value->isNativeString())
-            ? 'ZVAL_STR'
-            : 'ZVAL_STRING';
-
         return $this->assignHelper(
-            $macro,
+            'ZVAL_STRING',
             $this->getVariableCode($variable),
             $value,
             $context,

@@ -22,6 +22,7 @@ use function array_pop;
 use function count;
 use function filter_var;
 use function getenv;
+use function in_array;
 use function sprintf;
 
 use const FILTER_VALIDATE_BOOLEAN;
@@ -32,6 +33,16 @@ use const FILTER_VALIDATE_BOOLEAN;
  */
 class StatementsBlock
 {
+    /**
+     * Statement types that are not reported as unreachable code.
+     *
+     * A dead `break`/`continue` is a no-op and a `comment` is not code; PHP
+     * warns about none of them.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1704
+     */
+    private const SILENT_WHEN_UNREACHABLE = ['break', 'continue', 'comment'];
+
     protected bool $loop = false;
     protected bool $debug = false;
     protected ?array $lastStatement = null;
@@ -101,7 +112,7 @@ class StatementsBlock
             );
 
             if ($compilationContext->currentMethod) {
-                $where .= sprintf('::%s', $compilationContext->currentMethod->getName());
+                $where .= sprintf('::%s', $compilationContext->currentMethod->getDeclaredName());
             }
         }
 
@@ -120,9 +131,17 @@ class StatementsBlock
             }
 
             /**
-             * Show warnings if code is generated when the 'unreachable state' is 'on'
+             * Show warnings if code is generated when the 'unreachable state' is 'on'.
+             *
+             * A dead `break`/`continue` is a no-op, and is commonly written as
+             * padding after a `return` inside a `switch` clause; a `comment` is
+             * not code at all. PHP diagnoses none of the three, so neither do
+             * we. Anything else after the dead jump is still reported, because
+             * `break`/`continue` keep the unreachable state on.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/1704
              */
-            if (true === $this->unreachable) {
+            if (true === $this->unreachable && !in_array($statement['type'], self::SILENT_WHEN_UNREACHABLE, true)) {
                 switch ($statement['type']) {
                     case 'echo':
                         $compilationContext->logger->warning(

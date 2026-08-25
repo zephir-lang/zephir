@@ -341,6 +341,19 @@ final class Definition extends AbstractDefinition
      */
     public function checkInterfaceImplements(self $classDefinition, self $interfaceDefinition): void
     {
+        /**
+         * Requirements are inherited: implementing `Outer extends Inner` also
+         * commits the class to everything `Inner` declares. Bundled interfaces
+         * need no recursion here, their reflected method list is already flat.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2635
+         */
+        foreach ($interfaceDefinition->getImplementedInterfaceDefinitions() as $parentInterface) {
+            if ($parentInterface instanceof self) {
+                $this->checkInterfaceImplements($classDefinition, $parentInterface);
+            }
+        }
+
         foreach ($interfaceDefinition->getMethods() as $method) {
             if (!$classDefinition->hasMethod($method->getName())) {
                 throw new CompilerException(
@@ -1055,7 +1068,10 @@ final class Definition extends AbstractDefinition
             }
         }
 
-        return null;
+        /**
+         * An interface also declares whatever its parent interfaces declare.
+         */
+        return $this->isInterface() ? $this->getMethodFromInterfaces($methodName) : null;
     }
 
     /**
@@ -1239,7 +1255,14 @@ final class Definition extends AbstractDefinition
             $extendsClassDefinition = $extendsClassDefinition->getExtendsClassDefinition();
         }
 
-        return false;
+        /**
+         * An interface also declares whatever its parent interfaces declare.
+         * This deliberately does not apply to classes: for a class, "has" must
+         * keep meaning "provides an implementation", which is what the
+         * "does not implement method" diagnostic and the call-site code
+         * generation rely on.
+         */
+        return $this->isInterface() && $this->hasMethodFromInterfaces($methodName);
     }
 
     /**
@@ -1540,6 +1563,44 @@ final class Definition extends AbstractDefinition
                 if ($interface instanceof self && $interface->hasConstant($name)) {
                     return true;
                 }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Looks a method up in the parent interfaces of an interface.
+     *
+     * A Zephir interface keeps its `extends` list where a class keeps its
+     * `implements` list, so the parents are reached through
+     * getImplementedInterfaceDefinitions() rather than the extends chain.
+     * Recursion happens through the parent's own getMethod(), which covers
+     * chains of any depth as well as an interface extending several others.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2635
+     */
+    protected function getMethodFromInterfaces(string $methodName): ?Method
+    {
+        foreach ($this->getImplementedInterfaceDefinitions() as $interface) {
+            if ($interface instanceof self && $interface->hasMethod($methodName)) {
+                return $interface->getMethod($methodName);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Checks whether any parent interface of an interface declares the method.
+     *
+     * @see self::getMethodFromInterfaces()
+     */
+    protected function hasMethodFromInterfaces(string $methodName): bool
+    {
+        foreach ($this->getImplementedInterfaceDefinitions() as $interface) {
+            if ($interface instanceof self && $interface->hasMethod($methodName)) {
+                return true;
             }
         }
 

@@ -107,6 +107,16 @@ interface FileSystemInterface
     public function normalizePath(string $path): string;
 
     /**
+     * Absolute path of a temporary entry, for handing over to external tools.
+     *
+     * The entry does not have to exist. An empty path yields the container
+     * directory itself. Unversioned paths live beside the per-version
+     * containers, for entries that must not carry the Zephir version in their
+     * path.
+     */
+    public function path(string $path = '', bool $versioned = true): string;
+
+    /**
      * Writes data from a temporary entry.
      *
      * @param string $path

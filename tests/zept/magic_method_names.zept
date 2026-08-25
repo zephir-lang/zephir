@@ -1,0 +1,88 @@
+--TEST--
+__FUNCTION__ and __METHOD__ report the declared name, not a generated one (issue #2643)
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--FILE--
+namespace Stub;
+
+/**
+ * The three call shapes PHP resolves statically -- a private method, a final
+ * method and `self::` -- keep the `internal-call-transformation` twin, so the
+ * body is compiled twice and the magic constants are folded against the twin's
+ * `<name>_zephir_internal_call` name.
+ */
+class Probe
+{
+	private function privateStep() -> string
+	{
+		return __FUNCTION__;
+	}
+
+	final protected function finalStep() -> string
+	{
+		return __FUNCTION__;
+	}
+
+	protected static function selfStep() -> string
+	{
+		return __METHOD__;
+	}
+
+	private function classStep() -> string
+	{
+		return __CLASS__ . "|" . __NAMESPACE__;
+	}
+
+	public function viaPrivate() -> string
+	{
+		return this->privateStep();
+	}
+
+	public function viaFinal() -> string
+	{
+		return this->finalStep();
+	}
+
+	public function viaSelf() -> string
+	{
+		return self::selfStep();
+	}
+
+	public function viaClass() -> string
+	{
+		return this->classStep();
+	}
+}
+--FILE--
+namespace Stub;
+
+/**
+ * The same fold without the optimization: GeneratorTransformer moves the body
+ * into a step method named `zephir_gen_step_<name>`.
+ */
+class Gen
+{
+	public function numbers()
+	{
+		yield __FUNCTION__;
+		yield __METHOD__;
+	}
+}
+--USAGE--
+$p = new \Stub\Probe();
+
+echo $p->viaPrivate(), "\n";
+echo $p->viaFinal(), "\n";
+echo $p->viaSelf(), "\n";
+echo $p->viaClass(), "\n";
+
+foreach ((new \Stub\Gen())->numbers() as $value) {
+    echo $value, "\n";
+}
+--EXPECT--
+privateStep
+finalStep
+Probe:selfStep
+Stub\Probe|Stub
+numbers
+Gen:numbers

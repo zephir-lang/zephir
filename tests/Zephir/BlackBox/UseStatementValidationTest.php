@@ -164,6 +164,36 @@ ZEP);
         $this->assertStringNotContainsString('does not exist at compile time', $output);
     }
 
+    public function testOptionalExtensionUseDoesNotWarn(): void
+    {
+        // Regression: the bundled prototypes declare the classes of extensions
+        // that are not loaded in the running PHP, but they were required after
+        // the `use` validation ran. An extension built without redis/memcached
+        // therefore warned about classes Zephir itself provides.
+        // See https://github.com/phalcon/cphalcon/issues/17517.
+        $this->writeZep('optional.zep', <<<'ZEP'
+namespace Stub;
+
+use Memcached;
+use Redis;
+use RedisCluster;
+use RedisException;
+
+class Optional
+{
+    public function noop()
+    {
+    }
+}
+ZEP);
+
+        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
+
+        $this->assertSame(0, $result['exitCode']);
+        $output = $result['stdout'] . $result['stderr'];
+        $this->assertStringNotContainsString('does not exist at compile time', $output);
+    }
+
     public function testWnoFlagSuppressesTheWarning(): void
     {
         $this->writeZep('typo.zep', <<<'ZEP'

@@ -494,21 +494,22 @@ class GeneratorTest extends TestCase
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
-        $original = [
-            'default' => [
-                'type' => $type,
-                'value' => $value,
-            ],
+        $default  = [
+            'type' => $type,
+            'value' => $value,
         ];
+        $original = ['default' => $default];
 
         // Test requirements initialization
 
         $buildClass = $this->getMethod('buildProperty');
+        // Same argument pairing the compiler uses: the default node is both the
+        // property's value and part of its original AST (see CompilerFile).
         $classProperty = new Property(
             $this->classDefinition,
             $visibility,
             'testProperty',
-            null,
+            $default,
             '',
             $original
         );
@@ -523,6 +524,46 @@ class GeneratorTest extends TestCase
         );
 
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * An expression default (`public size = 1024 * 8;`) has no PHP spelling as
+     * an AST node, so the stub must render the folded value the compiler
+     * produced, not the original operator node.
+     *
+     * @covers \Zephir\Stubs\Generator::buildProperty
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2061
+     *
+     * @throws \ReflectionException
+     */
+    public function testShouldBuildPropertyFromTheFoldedDefault(): void
+    {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
+        $classProperty = new Property(
+            $this->classDefinition,
+            ['public'],
+            'testProperty',
+            ['type' => 'int', 'value' => '8192'],
+            '',
+            [
+                'default' => [
+                    'type'  => 'mul',
+                    'left'  => ['type' => 'int', 'value' => '1024'],
+                    'right' => ['type' => 'int', 'value' => '8'],
+                ],
+            ]
+        );
+
+        $actual = $this->getMethod('buildProperty')->invokeArgs(
+            $this->testClass,
+            [$classProperty, '']
+        );
+
+        $this->assertSame('public $testProperty = 8192;', $actual);
     }
 
     public function constantProvider(): array

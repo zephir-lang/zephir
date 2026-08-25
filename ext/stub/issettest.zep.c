@@ -156,7 +156,7 @@ PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty1)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_memory_observe(&g);
-	zephir_read_property_cached(&g, this_ptr, _zephir_prop_0, 40, PH_NOISY_CC);
+	zephir_read_property_cached(&g, this_ptr, _zephir_prop_0, 42, PH_NOISY_CC);
 	if (zephir_array_isset_value_string(&g, SL("a"))) {
 		RETURN_MM_BOOL(1);
 	}

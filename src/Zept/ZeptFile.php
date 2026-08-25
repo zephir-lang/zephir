@@ -23,7 +23,8 @@ namespace Zephir\Zept;
 final class ZeptFile
 {
     /**
-     * @param list<string> $files One Zephir source per `--FILE--` section, in order.
+     * @param list<string>              $files  One Zephir source per `--FILE--` section, in order.
+     * @param array<string, mixed>|null $config Merged into the project's `config.json`.
      */
     public function __construct(
         public string $test,
@@ -33,6 +34,7 @@ final class ZeptFile
         public bool $expectIsFormat,
         public ?string $skipif = null,
         public ?string $ini = null,
+        public ?array $config = null,
     ) {
     }
 }

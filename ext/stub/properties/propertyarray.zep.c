@@ -64,7 +64,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, __construct)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	zephir_array_fast_append(&_0, &_1);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 80, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 82, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -103,7 +103,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, setOtherArray)
 		Z_PARAM_ZVAL(arr)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &arr);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 81, arr);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 83, arr);
 }
 
 PHP_METHOD(Stub_Properties_PropertyArray, getOtherArray)
@@ -139,22 +139,22 @@ PHP_METHOD(Stub_Properties_PropertyArray, testIssues1831)
 		if (!(1)) {
 			break;
 		}
-		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 81, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 83, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_MAKE_REF(&_0$$3);
-		ZEPHIR_CALL_FUNCTION(&info, "array_shift", &_1, 89, &_0$$3);
+		ZEPHIR_CALL_FUNCTION(&info, "array_shift", &_1, 90, &_0$$3);
 		ZEPHIR_UNREF(&_0$$3);
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		ZVAL_STRING(&_2$$3, "header");
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "stripos", &_4, 90, &info, &_2$$3);
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "stripos", &_4, 91, &info, &_2$$3);
 		zephir_check_call_status();
 		if (!ZEPHIR_IS_FALSE_IDENTICAL(&_3$$3)) {
 			zephir_array_append(&headers, &info, PH_SEPARATE, "stub/properties/propertyarray.zep", 51);
 			continue;
 		} else {
-			zephir_read_property_cached(&_5$$5, this_ptr, _zephir_prop_0, 81, PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_5$$5, this_ptr, _zephir_prop_0, 83, PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_MAKE_REF(&_5$$5);
-			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_6, 91, &_5$$5, &info);
+			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_6, 92, &_5$$5, &info);
 			ZEPHIR_UNREF(&_5$$5);
 			zephir_check_call_status();
 			break;

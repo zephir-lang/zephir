@@ -753,8 +753,8 @@ class ArithmeticalBaseOperator extends AbstractOperator
 
         if ($compilationContext->config->get('constant-folding', 'optimizations')) {
             if ('int' == $expression['left']['type'] && 'int' == $expression['right']['type']) {
-                $left  = $this->literalToNumber($expression['left']['value']);
-                $right = $this->literalToNumber($expression['right']['value']);
+                $left  = self::literalToNumber($expression['left']['value']);
+                $right = self::literalToNumber($expression['right']['value']);
                 switch ($this->operator) {
                     case '+':
                         return new CompiledExpression('int', $left + $right, $expression);
@@ -768,8 +768,8 @@ class ArithmeticalBaseOperator extends AbstractOperator
             }
 
             if (('double' == $expression['left']['type'] && 'double' == $expression['right']['type']) || ('double' == $expression['left']['type'] && 'int' == $expression['right']['type']) || ('int' == $expression['left']['type'] && 'double' == $expression['right']['type'])) {
-                $left  = $this->literalToNumber($expression['left']['value']);
-                $right = $this->literalToNumber($expression['right']['value']);
+                $left  = self::literalToNumber($expression['left']['value']);
+                $right = self::literalToNumber($expression['right']['value']);
                 switch ($this->operator) {
                     case '+':
                         return new CompiledExpression('double', $left + $right, $expression);

@@ -39,4 +39,68 @@ final class SwitchFlowTest extends TestCase
         $this->assertSame('aaa', $test->testSwitch14(1));
         $this->assertSame('bbb', $test->testSwitch14(99));
     }
+
+    /**
+     * A clause without `break` falls through into the next clause's body, and
+     * on into `default`, exactly as in PHP.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1704
+     */
+    public function testFallThrough(): void
+    {
+        $test = new SwitchFlow();
+
+        $this->assertSame('abd', $test->testSwitch15(1));
+        $this->assertSame('bd', $test->testSwitch15(2));
+        $this->assertSame('d', $test->testSwitch15(9));
+    }
+
+    /**
+     * A `default` clause in the middle falls through into the `case` after it.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1704
+     */
+    public function testDefaultInTheMiddleFallsThrough(): void
+    {
+        $test = new SwitchFlow();
+
+        $this->assertSame('one', $test->testSwitch16(1));
+        $this->assertSame('two', $test->testSwitch16(2));
+        $this->assertSame('deftwo', $test->testSwitch16(9));
+    }
+
+    /**
+     * `continue` inside a `switch` is equivalent to `break`: the loop body
+     * after the `switch` still runs on that iteration.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1704
+     */
+    public function testContinueInsideSwitchBehavesLikeBreak(): void
+    {
+        $this->assertSame('0123', (new SwitchFlow())->testSwitch17());
+    }
+
+    /**
+     * A `break` inside a loop nested in a clause targets the loop.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1704
+     */
+    public function testBreakInsideNestedLoop(): void
+    {
+        $this->assertSame('w3', (new SwitchFlow())->testSwitch18());
+    }
+
+    /**
+     * An empty clause falls through into the next body, then into `default`.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1704
+     */
+    public function testEmptyClauseFallsThrough(): void
+    {
+        $test = new SwitchFlow();
+
+        $this->assertSame('xy', $test->testSwitch19(1));
+        $this->assertSame('xy', $test->testSwitch19(2));
+        $this->assertSame('y', $test->testSwitch19(9));
+    }
 }

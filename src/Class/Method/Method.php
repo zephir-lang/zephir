@@ -40,6 +40,7 @@ use Zephir\Variable\Variable;
 use function array_diff;
 use function array_key_exists;
 use function array_keys;
+use function array_values;
 use function count;
 use function implode;
 use function in_array;
@@ -59,6 +60,24 @@ use const PHP_EOL;
  */
 class Method
 {
+    /**
+     * Control runs off the end of the statement list and carries on after it.
+     */
+    private const OUTCOME_FALLS = 'falls';
+    /**
+     * Control leaves the enclosing `switch`/loop without leaving the method
+     * (a `break` or a `continue`).
+     */
+    private const OUTCOME_JUMPS = 'jumps';
+    /**
+     * Control leaves the method (a `return` or a `throw`).
+     */
+    private const OUTCOME_RETURNS = 'returns';
+    /**
+     * Statement types that loop, and so can capture a `break`/`continue`.
+     */
+    private const LOOP_TYPES = ['while', 'do-while', 'for', 'loop'];
+
     public bool $optimizable = true;
 
     /**
@@ -163,6 +182,20 @@ class Method
      * Number of yield suspension points allocated while compiling a step body.
      */
     protected int $yieldPoints = 0;
+
+    /**
+     * The method name as written in the .zep source.
+     *
+     * The compiler emits copies of a method under a mangled name — the
+     * `internal-call-transformation` twin (`<name>_zephir_internal_call`) and a
+     * generator's step (`zephir_gen_step_<name>`). Those copies are compiled as
+     * methods in their own right, so anything user-visible that reads the
+     * method name — `__FUNCTION__`, `__METHOD__`, compile diagnostics — must
+     * read the declared name instead of the mangled one.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2643
+     */
+    protected ?string $declaredName = null;
 
     public function __construct(
         protected ?Definition $classDefinition = null,
@@ -704,6 +737,13 @@ class Method
     /**
      * Assigns a zval value to a static low-level type.
      *
+     * Types that ZEND_PARSE_PARAMETERS populates directly into the native local
+     * (`int`, `long`, `bool`) normally need nothing emitted here. Internal
+     * methods are the exception: they run no ZPP block at all, because they are
+     * called C-to-C with the *caller's* execute_data and receive their own
+     * arguments through the trailing `_ext` pointers instead (see #2021). For
+     * those, the conversion has to be emitted explicitly.
+     *
      * @throws CompilerException
      */
     public function assignZvalValue(array $parameter, CompilationContext $compilationContext): string
@@ -760,6 +800,10 @@ class Method
             case 'uint':
             case 'long':
             case 'ulong':
+                if ($this->isInternal()) {
+                    return "\t" . $parameter['name'] . ' = zephir_get_intval(' . $parameterCode . ');' . PHP_EOL;
+                }
+
                 // Value already passed in `Z_PARAM_LONG()`
                 return '';
 
@@ -770,7 +814,11 @@ class Method
                 return "\t" . $parameter['name'] . ' = zephir_get_charval(' . $parameterCode . ');' . PHP_EOL;
 
             case 'bool':
-                //return "\t" . $parameter['name'] . ' = zephir_get_boolval(' . $parameterCode . ');' . PHP_EOL;
+                if ($this->isInternal()) {
+                    return "\t" . $parameter['name'] . ' = zephir_get_boolval(' . $parameterCode . ');' . PHP_EOL;
+                }
+
+                // Value already passed in `Z_PARAM_BOOL()`
                 return '';
 
             case 'double':
@@ -1023,6 +1071,8 @@ class Method
          * Reset try/catch and loop counter
          */
         $compilationContext->insideCycle     = 0;
+        $compilationContext->switchTargets   = [];
+        $compilationContext->switchLabelId   = 0;
         $compilationContext->insideTryCatch  = 0;
         $compilationContext->currentTryCatch = 0;
 
@@ -1102,7 +1152,17 @@ class Method
                                 : PHP_INT_MAX;
 
                             $defaultType = $parameter['default']['type'] ?? null;
-                            $canUseNativeString = $mutations <= 1
+
+                            /**
+                             * Internal methods are excluded: the native-string
+                             * strategy sources the zend_string * from the
+                             * caller's frame (Z_PARAM_STR, or ZEND_CALL_ARG for
+                             * mixed methods), which an internal method does not
+                             * own. They take the zval path so the trailing _ext
+                             * pointer stays the single source of truth (#2021).
+                             */
+                            $canUseNativeString = !$this->isInternal()
+                                && $mutations <= 1
                                 && (!isset($parameter['default']) || $defaultType === 'string' || $defaultType === 'null');
 
                             $symbol = $symbolTable->addVariable(
@@ -1456,7 +1516,7 @@ class Method
                             $parameter['name'],
                             $this->getParamDataType($parameter),
                             $this->getClassDefinition()?->getCompleteName() ?? '[unknown]',
-                            $this->getName()
+                            $this->getDeclaredName()
                         ),
                         ['deprecated-strict-type', $parameter]
                     );
@@ -1717,7 +1777,7 @@ class Method
                         . '" declared but not used in '
                         . $completeName
                         . '::'
-                        . $this->getName(),
+                        . $this->getDeclaredName(),
                         ['unused-variable', $variable->getOriginal()]
                     );
                     continue;
@@ -1729,7 +1789,7 @@ class Method
                     . '" declared but not used in '
                     . $completeName
                     . '::'
-                    . $this->getName(),
+                    . $this->getDeclaredName(),
                     ['unused-variable-external', $variable->getOriginal()]
                 );
             }
@@ -1784,7 +1844,7 @@ class Method
                         . '" assigned but not used in '
                         . $completeName
                         . '::'
-                        . $this->getName(),
+                        . $this->getDeclaredName(),
                         ['unused-variable', $expression]
                     );
                 } else {
@@ -1794,7 +1854,7 @@ class Method
                         . '" assigned but not used in '
                         . $completeName
                         . '::'
-                        . $this->getName(),
+                        . $this->getDeclaredName(),
                         ['unused-variable', $variable->getOriginal()]
                     );
                 }
@@ -1812,9 +1872,21 @@ class Method
          * the resuming caller's execute_data, whose argument frame has no
          * relation to the step's own parameter (the generator object arrives
          * via the trailing _ext pointer).
+         *
+         * Internal methods skip it for exactly the same reason: the
+         * ZEPHIR_CALL_INTERNAL_METHOD_P* macros pass the caller's execute_data
+         * straight through and hand the real arguments over as trailing _ext
+         * pointers. Parsing that frame read the caller's arguments instead of
+         * the callee's, and crashed outright whenever the two arities differed
+         * (#2021).
          */
         $tempCodePrinter = new Printer();
-        if ($this->parameters instanceof Parameters && $this->parameters->count() > 0 && !$this->isGeneratorStep()) {
+        if (
+            $this->parameters instanceof Parameters
+            && $this->parameters->count() > 0
+            && !$this->isGeneratorStep()
+            && !$this->isInternal()
+        ) {
             // Do not declare variable when it is not needed.
             if ($this->parameters->hasNullableParameters()) {
                 $tempCodePrinter->output("\t" . 'bool is_null_true = 1;');
@@ -1891,19 +1963,13 @@ class Method
         /**
          * Finalize the method compilation
          */
-        if (is_object($this->statements) && !empty($statement = $this->statements->getLastStatement())) {
+        if (is_object($this->statements) && !empty($this->statements->getLastStatement())) {
             /**
-             * If the last statement is not a 'return' or 'throw' we need to
-             * restore the memory stack if needed.
+             * When control cannot reach the end of the body there is nothing to
+             * restore and no `return` missing. Otherwise the memory stack has to
+             * be restored, and a declared return type is left unsatisfied.
              */
-            $lastType = $this->statements->getLastStatementType();
-
-            if (
-                'return' !== $lastType &&
-                'throw' !== $lastType &&
-                !$this->hasChildReturnStatementType($statement) &&
-                !('switch' === $lastType && $this->switchAlwaysReturns($statement))
-            ) {
+            if (self::OUTCOME_RETURNS !== $this->statementsOutcome($this->statements->getStatements())) {
                 if ($this->isGeneratorStep()) {
                     /* Falling off the end finishes the generator (getReturn() => NULL). */
                     $genVariable = $compilationContext->symbolTable->getVariableForRead(
@@ -2239,6 +2305,17 @@ class Method
     }
 
     /**
+     * Returns the method name as written in the .zep source.
+     *
+     * Same as {@see getName()} unless this method is a compiler-generated copy
+     * of another one, in which case it is the name of the method it copies.
+     */
+    public function getDeclaredName(): string
+    {
+        return $this->declaredName ?? $this->name;
+    }
+
+    /**
      * Returns the method name.
      */
     public function getName(): string
@@ -2374,53 +2451,15 @@ class Method
     }
 
     /**
-     * Simple method to check if one of the paths are returning the right expected type.
-     */
-    public function hasChildReturnStatementType(array $statement): bool
-    {
-        if (!isset($statement['statements']) || !is_array($statement['statements'])) {
-            return false;
-        }
-
-        if ('if' === $statement['type']) {
-            $ret = false;
-
-            $statements = $statement['statements'];
-            foreach ($statements as $item) {
-                $type = $item['type'] ?? null;
-                if ('return' === $type || 'throw' === $type) {
-                    $ret = true;
-                } else {
-                    $ret = $this->hasChildReturnStatementType($item);
-                }
-            }
-
-            if (!$ret || !isset($statement['else_statements'])) {
-                return false;
-            }
-
-            $statements = $statement['else_statements'];
-        } else {
-            $statements = $statement['statements'];
-        }
-
-        foreach ($statements as $item) {
-            $type = $item['type'] ?? null;
-            if ('return' === $type || 'throw' === $type) {
-                return true;
-            }
-
-            return $this->hasChildReturnStatementType($item);
-        }
-
-        return false;
-    }
-
-    /**
      * Issue #1706: tells whether a `switch` statement is guaranteed to return
-     * (or throw) on every path. This holds when it has a `default` clause, its
-     * last clause always exits, and every clause either always exits or is
-     * empty (falling through to a later clause that exits).
+     * (or throw) on every path.
+     *
+     * Every clause has to end up returning, because any of them can be the one
+     * that matches. A clause that neither returns nor jumps away falls through
+     * into the clause written after it (issue #1704), so it returns exactly
+     * when that next clause does - which leaves the last clause having to
+     * return on its own. Without a `default` clause a non-matching value skips
+     * the whole `switch`, so it is never exhaustive.
      */
     private function switchAlwaysReturns(array $statement): bool
     {
@@ -2428,7 +2467,7 @@ class Method
             return false;
         }
 
-        $clauses    = $statement['clauses'];
+        $clauses    = array_values($statement['clauses']);
         $hasDefault = false;
         foreach ($clauses as $clause) {
             if ('default' === ($clause['type'] ?? null)) {
@@ -2441,53 +2480,240 @@ class Method
             return false;
         }
 
-        $lastIndex = array_key_last($clauses);
-        foreach ($clauses as $index => $clause) {
-            $statements = $clause['statements'] ?? [];
+        /**
+         * Walk backwards so that each clause can be answered against the one
+         * it falls into. Past the last clause control leaves the `switch`
+         * without returning, hence the initial false.
+         */
+        $nextClauseReturns = false;
+        for ($index = count($clauses) - 1; $index >= 0; --$index) {
+            $outcome = $this->statementsOutcome($clauses[$index]['statements'] ?? []);
 
-            if ($this->statementsAlwaysExit($statements)) {
-                continue;
-            }
-
-            // The last clause must exit; otherwise execution falls off the end.
-            // An empty earlier clause is allowed: it falls through to the next.
-            if ($index === $lastIndex || [] !== $statements) {
+            if (self::OUTCOME_JUMPS === $outcome) {
+                /**
+                 * A `break`/`continue` leaves the `switch` without returning,
+                 * so the method can still fall off its end.
+                 */
                 return false;
             }
+
+            if (self::OUTCOME_FALLS === $outcome && !$nextClauseReturns) {
+                return false;
+            }
+
+            $nextClauseReturns = true;
         }
 
         return true;
     }
 
     /**
-     * Tells whether a block of statements is guaranteed to exit the method on
-     * every path (its last reachable statement is a `return`/`throw`, an
-     * exhaustive `if`/`else`, or an exhaustive `switch`).
+     * How control leaves a list of statements, as far as the enclosing method
+     * is concerned.
+     *
+     * The scan stops at the first statement that transfers control
+     * unconditionally, so a dead `break` written after a `return` as padding is
+     * never reached and cannot mask the `return` in front of it.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1704
      */
-    private function statementsAlwaysExit(array $statements): bool
+    private function statementsOutcome(array $statements): string
     {
-        if ([] === $statements) {
-            return false;
+        foreach ($statements as $statement) {
+            $outcome = $this->statementOutcome($statement);
+
+            if (self::OUTCOME_FALLS !== $outcome) {
+                return $outcome;
+            }
         }
 
-        $last = end($statements);
-        $type = $last['type'] ?? null;
+        return self::OUTCOME_FALLS;
+    }
+
+    /**
+     * How control leaves a single statement. Anything that does not transfer
+     * control of its own accord just falls through to the next one.
+     */
+    private function statementOutcome(array $statement): string
+    {
+        $type = $statement['type'] ?? null;
 
         if ('return' === $type || 'throw' === $type) {
-            return true;
+            return self::OUTCOME_RETURNS;
+        }
+
+        if ('break' === $type || 'continue' === $type) {
+            return self::OUTCOME_JUMPS;
         }
 
         if ('if' === $type) {
-            return isset($last['else_statements'])
-                && $this->statementsAlwaysExit($last['statements'] ?? [])
-                && $this->statementsAlwaysExit($last['else_statements']);
+            return $this->ifOutcome($statement);
+        }
+
+        if ('try-catch' === $type) {
+            return $this->tryCatchOutcome($statement);
+        }
+
+        if (in_array($type, self::LOOP_TYPES, true)) {
+            return $this->loopOutcome($statement);
         }
 
         if ('switch' === $type) {
-            return $this->switchAlwaysReturns($last);
+            /**
+             * A `switch` swallows its own `break`s, so it either returns on
+             * every path or control continues after it.
+             */
+            return $this->switchAlwaysReturns($statement)
+                ? self::OUTCOME_RETURNS
+                : self::OUTCOME_FALLS;
+        }
+
+        return self::OUTCOME_FALLS;
+    }
+
+    /**
+     * How control leaves a `try`/`catch`.
+     *
+     * Without `catch` clauses normal flow simply continues with the outcome of
+     * the `try` body. With them every body has to leave the method for the
+     * statement as a whole to do so, because any of them can be the one that
+     * runs.
+     */
+    private function tryCatchOutcome(array $statement): string
+    {
+        $outcomes = [$this->statementsOutcome($statement['statements'] ?? [])];
+
+        foreach ($statement['catches'] ?? [] as $catch) {
+            $outcomes[] = $this->statementsOutcome($catch['statements'] ?? []);
+        }
+
+        if (in_array(self::OUTCOME_JUMPS, $outcomes, true)) {
+            return self::OUTCOME_JUMPS;
+        }
+
+        return in_array(self::OUTCOME_FALLS, $outcomes, true)
+            ? self::OUTCOME_FALLS
+            : self::OUTCOME_RETURNS;
+    }
+
+    /**
+     * How control leaves a loop.
+     *
+     * A loop whose condition is not a constant truth - and every `for`, whose
+     * iterand can be empty - may run zero times, so control just continues
+     * after it. An infinite loop is left only by a `break` that targets it;
+     * without one the code after the loop is unreachable and the sole way out
+     * is a `return`/`throw`.
+     */
+    private function loopOutcome(array $statement): string
+    {
+        if (!$this->isInfiniteLoop($statement)) {
+            return self::OUTCOME_FALLS;
+        }
+
+        return $this->containsLoopBreak($statement['statements'] ?? [])
+            ? self::OUTCOME_FALLS
+            : self::OUTCOME_RETURNS;
+    }
+
+    /**
+     * Tells whether a loop can only be left by jumping out of it: a `loop`, or
+     * a `while`/`do-while` whose condition is a literal truth.
+     */
+    private function isInfiniteLoop(array $statement): bool
+    {
+        $type = $statement['type'] ?? null;
+
+        if ('loop' === $type) {
+            return true;
+        }
+
+        if ('while' !== $type && 'do-while' !== $type) {
+            return false;
+        }
+
+        $expr     = $statement['expr'] ?? [];
+        $exprType = $expr['type'] ?? null;
+
+        if ('bool' === $exprType) {
+            return 'true' === ($expr['value'] ?? null);
+        }
+
+        return 'int' === $exprType && 0 !== (int) ($expr['value'] ?? 0);
+    }
+
+    /**
+     * Tells whether a loop body holds a `break` that targets that loop.
+     *
+     * The walk enters `if` arms and `try`/`catch` bodies, but stops at a nested
+     * loop or `switch`, each of which captures a `break` of its own.
+     */
+    private function containsLoopBreak(array $statements): bool
+    {
+        foreach ($statements as $statement) {
+            $type = $statement['type'] ?? null;
+
+            if ('break' === $type) {
+                return true;
+            }
+
+            if ('if' === $type) {
+                $bodies = [
+                    $statement['statements'] ?? [],
+                    $statement['else_statements'] ?? [],
+                ];
+
+                foreach ($statement['elseif_statements'] ?? [] as $elseIf) {
+                    $bodies[] = $elseIf['statements'] ?? [];
+                }
+            } elseif ('try-catch' === $type) {
+                $bodies = [$statement['statements'] ?? []];
+
+                foreach ($statement['catches'] ?? [] as $catch) {
+                    $bodies[] = $catch['statements'] ?? [];
+                }
+            } else {
+                continue;
+            }
+
+            foreach ($bodies as $body) {
+                if ($this->containsLoopBreak($body)) {
+                    return true;
+                }
+            }
         }
 
         return false;
+    }
+
+    /**
+     * How control leaves an `if` statement, taking every arm into account: the
+     * `if` body, each `elseif` body, and either the `else` body or - when there
+     * is none - the implicit arm on which execution simply continues.
+     *
+     * An arm that jumps out makes the whole statement able to jump out, which
+     * is what stops a `break` hidden in a branch from being mistaken for an
+     * exhaustive clause.
+     */
+    private function ifOutcome(array $statement): string
+    {
+        $arms = [$this->statementsOutcome($statement['statements'] ?? [])];
+
+        foreach ($statement['elseif_statements'] ?? [] as $elseIf) {
+            $arms[] = $this->statementsOutcome($elseIf['statements'] ?? []);
+        }
+
+        $arms[] = isset($statement['else_statements'])
+            ? $this->statementsOutcome($statement['else_statements'])
+            : self::OUTCOME_FALLS;
+
+        if (in_array(self::OUTCOME_JUMPS, $arms, true)) {
+            return self::OUTCOME_JUMPS;
+        }
+
+        return in_array(self::OUTCOME_FALLS, $arms, true)
+            ? self::OUTCOME_FALLS
+            : self::OUTCOME_RETURNS;
     }
 
     /**
@@ -3205,6 +3431,14 @@ class Method
     }
 
     /**
+     * Records the name of the method this one is a generated copy of.
+     */
+    public function setDeclaredName(string $name): void
+    {
+        $this->declaredName = $name;
+    }
+
+    /**
      * Sets the method name.
      */
     public function setName(string $name): void
@@ -3351,20 +3585,53 @@ class Method
                 return $this;
             }
 
+            /**
+             * A method with no body of its own cannot be turned into a C
+             * function. The twin's visibility is just `internal`, so it does not
+             * inherit `isAbstract()` and would be emitted as a body-less
+             * function that silently returns nothing. Generator creators are the
+             * same shape: GeneratorTransformer moves the body into a step and
+             * nulls the statements before this runs, and the twin carries no
+             * generator step, so it would return null instead of a Generator.
+             */
+            if ($this->isAbstract() || null === $this->statements || $this->isGeneratorCreator()) {
+                return $this;
+            }
+
             $optimizedName = $this->getName() . '_zephir_internal_call';
 
+            /**
+             * `static` has to be carried over: the twin's body is compiled with
+             * a static context iff the method it copies had one. Visibility
+             * itself is irrelevant to an internal method (it is deliberately
+             * left out of the method_entry) but `static` is not.
+             */
             $visibility = ['internal'];
+            if ($this->isStatic()) {
+                $visibility[] = 'static';
+            }
 
-            $statements = null;
-            if ($this->statements) {
-                $statements = new StatementsBlock(json_decode(json_encode($this->statements->getStatements()), true));
+            $statements = new StatementsBlock(
+                json_decode(json_encode($this->statements->getStatements()), true)
+            );
+
+            /**
+             * The twin gets its own Parameters instance: fetchParameters()
+             * appends to the required/optional lists without ever resetting
+             * them, so sharing the original's instance made the twin see every
+             * parameter twice and emit each conversion twice — a leak for
+             * `string` and `array` parameters, which allocate.
+             */
+            $parameters = null;
+            if ($this->parameters instanceof Parameters) {
+                $parameters = new Parameters($this->parameters->getParameters());
             }
 
             $optimizedMethod                = new self(
                 $classDefinition,
                 $visibility,
                 $optimizedName,
-                $this->parameters,
+                $parameters,
                 $statements,
                 $this->docblock,
                 null,
@@ -3372,6 +3639,7 @@ class Method
             );
             $optimizedMethod->typeInference = $this->typeInference;
             $optimizedMethod->setReturnTypes($this->returnTypes);
+            $optimizedMethod->setDeclaredName($this->getName());
             $classDefinition->addMethod($optimizedMethod);
         }
 

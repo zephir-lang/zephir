@@ -137,6 +137,13 @@ class Closure
             );
         }
 
+        /**
+         * A closure's return type belongs to the synthetic `__invoke`, so it
+         * flows through the ordinary method path: arg-info, docblock and engine
+         * enforcement all come for free.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/1841
+         */
         $classMethod = new Method(
             $classDefinition,
             ['public', 'final'],
@@ -144,7 +151,7 @@ class Closure
             $parameters,
             new StatementsBlock($block),
             null,
-            null,
+            $expression['return-type'] ?? null,
             $expression,
             $staticVariables
         );
@@ -175,7 +182,18 @@ class Closure
         $compilationContext->headersManager->add('kernel/object');
 
         foreach ($staticVariables as $var) {
-            if (in_array($var->getType(), ['variable', 'array'])) {
+            /**
+             * Captures already held as a zval need no boxing: getVariableCode()
+             * yields their address directly. `string` belongs here too — it maps
+             * to `zval` like `variable` and `array`, and for a native
+             * `zend_string *` parameter getVariableCode() returns the companion
+             * `<name>_zv` the parameter prologue always populates. Boxing it a
+             * second time emitted ZVAL_STRING() on a zval, which does not
+             * compile. Only true C scalars fall through to the switch below.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2638
+             */
+            if (in_array($var->getType(), ['variable', 'array', 'string'])) {
                 $compilationContext->backend->updateStaticProperty(
                     $classDefinition->getClassEntry(),
                     $var->getName(),
@@ -205,9 +223,6 @@ class Closure
                     break;
                 case 'bool':
                     $compilationContext->backend->assignBool($tempVariable, $var, $compilationContext);
-                    break;
-                case 'string':
-                    $compilationContext->backend->assignString($tempVariable, $var, $compilationContext);
                     break;
                 default:
                     break;

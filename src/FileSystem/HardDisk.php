@@ -52,6 +52,16 @@ use const DIRECTORY_SEPARATOR;
 class HardDisk implements FileSystemInterface
 {
     /**
+     * Cache entries kept beside the per-version containers instead of inside
+     * one. Cleaned along with the current container.
+     *
+     * @see \Zephir\Compiler::PCH_HEADER The pre-compiled header prelude, which
+     *      cannot carry `Zephir::VERSION` in its path because that version
+     *      holds an unexpanded `$Id$` and the path is handed to `make`.
+     */
+    private const SHARED_ENTRIES = ['pch'];
+
+    /**
      * Root or base path
      *
      * Path to where all cached files and folders are collected.
@@ -80,23 +90,11 @@ class HardDisk implements FileSystemInterface
      */
     public function clean(): void
     {
-        if (!is_dir($this->basePath . DIRECTORY_SEPARATOR . $this->localPath)) {
-            return;
+        foreach (self::SHARED_ENTRIES as $entry) {
+            $this->removeDirectory($this->basePath . DIRECTORY_SEPARATOR . $entry);
         }
 
-        $contents = $this->listDirectoryRecursively(
-            $this->basePath . DIRECTORY_SEPARATOR . $this->localPath,
-            RecursiveIteratorIterator::CHILD_FIRST,
-        );
-
-        /** @var SplFileInfo $file */
-        foreach ($contents as $file) {
-            $this->deleteFileInfoObject($file);
-        }
-
-        unset($contents);
-
-        rmdir($this->basePath . DIRECTORY_SEPARATOR . $this->localPath);
+        $this->removeDirectory($this->basePath . DIRECTORY_SEPARATOR . $this->localPath);
     }
 
     public function delete(string $path): void
@@ -241,6 +239,15 @@ class HardDisk implements FileSystemInterface
         return str_replace(['\\', ':', '/'], '_', $path);
     }
 
+    public function path(string $path = '', bool $versioned = true): string
+    {
+        $container = $versioned
+            ? $this->basePath . DIRECTORY_SEPARATOR . $this->localPath
+            : $this->basePath;
+
+        return '' === $path ? $container : $container . DIRECTORY_SEPARATOR . $path;
+    }
+
     /**
      * Checks if the content of the file on the disk is the same as the content.
      */
@@ -314,6 +321,27 @@ class HardDisk implements FileSystemInterface
             new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS),
             $mode
         );
+    }
+
+    /**
+     * Removes a directory of the cache with everything in it.
+     */
+    private function removeDirectory(string $path): void
+    {
+        if (!is_dir($path)) {
+            return;
+        }
+
+        $contents = $this->listDirectoryRecursively($path, RecursiveIteratorIterator::CHILD_FIRST);
+
+        /** @var SplFileInfo $file */
+        foreach ($contents as $file) {
+            $this->deleteFileInfoObject($file);
+        }
+
+        unset($contents);
+
+        rmdir($path);
     }
 
     private function rightTrimPath(string $path): string

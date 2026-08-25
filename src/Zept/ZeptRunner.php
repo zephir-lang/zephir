@@ -87,7 +87,7 @@ final class ZeptRunner
         $dir = $this->makeWorkDir();
 
         try {
-            $this->writeProject($dir, $namespace, $sources);
+            $this->writeProject($dir, $namespace, $sources, $zept->config);
 
             // Force the pure-PHP parser so the .zept also exercises it end-to-end.
             $env = array_merge($this->env(), ['ZEPHIR_FORCE_PHP_PARSER' => '1']);
@@ -293,12 +293,24 @@ final class ZeptRunner
         }
     }
 
-    private function writeProject(string $dir, string $namespace, array $sources): void
+    /**
+     * @param array<string, string>     $sources
+     * @param array<string, mixed>|null $config Body of the `--CONFIG--` section, if any.
+     */
+    private function writeProject(string $dir, string $namespace, array $sources, ?array $config = null): void
     {
-        file_put_contents(
-            $dir . '/config.json',
-            (string) json_encode(['namespace' => $namespace, 'name' => $namespace])
+        /**
+         * `namespace` and `name` are derived from the sources, not from
+         * --CONFIG--: ZeptProject maps `namespace Stub; class Foo` to
+         * `stub/foo.zep`, so a config that disagreed would only produce a
+         * confusing build failure. Everything else the section declares wins.
+         */
+        $settings = array_replace_recursive(
+            $config ?? [],
+            ['namespace' => $namespace, 'name' => $namespace]
         );
+
+        file_put_contents($dir . '/config.json', (string) json_encode($settings));
 
         foreach ($sources as $relative => $source) {
             $full = $dir . '/' . $relative;

@@ -63,6 +63,29 @@ final class PhpToolchainTest extends TestCase
         $this->assertSame('', $toolchain->configureOption());
     }
 
+    public function testDefaultResolvesPhpConfigFromPath(): void
+    {
+        $this->assertSame('php-config', PhpToolchain::default()->phpConfigCommand());
+    }
+
+    /**
+     * The pre-compiled header and the build fingerprint have to be derived
+     * from the very same php-config `configure` is told about, otherwise they
+     * describe a different PHP than the one the extension is built against.
+     */
+    public function testExplicitPhpConfigIsReportedForTheBuildEnvironment(): void
+    {
+        $this->skipOnWindows();
+        $phpConfig = $this->createPrefix();
+
+        $toolchain = PhpToolchain::fromPhpConfig($phpConfig);
+
+        $this->assertSame(
+            escapeshellarg($this->physicalPrefix() . '/php-config'),
+            $toolchain->phpConfigCommand(),
+        );
+    }
+
     public function testExplicitPhpConfigPairsTheSiblingPhpize(): void
     {
         $this->skipOnWindows();

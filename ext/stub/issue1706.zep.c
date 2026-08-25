@@ -33,12 +33,14 @@ PHP_METHOD(Stub_Issue1706, testSwitch)
 {
 	zend_long a = 0;
 	a = 1;
-	do {
-		if (a == 2) {
-			RETURN_LONG(2);
-		}
+	if (a == 1) { goto zephir_switch_0_clause_0; }
+	if (a == 2) { goto zephir_switch_0_clause_2; }
+	goto zephir_switch_0_clause_1;
+	zephir_switch_0_clause_0: ;
+	zephir_switch_0_clause_1: ;
 		RETURN_LONG(1);
-	} while(0);
+	zephir_switch_0_clause_2: ;
+		RETURN_LONG(2);
 
 }
 
@@ -51,15 +53,15 @@ PHP_METHOD(Stub_Issue1706, switchDefaultLast)
 		Z_PARAM_LONG(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
-	do {
-		if (a == 1) {
-			RETURN_LONG(10);
-		}
-		if (a == 2) {
-			RETURN_LONG(20);
-		}
+	if (a == 1) { goto zephir_switch_0_clause_0; }
+	if (a == 2) { goto zephir_switch_0_clause_1; }
+	goto zephir_switch_0_clause_2;
+	zephir_switch_0_clause_0: ;
+		RETURN_LONG(10);
+	zephir_switch_0_clause_1: ;
+		RETURN_LONG(20);
+	zephir_switch_0_clause_2: ;
 		RETURN_LONG(0);
-	} while(0);
 
 }
 
@@ -72,13 +74,13 @@ PHP_METHOD(Stub_Issue1706, switchWithThrow)
 		Z_PARAM_LONG(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
-	do {
-		if (a == 1) {
-			RETURN_STRING("one");
-		}
+	if (a == 1) { goto zephir_switch_0_clause_0; }
+	goto zephir_switch_0_clause_1;
+	zephir_switch_0_clause_0: ;
+		RETURN_STRING("one");
+	zephir_switch_0_clause_1: ;
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(zend_ce_exception, "bad", "stub/issue1706.zep", 42);
 		return;
-	} while(0);
 
 }
 

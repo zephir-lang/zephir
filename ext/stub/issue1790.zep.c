@@ -49,9 +49,9 @@ PHP_METHOD(Stub_Issue1790, setStringProp)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
 	if (ZEPHIR_GT_LONG(value, 5)) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 44, &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 46, &__$true);
 	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 44, &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 46, &__$false);
 	}
 }
 

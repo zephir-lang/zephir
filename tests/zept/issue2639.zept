@@ -1,0 +1,190 @@
+--TEST--
+Issue #2639: creating or throwing an exception inside an `internal` method must not segfault
+--FILE--
+namespace Stub;
+
+/**
+ * Every callee below is reached through ZEPHIR_CALL_INTERNAL_METHOD_P*, i.e. as a
+ * plain C function on the synthetic frame that ZEPHIR_BACKUP_SCOPE() installs,
+ * without a PHP call frame of its own.
+ */
+class Issue2639
+{
+    internal function throwing()
+    {
+        throw new \Exception("from internal");
+    }
+
+    internal function throwingWith(string prefix, long code)
+    {
+        throw new \RuntimeException(prefix, code);
+    }
+
+    internal static function throwingStatic()
+    {
+        throw new \DomainException("from static internal");
+    }
+
+    internal function relaying()
+    {
+        return this->throwing();
+    }
+
+    /**
+     * Builds an exception and never throws it. Every Exception constructor
+     * captures a backtrace, so this crashed on its own — the throw was never
+     * the trigger.
+     */
+    internal function building()
+    {
+        var e;
+
+        let e = new \Exception("built, not thrown");
+
+        return e->getMessage();
+    }
+
+    internal function tracing()
+    {
+        return debug_backtrace();
+    }
+
+    public function caught() -> string
+    {
+        var e, status;
+
+        let status = "not reached";
+
+        try {
+            let status = this->throwing();
+        } catch \Exception, e {
+            let status = "caught " . e->getMessage();
+        }
+
+        return status;
+    }
+
+    public function caughtWithParams() -> string
+    {
+        var e, status;
+
+        let status = "not reached";
+
+        try {
+            let status = this->throwingWith("from params", 42);
+        } catch \RuntimeException, e {
+            let status = "caught " . e->getMessage() . " code " . e->getCode();
+        }
+
+        return status;
+    }
+
+    public function caughtStatic() -> string
+    {
+        var e, status;
+
+        let status = "not reached";
+
+        try {
+            let status = self::throwingStatic();
+        } catch \DomainException, e {
+            let status = "caught " . e->getMessage();
+        }
+
+        return status;
+    }
+
+    public function caughtNested() -> string
+    {
+        var e, status;
+
+        let status = "not reached";
+
+        try {
+            let status = this->relaying();
+        } catch \Exception, e {
+            let status = "caught nested " . e->getMessage();
+        }
+
+        return status;
+    }
+
+    public function build() -> string
+    {
+        return this->building();
+    }
+
+    public function trace()
+    {
+        return this->tracing();
+    }
+
+    public function uncaught()
+    {
+        return this->throwing();
+    }
+}
+--FILE--
+namespace Stub;
+
+/**
+ * A static internal call carries its called scope on the synthetic frame, which
+ * zephir_set_called_scope() finds by walking until it runs out of function. If
+ * it walks past the synthetic frame it lands on the caller's, whose `This` is a
+ * live object -- and writes the called scope straight into that object's class
+ * entry. Here the called scope (Issue2639Scope) differs from the receiver's
+ * type (Issue2639ScopeChild), so such a write shows up as the receiver changing
+ * type mid-call.
+ */
+class Issue2639Scope
+{
+    internal static function tag() -> string
+    {
+        return "scope-tag";
+    }
+
+    public function viaSelf() -> string
+    {
+        return self::tag();
+    }
+}
+--FILE--
+namespace Stub;
+
+class Issue2639ScopeChild extends Issue2639Scope
+{
+}
+--USAGE--
+$o = new \Stub\Issue2639();
+
+echo $o->caught(), "\n";
+echo $o->caughtWithParams(), "\n";
+echo $o->caughtStatic(), "\n";
+echo $o->caughtNested(), "\n";
+echo $o->build(), "\n";
+
+try {
+    $o->uncaught();
+    echo "no exception\n";
+} catch (\Throwable $e) {
+    echo "propagated ", get_class($e), " ", $e->getMessage(), "\n";
+}
+
+$names = array_column($o->trace(), 'function');
+echo 'synthetic frame leaked: ', var_export(in_array('unknown', $names, true), true), "\n";
+echo 'caller frame present: ', var_export(in_array('trace', $names, true), true), "\n";
+
+$child = new \Stub\Issue2639ScopeChild();
+echo $child->viaSelf(), "\n";
+echo 'receiver type after static internal call: ', get_class($child), "\n";
+--EXPECT--
+caught from internal
+caught from params code 42
+caught from static internal
+caught nested from internal
+built, not thrown
+propagated Exception from internal
+synthetic frame leaked: false
+caller frame present: true
+scope-tag
+receiver type after static internal call: Stub\Issue2639ScopeChild

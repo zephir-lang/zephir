@@ -793,7 +793,9 @@ final class PhpParser
         $default   = null;
         $shortcuts = null;
         if ($this->accept(TokenType::T_ASSIGN)) {
-            $default = $this->parseLiteralExpr();
+            // A property default is a full expression (`public size = 1024 * 8;`);
+            // the compiler folds it to a literal. See zephir#2061.
+            $default = $this->parseExpr(0);
         }
         if ($this->check(TokenType::T_BRACKET_OPEN)) {
             $shortcuts = $this->parsePropertyShortcuts();
@@ -875,7 +877,9 @@ final class PhpParser
         $this->expect(TokenType::T_CONST);
         $name = $this->expectNameToken();
         $this->expect(TokenType::T_ASSIGN);
-        $default = $this->parseLiteralExpr();
+        // A constant initializer is a full expression (`const A = -0x7f - 1;`);
+        // the compiler folds it to a literal. See zephir#2061.
+        $default = $this->parseExpr(0);
         $this->expect(TokenType::T_DOTCOMMA);
 
         $node = [
@@ -2349,9 +2353,16 @@ final class PhpParser
     }
 
     /**
-     * Closure expression: function([params]) [use (captures)] { [statements] }.
+     * Closure expression:
+     * function([params]) [use (captures)] [-> returnType] { [statements] }.
      * (`fn` is lexed as the same FUNCTION token.) Builds {type:closure,
-     * left:params?, right:statements?, use:captures?, ...}.
+     * left:params?, right:statements?, use:captures?, return-type:?, ...}.
+     *
+     * The return type is parsed before the body but emitted after `use`, which
+     * is the order xx_ret_closure() adds the keys in — the parity fixtures are
+     * byte-compared JSON dumps, so key order is load-bearing.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1841
      */
     private function parseClosure(): array
     {
@@ -2368,6 +2379,11 @@ final class PhpParser
             $this->expect(TokenType::T_PARENTHESES_CLOSE);
         }
 
+        $returnType = null;
+        if ($this->accept(TokenType::T_ARROW)) {
+            $returnType = $this->parseReturnType();
+        }
+
         $statements = $this->parseBlock();
 
         $node = ['type' => 'closure'];
@@ -2379,6 +2395,9 @@ final class PhpParser
         }
         if ($use !== null) {
             $node['use'] = $use;
+        }
+        if ($returnType !== null) {
+            $node['return-type'] = $returnType;
         }
         $node['file'] = $this->file;
         $node['line'] = $this->line();
@@ -2828,7 +2847,7 @@ final class PhpParser
         return $node;
     }
 
-    /* ----- literal-expr (property/const/parameter defaults) ------------- */
+    /* ----- literal-expr (parameter defaults, literal array values) ------- */
 
     private function parseLiteralExpr(): array
     {

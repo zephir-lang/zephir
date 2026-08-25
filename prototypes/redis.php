@@ -232,3 +232,7 @@ class RedisCluster
     {
     }
 }
+
+class RedisException extends RuntimeException
+{
+}

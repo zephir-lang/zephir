@@ -240,6 +240,24 @@ class MutateGathererPass
                 continue;
             }
 
+            /**
+             * Destructuring (`let [a, b] = expr;`) mutates every slot of its
+             * `variables` list instead of a single `variable`. The counts matter:
+             * an array fetch is promoted to a non-tracked read-only value only
+             * when the target is mutated exactly once.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2496
+             */
+            if ('destructure' === $assignment['assign-type']) {
+                foreach ($assignment['variables'] as $slot) {
+                    if (null !== $slot) {
+                        $this->increaseMutations($slot['value']);
+                    }
+                }
+
+                continue;
+            }
+
             $this->increaseMutations($assignment['variable']);
         }
     }

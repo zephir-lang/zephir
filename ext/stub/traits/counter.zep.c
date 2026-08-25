@@ -51,10 +51,10 @@ PHP_METHOD(Stub_Traits_Counter, increment)
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("count", 5, 1);
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 127, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 129, PH_NOISY_CC | PH_READONLY);
 	ZVAL_UNDEF(&_1);
 	ZVAL_LONG(&_1, (zephir_get_numberval(&_0) + 2));
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 127, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 129, &_1);
 	RETURN_MEMBER_TYPED(getThis(), "count", IS_LONG);
 }
 
@@ -87,8 +87,8 @@ PHP_METHOD(Stub_Traits_Counter, tagged)
 
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "label", NULL, 0);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 127, PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_CALL_FUNCTION(&_2, "strval", NULL, 61, &_1);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 129, PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_CALL_FUNCTION(&_2, "strval", NULL, 62, &_1);
 	zephir_check_call_status();
 	ZEPHIR_CONCAT_VSV(return_value, &_0, ":", &_2);
 	RETURN_MM();
