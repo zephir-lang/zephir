@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+- Fixed a `-Wformat` warning in `zephir_fclose()` by formatting the `zend_long` resource handle with the portable `ZEND_LONG_FMT` macro instead of `%d`.
+
 ## [1.3.0] - 2026-08-25
 
 ### Added
