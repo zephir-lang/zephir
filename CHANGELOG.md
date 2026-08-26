@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
-- Fixed a `-Wformat` warning in `zephir_fclose()` by formatting the `zend_long` resource handle with the portable `ZEND_LONG_FMT` macro instead of `%d`.
+- Fixed a `-Wformat` warning in `zephir_fclose()` by casting the resource handle to `zend_long` and formatting it with the portable `ZEND_LONG_FMT` macro instead of `%d`, preserving compatibility with PHP 8.0's `int` handle.
 
 ## [1.3.0] - 2026-08-25
 
