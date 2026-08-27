@@ -144,6 +144,7 @@
 #include "stub/issue2565.zep.h"
 #include "stub/issue2635/caller.zep.h"
 #include "stub/issue2635/impl.zep.h"
+#include "stub/issue2651.zep.h"
 #include "stub/issue663.zep.h"
 #include "stub/issue808.zep.h"
 #include "stub/issue820.zep.h"
