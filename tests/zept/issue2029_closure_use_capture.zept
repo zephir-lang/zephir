@@ -1,0 +1,77 @@
+--TEST--
+A variable consumed only by a closure's `use (...)` clause is a used variable (issue #2029)
+--FILE--
+namespace Stub;
+
+/**
+ * A `use (...)` capture reads the enclosing variable. Zephir used to resolve it
+ * without counting the read, and the same use count gates both the
+ * `unused-variable` warning and the variable's C declaration, so a variable
+ * whose only consumer was the clause got reported as unused and left
+ * undeclared - the generated C referenced it anyway and failed to build.
+ */
+class Capture2029
+{
+	protected source = "abc";
+
+	public function fromProperty() -> <\Closure>
+	{
+		var value = this->source;
+
+		return function () use (value) {
+			return value;
+		};
+	}
+
+	public function scalar() -> <\Closure>
+	{
+		int n = 5;
+
+		return function () use (n) {
+			return n;
+		};
+	}
+
+	public function flags() -> <\Closure>
+	{
+		var x;
+		var y;
+
+		let x = 1;
+		let y = 2;
+
+		return function () use (&x, const y) {
+			return x + y;
+		};
+	}
+
+	/**
+	 * Created but never invoked on purpose: a declared-but-unassigned variable
+	 * holds an uninitialised zval in Zephir no matter how it is read (`var x;
+	 * return x;` behaves the same way), so its captured value is not this
+	 * case's subject. What it does assert is that the shape compiles - it used
+	 * to emit C referencing an undeclared identifier.
+	 */
+	public function declaredOnly() -> <\Closure>
+	{
+		var pending;
+
+		return function () use (pending) {
+			return pending;
+		};
+	}
+}
+--USAGE--
+use Stub\Capture2029;
+
+$test = new Capture2029();
+
+echo var_export($test->fromProperty()(), true), "\n";
+echo var_export($test->scalar()(), true), "\n";
+echo var_export($test->flags()(), true), "\n";
+echo var_export($test->declaredOnly() instanceof \Closure, true), "\n";
+--EXPECT--
+'abc'
+5
+3
+true

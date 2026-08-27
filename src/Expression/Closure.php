@@ -21,6 +21,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\CompilerFileAnonymous;
 use Zephir\Exception;
+use Zephir\Exception\CompilerException;
 use Zephir\StatementsBlock;
 use Zephir\Variable\Variable;
 
@@ -118,9 +119,33 @@ class Closure
         $staticVariables = [];
         if (isset($expression['use']) && is_array($expression['use'])) {
             foreach ($expression['use'] as $parameter) {
-                $staticVariables[$parameter['name']] = $compilationContext->symbolTable->getVariable(
-                    $parameter['name']
+                $captured = $compilationContext->symbolTable->getVariable(
+                    $parameter['name'],
+                    $compilationContext
                 );
+
+                if (!$captured instanceof Variable) {
+                    throw new CompilerException(
+                        "Cannot capture variable '" . $parameter['name'] . "' because it wasn't declared",
+                        $parameter
+                    );
+                }
+
+                /**
+                 * A capture is a read of the enclosing variable, so it has to be
+                 * counted as one. Method::compile() gates both the
+                 * `unused-variable` warning and the variable's C declaration on
+                 * the very same use count, so a variable whose only consumer is
+                 * this clause used to be reported as unused *and* left
+                 * undeclared - the generated C then referenced it anyway and
+                 * failed to build.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2029
+                 */
+                $captured->increaseUses();
+                $captured->setUsed(true, $parameter);
+
+                $staticVariables[$parameter['name']] = $captured;
             }
         }
 
