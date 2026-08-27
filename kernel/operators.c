@@ -80,6 +80,17 @@ void zephir_concat_self(zval *left, zval *right)
 }
 
 /**
+ * Appends the string representation of the right integer to the left operand
+ */
+void zephir_concat_self_long(zval *left, const long right)
+{
+	zend_string *right_str = zend_long_to_str(right);
+
+	zephir_concat_self_str(left, ZSTR_VAL(right_str), ZSTR_LEN(right_str));
+	zend_string_release(right_str);
+}
+
+/**
  * Appends the content of the right operator to the left operator
  */
 void zephir_concat_self_char(zval *left, unsigned char right)

@@ -1,0 +1,24 @@
+--TEST--
+Appending an integer variable to a string
+--FILE--
+namespace Issue2660;
+
+class Example
+{
+    public function append() -> string
+    {
+        string value;
+        int suffix;
+
+        let value = "x";
+        let suffix = 5;
+        let value .= suffix;
+
+        return value;
+    }
+}
+--USAGE--
+$example = new \Issue2660\Example();
+echo $example->append(), "\n";
+--EXPECT--
+x5
