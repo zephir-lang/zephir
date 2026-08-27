@@ -63,6 +63,21 @@ void zephir_concat_self(zval *left, zval *right)
 
 	left_length = Z_STRLEN_P(left);
 	right_length = Z_STRLEN_P(right);
+
+	if (UNEXPECTED(right_length > ZSTR_MAX_LEN - left_length)) {
+		zend_throw_error(NULL, "String size overflow");
+
+		if (use_copy_left) {
+			zval_dtor(&left_copy);
+		}
+
+		if (use_copy_right) {
+			zval_dtor(&right_copy);
+		}
+
+		return;
+	}
+
 	length = left_length + right_length;
 	target = zend_string_extend(Z_STR_P(left), length, 0);
 	ZVAL_NEW_STR(left, target);
@@ -85,7 +100,8 @@ void zephir_concat_self(zval *left, zval *right)
 void zephir_concat_self_char(zval *left, unsigned char right)
 {
 	zval left_copy;
-	int use_copy = 0, length;
+	int use_copy = 0;
+	size_t length;
 	zend_string *target;
 
 	if (Z_TYPE_P(left) == IS_NULL) {
@@ -104,6 +120,16 @@ void zephir_concat_self_char(zval *left, unsigned char right)
 	}
 
 	SEPARATE_ZVAL_NOREF(left);
+
+	if (UNEXPECTED(Z_STRLEN_P(left) >= ZSTR_MAX_LEN)) {
+		zend_throw_error(NULL, "String size overflow");
+
+		if (use_copy) {
+			zval_dtor(&left_copy);
+		}
+
+		return;
+	}
 
 	length = Z_STRLEN_P(left) + 1;
 	target = zend_string_extend(Z_STR_P(left), length, 0);
@@ -140,6 +166,17 @@ void zephir_concat_self_str(zval *left, const char *right, int right_length)
 
 	SEPARATE_ZVAL_NOREF(left);
 	left_length = Z_STRLEN_P(left);
+
+	if (UNEXPECTED((size_t) right_length > ZSTR_MAX_LEN - left_length)) {
+		zend_throw_error(NULL, "String size overflow");
+
+		if (use_copy) {
+			zval_dtor(&left_copy);
+		}
+
+		return;
+	}
+
 	length = left_length + right_length;
 	target = zend_string_extend(Z_STR_P(left), length, 0);
 	ZVAL_NEW_STR(left, target);
