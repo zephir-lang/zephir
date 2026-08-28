@@ -1,5 +1,5 @@
 --TEST--
-Concat: static-property concat, string append/prepend, integer-like strings (#1573), float/double concat (#1893) (port of tests/Extension/ConcatTest.php)
+Concat: static-property concat, string append/prepend, integer-like strings (#1573), float/double concat (#1893), integer operand on a `string` and on a `var` (#2660) (port of tests/Extension/ConcatTest.php)
 --FILE--
 namespace Stub;
 
@@ -67,6 +67,67 @@ class Concat
 
         return retval;
     }
+
+    public function testConcatStringWithIntVar(int number) -> string
+    {
+        string retval = "n=";
+        let retval .= number;
+        return retval;
+    }
+
+    public function testConcatStringWithLongVar() -> string
+    {
+        string retval = "n=";
+        long number = 2147483647;
+        let retval .= number;
+        return retval;
+    }
+
+    public function testConcatStringWithUintVar() -> string
+    {
+        string retval = "n=";
+        uint number = 5;
+        let retval .= number;
+        return retval;
+    }
+
+    public function testConcatStringWithUlongVar() -> string
+    {
+        string retval = "n=";
+        ulong number = 5;
+        let retval .= number;
+        return retval;
+    }
+
+    public function testConcatStringWithCharVar() -> string
+    {
+        string retval = "n=";
+        char c = 'A';
+        let retval .= c;
+        return retval;
+    }
+
+    public function testConcatVarWithIntVar(int number) -> string
+    {
+        var retval = "n=";
+        let retval .= number;
+        return retval;
+    }
+
+    public function testConcatVarWithCharVar() -> string
+    {
+        var retval = "n=";
+        char c = 'A';
+        let retval .= c;
+        return retval;
+    }
+
+    public function testConcatVarWithIntLiteral() -> string
+    {
+        var retval = "n=";
+        let retval .= 5;
+        return retval;
+    }
 }
 --USAGE--
 $test = new \Stub\Concat();
@@ -80,6 +141,16 @@ echo var_export($test->testConcat2(), true), "\n";
 echo var_export($test->testConcat3(), true), "\n";
 echo var_export($test->testConcat4(1893), true), "\n";
 echo var_export($test->testConcat5(18.93000001), true), "\n";
+echo var_export($test->testConcatStringWithIntVar(5), true), "\n";
+echo var_export($test->testConcatStringWithIntVar(-5), true), "\n";
+echo var_export($test->testConcatStringWithIntVar(PHP_INT_MIN), true), "\n";
+echo var_export($test->testConcatStringWithLongVar(), true), "\n";
+echo var_export($test->testConcatStringWithUintVar(), true), "\n";
+echo var_export($test->testConcatStringWithUlongVar(), true), "\n";
+echo var_export($test->testConcatStringWithCharVar(), true), "\n";
+echo var_export($test->testConcatVarWithIntVar(-5), true), "\n";
+echo var_export($test->testConcatVarWithCharVar(), true), "\n";
+echo var_export($test->testConcatVarWithIntLiteral(), true), "\n";
 --EXPECT--
 NULL
 'test'
@@ -89,3 +160,13 @@ NULL
 '21'
 'SELECT * FROM TEST WHERE value <= 946.5 AND value >= 473.25'
 'Concatenated string with number 18.93000001'
+'n=5'
+'n=-5'
+'n=-9223372036854775808'
+'n=2147483647'
+'n=5'
+'n=5'
+'n=A'
+'n=-5'
+'n=A'
+'n=5'

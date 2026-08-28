@@ -74,4 +74,99 @@ class Concat
 
 		return retval;
 	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatStringWithIntVar(int number) -> string
+	{
+		string retval = "n=";
+		let retval .= number;
+		return retval;
+	}
+
+	/**
+	 * `long` is a C `long`, which is 32-bit on Windows LLP64, so this stays a
+	 * local holding a 32-bit-safe value. The 64-bit range is exercised through
+	 * the `int` variant above, which is a `zend_long` on every platform.
+	 *
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 * @see  https://github.com/zephir-lang/zephir/issues/2666
+	 */
+	public function testConcatStringWithLongVar() -> string
+	{
+		string retval = "n=";
+		long number = 2147483647;
+		let retval .= number;
+		return retval;
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatStringWithUintVar() -> string
+	{
+		string retval = "n=";
+		uint number = 5;
+		let retval .= number;
+		return retval;
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatStringWithUlongVar() -> string
+	{
+		string retval = "n=";
+		ulong number = 5;
+		let retval .= number;
+		return retval;
+	}
+
+	/**
+	 * Fence for the sibling helper: a char operand routes to
+	 * zephir_concat_self_char(), which is defined.
+	 *
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatStringWithCharVar() -> string
+	{
+		string retval = "n=";
+		char c = 'A';
+		let retval .= c;
+		return retval;
+	}
+
+	/**
+	 * A `var` left-hand side takes a different code path than a `string` one.
+	 *
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatVarWithIntVar(int number) -> string
+	{
+		var retval = "n=";
+		let retval .= number;
+		return retval;
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatVarWithCharVar() -> string
+	{
+		var retval = "n=";
+		char c = 'A';
+		let retval .= c;
+		return retval;
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatVarWithIntLiteral() -> string
+	{
+		var retval = "n=";
+		let retval .= 5;
+		return retval;
+	}
 }
