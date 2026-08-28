@@ -74,4 +74,93 @@ class Concat
 
 		return retval;
 	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatStringWithIntVar(int number) -> string
+	{
+		string retval = "n=";
+		let retval .= number;
+		return retval;
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatStringWithLongVar(long number) -> string
+	{
+		string retval = "n=";
+		let retval .= number;
+		return retval;
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatStringWithUintVar() -> string
+	{
+		string retval = "n=";
+		uint number = 5;
+		let retval .= number;
+		return retval;
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatStringWithUlongVar() -> string
+	{
+		string retval = "n=";
+		ulong number = 5;
+		let retval .= number;
+		return retval;
+	}
+
+	/**
+	 * Fence for the sibling helper: a char operand routes to
+	 * zephir_concat_self_char(), which is defined.
+	 *
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatStringWithCharVar() -> string
+	{
+		string retval = "n=";
+		char c = 'A';
+		let retval .= c;
+		return retval;
+	}
+
+	/**
+	 * A `var` left-hand side takes a different code path than a `string` one.
+	 *
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatVarWithIntVar(int number) -> string
+	{
+		var retval = "n=";
+		let retval .= number;
+		return retval;
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatVarWithCharVar() -> string
+	{
+		var retval = "n=";
+		char c = 'A';
+		let retval .= c;
+		return retval;
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/2660
+	 */
+	public function testConcatVarWithIntLiteral() -> string
+	{
+		var retval = "n=";
+		let retval .= 5;
+		return retval;
+	}
 }

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - A variable whose only consumer is a closure's `use (...)` clause now counts as used: it is no longer reported as `unused-variable`, and it is declared in the generated C. A declared-but-unassigned capture was skipped by both, so the generated code referenced an undeclared identifier and the extension failed to build. Capturing a variable that was never declared now fails with `Cannot capture variable 'x' because it wasn't declared` instead of a PHP fatal error [#2029](https://github.com/zephir-lang/zephir/issues/2029)
 - Fixed array defaults on a class (typed `array` property defaults, trait array property defaults and array class constants), which were one shared table that every instance mutated in place instead of being copy-on-write [#2651](https://github.com/zephir-lang/zephir/issues/2651)
 - Fixed the unchecked length arithmetic in the `zephir_concat_*()` helpers, which now throw `String size overflow` like PHP instead of writing past the allocation [#2657](https://github.com/zephir-lang/zephir/issues/2657)
+- Fixed `let s .= n` with an integer operand calling the declared but never defined `zephir_concat_self_long()`, so the extension built and then died at load with `undefined symbol`, and made the same append work on a `var` left-hand side [#2660](https://github.com/zephir-lang/zephir/issues/2660)
 
 ## [1.3.0] - 2026-08-25
 

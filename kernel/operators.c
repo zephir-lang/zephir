@@ -189,6 +189,25 @@ void zephir_concat_self_str(zval *left, const char *right, int right_length)
 }
 
 /**
+ * Appends the decimal representation of the right operator to the left operator.
+ *
+ * Mirrors what PHP does for `$s .= $n` with an `IS_LONG` right operand:
+ * `concat_function()` renders it through `zend_long_to_str()`.
+ */
+void zephir_concat_self_long(zval *left, const zend_long right)
+{
+	zend_string *right_str = zend_long_to_str(right);
+
+	/* `zend_long_to_str()` yields at most MAX_LENGTH_OF_LONG bytes, so the
+	   narrowing to `int` cannot lose data. */
+	zephir_concat_self_str(left, ZSTR_VAL(right_str), (int) ZSTR_LEN(right_str));
+
+	/* Small values come back interned (`ZSTR_CHAR`); `zend_string_release()`
+	   knows to leave those alone. */
+	zend_string_release(right_str);
+}
+
+/**
  * Natural compare with long operandus on right
  */
 int zephir_compare_strict_long(zval *op1, long op2)

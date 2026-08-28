@@ -75,4 +75,67 @@ final class ConcatTest extends TestCase
             $this->test->testConcat5(18.93000001)
         );
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2660
+     */
+    public function testShouldConcatenateStringWithIntVariable(): void
+    {
+        foreach ([0, 5, -5, 9, 10, PHP_INT_MAX, PHP_INT_MIN] as $number) {
+            $this->assertSame('n=' . $number, $this->test->testConcatStringWithIntVar($number));
+        }
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2660
+     */
+    public function testShouldConcatenateStringWithLongVariable(): void
+    {
+        foreach ([0, 5, -5, 9, 10, PHP_INT_MAX, PHP_INT_MIN] as $number) {
+            $this->assertSame('n=' . $number, $this->test->testConcatStringWithLongVar($number));
+        }
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2660
+     */
+    public function testShouldConcatenateStringWithUnsignedVariables(): void
+    {
+        $this->assertSame('n=5', $this->test->testConcatStringWithUintVar());
+        $this->assertSame('n=5', $this->test->testConcatStringWithUlongVar());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2660
+     */
+    public function testShouldConcatenateStringWithCharVariable(): void
+    {
+        $this->assertSame('n=A', $this->test->testConcatStringWithCharVar());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2660
+     */
+    public function testShouldConcatenateVarWithIntVariable(): void
+    {
+        foreach ([0, 5, -5, 9, 10, PHP_INT_MAX, PHP_INT_MIN] as $number) {
+            $this->assertSame('n=' . $number, $this->test->testConcatVarWithIntVar($number));
+        }
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2660
+     */
+    public function testShouldConcatenateVarWithCharVariable(): void
+    {
+        $this->assertSame('n=A', $this->test->testConcatVarWithCharVar());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2660
+     */
+    public function testShouldConcatenateVarWithIntLiteral(): void
+    {
+        $this->assertSame('n=5', $this->test->testConcatVarWithIntLiteral());
+    }
 }

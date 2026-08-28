@@ -191,3 +191,174 @@ PHP_METHOD(Stub_Concat, testConcat5)
 	RETURN_CTOR(&retval);
 }
 
+/**
+ * @link https://github.com/zephir-lang/zephir/issues/2660
+ */
+PHP_METHOD(Stub_Concat, testConcatStringWithIntVar)
+{
+	zval retval;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *number_param = NULL;
+	zend_long number;
+
+	ZVAL_UNDEF(&retval);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(number)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &number_param);
+	ZEPHIR_INIT_VAR(&retval);
+	ZVAL_STRING(&retval, "n=");
+	zephir_concat_self_long(&retval, number);
+	RETURN_CTOR(&retval);
+}
+
+/**
+ * @link https://github.com/zephir-lang/zephir/issues/2660
+ */
+PHP_METHOD(Stub_Concat, testConcatStringWithLongVar)
+{
+	zval retval;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *number_param = NULL;
+	long number;
+
+	ZVAL_UNDEF(&retval);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(number)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &number_param);
+	ZEPHIR_INIT_VAR(&retval);
+	ZVAL_STRING(&retval, "n=");
+	zephir_concat_self_long(&retval, number);
+	RETURN_CTOR(&retval);
+}
+
+/**
+ * @link https://github.com/zephir-lang/zephir/issues/2660
+ */
+PHP_METHOD(Stub_Concat, testConcatStringWithUintVar)
+{
+	zend_ulong number;
+	zval retval;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+
+	ZVAL_UNDEF(&retval);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&retval);
+	ZVAL_STRING(&retval, "n=");
+	number = 5;
+	zephir_concat_self_long(&retval, number);
+	RETURN_CTOR(&retval);
+}
+
+/**
+ * @link https://github.com/zephir-lang/zephir/issues/2660
+ */
+PHP_METHOD(Stub_Concat, testConcatStringWithUlongVar)
+{
+	unsigned long number;
+	zval retval;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+
+	ZVAL_UNDEF(&retval);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&retval);
+	ZVAL_STRING(&retval, "n=");
+	number = 5;
+	zephir_concat_self_long(&retval, number);
+	RETURN_CTOR(&retval);
+}
+
+/**
+ * Fence for the sibling helper: a char operand routes to
+ * zephir_concat_self_char(), which is defined.
+ *
+ * @link https://github.com/zephir-lang/zephir/issues/2660
+ */
+PHP_METHOD(Stub_Concat, testConcatStringWithCharVar)
+{
+	char c;
+	zval retval;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+
+	ZVAL_UNDEF(&retval);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&retval);
+	ZVAL_STRING(&retval, "n=");
+	c = 'A';
+	zephir_concat_self_char(&retval, c);
+	RETURN_CTOR(&retval);
+}
+
+/**
+ * A `var` left-hand side takes a different code path than a `string` one.
+ *
+ * @link https://github.com/zephir-lang/zephir/issues/2660
+ */
+PHP_METHOD(Stub_Concat, testConcatVarWithIntVar)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *number_param = NULL, retval;
+	zend_long number;
+
+	ZVAL_UNDEF(&retval);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(number)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &number_param);
+	ZEPHIR_INIT_VAR(&retval);
+	ZVAL_STRING(&retval, "n=");
+	zephir_concat_self_long(&retval, number);
+	RETURN_CCTOR(&retval);
+}
+
+/**
+ * @link https://github.com/zephir-lang/zephir/issues/2660
+ */
+PHP_METHOD(Stub_Concat, testConcatVarWithCharVar)
+{
+	char c;
+	zval retval;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+
+	ZVAL_UNDEF(&retval);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&retval);
+	ZVAL_STRING(&retval, "n=");
+	c = 'A';
+	zephir_concat_self_char(&retval, c);
+	RETURN_CCTOR(&retval);
+}
+
+/**
+ * @link https://github.com/zephir-lang/zephir/issues/2660
+ */
+PHP_METHOD(Stub_Concat, testConcatVarWithIntLiteral)
+{
+	zval retval;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+
+	ZVAL_UNDEF(&retval);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&retval);
+	ZVAL_STRING(&retval, "n=");
+	zephir_concat_self_long(&retval, 5);
+	RETURN_CCTOR(&retval);
+}
+
