@@ -48,8 +48,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_concat_testconcatstringwith
 	ZEND_ARG_TYPE_INFO(0, number, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_concat_testconcatstringwithlongvar, 0, 1, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, number, IS_LONG, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_concat_testconcatstringwithlongvar, 0, 0, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_concat_testconcatstringwithuintvar, 0, 0, IS_STRING, 0)
