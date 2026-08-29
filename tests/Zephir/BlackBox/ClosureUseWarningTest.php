@@ -246,6 +246,40 @@ ZEP);
         $this->assertStringContainsString('declared but not used', $output);
     }
 
+    /**
+     * A by-reference capture turns the enclosing local into a PHP reference,
+     * which a parameter's C shape cannot become. It has to fail loudly instead
+     * of emitting C that does not compile.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testByReferenceCaptureOfAParameterIsReportedAsCompilerError(): void
+    {
+        $this->writeZep('byrefparam.zep', <<<'ZEP'
+namespace Stub;
+
+class ByRefParam
+{
+    public function make(var seed) -> <\Closure>
+    {
+        return function () use (&seed) {
+            let seed = seed + 1;
+
+            return seed;
+        };
+    }
+}
+ZEP);
+
+        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
+        $output = $result['stdout'] . $result['stderr'];
+
+        $this->assertNotSame(0, $result['exitCode'], $output);
+        $this->assertStringContainsString("'seed'", $output);
+        $this->assertStringContainsString('by reference', $output);
+        $this->assertStringNotContainsString('Call to a member function', $output);
+    }
+
     public function testUndeclaredCaptureIsReportedAsCompilerError(): void
     {
         $this->writeZep('undeclared.zep', <<<'ZEP'

@@ -36,6 +36,26 @@ final class ReturnStatement extends StatementAbstract
     private const RETURN_RETURN = 'RETURN_MM();';
 
     /**
+     * How to reach the enclosing object.
+     *
+     * A capturing closure binds its capture carrier as `$this`, and `__invoke`
+     * re-points its `this_ptr` local at the enclosing object. getThis() does
+     * not follow that rebind, so it must not be used there.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2652
+     */
+    private function thisAccessor(CompilationContext $compilationContext): string
+    {
+        if (true !== $compilationContext->currentMethod?->hasCaptures()) {
+            return 'getThis()';
+        }
+
+        return $compilationContext->backend->getVariableCode(
+            $compilationContext->symbolTable->getVariable('this')
+        );
+    }
+
+    /**
      * @throws Exception
      * @throws ReflectionException
      */
@@ -111,12 +131,16 @@ final class ReturnStatement extends StatementAbstract
                              * @see https://github.com/zephir-lang/zephir/issues/1991
                              */
                             $expectedType = $this->resolveStrictScalarReturnTypeConst($currentMethod);
+                            $thisAccessor = $this->thisAccessor($compilationContext);
                             if ($expectedType !== null) {
                                 $codePrinter->output(
-                                    'RETURN_MM_MEMBER_TYPED(getThis(), "' . $property . '", ' . $expectedType . ');'
+                                    'RETURN_MM_MEMBER_TYPED(' . $thisAccessor . ', "' . $property . '", '
+                                    . $expectedType . ');'
                                 );
                             } else {
-                                $codePrinter->output('RETURN_MM_MEMBER(getThis(), "' . $property . '");');
+                                $codePrinter->output(
+                                    'RETURN_MM_MEMBER(' . $thisAccessor . ', "' . $property . '");'
+                                );
                             }
 
                             return;
@@ -369,7 +393,16 @@ final class ReturnStatement extends StatementAbstract
                         case Types::T_VARIABLE:
                         case Types::T_MIXED:
                             if ('this_ptr' == $symbolVariable->getName()) {
-                                $codePrinter->output('RETURN_THIS();');
+                                /*
+                                 * RETURN_THIS() reads getThis(), which in a
+                                 * capturing closure is the capture carrier.
+                                 * @see https://github.com/zephir-lang/zephir/issues/2652
+                                 */
+                                if (true === $compilationContext->currentMethod?->hasCaptures()) {
+                                    $codePrinter->output('RETURN_THIS_ZVAL(this_ptr);');
+                                } else {
+                                    $codePrinter->output('RETURN_THIS();');
+                                }
                             } else {
                                 if ('return_value' != $symbolVariable->getName()) {
                                     if (!$symbolVariable->isExternal()) {

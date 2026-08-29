@@ -62,6 +62,15 @@ class Variable implements TypeAwareInterface
     protected bool $initialized = false;
     protected bool $isExternal  = false;
     protected bool $localOnly   = false;
+
+    /**
+     * Whether this local holds a PHP reference shared with a closure that
+     * captured it with `use (&x)`. Every read and write goes through
+     * Z_REFVAL_P(), so both scopes see one storage slot.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2652
+     */
+    protected bool $closureReference = false;
     /**
      * When true, the variable is a string parameter using native zend_string *
      * instead of zval. getType() still returns 'string' for compatibility.
@@ -433,6 +442,17 @@ class Variable implements TypeAwareInterface
          * the second, third, etc. times are allocated using ZEPHIR_INIT_NVAR
          * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
          */
+        if ($this->closureReference) {
+            /*
+             * The reference is created once in the method prologue; re-running
+             * ZEPHIR_INIT_VAR here would drop it and unshare the storage.
+             * @see https://github.com/zephir-lang/zephir/issues/2652
+             */
+            $compilationContext->symbolTable->mustGrownStack(true);
+
+            return;
+        }
+
         if (self::VAR_THIS_POINTER !== $this->getName() && self::VAR_RETURN_VALUE !== $this->getName()) {
             if (!$this->initBranch) {
                 $this->initBranch = $compilationContext->currentBranch === 0;
@@ -544,9 +564,25 @@ class Variable implements TypeAwareInterface
     }
 
     /**
-     * Checks if a variable is a local static.
+     * Whether this local holds a PHP reference shared with a closure that
+     * captured it with `use (&x)`.
      */
-    public function isLocalStatic(): bool
+    public function isClosureReference(): bool
+    {
+        return $this->closureReference;
+    }
+
+    public function setIsClosureReference(bool $closureReference): void
+    {
+        $this->closureReference = $closureReference;
+    }
+
+    /**
+     * Whether this is a closure `use (...)` capture: a local seeded from the
+     * closure's capture carrier at the top of `__invoke` rather than declared
+     * or assigned by the body.
+     */
+    public function isClosureCapture(): bool
     {
         return $this->isExternal && $this->localOnly;
     }

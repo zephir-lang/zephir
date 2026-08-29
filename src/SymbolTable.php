@@ -40,6 +40,15 @@ class SymbolTable
 
     protected bool $mustGrownStack = false;
 
+    /**
+     * Names of locals a closure in this method captures with `use (&x)`. They
+     * have to be references from their first use, which is why the set is
+     * collected before the body is compiled.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2652
+     */
+    protected array $closureReferences = [];
+
     protected int $tempVarCount = 0;
 
     public function __construct(protected CompilationContext $compilationContext)
@@ -122,6 +131,10 @@ class SymbolTable
 
         $variable = new Variable($type, $varName, $currentBranch);
         $variable->setUsed(true);
+
+        if (isset($this->closureReferences[$name])) {
+            $variable->setIsClosureReference(true);
+        }
 
         /**
          * Checks whether a variable can be optimized to be static or not
@@ -794,8 +807,20 @@ class SymbolTable
     }
 
     /**
-     * Return a variable in the symbol table, it will be used for a write operation.
+     * Records which locals a closure captures with `use (&x)`.
+     *
+     * @param string[] $names
      */
+    public function setClosureReferences(array $names): void
+    {
+        $this->closureReferences = array_fill_keys($names, true);
+    }
+
+    public function isClosureReference(string $name): bool
+    {
+        return isset($this->closureReferences[$name]);
+    }
+
     public function mustGrownStack(bool $mustGrownStack): void
     {
         $this->mustGrownStack = $mustGrownStack;

@@ -257,4 +257,190 @@ final class ClosureTest extends TestCase
         $this->assertInstanceOf(\Closure::class, $closure);
         $this->assertSame('abc!', $closure());
     }
+
+    /**
+     * Two closures created from one source line must not share their capture.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testIssue2652ScalarCaptureIsPerClosure(): void
+    {
+        $test = new Closures();
+
+        $first  = $test->issue2652Scalar(1);
+        $second = $test->issue2652Scalar(2);
+
+        $this->assertSame(1, $first());
+        $this->assertSame(2, $second());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testIssue2652StringCaptureIsPerClosure(): void
+    {
+        $test = new Closures();
+
+        $first  = $test->issue2652Str('one');
+        $second = $test->issue2652Str('two');
+
+        $this->assertSame('one', $first());
+        $this->assertSame('two', $second());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testIssue2652ArrayCaptureIsPerClosure(): void
+    {
+        $test = new Closures();
+
+        $first  = $test->issue2652Arr(['a']);
+        $second = $test->issue2652Arr(['b', 'c']);
+
+        $this->assertSame(['a'], $first());
+        $this->assertSame(['b', 'c'], $second());
+    }
+
+    /**
+     * An object capture is by handle, so a later mutation is visible inside
+     * the closure, but the two closures still hold different objects.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testIssue2652ObjectCaptureIsByHandle(): void
+    {
+        $test = new Closures();
+
+        $one        = new \stdClass();
+        $one->value = 1;
+        $two        = new \stdClass();
+        $two->value = 2;
+
+        $first  = $test->issue2652Obj($one);
+        $second = $test->issue2652Obj($two);
+
+        $one->value = 11;
+
+        $this->assertSame(11, $first());
+        $this->assertSame(2, $second());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testIssue2652CaptureWithThisIsPerClosure(): void
+    {
+        $test = new Closures();
+
+        $first  = $test->issue2652WithThis('one');
+        $second = $test->issue2652WithThis('two');
+
+        $this->assertSame('hello:one', $first());
+        $this->assertSame('hello:two', $second());
+    }
+
+    /**
+     * `return this->prop` inside a capturing closure must read the enclosing
+     * object, not the capture carrier.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testIssue2652ReturnPropertyReadsEnclosingObject(): void
+    {
+        $test = new Closures();
+
+        $bare     = $test->issue2652ReturnProperty('');
+        $suffixed = $test->issue2652ReturnProperty('!');
+
+        $this->assertSame('default', $bare());
+        $this->assertSame('default!', $suffixed());
+    }
+
+    /**
+     * `return this` inside a capturing closure must return the enclosing
+     * object, not the capture carrier.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testIssue2652ReturnThisReturnsEnclosingObject(): void
+    {
+        $test = new Closures();
+
+        $self = $test->issue2652ReturnThis('self');
+        $tag  = $test->issue2652ReturnThis('plain');
+
+        $this->assertSame($test, $self());
+        $this->assertSame('plain', $tag());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testIssue2652LoopCapturesPerIteration(): void
+    {
+        $test = new Closures();
+
+        $closures = $test->issue2652Loop();
+
+        $this->assertCount(3, $closures);
+        $this->assertSame([0, 1, 2], array_map(static fn ($closure) => $closure(), $closures));
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testIssue2652CaptureIsASnapshot(): void
+    {
+        $test = new Closures();
+
+        $this->assertSame(5, $test->issue2652Snapshot()());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testIssue2652BodyMutationDoesNotPersist(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue2652BodyMutation(0);
+
+        $this->assertSame(1, $closure());
+        $this->assertSame(1, $closure());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testIssue2652ByRefCaptureIsShared(): void
+    {
+        $test = new Closures();
+
+        [$bump, $read] = $test->issue2652ByRefShared();
+
+        $this->assertSame(1, $bump());
+        $this->assertSame(2, $bump());
+        $this->assertSame(2, $read());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testIssue2652ByRefWriteIsVisibleOutside(): void
+    {
+        $test = new Closures();
+
+        $this->assertSame(20, $test->issue2652ByRefWritesOut());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function testIssue2652ByRefSeesLaterOuterWrite(): void
+    {
+        $test = new Closures();
+
+        $this->assertSame(42, $test->issue2652ByRefReadsLateWrite()());
+    }
 }

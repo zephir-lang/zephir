@@ -1,0 +1,221 @@
+--TEST--
+Closure `use (...)` captures belong to the closure instance, not to its source line (issue #2652)
+--FILE--
+namespace Stub;
+
+/**
+ * Captures used to live in `public static` properties on the synthetic
+ * per-source-site closure class, so two live closures built from one source
+ * line shared a single slot and the older one saw the newer one's value.
+ */
+class Capture2652
+{
+	protected name = "probe";
+
+	public function scalar(int n) -> <\Closure>
+	{
+		return function () use (n) {
+			return n;
+		};
+	}
+
+	public function text(string tag) -> <\Closure>
+	{
+		return function () use (tag) {
+			return tag;
+		};
+	}
+
+	public function withThis(var tag) -> <\Closure>
+	{
+		return function () use (tag) {
+			return this->name . ":" . tag;
+		};
+	}
+
+	public function iterations() -> array
+	{
+		var result, i;
+
+		let result = [];
+
+		for i in [0, 1, 2] {
+			let result[] = function () use (i) {
+				return i;
+			};
+		}
+
+		return result;
+	}
+
+	/**
+	 * A by-value capture is a snapshot: the later write is not visible.
+	 */
+	public function snapshot() -> <\Closure>
+	{
+		var value, callback;
+
+		let value = 5;
+		let callback = function () use (value) {
+			return value;
+		};
+		let value = 99;
+
+		return callback;
+	}
+
+	/**
+	 * `use (&x)` shares one storage slot, so writes inside the closure are
+	 * visible to every other holder of the capture and persist across calls.
+	 */
+	public function byRefShared() -> array
+	{
+		var counter, bump, read;
+
+		let counter = 0;
+
+		let bump = function () use (&counter) {
+			let counter = counter + 1;
+
+			return counter;
+		};
+
+		let read = function () use (&counter) {
+			return counter;
+		};
+
+		return [bump, read];
+	}
+
+	/**
+	 * And a write in the enclosing scope after the closure was created is
+	 * visible inside it, which is what separates `use (&x)` from `use (x)`.
+	 */
+	public function byRefLateWrite() -> <\Closure>
+	{
+		var value, reader;
+
+		let value = 1;
+
+		let reader = function () use (&value) {
+			return value;
+		};
+
+		let value = 42;
+
+		return reader;
+	}
+
+	/**
+	 * A capturing closure in a static method has no enclosing object to carry,
+	 * so the carrier holds nothing but the captures.
+	 */
+	public static function fromStatic(int n) -> <\Closure>
+	{
+		return function () use (n) {
+			return n * 10;
+		};
+	}
+
+	/**
+	 * `return this` inside a capturing closure has to return the enclosing
+	 * object, not the capture carrier. A scalar-only capture needs no memory
+	 * frame, which is the variant that reaches the non-MM form of the macro.
+	 */
+	public function returnThisScalar(int flag) -> <\Closure>
+	{
+		return function () use (flag) {
+			if flag == 1 {
+				return this;
+			}
+
+			return flag;
+		};
+	}
+
+	/**
+	 * The by-reference flag belongs to the clause, not to the variable: the
+	 * same local can be captured by value by one closure and by reference by
+	 * another, and the by-value one keeps its snapshot.
+	 */
+	public function mixedCapture() -> array
+	{
+		var value, snapshot, bump;
+
+		let value = 1;
+
+		let snapshot = function () use (value) {
+			return value;
+		};
+
+		let bump = function () use (&value) {
+			let value = value + 100;
+
+			return value;
+		};
+
+		return [snapshot, bump];
+	}
+
+	/**
+	 * Writing to a by-value capture inside the body is local to the call, so
+	 * both invocations return the same value.
+	 */
+	public function bodyMutation(int n) -> <\Closure>
+	{
+		return function () use (n) {
+			let n = n + 1;
+
+			return n;
+		};
+	}
+}
+--USAGE--
+use Stub\Capture2652;
+
+$test = new Capture2652();
+
+$a = $test->scalar(1);
+$b = $test->scalar(2);
+echo $a(), ",", $b(), "\n";
+
+$c = $test->text("one");
+$d = $test->text("two");
+echo $c(), ",", $d(), "\n";
+
+$e = $test->withThis("one");
+$f = $test->withThis("two");
+echo $e(), ",", $f(), "\n";
+
+echo implode(",", array_map(static fn ($closure) => $closure(), $test->iterations())), "\n";
+
+echo $test->snapshot()(), "\n";
+
+$g = $test->bodyMutation(0);
+echo $g(), ",", $g(), "\n";
+
+[$bump, $read] = $test->byRefShared();
+echo $bump(), ",", $bump(), ",", $read(), "\n";
+
+echo $test->byRefLateWrite()(), "\n";
+
+[$snapshot, $bump] = $test->mixedCapture();
+echo $bump(), ",", $snapshot(), "\n";
+
+echo var_export($test->returnThisScalar(1)() === $test, true), ",", $test->returnThisScalar(2)(), "\n";
+
+$s1 = Capture2652::fromStatic(1);
+$s2 = Capture2652::fromStatic(2);
+echo $s1(), ",", $s2(), "\n";
+--EXPECT--
+1,2
+one,two
+probe:one,probe:two
+0,1,2
+5
+1,1
+1,2,2
+42
+101,1
+true,2
+10,20

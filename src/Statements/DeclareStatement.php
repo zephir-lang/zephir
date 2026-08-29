@@ -68,9 +68,15 @@ class DeclareStatement extends StatementAbstract
             $currentType = $this->statement['data-type'];
 
             /**
-             * Replace original data type by the pre-processed infered type
+             * Replace original data type by the pre-processed infered type.
+             *
+             * A local captured with `use (&x)` is exempt: it is a PHP
+             * reference shared with the closure, so it has to stay a zval
+             * however narrow its inferred type looks.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2652
              */
-            if ($typeInference) {
+            if ($typeInference && !$symbolTable->isClosureReference($varName)) {
                 if ('variable' === $currentType) {
                     $type = $typeInference->getInferedType($varName);
                     if (is_string($type)) {
