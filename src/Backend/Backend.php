@@ -901,13 +901,86 @@ class Backend
         }
     }
 
-    public function createClosure(Variable $variable, $classDefinition, CompilationContext $context, bool $bindThis = false): void
-    {
-        $symbol = $this->getVariableCode($variable);
-        $thisArg = $bindThis ? 'this_ptr' : 'NULL';
+    public function createClosure(
+        Variable $variable,
+        $classDefinition,
+        CompilationContext $context,
+        bool $bindThis = false,
+        ?Variable $carrier = null
+    ): void {
+        $symbol     = $this->getVariableCode($variable);
+        $classEntry = $classDefinition->getClassEntry();
+        $thisArg    = $bindThis ? 'this_ptr' : 'NULL';
+
+        /*
+         * Without captures the closure needs no state of its own, so the
+         * enclosing object (or nothing) is bound directly, exactly as before.
+         */
+        if (null === $carrier) {
+            $context->codePrinter->output(
+                'zephir_create_closure_ex(' . $symbol . ', ' . $thisArg . ', ' . $classEntry . ', SL("__invoke"));'
+            );
+
+            return;
+        }
+
+        /*
+         * With captures the carrier takes the closure's single per-instance
+         * slot, and the scope keeps coming from the enclosing object so the
+         * body still reaches its protected/private members.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2652
+         */
         $context->codePrinter->output(
-            'zephir_create_closure_ex(' . $symbol . ', ' . $thisArg . ', ' . $classDefinition->getClassEntry(
-            ) . ', SL("__invoke"));'
+            'zephir_create_closure_bound(' . $symbol . ', ' . $this->getVariableCode($carrier) . ', '
+            . $thisArg . ', ' . $classEntry . ', SL("__invoke"));'
+        );
+    }
+
+    /**
+     * Writes one by-reference closure capture into the carrier object.
+     *
+     * The reference itself has to land in the property, undereferenced, so the
+     * closure and the enclosing scope keep sharing one storage slot.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function updateClosureReferenceCapture(
+        Variable $carrier,
+        string $property,
+        Variable $reference,
+        CompilationContext $context
+    ): void {
+        $context->codePrinter->output(
+            sprintf(
+                'zephir_update_property_reference(%s, SL("%s"), &%s);',
+                $this->getVariableCode($carrier),
+                $property,
+                $reference->getName()
+            )
+        );
+    }
+
+    /**
+     * Writes one closure capture into the carrier object.
+     *
+     * Deliberately not routed through updateProperty(): the cached emitter
+     * would register an interned-name slot in the enclosing method for a cache
+     * slot that is forced to 0 on a non-`this` object anyway.
+     */
+    public function updateClosureCapture(
+        Variable $carrier,
+        string $property,
+        $value,
+        CompilationContext $context
+    ): void {
+        $context->codePrinter->output(
+            sprintf(
+                'zephir_update_property_zval(%s, SL("%s"), %s);',
+                $this->getVariableCode($carrier),
+                $property,
+                $this->resolveValue($value, $context)
+            )
         );
     }
 
@@ -2094,6 +2167,19 @@ class Backend
 
         if ($variable->isNativeString()) {
             return '&' . $variable->getName() . '_zv';
+        }
+
+        /*
+         * A `use (&x)` capture is one storage slot shared by the enclosing
+         * scope and the closure. Routing every access through the reference is
+         * enough to give both sides PHP's semantics: reads see the other
+         * side's writes, and writes land in the shared slot rather than
+         * re-pointing a local.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2652
+         */
+        if ($variable->isClosureReference()) {
+            return 'Z_REFVAL_P(&' . $variable->getName() . ')';
         }
 
         return '&' . $variable->getName();

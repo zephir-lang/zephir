@@ -173,6 +173,22 @@ extern zend_string* i_self;
 	ZEPHIR_MM_RESTORE(); \
 	return;
 
+/**
+ * Return an explicitly named object instead of getThis().
+ *
+ * A capturing closure binds its capture carrier as `$this`, so getThis() is
+ * not the enclosing object there; `this_ptr` is. These are the RETURN_THIS
+ * pair with the object spelled out.
+ */
+#define RETURN_THISW_ZVAL(object) \
+	RETURN_ZVAL(object, 1, 0);
+
+#define RETURN_THIS_ZVAL(object) { \
+		RETVAL_ZVAL(object, 1, 0); \
+	} \
+	ZEPHIR_MM_RESTORE(); \
+	return;
+
 #define RETURN_LCTORW(var) RETURN_CCTORW(var);
 
 #define RETURN_LCTOR(var) RETURN_CCTOR(var);

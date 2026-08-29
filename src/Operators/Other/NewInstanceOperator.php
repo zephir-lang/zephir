@@ -129,9 +129,21 @@ class NewInstanceOperator extends AbstractOperator
                  * is still recorded for type inference because all LSB
                  * classes are subclasses of it — see
                  * https://github.com/zephir-lang/zephir/issues/2324.
+                 *
+                 * zend_get_called_scope() resolves through the call frame's
+                 * $this, which in a capturing closure is the capture carrier,
+                 * not the enclosing object; the rebound `this_ptr` local is —
+                 * see https://github.com/zephir-lang/zephir/issues/2652.
                  */
+                $lateStaticEntry = 'zend_get_called_scope(execute_data)';
+                if (true === $compilationContext->currentMethod?->hasCaptures()) {
+                    $lateStaticEntry = 'Z_OBJCE_P(' . $compilationContext->backend->getVariableCode(
+                        $compilationContext->symbolTable->getVariable('this')
+                    ) . ')';
+                }
+
                 $classEntry = $isLateStaticBinding
-                    ? 'zend_get_called_scope(execute_data)'
+                    ? $lateStaticEntry
                     : $classDefinition->getClassEntry($compilationContext);
 
                 $compilationContext->backend->initObject(

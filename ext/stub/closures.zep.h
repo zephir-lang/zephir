@@ -36,6 +36,19 @@ PHP_METHOD(Stub_Closures, issue2321ArrayMapPrivate);
 PHP_METHOD(Stub_Closures, issue2321Doubled);
 PHP_METHOD(Stub_Closures, issue2638StringLocalUse);
 PHP_METHOD(Stub_Closures, issue2638StringParamMutatedUse);
+PHP_METHOD(Stub_Closures, issue2652Scalar);
+PHP_METHOD(Stub_Closures, issue2652Str);
+PHP_METHOD(Stub_Closures, issue2652Arr);
+PHP_METHOD(Stub_Closures, issue2652Obj);
+PHP_METHOD(Stub_Closures, issue2652WithThis);
+PHP_METHOD(Stub_Closures, issue2652ReturnProperty);
+PHP_METHOD(Stub_Closures, issue2652ReturnThis);
+PHP_METHOD(Stub_Closures, issue2652Loop);
+PHP_METHOD(Stub_Closures, issue2652Snapshot);
+PHP_METHOD(Stub_Closures, issue2652BodyMutation);
+PHP_METHOD(Stub_Closures, issue2652ByRefShared);
+PHP_METHOD(Stub_Closures, issue2652ByRefWritesOut);
+PHP_METHOD(Stub_Closures, issue2652ByRefReadsLateWrite);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_closures_simple1, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -152,6 +165,53 @@ ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2638stringpara
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2652scalar, 0, 1, Closure, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2652str, 0, 1, Closure, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2652arr, 0, 1, Closure, 0)
+	ZEND_ARG_ARRAY_INFO(0, items, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2652obj, 0, 1, Closure, 0)
+	ZEND_ARG_INFO(0, box)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2652withthis, 0, 1, Closure, 0)
+	ZEND_ARG_INFO(0, name)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2652returnproperty, 0, 1, Closure, 0)
+	ZEND_ARG_INFO(0, suffix)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2652returnthis, 0, 1, Closure, 0)
+	ZEND_ARG_INFO(0, tag)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_closures_issue2652loop, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2652snapshot, 0, 0, Closure, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2652bodymutation, 0, 1, Closure, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_closures_issue2652byrefshared, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_closures_issue2652byrefwritesout, 0, 0, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2652byrefreadslatewrite, 0, 0, Closure, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_closures_method_entry) {
 PHP_ME(Stub_Closures, simple1, arginfo_stub_closures_simple1, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Closures, simple2, arginfo_stub_closures_simple2, ZEND_ACC_PUBLIC)
@@ -186,5 +246,18 @@ PHP_ME(Stub_Closures, issue1036Call, arginfo_stub_closures_issue1036call, ZEND_A
 	PHP_ME(Stub_Closures, issue2321Doubled, arginfo_stub_closures_issue2321doubled, ZEND_ACC_PRIVATE)
 	PHP_ME(Stub_Closures, issue2638StringLocalUse, arginfo_stub_closures_issue2638stringlocaluse, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Closures, issue2638StringParamMutatedUse, arginfo_stub_closures_issue2638stringparammutateduse, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2652Scalar, arginfo_stub_closures_issue2652scalar, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2652Str, arginfo_stub_closures_issue2652str, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2652Arr, arginfo_stub_closures_issue2652arr, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2652Obj, arginfo_stub_closures_issue2652obj, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2652WithThis, arginfo_stub_closures_issue2652withthis, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2652ReturnProperty, arginfo_stub_closures_issue2652returnproperty, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2652ReturnThis, arginfo_stub_closures_issue2652returnthis, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2652Loop, arginfo_stub_closures_issue2652loop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2652Snapshot, arginfo_stub_closures_issue2652snapshot, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2652BodyMutation, arginfo_stub_closures_issue2652bodymutation, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2652ByRefShared, arginfo_stub_closures_issue2652byrefshared, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2652ByRefWritesOut, arginfo_stub_closures_issue2652byrefwritesout, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2652ByRefReadsLateWrite, arginfo_stub_closures_issue2652byrefreadslatewrite, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

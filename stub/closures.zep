@@ -338,4 +338,230 @@ class Closures
             return name;
         };
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * Captures used to live in `public static` properties on the synthetic
+     * per-source-site closure class, so every closure created from one source
+     * line shared a single slot and the newest creation overwrote the older
+     * ones. Each of the methods below is called twice with different arguments
+     * and both closures are kept alive, which is exactly the shape that fails.
+     */
+    public function issue2652Scalar(int n) -> <\Closure>
+    {
+        return function () use (n) {
+            return n;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * A native `zend_string *` parameter: the capture goes through the
+     * companion `<name>_zv` zval rather than the boxing switch.
+     */
+    public function issue2652Str(string name) -> <\Closure>
+    {
+        return function () use (name) {
+            return name;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function issue2652Arr(array items) -> <\Closure>
+    {
+        return function () use (items) {
+            return items;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * An object capture is by handle in PHP: mutating the object after the
+     * closure was created is visible inside it.
+     */
+    public function issue2652Obj(var box) -> <\Closure>
+    {
+        return function () use (box) {
+            return box->value;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * Capture plus `this`: the closure's bound `$this` is the only
+     * per-instance slot the engine gives an internal-function closure, so it
+     * now holds the capture carrier and the enclosing object rides along on
+     * it.
+     */
+    public function issue2652WithThis(var name) -> <\Closure>
+    {
+        return function () use (name) {
+            return this->issue2497Helper() . ":" . name;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * `return this->prop;` is emitted as `RETURN_MEMBER(getThis(), ...)`,
+     * which does not follow the rebound `this_ptr`. Without the fix this
+     * reads the property off the capture carrier instead of the enclosing
+     * object.
+     */
+    public function issue2652ReturnProperty(var suffix) -> <\Closure>
+    {
+        return function () use (suffix) {
+            if suffix === "" {
+                return this->_name;
+            }
+
+            return this->_name . suffix;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * Same story for `return this;`, emitted as `RETURN_THIS()`.
+     */
+    public function issue2652ReturnThis(var tag) -> <\Closure>
+    {
+        return function () use (tag) {
+            if tag === "self" {
+                return this;
+            }
+
+            return tag;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * Closures built in a loop each capture their own iteration value.
+     */
+    public function issue2652Loop() -> array
+    {
+        var result, i;
+
+        let result = [];
+
+        for i in [0, 1, 2] {
+            let result[] = function () use (i) {
+                return i;
+            };
+        }
+
+        return result;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * A by-value capture is a snapshot taken when the closure is created;
+     * later writes to the enclosing variable are not visible inside it.
+     */
+    public function issue2652Snapshot() -> <\Closure>
+    {
+        var value, callback;
+
+        let value = 5;
+        let callback = function () use (value) {
+            return value;
+        };
+        let value = 99;
+
+        return callback;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * Writing to a by-value capture inside the body is local to the call: PHP
+     * re-seeds the bound variable on every invocation, so two calls of the
+     * same closure both return the same value.
+     */
+    public function issue2652BodyMutation(int n) -> <\Closure>
+    {
+        return function () use (n) {
+            let n = n + 1;
+
+            return n;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * `use (&x)` shares one storage slot: writes inside the closure are
+     * visible to every other holder of the same capture, and persist across
+     * calls.
+     */
+    public function issue2652ByRefShared() -> array
+    {
+        var counter, bump, read;
+
+        let counter = 0;
+
+        let bump = function () use (&counter) {
+            let counter = counter + 1;
+
+            return counter;
+        };
+
+        let read = function () use (&counter) {
+            return counter;
+        };
+
+        return [bump, read];
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * A by-reference write inside the closure is visible to the enclosing
+     * scope.
+     */
+    public function issue2652ByRefWritesOut() -> int
+    {
+        var value, bump;
+
+        let value = 0;
+
+        let bump = function () use (&value) {
+            let value = value + 10;
+        };
+
+        call_user_func(bump);
+        call_user_func(bump);
+
+        return value;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * And a write in the enclosing scope after the closure was created is
+     * visible inside it, which is what separates `use (&x)` from `use (x)`.
+     */
+    public function issue2652ByRefReadsLateWrite() -> <\Closure>
+    {
+        var value, reader;
+
+        let value = 1;
+
+        let reader = function () use (&value) {
+            return value;
+        };
+
+        let value = 42;
+
+        return reader;
+    }
 }

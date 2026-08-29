@@ -145,15 +145,69 @@ class Closure
                 $captured->increaseUses();
                 $captured->setUsed(true, $parameter);
 
-                $staticVariables[$parameter['name']] = $captured;
+                /**
+                 * The by-reference flag belongs to this one clause, not to the
+                 * variable: the same local can be captured by value by one
+                 * closure and by reference by another.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2652
+                 */
+                $capture = clone $captured;
+                $capture->setIsClosureReference(!empty($parameter['reference']));
+
+                $staticVariables[$parameter['name']] = $capture;
             }
         }
 
+        /**
+         * Detect if the closure body references `this`.
+         * If so, we need to bind the enclosing object to the closure and set
+         * the enclosing class definition for compile-time resolution.
+         */
+        $bindThis = self::astReferencesThis($block);
+        if ($bindThis) {
+            $classDefinition->setEnclosingClassDefinition($compilationContext->classDefinition);
+
+            // Ensure this_ptr is declared and not stripped in the enclosing method
+            if ($compilationContext->symbolTable->hasVariable('this')) {
+                $compilationContext->symbolTable->getVariable('this')->setUsed(true);
+            }
+        }
+
+        /**
+         * A capturing closure binds a per-creation carrier object as its
+         * `$this`, because that is the only per-instance slot the engine gives
+         * an internal-function closure. The enclosing object therefore has to
+         * ride along on the carrier as one more capture, under a name no
+         * Zephir identifier can spell.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2652
+         */
+        if ([] !== $staticVariables && $bindThis) {
+            $boundThis = new Variable(
+                'variable',
+                Method::CLOSURE_BOUND_THIS,
+                $compilationContext->branchManager->getCurrentBranch()
+            );
+            $boundThis->setIsInitialized(true, $compilationContext);
+            $boundThis->setDynamicTypes('object');
+            $boundThis->increaseUses();
+            $boundThis->setUsed(true);
+
+            $staticVariables[Method::CLOSURE_BOUND_THIS] = $boundThis;
+        }
+
+        /**
+         * Captures live in instance properties of the carrier, one carrier per
+         * closure creation. They used to be `public static` properties, which
+         * belong to the class and so were shared by every closure built from
+         * this same source line.
+         */
         foreach ($staticVariables as $var) {
             $classDefinition->addProperty(
                 new Property(
                     $classDefinition,
-                    ['public', 'static'],
+                    ['public'],
                     $var->getName(),
                     null,
                     null,
@@ -181,18 +235,62 @@ class Closure
             $staticVariables
         );
 
-        /**
-         * Detect if the closure body references `this`.
-         * If so, we need to bind the enclosing object's `this_ptr` to the closure
-         * and set the enclosing class definition for compile-time resolution.
-         */
-        $bindThis = self::astReferencesThis($block);
-        if ($bindThis) {
-            $classDefinition->setEnclosingClassDefinition($compilationContext->classDefinition);
+        $compilationContext->headersManager->add('kernel/object');
 
-            // Ensure this_ptr is declared and not stripped in the enclosing method
-            if ($compilationContext->symbolTable->hasVariable('this')) {
-                $compilationContext->symbolTable->getVariable('this')->setUsed(true);
+        /**
+         * The carrier and its captures must exist before the closure is
+         * created, so that the closure never observes a half-filled carrier.
+         *
+         * Known limitation: `$closure->bindTo($other)` replaces the carrier,
+         * so the captures read back as null where PHP would keep them. The
+         * bound `$this` is the only per-instance slot the engine gives an
+         * internal-function closure, so there is nowhere else to put them.
+         */
+        $carrier = null;
+        if ([] !== $staticVariables) {
+            $carrier = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+            $compilationContext->backend->initObject(
+                $carrier,
+                $classDefinition->getClassEntry(),
+                $compilationContext
+            );
+
+            foreach ($staticVariables as $var) {
+                $name = $var->getName();
+
+                if (Method::CLOSURE_BOUND_THIS === $name) {
+                    $compilationContext->backend->updateClosureCapture(
+                        $carrier,
+                        $name,
+                        $compilationContext->symbolTable->getVariable('this'),
+                        $compilationContext
+                    );
+                    continue;
+                }
+
+                /**
+                 * Resolve the value from the enclosing variable, never from the
+                 * clone: only the enclosing one knows how it is actually held
+                 * (a native `zend_string *` companion zval, a reference, ...).
+                 */
+                $enclosing = $compilationContext->symbolTable->getVariable($name);
+
+                if ($var->isClosureReference()) {
+                    $compilationContext->backend->updateClosureReferenceCapture(
+                        $carrier,
+                        $name,
+                        $enclosing,
+                        $compilationContext
+                    );
+                    continue;
+                }
+
+                $compilationContext->backend->updateClosureCapture(
+                    $carrier,
+                    $name,
+                    $this->boxCapture($enclosing, $compilationContext),
+                    $compilationContext
+                );
             }
         }
 
@@ -202,68 +300,48 @@ class Closure
             $block,
             $compilationContext,
             $expression,
-            $bindThis
+            $bindThis,
+            $carrier
         );
-        $compilationContext->headersManager->add('kernel/object');
-
-        foreach ($staticVariables as $var) {
-            /**
-             * Captures already held as a zval need no boxing: getVariableCode()
-             * yields their address directly. `string` belongs here too — it maps
-             * to `zval` like `variable` and `array`, and for a native
-             * `zend_string *` parameter getVariableCode() returns the companion
-             * `<name>_zv` the parameter prologue always populates. Boxing it a
-             * second time emitted ZVAL_STRING() on a zval, which does not
-             * compile. Only true C scalars fall through to the switch below.
-             *
-             * @see https://github.com/zephir-lang/zephir/issues/2638
-             */
-            if (in_array($var->getType(), ['variable', 'array', 'string'])) {
-                $compilationContext->backend->updateStaticProperty(
-                    $classDefinition->getClassEntry(),
-                    $var->getName(),
-                    $var,
-                    $compilationContext
-                );
-                continue;
-            }
-
-            $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
-                'variable',
-                $compilationContext,
-                true
-            );
-
-            switch ($var->getType()) {
-                case 'int':
-                case 'uint':
-                case 'long':
-                case 'ulong':
-                case 'char':
-                case 'uchar':
-                    $compilationContext->backend->assignLong($tempVariable, $var, $compilationContext);
-                    break;
-                case 'double':
-                    $compilationContext->backend->assignDouble($tempVariable, $var, $compilationContext);
-                    break;
-                case 'bool':
-                    $compilationContext->backend->assignBool($tempVariable, $var, $compilationContext);
-                    break;
-                default:
-                    break;
-            }
-
-            $compilationContext->backend->updateStaticProperty(
-                $classDefinition->getClassEntry(),
-                $var->getName(),
-                $tempVariable,
-                $compilationContext
-            );
-        }
 
         ++self::$id;
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * A capture that is already a zval is written straight through:
+     * getVariableCode() yields its address, and for a native `zend_string *`
+     * parameter it yields the companion `<name>_zv` the parameter prologue
+     * always populates. Boxing such a capture a second time emitted
+     * ZVAL_STRING() on a zval, which does not compile. Only true C scalars
+     * need a boxing temp.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2638
+     */
+    private function boxCapture(Variable $var, CompilationContext $compilationContext): Variable
+    {
+        $type = $var->getType();
+
+        if (!in_array($type, ['int', 'uint', 'long', 'ulong', 'char', 'uchar', 'double', 'bool'], true)) {
+            return $var;
+        }
+
+        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+            'variable',
+            $compilationContext,
+            true
+        );
+
+        $backend = $compilationContext->backend;
+
+        match ($type) {
+            'double' => $backend->assignDouble($tempVariable, $var, $compilationContext),
+            'bool'   => $backend->assignBool($tempVariable, $var, $compilationContext),
+            default  => $backend->assignLong($tempVariable, $var, $compilationContext),
+        };
+
+        return $tempVariable;
     }
 
     /**
@@ -299,7 +377,8 @@ class Closure
         mixed $block,
         CompilationContext $compilationContext,
         array $expression,
-        bool $bindThis = false
+        bool $bindThis = false,
+        ?Variable $carrier = null
     ): ?Variable {
         $classDefinition->addMethod($classMethod, $block);
 
@@ -324,7 +403,13 @@ class Closure
         }
 
         $symbolVariable->initVariant($compilationContext);
-        $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext, $bindThis);
+        $compilationContext->backend->createClosure(
+            $symbolVariable,
+            $classDefinition,
+            $compilationContext,
+            $bindThis,
+            $carrier
+        );
 
         return $symbolVariable;
     }
