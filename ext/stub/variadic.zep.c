@@ -15,9 +15,9 @@
 #include "kernel/memory.h"
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/string.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
-#include "kernel/string.h"
 #include "kernel/array.h"
 
 
@@ -57,11 +57,12 @@ PHP_METHOD(Stub_Variadic, collect)
 PHP_METHOD(Stub_Variadic, sum)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *first_param = NULL, rest, n, *_0;
+	zval *first_param = NULL, rest, n, *_0, _1, *_2;
 	zend_long first, ZEPHIR_LAST_CALL_STATUS, total;
 
 	ZVAL_UNDEF(&rest);
 	ZVAL_UNDEF(&n);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, -1)
 		Z_PARAM_LONG(first)
 	ZEND_PARSE_PARAMETERS_END();
@@ -71,11 +72,18 @@ PHP_METHOD(Stub_Variadic, sum)
 	ZEPHIR_INIT_VAR(&rest);
 	zephir_get_args_from(&rest, 1);
 	total = first;
-	zephir_is_iterable(&rest, 0, "stub/variadic.zep", 41);
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&rest), _0)
+	if (Z_TYPE_P(&rest) == IS_STRING) {
+		ZEPHIR_INIT_VAR(&_1);
+		zephir_string_to_char_array(&_1, &rest);
+		_0 = &_1;
+	} else {
+		_0 = &rest;
+	}
+	zephir_is_iterable(_0, 0, "stub/variadic.zep", 41);
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_0), _2)
 	{
 		ZEPHIR_INIT_NVAR(&n);
-		ZVAL_COPY(&n, _0);
+		ZVAL_COPY(&n, _2);
 		total += zephir_get_numberval(&n);
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&n);
@@ -193,10 +201,11 @@ PHP_METHOD(Stub_Variadic, totalLength)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, total;
-	zval rows, row, *_0;
+	zval rows, row, *_0, _1, *_2;
 
 	ZVAL_UNDEF(&rows);
 	ZVAL_UNDEF(&row);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(0, -1)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -204,11 +213,18 @@ PHP_METHOD(Stub_Variadic, totalLength)
 	ZEPHIR_INIT_VAR(&rows);
 	zephir_get_args_from(&rows, 0);
 	total = 0;
-	zephir_is_iterable(&rows, 0, "stub/variadic.zep", 90);
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&rows), _0)
+	if (Z_TYPE_P(&rows) == IS_STRING) {
+		ZEPHIR_INIT_VAR(&_1);
+		zephir_string_to_char_array(&_1, &rows);
+		_0 = &_1;
+	} else {
+		_0 = &rows;
+	}
+	zephir_is_iterable(_0, 0, "stub/variadic.zep", 90);
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_0), _2)
 	{
 		ZEPHIR_INIT_NVAR(&row);
-		ZVAL_COPY(&row, _0);
+		ZVAL_COPY(&row, _2);
 		total += zephir_fast_count_int(&row);
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&row);
@@ -224,11 +240,12 @@ PHP_METHOD(Stub_Variadic, classNames)
 	zval names;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval objects, obj, *_0, _1$$3;
+	zval objects, obj, *_0, _1, *_2, _3$$3;
 
 	ZVAL_UNDEF(&objects);
 	ZVAL_UNDEF(&obj);
-	ZVAL_UNDEF(&_1$$3);
+	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&names);
 	ZEND_PARSE_PARAMETERS_START(0, -1)
 	ZEND_PARSE_PARAMETERS_END();
@@ -238,14 +255,21 @@ PHP_METHOD(Stub_Variadic, classNames)
 	zephir_get_args_from(&objects, 0);
 	ZEPHIR_INIT_VAR(&names);
 	array_init(&names);
-	zephir_is_iterable(&objects, 0, "stub/variadic.zep", 106);
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&objects), _0)
+	if (Z_TYPE_P(&objects) == IS_STRING) {
+		ZEPHIR_INIT_VAR(&_1);
+		zephir_string_to_char_array(&_1, &objects);
+		_0 = &_1;
+	} else {
+		_0 = &objects;
+	}
+	zephir_is_iterable(_0, 0, "stub/variadic.zep", 106);
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_0), _2)
 	{
 		ZEPHIR_INIT_NVAR(&obj);
-		ZVAL_COPY(&obj, _0);
-		ZEPHIR_INIT_NVAR(&_1$$3);
-		zephir_get_class(&_1$$3, &obj, 0);
-		zephir_array_append(&names, &_1$$3, PH_SEPARATE, "stub/variadic.zep", 103);
+		ZVAL_COPY(&obj, _2);
+		ZEPHIR_INIT_NVAR(&_3$$3);
+		zephir_get_class(&_3$$3, &obj, 0);
+		zephir_array_append(&names, &_3$$3, PH_SEPARATE, "stub/variadic.zep", 103);
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&obj);
 	RETURN_CTOR(&names);
@@ -254,9 +278,10 @@ PHP_METHOD(Stub_Variadic, classNames)
 PHP_FUNCTION(f_Stub_variadicSum) {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, total;
-	zval numbers, n, *_0;
+	zval numbers, n, *_0, _1, *_2;
 		ZVAL_UNDEF(&numbers);
 	ZVAL_UNDEF(&n);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(0, -1)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -264,11 +289,18 @@ PHP_FUNCTION(f_Stub_variadicSum) {
 	ZEPHIR_INIT_VAR(&numbers);
 	zephir_get_args_from(&numbers, 0);
 	total = 0;
-	zephir_is_iterable(&numbers, 0, "stub/variadic.zep", 16);
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&numbers), _0)
+	if (Z_TYPE_P(&numbers) == IS_STRING) {
+		ZEPHIR_INIT_VAR(&_1);
+		zephir_string_to_char_array(&_1, &numbers);
+		_0 = &_1;
+	} else {
+		_0 = &numbers;
+	}
+	zephir_is_iterable(_0, 0, "stub/variadic.zep", 16);
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_0), _2)
 	{
 		ZEPHIR_INIT_NVAR(&n);
-		ZVAL_COPY(&n, _0);
+		ZVAL_COPY(&n, _2);
 		total += zephir_get_numberval(&n);
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&n);

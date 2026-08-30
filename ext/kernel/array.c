@@ -27,6 +27,7 @@
 #include "kernel/backtrace.h"
 #include "kernel/object.h"
 #include "kernel/fcall.h"
+#include "kernel/string.h"
 
 void ZEPHIR_FASTCALL zephir_create_array(zval *return_value, uint32_t size, int initialize)
 {
@@ -101,6 +102,18 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 		ZVAL_NULL(fetched);
 
 		return 0;
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		/* A `var` holding a string: PHP's isset() on a string offset is
+		 * silent for every illegal offset, so no diagnostic here. */
+		if (!zephir_string_offset_isset_zval(arr, index)) {
+			ZVAL_NULL(fetched);
+
+			return 0;
+		}
+
+		zephir_string_offset_read_zval(fetched, (zval *) arr, index, 0);
+
+		return 1;
 	} else if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
 		ZVAL_NULL(fetched);
 
@@ -186,6 +199,22 @@ int zephir_array_isset_string_fetch(zval *fetched, const zval *arr, char *index,
 			}
 			return 1;
 		}
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		zval offset;
+		int  found;
+
+		ZVAL_STRINGL(&offset, index, index_length);
+		found = zephir_string_offset_isset_zval(arr, &offset);
+
+		if (found) {
+			zephir_string_offset_read_zval(fetched, (zval *) arr, &offset, 0);
+		}
+
+		zval_ptr_dtor(&offset);
+
+		if (found) {
+			return 1;
+		}
 	}
 
 	ZVAL_NULL(fetched);
@@ -226,6 +255,12 @@ int zephir_array_isset_long_fetch(zval *fetched, const zval *arr, unsigned long 
 			}
 			return 1;
 		}
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		if (zephir_string_offset_isset(arr, (zend_long) index)) {
+			zephir_string_offset_read(fetched, (zval *) arr, (zend_long) index, 0);
+
+			return 1;
+		}
 	}
 
 	ZVAL_NULL(fetched);
@@ -251,6 +286,8 @@ int ZEPHIR_FASTCALL zephir_array_isset(const zval *arr, zval *index)
 		}
 
 		return 0;
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		return zephir_string_offset_isset_zval(arr, index);
 	} else if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
 		return 0;
 	}
@@ -296,6 +333,15 @@ int ZEPHIR_FASTCALL zephir_array_isset_string(const zval *arr, const char *index
 		return 0;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		return zend_hash_str_exists(Z_ARRVAL_P(arr), index, index_length);
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		zval offset;
+		int  found;
+
+		ZVAL_STRINGL(&offset, index, index_length);
+		found = zephir_string_offset_isset_zval(arr, &offset);
+		zval_ptr_dtor(&offset);
+
+		return found;
 	}
 
 	return 0;
@@ -316,6 +362,8 @@ int ZEPHIR_FASTCALL zephir_array_isset_long(const zval *arr, unsigned long index
 		return 0;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		return zend_hash_index_exists(Z_ARRVAL_P(arr), index);
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		return zephir_string_offset_isset(arr, (zend_long) index);
 	}
 
 	return 0;
@@ -339,6 +387,11 @@ int ZEPHIR_FASTCALL zephir_array_isset_value(const zval *arr, zval *index)
 	}
 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
+		return zephir_array_isset(arr, index);
+	}
+
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		/* A byte is never null, so isset() is the whole answer. */
 		return zephir_array_isset(arr, index);
 	}
 
@@ -387,6 +440,11 @@ int ZEPHIR_FASTCALL zephir_array_isset_value_string(const zval *arr, const char 
 		return zephir_array_isset_string(arr, index, index_length);
 	}
 
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		/* A byte is never null, so isset() is the whole answer. */
+		return zephir_array_isset_string(arr, index, index_length);
+	}
+
 	if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
 		return 0;
 	}
@@ -408,6 +466,11 @@ int ZEPHIR_FASTCALL zephir_array_isset_value_long(const zval *arr, unsigned long
 		return zephir_array_isset_long(arr, index);
 	}
 
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		/* A byte is never null, so isset() is the whole answer. */
+		return zephir_array_isset_long(arr, index);
+	}
+
 	if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
 		return 0;
 	}
@@ -421,6 +484,59 @@ int ZEPHIR_FASTCALL zephir_array_isset_value_long(const zval *arr, unsigned long
 	return Z_TYPE_P(entry) != IS_NULL;
 }
 
+/**
+ * `empty($container[$offset])`.
+ *
+ * PHP does not compose this out of a read plus a truthiness test: it has a
+ * dedicated silent handler (`zend_isempty_dim_slow`) that reports nothing for
+ * a missing key, an out-of-range string offset or an illegal offset type, and
+ * answers "empty" for all of them. Reusing the isset-fetch helpers gets the
+ * same answer for arrays, strings and ArrayAccess alike.
+ */
+static int zephir_isempty_dim_fetched(int found, zval *fetched)
+{
+	int result;
+
+	if (!found) {
+		return 1;
+	}
+
+	result = !zend_is_true(fetched);
+	zval_ptr_dtor(fetched);
+
+	return result;
+}
+
+int zephir_isempty_dim(zval *container, zval *offset)
+{
+	zval fetched;
+
+	ZVAL_UNDEF(&fetched);
+
+	return zephir_isempty_dim_fetched(zephir_array_isset_fetch(&fetched, container, offset, 0), &fetched);
+}
+
+int zephir_isempty_dim_long(zval *container, unsigned long offset)
+{
+	zval fetched;
+
+	ZVAL_UNDEF(&fetched);
+
+	return zephir_isempty_dim_fetched(zephir_array_isset_long_fetch(&fetched, container, offset, 0), &fetched);
+}
+
+int zephir_isempty_dim_string(zval *container, char *offset, uint32_t offset_length)
+{
+	zval fetched;
+
+	ZVAL_UNDEF(&fetched);
+
+	return zephir_isempty_dim_fetched(
+		zephir_array_isset_string_fetch(&fetched, container, offset, offset_length, 0),
+		&fetched
+	);
+}
+
 int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags)
 {
 	HashTable *ht;
@@ -431,6 +547,10 @@ int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags)
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
 			return 1;
 		}
+
+		return 0;
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		zend_throw_error(NULL, "Cannot unset string offsets");
 
 		return 0;
 	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
@@ -482,6 +602,10 @@ int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint
 		}
 
 		return 0;
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		zend_throw_error(NULL, "Cannot unset string offsets");
+
+		return 0;
 	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		return 0;
 	}
@@ -506,6 +630,10 @@ int ZEPHIR_FASTCALL zephir_array_unset_long(zval *arr, unsigned long index, int 
 		}
 
 		return 0;
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		zend_throw_error(NULL, "Cannot unset string offsets");
+
+		return 0;
 	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		return 0;
 	}
@@ -519,6 +647,12 @@ int ZEPHIR_FASTCALL zephir_array_unset_long(zval *arr, unsigned long index, int 
 
 int zephir_array_append(zval *arr, zval *value, int flags ZEPHIR_DEBUG_PARAMS)
 {
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		zend_throw_error(NULL, "[] operator not supported for strings");
+
+		return FAILURE;
+	}
+
 	if (Z_TYPE_P(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array in %s on line %d", file, line);
 		return FAILURE;
@@ -611,6 +745,12 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 		}
 	}
 
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		zephir_string_offset_read_zval(return_value, arr, index, flags);
+
+		return EG(exception) ? FAILURE : SUCCESS;
+	}
+
 	ZVAL_NULL(return_value);
 	return FAILURE;
 }
@@ -646,6 +786,14 @@ int zephir_array_fetch_string(zval *return_value, zval *arr, const char *index, 
 		if ((flags & PH_NOISY) == PH_NOISY) {
 			zend_error(E_NOTICE, "Undefined index: %s", index);
 		}
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		zval offset;
+
+		ZVAL_STRINGL(&offset, index, index_length);
+		zephir_string_offset_read_zval(return_value, arr, &offset, flags);
+		zval_ptr_dtor(&offset);
+
+		return EG(exception) ? FAILURE : SUCCESS;
 	} else {
 		if ((flags & PH_NOISY) == PH_NOISY) {
 			zend_error(E_NOTICE, "Cannot use a scalar value as an array in %s on line %d", file, line);
@@ -691,6 +839,13 @@ int zephir_array_fetch_long(zval *return_value, zval *arr, unsigned long index, 
 		if ((flags & PH_NOISY) == PH_NOISY) {
 			zend_error(E_NOTICE, "Undefined index: %lu", index);
 		}
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		/* The compiler cannot prove a `var` holds a string, so the string
+		 * offset is dispatched here. `index` is `unsigned long` for historical
+		 * reasons: a negative offset arrives wrapped and the cast restores it. */
+		zephir_string_offset_read(return_value, arr, (zend_long) index, flags);
+
+		return SUCCESS;
 	} else {
 		if ((flags & PH_NOISY) == PH_NOISY) {
 			zend_error(E_NOTICE, "Cannot use a scalar value as an array in %s on line %d", file, line);
@@ -745,6 +900,10 @@ int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags)
 		}
 
 		return FAILURE;
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		zephir_string_offset_write_zval(arr, index, value);
+
+		return EG(exception) ? FAILURE : SUCCESS;
 	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array (2)");
 		return FAILURE;
@@ -810,6 +969,14 @@ int zephir_array_update_string(zval *arr, const char *index, uint32_t index_leng
 		}
 
 		return FAILURE;
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		zval offset;
+
+		ZVAL_STRINGL(&offset, index, index_length);
+		zephir_string_offset_write_zval(arr, &offset, value);
+		zval_ptr_dtor(&offset);
+
+		return EG(exception) ? FAILURE : SUCCESS;
 	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array (3)");
 		return FAILURE;
@@ -843,6 +1010,10 @@ int zephir_array_update_long(zval *arr, unsigned long index, zval *value, int fl
 		}
 
 		return FAILURE;
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
+		zephir_string_offset_write(arr, (zend_long) index, value);
+
+		return EG(exception) ? FAILURE : SUCCESS;
 	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array in %s on line %d", file, line);
 		return FAILURE;
@@ -894,7 +1065,16 @@ void zephir_array_keys(zval *return_value, zval *input)
 
 int zephir_array_key_exists(zval *arr, zval *key)
 {
-	HashTable *h = Z_ARRVAL_P(arr);
+	HashTable *h;
+
+	/* Reachable with any dynamically typed container, and reading Z_ARRVAL of
+	 * a string would reinterpret the zend_string as a HashTable. Every other
+	 * helper here answers 0 for a non-array, so this one does too. */
+	if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
+		return 0;
+	}
+
+	h = Z_ARRVAL_P(arr);
 	if (h) {
 		switch (Z_TYPE_P(key)) {
 			case IS_STRING:

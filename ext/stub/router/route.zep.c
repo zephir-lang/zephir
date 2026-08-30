@@ -734,10 +734,10 @@ PHP_METHOD(Stub_Router_Route, getPaths)
  */
 PHP_METHOD(Stub_Router_Route, getReversedPaths)
 {
-	zend_bool _5;
-	zend_string *_3;
-	zend_ulong _2;
-	zval reversed, path, position, _0, *_1, _4;
+	zend_bool _7;
+	zend_string *_5;
+	zend_ulong _4;
+	zval reversed, path, position, _0, *_1, _2, *_3, _6;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -746,7 +746,8 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths)
 	ZVAL_UNDEF(&path);
 	ZVAL_UNDEF(&position);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_4);
+	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_6);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("_paths", 6, 1);
@@ -757,39 +758,46 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths)
 	ZEPHIR_INIT_VAR(&reversed);
 	array_init(&reversed);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 117, PH_NOISY_CC | PH_READONLY);
-	zephir_is_iterable(&_0, 0, "stub/router/route.zep", 478);
-	if (Z_TYPE_P(&_0) == IS_ARRAY) {
-		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&_0), _2, _3, _1)
+	if (Z_TYPE_P(&_0) == IS_STRING) {
+		ZEPHIR_INIT_VAR(&_2);
+		zephir_string_to_char_array(&_2, &_0);
+		_1 = &_2;
+	} else {
+		_1 = &_0;
+	}
+	zephir_is_iterable(_1, 0, "stub/router/route.zep", 478);
+	if (Z_TYPE_P(_1) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(_1), _4, _5, _3)
 		{
 			ZEPHIR_INIT_NVAR(&path);
-			if (_3 != NULL) { 
-				ZVAL_STR_COPY(&path, _3);
+			if (_5 != NULL) { 
+				ZVAL_STR_COPY(&path, _5);
 			} else {
-				ZVAL_LONG(&path, _2);
+				ZVAL_LONG(&path, _4);
 			}
 			ZEPHIR_INIT_NVAR(&position);
-			ZVAL_COPY(&position, _1);
+			ZVAL_COPY(&position, _3);
 			zephir_array_update_zval(&reversed, &position, &path, PH_COPY | PH_SEPARATE);
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD(NULL, _1, "rewind", NULL, 0);
 		zephir_check_call_status();
-		_5 = 1;
+		_7 = 1;
 		while (1) {
-			if (_5) {
-				_5 = 0;
+			if (_7) {
+				_7 = 0;
 			} else {
-				ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
+				ZEPHIR_CALL_METHOD(NULL, _1, "next", NULL, 0);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_4, &_0, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD(&_6, _1, "valid", NULL, 0);
 			zephir_check_call_status();
-			if (!zend_is_true(&_4)) {
+			if (!zend_is_true(&_6)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&path, &_0, "key", NULL, 0);
+			ZEPHIR_CALL_METHOD(&path, _1, "key", NULL, 0);
 			zephir_check_call_status();
-			ZEPHIR_CALL_METHOD(&position, &_0, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD(&position, _1, "current", NULL, 0);
 			zephir_check_call_status();
 				zephir_array_update_zval(&reversed, &position, &path, PH_COPY | PH_SEPARATE);
 		}

@@ -16,6 +16,7 @@
 #include "kernel/require.h"
 #include "kernel/object.h"
 #include "kernel/fcall.h"
+#include "kernel/string.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Requires)
@@ -112,22 +113,23 @@ PHP_METHOD(Stub_Requires, setContent)
 
 PHP_METHOD(Stub_Requires, renderTemplate)
 {
-	zend_bool _6$$3;
-	zend_ulong _2$$3;
+	zend_bool _8$$3;
+	zend_ulong _4$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval templatePath_zv, *params, params_sub, _0, key, value, _8, *_1$$3, _5$$3, _4$$4, _7$$5;
-	zend_string *templatePath = NULL, *_3$$3;
+	zval templatePath_zv, *params, params_sub, _0, key, value, _10, *_1$$3, _2$$3, *_3$$3, _7$$3, _6$$4, _9$$5;
+	zend_string *templatePath = NULL, *_5$$3;
 
 	ZVAL_UNDEF(&templatePath_zv);
 	ZVAL_UNDEF(&params_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&key);
 	ZVAL_UNDEF(&value);
-	ZVAL_UNDEF(&_8);
-	ZVAL_UNDEF(&_5$$3);
-	ZVAL_UNDEF(&_4$$4);
-	ZVAL_UNDEF(&_7$$5);
+	ZVAL_UNDEF(&_10);
+	ZVAL_UNDEF(&_2$$3);
+	ZVAL_UNDEF(&_7$$3);
+	ZVAL_UNDEF(&_6$$4);
+	ZVAL_UNDEF(&_9$$5);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(templatePath)
 		Z_PARAM_ZVAL(params)
@@ -141,45 +143,52 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	ZEPHIR_CREATE_SYMBOL_TABLE();
 	
 	if (Z_TYPE_P(params) == IS_ARRAY) {
-		zephir_is_iterable(params, 0, "stub/requires.zep", 47);
-		if (Z_TYPE_P(params) == IS_ARRAY) {
-			ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(params), _2$$3, _3$$3, _1$$3)
+		if (Z_TYPE_P(params) == IS_STRING) {
+			ZEPHIR_INIT_VAR(&_2$$3);
+			zephir_string_to_char_array(&_2$$3, params);
+			_1$$3 = &_2$$3;
+		} else {
+			_1$$3 = params;
+		}
+		zephir_is_iterable(_1$$3, 0, "stub/requires.zep", 47);
+		if (Z_TYPE_P(_1$$3) == IS_ARRAY) {
+			ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(_1$$3), _4$$3, _5$$3, _3$$3)
 			{
 				ZEPHIR_INIT_NVAR(&key);
-				if (_3$$3 != NULL) { 
-					ZVAL_STR_COPY(&key, _3$$3);
+				if (_5$$3 != NULL) { 
+					ZVAL_STR_COPY(&key, _5$$3);
 				} else {
-					ZVAL_LONG(&key, _2$$3);
+					ZVAL_LONG(&key, _4$$3);
 				}
 				ZEPHIR_INIT_NVAR(&value);
-				ZVAL_COPY(&value, _1$$3);
-				ZEPHIR_CPY_WRT(&_4$$4, &value);
-				if (zephir_set_symbol(&key, &_4$$4) == FAILURE) {
+				ZVAL_COPY(&value, _3$$3);
+				ZEPHIR_CPY_WRT(&_6$$4, &value);
+				if (zephir_set_symbol(&key, &_6$$4) == FAILURE) {
 					return;
 				}
 			} ZEND_HASH_FOREACH_END();
 		} else {
-			ZEPHIR_CALL_METHOD(NULL, params, "rewind", NULL, 0);
+			ZEPHIR_CALL_METHOD(NULL, _1$$3, "rewind", NULL, 0);
 			zephir_check_call_status();
-			_6$$3 = 1;
+			_8$$3 = 1;
 			while (1) {
-				if (_6$$3) {
-					_6$$3 = 0;
+				if (_8$$3) {
+					_8$$3 = 0;
 				} else {
-					ZEPHIR_CALL_METHOD(NULL, params, "next", NULL, 0);
+					ZEPHIR_CALL_METHOD(NULL, _1$$3, "next", NULL, 0);
 					zephir_check_call_status();
 				}
-				ZEPHIR_CALL_METHOD(&_5$$3, params, "valid", NULL, 0);
+				ZEPHIR_CALL_METHOD(&_7$$3, _1$$3, "valid", NULL, 0);
 				zephir_check_call_status();
-				if (!zend_is_true(&_5$$3)) {
+				if (!zend_is_true(&_7$$3)) {
 					break;
 				}
-				ZEPHIR_CALL_METHOD(&key, params, "key", NULL, 0);
+				ZEPHIR_CALL_METHOD(&key, _1$$3, "key", NULL, 0);
 				zephir_check_call_status();
-				ZEPHIR_CALL_METHOD(&value, params, "current", NULL, 0);
+				ZEPHIR_CALL_METHOD(&value, _1$$3, "current", NULL, 0);
 				zephir_check_call_status();
-					ZEPHIR_CPY_WRT(&_7$$5, &value);
-					if (zephir_set_symbol(&key, &_7$$5) == FAILURE) {
+					ZEPHIR_CPY_WRT(&_9$$5, &value);
+					if (zephir_set_symbol(&key, &_9$$5) == FAILURE) {
 						return;
 					}
 			}
@@ -187,11 +196,11 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 		ZEPHIR_INIT_NVAR(&value);
 		ZEPHIR_INIT_NVAR(&key);
 	}
-	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_8);
-	if (zephir_require_zval_ret(&_8, &templatePath_zv) == FAILURE) {
+	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_10);
+	if (zephir_require_zval_ret(&_10, &templatePath_zv) == FAILURE) {
 		RETURN_MM_NULL();
 	}
-	RETURN_CCTOR(&_8);
+	RETURN_CCTOR(&_10);
 }
 
 PHP_METHOD(Stub_Requires, requireOnce)

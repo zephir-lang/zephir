@@ -19,6 +19,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Name;
 use Zephir\Variable\Variable;
 
 /**
@@ -69,6 +70,24 @@ class NativeArrayAccess
                         );
                 }
                 break;
+
+            case 'string':
+            case 'istring':
+                /**
+                 * A string literal source, PHP's `"abc"[1]`. Box it into a
+                 * temp zval so the same offset path can read it.
+                 */
+                $literalVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite(
+                    'variable',
+                    $compilationContext
+                );
+                $compilationContext->backend->assignString(
+                    $literalVariable,
+                    Name::addSlashes($exprVariable->getCode()),
+                    $compilationContext
+                );
+
+                return $this->accessStringOffset($expression, $literalVariable, $compilationContext);
 
             default:
                 throw new CompilerException(
@@ -141,6 +160,25 @@ class NativeArrayAccess
                     ['non-array-access', $arrayAccess['left']]
                 );
             }
+        }
+
+        /**
+         * A native char destination cannot receive a zval, so the fetch goes
+         * through a temp and only the byte is handed over afterwards. This is
+         * the dynamic counterpart of what `accessStringOffset()` does for a
+         * compile-time `string` source, and it keeps `char c; let c = s[i];`
+         * working whether `s` was declared `string` or `var`.
+         *
+         * It has to happen before the symbol is resolved below, or the char
+         * would be registered in the memory frame as if it were a zval.
+         */
+        $charDestination = null;
+        if (
+            null !== $this->expectingVariable
+            && in_array($this->expectingVariable->getType(), ['char', 'uchar'], true)
+        ) {
+            $charDestination         = $this->expectingVariable;
+            $this->expectingVariable = null;
         }
 
         /**
@@ -278,6 +316,17 @@ class NativeArrayAccess
             $compilationContext
         );
 
+        if (null !== $charDestination) {
+            $compilationContext->headersManager->add('kernel/operators');
+            $compilationContext->codePrinter->output(sprintf(
+                '%s = (unsigned char) zephir_get_charval(%s);',
+                $charDestination->getName(),
+                $compilationContext->backend->getVariableCode($symbolVariable)
+            ));
+
+            return new CompiledExpression('variable', $charDestination->getName(), $expression);
+        }
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 
@@ -295,7 +344,7 @@ class NativeArrayAccess
          * When the destination is a zval we must box it as one; when it is a
          * native C scalar we write the raw byte straight in. See #1629.
          */
-        $boxAsString = $this->needsStringBoxing();
+        $boxAsString = $this->needsStringBoxing($compilationContext);
 
         if ($this->expecting) {
             if ($this->expectingVariable && !$boxAsString) {
@@ -322,48 +371,21 @@ class NativeArrayAccess
 
         $codePrinter  = $compilationContext->codePrinter;
         $variableCode = $compilationContext->backend->getVariableCode($variableVariable);
+        $offset       = $compilationContext->backend->resolveStringOffset(
+            $exprIndex,
+            $compilationContext,
+            $expression['right']
+        );
 
-        switch ($exprIndex->getType()) {
-            case 'int':
-            case 'uint':
-            case 'long':
-                $compilationContext->headersManager->add('kernel/operators');
-                $codePrinter->output(
-                    $symbolVariable->getName(
-                    ) . ' = ZEPHIR_STRING_OFFSET(' . $variableCode . ', ' . $exprIndex->getCode() . ');'
-                );
-                break;
+        /**
+         * PH_NOISY is the kernel's equivalent of PHP's BP_VAR_R: warn on an
+         * out-of-range offset and yield "". Without it the read is the
+         * BP_VAR_IS one an `isset`/`fetch` guard performs: silent, yielding
+         * null.
+         */
+        $flags = $this->noisy ? 'PH_NOISY' : '0';
 
-            case 'variable':
-                $variableIndex = $compilationContext->symbolTable->getVariableForRead(
-                    $exprIndex->getCode(),
-                    $compilationContext,
-                    $expression
-                );
-                switch ($variableIndex->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                        $codePrinter->output(
-                            $symbolVariable->getName(
-                            ) . ' = ZEPHIR_STRING_OFFSET(' . $variableCode . ', ' . $variableIndex->getName() . ');'
-                        );
-                        break;
-
-                    default:
-                        throw new CompilerException(
-                            'Cannot use index type ' . $variableIndex->getType() . ' as offset',
-                            $expression['right']
-                        );
-                }
-                break;
-
-            default:
-                throw new CompilerException(
-                    'Cannot use index type ' . $exprIndex->getType() . ' as offset',
-                    $expression['right']
-                );
-        }
+        $compilationContext->headersManager->add('kernel/string');
 
         if ($boxAsString) {
             $stringVariable = $compilationContext->symbolTable->getTempVariableForWrite(
@@ -371,10 +393,27 @@ class NativeArrayAccess
                 $compilationContext,
                 $expression
             );
-            $compilationContext->backend->assignChar($stringVariable, $symbolVariable, $compilationContext);
+
+            $codePrinter->output(sprintf(
+                'zephir_string_offset_read%s(%s, %s, %s, %s);',
+                $offset['suffix'],
+                $compilationContext->backend->getVariableCode($stringVariable),
+                $variableCode,
+                $offset['code'],
+                $flags
+            ));
 
             return new CompiledExpression('variable', $stringVariable->getName(), $expression);
         }
+
+        $codePrinter->output(sprintf(
+            '%s = zephir_string_offset_byte%s(%s, %s, %s);',
+            $symbolVariable->getName(),
+            $offset['suffix'],
+            $variableCode,
+            $offset['code'],
+            $flags
+        ));
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
     }
@@ -386,11 +425,14 @@ class NativeArrayAccess
      * It does when the destination is dynamic (`var`) or `string`, and when
      * there is no destination variable at all -- `let a[] = s[i]`, `f(s[i])`,
      * `echo s[i]`. It does not for a native scalar destination (`char`, `int`,
-     * `double`, ...), which wants the byte, nor for `return_value`: a method
-     * declaring `-> char` carries an `IS_LONG` arg-info, so returning a string
-     * there would be a TypeError.
+     * `double`, ...), which wants the byte.
+     *
+     * `return_value` is decided by the declared return type: a method
+     * declaring `-> char` or `-> int` carries an `IS_LONG` arg-info, so
+     * returning a 1-char string there would be a TypeError. An untyped return,
+     * or one that admits `string`, gets the string PHP would have produced.
      */
-    private function needsStringBoxing(): bool
+    private function needsStringBoxing(CompilationContext $compilationContext): bool
     {
         if (!$this->expecting) {
             return false;
@@ -401,7 +443,13 @@ class NativeArrayAccess
         }
 
         if ('return_value' === $this->expectingVariable->getName()) {
-            return false;
+            $method = $compilationContext->currentMethod;
+
+            if (null === $method || !$method->hasReturnTypes()) {
+                return true;
+            }
+
+            return !$method->areReturnTypesIntCompatible() || $method->areReturnTypesStringCompatible();
         }
 
         return in_array(

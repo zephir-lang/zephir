@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+- Added PHP compatible string offsets, so reading, writing, `isset()`, `empty()` and `unset()` on a string behave as they do in PHP, including negative offsets, out of range warnings, dynamically typed sources and `for c in s` [#760](https://github.com/zephir-lang/zephir/issues/760)
+
 ### Fixed
 - Fixed a `-Wformat` warning in `zephir_fclose()` by casting the resource handle to `zend_long` and formatting it with the portable `ZEND_LONG_FMT` macro instead of `%d`, preserving compatibility with PHP 8.0's `int` handle.
 - A variable whose only consumer is a closure's `use (...)` clause now counts as used: it is no longer reported as `unused-variable`, and it is declared in the generated C. A declared-but-unassigned capture was skipped by both, so the generated code referenced an undeclared identifier and the extension failed to build. Capturing a variable that was never declared now fails with `Cannot capture variable 'x' because it wasn't declared` instead of a PHP fatal error [#2029](https://github.com/zephir-lang/zephir/issues/2029)

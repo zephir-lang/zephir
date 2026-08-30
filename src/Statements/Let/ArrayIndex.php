@@ -54,6 +54,16 @@ class ArrayIndex
         $this->checkVariableLocalOnly($variable, $symbolVariable, $statement);
 
         /**
+         * A declared string is not an array: `let s[i] = v` is PHP's string
+         * offset write, a byte store rather than a hash update.
+         */
+        if ($symbolVariable->isString()) {
+            $this->assignStringOffset($symbolVariable, $resolvedExpr, $compilationContext, $statement);
+
+            return;
+        }
+
+        /**
          * Only dynamic variables can be used as arrays
          */
         if ($symbolVariable->isNotVariableAndArray()) {
@@ -163,6 +173,40 @@ class ArrayIndex
      * @throws Exception
      * @throws ReflectionException
      */
+    /**
+     * Compiles `let s[i] = value` where `s` is a declared string.
+     *
+     * PHP reports `Cannot use string offset as an array` at runtime for a
+     * chained offset. Here the type is known at compile time, so the operation
+     * could never have succeeded and the error is raised at build time.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function assignStringOffset(
+        ZephirVariable $symbolVariable,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        array $statement
+    ): void {
+        if (1 !== count($statement['index-expr'])) {
+            throw new CompilerException('Cannot use string offset as an array', $statement);
+        }
+
+        $compilationContext->headersManager->add('kernel/string');
+
+        $expression = new Expression($statement['index-expr'][0]);
+        $exprIndex  = $expression->compile($compilationContext);
+
+        $compilationContext->backend->updateStringOffset(
+            $symbolVariable,
+            $exprIndex,
+            $this->_getResolvedArrayItem($resolvedExpr, $compilationContext),
+            $compilationContext,
+            $statement['index-expr'][0]
+        );
+    }
+
     protected function _assignArrayIndexSingle(
         ZephirVariable $symbolVariable,
         CompiledExpression $resolvedExpr,

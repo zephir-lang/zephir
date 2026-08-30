@@ -12,11 +12,11 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/string.h"
 #include "kernel/memory.h"
 #include "kernel/operators.h"
 #include "kernel/object.h"
 #include "kernel/array.h"
-#include "kernel/string.h"
 
 
 /**
@@ -62,9 +62,8 @@ PHP_METHOD(Stub_Issue1629, stringTarget)
 	nb_param = ZEND_CALL_ARG(execute_data, 2);
 	zephir_memory_observe(&keyspace_zv);
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
-	_0 = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
 	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_STRINGL(&_1, &_0, 1);
+	zephir_string_offset_read(&_1, &keyspace_zv, nb, PH_NOISY);
 	zephir_get_strval(&ch, &_1);
 	RETURN_CTOR(&ch);
 }
@@ -96,7 +95,7 @@ PHP_METHOD(Stub_Issue1629, charTarget)
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
 	ZEPHIR_INIT_VAR(&pieces);
 	array_init(&pieces);
-	ch = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
+	ch = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
 	ch = ch;
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, ch);
@@ -145,9 +144,8 @@ PHP_METHOD(Stub_Issue1629, rebuild)
 				_0 = 1;
 			}
 			i = _1;
-			_3$$3 = ZEPHIR_STRING_OFFSET(&keyspace_zv, i);
 			ZEPHIR_INIT_NVAR(&_4$$3);
-			ZVAL_STRINGL(&_4$$3, &_3$$3, 1);
+			zephir_string_offset_read(&_4$$3, &keyspace_zv, i, PH_NOISY);
 			zephir_array_append(&pieces, &_4$$3, PH_SEPARATE, "stub/issue1629.zep", 54);
 		}
 	}
@@ -178,9 +176,8 @@ PHP_METHOD(Stub_Issue1629, varTarget)
 	nb_param = ZEND_CALL_ARG(execute_data, 2);
 	zephir_memory_observe(&keyspace_zv);
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
-	_0 = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
 	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_STRINGL(&_1, &_0, 1);
+	zephir_string_offset_read(&_1, &keyspace_zv, nb, PH_NOISY);
 	ZEPHIR_CPY_WRT(&ch, &_1);
 	RETURN_CCTOR(&ch);
 }
@@ -202,7 +199,7 @@ PHP_METHOD(Stub_Issue1629, intTarget)
 	ZEND_PARSE_PARAMETERS_END();
 	nb_param = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&keyspace_zv, keyspace);
-	_0 = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
+	_0 = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
 	c = _0;
 	RETURN_LONG(c);
 }
@@ -230,9 +227,8 @@ PHP_METHOD(Stub_Issue1629, arrayIndexTarget)
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
 	ZEPHIR_INIT_VAR(&pieces);
 	array_init(&pieces);
-	_0 = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
 	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_STRINGL(&_1, &_0, 1);
+	zephir_string_offset_read(&_1, &keyspace_zv, nb, PH_NOISY);
 	zephir_array_update_long(&pieces, 3, &_1, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 	RETURN_CTOR(&pieces);
 }
@@ -266,9 +262,8 @@ PHP_METHOD(Stub_Issue1629, propertyAppendTarget)
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 45, &_0);
-	_1 = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
 	ZEPHIR_INIT_VAR(&_2);
-	ZVAL_STRINGL(&_2, &_1, 1);
+	zephir_string_offset_read(&_2, &keyspace_zv, nb, PH_NOISY);
 	zephir_update_property_array_append(this_ptr, SL("parts"), &_2);
 	RETURN_MM_MEMBER_TYPED(getThis(), "parts", IS_ARRAY);
 }
@@ -303,9 +298,8 @@ PHP_METHOD(Stub_Issue1629, propertyIndexTarget)
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 45, &_0);
-	_1 = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
 	ZEPHIR_INIT_VAR(&_2);
-	ZVAL_STRINGL(&_2, &_1, 1);
+	zephir_string_offset_read(&_2, &keyspace_zv, nb, PH_NOISY);
 	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_STRING(&_3, "k");
 	zephir_update_property_array(this_ptr, SL("parts"), &_3, &_2);
@@ -336,9 +330,8 @@ PHP_METHOD(Stub_Issue1629, staticIndexTarget)
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
 	zephir_update_static_property_ce(stub_issue1629_ce, ZEND_STRL("staticParts"), &_0);
-	_1 = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
 	ZEPHIR_INIT_VAR(&_2);
-	ZVAL_STRINGL(&_2, &_1, 1);
+	zephir_string_offset_read(&_2, &keyspace_zv, nb, PH_NOISY);
 	zephir_update_static_property_array_multi_ce(stub_issue1629_ce, SL("staticParts"), &_2, SL("l"), 1, 0);
 	zephir_read_static_property_ce(&_3, stub_issue1629_ce, SL("staticParts"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTOR(&_3);
@@ -368,9 +361,8 @@ PHP_METHOD(Stub_Issue1629, staticAppendTarget)
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
 	zephir_update_static_property_ce(stub_issue1629_ce, ZEND_STRL("staticParts"), &_0);
-	_1 = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
 	ZEPHIR_INIT_VAR(&_2);
-	ZVAL_STRINGL(&_2, &_1, 1);
+	zephir_string_offset_read(&_2, &keyspace_zv, nb, PH_NOISY);
 	zephir_update_static_property_array_multi_ce(stub_issue1629_ce, SL("staticParts"), &_2, SL("a"), 1);
 	zephir_read_static_property_ce(&_3, stub_issue1629_ce, SL("staticParts"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTOR(&_3);
@@ -400,7 +392,7 @@ PHP_METHOD(Stub_Issue1629, charToStringTarget)
 	nb_param = ZEND_CALL_ARG(execute_data, 2);
 	zephir_memory_observe(&keyspace_zv);
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
-	ch = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
+	ch = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
 	ch = ch;
 	ZEPHIR_INIT_VAR(&out);
 	ZVAL_STRINGL(&out, &ch, 1);
@@ -446,7 +438,7 @@ PHP_METHOD(Stub_Issue1629, castStringOfChar)
 	nb_param = ZEND_CALL_ARG(execute_data, 2);
 	zephir_memory_observe(&keyspace_zv);
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
-	ch = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
+	ch = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
 	ch = ch;
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRINGL(&_0, &ch, 1);
@@ -475,9 +467,8 @@ PHP_METHOD(Stub_Issue1629, castStringOfOffset)
 	nb_param = ZEND_CALL_ARG(execute_data, 2);
 	zephir_memory_observe(&keyspace_zv);
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
-	_0 = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
 	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_STRINGL(&_1, &_0, 1);
+	zephir_string_offset_read(&_1, &keyspace_zv, nb, PH_NOISY);
 	zephir_cast_to_string(&_2, &_1);
 	ZEPHIR_CPY_WRT(&out, &_2);
 	RETURN_CTOR(&out);
@@ -545,7 +536,7 @@ PHP_METHOD(Stub_Issue1629, keyedCharArray)
 	nb_param = ZEND_CALL_ARG(execute_data, 2);
 	zephir_memory_observe(&keyspace_zv);
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
-	ch = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
+	ch = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
 	ch = ch;
 	zephir_create_array(return_value, 2, 0);
 	ZEPHIR_INIT_VAR(&_0);
@@ -572,7 +563,7 @@ PHP_METHOD(Stub_Issue1629, doubleFromChar)
 	ZEND_PARSE_PARAMETERS_END();
 	nb_param = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&keyspace_zv, keyspace);
-	ch = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
+	ch = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
 	ch = ch;
 	d = (double) ch;
 	RETURN_DOUBLE(d);
@@ -593,7 +584,7 @@ PHP_METHOD(Stub_Issue1629, boolFromChar)
 	ZEND_PARSE_PARAMETERS_END();
 	nb_param = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&keyspace_zv, keyspace);
-	ch = ZEPHIR_STRING_OFFSET(&keyspace_zv, nb);
+	ch = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
 	ch = ch;
 	b = ((ch) ? 1 : 0);
 	RETURN_BOOL(b);
