@@ -69,14 +69,8 @@ class DeclareStatement extends StatementAbstract
 
             /**
              * Replace original data type by the pre-processed infered type.
-             *
-             * A local captured with `use (&x)` is exempt: it is a PHP
-             * reference shared with the closure, so it has to stay a zval
-             * however narrow its inferred type looks.
-             *
-             * @see https://github.com/zephir-lang/zephir/issues/2652
              */
-            if ($typeInference && !$symbolTable->isClosureReference($varName)) {
+            if ($typeInference) {
                 if ('variable' === $currentType) {
                     $type = $typeInference->getInferedType($varName);
                     if (is_string($type)) {
@@ -95,6 +89,20 @@ class DeclareStatement extends StatementAbstract
                 case 'scall':
                     $currentType = 'variable';
                     break;
+            }
+
+            /**
+             * A local captured with `use (&x)` becomes a PHP reference shared
+             * with the closure, so it has to be a zval however narrow its type
+             * looks - whether that type was inferred or written out. `int n`
+             * kept its `zend_long` shape and got the zval-only
+             * zephir_make_local_reference() emitted against it.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2652
+             * @see https://github.com/zephir-lang/zephir/issues/2653
+             */
+            if ($symbolTable->isClosureReference($varName)) {
+                $currentType = 'variable';
             }
 
             /**

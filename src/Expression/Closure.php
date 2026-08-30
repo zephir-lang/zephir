@@ -146,14 +146,22 @@ class Closure
                 $captured->setUsed(true, $parameter);
 
                 /**
-                 * The by-reference flag belongs to this one clause, not to the
+                 * Both clause flags belong to this one clause, not to the
                  * variable: the same local can be captured by value by one
-                 * closure and by reference by another.
+                 * closure and by reference by another, and only the clause
+                 * that says `const` makes its capture read only.
+                 *
+                 * Assigned rather than OR-ed with the captured variable's own
+                 * flags on purpose. A by-value capture is a private copy, so
+                 * `use (x)` of a `const` parameter is writable inside the body
+                 * exactly as PHP's `use ($x)` is.
                  *
                  * @see https://github.com/zephir-lang/zephir/issues/2652
+                 * @see https://github.com/zephir-lang/zephir/issues/2653
                  */
                 $capture = clone $captured;
                 $capture->setIsClosureReference(!empty($parameter['reference']));
+                $capture->setReadOnly(!empty($parameter['const']));
 
                 $staticVariables[$parameter['name']] = $capture;
             }

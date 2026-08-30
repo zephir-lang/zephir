@@ -1,0 +1,120 @@
+--TEST--
+Closure `use (...)` honours both clause flags: `&` shares a slot, `const` is read only (issue #2653)
+--FILE--
+namespace Stub;
+
+/**
+ * The parser attaches a `reference` and a `const` flag to every `use (...)`
+ * entry. Both used to be dropped, so `use (&x)` and `use (const x)` compiled
+ * exactly like a plain by-value capture.
+ */
+class Flags2653
+{
+	/**
+	 * The snippet from the issue, verbatim: a write in the enclosing scope
+	 * after the closure was created has to be visible inside it.
+	 */
+	public function byRef() -> array
+	{
+		var x, cb;
+
+		let x = 1;
+
+		let cb = function () use (&x) {
+			return x;
+		};
+
+		let x = 2;
+
+		return [call_user_func(cb), x];
+	}
+
+	/**
+	 * A by-reference capture makes the local a PHP reference, so it has to be
+	 * a zval however narrowly it was declared. `int n` used to keep its
+	 * `zend_long` shape and got a zval-only helper emitted against it.
+	 */
+	public function typedByRef() -> int
+	{
+		int n = 5;
+		var bump;
+
+		let bump = function () use (&n) {
+			let n = n + 1;
+		};
+
+		call_user_func(bump);
+		call_user_func(bump);
+
+		return n;
+	}
+
+	/**
+	 * The other narrow C shape a declared local can take.
+	 */
+	public function stringByRef() -> string
+	{
+		string s = "a";
+		var append;
+
+		let append = function () use (&s) {
+			let s = s . "b";
+		};
+
+		call_user_func(append);
+		call_user_func(append);
+
+		return s;
+	}
+
+	/**
+	 * `const` is a compile-time guard on the body only, so a reading closure
+	 * behaves exactly as it did before.
+	 */
+	public function constCapture() -> <\Closure>
+	{
+		var y;
+
+		let y = 7;
+
+		return function () use (const y) {
+			return y;
+		};
+	}
+
+	/**
+	 * `use (const &y)` is the accepted order for both flags. The slot is still
+	 * shared, so a later write in the enclosing scope is visible: `const`
+	 * constrains the closure body, not the scope that declared the clause.
+	 */
+	public function constRefCapture() -> <\Closure>
+	{
+		var y, reader;
+
+		let y = 1;
+
+		let reader = function () use (const &y) {
+			return y;
+		};
+
+		let y = 9;
+
+		return reader;
+	}
+}
+--USAGE--
+use Stub\Flags2653;
+
+$test = new Flags2653();
+
+echo implode(",", $test->byRef()), "\n";
+echo $test->typedByRef(), "\n";
+echo $test->stringByRef(), "\n";
+echo $test->constCapture()(), "\n";
+echo $test->constRefCapture()(), "\n";
+--EXPECT--
+2,2
+7
+abb
+7
+9

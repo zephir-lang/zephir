@@ -306,6 +306,182 @@ ZEP);
         $this->assertStringNotContainsString('must be of type', $output);
     }
 
+    /**
+     * `use (const x)` marks the capture read only inside the closure body, the
+     * same way `const` on a method parameter does. The flag is parsed for every
+     * `use` entry but used to be dropped, so mutating the capture compiled
+     * silently.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2653
+     */
+    public function testConstCaptureRejectsAssignmentInBody(): void
+    {
+        $this->writeZep('constassign.zep', <<<'ZEP'
+namespace Stub;
+
+class ConstAssign
+{
+    public function make() -> <\Closure>
+    {
+        var y;
+
+        let y = 2;
+
+        return function () use (const y) {
+            let y = 3;
+
+            return y;
+        };
+    }
+}
+ZEP);
+
+        $this->assertReadOnlyCaptureError('y');
+    }
+
+    /**
+     * `++` reaches the same guard through Let\Decr, so it has to be rejected too.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2653
+     */
+    public function testConstCaptureRejectsIncrementInBody(): void
+    {
+        $this->writeZep('constincr.zep', <<<'ZEP'
+namespace Stub;
+
+class ConstIncr
+{
+    public function make() -> <\Closure>
+    {
+        var y;
+
+        let y = 2;
+
+        return function () use (const y) {
+            let y++;
+
+            return y;
+        };
+    }
+}
+ZEP);
+
+        $this->assertReadOnlyCaptureError('y');
+    }
+
+    /**
+     * `use (const &y)` is the accepted order for both flags (`&const` is a
+     * syntax error). The capture still shares one slot with the enclosing
+     * scope, and is still read only from inside.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2653
+     */
+    public function testConstAndReferenceCaptureCombine(): void
+    {
+        $this->writeZep('constref.zep', <<<'ZEP'
+namespace Stub;
+
+class ConstRef
+{
+    public function make() -> <\Closure>
+    {
+        var y;
+
+        let y = 2;
+
+        return function () use (const &y) {
+            let y = 3;
+
+            return y;
+        };
+    }
+}
+ZEP);
+
+        $this->assertReadOnlyCaptureError('y');
+    }
+
+    /**
+     * Positive control on the very predicate the `const` flag now feeds:
+     * without the flag the capture is a private copy and stays mutable.
+     * Without this assertion a harness that never reaches the check would pass
+     * every rejection case above vacuously.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2653
+     */
+    public function testNonConstCaptureStillAllowsBodyMutation(): void
+    {
+        $this->writeZep('plaincapture.zep', <<<'ZEP'
+namespace Stub;
+
+class PlainCapture
+{
+    public function make() -> <\Closure>
+    {
+        var y;
+
+        let y = 2;
+
+        return function () use (y) {
+            let y = 3;
+
+            return y;
+        };
+    }
+}
+ZEP);
+
+        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
+        $output = $result['stdout'] . $result['stderr'];
+
+        $this->assertSame(0, $result['exitCode'], $output);
+        $this->assertStringNotContainsString('read only', $output);
+    }
+
+    /**
+     * The flag belongs to the clause, not to the captured variable: a by-value
+     * capture of a `const` parameter is a private copy, so the body may write
+     * to it even though the parameter itself is read only.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2653
+     */
+    public function testCaptureOfAConstParameterIsMutableInsideTheClosure(): void
+    {
+        $this->writeZep('constparam.zep', <<<'ZEP'
+namespace Stub;
+
+class ConstParam
+{
+    public function make(const var seed) -> <\Closure>
+    {
+        return function () use (seed) {
+            let seed = 1;
+
+            return seed;
+        };
+    }
+}
+ZEP);
+
+        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
+        $output = $result['stdout'] . $result['stderr'];
+
+        $this->assertSame(0, $result['exitCode'], $output);
+        $this->assertStringNotContainsString('read only', $output);
+    }
+
+    private function assertReadOnlyCaptureError(string $name): void
+    {
+        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
+        $output = $result['stdout'] . $result['stderr'];
+
+        $this->assertNotSame(0, $result['exitCode'], $output);
+        $this->assertStringContainsString("'" . $name . "'", $output);
+        $this->assertStringContainsString('read only', $output);
+        // Not a PHP-level failure inside the compiler.
+        $this->assertStringNotContainsString('Call to a member function', $output);
+    }
+
     private function assertNoUnusedVariableWarning(): void
     {
         $result = $this->runZephir('generate --no-ansi', $this->projectDir);
