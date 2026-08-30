@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/array.h"
 #include "kernel/memory.h"
+#include "kernel/string.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
 #include "kernel/exception.h"
@@ -32,16 +33,16 @@ ZEPHIR_INIT_CLASS(Stub_FortyTwo)
 
 PHP_METHOD(Stub_FortyTwo, proof)
 {
-	zend_bool _3$$3;
+	zend_bool _4$$3;
 	zval _0;
-	zval box, side, _1, *_2, _6$$4;
+	zval box, side, _1, *_2, *_3, _7$$4;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zend_long ZEPHIR_LAST_CALL_STATUS, i = 0, j = 0, _4$$3, _5$$3;
+	zend_long ZEPHIR_LAST_CALL_STATUS, i = 0, j = 0, _5$$3, _6$$3;
 
 	ZVAL_UNDEF(&box);
 	ZVAL_UNDEF(&side);
 	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_6$$4);
+	ZVAL_UNDEF(&_7$$4);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -228,28 +229,35 @@ PHP_METHOD(Stub_FortyTwo, proof)
 	ZVAL_LONG(&_1, 4);
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
-	zephir_is_iterable(&box, 0, "stub/fortytwo.zep", 32);
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&box), _2)
+	if (Z_TYPE_P(&box) == IS_STRING) {
+		ZEPHIR_INIT_NVAR(&_1);
+		zephir_string_to_char_array(&_1, &box);
+		_2 = &_1;
+	} else {
+		_2 = &box;
+	}
+	zephir_is_iterable(_2, 0, "stub/fortytwo.zep", 32);
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_2), _3)
 	{
 		ZEPHIR_INIT_NVAR(&side);
-		ZVAL_COPY(&side, _2);
+		ZVAL_COPY(&side, _3);
 		j = 0;
-		_5$$3 = 2;
+		_6$$3 = 2;
+		_5$$3 = 0;
 		_4$$3 = 0;
-		_3$$3 = 0;
-		if (_4$$3 <= _5$$3) {
+		if (_5$$3 <= _6$$3) {
 			while (1) {
-				if (_3$$3) {
-					_4$$3++;
-					if (!(_4$$3 <= _5$$3)) {
+				if (_4$$3) {
+					_5$$3++;
+					if (!(_5$$3 <= _6$$3)) {
 						break;
 					}
 				} else {
-					_3$$3 = 1;
+					_4$$3 = 1;
 				}
-				i = _4$$3;
-				zephir_array_fetch_long(&_6$$4, &side, i, PH_NOISY | PH_READONLY, "stub/fortytwo.zep", 26);
-				j += zephir_get_numberval(&_6$$4);
+				i = _5$$3;
+				zephir_array_fetch_long(&_7$$4, &side, i, PH_NOISY | PH_READONLY, "stub/fortytwo.zep", 26);
+				j += zephir_get_numberval(&_7$$4);
 			}
 		}
 		if (j != 42) {

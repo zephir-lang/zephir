@@ -475,9 +475,8 @@ PHP_METHOD(Stub_Strings, strToHex)
 		if (!(i < zephir_fast_strlen_ev(&value_zv))) {
 			break;
 		}
-		_1$$3 = ZEPHIR_STRING_OFFSET(&value_zv, i);
 		ZEPHIR_INIT_NVAR(&_2$$3);
-		ZVAL_STRINGL(&_2$$3, &_1$$3, 1);
+		zephir_string_offset_read(&_2$$3, &value_zv, i, PH_NOISY);
 		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 116, &_2$$3);
 		zephir_check_call_status();
 		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 19, &_3$$3);

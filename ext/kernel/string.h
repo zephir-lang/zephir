@@ -79,4 +79,15 @@ int zephir_hash_equals(const zval *known_zval, const zval *user_zval);
 
 void zephir_string_to_hex(zval *return_value, zval *var);
 
+/** String offsets: PHP's `$str[$off]` semantics. `flags` carries PH_NOISY. */
+void zephir_string_offset_read(zval *return_value, zval *str, zend_long offset, int flags);
+void zephir_string_offset_read_zval(zval *return_value, zval *str, zval *dim, int flags);
+unsigned char zephir_string_offset_byte(zval *str, zend_long offset, int flags);
+unsigned char zephir_string_offset_byte_zval(zval *str, zval *dim, int flags);
+int zephir_string_offset_isset(const zval *str, zend_long offset);
+int zephir_string_offset_isset_zval(const zval *str, zval *dim);
+void zephir_string_offset_write(zval *str, zend_long offset, zval *value);
+void zephir_string_offset_write_zval(zval *str, zval *dim, zval *value);
+void zephir_string_to_char_array(zval *return_value, zval *str);
+
 #endif /* ZEPHIR_KERNEL_STRING_H */

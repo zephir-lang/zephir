@@ -45,6 +45,11 @@ int ZEPHIR_FASTCALL zephir_array_isset_value_long(const zval *arr, unsigned long
 int ZEPHIR_FASTCALL zephir_array_isset_value_string(const zval *arr, const char *index, uint32_t index_length);
 
 /** Unset existing indexes */
+/** PHP's silent `empty($container[$offset])` handler */
+int zephir_isempty_dim(zval *container, zval *offset);
+int zephir_isempty_dim_long(zval *container, unsigned long offset);
+int zephir_isempty_dim_string(zval *container, char *offset, uint32_t offset_length);
+
 int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags);
 int ZEPHIR_FASTCALL zephir_array_unset_long(zval *arr, unsigned long index, int flags);
 int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint32_t index_length, int flags);

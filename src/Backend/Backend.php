@@ -2489,6 +2489,153 @@ class Backend
         );
     }
 
+    /**
+     * Renders the offset for the kernel string-offset helpers.
+     *
+     * A native integer goes straight through. Everything else has to reach the
+     * runtime as a zval, because PHP's offset rules -- numeric strings,
+     * "String offset cast occurred", the TypeError for arrays and objects --
+     * depend on the value, not just its type. The `_zval` suffix selects the
+     * helper variant that applies them.
+     *
+     * @return array{suffix: string, code: string}
+     *
+     * @throws CompilerException
+     */
+    public function resolveStringOffset(
+        CompiledExpression $exprIndex,
+        CompilationContext $compilationContext,
+        array $node
+    ): array {
+        switch ($exprIndex->getType()) {
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+                return ['suffix' => '', 'code' => $exprIndex->getCode()];
+
+            case 'char':
+            case 'uchar':
+                return ['suffix' => '', 'code' => "'" . $exprIndex->getCode() . "'"];
+
+            case 'variable':
+                $variableIndex = $compilationContext->symbolTable->getVariableForRead(
+                    $exprIndex->getCode(),
+                    $compilationContext,
+                    $node
+                );
+
+                switch ($variableIndex->getType()) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'ulong':
+                    case 'char':
+                    case 'uchar':
+                        return ['suffix' => '', 'code' => $variableIndex->getName()];
+
+                    case 'variable':
+                    case 'mixed':
+                    case 'string':
+                    case 'istring':
+                    case 'array':
+                        return [
+                            'suffix' => '_zval',
+                            'code'   => $this->getVariableCode($variableIndex),
+                        ];
+
+                    case 'double':
+                        return $this->boxStringOffset('assignDouble', $variableIndex->getName(), $compilationContext);
+
+                    case 'bool':
+                        return $this->boxStringOffset('assignBool', $variableIndex->getName(), $compilationContext);
+                }
+
+                throw new CompilerException(
+                    'Cannot use index type ' . $variableIndex->getType() . ' as offset',
+                    $node
+                );
+
+            case 'string':
+            case 'istring':
+                return $this->boxStringOffset(
+                    'assignString',
+                    Name::addSlashes($exprIndex->getCode()),
+                    $compilationContext
+                );
+
+            case 'double':
+                return $this->boxStringOffset('assignDouble', $exprIndex->getCode(), $compilationContext);
+
+            case 'bool':
+                return $this->boxStringOffset('assignBool', $exprIndex->getCode(), $compilationContext);
+
+            case 'null':
+                return $this->boxStringOffset('assignNull', null, $compilationContext);
+        }
+
+        throw new CompilerException(
+            'Cannot use index type ' . $exprIndex->getType() . ' as offset',
+            $node
+        );
+    }
+
+    /**
+     * Boxes a non-integer offset into a temp zval so the runtime can coerce it
+     * the way PHP does.
+     *
+     * @return array{suffix: string, code: string}
+     */
+    private function boxStringOffset(string $assign, ?string $value, CompilationContext $compilationContext): array
+    {
+        $temp = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
+
+        if (null === $value) {
+            $this->assignNull($temp, $compilationContext);
+        } else {
+            $this->{$assign}($temp, $value, $compilationContext);
+        }
+
+        return ['suffix' => '_zval', 'code' => $this->getVariableCode($temp)];
+    }
+
+    /**
+     * Emits `let s[i] = value` for a declared string, PHP's `$s[$i] = $v`.
+     *
+     * The target must be a zval-backed string. A `string` parameter can also
+     * be a bare `zend_string *` with a companion `_zv` zval, and separating or
+     * extending the string would leave that pointer dangling. Being the target
+     * of an offset write is enough to keep the compiler off that
+     * representation today; the guard below turns a future regression into a
+     * build error rather than a use-after-free.
+     *
+     * @throws CompilerException
+     */
+    public function updateStringOffset(
+        Variable $symbolVariable,
+        CompiledExpression $key,
+        $value,
+        CompilationContext $compilationContext,
+        array $node
+    ): void {
+        if ($symbolVariable->isNativeString()) {
+            throw new CompilerException(
+                'Cannot write to an offset of the native string ' . $symbolVariable->getName(),
+                $node
+            );
+        }
+
+        $offset = $this->resolveStringOffset($key, $compilationContext, $node);
+
+        $compilationContext->codePrinter->output(sprintf(
+            'zephir_string_offset_write%s(%s, %s, %s);',
+            $offset['suffix'],
+            $this->getVariableCode($symbolVariable),
+            $offset['code'],
+            $this->resolveValue($value, $compilationContext, true)
+        ));
+    }
+
     public function updateArray(
         Variable $symbolVariable,
         $key,
