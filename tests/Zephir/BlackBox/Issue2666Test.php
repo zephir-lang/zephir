@@ -95,6 +95,51 @@ final class Issue2666Test extends TestCase
     }
 
     /**
+     * `zephir_array_update_multi()` and its two siblings read every `l` offset
+     * with `va_arg(ap, zend_long)`. A variadic argument passed as a plain C
+     * `int` therefore has its upper half read as whatever the ABI left in the
+     * slot, and a `uint`/`ulong` local reached the slot as `&name`. Neither is
+     * observable on the System V ABI, where the compiler happens to clear the
+     * upper half, so the contract is asserted on the generated C instead.
+     */
+    public function testMultiDimensionalIndexesArePassedAsZendLong(): void
+    {
+        $generated = $this->generate(
+            'multiwidth',
+            'keys.zep',
+            <<<'ZEP'
+                namespace Multiwidth;
+
+                class Keys
+                {
+                    public function literals() -> array
+                    {
+                        array result = [];
+                        let result[0][1] = "v";
+                        return result;
+                    }
+
+                    public function unsignedLocal(uint key) -> array
+                    {
+                        array result = [];
+                        let result[key][2] = "v";
+                        return result;
+                    }
+                }
+                ZEP,
+        );
+
+        $this->assertStringContainsString(
+            'zephir_array_update_multi(&result, &_0, SL("ll"), 2, (zend_long) 0, (zend_long) 1);',
+            $generated,
+        );
+        $this->assertStringContainsString(
+            'zephir_array_update_multi(&result, &_0, SL("ll"), 2, (zend_long) key, (zend_long) 2);',
+            $generated,
+        );
+    }
+
+    /**
      * Declarations whose C type is a bare `long`/`unsigned long`, i.e. 32-bit
      * under LLP64 and 64-bit under LP64. `zend_long`/`zend_ulong` are excluded
      * by the leading word boundary.

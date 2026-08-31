@@ -228,4 +228,62 @@ class Issue2666
 	{
 		return 2.5 % b;
 	}
+
+	/**
+	 * Multi-dimensional keys reach `zephir_array_update_multi()` through a
+	 * variadic slot read back as `zend_long`. An integer literal is a C `int`,
+	 * so the upper half of the slot was whatever the ABI left there: on Windows
+	 * `a[0][1]` produced the key 140733193388033. `uint`/`ulong` were worse,
+	 * passing `&i` and using the pointer as the key.
+	 */
+	public function multiLiteralKeys() -> array
+	{
+		array result = [];
+		let result[0][1] = "v";
+		return result;
+	}
+
+	public function multiIntKey(int key) -> array
+	{
+		array result = [];
+		let result[key][2] = "v";
+		return result;
+	}
+
+	public function multiUintKey(uint key) -> array
+	{
+		array result = [];
+		let result[key][2] = "v";
+		return result;
+	}
+
+	public function multiLongKey(long key) -> array
+	{
+		array result = [];
+		let result[key][2] = "v";
+		return result;
+	}
+
+	public function multiUlongKey(ulong key) -> array
+	{
+		array result = [];
+		let result[key][2] = "v";
+		return result;
+	}
+
+	/** Enough offsets to spill past the register arguments. */
+	public function multiDeepKeys() -> array
+	{
+		array result = [];
+		let result[0][1][2][3][4][5][6][7][8] = "v";
+		return result;
+	}
+
+	/** Mixed string and integer offsets in one call. */
+	public function multiMixedKeys(long key) -> array
+	{
+		array result = [];
+		let result["k"][key] = "v";
+		return result;
+	}
 }

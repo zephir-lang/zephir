@@ -165,7 +165,7 @@ PHP_METHOD(Stub_MultiDimArray, generateTyped)
 					j = _5$$3;
 					ZEPHIR_INIT_NVAR(&_7$$4);
 					ZVAL_LONG(&_7$$4, 1);
-					zephir_array_update_multi(&output, &_7$$4, SL("ll"), 2, i, j);
+					zephir_array_update_multi(&output, &_7$$4, SL("ll"), 2, (zend_long) i, (zend_long) j);
 				}
 			}
 		}
@@ -190,7 +190,7 @@ PHP_METHOD(Stub_MultiDimArray, intKeys)
 	array_init(&a);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 10);
-	zephir_array_update_multi(&a, &_0, SL("ll"), 2, 0, 1);
+	zephir_array_update_multi(&a, &_0, SL("ll"), 2, (zend_long) 0, (zend_long) 1);
 	RETURN_CCTOR(&a);
 }
 
@@ -253,10 +253,10 @@ PHP_METHOD(Stub_MultiDimArray, mixedKeys)
 	array_init(&a);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
-	zephir_array_update_multi(&a, &_0, SL("sl"), 3, SL("k"), 0);
+	zephir_array_update_multi(&a, &_0, SL("sl"), 3, SL("k"), (zend_long) 0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_LONG(&_0, 2);
-	zephir_array_update_multi(&a, &_0, SL("ls"), 3, 1, SL("k"));
+	zephir_array_update_multi(&a, &_0, SL("ls"), 3, (zend_long) 1, SL("k"));
 	RETURN_CCTOR(&a);
 }
 
@@ -279,10 +279,10 @@ PHP_METHOD(Stub_MultiDimArray, appendFinal)
 	array_init(&a);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "first");
-	zephir_array_update_multi(&a, &_0, SL("la"), 2, 0);
+	zephir_array_update_multi(&a, &_0, SL("la"), 2, (zend_long) 0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "second");
-	zephir_array_update_multi(&a, &_1, SL("la"), 2, 0);
+	zephir_array_update_multi(&a, &_1, SL("la"), 2, (zend_long) 0);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_LONG(&_2, 1);
 	zephir_array_update_multi(&a, &_2, SL("sa"), 3, SL("bag"));
@@ -307,10 +307,10 @@ PHP_METHOD(Stub_MultiDimArray, overwriteFinal)
 	array_init(&a);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
-	zephir_array_update_multi(&a, &_0, SL("ll"), 2, 0, 0);
+	zephir_array_update_multi(&a, &_0, SL("ll"), 2, (zend_long) 0, (zend_long) 0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_LONG(&_0, 2);
-	zephir_array_update_multi(&a, &_0, SL("ll"), 2, 0, 0);
+	zephir_array_update_multi(&a, &_0, SL("ll"), 2, (zend_long) 0, (zend_long) 0);
 	RETURN_CCTOR(&a);
 }
 

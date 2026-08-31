@@ -37,6 +37,13 @@ PHP_METHOD(Stub_Issue2666, modLongVar);
 PHP_METHOD(Stub_Issue2666, modDoubleVar);
 PHP_METHOD(Stub_Issue2666, divLiteralDoubleByDouble);
 PHP_METHOD(Stub_Issue2666, modLiteralDoubleByDouble);
+PHP_METHOD(Stub_Issue2666, multiLiteralKeys);
+PHP_METHOD(Stub_Issue2666, multiIntKey);
+PHP_METHOD(Stub_Issue2666, multiUintKey);
+PHP_METHOD(Stub_Issue2666, multiLongKey);
+PHP_METHOD(Stub_Issue2666, multiUlongKey);
+PHP_METHOD(Stub_Issue2666, multiDeepKeys);
+PHP_METHOD(Stub_Issue2666, multiMixedKeys);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2666_longparamtostring, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, number, IS_LONG, 0)
@@ -193,6 +200,32 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2666_modliteraldoublebydouble, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, b, IS_DOUBLE, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2666_multiliteralkeys, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2666_multiintkey, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_TYPE_INFO(0, key, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2666_multiuintkey, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_TYPE_INFO(0, key, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2666_multilongkey, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_TYPE_INFO(0, key, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2666_multiulongkey, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_TYPE_INFO(0, key, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2666_multideepkeys, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2666_multimixedkeys, 0, 1, IS_ARRAY, 0)
+	ZEND_ARG_TYPE_INFO(0, key, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_issue2666_method_entry) {
 	PHP_ME(Stub_Issue2666, longParamToString, arginfo_stub_issue2666_longparamtostring, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Issue2666, ulongParamToString, arginfo_stub_issue2666_ulongparamtostring, ZEND_ACC_PUBLIC)
@@ -228,5 +261,12 @@ ZEPHIR_INIT_FUNCS(stub_issue2666_method_entry) {
 	PHP_ME(Stub_Issue2666, modDoubleVar, arginfo_stub_issue2666_moddoublevar, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Issue2666, divLiteralDoubleByDouble, arginfo_stub_issue2666_divliteraldoublebydouble, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Issue2666, modLiteralDoubleByDouble, arginfo_stub_issue2666_modliteraldoublebydouble, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2666, multiLiteralKeys, arginfo_stub_issue2666_multiliteralkeys, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2666, multiIntKey, arginfo_stub_issue2666_multiintkey, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2666, multiUintKey, arginfo_stub_issue2666_multiuintkey, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2666, multiLongKey, arginfo_stub_issue2666_multilongkey, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2666, multiUlongKey, arginfo_stub_issue2666_multiulongkey, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2666, multiDeepKeys, arginfo_stub_issue2666_multideepkeys, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2666, multiMixedKeys, arginfo_stub_issue2666_multimixedkeys, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

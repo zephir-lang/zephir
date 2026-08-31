@@ -583,3 +583,165 @@ PHP_METHOD(Stub_Issue2666, modLiteralDoubleByDouble)
 	RETURN_LONG(zephir_safe_mod_double_double(2.5, b));
 }
 
+/**
+ * Multi-dimensional keys reach `zephir_array_update_multi()` through a
+ * variadic slot read back as `zend_long`. An integer literal is a C `int`,
+ * so the upper half of the slot was whatever the ABI left there: on Windows
+ * `a[0][1]` produced the key 140733193388033. `uint`/`ulong` were worse,
+ * passing `&i` and using the pointer as the key.
+ */
+PHP_METHOD(Stub_Issue2666, multiLiteralKeys)
+{
+	zval _0;
+	zval result;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+
+	ZVAL_UNDEF(&result);
+	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&result);
+	array_init(&result);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_STRING(&_0, "v");
+	zephir_array_update_multi(&result, &_0, SL("ll"), 2, (zend_long) 0, (zend_long) 1);
+	RETURN_CTOR(&result);
+}
+
+PHP_METHOD(Stub_Issue2666, multiIntKey)
+{
+	zval result;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *key_param = NULL, _0;
+	zend_long key;
+
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&result);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(key)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &key_param);
+	ZEPHIR_INIT_VAR(&result);
+	array_init(&result);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_STRING(&_0, "v");
+	zephir_array_update_multi(&result, &_0, SL("ll"), 2, (zend_long) key, (zend_long) 2);
+	RETURN_CTOR(&result);
+}
+
+PHP_METHOD(Stub_Issue2666, multiUintKey)
+{
+	zval result;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *key_param = NULL, _0;
+	zend_ulong key;
+
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&result);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(key)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &key_param);
+	ZEPHIR_INIT_VAR(&result);
+	array_init(&result);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_STRING(&_0, "v");
+	zephir_array_update_multi(&result, &_0, SL("ll"), 2, (zend_long) key, (zend_long) 2);
+	RETURN_CTOR(&result);
+}
+
+PHP_METHOD(Stub_Issue2666, multiLongKey)
+{
+	zval result;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *key_param = NULL, _0;
+	zend_long key;
+
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&result);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(key)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &key_param);
+	ZEPHIR_INIT_VAR(&result);
+	array_init(&result);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_STRING(&_0, "v");
+	zephir_array_update_multi(&result, &_0, SL("ll"), 2, (zend_long) key, (zend_long) 2);
+	RETURN_CTOR(&result);
+}
+
+PHP_METHOD(Stub_Issue2666, multiUlongKey)
+{
+	zval result;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *key_param = NULL, _0;
+	zend_ulong key;
+
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&result);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(key)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &key_param);
+	ZEPHIR_INIT_VAR(&result);
+	array_init(&result);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_STRING(&_0, "v");
+	zephir_array_update_multi(&result, &_0, SL("ll"), 2, (zend_long) key, (zend_long) 2);
+	RETURN_CTOR(&result);
+}
+
+/** Enough offsets to spill past the register arguments. */
+PHP_METHOD(Stub_Issue2666, multiDeepKeys)
+{
+	zval _0;
+	zval result;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+
+	ZVAL_UNDEF(&result);
+	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&result);
+	array_init(&result);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_STRING(&_0, "v");
+	zephir_array_update_multi(&result, &_0, SL("lllllllll"), 9, (zend_long) 0, (zend_long) 1, (zend_long) 2, (zend_long) 3, (zend_long) 4, (zend_long) 5, (zend_long) 6, (zend_long) 7, (zend_long) 8);
+	RETURN_CTOR(&result);
+}
+
+/** Mixed string and integer offsets in one call. */
+PHP_METHOD(Stub_Issue2666, multiMixedKeys)
+{
+	zval result;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *key_param = NULL, _0;
+	zend_long key;
+
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&result);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(key)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &key_param);
+	ZEPHIR_INIT_VAR(&result);
+	array_init(&result);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_STRING(&_0, "v");
+	zephir_array_update_multi(&result, &_0, SL("sl"), 3, SL("k"), (zend_long) key);
+	RETURN_CTOR(&result);
+}
+

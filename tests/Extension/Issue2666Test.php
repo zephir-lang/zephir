@@ -245,6 +245,58 @@ final class Issue2666Test extends TestCase
     }
 
     /**
+     * A multi-dimensional key travels through a variadic slot that
+     * `zephir_array_update_multi()` reads back as `zend_long`. Passing it as a
+     * C `int`, which every integer literal is, leaves the upper half of the
+     * slot undefined; Windows returned keys such as 140733193388033 for 1.
+     * `uint`/`ulong` offsets were passed as `&i` and used the pointer value.
+     *
+     * @dataProvider sixtyFourBitProvider
+     */
+    public function testMultiDimensionalKeysMatchPhp(int $key): void
+    {
+        $this->assertMatchesPhp(
+            fn () => $this->test->multiIntKey($key),
+            fn () => [$key => [2 => 'v']]
+        );
+        $this->assertMatchesPhp(
+            fn () => $this->test->multiLongKey($key),
+            fn () => [$key => [2 => 'v']]
+        );
+        $this->assertMatchesPhp(
+            fn () => $this->test->multiMixedKeys($key),
+            fn () => ['k' => [$key => 'v']]
+        );
+    }
+
+    /**
+     * @dataProvider unsignedProvider
+     */
+    public function testUnsignedMultiDimensionalKeysMatchPhp(int $key): void
+    {
+        $this->assertMatchesPhp(
+            fn () => $this->test->multiUintKey($key),
+            fn () => [$key => [2 => 'v']]
+        );
+        $this->assertMatchesPhp(
+            fn () => $this->test->multiUlongKey($key),
+            fn () => [$key => [2 => 'v']]
+        );
+    }
+
+    public function testLiteralMultiDimensionalKeysMatchPhp(): void
+    {
+        $this->assertMatchesPhp(
+            fn () => $this->test->multiLiteralKeys(),
+            fn () => [0 => [1 => 'v']]
+        );
+        $this->assertMatchesPhp(
+            fn () => $this->test->multiDeepKeys(),
+            fn () => [0 => [1 => [2 => [3 => [4 => [5 => [6 => [7 => [8 => 'v']]]]]]]]]
+        );
+    }
+
+    /**
      * Every shape of `%` the compiler can emit, against the identical PHP
      * expression. PHP's `%` always yields an `int`, so routing the result
      * through a C `double` -- which Zephir did -- loses every value above

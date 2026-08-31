@@ -1103,8 +1103,11 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 	zval *item;
 	zval pzv;
 	zend_array *p;
-	int i, l, re_update, must_continue, wrap_tmp;
+	int i, re_update, must_continue, wrap_tmp;
 	zend_long ll;
+	/* SL() yields sizeof(...) - 1, a size_t, so that is what the variadic
+	 * slot holds. Reading it back as `int` was reading half of it. */
+	size_t l;
 
 	ZVAL_UNDEF(&pzv);
 
@@ -1128,7 +1131,7 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 
 			case 's':
 				s = va_arg(ap, char*);
-				l = va_arg(ap, int);
+				l = va_arg(ap, size_t);
 
 				/*
 				 * Issue #1884: the final offset overwrites its slot regardless of
