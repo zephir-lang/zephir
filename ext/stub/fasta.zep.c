@@ -122,7 +122,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	ZEPHIR_INIT_NVAR(&j);
 	ZVAL_LONG(&j, 0);
 	ZEPHIR_INIT_NVAR(&k);
-	ZVAL_DOUBLE(&k, zephir_safe_mod_zval_long(&l, i));
+	ZVAL_LONG(&k, zephir_safe_mod_zval_long(&l, i));
 	while (1) {
 		if (!(ZEPHIR_LT(&j, &k))) {
 			break;
@@ -135,7 +135,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	if (zephir_safe_mod_zval_long(n, 60) > 0) {
 		zephir_array_fetch(&_12$$7, &lines, &k, PH_NOISY | PH_READONLY, "stub/fasta.zep", 43);
 		ZVAL_LONG(&_13$$7, 0);
-		ZVAL_DOUBLE(&_14$$7, zephir_safe_mod_zval_long(n, 60));
+		ZVAL_LONG(&_14$$7, zephir_safe_mod_zval_long(n, 60));
 		ZEPHIR_INIT_VAR(&_15$$7);
 		zephir_substr(&_15$$7, &_12$$7, 0 , zephir_get_intval(&_14$$7), 0);
 		zend_print_zval(&_15$$7, 0);

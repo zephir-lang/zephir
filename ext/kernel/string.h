@@ -31,8 +31,8 @@ void zephir_fast_strtolower(zval *return_value, zval *str);
 void zephir_fast_strtoupper(zval *return_value, zval *str);
 void zephir_fast_join(zval *result, zval *glue, zval *pieces);
 void zephir_fast_join_str(zval *result, char *glue, unsigned int glue_length, zval *pieces);
-void zephir_fast_explode(zval *result, zval *delimiter, zval *str, long limit);
-void zephir_fast_explode_str(zval *result, const char *delimiter, int delimiter_length, zval *str, long limit);
+void zephir_fast_explode(zval *result, zval *delimiter, zval *str, zend_long limit);
+void zephir_fast_explode_str(zval *result, const char *delimiter, int delimiter_length, zval *str, zend_long limit);
 void zephir_fast_strpos(zval *return_value, const zval *haystack, const zval *needle, unsigned int offset);
 void zephir_fast_strpos_str(zval *return_value, const zval *haystack, char *needle, unsigned int needle_length);
 void zephir_fast_trim(zval *return_value, zval *str, zval *charlist, int where);
@@ -57,10 +57,10 @@ int zephir_json_encode(zval *return_value, zval *v, int opts);
 int zephir_json_decode(zval *return_value, zval *v, zend_bool assoc);
 
 /* Substr */
-void zephir_substr(zval *return_value, zval *str, long from, long length, int flags);
+void zephir_substr(zval *return_value, zval *str, zend_long from, zend_long length, int flags);
 
 /** Preg-Match */
-void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *matches, int global, long flags, long offset);
+void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *matches, int global, zend_long flags, zend_long offset);
 
 /** Hash */
 void zephir_md5(zval *return_value, zval *str);

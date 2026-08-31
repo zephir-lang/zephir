@@ -2053,12 +2053,20 @@ class Backend
                 $code = 'unsigned char';
                 break;
 
+            /**
+             * All four integer types describe a PHP `int`, which the engine
+             * keeps in a `zend_long` (`int64_t`). A C `long` would instead
+             * follow the data model: 64-bit under LP64, 32-bit under LLP64
+             * (Windows x64).
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2666
+             */
             case 'long':
-                $code = 'long';
+                $code = 'zend_long';
                 break;
 
             case 'ulong':
-                $code = 'unsigned long';
+                $code = 'zend_ulong';
                 break;
 
             case 'bool':
@@ -2836,6 +2844,27 @@ class Backend
      *
      * @throws CompilerException
      */
+    /**
+     * An `l` index reaches zephir_array_update_multi() and friends through a
+     * variadic slot, where the callee reads it back with `va_arg(ap,
+     * zend_long)`. An argument passed as a plain C `int` (every integer
+     * literal is one) therefore has its upper half read as whatever the ABI
+     * left there: on Windows that produced keys like 140733193388033 instead
+     * of 1. The cast makes the argument's type match the read on every ABI.
+     *
+     * A cast binds tighter than any binary operator, so this relies on the
+     * offset's code being an atom or already parenthesised. Every producer
+     * that reaches here satisfies that: integer literals and constants fold to
+     * a single token, and ArithmeticalBaseOperator wraps its result in
+     * parentheses.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2666
+     */
+    private function castMultiIndex(string $code): string
+    {
+        return '(zend_long) ' . $code;
+    }
+
     private function resolveOffsetExprs(array $offsetExprs, CompilationContext $compilationContext): array
     {
         $keys         = '';
@@ -2855,7 +2884,7 @@ class Backend
                 case 'long':
                 case 'ulong':
                     $keys          .= 'l';
-                    $offsetItems[] = $offsetExpr->getCode();
+                    $offsetItems[] = $this->castMultiIndex($offsetExpr->getCode());
                     ++$numberParams;
                     break;
 
@@ -2876,8 +2905,15 @@ class Backend
                         case 'uint':
                         case 'long':
                         case 'ulong':
-                            $keys          .= 'l';
-                            $offsetItems[] = $this->getVariableCode($variableIndex);
+                            $keys .= 'l';
+                            /**
+                             * A native integer local is the value itself, not
+                             * a zval, so getVariableCode() would hand the
+                             * variadic slot a `&name` pointer for `uint` and
+                             * `ulong` (it only bypasses `int` and `long`).
+                             */
+                            $variableIndex->setUsed(true);
+                            $offsetItems[] = $this->castMultiIndex($variableIndex->getName());
                             ++$numberParams;
                             break;
                         case 'string':

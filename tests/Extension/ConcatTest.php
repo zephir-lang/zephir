@@ -87,17 +87,18 @@ final class ConcatTest extends TestCase
     }
 
     /**
-     * Zephir's `long` is a C `long`, so it is 32-bit on Windows LLP64 while
-     * `int` is a 64-bit `zend_long` everywhere. The 64-bit range is asserted on
-     * the `int` variant above; this one only has to prove the `long` operand
-     * reaches the same helper.
+     * `long` is a `zend_long` on every platform since #2666, so it carries the
+     * same 64-bit range as `int`. Before that it was a C `long`, 32-bit under
+     * Windows LLP64, and PHP_INT_MAX came back as `n=-1` there.
      *
      * @issue https://github.com/zephir-lang/zephir/issues/2660
-     * @see   https://github.com/zephir-lang/zephir/issues/2666
+     * @issue https://github.com/zephir-lang/zephir/issues/2666
      */
     public function testShouldConcatenateStringWithLongVariable(): void
     {
-        $this->assertSame('n=' . 2147483647, $this->test->testConcatStringWithLongVar());
+        foreach ([0, 5, -5, 2147483647, PHP_INT_MAX, PHP_INT_MIN] as $number) {
+            $this->assertSame('n=' . $number, $this->test->testConcatStringWithLongVar($number));
+        }
     }
 
     /**

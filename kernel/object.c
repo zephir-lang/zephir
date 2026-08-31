@@ -1045,13 +1045,14 @@ int zephir_update_property_array_multi(zval *object, const char *property, uint3
 			va_start(ap, types_count);
 			switch (types[0]) {
 				case 's': {
-					char *str = va_arg(ap, char*);
-					int len   = va_arg(ap, int);
+					char *str  = va_arg(ap, char*);
+					/* SL() pushes a size_t; see kernel/array.c. */
+					size_t len = va_arg(ap, size_t);
 					ZVAL_STRINGL(&offset, str, len);
 					break;
 				}
 				case 'l':
-					ZVAL_LONG(&offset, va_arg(ap, long));
+					ZVAL_LONG(&offset, va_arg(ap, zend_long));
 					break;
 				case 'z':
 					ZVAL_COPY(&offset, va_arg(ap, zval*));

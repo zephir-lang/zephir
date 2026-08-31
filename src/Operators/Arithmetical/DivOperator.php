@@ -132,15 +132,14 @@ class DivOperator extends ArithmeticalBaseOperator
                     case 'ulong':
                         return new CompiledExpression(
                             'double',
-                            'zephir_safe_div_double_long(' . $left->getCode() . ', (double) (' . $right->getCode(
-                            ) . '))',
+                            'zephir_safe_div_double_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
                             $expression
                         );
 
                     case 'double':
                         return new CompiledExpression(
                             'double',
-                            'zephir_safe_div_double_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
+                            'zephir_safe_div_double_double(' . $left->getCode() . ', ' . $right->getCode() . ')',
                             $expression
                         );
 
@@ -428,10 +427,17 @@ class DivOperator extends ArithmeticalBaseOperator
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                            case 'double':
                                 return new CompiledExpression(
                                     'double',
                                     'zephir_safe_div_double_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
+                                    $expression
+                                );
+
+                            case 'double':
+                                return new CompiledExpression(
+                                    'double',
+                                    'zephir_safe_div_double_double('
+                                    . $left->getCode() . ', ' . $right->getCode() . ')',
                                     $expression
                                 );
 
@@ -457,14 +463,14 @@ class DivOperator extends ArithmeticalBaseOperator
                                         return new CompiledExpression(
                                             'double',
                                             'zephir_safe_div_double_long(' . $variableLeft->getName(
-                                            ) . ',  (double) ' . $variableRight->getName() . ')',
+                                            ) . ', ' . $variableRight->getName() . ')',
                                             $expression
                                         );
 
                                     case 'double':
                                         return new CompiledExpression(
                                             'double',
-                                            'zephir_safe_div_double_long(' . $variableLeft->getName(
+                                            'zephir_safe_div_double_double(' . $variableLeft->getName(
                                             ) . ', ' . $variableRight->getName() . ')',
                                             $expression
                                         );

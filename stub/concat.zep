@@ -86,17 +86,17 @@ class Concat
 	}
 
 	/**
-	 * `long` is a C `long`, which is 32-bit on Windows LLP64, so this stays a
-	 * local holding a 32-bit-safe value. The 64-bit range is exercised through
-	 * the `int` variant above, which is a `zend_long` on every platform.
+	 * `long` is a `zend_long` on every platform since #2666, so this carries
+	 * the full 64-bit range exactly like the `int` variant above. It used to
+	 * be a C `long`, 32-bit under Windows LLP64, and this method held a
+	 * 32-bit-safe local to keep CI green.
 	 *
 	 * @link https://github.com/zephir-lang/zephir/issues/2660
-	 * @see  https://github.com/zephir-lang/zephir/issues/2666
+	 * @link https://github.com/zephir-lang/zephir/issues/2666
 	 */
-	public function testConcatStringWithLongVar() -> string
+	public function testConcatStringWithLongVar(long number) -> string
 	{
 		string retval = "n=";
-		long number = 2147483647;
 		let retval .= number;
 		return retval;
 	}

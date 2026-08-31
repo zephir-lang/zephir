@@ -55,7 +55,7 @@ void zep_Stub_McallInternal_b(int ht, zend_execute_data *execute_data, zval *ret
 void zep_Stub_McallInternal_c(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext)
 {
 	zval *a_param = NULL, *b_param = NULL;
-	long a, b;
+	zend_long a, b;
 	a_param = a_param_ext;
 
 	b_param = b_param_ext;
@@ -154,7 +154,7 @@ PHP_METHOD(Stub_McallInternal, g)
 {
 	zval _3$$3, _4$$3, _5$$3;
 	zend_bool _0;
-	long i = 0;
+	zend_long i = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, a, _1, _2;
 	zval *this_ptr = getThis();
@@ -193,7 +193,7 @@ PHP_METHOD(Stub_McallInternal, g)
 void zep_Stub_McallInternal_other(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext)
 {
 	zval *a_param = NULL, *b_param = NULL;
-	long a, b;
+	zend_long a, b;
 	a_param = a_param_ext;
 
 	b_param = b_param_ext;
@@ -207,7 +207,7 @@ PHP_METHOD(Stub_McallInternal, callFibonacci)
 {
 	zval _3$$3, _4$$3, _5$$3;
 	zend_bool _0;
-	long i;
+	zend_long i;
 	double p;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1, _2;

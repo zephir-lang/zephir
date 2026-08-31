@@ -333,7 +333,7 @@ PHP_METHOD(Stub_Scall, testCall15)
 PHP_METHOD(Stub_Scall, testMethod16)
 {
 	zval *a_param = NULL, *b_param = NULL;
-	long a, b;
+	zend_long a, b;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(a)
@@ -350,7 +350,7 @@ PHP_METHOD(Stub_Scall, testCall17)
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1;
 	zephir_fcall_cache_entry *_4 = NULL;
 	zval *k_param = NULL, *p, p_sub, _3$$3;
-	long k, i = 0, j, _2;
+	zend_long k, i = 0, j, _2;
 
 	ZVAL_UNDEF(&p_sub);
 	ZVAL_UNDEF(&_3$$3);
@@ -391,7 +391,7 @@ PHP_METHOD(Stub_Scall, testCall18)
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1;
 	zephir_fcall_cache_entry *_4 = NULL;
 	zval *k_param = NULL, *p, p_sub, _3$$3;
-	long k, i = 0, j, _2;
+	zend_long k, i = 0, j, _2;
 
 	ZVAL_UNDEF(&p_sub);
 	ZVAL_UNDEF(&_3$$3);

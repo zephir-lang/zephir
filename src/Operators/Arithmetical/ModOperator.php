@@ -20,6 +20,17 @@ use Zephir\Types\Types;
 
 /**
  * Generates an arithmetical operation according to the operands
+ *
+ * PHP's `%` converts both operands to `zend_long` and always yields an `int`,
+ * so every `zephir_safe_mod_*` result is typed `int` here. Typing it `double`
+ * -- as this did -- routed the result through a C double and lost every value
+ * above 2^53 on every platform.
+ *
+ * The `$bitOperator` branches below are still wrong for a bool operand:
+ * they emit a subtraction and type the result `bool`.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2666
+ * @see https://github.com/zephir-lang/zephir/issues/2677
  */
 class ModOperator extends ArithmeticalBaseOperator
 {
@@ -48,14 +59,14 @@ class ModOperator extends ArithmeticalBaseOperator
                     case Types::T_LONG:
                     case Types::T_ULONG:
                         return new CompiledExpression(
-                            'double',
+                            'int',
                             'zephir_safe_mod_long_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
                             $expression
                         );
 
                     case Types::T_DOUBLE:
                         return new CompiledExpression(
-                            'double',
+                            'int',
                             'zephir_safe_mod_long_double((double) ' . $left->getCode() . ', ' . $right->getCode() . ')',
                             $expression
                         );
@@ -79,19 +90,19 @@ class ModOperator extends ArithmeticalBaseOperator
                             Types::T_LONG,
                             Types::T_ULONG,
                             Types::T_BOOL     => new CompiledExpression(
-                                'double',
+                                'int',
                                 'zephir_safe_mod_long_long('
                                 . $left->getCode() . ', ' . $variableRight->getName() . ')',
                                 $expression
                             ),
                             Types::T_DOUBLE   => new CompiledExpression(
-                                'double',
+                                'int',
                                 'zephir_safe_mod_long_double('
                                 . $left->getCode() . ', ' . $variableRight->getName() . ')',
                                 $expression
                             ),
                             Types::T_VARIABLE => new CompiledExpression(
-                                'double',
+                                'int',
                                 'zephir_safe_mod_long_zval('
                                 . $left->getCode()
                                 . ', '
@@ -125,22 +136,21 @@ class ModOperator extends ArithmeticalBaseOperator
                     case Types::T_LONG:
                     case Types::T_ULONG:
                         return new CompiledExpression(
-                            'double',
-                            'zephir_safe_mod_double_long(' . $left->getCode() . ', (double) (' . $right->getCode(
-                            ) . '))',
+                            'int',
+                            'zephir_safe_mod_double_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
                             $expression
                         );
 
                     case Types::T_DOUBLE:
                         return new CompiledExpression(
-                            'double',
-                            'zephir_safe_mod_double_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
+                            'int',
+                            'zephir_safe_mod_double_double(' . $left->getCode() . ', ' . $right->getCode() . ')',
                             $expression
                         );
 
                     case Types::T_BOOL:
                         return new CompiledExpression(
-                            'double',
+                            'int',
                             'zephir_safe_mod_double_long(' . $left->getCode() . ', ' . $right->getBooleanCode() . ')',
                             $expression
                         );
@@ -158,19 +168,19 @@ class ModOperator extends ArithmeticalBaseOperator
                             Types::T_LONG,
                             Types::T_ULONG,
                             Types::T_BOOL     => new CompiledExpression(
-                                'double',
+                                'int',
                                 'zephir_safe_mod_double_long('
                                 . $left->getCode() . ', ' . $variableRight->getName() . ')',
                                 $expression
                             ),
                             Types::T_DOUBLE   => new CompiledExpression(
-                                'double',
+                                'int',
                                 'zephir_safe_mod_double_double('
                                 . $left->getCode() . ', ' . $variableRight->getName() . ')',
                                 $expression
                             ),
                             Types::T_VARIABLE => new CompiledExpression(
-                                'double',
+                                'int',
                                 'zephir_safe_mod_double_zval('
                                 . $left->getCode()
                                 . ', '
@@ -219,14 +229,14 @@ class ModOperator extends ArithmeticalBaseOperator
                             case Types::T_LONG:
                             case Types::T_ULONG:
                                 return new CompiledExpression(
-                                    'double',
+                                    'int',
                                     'zephir_safe_mod_long_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
                                     $expression
                                 );
 
                             case Types::T_DOUBLE:
                                 return new CompiledExpression(
-                                    'double',
+                                    'int',
                                     'zephir_safe_mod_long_double(' . $left->getCode() . ', ' . $right->getCode() . ')',
                                     $expression
                                 );
@@ -244,19 +254,19 @@ class ModOperator extends ArithmeticalBaseOperator
                                     Types::T_LONG,
                                     Types::T_ULONG,
                                     Types::T_BOOL     => new CompiledExpression(
-                                        'double',
+                                        'int',
                                         'zephir_safe_mod_long_long('
                                         . $variableLeft->getName() . ', ' . $variableRight->getName() . ')',
                                         $expression
                                     ),
                                     Types::T_DOUBLE   => new CompiledExpression(
-                                        'double',
+                                        'int',
                                         'zephir_safe_mod_long_double('
                                         . $variableLeft->getName() . ', ' . $variableRight->getName() . ')',
                                         $expression
                                     ),
                                     Types::T_VARIABLE => new CompiledExpression(
-                                        'double',
+                                        'int',
                                         'zephir_safe_mod_long_zval('
                                         . $variableLeft->getName()
                                         . ', '
@@ -313,7 +323,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                     case Types::T_LONG:
                                     case Types::T_ULONG:
                                         return new CompiledExpression(
-                                            'double',
+                                            'int',
                                             'zephir_safe_mod_long_long('
                                             . $variableLeft->getName()
                                             . ', '
@@ -324,7 +334,7 @@ class ModOperator extends ArithmeticalBaseOperator
 
                                     case Types::T_DOUBLE:
                                         return new CompiledExpression(
-                                            'double',
+                                            'int',
                                             'zephir_safe_mod_long_double('
                                             . $variableLeft->getName()
                                             . ', '
@@ -335,7 +345,7 @@ class ModOperator extends ArithmeticalBaseOperator
 
                                     case Types::T_BOOL:
                                         return new CompiledExpression(
-                                            'double',
+                                            'int',
                                             'zephir_safe_mod_long_long('
                                             . $variableLeft->getName()
                                             . ' '
@@ -349,7 +359,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                     case Types::T_VARIABLE:
                                         $compilationContext->headersManager->add('kernel/operators');
                                         return new CompiledExpression(
-                                            'double',
+                                            'int',
                                             'zephir_safe_mod_long_zval('
                                             . $variableLeft->getName()
                                             . ', '
@@ -383,10 +393,17 @@ class ModOperator extends ArithmeticalBaseOperator
                             case Types::T_UINT:
                             case Types::T_LONG:
                             case Types::T_ULONG:
+                                return new CompiledExpression(
+                                    'int',
+                                    'zephir_safe_mod_double_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
+                                    $expression
+                                );
+
                             case Types::T_DOUBLE:
                                 return new CompiledExpression(
-                                    'double',
-                                    'zephir_safe_mod_double_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
+                                    'int',
+                                    'zephir_safe_mod_double_double('
+                                    . $left->getCode() . ', ' . $right->getCode() . ')',
                                     $expression
                                 );
 
@@ -410,16 +427,16 @@ class ModOperator extends ArithmeticalBaseOperator
                                     case Types::T_LONG:
                                     case Types::T_ULONG:
                                         return new CompiledExpression(
-                                            'double',
+                                            'int',
                                             'zephir_safe_mod_double_long(' . $variableLeft->getName(
-                                            ) . ',  (double) ' . $variableRight->getName() . ')',
+                                            ) . ', ' . $variableRight->getName() . ')',
                                             $expression
                                         );
 
                                     case Types::T_DOUBLE:
                                         return new CompiledExpression(
-                                            'double',
-                                            'zephir_safe_mod_double_long(' . $variableLeft->getName(
+                                            'int',
+                                            'zephir_safe_mod_double_double(' . $variableLeft->getName(
                                             ) . ', ' . $variableRight->getName() . ')',
                                             $expression
                                         );
@@ -435,7 +452,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                     case Types::T_VARIABLE:
                                         $compilationContext->headersManager->add('kernel/operators');
                                         return new CompiledExpression(
-                                            'double',
+                                            'int',
                                             'zephir_safe_mod_double_zval('
                                             . $variableLeft->getName()
                                             . ', '
@@ -478,7 +495,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                 $op2 = $right->getCode();
 
                                 return new CompiledExpression(
-                                    'double',
+                                    'int',
                                     'zephir_safe_mod_zval_long(' . $op1 . ', ' . $op2 . ')',
                                     $expression
                                 );
@@ -488,7 +505,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                 $op2 = $right->getCode();
 
                                 return new CompiledExpression(
-                                    'double',
+                                    'int',
                                     'zephir_safe_mod_zval_double(' . $op1 . ', ' . $op2 . ')',
                                     $expression
                                 );
@@ -508,7 +525,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                     case Types::T_LONG:
                                     case Types::T_ULONG:
                                         return new CompiledExpression(
-                                            'double',
+                                            'int',
                                             'zephir_safe_mod_zval_long('
                                             . $op1 . ', ' . $variableRight->getName() . ')',
                                             $expression

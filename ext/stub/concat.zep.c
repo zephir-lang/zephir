@@ -215,26 +215,30 @@ PHP_METHOD(Stub_Concat, testConcatStringWithIntVar)
 }
 
 /**
- * `long` is a C `long`, which is 32-bit on Windows LLP64, so this stays a
- * local holding a 32-bit-safe value. The 64-bit range is exercised through
- * the `int` variant above, which is a `zend_long` on every platform.
+ * `long` is a `zend_long` on every platform since #2666, so this carries
+ * the full 64-bit range exactly like the `int` variant above. It used to
+ * be a C `long`, 32-bit under Windows LLP64, and this method held a
+ * 32-bit-safe local to keep CI green.
  *
  * @link https://github.com/zephir-lang/zephir/issues/2660
- * @see  https://github.com/zephir-lang/zephir/issues/2666
+ * @link https://github.com/zephir-lang/zephir/issues/2666
  */
 PHP_METHOD(Stub_Concat, testConcatStringWithLongVar)
 {
-	long number;
 	zval retval;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *number_param = NULL;
+	zend_long number;
 
 	ZVAL_UNDEF(&retval);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(number)
+	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
+	zephir_fetch_params(1, 1, 0, &number_param);
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
-	number = 2147483647;
 	zephir_concat_self_long(&retval, number);
 	RETURN_CTOR(&retval);
 }
@@ -264,7 +268,7 @@ PHP_METHOD(Stub_Concat, testConcatStringWithUintVar)
  */
 PHP_METHOD(Stub_Concat, testConcatStringWithUlongVar)
 {
-	unsigned long number;
+	zend_ulong number;
 	zval retval;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 

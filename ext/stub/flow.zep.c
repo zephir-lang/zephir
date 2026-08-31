@@ -1168,7 +1168,7 @@ PHP_METHOD(Stub_Flow, testFor16)
 {
 	zend_long _2, _3;
 	zend_bool _1;
-	long _0;
+	zend_long _0;
 	zval a, b, c;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
@@ -1209,7 +1209,7 @@ PHP_METHOD(Stub_Flow, testFor17)
 {
 	zend_long _2, _3;
 	zend_bool _1;
-	long _0;
+	zend_long _0;
 	zval a, b, c;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
@@ -1249,7 +1249,7 @@ PHP_METHOD(Stub_Flow, testFor17)
 PHP_METHOD(Stub_Flow, testFor18)
 {
 	zend_bool _1;
-	long _0;
+	zend_long _0;
 	zval c, _4$$3;
 	zend_long a = 0, b = 0, _2, _3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -1507,7 +1507,7 @@ PHP_METHOD(Stub_Flow, testFor24)
 
 PHP_METHOD(Stub_Flow, testFor30)
 {
-	long _0;
+	zend_long _0;
 	zend_long v = 0;
 	zval b;
 	zval a, _1$$3;
@@ -1534,7 +1534,7 @@ PHP_METHOD(Stub_Flow, testFor30)
 
 PHP_METHOD(Stub_Flow, testFor31)
 {
-	long _0;
+	zend_long _0;
 	zend_long k = 0, v = 0;
 	zval b;
 	zval a, _1$$3;
@@ -1563,7 +1563,7 @@ PHP_METHOD(Stub_Flow, testFor31)
 PHP_METHOD(Stub_Flow, testFor32)
 {
 	zend_bool _4;
-	long sum;
+	zend_long sum;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *e, e_sub, v, *_0, _1, *_2, _3;
@@ -1821,7 +1821,7 @@ PHP_METHOD(Stub_Flow, testFor37)
 PHP_METHOD(Stub_Flow, testFor38)
 {
 	zend_bool _1;
-	long _0;
+	zend_long _0;
 	zval v;
 	zend_long i, _2, _3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -1858,7 +1858,7 @@ PHP_METHOD(Stub_Flow, testFor38)
 PHP_METHOD(Stub_Flow, testFor39)
 {
 	zval _2;
-	long _1;
+	zend_long _1;
 	char _0;
 	zend_long i;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;

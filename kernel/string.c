@@ -282,7 +282,7 @@ int zephir_end_with_str(const zval *str, char *compared, unsigned int compared_l
 /**
  * Makes a substr like the PHP function. This function SUPPORT negative from and length
  */
-void zephir_substr(zval *return_value, zval *str, long f, long l, int flags)
+void zephir_substr(zval *return_value, zval *str, zend_long f, zend_long l, int flags)
 {
 	zval copy;
 	int use_copy = 0;
@@ -712,7 +712,7 @@ int zephir_memnstr_str(const zval *haystack, char *needle, unsigned int needle_l
 /**
  * Fast call to explode php function
  */
-void zephir_fast_explode(zval *return_value, zval *delimiter, zval *str, long limit)
+void zephir_fast_explode(zval *return_value, zval *delimiter, zval *str, zend_long limit)
 {
 	if (UNEXPECTED(Z_TYPE_P(str) != IS_STRING || Z_TYPE_P(delimiter) != IS_STRING)) {
 		zend_error(E_WARNING, "Invalid arguments supplied for explode()");
@@ -726,7 +726,7 @@ void zephir_fast_explode(zval *return_value, zval *delimiter, zval *str, long li
 /**
  * Fast call to explode php function
  */
-void zephir_fast_explode_str(zval *return_value, const char *delim, int delim_length, zval *str, long limit)
+void zephir_fast_explode_str(zval *return_value, const char *delim, int delim_length, zval *str, zend_long limit)
 {
 	zend_string *delimiter;
 
@@ -1044,7 +1044,7 @@ void zephir_fast_str_replace(zval *return_value_ptr, zval *search, zval *replace
 /**
  * Execute preg-match without function lookup in the PHP userland
  */
-void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *matches, int global, long flags, long offset)
+void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *matches, int global, zend_long flags, zend_long offset)
 {
 	int use_copy = 0;
 	zval copy, tmp_matches;
@@ -1104,7 +1104,7 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 
 #else
 
-void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *matches, int global, long flags, long offset)
+void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *matches, int global, zend_long flags, zend_long offset)
 {
 	zval tmp_flags;
 	zval tmp_offset;

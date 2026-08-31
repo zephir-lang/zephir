@@ -332,7 +332,7 @@ PHP_METHOD(Stub_Issue1629, staticIndexTarget)
 	zephir_update_static_property_ce(stub_issue1629_ce, ZEND_STRL("staticParts"), &_0);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_string_offset_read(&_2, &keyspace_zv, nb, PH_NOISY);
-	zephir_update_static_property_array_multi_ce(stub_issue1629_ce, SL("staticParts"), &_2, SL("l"), 1, 0);
+	zephir_update_static_property_array_multi_ce(stub_issue1629_ce, SL("staticParts"), &_2, SL("l"), 1, (zend_long) 0);
 	zephir_read_static_property_ce(&_3, stub_issue1629_ce, SL("staticParts"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTOR(&_3);
 }

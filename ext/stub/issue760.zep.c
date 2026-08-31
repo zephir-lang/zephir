@@ -738,7 +738,7 @@ PHP_METHOD(Stub_Issue760, dynTraverseReverse)
 
 PHP_METHOD(Stub_Issue760, strTraverse)
 {
-	long _0;
+	zend_long _0;
 	zval out;
 	char c = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
