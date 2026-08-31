@@ -64,6 +64,20 @@ class Variable implements TypeAwareInterface
     protected bool $localOnly   = false;
 
     /**
+     * Whether the user wrote a declaration for this local and gave it no value,
+     * as in `var x;` rather than `var x = 1;`.
+     *
+     * Provenance, not policy: it is set only by DeclareStatement, which is the
+     * sole producer of a user-written declaration. That is what separates a
+     * real local from the compiler's own symbols, several of which are created
+     * with a bare addVariable() and written by raw codegen, so they carry no
+     * mutation record while very much being written.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2654
+     */
+    protected bool $declaredWithoutValue = false;
+
+    /**
      * Whether this local holds a PHP reference shared with a closure that
      * captured it with `use (&x)`. Every read and write goes through
      * Z_REFVAL_P(), so both scopes see one storage slot.
@@ -588,6 +602,19 @@ class Variable implements TypeAwareInterface
     }
 
     /**
+     * Whether the user declared this local and gave it no value.
+     */
+    public function isDeclaredWithoutValue(): bool
+    {
+        return $this->declaredWithoutValue;
+    }
+
+    public function setDeclaredWithoutValue(bool $declaredWithoutValue): void
+    {
+        $this->declaredWithoutValue = $declaredWithoutValue;
+    }
+
+    /**
      * Checks if the variable is tracked by the memory manager.
      */
     public function isMemoryTracked(): bool
@@ -601,6 +628,32 @@ class Variable implements TypeAwareInterface
     public function isMixed(): bool
     {
         return 'mixed' === $this->type;
+    }
+
+    /**
+     * Whether the user declared this local without a value and nothing ever
+     * wrote to it, so every read of it sees whatever the declaration left
+     * behind.
+     *
+     * IS_UNDEF at declaration is load-bearing, which is why this is deliberately
+     * narrow. The memory frame registers a zval lazily: ZEPHIR_INIT_NVAR,
+     * ZEPHIR_CPY_WRT, ZEPHIR_OBS_NVAR, ZEPHIR_OBS_COPY_OR_DUP and
+     * ZEPHIR_GEN_RESTORE_ZVAL all call zephir_memory_observe() only while the
+     * target is still undefined. A variable any of those reach has to keep
+     * IS_UNDEF or the value it later holds is never freed. With no writes at all
+     * there is nothing to free, because IS_NULL is not refcounted.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2654
+     */
+    public function isNeverAssigned(): bool
+    {
+        return $this->declaredWithoutValue
+            && 0 === $this->numberMutates
+            && 0 === $this->variantInits
+            // Covers parameters, superglobals and closure captures.
+            && !$this->isExternal
+            && !$this->temporal
+            && !$this->closureReference;
     }
 
     /**

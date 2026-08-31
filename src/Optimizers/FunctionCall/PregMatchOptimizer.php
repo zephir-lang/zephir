@@ -137,6 +137,15 @@ class PregMatchOptimizer extends OptimizerAbstract
                 );
             }
 
+            /**
+             * `matches` is an out-parameter: zephir_preg_match() writes the
+             * captures into it. Nothing else records that, and a variable with
+             * no recorded write looks never-assigned to the compiler.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2654
+             */
+            $variable->increaseMutates();
+
             if (!in_array($variable->getType(), ['variable', 'array'], true)) {
                 throw new CompilerException(
                     sprintf(

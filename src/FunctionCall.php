@@ -632,6 +632,15 @@ class FunctionCall extends Call
 
                             $variable = $compilationContext->symbolTable->getVariable($parameters[$n - 1]);
                             if ($variable) {
+                                /**
+                                 * The callee writes through the reference, so
+                                 * this is a write however much it reads like a
+                                 * read here. Without the record the variable
+                                 * looks never-assigned to the compiler.
+                                 *
+                                 * @see https://github.com/zephir-lang/zephir/issues/2654
+                                 */
+                                $variable->increaseMutates();
                                 $variable->setDynamicTypes('undefined');
                                 $referenceSymbol = $compilationContext->backend->getVariableCode($variable);
                                 $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF(' . $referenceSymbol . ');');
