@@ -160,7 +160,7 @@ PHP_METHOD(Stub_UnspacedMinus, gluedMod)
 		Z_PARAM_LONG(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
-	RETURN_LONG((int) (zephir_safe_mod_long_long(a, 5)));
+	RETURN_LONG((zephir_safe_mod_long_long(a, 5)));
 }
 
 PHP_METHOD(Stub_UnspacedMinus, mulByNegative)

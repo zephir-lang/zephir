@@ -115,7 +115,7 @@ PHP_METHOD(Stub_Issue2394, modulo)
 		Z_PARAM_LONG(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
-	x = (long) (zephir_safe_mod_long_long(a, 3));
+	x = zephir_safe_mod_long_long(a, 3);
 	RETURN_LONG(x);
 }
 

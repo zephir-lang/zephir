@@ -655,7 +655,7 @@ PHP_METHOD(Stub_NativeArray, testArray28)
 
 PHP_METHOD(Stub_NativeArray, testArray29)
 {
-	long b = 0;
+	zend_long b = 0;
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
@@ -738,7 +738,7 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess2)
 
 PHP_METHOD(Stub_NativeArray, testArrayAccess3)
 {
-	long c = 0;
+	zend_long c = 0;
 	zval a, b, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 

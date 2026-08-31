@@ -16,7 +16,6 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Stub\Issue760;
 use stdClass;
-use Throwable;
 
 /**
  * String offsets must behave exactly as PHP's do.
@@ -31,6 +30,8 @@ use Throwable;
  */
 final class Issue760Test extends TestCase
 {
+    use AssertsPhpParity;
+
     private const SUBJECT = 'abcdef';
 
     private Issue760 $test;
@@ -291,6 +292,15 @@ final class Issue760Test extends TestCase
         $this->assertSame([2, 1], $this->test->dynTraverseReverse([1, 2]));
     }
 
+    /**
+     * The extremes are not padding. These offsets reach the kernel through the
+     * `*_long` helpers, whose parameter used to be `unsigned long` -- 32-bit on
+     * Windows, where a negative offset became a huge positive one and a write
+     * tried to grow the string to 4 GB. Windows CI is the only place that can
+     * catch a regression here.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2666
+     */
     public static function intOffsetProvider(): array
     {
         return [
@@ -374,41 +384,5 @@ final class Issue760Test extends TestCase
             'empty'  => ['', [], []],
             'nul'    => ["a\0b", ['a', "\0", 'b'], [97, 0, 98]],
         ];
-    }
-
-    /**
-     * Runs both sides and asserts the diagnostics and the value agree.
-     */
-    private function assertMatchesPhp(callable $extension, callable $php): void
-    {
-        $this->assertSame(
-            $this->transcript($php),
-            $this->transcript($extension),
-            'The extension must behave exactly as PHP does'
-        );
-    }
-
-    private function transcript(callable $subject): string
-    {
-        $diagnostics = [];
-
-        set_error_handler(static function (int $code, string $message) use (&$diagnostics): bool {
-            $diagnostics[] = $message;
-
-            return true;
-        });
-
-        try {
-            $value  = $subject();
-            $result = is_string($value)
-                ? 'string(' . strlen($value) . ') ' . bin2hex($value)
-                : var_export($value, true);
-        } catch (Throwable $e) {
-            $result = get_class($e) . ': ' . $e->getMessage();
-        } finally {
-            restore_error_handler();
-        }
-
-        return implode(' ; ', $diagnostics) . ' => ' . $result;
     }
 }

@@ -223,7 +223,7 @@ PHP_METHOD(Stub_Router_Route, via)
  */
 PHP_METHOD(Stub_Router_Route, extractNamedParams)
 {
-	long _0, _5$$11, _26$$19;
+	zend_long _0, _5$$11, _26$$19;
 	zval route, item, variable, regexp, _4$$11, _21$$16, _24$$16, _29$$29;
 	zend_bool notValid, _6$$12, _7$$12, _8$$12, _9$$12, _10$$12, _11$$12, _12$$12, _13$$12, _14$$12, _15$$12, _16$$12, _17$$12, _25$$18;
 	zend_long tmp = 0, cursor = 0, cursorVar = 0, marker = 0, bracketCount, parenthesesCount, foundPattern, intermediate, numberMatches;

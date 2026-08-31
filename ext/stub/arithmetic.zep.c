@@ -1683,7 +1683,7 @@ PHP_METHOD(Stub_Arithmetic, negativeInt)
 PHP_METHOD(Stub_Arithmetic, negativeLong)
 {
 	zval *val_param = NULL;
-	long val;
+	zend_long val;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(val)

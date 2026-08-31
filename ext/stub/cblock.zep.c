@@ -55,7 +55,7 @@ PHP_METHOD(Stub_Cblock, testCblock1)
 
 PHP_METHOD(Stub_Cblock, testCblock2)
 {
-	long a;
+	zend_long a;
 	a = 0;
 	
 			a = fibonacci(MAX_FACTOR);

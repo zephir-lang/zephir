@@ -105,7 +105,7 @@ PHP_METHOD(Stub_Quantum, harmos)
 	x = zephir_get_doubleval(x_param);
 	dx =  (0.02);
 	k0 =  ((3.0 * 3.14159265358979323846));
-	dt =  (zephir_safe_div_double_long((dx * dx), 4.0));
+	dt =  (zephir_safe_div_double_double((dx * dx), 4.0));
 	ZEPHIR_INIT_VAR(&paramater);
 	zephir_create_array(&paramater, 4, 0);
 	ZEPHIR_INIT_VAR(&_0);

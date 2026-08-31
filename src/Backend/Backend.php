@@ -2053,12 +2053,20 @@ class Backend
                 $code = 'unsigned char';
                 break;
 
+            /**
+             * All four integer types describe a PHP `int`, which the engine
+             * keeps in a `zend_long` (`int64_t`). A C `long` would instead
+             * follow the data model: 64-bit under LP64, 32-bit under LLP64
+             * (Windows x64).
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2666
+             */
             case 'long':
-                $code = 'long';
+                $code = 'zend_long';
                 break;
 
             case 'ulong':
-                $code = 'unsigned long';
+                $code = 'zend_ulong';
                 break;
 
             case 'bool':

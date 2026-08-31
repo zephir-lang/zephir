@@ -1051,7 +1051,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, uint3
 					break;
 				}
 				case 'l':
-					ZVAL_LONG(&offset, va_arg(ap, long));
+					ZVAL_LONG(&offset, va_arg(ap, zend_long));
 					break;
 				case 'z':
 					ZVAL_COPY(&offset, va_arg(ap, zval*));
