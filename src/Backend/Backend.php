@@ -1863,7 +1863,20 @@ class Backend
                 '__$null'  => "\t" . 'ZVAL_NULL(&' . $variable->getName() . ');',
                 '__$true'  => "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 1);',
                 '__$false' => "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 0);',
-                default    => "\t" . 'ZVAL_UNDEF(&' . $variable->getName() . ');',
+                /**
+                 * A local the user declared without a value and never assigned
+                 * would otherwise keep the IS_UNDEF left here and hand it to
+                 * userland, where var_dump() prints it as `UNKNOWN:0`. PHP
+                 * evaluates an unset variable as null.
+                 *
+                 * Every other zval has to start undefined: that is what makes
+                 * its first write register it with the memory frame.
+                 *
+                 * @see Variable::isNeverAssigned()
+                 * @see https://github.com/zephir-lang/zephir/issues/2654
+                 */
+                default    => "\t" . ($variable->isNeverAssigned() ? 'ZVAL_NULL' : 'ZVAL_UNDEF')
+                    . '(&' . $variable->getName() . ');',
             };
         }
 

@@ -132,6 +132,16 @@ class DeclareStatement extends StatementAbstract
                 $letStatement = new LetStatement($letBuilder->build());
                 $letStatement->compile($compilationContext);
             } else {
+                /**
+                 * The only place a user-written declaration with no value is
+                 * recorded. The emitter starts such a local at IS_NULL when
+                 * nothing ever writes to it, because PHP evaluates an unset
+                 * variable as null while an IS_UNDEF zval reaches userland as
+                 * `UNKNOWN:0`.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2654
+                 */
+                $symbolVariable->setDeclaredWithoutValue(true);
                 $symbolVariable->enableDefaultAutoInitValue();
             }
         }

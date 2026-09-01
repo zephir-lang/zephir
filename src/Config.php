@@ -74,6 +74,7 @@ class Config implements ArrayAccess, JsonSerializable
         'warnings'      => [
             'unused-variable'                    => true,
             'unused-variable-external'           => false,
+            'unassigned-variable'                => true,
             'possible-wrong-parameter'           => true,
             'possible-wrong-parameter-undefined' => false,
             'nonexistent-function'               => true,

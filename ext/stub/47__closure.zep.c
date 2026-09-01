@@ -12,31 +12,27 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/fcall.h"
 #include "kernel/object.h"
 #include "kernel/memory.h"
 
 
-ZEPHIR_INIT_CLASS(stub_45__closure)
+ZEPHIR_INIT_CLASS(stub_47__closure)
 {
-	ZEPHIR_REGISTER_CLASS(stub, 45__closure, stub, 45__closure, stub_45__closure_method_entry, ZEND_ACC_FINAL_CLASS);
+	ZEPHIR_REGISTER_CLASS(stub, 47__closure, stub, 47__closure, stub_47__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
-	zend_declare_property_null(stub_45__closure_ce, SL("x"), ZEND_ACC_PUBLIC);
 	return SUCCESS;
 }
 
-PHP_METHOD(stub_45__closure, __invoke)
+PHP_METHOD(stub_47__closure, __invoke)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval x;
-	zval *this_ptr = getThis();
-
-	ZVAL_UNDEF(&x);
+	zend_long ZEPHIR_LAST_CALL_STATUS;
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_memory_observe(&x);
-	zephir_read_property(&x, this_ptr, SL("x"), PH_NOISY_CC);
 
-	RETVAL_ZVAL(&x, 1, 0);
+	ZEPHIR_RETURN_CALL_CE_STATIC(stub_mcall_caller_ce, "perform", NULL, 0);
+	zephir_check_call_status();
 	RETURN_MM();
 }
 

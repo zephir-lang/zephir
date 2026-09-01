@@ -1967,6 +1967,26 @@ class Method
                     );
                 }
             }
+
+            /**
+             * The counterpart of the check above: read, but nothing ever wrote
+             * to it. The value now reads as null, which is what PHP evaluates
+             * an unset variable to, and PHP says so at runtime. Zephir knows it
+             * at compile time, so it says so here.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2654
+             */
+            if ($variable->getNumberUses() > 0 && $variable->isNeverAssigned()) {
+                $compilationContext->logger->warning(
+                    'Variable "'
+                    . $variable->getName()
+                    . '" read but never assigned in '
+                    . $completeName
+                    . '::'
+                    . $this->getDeclaredName(),
+                    ['unassigned-variable', $variable->getOriginal()]
+                );
+            }
         }
 
         if (count($usedVariables)) {
