@@ -1143,6 +1143,8 @@ int zephir_unset_property(zval* object, const char* name)
 	/* Restore original scope */
 	zephir_set_scope(scope);
 
+	zval_ptr_dtor(&member);
+
 	return SUCCESS;
 }
 

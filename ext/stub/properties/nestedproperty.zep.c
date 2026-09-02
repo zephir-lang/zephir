@@ -51,7 +51,7 @@ PHP_METHOD(Stub_Properties_NestedProperty, __construct)
 		zephir_check_call_status();
 	}
 
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 81, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 82, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -85,7 +85,7 @@ PHP_METHOD(Stub_Properties_NestedProperty, setData)
 	} else {
 		}
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 81, PH_NOISY_CC);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 82, PH_NOISY_CC);
 	ZVAL_UNDEF(&_1);
 	ZVAL_LONG(&_1, value);
 	zephir_update_property_zval_cached(&_0, _zephir_prop_1, 0, &_1);
@@ -118,7 +118,7 @@ PHP_METHOD(Stub_Properties_NestedProperty, setName)
 	zephir_memory_observe(&value_zv);
 	ZVAL_STR_COPY(&value_zv, value);
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 81, PH_NOISY_CC);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 82, PH_NOISY_CC);
 	zephir_update_property_zval_cached(&_0, _zephir_prop_1, 0, &value_zv);
 	ZEPHIR_MM_RESTORE();
 }

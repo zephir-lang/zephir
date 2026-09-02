@@ -50,7 +50,7 @@ PHP_METHOD(Stub_MethodArgs, setCallable)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 62, a);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 63, a);
 }
 
 PHP_METHOD(Stub_MethodArgs, setObject)
@@ -68,7 +68,7 @@ PHP_METHOD(Stub_MethodArgs, setObject)
 		Z_PARAM_OBJECT(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 62, a);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 63, a);
 }
 
 PHP_METHOD(Stub_MethodArgs, setCallableStrict)
@@ -90,7 +90,7 @@ PHP_METHOD(Stub_MethodArgs, setCallableStrict)
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type callable"));
 		RETURN_NULL();
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 62, a);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 63, a);
 }
 
 PHP_METHOD(Stub_MethodArgs, setObjectStrict)
@@ -112,7 +112,7 @@ PHP_METHOD(Stub_MethodArgs, setObjectStrict)
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type object"));
 		RETURN_NULL();
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 62, a);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 63, a);
 }
 
 PHP_METHOD(Stub_MethodArgs, setResourceStrict)
@@ -134,7 +134,7 @@ PHP_METHOD(Stub_MethodArgs, setResourceStrict)
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type resource"));
 		RETURN_NULL();
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 62, a);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 63, a);
 }
 
 /**

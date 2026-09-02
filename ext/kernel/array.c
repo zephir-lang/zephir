@@ -87,21 +87,31 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval exist;
+		zval container, exist;
+		int found = 0;
+
+		/* offsetExists() runs userland code that can drop the last reference
+		 * to the container, and zend_call_function() takes none for the call
+		 * frame, so own the container across both calls. PHP's own
+		 * zend_std_read_dimension() does the same. */
+		ZVAL_COPY(&container, (zval *)arr);
 		ZVAL_UNDEF(&exist);
-		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, (zval *)arr, "offsetexists", NULL, 0, index);
+
+		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, &container, "offsetexists", NULL, 0, index);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
-			ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(fetched, (zval *)arr, "offsetget", NULL, 0, index);
+			ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(fetched, &container, "offsetget", NULL, 0, index);
 			if (readonly) {
 				Z_TRY_DELREF_P(fetched);
 			}
-
-			return 1;
+			found = 1;
+		} else {
+			ZVAL_NULL(fetched);
 		}
 
-		ZVAL_NULL(fetched);
+		zval_ptr_dtor(&exist);
+		zval_ptr_dtor(&container);
 
-		return 0;
+		return found;
 	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
 		/* A `var` holding a string: PHP's isset() on a string offset is
 		 * silent for every illegal offset, so no diagnostic here. */
@@ -171,23 +181,37 @@ int zephir_array_isset_string_fetch(zval *fetched, const zval *arr, char *index,
 	zval *zv;
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval exist, offset;
+		zval container, exist, offset;
+		int found = 0;
+
+		/* offsetExists() runs userland code that can drop the last reference
+		 * to the container, and zend_call_function() takes none for the call
+		 * frame, so own the container across both calls. PHP's own
+		 * zend_std_read_dimension() does the same. */
+		ZVAL_COPY(&container, (zval *)arr);
 		ZVAL_UNDEF(&exist);
+		/* The offset has to outlive offsetExists() too: releasing it here left
+		 * offsetGet() reading a freed zend_string, and the method-name string
+		 * allocated for that very call reused the slot, so the object silently
+		 * received the key "offsetget". */
 		ZVAL_STRINGL(&offset, index, index_length);
 
-		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, (zval *)arr, "offsetexists", NULL, 0, &offset);
-		zval_ptr_dtor(&offset);
+		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, &container, "offsetexists", NULL, 0, &offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
-			ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(fetched, (zval *)arr, "offsetget", NULL, 0, &offset);
+			ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(fetched, &container, "offsetget", NULL, 0, &offset);
 			if (readonly) {
 				Z_TRY_DELREF_P(fetched);
 			}
-			return 1;
+			found = 1;
+		} else {
+			ZVAL_NULL(fetched);
 		}
 
-		ZVAL_NULL(fetched);
+		zval_ptr_dtor(&offset);
+		zval_ptr_dtor(&exist);
+		zval_ptr_dtor(&container);
 
-		return 0;
+		return found;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_str_find(Z_ARRVAL_P(arr), index, index_length)) != NULL) {
 			zephir_ensure_array(zv);
@@ -228,22 +252,32 @@ int zephir_array_isset_long_fetch(zval *fetched, const zval *arr, zend_long inde
 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval exist, offset;
+		zval container, exist, offset;
+		int found = 0;
+
+		/* offsetExists() runs userland code that can drop the last reference
+		 * to the container, and zend_call_function() takes none for the call
+		 * frame, so own the container across both calls. PHP's own
+		 * zend_std_read_dimension() does the same. */
+		ZVAL_COPY(&container, (zval *)arr);
 		ZVAL_UNDEF(&exist);
 		ZVAL_LONG(&offset, index);
-		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, (zval *)arr, "offsetexists", NULL, 0, &offset);
+
+		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, &container, "offsetexists", NULL, 0, &offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
-			ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(fetched, (zval *)arr, "offsetget", NULL, 0, &offset);
+			ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(fetched, &container, "offsetget", NULL, 0, &offset);
 			if (readonly) {
 				Z_TRY_DELREF_P(fetched);
 			}
-
-			return 1;
+			found = 1;
+		} else {
+			ZVAL_NULL(fetched);
 		}
 
-		ZVAL_NULL(fetched);
+		zval_ptr_dtor(&exist);
+		zval_ptr_dtor(&container);
 
-		return 0;
+		return found;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_index_find(Z_ARRVAL_P(arr), (zend_ulong) index)) != NULL) {
 			zephir_ensure_array(zv);
@@ -278,14 +312,23 @@ int ZEPHIR_FASTCALL zephir_array_isset(const zval *arr, zval *index)
 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval exist;
-		ZVAL_UNDEF(&exist);
-		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, (zval *)arr, "offsetexists", NULL, 0, index);
-		if (zend_is_true(&exist)) {
-			return 1;
-		}
+		zval container, exist;
+		int found;
 
-		return 0;
+		/* offsetExists() runs userland code that can drop the last reference
+		 * to the container, and zend_call_function() takes none for the call
+		 * frame, so own the container across both calls. PHP's own
+		 * zend_std_read_dimension() does the same. */
+		ZVAL_COPY(&container, (zval *)arr);
+		ZVAL_UNDEF(&exist);
+
+		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, &container, "offsetexists", NULL, 0, index);
+		found = ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist);
+
+		zval_ptr_dtor(&exist);
+		zval_ptr_dtor(&container);
+
+		return found;
 	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
 		return zephir_string_offset_isset_zval(arr, index);
 	} else if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
@@ -321,16 +364,25 @@ int ZEPHIR_FASTCALL zephir_array_isset_string(const zval *arr, const char *index
 {
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval exist, offset;
+		zval container, exist, offset;
+		int found;
+
+		/* offsetExists() runs userland code that can drop the last reference
+		 * to the container, and zend_call_function() takes none for the call
+		 * frame, so own the container across both calls. PHP's own
+		 * zend_std_read_dimension() does the same. */
+		ZVAL_COPY(&container, (zval *)arr);
 		ZVAL_UNDEF(&exist);
 		ZVAL_STRINGL(&offset, index, index_length);
-		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, (zval *)arr, "offsetexists", NULL, 0, &offset);
-		zval_ptr_dtor(&offset);
-		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
-			return 1;
-		}
 
-		return 0;
+		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, &container, "offsetexists", NULL, 0, &offset);
+		found = ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist);
+
+		zval_ptr_dtor(&offset);
+		zval_ptr_dtor(&exist);
+		zval_ptr_dtor(&container);
+
+		return found;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		return zend_hash_str_exists(Z_ARRVAL_P(arr), index, index_length);
 	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
@@ -351,15 +403,24 @@ int ZEPHIR_FASTCALL zephir_array_isset_long(const zval *arr, zend_long index)
 {
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval exist, offset;
+		zval container, exist, offset;
+		int found;
+
+		/* offsetExists() runs userland code that can drop the last reference
+		 * to the container, and zend_call_function() takes none for the call
+		 * frame, so own the container across both calls. PHP's own
+		 * zend_std_read_dimension() does the same. */
+		ZVAL_COPY(&container, (zval *)arr);
 		ZVAL_UNDEF(&exist);
 		ZVAL_LONG(&offset, index);
-		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, (zval *)arr, "offsetexists", NULL, 0, &offset);
-		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
-			return 1;
-		}
 
-		return 0;
+		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, &container, "offsetexists", NULL, 0, &offset);
+		found = ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist);
+
+		zval_ptr_dtor(&exist);
+		zval_ptr_dtor(&container);
+
+		return found;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		return zend_hash_index_exists(Z_ARRVAL_P(arr), (zend_ulong) index);
 	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {

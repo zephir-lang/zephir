@@ -86,7 +86,7 @@ PHP_METHOD(Stub_Router_Route, __construct)
 	}
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "reconfigure", NULL, 0, pattern, paths);
 	zephir_check_call_status();
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 114, httpMethods);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 115, httpMethods);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -212,7 +212,7 @@ PHP_METHOD(Stub_Router_Route, via)
 		Z_PARAM_ZVAL(httpMethods)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &httpMethods);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 114, httpMethods);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 115, httpMethods);
 	RETURN_THISW();
 }
 
@@ -597,9 +597,9 @@ PHP_METHOD(Stub_Router_Route, reConfigure)
 	} else {
 		ZEPHIR_CPY_WRT(&compiledPattern, pattern);
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 115, pattern);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 116, &compiledPattern);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 117, &routePaths);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 116, pattern);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 117, &compiledPattern);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 118, &routePaths);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -641,7 +641,7 @@ PHP_METHOD(Stub_Router_Route, setName)
 		Z_PARAM_ZVAL(name)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &name);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 118, name);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 119, name);
 	RETURN_THISW();
 }
 
@@ -668,7 +668,7 @@ PHP_METHOD(Stub_Router_Route, beforeMatch)
 		Z_PARAM_ZVAL(callback)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &callback);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 119, callback);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 120, callback);
 	RETURN_THISW();
 }
 
@@ -757,7 +757,7 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths)
 
 	ZEPHIR_INIT_VAR(&reversed);
 	array_init(&reversed);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 117, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 118, PH_NOISY_CC | PH_READONLY);
 	if (Z_TYPE_P(&_0) == IS_STRING) {
 		ZEPHIR_INIT_VAR(&_2);
 		zephir_string_to_char_array(&_2, &_0);
@@ -833,7 +833,7 @@ PHP_METHOD(Stub_Router_Route, setHttpMethods)
 		Z_PARAM_ZVAL(httpMethods)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &httpMethods);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 114, httpMethods);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 115, httpMethods);
 	RETURN_THISW();
 }
 
@@ -873,7 +873,7 @@ PHP_METHOD(Stub_Router_Route, setHostname)
 		Z_PARAM_ZVAL(hostname)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &hostname);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 120, hostname);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 121, hostname);
 	RETURN_THISW();
 }
 
