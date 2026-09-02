@@ -132,7 +132,7 @@ final class KernelCallArgumentLifetimeTest extends TestCase
      */
     private function releasedThenPassed(string $source): array
     {
-        $source = $this->stripComments($source);
+        $source = $this->stripComments($this->normaliseNewlines($source));
 
         $found = [];
         foreach ($this->functionBodies($source) as [$firstLine, $body]) {
@@ -157,6 +157,18 @@ final class KernelCallArgumentLifetimeTest extends TestCase
         }
 
         return $found;
+    }
+
+    /**
+     * Only `*.zep`, `*.zept` and the `.dist` files are pinned to LF in
+     * `.gitattributes`, so a Windows checkout hands both the kernel sources
+     * and this file's own heredocs CRLF. Body detection compares whole lines
+     * against a bare brace, which a trailing CR would never match, and the
+     * scan would report nothing at all rather than reporting it is clean.
+     */
+    private function normaliseNewlines(string $source): string
+    {
+        return str_replace(["\r\n", "\r"], "\n", $source);
     }
 
     /**
