@@ -210,33 +210,76 @@ final class Issue2656Test extends TestCase
      */
     public function testContainerFreedByOffsetExistsSurvives(): void
     {
-        $root      = \dirname(__DIR__, 2);
-        $localSo   = $root . '/ext/modules/stub.so';
-        $extension = is_file($localSo) ? $localSo : 'stub';
+        $root   = \dirname(__DIR__, 2);
+        $script = (string) tempnam(sys_get_temp_dir(), 'issue2656');
 
-        $script = tempnam(sys_get_temp_dir(), 'issue2656') . '.php';
         file_put_contents($script, sprintf(
             '<?php require %s; $h = new Stub\Issue2656();'
             . ' $h->setContainer(new Issue2656SelfDestroying($h));'
-            . ' echo $h->fetchThroughProperty();',
+            . ' echo "RESULT:", $h->fetchThroughProperty(), "\n";',
             var_export($root . '/vendor/autoload.php', true)
         ));
 
         $command = sprintf(
-            '%s -d extension=%s %s 2>&1',
+            '%s %s %s 2>&1',
             escapeshellarg(PHP_BINARY),
-            escapeshellarg($extension),
+            $this->childExtensionFlag($root),
             escapeshellarg($script)
         );
 
         exec($command, $output, $status);
         unlink($script);
 
-        $this->assertSame(0, $status, "Child exited with {$status}:\n" . implode("\n", $output));
+        $printed = implode("\n", $output);
+
+        $this->assertSame(0, $status, "Child exited with {$status}:\n" . $printed);
         $this->assertSame(
-            'alive',
-            implode("\n", $output),
-            'The container was destroyed before offsetGet() ran.'
+            'RESULT:alive',
+            $this->resultLine($output),
+            "The container was destroyed before offsetGet() ran. Child said:\n" . $printed
         );
+    }
+
+    /**
+     * The child needs `-d extension=` only when it does not already inherit
+     * the extension from php.ini. CI installs stub.so into extension_dir and
+     * enables it from a conf.d file, so passing the flag there loads the
+     * module a second time and PHP warns about it on the child's stdout.
+     */
+    private function childExtensionFlag(string $root): string
+    {
+        exec(
+            sprintf(
+                '%s -r %s',
+                escapeshellarg(PHP_BINARY),
+                escapeshellarg('echo (int) extension_loaded("stub");')
+            ),
+            $probe
+        );
+
+        if ('1' === trim(implode('', $probe))) {
+            return '';
+        }
+
+        $localSo = $root . '/ext/modules/stub.so';
+
+        return '-d extension=' . escapeshellarg(is_file($localSo) ? $localSo : 'stub');
+    }
+
+    /**
+     * Startup diagnostics land on stdout ahead of the result, so match the
+     * marker line rather than comparing the whole output.
+     *
+     * @param list<string> $output
+     */
+    private function resultLine(array $output): string
+    {
+        foreach ($output as $line) {
+            if (str_starts_with($line, 'RESULT:')) {
+                return $line;
+            }
+        }
+
+        return implode("\n", $output);
     }
 }
