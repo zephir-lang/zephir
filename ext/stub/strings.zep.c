@@ -477,7 +477,7 @@ PHP_METHOD(Stub_Strings, strToHex)
 		}
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		zephir_string_offset_read(&_2$$3, &value_zv, i, PH_NOISY);
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 116, &_2$$3);
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 117, &_2$$3);
 		zephir_check_call_status();
 		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 19, &_3$$3);
 		zephir_check_call_status();
@@ -532,13 +532,13 @@ PHP_METHOD(Stub_Strings, issue1267)
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(value, &_4);
 	ZEPHIR_INIT_NVAR(&_0);
-	ZEPHIR_CALL_FUNCTION(&_4, "strip_tags", &_5, 117, value);
+	ZEPHIR_CALL_FUNCTION(&_4, "strip_tags", &_5, 118, value);
 	zephir_check_call_status();
 	zephir_stripslashes(&_0, &_4);
 	ZEPHIR_INIT_VAR(&x);
 	zephir_fast_trim(&x, &_0, NULL , ZEPHIR_TRIM_BOTH);
 	ZEPHIR_INIT_VAR(&_6);
-	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 117, value);
+	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 118, value);
 	zephir_check_call_status();
 	zephir_stripcslashes(&_6, &_7);
 	zephir_fast_trim(return_value, &_6, NULL , ZEPHIR_TRIM_BOTH);

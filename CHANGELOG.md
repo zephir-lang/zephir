@@ -10,8 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Added PHP compatible string offsets, so reading, writing, `isset()`, `empty()` and `unset()` on a string behave as they do in PHP, including negative offsets, out of range warnings, dynamically typed sources and `for c in s` [#760](https://github.com/zephir-lang/zephir/issues/760)
 - Added an `unassigned-variable` warning, on by default, for a local that is read but never assigned [#2654](https://github.com/zephir-lang/zephir/issues/2654)
 
+### Changed
+- Widened the `conditional-initialization` warning to every local that can be read before it is assigned, instead of only one assigned exactly once in a deeper branch [#2679](https://github.com/zephir-lang/zephir/issues/2679)
+
 ### Fixed
 - Fixed a declared but never assigned variable reaching userland as an uninitialized zval, printed by `var_dump()` as `UNKNOWN:0`, where PHP evaluates an unset variable as `null` [#2654](https://github.com/zephir-lang/zephir/issues/2654)
+- Fixed a variable assigned only inside a conditional branch reaching userland as an uninitialized zval on a path that skips the assignment [#2679](https://github.com/zephir-lang/zephir/issues/2679)
 - Fixed the `zephir_array_*_long()` helpers truncating a negative or large index to 32 bits on Windows, where `unsigned long` is narrower than `zend_long`, so `s[-1]` read index 4294967295 and a write tried to grow the string to 4 GB [#2666](https://github.com/zephir-lang/zephir/issues/2666)
 - Fixed Zephir `long`/`ulong` mapping to a C `long`, 32-bit on Windows, so a 64-bit value truncated and `Z_PARAM_LONG()` stored 8 bytes into a 4-byte local [#2666](https://github.com/zephir-lang/zephir/issues/2666)
 - Fixed the kernel signatures that carry a PHP integer (`zephir_get_intval_ex()`, the comparison, division and modulo helpers, `zephir_substr()`, `zephir_fast_explode()`, `zephir_preg_match()` and the multi-dimensional array key) using a C `long` [#2666](https://github.com/zephir-lang/zephir/issues/2666)

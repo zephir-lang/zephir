@@ -33,6 +33,23 @@ class Variable implements TypeAwareInterface
     public const BRANCH_MAGIC     = '$$';
     public const VAR_RETURN_VALUE = 'return_value';
     public const VAR_THIS_POINTER = 'this_ptr';
+    /**
+     * Types that are a zval in the generated C, as opposed to a native local
+     * such as `zend_long`. Only these carry the IS_UNDEF that reaches userland
+     * as `UNKNOWN:0`, and only these take part in the memory frame.
+     *
+     * @see Backend::generateInitCode()
+     * @see self::isComplexZval()
+     */
+    public const COMPLEX_ZVAL_TYPES = [
+        'variable',
+        'string',
+        'array',
+        'resource',
+        'callable',
+        'object',
+        'mixed',
+    ];
     protected Definition | ReflectionClass | null $associatedClass  = null;
     protected array                               $classTypes       = [];
     protected mixed                               $defaultInitValue = null;
@@ -62,6 +79,17 @@ class Variable implements TypeAwareInterface
     protected bool $initialized = false;
     protected bool $isExternal  = false;
     protected bool $localOnly   = false;
+
+    /**
+     * Whether some path can reach a read of this local before anything has
+     * assigned it. Decided once, by DeclareStatement from the
+     * DefiniteAssignmentPass, and read by both the emitter that adds the
+     * initialization and the `conditional-initialization` warning, so the two
+     * cannot disagree about which locals are affected.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2679
+     */
+    protected bool $readBeforeAssignment = false;
 
     /**
      * Whether the user wrote a declaration for this local and gave it no value,
@@ -654,6 +682,29 @@ class Variable implements TypeAwareInterface
             && !$this->isExternal
             && !$this->temporal
             && !$this->closureReference;
+    }
+
+    /**
+     * Whether some path can reach a read of this local before anything has
+     * assigned it.
+     */
+    public function isReadBeforeAssignment(): bool
+    {
+        return $this->readBeforeAssignment;
+    }
+
+    public function setReadBeforeAssignment(bool $readBeforeAssignment): void
+    {
+        $this->readBeforeAssignment = $readBeforeAssignment;
+    }
+
+    /**
+     * Whether this variable is a zval in the generated C rather than a native
+     * local, and so takes part in the memory frame.
+     */
+    public function isComplexZval(): bool
+    {
+        return in_array($this->type, self::COMPLEX_ZVAL_TYPES, true);
     }
 
     /**

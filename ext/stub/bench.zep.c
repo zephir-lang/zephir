@@ -1566,6 +1566,129 @@ PHP_METHOD(Stub_Bench, acosLoop)
 	RETURN_DOUBLE(sum);
 }
 
+/**
+ * The cost of #2679: a local assigned only inside a conditional is
+ * registered with the memory frame at its declaration, so every call pays
+ * one extra zephir_memory_observe(). The call is the unit being measured,
+ * so the loop lives in the caller.
+ */
+PHP_METHOD(Stub_Bench, conditionalLocalLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zephir_fcall_cache_entry *_2 = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *iterations_param = NULL, _0$$3, _1$$3;
+	zend_long iterations, i, hits;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0$$3);
+	ZVAL_UNDEF(&_1$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(iterations)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &iterations_param);
+	i = 0;
+	hits = 0;
+	while (1) {
+		if (!(i < iterations)) {
+			break;
+		}
+		ZVAL_BOOL(&_1$$3, (zephir_safe_mod_long_long(i, 2)) == 0);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "conditionallocalstep", &_2, 0, &_1$$3);
+		zephir_check_call_status();
+		hits += zephir_get_numberval(&_0$$3);
+		i++;
+	}
+	RETURN_MM_LONG(hits);
+}
+
+PHP_METHOD(Stub_Bench, conditionalLocalStep)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *flag_param = NULL, x;
+	zend_bool flag;
+
+	ZVAL_UNDEF(&x);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_BOOL(flag)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &flag_param);
+	ZEPHIR_INIT_VAR(&x);
+	if (flag) {
+		ZEPHIR_INIT_NVAR(&x);
+		ZVAL_STRING(&x, "set");
+	}
+	if (Z_TYPE_P(&x) == IS_STRING) {
+		RETURN_MM_LONG(1);
+	}
+	RETURN_MM_LONG(0);
+}
+
+/**
+ * The control: identical shape with the local assigned on every path, so
+ * the compiler adds nothing to it. A difference here is noise, not cost.
+ */
+PHP_METHOD(Stub_Bench, definiteLocalLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zephir_fcall_cache_entry *_2 = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *iterations_param = NULL, _0$$3, _1$$3;
+	zend_long iterations, i, hits;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0$$3);
+	ZVAL_UNDEF(&_1$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(iterations)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &iterations_param);
+	i = 0;
+	hits = 0;
+	while (1) {
+		if (!(i < iterations)) {
+			break;
+		}
+		ZVAL_BOOL(&_1$$3, (zephir_safe_mod_long_long(i, 2)) == 0);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "definitelocalstep", &_2, 0, &_1$$3);
+		zephir_check_call_status();
+		hits += zephir_get_numberval(&_0$$3);
+		i++;
+	}
+	RETURN_MM_LONG(hits);
+}
+
+PHP_METHOD(Stub_Bench, definiteLocalStep)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *flag_param = NULL, x;
+	zend_bool flag;
+
+	ZVAL_UNDEF(&x);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_BOOL(flag)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &flag_param);
+	ZEPHIR_INIT_VAR(&x);
+	if (flag) {
+		ZVAL_STRING(&x, "set");
+	} else {
+		ZVAL_LONG(&x, 1);
+	}
+	if (Z_TYPE_P(&x) == IS_STRING) {
+		RETURN_MM_LONG(1);
+	}
+	RETURN_MM_LONG(0);
+}
+
 void zep_Stub_Bench_zephir_gen_step_generatorRange(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext )
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;

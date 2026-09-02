@@ -1854,7 +1854,7 @@ class Backend
 
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable): ?string
     {
-        $isComplex = in_array($type, ['variable', 'string', 'array', 'resource', 'callable', 'object', 'mixed'], true);
+        $isComplex = in_array($type, Variable::COMPLEX_ZVAL_TYPES, true);
 
         if ($isComplex && !$variable->isDoublePointer()) {
             $groupVariables[] = $variable->getName();
