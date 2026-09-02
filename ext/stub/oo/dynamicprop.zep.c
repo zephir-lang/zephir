@@ -274,7 +274,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringProperty)
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "works");
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 64, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 65, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -294,7 +294,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringPropertyString)
 		Z_PARAM_STR(value)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&value_zv, value);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 65, &value_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 66, &value_zv);
 }
 
 PHP_METHOD(Stub_Oo_DynamicProp, setNonExistingStringProperty)
@@ -313,7 +313,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setNonExistingStringProperty)
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "works");
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 66, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 67, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 

@@ -1,0 +1,93 @@
+--TEST--
+fetch, isset and empty on an ArrayAccess object hand offsetGet() the real key
+--FILE--
+namespace Zept;
+
+class Issue2656
+{
+    /**
+     * Nine characters on purpose: the offset string and the "offsetget"
+     * method-name string then share a ZEND_MM bin, so releasing the offset
+     * before the second call let the method name reuse its slot.
+     */
+    public function fetchLiteral(var container)
+    {
+        var value;
+
+        let value = null;
+        if fetch value, container["cache.key"] {
+            return value;
+        }
+
+        return false;
+    }
+
+    public function emptyLiteral(var container) -> bool
+    {
+        return empty container["cache.key"];
+    }
+
+    public function issetLiteral(var container) -> bool
+    {
+        return isset container["cache.key"];
+    }
+
+    public function fetchLong(var container)
+    {
+        var value;
+
+        let value = null;
+        if fetch value, container[7] {
+            return value;
+        }
+
+        return false;
+    }
+}
+--USAGE--
+class Recorder implements ArrayAccess
+{
+    public array $seen = [];
+    public int $existsCount = 0;
+
+    private array $data = [
+        'cache.key' => 'hit',
+        'offsetget' => 'CORRUPT',
+        7           => 'seven',
+    ];
+
+    public function offsetExists(mixed $offset): bool
+    {
+        // Never stores $offset: an extra reference would keep the string
+        // alive past the premature release and hide the bug.
+        ++$this->existsCount;
+
+        return isset($this->data[$offset]);
+    }
+
+    public function offsetGet(mixed $offset): mixed
+    {
+        $this->seen[] = $offset;
+
+        return $this->data[$offset] ?? null;
+    }
+
+    public function offsetSet(mixed $offset, mixed $value): void {}
+    public function offsetUnset(mixed $offset): void {}
+}
+
+$p = new Zept\Issue2656();
+
+$fetch = new Recorder();
+$empty = new Recorder();
+$isset = new Recorder();
+$long  = new Recorder();
+
+echo json_encode([
+    'fetch' => [$p->fetchLiteral($fetch), $fetch->seen, $fetch->existsCount],
+    'empty' => [$p->emptyLiteral($empty), $empty->seen, $empty->existsCount],
+    'isset' => [$p->issetLiteral($isset), $isset->seen, $isset->existsCount],
+    'long'  => [$p->fetchLong($long), $long->seen, $long->existsCount],
+]), "\n";
+--EXPECT--
+{"fetch":["hit",["cache.key"],1],"empty":[false,["cache.key"],1],"isset":[true,[],1],"long":["seven",[7],1]}

@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Widened the `conditional-initialization` warning to every local that can be read before it is assigned, instead of only one assigned exactly once in a deeper branch [#2679](https://github.com/zephir-lang/zephir/issues/2679)
 
 ### Fixed
+- Fixed `fetch` and `empty()` on an `ArrayAccess` object releasing the string offset before `offsetGet()` received it, so the object was silently handed the key `offsetget` [#2656](https://github.com/zephir-lang/zephir/issues/2656)
+- Fixed the array `isset` helpers never releasing the `offsetExists()` return value, and holding no reference to the container across the two userland calls, as PHP's own `zend_std_read_dimension()` does [#2656](https://github.com/zephir-lang/zephir/issues/2656)
+- Fixed `unset obj->property` leaking the property name string on every call [#2656](https://github.com/zephir-lang/zephir/issues/2656)
+- Fixed a leaked exception instance when a `throw` cannot construct its exception, a leaked callable when an internal call names an unknown function, and an uninitialized return slot in the `zephir_return_call_*()` helpers [#2656](https://github.com/zephir-lang/zephir/issues/2656)
 - Fixed a declared but never assigned variable reaching userland as an uninitialized zval, printed by `var_dump()` as `UNKNOWN:0`, where PHP evaluates an unset variable as `null` [#2654](https://github.com/zephir-lang/zephir/issues/2654)
 - Fixed a variable assigned only inside a conditional branch reaching userland as an uninitialized zval on a path that skips the assignment [#2679](https://github.com/zephir-lang/zephir/issues/2679)
 - Fixed the `zephir_array_*_long()` helpers truncating a negative or large index to 32 bits on Windows, where `unsigned long` is narrower than `zend_long`, so `s[-1]` read index 4294967295 and a write tried to grow the string to 4 GB [#2666](https://github.com/zephir-lang/zephir/issues/2666)
