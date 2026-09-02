@@ -12,39 +12,26 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "ext/spl/spl_directory.h"
 #include "kernel/fcall.h"
 #include "kernel/object.h"
 #include "kernel/memory.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Spl)
+ZEPHIR_INIT_CLASS(stub_48__closure)
 {
-	ZEPHIR_REGISTER_CLASS(Stub, Spl, stub, spl, stub_spl_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(stub, 48__closure, stub, 48__closure, stub_48__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
 	return SUCCESS;
 }
 
-/**
- * @issue https://github.com/zephir-lang/zephir/issues/1212
- */
-PHP_METHOD(Stub_Spl, issue1212)
+PHP_METHOD(stub_48__closure, __invoke)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval file_zv;
-	zend_string *file = NULL;
-
-	ZVAL_UNDEF(&file_zv);
-	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_STR(file)
-	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_memory_observe(&file_zv);
-	ZVAL_STR_COPY(&file_zv, file);
-	object_init_ex(return_value, spl_ce_SplFileObject);
-	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 116, &file_zv);
+
+	ZEPHIR_RETURN_CALL_CE_STATIC(stub_mcall_caller_ce, "perform", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Zephir;
 
 use Zephir\Exception\CompilerException;
+use Zephir\Passes\DefiniteAssignmentPass;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
@@ -36,7 +37,8 @@ class SymbolTable
 
     protected Globals $globalsManager;
 
-    protected ?LocalContextPass $localContext = null;
+    protected ?DefiniteAssignmentPass $definiteAssignment = null;
+    protected ?LocalContextPass       $localContext       = null;
 
     protected bool $mustGrownStack = false;
 
@@ -150,6 +152,19 @@ class SymbolTable
         $this->branchVariables[$branchId][$name] = $variable;
 
         return $variable;
+    }
+
+    /**
+     * Whether a local has to be initialised to null at its declaration because
+     * it is read somewhere nothing has assigned it yet. Gathered by the
+     * DefiniteAssignmentPass, which is not really part of the symbol table but
+     * reaches DeclareStatement through it, as the local context does.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2679
+     */
+    public function requiresNullInitialization(string $variable): bool
+    {
+        return $this->definiteAssignment?->requiresNullInitialization($variable) ?? false;
     }
 
     /**
@@ -595,6 +610,17 @@ class SymbolTable
                         /**
                          * Check if last assignment
                          * Variable was initialized in a sub-branch, and it's being used in a parent branch.
+                         *
+                         * This used to also raise `conditional-initialization`, but it could only
+                         * see a variable assigned exactly once, in a branch deeper than the read.
+                         * The warning now comes from Method::compile(), off the same
+                         * definite-assignment decision that adds the initialization, which covers
+                         * the shapes this misses: several conditional writes, a loop or `try` that
+                         * may not run, a `switch` with no `default`, and a read before the only
+                         * write.
+                         *
+                         * @see Variable::isReadBeforeAssignment()
+                         * @see https://github.com/zephir-lang/zephir/issues/2679
                          */
                         $possibleBadAssignment = $currentBranch->getLevel() < $branches[0]->getLevel();
                         if ($possibleBadAssignment && count($branches) === 1) {
@@ -611,10 +637,6 @@ class SymbolTable
                                     );
                                 } else {
                                     $variable->enableDefaultAutoInitValue();
-                                    $compilationContext->logger->warning(
-                                        "Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration",
-                                        ['conditional-initialization', $statement]
-                                    );
                                 }
                             } else {
                                 if (Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
@@ -627,10 +649,6 @@ class SymbolTable
                                         );
                                     } else {
                                         $variable->enableDefaultAutoInitValue();
-                                        $compilationContext->logger->warning(
-                                            "Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration",
-                                            ['conditional-initialization', $statement]
-                                        );
                                     }
                                 }
                             }
@@ -839,6 +857,14 @@ class SymbolTable
         } while (null != $currentBranch);
 
         return null;
+    }
+
+    /**
+     * Sets the definite-assignment information.
+     */
+    public function setDefiniteAssignment(DefiniteAssignmentPass $definiteAssignment): void
+    {
+        $this->definiteAssignment = $definiteAssignment;
     }
 
     /**

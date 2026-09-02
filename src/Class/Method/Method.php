@@ -31,6 +31,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Name;
 use Zephir\Passes\CallGathererPass;
+use Zephir\Passes\DefiniteAssignmentPass;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
 use Zephir\StatementsBlock;
@@ -114,6 +115,7 @@ class Method
      * Whether the method is static or not.
      */
     protected bool              $isStatic     = false;
+    protected ?DefiniteAssignmentPass $definiteAssignment = null;
     protected ?LocalContextPass $localContext = null;
     /**
      * Maps a Zephir return-type name to its Zend `MAY_BE_*` type-mask bit.
@@ -1007,6 +1009,10 @@ class Method
         $symbolTable = new SymbolTable($compilationContext);
         if ($this->localContext instanceof LocalContextPass) {
             $symbolTable->setLocalContext($this->localContext);
+        }
+
+        if ($this->definiteAssignment instanceof DefiniteAssignmentPass) {
+            $symbolTable->setDefiniteAssignment($this->definiteAssignment);
         }
 
         /**
@@ -1985,6 +1991,32 @@ class Method
                     . '::'
                     . $this->getDeclaredName(),
                     ['unassigned-variable', $variable->getOriginal()]
+                );
+            }
+
+            /**
+             * The middle case between the two above: something does write to
+             * it, but not on every path that reaches a read. PHP evaluates such
+             * a read as null and says so at runtime; the compiler now makes the
+             * value null too and says so here.
+             *
+             * Never both this and `unassigned-variable`: registering the slot
+             * leaves a variant init behind, which is what isNeverAssigned()
+             * rules out.
+             *
+             * @see Variable::isReadBeforeAssignment()
+             * @see https://github.com/zephir-lang/zephir/issues/2679
+             */
+            if ($variable->isReadBeforeAssignment()) {
+                $compilationContext->logger->warning(
+                    'Variable "'
+                    . $variable->getName()
+                    . '" may be read before it is assigned in '
+                    . $completeName
+                    . '::'
+                    . $this->getDeclaredName()
+                    . ', consider initializing it at its declaration',
+                    ['conditional-initialization', $variable->getOriginal()]
                 );
             }
         }
@@ -3443,12 +3475,24 @@ class Method
      */
     public function preCompile(CompilationContext $compilationContext): void
     {
-        $localContext     = null;
-        $typeInference    = null;
-        $callGathererPass = null;
+        $definiteAssignment = null;
+        $localContext       = null;
+        $typeInference      = null;
+        $callGathererPass   = null;
 
         if (is_object($this->statements)) {
             $compilationContext->currentMethod = $this;
+
+            /**
+             * Which locals the user declared without a value are read before
+             * anything assigns them. Not an optimization and so not switchable:
+             * it decides whether such a read produces null, as PHP does, or
+             * hands userland the IS_UNDEF the declaration left behind.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2679
+             */
+            $definiteAssignment = new DefiniteAssignmentPass();
+            $definiteAssignment->pass($this->statements);
 
             /**
              * This pass checks for zval variables than can be potentially
@@ -3490,9 +3534,10 @@ class Method
             }
         }
 
-        $this->localContext     = $localContext;
-        $this->typeInference    = $typeInference;
-        $this->callGathererPass = $callGathererPass;
+        $this->definiteAssignment = $definiteAssignment;
+        $this->localContext       = $localContext;
+        $this->typeInference      = $typeInference;
+        $this->callGathererPass   = $callGathererPass;
     }
 
     /**
