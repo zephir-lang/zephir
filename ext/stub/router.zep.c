@@ -224,7 +224,7 @@ PHP_METHOD(Stub_Router, getRewriteUri)
 		ZEPHIR_OBS_NVAR(&url);
 		if (zephir_array_isset_string_fetch(&url, &_SERVER, SL("REQUEST_URI"), 0)) {
 			ZEPHIR_INIT_VAR(&urlParts);
-			zephir_fast_explode_str(&urlParts, SL("?"), &url, LONG_MAX);
+			zephir_fast_explode_str(&urlParts, SL("?"), &url, ZEND_LONG_MAX);
 			zephir_array_fetch_long(&realUri, &urlParts, 0, PH_NOISY | PH_READONLY, "stub/router.zep", 142);
 			if (!(zephir_is_true(&realUri))) {
 				RETURN_CTOR(&realUri);
@@ -1106,7 +1106,7 @@ PHP_METHOD(Stub_Router, handle)
 			zephir_substr(&strParams, &paramsStr, 1 , 0, ZEPHIR_SUBSTR_NO_LENGTH);
 			if (zephir_is_true(&strParams)) {
 				ZEPHIR_INIT_NVAR(&params);
-				zephir_fast_explode_str(&params, SL("/"), &strParams, LONG_MAX);
+				zephir_fast_explode_str(&params, SL("/"), &strParams, ZEND_LONG_MAX);
 			}
 			zephir_array_unset_string(&parts, SL("params"), PH_SEPARATE);
 		}

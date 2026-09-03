@@ -201,7 +201,7 @@ PHP_METHOD(Stub_Ternary, testTernaryWithPromotedTemporaryVariable)
 		ZVAL_STRING(&_1, "");
 	}
 	ZEPHIR_INIT_VAR(&var3);
-	zephir_fast_explode_str(&var3, SL("_"), &_1, LONG_MAX);
+	zephir_fast_explode_str(&var3, SL("_"), &_1, ZEND_LONG_MAX);
 	RETURN_CCTOR(&var3);
 }
 

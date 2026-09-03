@@ -56,7 +56,7 @@ class ExplodeOptimizer extends OptimizerAbstract
         /**
          * Process limit.
          */
-        $limit       = 'LONG_MAX';
+        $limit       = 'ZEND_LONG_MAX';
         $limitOffset = 2;
         if (3 == count($expression['parameters']) && 'int' == $expression['parameters'][2]['parameter']['type']) {
             $limit = $expression['parameters'][2]['parameter']['value'] . ' ';

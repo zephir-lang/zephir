@@ -224,7 +224,7 @@ PHP_METHOD(Stub_Strings, testExplode)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &delimiter, &str);
-	zephir_fast_explode(return_value, delimiter, str, LONG_MAX);
+	zephir_fast_explode(return_value, delimiter, str, ZEND_LONG_MAX);
 	return;
 }
 
@@ -237,7 +237,7 @@ PHP_METHOD(Stub_Strings, testExplodeStr)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
-	zephir_fast_explode_str(return_value, SL(","), str, LONG_MAX);
+	zephir_fast_explode_str(return_value, SL(","), str, ZEND_LONG_MAX);
 	return;
 }
 

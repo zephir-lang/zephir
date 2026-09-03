@@ -518,7 +518,7 @@ PHP_METHOD(Stub_Router_Route, reConfigure)
 			ZEPHIR_INIT_VAR(&actionName);
 			ZVAL_NULL(&actionName);
 			ZEPHIR_INIT_VAR(&parts);
-			zephir_fast_explode_str(&parts, SL("::"), paths, LONG_MAX);
+			zephir_fast_explode_str(&parts, SL("::"), paths, ZEND_LONG_MAX);
 			_0$$5 = zephir_fast_count_int(&parts);
 			if (_0$$5 == 3) { goto zephir_switch_0_clause_0; }
 			if (_0$$5 == 2) { goto zephir_switch_0_clause_1; }
