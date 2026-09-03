@@ -49,6 +49,8 @@
 #include "kernel/operators.h"
 #include "kernel/fcall.h"
 
+#include <Zend/zend_exceptions.h>
+
 #define PH_RANDOM_ALNUM 0
 #define PH_RANDOM_ALPHA 1
 #define PH_RANDOM_HEXDEC 2
