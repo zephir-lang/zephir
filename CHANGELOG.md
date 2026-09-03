@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Widened the `conditional-initialization` warning to every local that can be read before it is assigned, instead of only one assigned exactly once in a deeper branch [#2679](https://github.com/zephir-lang/zephir/issues/2679)
 
 ### Fixed
+- Fixed `explode()` returning the `limit = 2` result for a limit of `0`, `1` or negative, and looping forever on an empty separator where PHP throws `ValueError` [#2674](https://github.com/zephir-lang/zephir/issues/2674)
 - Fixed `fetch` and `empty()` on an `ArrayAccess` object releasing the string offset before `offsetGet()` received it, so the object was silently handed the key `offsetget` [#2656](https://github.com/zephir-lang/zephir/issues/2656)
 - Fixed the array `isset` helpers never releasing the `offsetExists()` return value, and holding no reference to the container across the two userland calls, as PHP's own `zend_std_read_dimension()` does [#2656](https://github.com/zephir-lang/zephir/issues/2656)
 - Fixed `unset obj->property` leaking the property name string on every call [#2656](https://github.com/zephir-lang/zephir/issues/2656)
