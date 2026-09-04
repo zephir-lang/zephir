@@ -162,9 +162,22 @@ final class NestedClosureTest extends TestCase
         $this->assertSame(0, $result['exitCode'], $result['stderr'] . $result['stdout']);
 
         $projectSource = (string) file_get_contents($projectDir . '/ext/' . $project . '.c');
-        $projectHeader = (string) file_get_contents($projectDir . '/ext/' . $project . '.h');
         $configM4      = (string) file_get_contents($projectDir . '/ext/config.m4');
         $configW32     = (string) file_get_contents($projectDir . '/ext/config.w32');
+
+        /**
+         * The project header's include list is built from the compiled file
+         * paths verbatim, so it carries `DIRECTORY_SEPARATOR` and reads
+         * `#include "nestone\0__closure.zep.h"` on Windows. Which separator the
+         * generator picks is not what this test is about, so normalise it away
+         * (`config.m4` and `config.w32` already come out with forward slashes,
+         * through `toUnixPaths()` and `processAddSources()`).
+         */
+        $projectHeader = str_replace(
+            '\\',
+            '/',
+            (string) file_get_contents($projectDir . '/ext/' . $project . '.h'),
+        );
 
         preg_match_all(
             '/ZEPHIR_INIT\(' . preg_quote($project, '/') . '_(\d+__closure)\);/',
