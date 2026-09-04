@@ -91,6 +91,27 @@ class Closure
     }
 
     /**
+     * The user class a closure body's `this` belongs to.
+     *
+     * A closure declared inside another closure compiles with the *outer
+     * closure's* synthetic class as the current scope, and that class owns no
+     * user properties or methods. Every consumer of the enclosing definition
+     * (property access, method call, `let this->x`, `return this`) resolves it
+     * with a single hop, so the chain has to be flattened here, at the one
+     * place it is written.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2655
+     */
+    protected static function enclosingUserClass(Definition $scope): Definition
+    {
+        while (null !== ($outer = $scope->getEnclosingClassDefinition())) {
+            $scope = $outer;
+        }
+
+        return $scope;
+    }
+
+    /**
      * Creates a closure.
      *
      * @throws Exception
@@ -174,7 +195,9 @@ class Closure
          */
         $bindThis = self::astReferencesThis($block);
         if ($bindThis) {
-            $classDefinition->setEnclosingClassDefinition($compilationContext->classDefinition);
+            $classDefinition->setEnclosingClassDefinition(
+                self::enclosingUserClass($compilationContext->classDefinition)
+            );
 
             // Ensure this_ptr is declared and not stripped in the enclosing method
             if ($compilationContext->symbolTable->hasVariable('this')) {
