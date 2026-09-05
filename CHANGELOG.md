@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `let s .= n` with an integer operand calling the declared but never defined `zephir_concat_self_long()`, so the extension built and then died at load with `undefined symbol`, and made the same append work on a `var` left-hand side [#2660](https://github.com/zephir-lang/zephir/issues/2660)
 - Fixed closure `use (...)` captures being shared by every closure created from the same source line, and implemented `use (&x)` as a real reference [#2652](https://github.com/zephir-lang/zephir/issues/2652)
 - Fixed the closure `use (...)` clause dropping `const`, which is now a read-only capture, and a by-reference capture of an explicitly typed local [#2653](https://github.com/zephir-lang/zephir/issues/2653)
+- Fixed a closure declared inside another closure never having its source file generated, so the extension failed to link, and `this` inside it resolving against the outer closure instead of the enclosing class [#2655](https://github.com/zephir-lang/zephir/issues/2655)
 - Fixed every closure invocation leaking one reference of the closure object and of each captured value [#2652](https://github.com/zephir-lang/zephir/issues/2652)
 
 ## [1.3.0] - 2026-08-25

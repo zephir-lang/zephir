@@ -1,0 +1,171 @@
+--TEST--
+A closure declared inside another closure compiles, links and behaves as in PHP (issue #2655)
+--FILE--
+namespace Stub;
+
+/**
+ * The inner closure's class was registered in the module init but its source
+ * file was never generated, so the extension did not link. `this` inside a
+ * nested closure additionally resolved against the *outer closure's* synthetic
+ * class instead of the user class that owns the property.
+ */
+class Nest2655
+{
+	protected name = "probe";
+
+	public function label() -> string
+	{
+		return "label";
+	}
+
+	public function plainNested() -> <\Closure>
+	{
+		return function () {
+			return function () {
+				return 1;
+			};
+		};
+	}
+
+	public function depth3() -> <\Closure>
+	{
+		return function () {
+			return function () {
+				return function () {
+					return 3;
+				};
+			};
+		};
+	}
+
+	public function nestedThis() -> <\Closure>
+	{
+		return function () {
+			return function () {
+				return this->name;
+			};
+		};
+	}
+
+	public function nestedThisCall() -> <\Closure>
+	{
+		return function () {
+			return function () {
+				return this->label();
+			};
+		};
+	}
+
+	public function nestedCapture(int n) -> <\Closure>
+	{
+		return function () use (n) {
+			return function () use (n) {
+				return n * 2;
+			};
+		};
+	}
+
+	public function innerCaptureOfLocal() -> <\Closure>
+	{
+		var value;
+
+		let value = 7;
+
+		return function () use (value) {
+			var doubled;
+
+			let doubled = value * 2;
+
+			return function () use (doubled) {
+				return doubled;
+			};
+		};
+	}
+
+	public static function fromStatic(int n) -> <\Closure>
+	{
+		return function () use (n) {
+			return function () use (n) {
+				return n + 100;
+			};
+		};
+	}
+
+	/**
+	 * `this` reached through three levels, not just two.
+	 */
+	public function deepThis() -> <\Closure>
+	{
+		return function () {
+			return function () {
+				return function () {
+					return this->name;
+				};
+			};
+		};
+	}
+
+	/**
+	 * A by-reference capture is one storage slot shared by the method and every
+	 * nesting level, so the writes accumulate across calls.
+	 */
+	public function nestedByRef() -> <\Closure>
+	{
+		var counter;
+
+		let counter = 0;
+
+		return function () use (&counter) {
+			return function () use (&counter) {
+				let counter = counter + 1;
+
+				return counter;
+			};
+		};
+	}
+
+	/**
+	 * Writing a property through a nested closure, which reaches
+	 * `Let\ObjectProperty` rather than the read path.
+	 */
+	public function nestedWrite() -> <\Closure>
+	{
+		return function () {
+			return function () {
+				let this->name = "written";
+
+				return this->name;
+			};
+		};
+	}
+}
+--USAGE--
+use Stub\Nest2655;
+
+$test = new Nest2655();
+
+echo $test->plainNested()()(), "\n";
+echo $test->depth3()()()(), "\n";
+echo $test->nestedThis()()(), "\n";
+echo $test->nestedThisCall()()(), "\n";
+echo $test->nestedCapture(5)()(), "\n";
+echo $test->innerCaptureOfLocal()()(), "\n";
+echo Nest2655::fromStatic(1)()(), "\n";
+echo $test->deepThis()()()(), "\n";
+
+$bump = $test->nestedByRef()();
+echo $bump(), ",", $bump(), "\n";
+
+// Mutates the property, so it runs last.
+echo $test->nestedWrite()()(), "\n";
+--EXPECT--
+1
+3
+probe
+label
+10
+14
+101
+probe
+1,2
+written
