@@ -74,6 +74,20 @@ int zephir_return_property(zval *return_value, zval *object, char *property_name
 int zephir_fetch_property(zval *result, zval *object, const char *property_name, uint32_t property_length, int silent);
 int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int silent);
 
+/**
+ * Reading properties in write context.
+ *
+ * These hand back the storage slot rather than a copy of it, which is what
+ * makes a by-reference call argument behave as PHP's does. `fallback` is an
+ * owned, memory-frame-registered zval the caller supplies for the case where
+ * the object has no slot to give.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2691
+ */
+zval *zephir_fetch_property_write(zval *object, zend_string *name, zval *fallback);
+zval *zephir_fetch_property_write_zval(zval *object, zval *property, zval *fallback);
+zval *zephir_fetch_static_property_write_ce(zend_class_entry *ce, const char *property, uint32_t property_length, zval *fallback);
+
 /** Updating properties */
 int zephir_update_property_zval_ex(zval *obj, const char *property_name, unsigned int property_length, zval *value);
 int zephir_update_property_zval(zval *obj, const char *property_name, unsigned int property_length, zval *value);

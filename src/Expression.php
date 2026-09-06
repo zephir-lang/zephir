@@ -182,12 +182,14 @@ class Expression
             case 'property-access':
                 $compilableExpression = new PropertyAccess();
                 $compilableExpression->setNoisy($this->isNoisy());
+                $compilableExpression->setWriteThrough($this->isWriteThrough());
                 break;
 
             case 'property-string-access':
             case 'property-dynamic-access':
                 $compilableExpression = new PropertyDynamicAccess();
                 $compilableExpression->setNoisy($this->isNoisy());
+                $compilableExpression->setWriteThrough($this->isWriteThrough());
                 break;
 
             case 'static-constant-access':
@@ -196,6 +198,7 @@ class Expression
 
             case 'static-property-access':
                 $compilableExpression = new StaticPropertyAccess();
+                $compilableExpression->setWriteThrough($this->isWriteThrough());
                 break;
 
             case 'fcall':

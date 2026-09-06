@@ -30,10 +30,15 @@ extern zend_string* i_self;
 #define PH_SILENT 1024
 #define PH_READONLY 4096
 /**
- * A subscript read whose value the caller is about to write through, which is
- * what a by-reference call argument does. Mutually exclusive with PH_READONLY.
+ * A read whose value the caller is about to write through, which is what a
+ * by-reference call argument does. Mutually exclusive with PH_READONLY.
+ *
+ * The container it is applied to must own its value, because the write context
+ * separates it. The emitter guarantees that: a local variable, or a property
+ * slot from zephir_fetch_property_write().
  *
  * @see https://github.com/zephir-lang/zephir/issues/2682
+ * @see https://github.com/zephir-lang/zephir/issues/2691
  */
 #define PH_WRITE 8192
 
@@ -435,6 +440,30 @@ int zephir_fetch_parameters_variadic(int num_args, int required_args, int option
 #define ZEPHIR_MAKE_WRITE_REF(obj) do { \
 		if (!Z_ISREF_P(obj)) { \
 			ZVAL_NEW_REF(obj, obj); \
+		} \
+	} while (0)
+
+/**
+ * Unwraps a write-context slot once the callee is done with it.
+ *
+ * PHP leaves a property it sent by reference as a reference and relies on every
+ * read dereferencing. Zephir's property reads deliberately do not, because a
+ * `use (&x)` closure capture is stored in a property as a reference and has to
+ * come back as one, so the slot is unwrapped again here instead.
+ *
+ * The refcount test is PHP's own, from the overloaded-element branch of
+ * `zend_fetch_dimension_address()`: a reference the callee kept a hold of is
+ * left alone, and the storage stays shared with whatever kept it.
+ *
+ * Only ever applied to a slot, never to a value fetched out of a container:
+ * there the reference belongs to the container, and ZVAL_UNREF() would efree
+ * what it is still pointing at.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2691
+ */
+#define ZEPHIR_UNREF_WRITE(obj) do { \
+		if (Z_ISREF_P(obj) && Z_REFCOUNT_P(obj) == 1) { \
+			ZVAL_UNREF(obj); \
 		} \
 	} while (0)
 

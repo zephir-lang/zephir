@@ -20,6 +20,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Traits\VariablesTrait;
+use Zephir\Traits\WriteContextSlotTrait;
 use Zephir\Variable\Variable;
 
 use function in_array;
@@ -30,10 +31,12 @@ use function in_array;
 class StaticPropertyAccess
 {
     use VariablesTrait;
+    use WriteContextSlotTrait;
 
     protected bool      $expecting         = true;
     protected ?Variable $expectingVariable = null;
     protected bool      $readOnly          = false;
+    protected bool      $writeThrough      = false;
 
     /**
      * Access a static property.
@@ -128,6 +131,26 @@ class StaticPropertyAccess
         }
 
         /**
+         * A write context takes the slot the static property lives in rather
+         * than a copy of it, for the same reasons an instance property does.
+         *
+         * @see \Zephir\Expression\PropertyAccess::setWriteThrough()
+         */
+        if ($this->writeThrough) {
+            [$slot, $fallback] = $this->writeContextSlot($compilationContext);
+
+            $compilationContext->backend->fetchStaticPropertyWrite(
+                $slot,
+                $classDefinition,
+                $property,
+                $fallback,
+                $compilationContext
+            );
+
+            return new CompiledExpression('variable', $slot->getRealName(), $expression);
+        }
+
+        /**
          * Resolves the symbol that expects the value
          */
         if ($this->expecting) {
@@ -196,5 +219,16 @@ class StaticPropertyAccess
     public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
+    }
+
+    /**
+     * Sets whether the caller will write through the property instead of only
+     * reading it, which is what a by-reference call argument does.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2691
+     */
+    public function setWriteThrough(bool $writeThrough): void
+    {
+        $this->writeThrough = $writeThrough;
     }
 }

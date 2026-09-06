@@ -18,6 +18,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Name;
+use Zephir\Traits\WriteContextSlotTrait;
 use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
@@ -26,10 +27,13 @@ use Zephir\Variable\Variable;
  */
 class PropertyDynamicAccess
 {
+    use WriteContextSlotTrait;
+
     protected bool      $expecting         = true;
     protected ?Variable $expectingVariable = null;
     protected bool      $noisy             = true;
     protected bool      $readOnly          = false;
+    protected bool      $writeThrough      = false;
 
     /**
      * Resolves the access to a property in an object.
@@ -78,6 +82,29 @@ class PropertyDynamicAccess
             ),
         };
 
+        $property = $propertyVariable ?: Name::addSlashes($expression['right']['value']);
+
+        /**
+         * A write context takes the slot the property lives in, and the engine
+         * reaches it through the same handler whether the name came from a
+         * literal or from a variable.
+         *
+         * @see \Zephir\Expression\PropertyAccess::setWriteThrough()
+         */
+        if ($this->writeThrough) {
+            [$slot, $fallback] = $this->writeContextSlot($compilationContext);
+
+            $compilationContext->backend->fetchPropertyWrite(
+                $slot,
+                $variableVariable,
+                $property,
+                $fallback,
+                $compilationContext
+            );
+
+            return new CompiledExpression('variable', $slot->getRealName(), $expression);
+        }
+
         /**
          * Resolves the symbol that expects the value
          */
@@ -119,7 +146,6 @@ class PropertyDynamicAccess
 
         $compilationContext->headersManager->add('kernel/object');
 
-        $property = $propertyVariable ?: Name::addSlashes($expression['right']['value']);
         $compilationContext->backend->fetchProperty(
             $symbolVariable,
             $variableVariable,
@@ -155,5 +181,16 @@ class PropertyDynamicAccess
     public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
+    }
+
+    /**
+     * Sets whether the caller will write through the property instead of only
+     * reading it, which is what a by-reference call argument does.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2691
+     */
+    public function setWriteThrough(bool $writeThrough): void
+    {
+        $this->writeThrough = $writeThrough;
     }
 }

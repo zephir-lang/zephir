@@ -1427,6 +1427,81 @@ class Backend
     }
 
     /**
+     * Fetches a property in write context, as the storage slot itself.
+     *
+     * PHP's `ZEND_FETCH_OBJ_W` produces an IS_INDIRECT to the property, and
+     * everything a by-reference argument needs follows from that: the container
+     * can be separated where its owner will see it, a missing element can be
+     * created, and a callee that assigns to its argument replaces what the
+     * property holds. A copy of the property gives none of those, and the last
+     * one frees the property's array under it.
+     *
+     * `$slot` is a double pointer, so it is emitted without an ampersand and is
+     * never registered with the memory frame: it points into a live object.
+     * `$fallback` is, because the object may have no slot to give and the value
+     * that comes back instead is owned.
+     *
+     * `$property` is a Variable when the name is only known at runtime,
+     * `this->{name}`, which PHP fetches through the same handler.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2691
+     */
+    public function fetchPropertyWrite(
+        Variable $slot,
+        Variable $variableVariable,
+        string|Variable $property,
+        Variable $fallback,
+        CompilationContext $context
+    ): void {
+        if ($property instanceof Variable) {
+            $context->codePrinter->output(
+                sprintf(
+                    '%s = zephir_fetch_property_write_zval(%s, %s, %s);',
+                    $this->getVariableCode($slot),
+                    $this->getVariableCode($variableVariable),
+                    $this->getVariableCode($property),
+                    $this->getVariableCode($fallback)
+                )
+            );
+
+            return;
+        }
+
+        $context->codePrinter->output(
+            sprintf(
+                '%s = zephir_fetch_property_write(%s, %s, %s);',
+                $this->getVariableCode($slot),
+                $this->getVariableCode($variableVariable),
+                $this->internedPropertyName($property, $context),
+                $this->getVariableCode($fallback)
+            )
+        );
+    }
+
+    /**
+     * The same for a static property, `ZEND_FETCH_STATIC_PROP_W`.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2691
+     */
+    public function fetchStaticPropertyWrite(
+        Variable $slot,
+        $classDefinition,
+        string $property,
+        Variable $fallback,
+        CompilationContext $context
+    ): void {
+        $context->codePrinter->output(
+            sprintf(
+                '%s = zephir_fetch_static_property_write_ce(%s, SL("%s"), %s);',
+                $this->getVariableCode($slot),
+                $classDefinition->getClassEntry(),
+                $property,
+                $this->getVariableCode($fallback)
+            )
+        );
+    }
+
+    /**
      * Registers (once per property name per method) a method-scope interned
      * zend_string slot for a compile-time-known object-property name and
      * returns its C variable. The `static` declaration and lazy init are
@@ -1880,7 +1955,7 @@ class Backend
             };
         }
 
-        if ($variable->isLocalOnly()) {
+        if ($variable->isLocalOnly() && !$variable->isDoublePointer()) {
             $groupVariables[] = $variable->getName();
 
             return null;

@@ -192,11 +192,12 @@ final class Issue2682Test extends TestCase
      * accumulate on the instance, and a fresh instance has to start from the
      * default again.
      *
-     * Not asserted, because Zephir cannot match it: an array returned out of
-     * one of these calls and held on to still aliases the property, so a later
-     * push shows through it. PHP separates the container when anything else can
-     * see it, and the kernel is handed a borrowed copy of the property rather
-     * than the property slot, so it has no container to separate.
+     * The array a call hands back is bound to a variable and read again after
+     * the next push, which is what the write context has to get right: PHP
+     * separates the container when anything else can see it, so what was handed
+     * out stops tracking the property. That used to be impossible here, because
+     * the kernel was given a borrowed copy of the property rather than the slot
+     * it lives in, and it is what #2691 closed.
      *
      * @see https://github.com/zephir-lang/zephir/issues/2691
      */
@@ -205,20 +206,22 @@ final class Issue2682Test extends TestCase
         $this->assertMatchesPhp(
             static function (): array {
                 $first = new Issue2682();
-                $first->pushIntoDefault('v');
+                $kept  = $first->pushIntoDefault('v');
 
                 return [
                     $first->pushIntoDefault('w'),
                     (new Issue2682())->pushIntoDefault('z'),
+                    $kept,
                 ];
             },
             static function (): array {
                 $first = new Issue2682DefaultsHolder();
-                $first->push('v');
+                $kept  = $first->push('v');
 
                 return [
                     $first->push('w'),
                     (new Issue2682DefaultsHolder())->push('z'),
+                    $kept,
                 ];
             }
         );
