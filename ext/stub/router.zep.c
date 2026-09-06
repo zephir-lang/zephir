@@ -225,9 +225,10 @@ PHP_METHOD(Stub_Router, getRewriteUri)
 		if (zephir_array_isset_string_fetch(&url, &_SERVER, SL("REQUEST_URI"), 0)) {
 			ZEPHIR_INIT_VAR(&urlParts);
 			zephir_fast_explode_str(&urlParts, SL("?"), &url, ZEND_LONG_MAX);
-			zephir_array_fetch_long(&realUri, &urlParts, 0, PH_NOISY | PH_READONLY, "stub/router.zep", 142);
+			zephir_memory_observe(&realUri);
+			zephir_array_fetch_long(&realUri, &urlParts, 0, PH_NOISY, "stub/router.zep", 142);
 			if (!(zephir_is_true(&realUri))) {
-				RETURN_CTOR(&realUri);
+				RETURN_CCTOR(&realUri);
 			}
 		}
 	}
@@ -404,6 +405,7 @@ PHP_METHOD(Stub_Router, setDefaultAction)
  */
 PHP_METHOD(Stub_Router, setDefaults)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *defaults, defaults_sub, namespaceName, module, controller, action, params;
 	zval *this_ptr = getThis();
 
@@ -437,27 +439,34 @@ PHP_METHOD(Stub_Router, setDefaults)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(defaults)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &defaults);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &defaults);
 	if (Z_TYPE_P(defaults) != IS_ARRAY) {
-		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_router_exception_ce, "Defaults must be an array", "stub/router.zep", 246);
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(stub_router_exception_ce, "Defaults must be an array", "stub/router.zep", 246);
 		return;
 	}
-	if (zephir_array_isset_string_fetch(&namespaceName, defaults, SL("namespace"), 1)) {
+	zephir_memory_observe(&namespaceName);
+	if (zephir_array_isset_string_fetch(&namespaceName, defaults, SL("namespace"), 0)) {
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 102, &namespaceName);
 	}
-	if (zephir_array_isset_string_fetch(&module, defaults, SL("module"), 1)) {
+	zephir_memory_observe(&module);
+	if (zephir_array_isset_string_fetch(&module, defaults, SL("module"), 0)) {
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 103, &module);
 	}
-	if (zephir_array_isset_string_fetch(&controller, defaults, SL("controller"), 1)) {
+	zephir_memory_observe(&controller);
+	if (zephir_array_isset_string_fetch(&controller, defaults, SL("controller"), 0)) {
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 104, &controller);
 	}
-	if (zephir_array_isset_string_fetch(&action, defaults, SL("action"), 1)) {
+	zephir_memory_observe(&action);
+	if (zephir_array_isset_string_fetch(&action, defaults, SL("action"), 0)) {
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 105, &action);
 	}
-	if (zephir_array_isset_string_fetch(&params, defaults, SL("params"), 1)) {
+	zephir_memory_observe(&params);
+	if (zephir_array_isset_string_fetch(&params, defaults, SL("params"), 0)) {
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_4, 106, &params);
 	}
-	RETURN_THISW();
+	RETURN_THIS();
 }
 
 /**

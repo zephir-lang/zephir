@@ -12,8 +12,8 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/array.h"
 #include "kernel/memory.h"
+#include "kernel/array.h"
 #include "kernel/object.h"
 #include "kernel/operators.h"
 
@@ -44,6 +44,7 @@ ZEPHIR_INIT_CLASS(Stub_Issue1097)
  */
 PHP_METHOD(Stub_Issue1097, testStringOrArrayOfString)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *myvar, myvar_sub, _0;
 
 	ZVAL_UNDEF(&myvar_sub);
@@ -51,16 +52,19 @@ PHP_METHOD(Stub_Issue1097, testStringOrArrayOfString)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(myvar)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &myvar);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &myvar);
 	if (Z_TYPE_P(myvar) == IS_STRING) {
-		RETURN_STRING("string");
+		RETURN_MM_STRING("string");
 	} else {
-		zephir_array_fetch_long(&_0, myvar, 0, PH_NOISY | PH_READONLY, "stub/issue1097.zep", 26);
+		zephir_memory_observe(&_0);
+		zephir_array_fetch_long(&_0, myvar, 0, PH_NOISY, "stub/issue1097.zep", 26);
 		if (Z_TYPE_P(&_0) == IS_STRING) {
-			RETURN_STRING("array-of-string");
+			RETURN_MM_STRING("array-of-string");
 		}
 	}
-	RETURN_STRING("other");
+	RETURN_MM_STRING("other");
 }
 
 /**
@@ -90,6 +94,7 @@ PHP_METHOD(Stub_Issue1097, testWithElse)
  */
 PHP_METHOD(Stub_Issue1097, testMultipleElseif)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *myvar, myvar_sub, _0, _1;
 
 	ZVAL_UNDEF(&myvar_sub);
@@ -98,21 +103,25 @@ PHP_METHOD(Stub_Issue1097, testMultipleElseif)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(myvar)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &myvar);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &myvar);
 	if (Z_TYPE_P(myvar) == IS_STRING) {
-		RETURN_STRING("string");
+		RETURN_MM_STRING("string");
 	} else {
-		zephir_array_fetch_long(&_0, myvar, 0, PH_NOISY | PH_READONLY, "stub/issue1097.zep", 55);
+		zephir_memory_observe(&_0);
+		zephir_array_fetch_long(&_0, myvar, 0, PH_NOISY, "stub/issue1097.zep", 55);
 		if (Z_TYPE_P(&_0) == IS_STRING) {
-			RETURN_STRING("array-of-string");
+			RETURN_MM_STRING("array-of-string");
 		} else {
-			zephir_array_fetch_long(&_1, myvar, 0, PH_NOISY | PH_READONLY, "stub/issue1097.zep", 57);
+			zephir_memory_observe(&_1);
+			zephir_array_fetch_long(&_1, myvar, 0, PH_NOISY, "stub/issue1097.zep", 57);
 			if (Z_TYPE_P(&_1) == IS_LONG) {
-				RETURN_STRING("array-of-int");
+				RETURN_MM_STRING("array-of-int");
 			}
 		}
 	}
-	RETURN_STRING("other");
+	RETURN_MM_STRING("other");
 }
 
 /**

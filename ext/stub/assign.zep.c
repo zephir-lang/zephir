@@ -2483,7 +2483,8 @@ PHP_METHOD(Stub_Assign, issue597)
 		}
 	}
 	if (zephir_array_isset_value_string(&_GET, SL("s"))) {
-		zephir_array_fetch_string(&_0$$4, &_GET, SL("s"), PH_NOISY | PH_READONLY, "stub/assign.zep", 1041);
+		zephir_memory_observe(&_0$$4);
+		zephir_array_fetch_string(&_0$$4, &_GET, SL("s"), PH_NOISY, "stub/assign.zep", 1041);
 		ZEPHIR_INIT_VAR(&s$$4);
 		ZVAL_LONG(&s$$4, (zephir_get_numberval(&_0$$4) * 5));
 		zephir_array_update_string(&_GET, SL("s"), &s$$4, PH_COPY | PH_SEPARATE);

@@ -14,8 +14,8 @@
 #include "kernel/main.h"
 #include "kernel/object.h"
 #include "kernel/array.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 #include "kernel/string.h"
 
 
@@ -80,6 +80,7 @@ PHP_METHOD(Stub_Logical, testAnd4)
 PHP_METHOD(Stub_Logical, testAnd9)
 {
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long b;
 	zval *a, a_sub, *b_param = NULL, _1$$3;
 
@@ -89,16 +90,19 @@ PHP_METHOD(Stub_Logical, testAnd9)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_LONG(b)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 2, 0, &a, &b_param);
 	_0 = Z_TYPE_P(a) == IS_ARRAY;
 	if (_0) {
 		_0 = zephir_array_isset_value_long(a, b);
 	}
 	if (_0) {
-		zephir_array_fetch_long(&_1$$3, a, b, PH_NOISY | PH_READONLY, "stub/logical.zep", 35);
-		RETURN_CTORW(&_1$$3);
+		zephir_memory_observe(&_1$$3);
+		zephir_array_fetch_long(&_1$$3, a, b, PH_NOISY, "stub/logical.zep", 35);
+		RETURN_CCTOR(&_1$$3);
 	}
-	RETURN_NULL();
+	RETURN_MM_NULL();
 }
 
 PHP_METHOD(Stub_Logical, testOr1)
@@ -145,6 +149,7 @@ PHP_METHOD(Stub_Logical, testMixed1)
 PHP_METHOD(Stub_Logical, testMixed2)
 {
 	zend_bool _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *match, match_sub, *minLength, minLength_sub, _2;
 
 	ZVAL_UNDEF(&match_sub);
@@ -154,20 +159,23 @@ PHP_METHOD(Stub_Logical, testMixed2)
 		Z_PARAM_ZVAL(match)
 		Z_PARAM_ZVAL(minLength)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(2, 0, &match, &minLength);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 2, 0, &match, &minLength);
 	_0 = Z_TYPE_P(match) == IS_ARRAY;
 	if (_0) {
 		_0 = zephir_fast_count_int(match) == 2;
 	}
 	_1 = _0;
 	if (_1) {
-		zephir_array_fetch_long(&_2, match, 0, PH_NOISY | PH_READONLY, "stub/logical.zep", 65);
+		zephir_memory_observe(&_2);
+		zephir_array_fetch_long(&_2, match, 0, PH_NOISY, "stub/logical.zep", 65);
 		_1 = ZEPHIR_LE_LONG(minLength, zephir_fast_strlen_ev(&_2));
 	}
 	if (_1) {
-		RETURN_BOOL(1);
+		RETURN_MM_BOOL(1);
 	}
-	RETURN_BOOL(0);
+	RETURN_MM_BOOL(0);
 }
 
 PHP_METHOD(Stub_Logical, testMixed3)

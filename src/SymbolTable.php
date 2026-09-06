@@ -16,6 +16,7 @@ namespace Zephir;
 use Zephir\Exception\CompilerException;
 use Zephir\Passes\DefiniteAssignmentPass;
 use Zephir\Passes\LocalContextPass;
+use Zephir\Passes\NativeArrayPass;
 use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
 
@@ -38,6 +39,7 @@ class SymbolTable
     protected Globals $globalsManager;
 
     protected ?DefiniteAssignmentPass $definiteAssignment = null;
+    protected ?NativeArrayPass        $nativeArray        = null;
     protected ?LocalContextPass       $localContext       = null;
 
     protected bool $mustGrownStack = false;
@@ -165,6 +167,21 @@ class SymbolTable
     public function requiresNullInitialization(string $variable): bool
     {
         return $this->definiteAssignment?->requiresNullInitialization($variable) ?? false;
+    }
+
+    /**
+     * Whether every value this local can hold is a native array, so a
+     * subscript read of it may borrow instead of taking a reference. Gathered
+     * by the NativeArrayPass, which reaches the emitters through the symbol
+     * table as the local context does.
+     *
+     * Without the pass nothing is proven, which is the safe answer.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2682
+     */
+    public function isProvenNativeArray(string $variable): bool
+    {
+        return $this->nativeArray?->isProvenNativeArray($variable) ?? false;
     }
 
     /**
@@ -865,6 +882,14 @@ class SymbolTable
     public function setDefiniteAssignment(DefiniteAssignmentPass $definiteAssignment): void
     {
         $this->definiteAssignment = $definiteAssignment;
+    }
+
+    /**
+     * Sets the native-array information.
+     */
+    public function setNativeArray(NativeArrayPass $nativeArray): void
+    {
+        $this->nativeArray = $nativeArray;
     }
 
     /**

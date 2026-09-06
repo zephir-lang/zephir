@@ -127,13 +127,15 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 		if (!(ZEPHIR_LT(&j, &k))) {
 			break;
 		}
-		zephir_array_fetch(&_11$$6, &lines, &j, PH_NOISY | PH_READONLY, "stub/fasta.zep", 38);
+		ZEPHIR_OBS_NVAR(&_11$$6);
+		zephir_array_fetch(&_11$$6, &lines, &j, PH_NOISY, "stub/fasta.zep", 38);
 		zend_print_zval(&_11$$6, 0);
 		SEPARATE_ZVAL(&j);
 		zephir_increment(&j);
 	}
 	if (zephir_safe_mod_zval_long(n, 60) > 0) {
-		zephir_array_fetch(&_12$$7, &lines, &k, PH_NOISY | PH_READONLY, "stub/fasta.zep", 43);
+		zephir_memory_observe(&_12$$7);
+		zephir_array_fetch(&_12$$7, &lines, &k, PH_NOISY, "stub/fasta.zep", 43);
 		ZVAL_LONG(&_13$$7, 0);
 		ZVAL_LONG(&_14$$7, zephir_safe_mod_zval_long(n, 60));
 		ZEPHIR_INIT_VAR(&_15$$7);

@@ -235,13 +235,17 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 		ZEPHIR_CALL_FUNCTION(&imageinfo, "getimagesize", NULL, 84, &_4$$4);
 		zephir_check_call_status();
 		if (zephir_is_true(&imageinfo)) {
-			zephir_array_fetch_long(&_5$$5, &imageinfo, 0, PH_NOISY | PH_READONLY, "stub/oo/oodestruct.zep", 62);
+			zephir_memory_observe(&_5$$5);
+			zephir_array_fetch_long(&_5$$5, &imageinfo, 0, PH_NOISY, "stub/oo/oodestruct.zep", 62);
 			zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 72, &_5$$5);
-			zephir_array_fetch_long(&_6$$5, &imageinfo, 1, PH_NOISY | PH_READONLY, "stub/oo/oodestruct.zep", 63);
+			zephir_memory_observe(&_6$$5);
+			zephir_array_fetch_long(&_6$$5, &imageinfo, 1, PH_NOISY, "stub/oo/oodestruct.zep", 63);
 			zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 73, &_6$$5);
-			zephir_array_fetch_long(&_7$$5, &imageinfo, 2, PH_NOISY | PH_READONLY, "stub/oo/oodestruct.zep", 64);
+			zephir_memory_observe(&_7$$5);
+			zephir_array_fetch_long(&_7$$5, &imageinfo, 2, PH_NOISY, "stub/oo/oodestruct.zep", 64);
 			zephir_update_property_zval_cached(this_ptr, _zephir_prop_4, 74, &_7$$5);
-			zephir_array_fetch_string(&_8$$5, &imageinfo, SL("mime"), PH_NOISY | PH_READONLY, "stub/oo/oodestruct.zep", 65);
+			zephir_memory_observe(&_8$$5);
+			zephir_array_fetch_string(&_8$$5, &imageinfo, SL("mime"), PH_NOISY, "stub/oo/oodestruct.zep", 65);
 			zephir_update_property_zval_cached(this_ptr, _zephir_prop_5, 75, &_8$$5);
 		}
 		zephir_read_property_cached(&_9$$4, this_ptr, _zephir_prop_4, 74, PH_NOISY_CC | PH_READONLY);
@@ -525,7 +529,8 @@ PHP_METHOD(Stub_Oo_OoDestruct, getVersion)
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&matches);
 		ZVAL_NULL(&matches);
-		zephir_array_fetch_string(&_5$$5, &info, SL("GD Version"), PH_NOISY | PH_READONLY, "stub/oo/oodestruct.zep", 182);
+		zephir_memory_observe(&_5$$5);
+		zephir_array_fetch_string(&_5$$5, &info, SL("GD Version"), PH_NOISY, "stub/oo/oodestruct.zep", 182);
 		ZEPHIR_INIT_VAR(&_6$$5);
 		ZVAL_STRING(&_6$$5, "/\\d+\\.\\d+(?:\\.\\d+)?/");
 		ZEPHIR_INIT_VAR(&_7$$5);

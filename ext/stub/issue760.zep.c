@@ -175,6 +175,7 @@ PHP_METHOD(Stub_Issue760, charDest)
 PHP_METHOD(Stub_Issue760, dynCharDest)
 {
 	char c = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long i;
 	zval *s, s_sub, *i_param = NULL, _0;
 
@@ -184,11 +185,14 @@ PHP_METHOD(Stub_Issue760, dynCharDest)
 		Z_PARAM_ZVAL(s)
 		Z_PARAM_LONG(i)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(2, 0, &s, &i_param);
-	zephir_array_fetch_long(&_0, s, i, PH_NOISY | PH_READONLY, "stub/issue760.zep", 81);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 2, 0, &s, &i_param);
+	zephir_memory_observe(&_0);
+	zephir_array_fetch_long(&_0, s, i, PH_NOISY, "stub/issue760.zep", 81);
 	c = (unsigned char) zephir_get_charval(&_0);
 	c = c;
-	RETURN_LONG((unsigned char) c);
+	RETURN_MM_LONG((unsigned char) c);
 }
 
 /**
@@ -280,6 +284,7 @@ PHP_METHOD(Stub_Issue760, returnStrOffset)
 
 PHP_METHOD(Stub_Issue760, returnDynOffset)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long i;
 	zval *s, s_sub, *i_param = NULL, _0;
 
@@ -289,9 +294,12 @@ PHP_METHOD(Stub_Issue760, returnDynOffset)
 		Z_PARAM_ZVAL(s)
 		Z_PARAM_LONG(i)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(2, 0, &s, &i_param);
-	zephir_array_fetch_long(&_0, s, i, PH_NOISY | PH_READONLY, "stub/issue760.zep", 119);
-	RETURN_CTORW(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 2, 0, &s, &i_param);
+	zephir_memory_observe(&_0);
+	zephir_array_fetch_long(&_0, s, i, PH_NOISY, "stub/issue760.zep", 119);
+	RETURN_CCTOR(&_0);
 }
 
 /**

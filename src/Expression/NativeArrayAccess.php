@@ -29,8 +29,9 @@ class NativeArrayAccess
 {
     protected bool      $expecting = true;
     protected ?Variable $expectingVariable;
-    protected bool      $noisy     = true;
-    protected bool      $readOnly  = false;
+    protected bool      $noisy        = true;
+    protected bool      $readOnly     = false;
+    protected bool      $writeThrough = false;
 
     /**
      * Compiles foo[x] = {expr}.
@@ -136,6 +137,26 @@ class NativeArrayAccess
     }
 
     /**
+     * Sets whether the caller will write through the fetched value instead of
+     * only reading it, which is what a by-reference call argument does. The
+     * write only reaches the container through a borrowed pointer, so such a
+     * read has to borrow whether or not the container is a proven array. PHP
+     * refuses the same construct on an ArrayAccess object with "Indirect
+     * modification of overloaded element ... has no effect".
+     *
+     * An ArrayAccess container therefore still leaks the offsetGet() result
+     * here, one allocation per call, because nothing can release a value the
+     * generated code never registers. That is the one case the proof cannot
+     * cover, and it is a construct PHP does not support either.
+     *
+     * @see Zephir\FunctionCall::markReferences()
+     */
+    public function setWriteThrough(bool $writeThrough): void
+    {
+        $this->writeThrough = $writeThrough;
+    }
+
+    /**
      * @throws Exception
      * @throws ReflectionException
      */
@@ -182,12 +203,28 @@ class NativeArrayAccess
         }
 
         /**
+         * A read-only target borrows the value: the kernel skips the addref
+         * (ZVAL_COPY_VALUE) and the emitter neither observes the target nor
+         * lets the memory frame release it. Only a container that owns its
+         * values can back that bargain. An ArrayAccess object builds the value
+         * inside offsetGet() and owns nothing once it has returned, so a
+         * container that might be one hands over an owned value instead, and
+         * the target has to keep its own reference to it.
+         *
+         * The declared type does not settle this, so the NativeArrayPass does.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2682
+         */
+        $canBorrow = $this->writeThrough
+            || $compilationContext->symbolTable->isProvenNativeArray($variableVariable->getRealName());
+
+        /**
          * Resolves the symbol that expects the value.
          */
         $readOnly       = false;
         $symbolVariable = $this->expectingVariable;
 
-        if ($this->readOnly) {
+        if ($this->readOnly && $canBorrow) {
             if ($this->expecting && $this->expectingVariable) {
                 /**
                  * If a variable is assigned once in the method, we try to promote it
@@ -195,7 +232,7 @@ class NativeArrayAccess
                  */
                 if ('return_value' != $symbolVariable->getName()) {
                     $line = $compilationContext->symbolTable->getLastCallLine();
-                    if (false === $line || ($line > 0 && $line < $expression['line'])) {
+                    if ($canBorrow && (false === $line || ($line > 0 && $line < $expression['line']))) {
                         $numberMutations = $compilationContext->symbolTable->getExpectedMutations(
                             $symbolVariable->getName()
                         );
@@ -236,7 +273,7 @@ class NativeArrayAccess
                  */
                 if ('return_value' !== $symbolVariable->getName()) {
                     $line = $compilationContext->symbolTable->getLastCallLine();
-                    if (false === $line || ($line > 0 && $line < $expression['line'])) {
+                    if ($canBorrow && (false === $line || ($line > 0 && $line < $expression['line']))) {
                         $numberMutations = $compilationContext->symbolTable->getExpectedMutations(
                             $symbolVariable->getName()
                         );
@@ -286,7 +323,7 @@ class NativeArrayAccess
          */
         $symbolVariable->setDynamicTypes('undefined');
 
-        if ($this->readOnly || $readOnly) {
+        if ($canBorrow && ($this->readOnly || $readOnly)) {
             $flags = $this->noisy ? 'PH_NOISY | PH_READONLY' : 'PH_READONLY';
         } else {
             $flags = $this->noisy ? 'PH_NOISY' : '0';

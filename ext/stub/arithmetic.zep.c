@@ -1730,6 +1730,7 @@ PHP_METHOD(Stub_Arithmetic, longLiteralPlusVar)
  */
 PHP_METHOD(Stub_Arithmetic, shiftOrPrecedence)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long offset, code = 0;
 	zval *hmac, hmac_sub, *offset_param = NULL, _0, _1, _2, _3;
 
@@ -1742,12 +1743,18 @@ PHP_METHOD(Stub_Arithmetic, shiftOrPrecedence)
 		Z_PARAM_ZVAL(hmac)
 		Z_PARAM_LONG(offset)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(2, 0, &hmac, &offset_param);
-	zephir_array_fetch_long(&_0, hmac, (offset + 0), PH_NOISY | PH_READONLY, "stub/arithmetic.zep", 1511);
-	zephir_array_fetch_long(&_1, hmac, (offset + 1), PH_NOISY | PH_READONLY, "stub/arithmetic.zep", 1511);
-	zephir_array_fetch_long(&_2, hmac, (offset + 2), PH_NOISY | PH_READONLY, "stub/arithmetic.zep", 1511);
-	zephir_array_fetch_long(&_3, hmac, (offset + 3), PH_NOISY | PH_READONLY, "stub/arithmetic.zep", 1511);
-	code = (((((((int) (zephir_get_numberval(&_0)) & 0x7F)) << 24) | ((((int) (zephir_get_numberval(&_1)) & 0xFF)) << 16)) | ((((int) (zephir_get_numberval(&_2)) & 0xFF)) << 8)) | (((int) (zephir_get_numberval(&_3)) & 0xFF)));
-	RETURN_LONG(code);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 2, 0, &hmac, &offset_param);
+	zephir_memory_observe(&_0);
+	zephir_array_fetch_long(&_0, hmac, (offset + 0), PH_NOISY, "stub/arithmetic.zep", 1511);
+	zephir_memory_observe(&_1);
+	zephir_array_fetch_long(&_1, hmac, (offset + 1), PH_NOISY, "stub/arithmetic.zep", 1511);
+	zephir_memory_observe(&_2);
+	zephir_array_fetch_long(&_2, hmac, (offset + 2), PH_NOISY, "stub/arithmetic.zep", 1511);
+	zephir_memory_observe(&_3);
+	zephir_array_fetch_long(&_3, hmac, (offset + 3), PH_NOISY, "stub/arithmetic.zep", 1511);
+	code = ((((((int) (zephir_get_numberval(&_0)) & 0x7F) << 24) | (((int) (zephir_get_numberval(&_1)) & 0xFF) << 16)) | (((int) (zephir_get_numberval(&_2)) & 0xFF) << 8)) | ((int) (zephir_get_numberval(&_3)) & 0xFF));
+	RETURN_MM_LONG(code);
 }
 

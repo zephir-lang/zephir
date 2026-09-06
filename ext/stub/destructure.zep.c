@@ -389,9 +389,11 @@ PHP_METHOD(Stub_Destructure, typedTargets)
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "x");
 	zephir_array_fast_append(&_0, &_1);
-	zephir_array_fetch_long(&_2, &_0, 0, PH_NOISY | PH_READONLY, "stub/destructure.zep", 112);
+	zephir_memory_observe(&_2);
+	zephir_array_fetch_long(&_2, &_0, 0, PH_NOISY, "stub/destructure.zep", 112);
 	i = zephir_get_numberval(&_2);
-	zephir_array_fetch_long(&_3, &_0, 1, PH_NOISY | PH_READONLY, "stub/destructure.zep", 112);
+	zephir_memory_observe(&_3);
+	zephir_array_fetch_long(&_3, &_0, 1, PH_NOISY, "stub/destructure.zep", 112);
 	zephir_get_strval(&s, &_3);
 	zephir_create_array(return_value, 2, 0);
 	ZEPHIR_INIT_NVAR(&_1);
