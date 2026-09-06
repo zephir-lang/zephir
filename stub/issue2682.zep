@@ -29,6 +29,10 @@ class Issue2682
 {
     protected retained = [];
 
+    protected shelf = [];
+
+    protected defaults = ["bucket": ["seed"]];
+
     /**
      * `fetch` family, kernel/array.c zephir_array_isset_string_fetch().
      *
@@ -173,5 +177,84 @@ class Issue2682
         let value = table["namespace"];
 
         return value;
+    }
+
+    /**
+     * A subscript handed to a by-reference parameter, with a native array
+     * container someone else also holds.
+     *
+     * PHP fetches the dimension in write context: it separates the bucket and
+     * turns it into a real reference, so the push reaches the container however
+     * many holders there were, and the alias taken beforehand keeps the value
+     * it was given. Zephir borrows the container's value and wraps the borrow
+     * in a reference, which only writes through while the inner array is
+     * unshared. Take the alias first and array_push() separates the borrowed
+     * temp instead, so the write lands on a copy nobody can reach.
+     */
+    public function pushShared(string key, string value) -> array
+    {
+        var alias;
+
+        let this->shelf = [];
+        let this->shelf[key] = [];
+        let alias = this->shelf[key];
+
+        array_push(this->shelf[key], value);
+
+        return ["shelf": this->shelf[key], "alias": alias];
+    }
+
+    /**
+     * The container is a persistent array default, so the table starts at
+     * refcount 2 with IS_ARRAY_IMMUTABLE and is shared by every instance of
+     * this class. The write context has to separate it before it turns the
+     * element into a reference, or it would write into that shared table.
+     */
+    public function pushIntoDefault(string value) -> array
+    {
+        array_push(this->defaults["bucket"], value);
+
+        return this->defaults;
+    }
+
+    /**
+     * The same construct with an ArrayAccess container. PHP takes an owned copy
+     * and says so, `Indirect modification of overloaded element ... has no
+     * effect`; the write goes nowhere and nothing is left behind. Zephir
+     * borrowed a value offsetGet() owns, so nothing released it.
+     */
+    public function pushIntoContainer(container, string value) -> bool
+    {
+        if typeof container === "null" {
+            throw new \RuntimeException("A container is required");
+        }
+
+        array_push(container["bucket"], value);
+
+        return true;
+    }
+
+    /**
+     * `pushIntoContainer()` run `iterations` times. The container answers every
+     * read with a freshly allocated array, so anything not released shows up as
+     * growth. leakProbeControl() above is the positive control for this too.
+     */
+    public function writeLeakProbe(var container, int iterations) -> int
+    {
+        int i;
+        var before, after, sink;
+
+        let sink = null;
+        let before = memory_get_usage();
+
+        let i = 0;
+        while i < iterations {
+            let sink = this->pushIntoContainer(container, "v");
+            let i++;
+        }
+
+        let after = memory_get_usage();
+
+        return after - before;
     }
 }

@@ -29,6 +29,76 @@
 #include "kernel/fcall.h"
 #include "kernel/string.h"
 
+/**
+ * Hands a found array element to the caller under one of three contracts.
+ *
+ * PH_WRITE is the write context, PHP's `zend_fetch_dimension_address_inner()`
+ * (Zend/zend_execute.c): the element becomes a real reference, so the callee's
+ * write reaches the container however many holders the *value* has. Without it
+ * a shared value separates inside the callee and the write lands on a copy
+ * nobody can reach.
+ *
+ * PHP also separates the *container* first, and that half is not available
+ * here. `arr` is the caller's own zval, and for the construct this exists for
+ * it is a borrowed copy of a property rather than the property slot, so
+ * SEPARATE_ARRAY() would GC_TRY_DELREF() a reference this zval never took and
+ * free the table under its real owner. So the element is only turned into a
+ * reference when the table is unshared and mutable, which is when writing to it
+ * is nobody else's business; otherwise the caller gets an owned copy and the
+ * write reaches no further than that copy.
+ *
+ * PH_READONLY borrows: no addref, and the caller neither observes the target
+ * nor releases it, because the container owns the value.
+ *
+ * Otherwise the caller gets its own reference.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2682
+ * @see https://github.com/zephir-lang/zephir/issues/2691
+ */
+static void zephir_array_fetch_found(zval *return_value, const zval *arr, zval *zv, int flags)
+{
+	if ((flags & PH_WRITE) == PH_WRITE) {
+		const zend_array *ht = Z_ARRVAL_P(arr);
+
+		if (GC_REFCOUNT(ht) == 1 && !(GC_FLAGS(ht) & IS_ARRAY_IMMUTABLE)) {
+			ZVAL_MAKE_REF(zv);
+		}
+
+		ZVAL_COPY(return_value, zv);
+
+		return;
+	}
+
+	if ((flags & PH_READONLY) == PH_READONLY) {
+		ZVAL_COPY_VALUE(return_value, zv);
+
+		return;
+	}
+
+	ZVAL_COPY(return_value, zv);
+}
+
+/**
+ * PHP's warning for a write context it cannot honour.
+ *
+ * An ArrayAccess object builds the value inside offsetGet() and owns nothing
+ * afterwards, so unless it handed back a reference, or an object whose identity
+ * is the thing being modified, the caller is about to write into a temporary.
+ * Same condition and same wording as `zend_fetch_dimension_address_inner()`,
+ * which has not moved since 8.0.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2682
+ */
+static void zephir_array_fetch_overloaded_notice(const zval *arr, const zval *fetched)
+{
+	if (Z_ISREF_P(fetched) || Z_TYPE_P(fetched) == IS_OBJECT) {
+		return;
+	}
+
+	zend_error(E_NOTICE, "Indirect modification of overloaded element of %s has no effect",
+		ZSTR_VAL(Z_OBJCE_P(arr)->name));
+}
+
 void ZEPHIR_FASTCALL zephir_create_array(zval *return_value, uint32_t size, int initialize)
 {
 	uint32_t i;
@@ -738,6 +808,10 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
 			/* No PH_READONLY here: offsetGet() owns nothing once it has
 			 * returned, so its result is handed over owned. @see kernel/array.h */
+			if ((flags & PH_WRITE) == PH_WRITE) {
+				zephir_array_fetch_overloaded_notice(arr, return_value);
+			}
+
 			return SUCCESS;
 		}
 
@@ -785,11 +859,8 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 		}
 
 		if (result != FAILURE && found == 1) {
-			if ((flags & PH_READONLY) == PH_READONLY) {
-				ZVAL_COPY_VALUE(return_value, zv);
-			} else {
-				ZVAL_COPY(return_value, zv);
-			}
+			zephir_array_fetch_found(return_value, arr, zv, flags);
+
 			return SUCCESS;
 		}
 
@@ -825,18 +896,18 @@ int zephir_array_fetch_string(zval *return_value, zval *arr, const char *index, 
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
 			/* No PH_READONLY here: offsetGet() owns nothing once it has
 			 * returned, so its result is handed over owned. @see kernel/array.h */
+			if ((flags & PH_WRITE) == PH_WRITE) {
+				zephir_array_fetch_overloaded_notice(arr, return_value);
+			}
+
 			return SUCCESS;
 		}
 
 		return FAILURE;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_str_find(Z_ARRVAL_P(arr), index, index_length)) != NULL) {
+			zephir_array_fetch_found(return_value, arr, zv, flags);
 
-			if ((flags & PH_READONLY) == PH_READONLY) {
-				ZVAL_COPY_VALUE(return_value, zv);
-			} else {
-				ZVAL_COPY(return_value, zv);
-			}
 			return SUCCESS;
 		}
 		if ((flags & PH_NOISY) == PH_NOISY) {
@@ -877,18 +948,18 @@ int zephir_array_fetch_long(zval *return_value, zval *arr, zend_long index, int 
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
 			/* No PH_READONLY here: offsetGet() owns nothing once it has
 			 * returned, so its result is handed over owned. @see kernel/array.h */
+			if ((flags & PH_WRITE) == PH_WRITE) {
+				zephir_array_fetch_overloaded_notice(arr, return_value);
+			}
+
 			return SUCCESS;
 		}
 
 		return FAILURE;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_index_find(Z_ARRVAL_P(arr), (zend_ulong) index)) != NULL) {
+			zephir_array_fetch_found(return_value, arr, zv, flags);
 
-			if ((flags & PH_READONLY) == PH_READONLY) {
-				ZVAL_COPY_VALUE(return_value, zv);
-			} else {
-				ZVAL_COPY(return_value, zv);
-			}
 			return SUCCESS;
 		}
 		if ((flags & PH_NOISY) == PH_NOISY) {

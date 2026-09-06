@@ -14,16 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Test\CodeGen;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
-use Zephir\Backend\Backend;
-use Zephir\Backend\StringsManager;
-use Zephir\Compiler;
-use Zephir\Compiler\CompilerFileFactory;
-use Zephir\Config;
-use Zephir\FileSystem\HardDisk;
-use Zephir\Os;
-use Zephir\Parser\Manager;
-use Zephir\Parser\Parser;
 
 /**
  * A local whose only assignment sits inside a conditional has to be registered
@@ -45,66 +35,16 @@ use Zephir\Parser\Parser;
  */
 final class ConditionalVariableInitTest extends TestCase
 {
-    private Compiler $compiler;
-    private CompilerFileFactory $compilerFileFactory;
-    private string $originalCwd;
-    private string $tempDir;
+    use CompilesZephirSource;
 
     protected function setUp(): void
     {
-        if (Os::isWindows()) {
-            $this->markTestSkipped('Code generation tests do not run on Windows.');
-        }
-
-        $this->originalCwd = getcwd();
-
-        $this->tempDir = sys_get_temp_dir() . '/zephir_issue2679_test_' . uniqid('', true);
-        mkdir($this->tempDir . '/ext/stub/issue2679', 0755, true);
-        mkdir($this->tempDir . '/stub/issue2679', 0755, true);
-
-        file_put_contents(
-            $this->tempDir . '/config.json',
-            json_encode(['namespace' => 'stub'], JSON_PRETTY_PRINT)
-        );
-
-        chdir($this->tempDir);
-
-        $config = new Config();
-        $disk   = new HardDisk($this->tempDir . '/.zephir');
-        $disk->initialize();
-        $disk->makeDirectory('.');
-        $logger  = new NullLogger();
-        $backend = new Backend($config, ZEPHIRPATH . 'kernel', ZEPHIRPATH . 'templates');
-
-        $this->compilerFileFactory = new CompilerFileFactory($config, $disk, $logger);
-
-        $this->compiler = new Compiler(
-            $config,
-            $backend,
-            new Manager(new Parser()),
-            $disk,
-            $this->compilerFileFactory
-        );
-        $this->compiler->setLogger($logger);
+        $this->setUpCodeGen('zephir_issue2679_test_', ['stub/issue2679']);
     }
 
     protected function tearDown(): void
     {
-        chdir($this->originalCwd);
-
-        if (is_dir($this->tempDir)) {
-            $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator(
-                    $this->tempDir,
-                    \FilesystemIterator::SKIP_DOTS
-                ),
-                \RecursiveIteratorIterator::CHILD_FIRST
-            );
-            foreach ($iterator as $file) {
-                $file->isDir() ? rmdir($file->getRealPath()) : unlink($file->getRealPath());
-            }
-            rmdir($this->tempDir);
-        }
+        $this->tearDownCodeGen();
     }
 
     /**
@@ -156,7 +96,7 @@ final class ConditionalVariableInitTest extends TestCase
         string $name,
         string $firstBranch
     ): void {
-        $body         = $this->methodBody($this->compileFixture(), $method);
+        $body         = $this->methodBodyUntilNextMethod($this->compileFixture(), $method);
         $registration = 'ZEPHIR_INIT_VAR(&' . $name . ');';
 
         $this->assertStringContainsString(
@@ -200,7 +140,7 @@ final class ConditionalVariableInitTest extends TestCase
         string $name,
         string $firstBranch
     ): void {
-        $body         = $this->methodBody($this->compileFixture(), $method);
+        $body         = $this->methodBodyUntilNextMethod($this->compileFixture(), $method);
         $registration = 'ZEPHIR_INIT_VAR(&' . $name . ');';
 
         $this->assertGreaterThan(
@@ -223,7 +163,7 @@ final class ConditionalVariableInitTest extends TestCase
      */
     public function testExhaustiveIfElseKeepsItsHoistedRegistration(): void
     {
-        $body = $this->methodBody($this->compileFixture(), 'exhaustiveIfElse');
+        $body = $this->methodBodyUntilNextMethod($this->compileFixture(), 'exhaustiveIfElse');
 
         $this->assertSame(1, substr_count($body, 'ZEPHIR_INIT_VAR(&x);'));
         $this->assertStringNotContainsString(
@@ -242,7 +182,7 @@ final class ConditionalVariableInitTest extends TestCase
      */
     public function testFetchTargetIsNotRegistered(): void
     {
-        $body = $this->methodBody($this->compileFixture(), 'fetchCase');
+        $body = $this->methodBodyUntilNextMethod($this->compileFixture(), 'fetchCase');
 
         $this->assertStringContainsString(
             'zephir_memory_observe(&v);',
@@ -262,7 +202,7 @@ final class ConditionalVariableInitTest extends TestCase
      */
     public function testNeverAssignedLocalStillStartsAsNull(): void
     {
-        $body = $this->methodBody($this->compileFixture(), 'neverAssigned');
+        $body = $this->methodBodyUntilNextMethod($this->compileFixture(), 'neverAssigned');
 
         $this->assertStringContainsString('ZVAL_NULL(&x);', $body);
         $this->assertStringNotContainsString('ZEPHIR_INIT_VAR(&x);', $body);
@@ -274,7 +214,7 @@ final class ConditionalVariableInitTest extends TestCase
      */
     public function testNativeLocalIsUntouched(): void
     {
-        $body = $this->methodBody($this->compileFixture(), 'nativeLocal');
+        $body = $this->methodBodyUntilNextMethod($this->compileFixture(), 'nativeLocal');
 
         $this->assertStringContainsString('zend_long i = 0;', $body);
         $this->assertStringNotContainsString('ZEPHIR_INIT_VAR(&i);', $body);
@@ -450,22 +390,18 @@ class Branch
     }
 }
 ZEP;
-        file_put_contents($this->tempDir . '/stub/issue2679/branch.zep', $zep);
+        $this->compileSource('Stub\\Issue2679\\Branch', 'stub/issue2679/branch.zep', $zep);
 
-        $compilerFile = $this->compilerFileFactory->create(
-            'Stub\\Issue2679\\Branch',
-            'stub/issue2679/branch.zep'
-        );
-        $compilerFile->preCompile($this->compiler);
-        $compilerFile->compile($this->compiler, new StringsManager());
-
-        return file_get_contents($this->tempDir . '/ext/stub/issue2679/branch.zep.c');
+        return $this->generatedC('stub/issue2679/branch.zep');
     }
 
     /**
      * Returns the C body of a single generated method.
+     *
+     * Not CompilesZephirSource::methodBody(): this one takes a bare method name
+     * and runs to the next `PHP_METHOD(` marker rather than counting braces.
      */
-    private function methodBody(string $generated, string $method): string
+    private function methodBodyUntilNextMethod(string $generated, string $method): string
     {
         $marker   = 'PHP_METHOD(Stub_Issue2679_Branch, ' . $method . ')';
         $startPos = strpos($generated, $marker);

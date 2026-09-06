@@ -14,16 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Test\CodeGen;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
-use Zephir\Backend\Backend;
-use Zephir\Backend\StringsManager;
-use Zephir\Compiler;
-use Zephir\Compiler\CompilerFileFactory;
 use Zephir\Config;
-use Zephir\FileSystem\HardDisk;
-use Zephir\Os;
-use Zephir\Parser\Manager;
-use Zephir\Parser\Parser;
 
 /**
  * Code generated with `internal-call-transformation` enabled.
@@ -41,58 +32,23 @@ use Zephir\Parser\Parser;
  */
 final class InternalCallTransformationTest extends TestCase
 {
-    private string $originalCwd;
-    private string $tempDir;
-    private Compiler $compiler;
+    use CompilesZephirSource;
 
     protected function setUp(): void
     {
-        if (Os::isWindows()) {
-            $this->markTestSkipped('Code generation tests do not run on Windows.');
-        }
-
-        $this->originalCwd = getcwd();
-
-        $this->tempDir = sys_get_temp_dir() . '/zephir_ict_test_' . uniqid('', true);
-        mkdir($this->tempDir . '/ext/stub/issue2021', 0755, true);
-        mkdir($this->tempDir . '/stub/issue2021', 0755, true);
-
-        file_put_contents(
-            $this->tempDir . '/config.json',
-            json_encode(
-                [
-                    'namespace'     => 'stub',
-                    'optimizations' => ['internal-call-transformation' => true],
-                ],
-                JSON_PRETTY_PRINT
-            )
+        $this->setUpCodeGen(
+            'zephir_ict_test_',
+            ['stub/issue2021'],
+            [
+                'namespace'     => 'stub',
+                'optimizations' => ['internal-call-transformation' => true],
+            ]
         );
-
-        chdir($this->tempDir);
-
-        $config = new Config();
-        $disk   = new HardDisk($this->tempDir . '/.zephir');
-        $disk->initialize();
-        $disk->makeDirectory('.');
-        $logger  = new NullLogger();
-        $backend = new Backend($config, ZEPHIRPATH . 'kernel', ZEPHIRPATH . 'templates');
-
-        $compilerFactory = new CompilerFileFactory($config, $disk, $logger);
-
-        $this->compiler = new Compiler(
-            $config,
-            $backend,
-            new Manager(new Parser()),
-            $disk,
-            $compilerFactory
-        );
-        $this->compiler->setLogger($logger);
     }
 
     protected function tearDown(): void
     {
-        chdir($this->originalCwd);
-        $this->removeDirectory($this->tempDir);
+        $this->tearDownCodeGen();
     }
 
     public function testOptionIsEnabledForTheseFixtures(): void
@@ -420,23 +376,11 @@ final class InternalCallTransformationTest extends TestCase
      */
     private function compileZep(string $className, string $zep): string
     {
-        $lower = strtolower($className);
+        $relPath = 'stub/issue2021/' . strtolower($className) . '.zep';
 
-        file_put_contents($this->tempDir . '/stub/issue2021/' . $lower . '.zep', $zep);
+        $this->compileSource('Stub\\Issue2021\\' . $className, $relPath, $zep);
 
-        $factoryProp = (new \ReflectionClass($this->compiler))->getProperty('compilerFileFactory');
-        $factoryProp->setAccessible(true);
-        /** @var CompilerFileFactory $compilerFileFactory */
-        $compilerFileFactory = $factoryProp->getValue($this->compiler);
-
-        $compilerFile = $compilerFileFactory->create(
-            'Stub\\Issue2021\\' . $className,
-            'stub/issue2021/' . $lower . '.zep'
-        );
-        $compilerFile->preCompile($this->compiler);
-        $compilerFile->compile($this->compiler, new StringsManager());
-
-        return file_get_contents($this->tempDir . '/ext/stub/issue2021/' . $lower . '.zep.c');
+        return $this->generatedC($relPath);
     }
 
     /**
@@ -465,23 +409,5 @@ final class InternalCallTransformationTest extends TestCase
         }
 
         return substr($haystack, $startPos, $endPos - $startPos);
-    }
-
-    private function removeDirectory(string $dir): void
-    {
-        if (!is_dir($dir)) {
-            return;
-        }
-
-        $items = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        foreach ($items as $item) {
-            $item->isDir() ? rmdir($item->getPathname()) : unlink($item->getPathname());
-        }
-
-        rmdir($dir);
     }
 }

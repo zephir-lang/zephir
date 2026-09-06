@@ -50,10 +50,10 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 	value = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&name_zv, name);
 	zephir_update_property_zval_zval(this_ptr, &name_zv, value);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 80, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 82, PH_NOISY_CC | PH_READONLY);
 	ZVAL_UNDEF(&_1);
 	ZVAL_LONG(&_1, (zephir_get_numberval(&_0) + 1));
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 80, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 82, &_1);
 }
 
 PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __get)

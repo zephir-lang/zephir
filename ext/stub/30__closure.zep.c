@@ -50,7 +50,7 @@ PHP_METHOD(stub_30__closure, __invoke)
 	if (ZEPHIR_IS_STRING_IDENTICAL(&suffix, "")) {
 		RETURN_MM_MEMBER(this_ptr, "_name");
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 139, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 141, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CONCAT_VV(return_value, &_0, &suffix);
 	RETURN_MM();
 }

@@ -94,7 +94,18 @@ int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint
  * PH_READONLY carries the same contract as the `readonly` argument above, and
  * the ArrayAccess branch ignores it for the same reason.
  *
+ * PH_WRITE is its opposite and the two are mutually exclusive: the caller is
+ * about to write through the value, which is what a by-reference call argument
+ * does. The result is always owned, so the emitter observes the target and the
+ * memory frame releases it whichever branch ran. A native array element is
+ * turned into a real reference so the write reaches the container, and an
+ * ArrayAccess container gets PHP's "Indirect modification of overloaded element
+ * ... has no effect" notice under PHP's own condition. See
+ * zephir_array_fetch_found() for the one half of PHP's write context that
+ * cannot be reproduced here, separating a shared container.
+ *
  * @see https://github.com/zephir-lang/zephir/issues/2682
+ * @see https://github.com/zephir-lang/zephir/issues/2691
  */
 int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEPHIR_DEBUG_PARAMS);
 int zephir_array_fetch_string(zval *return_value, zval *arr, const char *index, uint32_t index_length, int flags ZEPHIR_DEBUG_PARAMS);

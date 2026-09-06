@@ -934,6 +934,17 @@ class SymbolTable
                 if (!$variable->isDoublePointer() && $variable->isIdle()) {
                     $variable->setIdle(false);
 
+                    /**
+                     * Whether the kernel already made the slot a reference is
+                     * true of one fetch, not of the slot. Left set, the next
+                     * by-reference argument to land in this temp would be
+                     * wrapped conditionally and never unwrapped, so the caller
+                     * would read an IS_REFERENCE back out of it.
+                     *
+                     * @see https://github.com/zephir-lang/zephir/issues/2691
+                     */
+                    $variable->setIsWriteContextReference(false);
+
                     return $variable;
                 }
             }

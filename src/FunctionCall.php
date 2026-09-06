@@ -669,21 +669,43 @@ class FunctionCall extends Call
                                 continue;
                             }
 
+                            /**
+                             * The callee writes through the reference, so this is
+                             * a write however much it reads like a read here.
+                             * Without the record the variable looks
+                             * never-assigned to the compiler.
+                             *
+                             * @see https://github.com/zephir-lang/zephir/issues/2654
+                             */
                             $variable = $compilationContext->symbolTable->getVariable($parameters[$n - 1]);
                             if ($variable) {
-                                /**
-                                 * The callee writes through the reference, so
-                                 * this is a write however much it reads like a
-                                 * read here. Without the record the variable
-                                 * looks never-assigned to the compiler.
-                                 *
-                                 * @see https://github.com/zephir-lang/zephir/issues/2654
-                                 */
                                 $variable->increaseMutates();
                                 $variable->setDynamicTypes('undefined');
                                 $referenceSymbol = $compilationContext->backend->getVariableCode($variable);
-                                $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF(' . $referenceSymbol . ');');
-                                $references[] = $parameters[$n - 1];
+
+                                if ($variable->isWriteContextReference()) {
+                                    /**
+                                     * A subscript fetched in write context comes
+                                     * back as a reference into a native array
+                                     * container, and as the owned offsetGet()
+                                     * result for an ArrayAccess one, so only the
+                                     * second needs wrapping. It is not registered
+                                     * for the unref either: the memory frame owns
+                                     * it, and ZEPHIR_UNREF() would efree a
+                                     * zend_reference the container still points
+                                     * at.
+                                     *
+                                     * @see https://github.com/zephir-lang/zephir/issues/2682
+                                     */
+                                    $compilationContext->codePrinter->output(
+                                        'ZEPHIR_MAKE_WRITE_REF(' . $referenceSymbol . ');'
+                                    );
+                                } else {
+                                    $compilationContext->codePrinter->output(
+                                        'ZEPHIR_MAKE_REF(' . $referenceSymbol . ');'
+                                    );
+                                    $references[] = $parameters[$n - 1];
+                                }
                             }
                         }
                     }

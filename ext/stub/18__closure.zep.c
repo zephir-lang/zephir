@@ -46,7 +46,7 @@ PHP_METHOD(stub_18__closure, __invoke)
 	zephir_read_property(&prefix, this_ptr, SL("prefix"), PH_NOISY_CC);
 	this_ptr = &__$zephir_this;
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 138, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 140, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CONCAT_VSV(return_value, &prefix, ":", &_0);
 	RETURN_MM();
 }

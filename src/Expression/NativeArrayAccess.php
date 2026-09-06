@@ -138,18 +138,27 @@ class NativeArrayAccess
 
     /**
      * Sets whether the caller will write through the fetched value instead of
-     * only reading it, which is what a by-reference call argument does. The
-     * write only reaches the container through a borrowed pointer, so such a
-     * read has to borrow whether or not the container is a proven array. PHP
-     * refuses the same construct on an ArrayAccess object with "Indirect
-     * modification of overloaded element ... has no effect".
+     * only reading it, which is what a by-reference call argument does.
      *
-     * An ArrayAccess container therefore still leaks the offsetGet() result
-     * here, one allocation per call, because nothing can release a value the
-     * generated code never registers. That is the one case the proof cannot
-     * cover, and it is a construct PHP does not support either.
+     * Such a read is never a borrow. It emits PH_WRITE, and the kernel follows
+     * PHP's `zend_fetch_dimension_address_inner()` as far as it can: a native
+     * array element becomes a real reference, so the write reaches the container
+     * however many holders the *value* had, and an ArrayAccess container yields
+     * the owned offsetGet() result plus PHP's "Indirect modification of
+     * overloaded element ... has no effect" notice. Ownership is the same on
+     * both paths, so the target is observed and the memory frame releases it
+     * either way.
+     *
+     * Borrowing here used to lose the write whenever the value was shared, and
+     * to leak one allocation per call for an ArrayAccess container.
+     *
+     * What the kernel cannot do is separate a shared *container*, because it is
+     * handed a borrowed copy of one rather than the slot it lives in. See
+     * zephir_array_fetch_found() in kernel/array.c for what that leaves.
      *
      * @see Zephir\FunctionCall::markReferences()
+     * @see https://github.com/zephir-lang/zephir/issues/2682
+     * @see https://github.com/zephir-lang/zephir/issues/2691
      */
     public function setWriteThrough(bool $writeThrough): void
     {
@@ -215,97 +224,51 @@ class NativeArrayAccess
          *
          * @see https://github.com/zephir-lang/zephir/issues/2682
          */
-        $canBorrow = $this->writeThrough
-            || $compilationContext->symbolTable->isProvenNativeArray($variableVariable->getRealName());
+        $canBorrow = !$this->writeThrough
+            && $compilationContext->symbolTable->isProvenNativeArray($variableVariable->getRealName());
 
         /**
          * Resolves the symbol that expects the value.
+         *
+         * A borrowing read and any other read resolve the symbol identically.
+         * They part only over the temp that stands in when the caller has no
+         * variable of its own, which is what borrowedTempVariable() picks.
          */
         $readOnly       = false;
+        $borrowing      = $this->readOnly && $canBorrow;
         $symbolVariable = $this->expectingVariable;
 
-        if ($this->readOnly && $canBorrow) {
-            if ($this->expecting && $this->expectingVariable) {
-                /**
-                 * If a variable is assigned once in the method, we try to promote it
-                 * to a read only variable
-                 */
-                if ('return_value' != $symbolVariable->getName()) {
-                    $line = $compilationContext->symbolTable->getLastCallLine();
-                    if ($canBorrow && (false === $line || ($line > 0 && $line < $expression['line']))) {
-                        $numberMutations = $compilationContext->symbolTable->getExpectedMutations(
-                            $symbolVariable->getName()
-                        );
-                        if (1 == $numberMutations) {
-                            if ($symbolVariable->getNumberMutations() == $numberMutations) {
-                                $symbolVariable->setMemoryTracked(false);
-                                $readOnly = true;
-                            }
-                        }
+        if ($this->expecting && $this->expectingVariable) {
+            /**
+             * If a variable is assigned once in the method, we try to promote it
+             * to a read only variable
+             */
+            if ('return_value' !== $symbolVariable->getName()) {
+                $line = $compilationContext->symbolTable->getLastCallLine();
+                if ($canBorrow && (false === $line || ($line > 0 && $line < $expression['line']))) {
+                    $numberMutations = $compilationContext->symbolTable->getExpectedMutations(
+                        $symbolVariable->getName()
+                    );
+                    if (1 == $numberMutations && $symbolVariable->getNumberMutations() == $numberMutations) {
+                        $symbolVariable->setMemoryTracked(false);
+                        $readOnly = true;
                     }
                 }
+            }
 
-                /**
-                 * Variable is not read-only or it wasn't promoted
-                 */
-                if (!$readOnly) {
-                    if ('return_value' != $symbolVariable->getName()) {
-                        $symbolVariable->observeVariant($compilationContext);
-                        $this->readOnly = false;
-                    } else {
-                        $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable(
-                            'variable',
-                            $compilationContext,
-                        );
-                    }
+            /**
+             * Variable is not read-only or it wasn't promoted
+             */
+            if (!$readOnly) {
+                if ('return_value' !== $symbolVariable->getName()) {
+                    $symbolVariable->observeVariant($compilationContext);
+                    $this->readOnly = false;
+                } else {
+                    $symbolVariable = $this->borrowedTempVariable($borrowing, $compilationContext);
                 }
-            } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable(
-                    'variable',
-                    $compilationContext,
-                );
             }
         } else {
-            if ($this->expecting && $this->expectingVariable) {
-                /**
-                 * If a variable is assigned once in the method, we try to promote it
-                 * to a read only variable
-                 */
-                if ('return_value' !== $symbolVariable->getName()) {
-                    $line = $compilationContext->symbolTable->getLastCallLine();
-                    if ($canBorrow && (false === $line || ($line > 0 && $line < $expression['line']))) {
-                        $numberMutations = $compilationContext->symbolTable->getExpectedMutations(
-                            $symbolVariable->getName()
-                        );
-                        if (1 == $numberMutations) {
-                            if ($symbolVariable->getNumberMutations() == $numberMutations) {
-                                $symbolVariable->setMemoryTracked(false);
-                                $readOnly = true;
-                            }
-                        }
-                    }
-                }
-
-                /**
-                 * Variable is not read-only or it wasn't promoted
-                 */
-                if (!$readOnly) {
-                    if ('return_value' != $symbolVariable->getName()) {
-                        $symbolVariable->observeVariant($compilationContext);
-                        $this->readOnly = false;
-                    } else {
-                        $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve(
-                            'variable',
-                            $compilationContext
-                        );
-                    }
-                }
-            } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve(
-                    'variable',
-                    $compilationContext
-                );
-            }
+            $symbolVariable = $this->borrowedTempVariable($borrowing, $compilationContext);
         }
 
         /**
@@ -323,7 +286,16 @@ class NativeArrayAccess
          */
         $symbolVariable->setDynamicTypes('undefined');
 
-        if ($canBorrow && ($this->readOnly || $readOnly)) {
+        if ($this->writeThrough) {
+            /**
+             * The kernel makes the element itself a reference, so the callee's
+             * write reaches the container and the target owns what it is given
+             * on both runtime paths. ZEPHIR_MAKE_REF() must not run on top of
+             * that.
+             */
+            $symbolVariable->setIsWriteContextReference(true);
+            $flags = $this->noisy ? 'PH_NOISY | PH_WRITE' : 'PH_WRITE';
+        } elseif ($canBorrow && ($this->readOnly || $readOnly)) {
             $flags = $this->noisy ? 'PH_NOISY | PH_READONLY' : 'PH_READONLY';
         } else {
             $flags = $this->noisy ? 'PH_NOISY' : '0';
@@ -365,6 +337,31 @@ class NativeArrayAccess
         }
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * The temp that receives the value when the caller has no variable of its
+     * own to put it in.
+     *
+     * A borrowing read must not register it with the memory frame, because the
+     * container still owns the value and the frame would release what it never
+     * took. Every other read must, because the target holds the only reference.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2682
+     */
+    private function borrowedTempVariable(bool $borrowing, CompilationContext $compilationContext): Variable
+    {
+        if ($borrowing) {
+            return $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable(
+                'variable',
+                $compilationContext
+            );
+        }
+
+        return $compilationContext->symbolTable->getTempVariableForObserve(
+            'variable',
+            $compilationContext
+        );
     }
 
     /**

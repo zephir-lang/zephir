@@ -681,12 +681,12 @@ class Call
                     case 'static-property-access':
                         $paramExpr->setReadOnly(true);
                         /**
-                         * A by-reference parameter is written by the callee,
-                         * and the write only reaches the container through a
-                         * borrowed pointer, so the fetch has to borrow whether
-                         * or not the container is a proven array.
+                         * A by-reference parameter is written by the callee, so
+                         * the fetch runs in write context and the element itself
+                         * becomes a reference, exactly as PHP does it. Never a
+                         * borrow, whatever the container is.
                          *
-                         * @see \Zephir\FunctionCall::markReferences()
+                         * @see \Zephir\Expression\NativeArrayAccess::setWriteThrough()
                          */
                         $paramExpr->setWriteThrough(isset($this->byReferenceParameters[$position]));
                         break;

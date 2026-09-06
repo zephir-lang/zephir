@@ -29,6 +29,13 @@ extern zend_string* i_self;
 #define PH_NOISY 256
 #define PH_SILENT 1024
 #define PH_READONLY 4096
+/**
+ * A subscript read whose value the caller is about to write through, which is
+ * what a by-reference call argument does. Mutually exclusive with PH_READONLY.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2682
+ */
+#define PH_WRITE 8192
 
 #define PH_NOISY_CC PH_NOISY
 #define PH_SILENT_CC PH_SILENT
@@ -410,6 +417,26 @@ int zephir_fetch_parameters_variadic(int num_args, int required_args, int option
 
 #define ZEPHIR_MAKE_REF(obj) ZVAL_NEW_REF(obj, obj);
 #define ZEPHIR_UNREF(obj) ZVAL_UNREF(obj);
+
+/**
+ * Hands a PH_WRITE subscript to a by-reference parameter.
+ *
+ * The fetch already returned a reference when the container was a native array,
+ * and the plain owned offsetGet() result when it was an ArrayAccess object. The
+ * callee needs a reference either way, and only the second case has to be
+ * wrapped.
+ *
+ * There is deliberately no matching unref. The memory frame owns the argument,
+ * so releasing it releases the reference, whereas ZEPHIR_UNREF() would efree a
+ * zend_reference the container is still pointing at.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2682
+ */
+#define ZEPHIR_MAKE_WRITE_REF(obj) do { \
+		if (!Z_ISREF_P(obj)) { \
+			ZVAL_NEW_REF(obj, obj); \
+		} \
+	} while (0)
 
 #define ZEPHIR_GET_CONSTANT(return_value, const_name) do { \
 	zval *_constant_ptr = zend_get_constant_str(SL(const_name)); \
