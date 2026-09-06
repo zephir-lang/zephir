@@ -91,10 +91,12 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	zephir_array_fast_append(&_0, &_1);
 	zephir_update_property_zval_cached(&test, _zephir_prop_0, 0, &_0);
 	zephir_read_property_cached(&_2, &test, _zephir_prop_0, 0, PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch_long(&_3, &_2, 0, PH_NOISY | PH_READONLY, "stub/oo/propertyaccess.zep", 17);
+	zephir_memory_observe(&_3);
+	zephir_array_fetch_long(&_3, &_2, 0, PH_NOISY, "stub/oo/propertyaccess.zep", 17);
 	zephir_update_property_zval_cached(&test, _zephir_prop_1, 0, &_3);
 	zephir_read_property_cached(&_4, &test, _zephir_prop_0, 0, PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch_long(&_5, &_4, 1, PH_NOISY | PH_READONLY, "stub/oo/propertyaccess.zep", 18);
+	zephir_memory_observe(&_5);
+	zephir_array_fetch_long(&_5, &_4, 1, PH_NOISY, "stub/oo/propertyaccess.zep", 18);
 	zephir_update_property_zval_cached(&test, _zephir_prop_2, 0, &_5);
 	ZEPHIR_INIT_VAR(&_6);
 	zephir_create_array(&_6, 4, 0);

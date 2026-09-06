@@ -84,6 +84,7 @@ class Expression
     protected ?Variable $expectingVariable = null;
     protected bool      $noisy             = true;
     protected bool      $readOnly          = false;
+    protected bool      $writeThrough      = false;
 
     public function __construct(protected array $expression)
     {
@@ -175,6 +176,7 @@ class Expression
             case 'array-access':
                 $compilableExpression = new NativeArrayAccess();
                 $compilableExpression->setNoisy($this->isNoisy());
+                $compilableExpression->setWriteThrough($this->isWriteThrough());
                 break;
 
             case 'property-access':
@@ -545,6 +547,15 @@ class Expression
     }
 
     /**
+     * Checks whether the caller writes through the value instead of only
+     * reading it, which a by-reference call argument does.
+     */
+    public function isWriteThrough(): bool
+    {
+        return $this->writeThrough;
+    }
+
+    /**
      * Sets if the expression is being evaluated in an evaluation like the ones in 'if' and 'while' statements.
      */
     public function setEvalMode(bool $evalMode): void
@@ -576,6 +587,17 @@ class Expression
     public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
+    }
+
+    /**
+     * Sets whether the caller writes through the value instead of only reading
+     * it. Only a subscript read acts on it.
+     *
+     * @see Zephir\Expression\NativeArrayAccess::setWriteThrough()
+     */
+    public function setWriteThrough(bool $writeThrough): void
+    {
+        $this->writeThrough = $writeThrough;
     }
 
     /**

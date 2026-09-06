@@ -586,7 +586,8 @@ PHP_METHOD(Stub_Router_Route, reConfigure)
 			zephir_memory_observe(&pcrePattern);
 			zephir_array_fetch_long(&pcrePattern, &extracted, 0, PH_NOISY, "stub/router/route.zep", 351);
 			ZEPHIR_INIT_VAR(&_2$$19);
-			zephir_array_fetch_long(&_3$$19, &extracted, 1, PH_NOISY | PH_READONLY, "stub/router/route.zep", 352);
+			zephir_memory_observe(&_3$$19);
+			zephir_array_fetch_long(&_3$$19, &extracted, 1, PH_NOISY, "stub/router/route.zep", 352);
 			zephir_fast_array_merge(&_2$$19, &routePaths, &_3$$19);
 			ZEPHIR_CPY_WRT(&routePaths, &_2$$19);
 		} else {

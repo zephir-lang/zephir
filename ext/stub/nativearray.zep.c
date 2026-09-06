@@ -924,7 +924,8 @@ PHP_METHOD(Stub_NativeArray, testArrayMultipleAccess3)
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&a, &_0);
 	zephir_array_fetch_long(&_3, &a, 0, PH_NOISY | PH_READONLY, "stub/nativearray.zep", 330);
-	zephir_array_fetch_long(&_4, &_3, 0, PH_NOISY | PH_READONLY, "stub/nativearray.zep", 330);
+	zephir_memory_observe(&_4);
+	zephir_array_fetch_long(&_4, &_3, 0, PH_NOISY, "stub/nativearray.zep", 330);
 	zephir_memory_observe(&b);
 	zephir_array_fetch_long(&b, &_4, 1, PH_NOISY, "stub/nativearray.zep", 330);
 	RETURN_CCTOR(&b);
@@ -961,7 +962,8 @@ PHP_METHOD(Stub_NativeArray, testArrayMultipleAccess4)
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&a, &_0);
 	zephir_array_fetch_long(&_3, &a, 0, PH_NOISY | PH_READONLY, "stub/nativearray.zep", 340);
-	zephir_array_fetch_long(&_4, &_3, 0, PH_NOISY | PH_READONLY, "stub/nativearray.zep", 340);
+	zephir_memory_observe(&_4);
+	zephir_array_fetch_long(&_4, &_3, 0, PH_NOISY, "stub/nativearray.zep", 340);
 	zephir_memory_observe(&b);
 	zephir_array_fetch_long(&b, &_4, 1, PH_NOISY, "stub/nativearray.zep", 340);
 	RETURN_CCTOR(&b);
@@ -993,7 +995,8 @@ PHP_METHOD(Stub_NativeArray, testArrayMultipleAccess5)
 	zephir_array_update_string(&_0, SL("b"), &_1, PH_COPY | PH_SEPARATE);
 	zephir_array_update_string(&a, SL("a"), &_0, PH_COPY | PH_SEPARATE);
 	zephir_array_fetch_string(&_2, &a, SL("a"), PH_NOISY | PH_READONLY, "stub/nativearray.zep", 350);
-	zephir_array_fetch_string(&_3, &_2, SL("b"), PH_NOISY | PH_READONLY, "stub/nativearray.zep", 350);
+	zephir_memory_observe(&_3);
+	zephir_array_fetch_string(&_3, &_2, SL("b"), PH_NOISY, "stub/nativearray.zep", 350);
 	zephir_memory_observe(&b);
 	zephir_array_fetch_string(&b, &_3, SL("c"), PH_NOISY, "stub/nativearray.zep", 350);
 	RETURN_CCTOR(&b);
@@ -1803,9 +1806,10 @@ PHP_METHOD(Stub_NativeArray, issue709)
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_LONG(&_3$$3, 2);
 			zephir_array_fast_append(&arr, &_3$$3);
+			ZEPHIR_OBS_NVAR(&_4$$3);
 			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 78, &arr);
 			zephir_check_call_status();
-			zephir_array_fetch(&_4$$3, &arr, &_5$$3, PH_NOISY | PH_READONLY, "stub/nativearray.zep", 626);
+			zephir_array_fetch(&_4$$3, &arr, &_5$$3, PH_NOISY, "stub/nativearray.zep", 626);
 			ZEPHIR_CPY_WRT(&arr, &_4$$3);
 			_7$$3 = ZEPHIR_LT_LONG(&arr, 0);
 			if (!(_7$$3)) {

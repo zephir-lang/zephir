@@ -102,10 +102,11 @@ PHP_METHOD(Stub_ArrayIterator, current)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 15, PH_NOISY_CC | PH_READONLY);
+	zephir_memory_observe(&_1);
 	zephir_memory_observe(&_2);
 	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 16, PH_NOISY_CC);
-	zephir_array_fetch(&_1, &_0, &_2, PH_NOISY | PH_READONLY, "stub/arrayiterator.zep", 25);
-	RETURN_CTOR(&_1);
+	zephir_array_fetch(&_1, &_0, &_2, PH_NOISY, "stub/arrayiterator.zep", 25);
+	RETURN_CCTOR(&_1);
 }
 
 PHP_METHOD(Stub_ArrayIterator, key)

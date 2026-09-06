@@ -371,6 +371,16 @@ class FunctionCall extends Call
         }
 
         /**
+         * Which parameters the callee takes by reference has to be known
+         * before the arguments are compiled, not only when markReferences()
+         * wraps them: a subscript argument for one of those has to be fetched
+         * as a borrowed pointer or the write never reaches the container.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2682
+         */
+        $this->byReferenceParameters = $this->byReferenceParameterPositions($funcName);
+
+        /**
          * Resolve parameters
          */
         if (isset($expression['parameters'])) {
@@ -585,6 +595,35 @@ class FunctionCall extends Call
         }
 
         return true;
+    }
+
+    /**
+     * Positions of the parameters this function takes by reference.
+     *
+     * Mirrors the conditions markReferences() applies, so the two cannot
+     * disagree about which argument is a reference.
+     *
+     * @return array<int, true>
+     */
+    protected function byReferenceParameterPositions(string $funcName): array
+    {
+        if ($this->isBuiltInFunction($funcName)) {
+            return [];
+        }
+
+        $reflector = $this->getReflector($funcName);
+        if (null === $reflector) {
+            return [];
+        }
+
+        $positions = [];
+        foreach ($reflector->getParameters() as $position => $parameter) {
+            if ($parameter->isPassedByReference()) {
+                $positions[$position] = true;
+            }
+        }
+
+        return $positions;
     }
 
     /**

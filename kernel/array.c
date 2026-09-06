@@ -99,10 +99,9 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 
 		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, &container, "offsetexists", NULL, 0, index);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
+			/* No `readonly` here: offsetGet() owns nothing once it has
+			 * returned, so its result is handed over owned. @see kernel/array.h */
 			ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(fetched, &container, "offsetget", NULL, 0, index);
-			if (readonly) {
-				Z_TRY_DELREF_P(fetched);
-			}
 			found = 1;
 		} else {
 			ZVAL_NULL(fetched);
@@ -198,10 +197,9 @@ int zephir_array_isset_string_fetch(zval *fetched, const zval *arr, char *index,
 
 		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, &container, "offsetexists", NULL, 0, &offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
+			/* No `readonly` here: offsetGet() owns nothing once it has
+			 * returned, so its result is handed over owned. @see kernel/array.h */
 			ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(fetched, &container, "offsetget", NULL, 0, &offset);
-			if (readonly) {
-				Z_TRY_DELREF_P(fetched);
-			}
 			found = 1;
 		} else {
 			ZVAL_NULL(fetched);
@@ -265,10 +263,9 @@ int zephir_array_isset_long_fetch(zval *fetched, const zval *arr, zend_long inde
 
 		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&exist, &container, "offsetexists", NULL, 0, &offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
+			/* No `readonly` here: offsetGet() owns nothing once it has
+			 * returned, so its result is handed over owned. @see kernel/array.h */
 			ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(fetched, &container, "offsetget", NULL, 0, &offset);
-			if (readonly) {
-				Z_TRY_DELREF_P(fetched);
-			}
 			found = 1;
 		} else {
 			ZVAL_NULL(fetched);
@@ -739,9 +736,8 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(return_value, arr, "offsetget", NULL, 0, index);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			if ((flags & PH_READONLY) == PH_READONLY) {
-				Z_TRY_DELREF_P(return_value);
-			}
+			/* No PH_READONLY here: offsetGet() owns nothing once it has
+			 * returned, so its result is handed over owned. @see kernel/array.h */
 			return SUCCESS;
 		}
 
@@ -827,9 +823,8 @@ int zephir_array_fetch_string(zval *return_value, zval *arr, const char *index, 
 		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(return_value, arr, "offsetget", NULL, 0, &offset);
 		zval_ptr_dtor(&offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			if ((flags & PH_READONLY) == PH_READONLY) {
-				Z_TRY_DELREF_P(return_value);
-			}
+			/* No PH_READONLY here: offsetGet() owns nothing once it has
+			 * returned, so its result is handed over owned. @see kernel/array.h */
 			return SUCCESS;
 		}
 
@@ -880,9 +875,8 @@ int zephir_array_fetch_long(zval *return_value, zval *arr, zend_long index, int 
 		ZVAL_LONG(&offset, index);
 		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(return_value, arr, "offsetget", NULL, 0, &offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			if ((flags & PH_READONLY) == PH_READONLY) {
-				Z_TRY_DELREF_P(return_value);
-			}
+			/* No PH_READONLY here: offsetGet() owns nothing once it has
+			 * returned, so its result is handed over owned. @see kernel/array.h */
 			return SUCCESS;
 		}
 

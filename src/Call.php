@@ -46,6 +46,14 @@ class Call
      * @var mixed|null
      */
     protected $reflection;
+    /**
+     * Positions of the callee's by-reference parameters, when the callee is
+     * known. Populated before the arguments are resolved, because a subscript
+     * argument has to be fetched differently for one.
+     *
+     * @var array<int, true>
+     */
+    protected array $byReferenceParameters = [];
 
     protected array $resolvedDynamicTypes = [];
 
@@ -663,7 +671,7 @@ class Call
         }
 
         $params = [];
-        foreach ($parameters as $parameter) {
+        foreach ($parameters as $position => $parameter) {
             if (is_array($parameter['parameter'])) {
                 $paramExpr = new Expression($parameter['parameter']);
 
@@ -672,6 +680,15 @@ class Call
                     case 'array-access':
                     case 'static-property-access':
                         $paramExpr->setReadOnly(true);
+                        /**
+                         * A by-reference parameter is written by the callee,
+                         * and the write only reaches the container through a
+                         * borrowed pointer, so the fetch has to borrow whether
+                         * or not the container is a proven array.
+                         *
+                         * @see \Zephir\FunctionCall::markReferences()
+                         */
+                        $paramExpr->setWriteThrough(isset($this->byReferenceParameters[$position]));
                         break;
 
                     default:

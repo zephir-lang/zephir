@@ -256,7 +256,8 @@ PHP_METHOD(Stub_FortyTwo, proof)
 					_4$$3 = 1;
 				}
 				i = _5$$3;
-				zephir_array_fetch_long(&_7$$4, &side, i, PH_NOISY | PH_READONLY, "stub/fortytwo.zep", 26);
+				ZEPHIR_OBS_NVAR(&_7$$4);
+				zephir_array_fetch_long(&_7$$4, &side, i, PH_NOISY, "stub/fortytwo.zep", 26);
 				j += zephir_get_numberval(&_7$$4);
 			}
 		}

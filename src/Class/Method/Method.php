@@ -33,6 +33,7 @@ use Zephir\Name;
 use Zephir\Passes\CallGathererPass;
 use Zephir\Passes\DefiniteAssignmentPass;
 use Zephir\Passes\LocalContextPass;
+use Zephir\Passes\NativeArrayPass;
 use Zephir\Passes\StaticTypeInference;
 use Zephir\StatementsBlock;
 use Zephir\SymbolTable;
@@ -116,7 +117,8 @@ class Method
      */
     protected bool              $isStatic     = false;
     protected ?DefiniteAssignmentPass $definiteAssignment = null;
-    protected ?LocalContextPass $localContext = null;
+    protected ?LocalContextPass       $localContext       = null;
+    protected ?NativeArrayPass        $nativeArray        = null;
     /**
      * Maps a Zephir return-type name to its Zend `MAY_BE_*` type-mask bit.
      *
@@ -1013,6 +1015,10 @@ class Method
 
         if ($this->definiteAssignment instanceof DefiniteAssignmentPass) {
             $symbolTable->setDefiniteAssignment($this->definiteAssignment);
+        }
+
+        if ($this->nativeArray instanceof NativeArrayPass) {
+            $symbolTable->setNativeArray($this->nativeArray);
         }
 
         /**
@@ -3479,6 +3485,7 @@ class Method
         $localContext       = null;
         $typeInference      = null;
         $callGathererPass   = null;
+        $nativeArray        = null;
 
         if (is_object($this->statements)) {
             $compilationContext->currentMethod = $this;
@@ -3493,6 +3500,21 @@ class Method
              */
             $definiteAssignment = new DefiniteAssignmentPass();
             $definiteAssignment->pass($this->statements);
+
+            /**
+             * Which locals can only hold a native array, so a subscript read
+             * of one may borrow the value the container owns instead of taking
+             * a reference to it. Not an optimization either: an ArrayAccess
+             * container owns nothing after offsetGet() returns, so borrowing
+             * from one leaks the value or frees it under its own target.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2682
+             */
+            $nativeArray = new NativeArrayPass();
+            if ($this->parameters instanceof Parameters) {
+                $nativeArray->passParameters($this->parameters->getParameters());
+            }
+            $nativeArray->pass($this->statements);
 
             /**
              * This pass checks for zval variables than can be potentially
@@ -3536,6 +3558,7 @@ class Method
 
         $this->definiteAssignment = $definiteAssignment;
         $this->localContext       = $localContext;
+        $this->nativeArray        = $nativeArray;
         $this->typeInference      = $typeInference;
         $this->callGathererPass   = $callGathererPass;
     }
