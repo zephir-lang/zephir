@@ -13,21 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Test\CodeGen;
 
-use FilesystemIterator;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use ReflectionClass;
-use Zephir\Backend\Backend;
-use Zephir\Backend\StringsManager;
-use Zephir\Compiler;
-use Zephir\Compiler\CompilerFileFactory;
-use Zephir\Config;
-use Zephir\FileSystem\HardDisk;
-use Zephir\Os;
-use Zephir\Parser\Manager;
-use Zephir\Parser\Parser;
 
 /**
  * The read-only flag on a subscript read means "borrowed, the container owns
@@ -43,60 +29,16 @@ use Zephir\Parser\Parser;
  */
 final class ReadOnlyArrayAccessTest extends TestCase
 {
-    private Compiler $compiler;
-    private string   $originalCwd;
-    private string   $tempDir;
+    use CompilesZephirSource;
 
     protected function setUp(): void
     {
-        if (Os::isWindows()) {
-            $this->markTestSkipped('Code generation tests do not run on Windows.');
-        }
-
-        $this->originalCwd = getcwd();
-
-        $this->tempDir = sys_get_temp_dir() . '/zephir_readonly_dim_test_' . uniqid('', true);
-        mkdir($this->tempDir . '/ext/stub/issue2682', 0755, true);
-        mkdir($this->tempDir . '/stub/issue2682', 0755, true);
-
-        file_put_contents(
-            $this->tempDir . '/config.json',
-            json_encode(['namespace' => 'stub'], JSON_PRETTY_PRINT)
-        );
-
-        chdir($this->tempDir);
-
-        $config = new Config();
-        $disk   = new HardDisk($this->tempDir . '/.zephir');
-        $disk->initialize();
-        $disk->makeDirectory('.');
-        $logger  = new NullLogger();
-        $backend = new Backend($config, ZEPHIRPATH . 'kernel', ZEPHIRPATH . 'templates');
-
-        $this->compiler = new Compiler(
-            $config,
-            $backend,
-            new Manager(new Parser()),
-            $disk,
-            new CompilerFileFactory($config, $disk, $logger)
-        );
-        $this->compiler->setLogger($logger);
+        $this->setUpCodeGen('zephir_readonly_dim_test_', ['stub/issue2682']);
     }
 
     protected function tearDown(): void
     {
-        chdir($this->originalCwd);
-
-        if (is_dir($this->tempDir)) {
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($this->tempDir, FilesystemIterator::SKIP_DOTS),
-                RecursiveIteratorIterator::CHILD_FIRST
-            );
-            foreach ($iterator as $file) {
-                $file->isDir() ? rmdir($file->getRealPath()) : unlink($file->getRealPath());
-            }
-            rmdir($this->tempDir);
-        }
+        $this->tearDownCodeGen();
     }
 
     /**
@@ -247,58 +189,73 @@ ZEP);
         );
     }
 
+    /**
+     * A subscript handed to a by-reference parameter is a write context, never
+     * a borrow, whatever the container turns out to be. Only the kernel can
+     * tell an array from an ArrayAccess object at that point, so the target is
+     * observed either way and the reference wrap is left conditional.
+     *
+     * ZEPHIR_UNREF() must not appear: for an array container the reference
+     * belongs to the container as much as to the argument.
+     */
+    public function testAByReferenceSubscriptArgumentFetchesInWriteContext(): void
+    {
+        $body = $this->compileMethod('WriteDim', 'writedim', <<<'ZEP'
+    public function read(container, value)
+    {
+        array_push(container["bucket"], value);
+
+        return container;
+    }
+ZEP);
+
+        $this->assertStringContainsString(
+            'PH_WRITE',
+            $body,
+            "A by-reference subscript argument must be fetched in write context.\n$body"
+        );
+        $this->assertStringNotContainsString(
+            'PH_READONLY',
+            $body,
+            "A write context is never a borrow.\n$body"
+        );
+        $this->assertStringContainsString(
+            'zephir_memory_observe(',
+            $body,
+            "The target owns what it is given on both runtime paths.\n$body"
+        );
+        $this->assertStringContainsString(
+            'ZEPHIR_MAKE_WRITE_REF(',
+            $body,
+            "The callee needs a reference, and only an ArrayAccess result needs wrapping.\n$body"
+        );
+        $this->assertStringNotContainsString(
+            'ZEPHIR_MAKE_REF(',
+            $body,
+            "An unconditional wrap would give the callee a reference to a reference.\n$body"
+        );
+        $this->assertStringNotContainsString(
+            'ZEPHIR_UNREF(',
+            $body,
+            "Unreffing would free a zend_reference the container still points at.\n$body"
+        );
+    }
+
     private function compileMethod(string $className, string $fileName, string $method): string
     {
-        $zep = "namespace Stub\\Issue2682;\n\nclass $className\n{\n$method\n}\n";
+        $relPath = "stub/issue2682/$fileName.zep";
 
-        file_put_contents($this->tempDir . "/stub/issue2682/$fileName.zep", $zep);
-
-        $factory = new ReflectionClass($this->compiler);
-        $prop    = $factory->getProperty('compilerFileFactory');
-        if (PHP_VERSION_ID < 80100) {
-            $prop->setAccessible(true);
-        }
-        /** @var CompilerFileFactory $compilerFileFactory */
-        $compilerFileFactory = $prop->getValue($this->compiler);
-
-        $compilerFile = $compilerFileFactory->create(
+        $this->compileSource(
             "Stub\\Issue2682\\$className",
-            "stub/issue2682/$fileName.zep"
+            $relPath,
+            "namespace Stub\\Issue2682;\n\nclass $className\n{\n$method\n}\n"
         );
-        $compilerFile->preCompile($this->compiler);
-        $compilerFile->compile($this->compiler, new StringsManager());
 
-        $c    = file_get_contents($this->tempDir . "/ext/stub/issue2682/$fileName.zep.c");
+        $c    = $this->generatedC($relPath);
         $body = $this->methodBody($c, "PHP_METHOD(Stub_Issue2682_$className, read)");
 
         $this->assertNotSame('', $body, "Could not locate read() in the generated C.\n$c");
 
         return $body;
-    }
-
-    private function methodBody(string $haystack, string $signature): string
-    {
-        $startPos = strpos($haystack, $signature);
-        if (false === $startPos) {
-            return '';
-        }
-
-        $braceStart = strpos($haystack, '{', $startPos);
-        if (false === $braceStart) {
-            return '';
-        }
-
-        $depth = 1;
-        $i     = $braceStart + 1;
-        while ($i < strlen($haystack) && $depth > 0) {
-            if ('{' === $haystack[$i]) {
-                ++$depth;
-            } elseif ('}' === $haystack[$i]) {
-                --$depth;
-            }
-            ++$i;
-        }
-
-        return substr($haystack, $startPos, $i - $startPos);
     }
 }

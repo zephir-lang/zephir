@@ -114,6 +114,15 @@ class Variable implements TypeAwareInterface
      */
     protected bool $closureReference = false;
     /**
+     * Whether this temp already holds a PHP reference, because the kernel made
+     * one when it fetched a subscript in write context. Wrapping it again with
+     * ZEPHIR_MAKE_REF() would give a reference to a reference, and the matching
+     * ZEPHIR_UNREF() would free a zend_reference the container still points at.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2682
+     */
+    protected bool $writeContextReference = false;
+    /**
      * When true, the variable is a string parameter using native zend_string *
      * instead of zval. getType() still returns 'string' for compatibility.
      */
@@ -617,6 +626,20 @@ class Variable implements TypeAwareInterface
     public function setIsClosureReference(bool $closureReference): void
     {
         $this->closureReference = $closureReference;
+    }
+
+    /**
+     * Whether the kernel already made this temp a PHP reference, fetching a
+     * subscript in write context.
+     */
+    public function isWriteContextReference(): bool
+    {
+        return $this->writeContextReference;
+    }
+
+    public function setIsWriteContextReference(bool $writeContextReference): void
+    {
+        $this->writeContextReference = $writeContextReference;
     }
 
     /**

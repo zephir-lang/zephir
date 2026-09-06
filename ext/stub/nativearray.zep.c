@@ -1807,7 +1807,7 @@ PHP_METHOD(Stub_NativeArray, issue709)
 			ZVAL_LONG(&_3$$3, 2);
 			zephir_array_fast_append(&arr, &_3$$3);
 			ZEPHIR_OBS_NVAR(&_4$$3);
-			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 78, &arr);
+			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 79, &arr);
 			zephir_check_call_status();
 			zephir_array_fetch(&_4$$3, &arr, &_5$$3, PH_NOISY, "stub/nativearray.zep", 626);
 			ZEPHIR_CPY_WRT(&arr, &_4$$3);
@@ -1852,17 +1852,17 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 	ZVAL_STR_COPY(&prefix_zv, prefix);
 	zephir_memory_observe(&baseDir_zv);
 	ZVAL_STR_COPY(&baseDir_zv, baseDir);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 64, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 66, PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_isset_value(&_0, &prefix_zv))) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		array_init(&_1$$3);
 		zephir_update_property_array(this_ptr, SL("prefixes"), &prefix_zv, &_1$$3);
 	}
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 64, PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch(&_3, &_2, &prefix_zv, PH_NOISY | PH_READONLY, "stub/nativearray.zep", 639);
-	ZEPHIR_MAKE_REF(&_3);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 79, &_3, &baseDir_zv);
-	ZEPHIR_UNREF(&_3);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 66, PH_NOISY_CC | PH_READONLY);
+	zephir_memory_observe(&_3);
+	zephir_array_fetch(&_3, &_2, &prefix_zv, PH_NOISY | PH_WRITE, "stub/nativearray.zep", 639);
+	ZEPHIR_MAKE_WRITE_REF(&_3);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 68, &_3, &baseDir_zv);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER(getThis(), "prefixes");
 }

@@ -14,17 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Test\CodeGen;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
-use Zephir\Backend\Backend;
-use Zephir\Backend\StringsManager;
-use Zephir\Compiler;
-use Zephir\Compiler\CompilerFileFactory;
-use Zephir\Config;
 use Zephir\Exception;
-use Zephir\FileSystem\HardDisk;
-use Zephir\Os;
-use Zephir\Parser\Manager;
-use Zephir\Parser\Parser;
 
 /**
  * Tests that the C and H files generated from Zephir source code are
@@ -34,36 +24,63 @@ use Zephir\Parser\Parser;
  */
 final class ConstructorsCodeGenTest extends TestCase
 {
-    private string $originalCwd;
-    private string $tempDir;
+    use CompilesZephirSource;
+
     private string $fixturesDir;
     private string $argsSingleFixturesDir;
-    private Compiler $compiler;
 
     protected function setUp(): void
     {
-        if (Os::isWindows()) {
-            $this->markTestSkipped('Code generation tests do not run on Windows.');
-        }
-
-        $this->originalCwd  = getcwd();
         // Resolve the fixtures path to absolute BEFORE any chdir(), so reads
         // work correctly even after we switch the working directory.
-        $this->fixturesDir  = realpath(FIXTURES_PATH . '/constructors');
+        $this->fixturesDir           = realpath(FIXTURES_PATH . '/constructors');
         $this->argsSingleFixturesDir = realpath(FIXTURES_PATH . '/constructors/args/single');
 
-        // Create an isolated temp working directory so that all relative
-        // paths used by CompilerFile (e.g. "ext/stub/constructors/…") land
-        // inside it and do not touch the real project tree.
-        $this->tempDir = sys_get_temp_dir() . '/zephir_codegen_test_' . uniqid('', true);
-        mkdir($this->tempDir . '/ext/stub/constructors', 0755, true);
-        mkdir($this->tempDir . '/ext/stub/args/single', 0755, true);
-        mkdir($this->tempDir . '/stub/constructors', 0755, true);
-        mkdir($this->tempDir . '/stub/args/single', 0755, true);
+        $this->setUpCodeGen('zephir_codegen_test_', ['stub/constructors', 'stub/args/single']);
+    }
 
-        // Write the Zephir source under the path that matches the namespace
-        // Stub\Constructors\Issue1803 → stub/constructors/issue1803.zep
-        $zepCode = <<<'ZEP'
+    protected function tearDown(): void
+    {
+        $this->tearDownCodeGen();
+    }
+
+    /**
+     * Compiles a single .zep file and returns a [cOutput, hOutput] pair
+     * with the raw generated file contents.
+     *
+     * @param  string $className  Fully-qualified Zephir class name (e.g. "Stub\Args\Single\Integer")
+     * @param  string $relPath    Relative path to the .zep source (e.g. "stub/args/single/integer.zep")
+     * @param  string $zep        The Zephir source to write there
+     *
+     * @return array{0: string, 1: string}
+     * @throws Exception
+     */
+    private function compileZep(string $className, string $relPath, string $zep): array
+    {
+        $this->compileSource($className, $relPath, $zep);
+
+        return [
+            $this->generatedC($relPath),
+            $this->generatedHeader($relPath),
+        ];
+    }
+
+    /**
+     * Compiles stub/constructors/issue1803.zep and returns a
+     * [cOutput, hOutput] pair with the raw generated file contents.
+     *
+     * The source path matches the namespace:
+     * Stub\Constructors\Issue1803 → stub/constructors/issue1803.zep
+     *
+     * @return array{0: string, 1: string}
+     * @throws Exception
+     */
+    private function compileIssue1803(): array
+    {
+        return $this->compileZep(
+            'Stub\Constructors\Issue1803',
+            'stub/constructors/issue1803.zep',
+            <<<'ZEP'
 
 namespace Stub\Constructors;
 
@@ -80,14 +97,23 @@ class Issue1803
     }
 }
 
-ZEP;
-        file_put_contents(
-            $this->tempDir . '/stub/constructors/issue1803.zep',
-            $zepCode
+ZEP
         );
+    }
 
-        // Write Zephir source for Stub\Args\Single\Integer
-        $integerZepCode = <<<'ZEP'
+    /**
+     * Compiles stub/args/single/integer.zep and returns a
+     * [cOutput, hOutput] pair with the raw generated file contents.
+     *
+     * @return array{0: string, 1: string}
+     * @throws Exception
+     */
+    private function compileArgsSingleInteger(): array
+    {
+        return $this->compileZep(
+            'Stub\Args\Single\Integer',
+            'stub/args/single/integer.zep',
+            <<<'ZEP'
 namespace Stub\Args\Single;
 
 class Integer
@@ -98,14 +124,23 @@ class Integer
     }
 }
 
-ZEP;
-        file_put_contents(
-            $this->tempDir . '/stub/args/single/integer.zep',
-            $integerZepCode
+ZEP
         );
+    }
 
-        // Write Zephir source for Stub\Args\Single\Str
-        $strZepCode = <<<'ZEP'
+    /**
+     * Compiles stub/args/single/str.zep and returns a
+     * [cOutput, hOutput] pair with the raw generated file contents.
+     *
+     * @return array{0: string, 1: string}
+     * @throws Exception
+     */
+    private function compileArgsSingleStr(): array
+    {
+        return $this->compileZep(
+            'Stub\Args\Single\Str',
+            'stub/args/single/str.zep',
+            <<<'ZEP'
 namespace Stub\Args\Single;
 
 class Str
@@ -116,218 +151,7 @@ class Str
     }
 }
 
-ZEP;
-        file_put_contents(
-            $this->tempDir . '/stub/args/single/str.zep',
-            $strZepCode
-        );
-
-        // Write Zephir source for Stub\Args\Single\StrOptional
-        $strOptionalZepCode = <<<'ZEP'
-namespace Stub\Args\Single;
-
-class StrOptional
-{
-    public function argStringDefault(string param = "test string") -> string
-    {
-        return param;
-    }
-}
-
-ZEP;
-        file_put_contents(
-            $this->tempDir . '/stub/args/single/stroptional.zep',
-            $strOptionalZepCode
-        );
-
-        // Write Zephir source for Stub\Args\Single\StrNullable
-        $strNullableZepCode = <<<'ZEP'
-namespace Stub\Args\Single;
-
-class StrNullable
-{
-    public function argStringNull(string param = null) -> string | null
-    {
-        return param;
-    }
-}
-
-ZEP;
-        file_put_contents(
-            $this->tempDir . '/stub/args/single/strnullable.zep',
-            $strNullableZepCode
-        );
-
-        // Write Zephir source for Stub\Args\Single\StrMixed
-        $strMixedZepCode = <<<'ZEP'
-namespace Stub\Args\Single;
-
-class StrMixed
-{
-    public function argStringAndInt(string str, int position) -> string
-    {
-        return str;
-    }
-}
-
-ZEP;
-        file_put_contents(
-            $this->tempDir . '/stub/args/single/strmixed.zep',
-            $strMixedZepCode
-        );
-
-        // Write Zephir source for Stub\Args\Single\ObjNullable
-        // A parameter that has a class type and defaults to null must keep
-        // its default value readable through reflection. The parameter type
-        // points at the class itself so the generated class entry stays the
-        // same in any environment.
-        // @see https://github.com/zephir-lang/zephir/issues/2564
-        $objNullableZepCode = <<<'ZEP'
-namespace Stub\Args\Single;
-
-class ObjNullable
-{
-    public function argObjNull(<\Stub\Args\Single\ObjNullable> param = null) -> void
-    {
-    }
-}
-
-ZEP;
-        file_put_contents(
-            $this->tempDir . '/stub/args/single/objnullable.zep',
-            $objNullableZepCode
-        );
-
-        // Config::populate() reads config.json from CWD; write a minimal one
-        // so the namespace is available without touching the project's own file.
-        $configData = json_encode(['namespace' => 'stub'], JSON_PRETTY_PRINT);
-        file_put_contents($this->tempDir . '/config.json', $configData);
-
-        // Change CWD so that all relative paths resolve inside $tempDir.
-        chdir($this->tempDir);
-
-        $config  = new Config();
-        $disk    = new HardDisk($this->tempDir . '/.zephir');
-        $disk->initialize();
-        $disk->makeDirectory('.');
-        $logger  = new NullLogger();
-        $backend = new Backend($config, ZEPHIRPATH . 'kernel', ZEPHIRPATH . 'templates');
-
-        $compilerFactory = new CompilerFileFactory($config, $disk, $logger);
-
-        $this->compiler = new Compiler(
-            $config,
-            $backend,
-            new Manager(new Parser()),
-            $disk,
-            $compilerFactory
-        );
-        $this->compiler->setLogger($logger);
-    }
-
-    protected function tearDown(): void
-    {
-        chdir($this->originalCwd);
-
-        // Recursively remove the temp directory.
-        if (is_dir($this->tempDir)) {
-            $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator(
-                    $this->tempDir,
-                    \FilesystemIterator::SKIP_DOTS
-                ),
-                \RecursiveIteratorIterator::CHILD_FIRST
-            );
-            foreach ($iterator as $file) {
-                $file->isDir() ? rmdir($file->getRealPath()) : unlink($file->getRealPath());
-            }
-            rmdir($this->tempDir);
-        }
-    }
-
-    /**
-     * Compiles a single .zep file and returns a [cOutput, hOutput] pair
-     * with the raw generated file contents.
-     *
-     * @param  string $className  Fully-qualified Zephir class name (e.g. "Stub\Args\Single\Integer")
-     * @param  string $filePath   Relative path to the .zep source (e.g. "stub/args/single/integer.zep")
-     * @param  string $extPath    Relative path (without extension) to the generated output under ext/
-     *                            (e.g. "stub/args/single/integer")
-     *
-     * @return array{0: string, 1: string}
-     * @throws \ReflectionException
-     * @throws Exception
-     */
-    private function compileZep(string $className, string $filePath, string $extPath): array
-    {
-        $factory      = new \ReflectionClass($this->compiler);
-        $factoryProp  = $factory->getProperty('compilerFileFactory');
-        $factoryProp->setAccessible(true);
-        /** @var CompilerFileFactory $compilerFileFactory */
-        $compilerFileFactory = $factoryProp->getValue($this->compiler);
-
-        /** @var \Zephir\CompilerFile $compilerFile */
-        $compilerFile = $compilerFileFactory->create($className, $filePath);
-        $compilerFile->preCompile($this->compiler);
-        $compilerFile->compile($this->compiler, new StringsManager());
-
-        $cFile = $this->tempDir . '/ext/' . $extPath . '.zep.c';
-        $hFile = $this->tempDir . '/ext/' . $extPath . '.zep.h';
-
-        return [
-            file_get_contents($cFile),
-            file_get_contents($hFile),
-        ];
-    }
-
-    /**
-     * Compiles stub/constructors/issue1803.zep and returns a
-     * [cOutput, hOutput] pair with the raw generated file contents.
-     *
-     * @return array{0: string, 1: string}
-     * @throws \ReflectionException
-     * @throws Exception
-     */
-    private function compileIssue1803(): array
-    {
-        return $this->compileZep(
-            'Stub\Constructors\Issue1803',
-            'stub/constructors/issue1803.zep',
-            'stub/constructors/issue1803'
-        );
-    }
-
-    /**
-     * Compiles stub/args/single/integer.zep and returns a
-     * [cOutput, hOutput] pair with the raw generated file contents.
-     *
-     * @return array{0: string, 1: string}
-     * @throws \ReflectionException
-     * @throws Exception
-     */
-    private function compileArgsSingleInteger(): array
-    {
-        return $this->compileZep(
-            'Stub\Args\Single\Integer',
-            'stub/args/single/integer.zep',
-            'stub/args/single/integer'
-        );
-    }
-
-    /**
-     * Compiles stub/args/single/str.zep and returns a
-     * [cOutput, hOutput] pair with the raw generated file contents.
-     *
-     * @return array{0: string, 1: string}
-     * @throws \ReflectionException
-     * @throws Exception
-     */
-    private function compileArgsSingleStr(): array
-    {
-        return $this->compileZep(
-            'Stub\Args\Single\Str',
-            'stub/args/single/str.zep',
-            'stub/args/single/str'
+ZEP
         );
     }
 
@@ -432,7 +256,6 @@ ZEP;
      * [cOutput, hOutput] pair with the raw generated file contents.
      *
      * @return array{0: string, 1: string}
-     * @throws \ReflectionException
      * @throws Exception
      */
     private function compileArgsSingleStrOptional(): array
@@ -440,7 +263,18 @@ ZEP;
         return $this->compileZep(
             'Stub\Args\Single\StrOptional',
             'stub/args/single/stroptional.zep',
-            'stub/args/single/stroptional'
+            <<<'ZEP'
+namespace Stub\Args\Single;
+
+class StrOptional
+{
+    public function argStringDefault(string param = "test string") -> string
+    {
+        return param;
+    }
+}
+
+ZEP
         );
     }
 
@@ -481,7 +315,6 @@ ZEP;
      * [cOutput, hOutput] pair with the raw generated file contents.
      *
      * @return array{0: string, 1: string}
-     * @throws \ReflectionException
      * @throws Exception
      */
     private function compileArgsSingleStrNullable(): array
@@ -489,7 +322,18 @@ ZEP;
         return $this->compileZep(
             'Stub\Args\Single\StrNullable',
             'stub/args/single/strnullable.zep',
-            'stub/args/single/strnullable'
+            <<<'ZEP'
+namespace Stub\Args\Single;
+
+class StrNullable
+{
+    public function argStringNull(string param = null) -> string | null
+    {
+        return param;
+    }
+}
+
+ZEP
         );
     }
 
@@ -530,7 +374,6 @@ ZEP;
      * [cOutput, hOutput] pair with the raw generated file contents.
      *
      * @return array{0: string, 1: string}
-     * @throws \ReflectionException
      * @throws Exception
      */
     private function compileArgsSingleStrMixed(): array
@@ -538,7 +381,18 @@ ZEP;
         return $this->compileZep(
             'Stub\Args\Single\StrMixed',
             'stub/args/single/strmixed.zep',
-            'stub/args/single/strmixed'
+            <<<'ZEP'
+namespace Stub\Args\Single;
+
+class StrMixed
+{
+    public function argStringAndInt(string str, int position) -> string
+    {
+        return str;
+    }
+}
+
+ZEP
         );
     }
 
@@ -578,8 +432,14 @@ ZEP;
      * Compiles stub/args/single/objnullable.zep and returns a
      * [cOutput, hOutput] pair with the raw generated file contents.
      *
+     * A parameter that has a class type and defaults to null must keep its
+     * default value readable through reflection. The parameter type points at
+     * the class itself so the generated class entry stays the same in any
+     * environment.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2564
+     *
      * @return array{0: string, 1: string}
-     * @throws \ReflectionException
      * @throws Exception
      */
     private function compileArgsSingleObjNullable(): array
@@ -587,7 +447,17 @@ ZEP;
         return $this->compileZep(
             'Stub\Args\Single\ObjNullable',
             'stub/args/single/objnullable.zep',
-            'stub/args/single/objnullable'
+            <<<'ZEP'
+namespace Stub\Args\Single;
+
+class ObjNullable
+{
+    public function argObjNull(<\Stub\Args\Single\ObjNullable> param = null) -> void
+    {
+    }
+}
+
+ZEP
         );
     }
 

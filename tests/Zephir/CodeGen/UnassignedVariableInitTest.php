@@ -14,16 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Test\CodeGen;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
-use Zephir\Backend\Backend;
-use Zephir\Backend\StringsManager;
-use Zephir\Compiler;
-use Zephir\Compiler\CompilerFileFactory;
-use Zephir\Config;
-use Zephir\FileSystem\HardDisk;
-use Zephir\Os;
-use Zephir\Parser\Manager;
-use Zephir\Parser\Parser;
 
 /**
  * A local the user declared without a value and never assigned has to start at
@@ -38,66 +28,16 @@ use Zephir\Parser\Parser;
  */
 final class UnassignedVariableInitTest extends TestCase
 {
-    private string $originalCwd;
-    private string $tempDir;
-    private Compiler $compiler;
-    private CompilerFileFactory $compilerFileFactory;
+    use CompilesZephirSource;
 
     protected function setUp(): void
     {
-        if (Os::isWindows()) {
-            $this->markTestSkipped('Code generation tests do not run on Windows.');
-        }
-
-        $this->originalCwd = getcwd();
-
-        $this->tempDir = sys_get_temp_dir() . '/zephir_issue2654_test_' . uniqid('', true);
-        mkdir($this->tempDir . '/ext/stub/issue2654', 0755, true);
-        mkdir($this->tempDir . '/stub/issue2654', 0755, true);
-
-        file_put_contents(
-            $this->tempDir . '/config.json',
-            json_encode(['namespace' => 'stub'], JSON_PRETTY_PRINT)
-        );
-
-        chdir($this->tempDir);
-
-        $config = new Config();
-        $disk   = new HardDisk($this->tempDir . '/.zephir');
-        $disk->initialize();
-        $disk->makeDirectory('.');
-        $logger  = new NullLogger();
-        $backend = new Backend($config, ZEPHIRPATH . 'kernel', ZEPHIRPATH . 'templates');
-
-        $this->compilerFileFactory = new CompilerFileFactory($config, $disk, $logger);
-
-        $this->compiler = new Compiler(
-            $config,
-            $backend,
-            new Manager(new Parser()),
-            $disk,
-            $this->compilerFileFactory
-        );
-        $this->compiler->setLogger($logger);
+        $this->setUpCodeGen('zephir_issue2654_test_', ['stub/issue2654']);
     }
 
     protected function tearDown(): void
     {
-        chdir($this->originalCwd);
-
-        if (is_dir($this->tempDir)) {
-            $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator(
-                    $this->tempDir,
-                    \FilesystemIterator::SKIP_DOTS
-                ),
-                \RecursiveIteratorIterator::CHILD_FIRST
-            );
-            foreach ($iterator as $file) {
-                $file->isDir() ? rmdir($file->getRealPath()) : unlink($file->getRealPath());
-            }
-            rmdir($this->tempDir);
-        }
+        $this->tearDownCodeGen();
     }
 
     /**
@@ -117,7 +57,7 @@ final class UnassignedVariableInitTest extends TestCase
      */
     public function testUnassignedDeclarationStartsAsNull(string $method, string $name): void
     {
-        $body = $this->methodBody($this->compileFixture(), $method);
+        $body = $this->methodBodyUntilNextMethod($this->compileFixture(), $method);
 
         $this->assertStringContainsString(
             'ZVAL_NULL(&' . $name . ');',
@@ -133,7 +73,7 @@ final class UnassignedVariableInitTest extends TestCase
 
     public function testAssignedVariableKeepsUndef(): void
     {
-        $body = $this->methodBody($this->compileFixture(), 'writeVar');
+        $body = $this->methodBodyUntilNextMethod($this->compileFixture(), 'writeVar');
 
         $this->assertStringContainsString(
             'ZVAL_UNDEF(&y);',
@@ -144,7 +84,7 @@ final class UnassignedVariableInitTest extends TestCase
 
     public function testTemporalVariableKeepsUndef(): void
     {
-        $body = $this->methodBody($this->compileFixture(), 'temporal');
+        $body = $this->methodBodyUntilNextMethod($this->compileFixture(), 'temporal');
 
         $this->assertStringContainsString(
             'ZVAL_UNDEF(&_0);',
@@ -156,7 +96,7 @@ final class UnassignedVariableInitTest extends TestCase
 
     public function testOptionalParamSubstituteKeepsUndef(): void
     {
-        $body = $this->methodBody($this->compileFixture(), 'optionalParam');
+        $body = $this->methodBodyUntilNextMethod($this->compileFixture(), 'optionalParam');
 
         $this->assertStringContainsString(
             'ZVAL_UNDEF(&b_sub);',
@@ -168,7 +108,7 @@ final class UnassignedVariableInitTest extends TestCase
 
     public function testNativeStringParamCompanionKeepsUndef(): void
     {
-        $body = $this->methodBody($this->compileFixture(), 'stringParam');
+        $body = $this->methodBodyUntilNextMethod($this->compileFixture(), 'stringParam');
 
         $this->assertStringContainsString(
             'ZVAL_UNDEF(&t_zv);',
@@ -183,7 +123,7 @@ final class UnassignedVariableInitTest extends TestCase
      */
     public function testPregMatchOutParameterKeepsUndef(): void
     {
-        $body = $this->methodBody($this->compileFixture(), 'pregMatch');
+        $body = $this->methodBodyUntilNextMethod($this->compileFixture(), 'pregMatch');
 
         $this->assertStringContainsString(
             'ZVAL_UNDEF(&matches);',
@@ -194,7 +134,7 @@ final class UnassignedVariableInitTest extends TestCase
 
     public function testNativeIntDeclarationKeepsZeroDefault(): void
     {
-        $body = $this->methodBody($this->compileFixture(), 'readInt');
+        $body = $this->methodBodyUntilNextMethod($this->compileFixture(), 'readInt');
 
         $this->assertStringContainsString(
             'zend_long i = 0;',
@@ -284,22 +224,18 @@ class Plain
     }
 }
 ZEP;
-        file_put_contents($this->tempDir . '/stub/issue2654/plain.zep', $zep);
+        $this->compileSource('Stub\\Issue2654\\Plain', 'stub/issue2654/plain.zep', $zep);
 
-        $compilerFile = $this->compilerFileFactory->create(
-            'Stub\\Issue2654\\Plain',
-            'stub/issue2654/plain.zep'
-        );
-        $compilerFile->preCompile($this->compiler);
-        $compilerFile->compile($this->compiler, new StringsManager());
-
-        return file_get_contents($this->tempDir . '/ext/stub/issue2654/plain.zep.c');
+        return $this->generatedC('stub/issue2654/plain.zep');
     }
 
     /**
      * Returns the C body of a single generated method.
+     *
+     * Not CompilesZephirSource::methodBody(): this one takes a bare method name
+     * and runs to the next `PHP_METHOD(` marker rather than counting braces.
      */
-    private function methodBody(string $generated, string $method): string
+    private function methodBodyUntilNextMethod(string $generated, string $method): string
     {
         $marker   = 'PHP_METHOD(Stub_Issue2654_Plain, ' . $method . ')';
         $startPos = strpos($generated, $marker);

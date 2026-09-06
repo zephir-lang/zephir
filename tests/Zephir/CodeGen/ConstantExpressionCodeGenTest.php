@@ -13,22 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Test\CodeGen;
 
-use FilesystemIterator;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use ReflectionClass;
-use Zephir\Backend\Backend;
-use Zephir\Backend\StringsManager;
-use Zephir\Compiler;
-use Zephir\Compiler\CompilerFileFactory;
-use Zephir\CompilerFile;
-use Zephir\Config;
-use Zephir\FileSystem\HardDisk;
-use Zephir\Os;
-use Zephir\Parser\Manager;
-use Zephir\Parser\Parser;
 
 /**
  * Expression initializers must reach the class-entry emitters already folded to
@@ -38,60 +23,16 @@ use Zephir\Parser\Parser;
  */
 final class ConstantExpressionCodeGenTest extends TestCase
 {
-    private string $originalCwd;
-    private string $tempDir;
-    private Compiler $compiler;
+    use CompilesZephirSource;
 
     protected function setUp(): void
     {
-        if (Os::isWindows()) {
-            $this->markTestSkipped('Code generation tests do not run on Windows.');
-        }
-
-        $this->originalCwd = getcwd();
-
-        $this->tempDir = sys_get_temp_dir() . '/zephir_constexpr_test_' . uniqid('', true);
-        mkdir($this->tempDir . '/ext/stub/issue2061', 0755, true);
-        mkdir($this->tempDir . '/stub/issue2061', 0755, true);
-
-        file_put_contents(
-            $this->tempDir . '/config.json',
-            json_encode(['namespace' => 'stub'], JSON_PRETTY_PRINT)
-        );
-
-        chdir($this->tempDir);
-
-        $config = new Config();
-        $disk   = new HardDisk($this->tempDir . '/.zephir');
-        $disk->initialize();
-        $disk->makeDirectory('.');
-        $logger  = new NullLogger();
-        $backend = new Backend($config, ZEPHIRPATH . 'kernel', ZEPHIRPATH . 'templates');
-
-        $this->compiler = new Compiler(
-            $config,
-            $backend,
-            new Manager(new Parser()),
-            $disk,
-            new CompilerFileFactory($config, $disk, $logger)
-        );
-        $this->compiler->setLogger($logger);
+        $this->setUpCodeGen('zephir_constexpr_test_', ['stub/issue2061']);
     }
 
     protected function tearDown(): void
     {
-        chdir($this->originalCwd);
-
-        if (is_dir($this->tempDir)) {
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($this->tempDir, FilesystemIterator::SKIP_DOTS),
-                RecursiveIteratorIterator::CHILD_FIRST
-            );
-            foreach ($iterator as $file) {
-                $file->isDir() ? rmdir($file->getRealPath()) : unlink($file->getRealPath());
-            }
-            rmdir($this->tempDir);
-        }
+        $this->tearDownCodeGen();
     }
 
     public static function declarationProvider(): iterable
@@ -110,12 +51,12 @@ final class ConstantExpressionCodeGenTest extends TestCase
      */
     public function testFoldedDeclarationIsEmittedAsALiteral(string $expected): void
     {
-        $this->assertMatchesRegularExpression($expected, $this->generatedC());
+        $this->assertMatchesRegularExpression($expected, $this->compileFixture());
     }
 
     public function testNoOperatorNodeLeaksIntoTheEmittedSymbolName(): void
     {
-        $c = $this->generatedC();
+        $c = $this->compileFixture();
 
         foreach (['_sub(', '_add(', '_mul(', '_bitwise_or(', '_concat(', '_list('] as $leaked) {
             $this->assertStringNotContainsString(
@@ -126,7 +67,7 @@ final class ConstantExpressionCodeGenTest extends TestCase
         }
     }
 
-    private function generatedC(): string
+    private function compileFixture(): string
     {
         $zep = <<<'ZEP'
 namespace Stub\Issue2061;
@@ -144,21 +85,8 @@ final class Limits
     public size = 1024 * 8;
 }
 ZEP;
-        file_put_contents($this->tempDir . '/stub/issue2061/limits.zep', $zep);
+        $this->compileSource('Stub\\Issue2061\\Limits', 'stub/issue2061/limits.zep', $zep);
 
-        $factoryProp = (new ReflectionClass($this->compiler))->getProperty('compilerFileFactory');
-        $factoryProp->setAccessible(true);
-        /** @var CompilerFileFactory $compilerFileFactory */
-        $compilerFileFactory = $factoryProp->getValue($this->compiler);
-
-        /** @var CompilerFile $compilerFile */
-        $compilerFile = $compilerFileFactory->create(
-            'Stub\\Issue2061\\Limits',
-            'stub/issue2061/limits.zep'
-        );
-        $compilerFile->preCompile($this->compiler);
-        $compilerFile->compile($this->compiler, new StringsManager());
-
-        return file_get_contents($this->tempDir . '/ext/stub/issue2061/limits.zep.c');
+        return $this->generatedC('stub/issue2061/limits.zep');
     }
 }

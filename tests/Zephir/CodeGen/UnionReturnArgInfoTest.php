@@ -14,17 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Test\CodeGen;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
-use Zephir\Backend\Backend;
-use Zephir\Backend\StringsManager;
-use Zephir\Compiler;
-use Zephir\Compiler\CompilerFileFactory;
-use Zephir\Config;
 use Zephir\Exception\InvalidTypeException;
-use Zephir\FileSystem\HardDisk;
-use Zephir\Os;
-use Zephir\Parser\Manager;
-use Zephir\Parser\Parser;
 
 /**
  * Locks the arginfo macro chosen for union return types so the compiled
@@ -42,65 +32,16 @@ use Zephir\Parser\Parser;
  */
 final class UnionReturnArgInfoTest extends TestCase
 {
-    private string $originalCwd;
-    private string $tempDir;
-    private Compiler $compiler;
+    use CompilesZephirSource;
 
     protected function setUp(): void
     {
-        if (Os::isWindows()) {
-            $this->markTestSkipped('Code generation tests do not run on Windows.');
-        }
-
-        $this->originalCwd = getcwd();
-
-        $this->tempDir = sys_get_temp_dir() . '/zephir_arginfo_union_test_' . uniqid('', true);
-        mkdir($this->tempDir . '/ext/stub/issue2428', 0755, true);
-        mkdir($this->tempDir . '/stub/issue2428', 0755, true);
-
-        file_put_contents(
-            $this->tempDir . '/config.json',
-            json_encode(['namespace' => 'stub'], JSON_PRETTY_PRINT)
-        );
-
-        chdir($this->tempDir);
-
-        $config  = new Config();
-        $disk    = new HardDisk($this->tempDir . '/.zephir');
-        $disk->initialize();
-        $disk->makeDirectory('.');
-        $logger  = new NullLogger();
-        $backend = new Backend($config, ZEPHIRPATH . 'kernel', ZEPHIRPATH . 'templates');
-
-        $compilerFactory = new CompilerFileFactory($config, $disk, $logger);
-
-        $this->compiler = new Compiler(
-            $config,
-            $backend,
-            new Manager(new Parser()),
-            $disk,
-            $compilerFactory
-        );
-        $this->compiler->setLogger($logger);
+        $this->setUpCodeGen('zephir_arginfo_union_test_', ['stub/issue2428']);
     }
 
     protected function tearDown(): void
     {
-        chdir($this->originalCwd);
-
-        if (is_dir($this->tempDir)) {
-            $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator(
-                    $this->tempDir,
-                    \FilesystemIterator::SKIP_DOTS
-                ),
-                \RecursiveIteratorIterator::CHILD_FIRST
-            );
-            foreach ($iterator as $file) {
-                $file->isDir() ? rmdir($file->getRealPath()) : unlink($file->getRealPath());
-            }
-            rmdir($this->tempDir);
-        }
+        $this->tearDownCodeGen();
     }
 
     public function testScalarUnionUsesTypeMask(): void
@@ -320,30 +261,10 @@ ZEP);
 
     private function compileSingle(string $simpleClassName, string $fileName, string $zep): string
     {
-        $extDir = $this->tempDir . '/ext/stub/issue2428';
-        if (!is_dir($extDir)) {
-            mkdir($extDir, 0755, true);
-        }
-
         $srcRel = 'stub/issue2428/' . $fileName;
-        $headerRel = 'stub/issue2428/' . pathinfo($fileName, PATHINFO_FILENAME);
 
-        file_put_contents($this->tempDir . '/' . $srcRel, $zep);
+        $this->compileSource('Stub\\Issue2428\\' . $simpleClassName, $srcRel, $zep);
 
-        $factoryProp = (new \ReflectionClass($this->compiler))->getProperty('compilerFileFactory');
-        $factoryProp->setAccessible(true);
-        /** @var CompilerFileFactory $compilerFileFactory */
-        $compilerFileFactory = $factoryProp->getValue($this->compiler);
-
-        $fqcn = 'Stub\\Issue2428\\' . $simpleClassName;
-        /** @var \Zephir\CompilerFile $compilerFile */
-        $compilerFile = $compilerFileFactory->create($fqcn, $srcRel);
-        $compilerFile->preCompile($this->compiler);
-        $compilerFile->compile($this->compiler, new StringsManager());
-
-        $headerPath = $this->tempDir . '/ext/' . $headerRel . '.zep.h';
-        $this->assertFileExists($headerPath, 'Compiler should emit a header file.');
-
-        return file_get_contents($headerPath);
+        return $this->generatedHeader($srcRel);
     }
 }
