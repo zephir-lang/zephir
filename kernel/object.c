@@ -634,6 +634,115 @@ int zephir_read_property_cached(
 }
 
 /**
+ * The property slot a write context writes through.
+ *
+ * PHP's `ZEND_FETCH_OBJ_W` hands the VM an IS_INDIRECT to the property itself
+ * (`zend_fetch_property_address()`, Zend/zend_execute.c). That is what lets a
+ * by-reference argument separate a shared array in place, create a missing
+ * element, and be replaced outright by a callee that assigns rather than
+ * mutates. A borrowed copy of the property loses all three, and the last one
+ * frees the array the property is still pointing at.
+ *
+ * `get_property_ptr_ptr` answers NULL when there is no slot to hand out: a
+ * magic __get, a readonly or asymmetrically visible property, or an object
+ * whose handlers do not offer one. PHP falls back to read_property() in write
+ * mode, and that is what raises "Indirect modification of overloaded property
+ * %s::$%s has no effect" (Zend/zend_object_handlers.c), so this does the same
+ * and lets the engine speak. The value goes into `fallback`, owned, which the
+ * caller has registered with the memory frame, and the write reaches no
+ * further than it.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2691
+ */
+zval *zephir_fetch_property_write(zval *object, zend_string *name, zval *fallback)
+{
+	zval tmp;
+	zval *res;
+
+	ZVAL_NULL(fallback);
+
+	if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
+		php_error_docref(NULL, E_NOTICE, "Trying to get property '%s' of non-object", ZSTR_VAL(name));
+
+		return fallback;
+	}
+
+	if (EXPECTED(Z_OBJ_HT_P(object)->get_property_ptr_ptr != NULL)) {
+		res = Z_OBJ_HT_P(object)->get_property_ptr_ptr(Z_OBJ_P(object), name, BP_VAR_W, NULL);
+
+		if (EXPECTED(res != NULL && res != &EG(error_zval))) {
+			return res;
+		}
+	}
+
+	if (UNEXPECTED(!Z_OBJ_HT_P(object)->read_property)) {
+		return fallback;
+	}
+
+	ZVAL_UNDEF(&tmp);
+	res = Z_OBJ_HT_P(object)->read_property(Z_OBJ_P(object), name, BP_VAR_W, NULL, &tmp);
+
+	/* A getter builds its result in `tmp` and hands over what it owns, while a
+	 * real slot stays the object's and has to be addref'd. */
+	if (res == &tmp) {
+		ZVAL_COPY_VALUE(fallback, res);
+	} else {
+		ZVAL_COPY(fallback, res);
+	}
+
+	return fallback;
+}
+
+/**
+ * The same for a property named at runtime, `this->{name}`.
+ *
+ * PHP's `ZEND_FETCH_OBJ_W` takes the same path whether the name came from a
+ * literal or from a variable, so this one only has to turn the name into a
+ * zend_string and hand over.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2691
+ */
+zval *zephir_fetch_property_write_zval(zval *object, zval *property, zval *fallback)
+{
+	if (UNEXPECTED(Z_TYPE_P(property) != IS_STRING)) {
+		php_error_docref(NULL, E_NOTICE, "Cannot access empty property %d", Z_TYPE_P(property));
+
+		ZVAL_NULL(fallback);
+
+		return fallback;
+	}
+
+	return zephir_fetch_property_write(object, Z_STR_P(property), fallback);
+}
+
+/**
+ * The same for a static property, `ZEND_FETCH_STATIC_PROP_W`.
+ *
+ * zend_std_get_static_property() is the slot getter here, and it throws for a
+ * property that does not exist rather than answering NULL, so the fallback is
+ * only reached when an error is already pending.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2691
+ */
+zval *zephir_fetch_static_property_write_ce(zend_class_entry *ce, const char *property, uint32_t property_length, zval *fallback)
+{
+	zend_string *name;
+	zval *res;
+
+	ZVAL_NULL(fallback);
+
+	name = zend_string_init(property, property_length, 0);
+	res  = zend_std_get_static_property(ce, name, BP_VAR_W);
+	zend_string_release(name);
+
+	if (EXPECTED(res != NULL && res != &EG(error_zval))) {
+		return res;
+	}
+
+	return fallback;
+}
+
+/**
  * Fetches a property using a const char
  */
 int zephir_fetch_property(zval *result, zval *object, const char *property_name, uint32_t property_length, int silent)

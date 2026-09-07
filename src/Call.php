@@ -691,6 +691,20 @@ class Call
                         $paramExpr->setWriteThrough(isset($this->byReferenceParameters[$position]));
                         break;
 
+                    case 'property-string-access':
+                    case 'property-dynamic-access':
+                        /**
+                         * A property named at runtime reaches the same write
+                         * context. Its read is left as it was: unlike the three
+                         * above it never borrowed, so forcing read-only here
+                         * would be a change with nothing behind it.
+                         *
+                         * @see \Zephir\Expression\PropertyDynamicAccess::setWriteThrough()
+                         */
+                        $paramExpr->setReadOnly($readOnly);
+                        $paramExpr->setWriteThrough(isset($this->byReferenceParameters[$position]));
+                        break;
+
                     default:
                         $paramExpr->setReadOnly($readOnly);
                         break;

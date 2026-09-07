@@ -43,9 +43,20 @@ class NativeArrayAccess
     {
         /**
          * Resolve the left part of the expression.
+         *
+         * A write context runs the whole way down. PHP fetches
+         * `this->a[b][c]` as FETCH_OBJ_W, FETCH_DIM_W, FETCH_DIM_W, so every
+         * container in the chain is the storage slot of the one above it, and
+         * separating one writes the new table back where its owner sees it.
+         * Borrowing the container and separating it in the kernel would instead
+         * GC_TRY_DELREF() a reference the zval never took, which is why
+         * PH_WRITE and PH_READONLY never meet.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2691
          */
         $expr = new Expression($expression['left']);
-        $expr->setReadOnly(true);
+        $expr->setReadOnly(!$this->writeThrough);
+        $expr->setWriteThrough($this->writeThrough);
         $exprVariable = $expr->compile($compilationContext);
 
         /**

@@ -97,12 +97,16 @@ int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint
  * PH_WRITE is its opposite and the two are mutually exclusive: the caller is
  * about to write through the value, which is what a by-reference call argument
  * does. The result is always owned, so the emitter observes the target and the
- * memory frame releases it whichever branch ran. A native array element is
- * turned into a real reference so the write reaches the container, and an
- * ArrayAccess container gets PHP's "Indirect modification of overloaded element
- * ... has no effect" notice under PHP's own condition. See
- * zephir_array_fetch_found() for the one half of PHP's write context that
- * cannot be reproduced here, separating a shared container.
+ * memory frame releases it whichever branch ran.
+ *
+ * It is the whole of PHP's write context. The container is separated before
+ * anything is looked up in it, a missing element is created rather than
+ * reported, and the element becomes a real reference so the write reaches the
+ * container. Separating is only safe because the emitter never hands a write
+ * context a borrowed container -- see zephir_array_write_container(). An
+ * ArrayAccess container is the one case the write cannot be carried home, and
+ * gets PHP's "Indirect modification of overloaded element ... has no effect"
+ * notice under PHP's own condition.
  *
  * @see https://github.com/zephir-lang/zephir/issues/2682
  * @see https://github.com/zephir-lang/zephir/issues/2691

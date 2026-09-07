@@ -505,8 +505,20 @@ class FunctionCall extends Call
         if (is_array($references)) {
             foreach ($references as $reference) {
                 $variable = $compilationContext->symbolTable->getVariable($reference, $compilationContext);
+
+                /**
+                 * A write-context slot is the storage itself, so it is unwrapped
+                 * again rather than released, and only when nothing else kept
+                 * the reference. See ZEPHIR_UNREF_WRITE(). Everything else was
+                 * wrapped unconditionally by ZEPHIR_MAKE_REF() and is unwrapped
+                 * the same way.
+                 */
+                $unref = $variable->isWriteContextReference() && $variable->isDoublePointer()
+                    ? 'ZEPHIR_UNREF_WRITE('
+                    : 'ZEPHIR_UNREF(';
+
                 $compilationContext->codePrinter->output(
-                    'ZEPHIR_UNREF(' . $compilationContext->backend->getVariableCode($variable) . ');'
+                    $unref . $compilationContext->backend->getVariableCode($variable) . ');'
                 );
             }
         }
@@ -689,17 +701,25 @@ class FunctionCall extends Call
                                      * back as a reference into a native array
                                      * container, and as the owned offsetGet()
                                      * result for an ArrayAccess one, so only the
-                                     * second needs wrapping. It is not registered
-                                     * for the unref either: the memory frame owns
-                                     * it, and ZEPHIR_UNREF() would efree a
-                                     * zend_reference the container still points
-                                     * at.
+                                     * second needs wrapping.
+                                     *
+                                     * Only a slot is registered for the unwrap.
+                                     * A value fetched out of a container is not:
+                                     * the reference there belongs to the
+                                     * container as much as to the argument, and
+                                     * ZVAL_UNREF() would efree what it is still
+                                     * pointing at.
                                      *
                                      * @see https://github.com/zephir-lang/zephir/issues/2682
+                                     * @see https://github.com/zephir-lang/zephir/issues/2691
                                      */
                                     $compilationContext->codePrinter->output(
                                         'ZEPHIR_MAKE_WRITE_REF(' . $referenceSymbol . ');'
                                     );
+
+                                    if ($variable->isDoublePointer()) {
+                                        $references[] = $parameters[$n - 1];
+                                    }
                                 } else {
                                     $compilationContext->codePrinter->output(
                                         'ZEPHIR_MAKE_REF(' . $referenceSymbol . ');'
