@@ -102,7 +102,16 @@ zend_class_entry *stub_45__closure_ce;
 zend_class_entry *stub_46__closure_ce;
 zend_class_entry *stub_47__closure_ce;
 zend_class_entry *stub_48__closure_ce;
+zend_class_entry *stub_49__closure_ce;
 zend_class_entry *stub_4__closure_ce;
+zend_class_entry *stub_50__closure_ce;
+zend_class_entry *stub_51__closure_ce;
+zend_class_entry *stub_52__closure_ce;
+zend_class_entry *stub_53__closure_ce;
+zend_class_entry *stub_54__closure_ce;
+zend_class_entry *stub_55__closure_ce;
+zend_class_entry *stub_56__closure_ce;
+zend_class_entry *stub_57__closure_ce;
 zend_class_entry *stub_5__closure_ce;
 zend_class_entry *stub_6__closure_ce;
 zend_class_entry *stub_7__closure_ce;
@@ -703,7 +712,16 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(stub_46__closure);
 	ZEPHIR_INIT(stub_47__closure);
 	ZEPHIR_INIT(stub_48__closure);
+	ZEPHIR_INIT(stub_49__closure);
 	ZEPHIR_INIT(stub_4__closure);
+	ZEPHIR_INIT(stub_50__closure);
+	ZEPHIR_INIT(stub_51__closure);
+	ZEPHIR_INIT(stub_52__closure);
+	ZEPHIR_INIT(stub_53__closure);
+	ZEPHIR_INIT(stub_54__closure);
+	ZEPHIR_INIT(stub_55__closure);
+	ZEPHIR_INIT(stub_56__closure);
+	ZEPHIR_INIT(stub_57__closure);
 	ZEPHIR_INIT(stub_5__closure);
 	ZEPHIR_INIT(stub_6__closure);
 	ZEPHIR_INIT(stub_7__closure);
@@ -713,15 +731,25 @@ static PHP_MINIT_FUNCTION(stub)
 	return SUCCESS;
 }
 
-#ifndef ZEPHIR_RELEASE
 static PHP_MSHUTDOWN_FUNCTION(stub)
 {
+#ifndef ZEPHIR_RELEASE
 	
 	zephir_deinitialize_memory();
+#endif
+	/**
+	 * Both of these have to run in every build, release included.
+	 *
+	 * module_destructor() unregisters a module's INI entries for it only when
+	 * the module has no MSHUTDOWN of its own, so declaring one takes over that
+	 * duty; skipping it leaves zend_ini_entry records pointing into an
+	 * unloaded extension. And the kernel installs process-wide hooks that
+	 * point into this extension and must not outlive it.
+	 */
 	UNREGISTER_INI_ENTRIES();
+	zephir_module_shutdown();
 	return SUCCESS;
 }
-#endif
 
 /**
  * Initialize globals on each request or each thread started
@@ -901,11 +929,7 @@ zend_module_entry stub_module_entry = {
 	PHP_STUB_EXTNAME,
 	php_stub_functions,
 	PHP_MINIT(stub),
-#ifndef ZEPHIR_RELEASE
 	PHP_MSHUTDOWN(stub),
-#else
-	NULL,
-#endif
 	PHP_RINIT(stub),
 	PHP_RSHUTDOWN(stub),
 	PHP_MINFO(stub),

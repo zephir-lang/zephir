@@ -1066,3 +1066,213 @@ PHP_METHOD(Stub_Closures, issue2652ByRefReadsLateWrite)
 	RETURN_CCTOR(&reader);
 }
 
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2667
+ *
+ * Captures live on a carrier object bound as the closure's `$this`, so
+ * every rebinding entry point has to carry them across to the closure it
+ * builds.
+ */
+PHP_METHOD(Stub_Closures, issue2667Scalar)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *n_param = NULL, _0, _1;
+	zend_long n;
+
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &n_param);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_39__closure_ce);
+	ZVAL_UNDEF(&_1);
+	ZVAL_LONG(&_1, n);
+	zephir_update_property_zval(&_0, SL("n"), &_1);
+	zephir_create_closure_bound(return_value, &_0, NULL, stub_39__closure_ce, SL("__invoke"));
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2667
+ */
+PHP_METHOD(Stub_Closures, issue2667Str)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval name_zv, _0;
+	zend_string *name = NULL;
+
+	ZVAL_UNDEF(&name_zv);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(name)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&name_zv);
+	ZVAL_STR_COPY(&name_zv, name);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_40__closure_ce);
+	zephir_update_property_zval(&_0, SL("name"), &name_zv);
+	zephir_create_closure_bound(return_value, &_0, NULL, stub_40__closure_ce, SL("__invoke"));
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2667
+ */
+PHP_METHOD(Stub_Closures, issue2667Arr)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *items_param = NULL, _0;
+	zval items;
+
+	ZVAL_UNDEF(&items);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		ZEPHIR_Z_PARAM_ARRAY(items, items_param)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &items_param);
+	zephir_get_arrval(&items, items_param);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_41__closure_ce);
+	zephir_update_property_zval(&_0, SL("items"), &items);
+	zephir_create_closure_bound(return_value, &_0, NULL, stub_41__closure_ce, SL("__invoke"));
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2667
+ */
+PHP_METHOD(Stub_Closures, issue2667Obj)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *box, box_sub, _0;
+
+	ZVAL_UNDEF(&box_sub);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(box)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &box);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_42__closure_ce);
+	zephir_update_property_zval(&_0, SL("box"), box);
+	zephir_create_closure_bound(return_value, &_0, NULL, stub_42__closure_ce, SL("__invoke"));
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2667
+ *
+ * A body that reads `this` gets the enclosing object off the carrier, so a
+ * rebind has to replace that too.
+ */
+PHP_METHOD(Stub_Closures, issue2667WithThis)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *tag, tag_sub, _0;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&tag_sub);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(tag)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &tag);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_43__closure_ce);
+	zephir_update_property_zval(&_0, SL("tag"), tag);
+	zephir_update_property_zval(&_0, SL("__$zephir_this"), this_ptr);
+	zephir_create_closure_bound(return_value, &_0, this_ptr, stub_43__closure_ce, SL("__invoke"));
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2667
+ *
+ * The reference ends up held by this one closure, so a rebind splits off a
+ * private copy, exactly as PHP's `zend_array_dup_value()` does.
+ */
+PHP_METHOD(Stub_Closures, issue2667ByRef)
+{
+	zval counter, bump, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+
+	ZVAL_UNDEF(&counter);
+	ZVAL_UNDEF(&bump);
+	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&counter);
+	zephir_make_local_reference(&counter);
+
+	ZVAL_LONG(Z_REFVAL_P(&counter), 0);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_44__closure_ce);
+	zephir_update_property_reference(&_0, SL("counter"), &counter);
+	ZEPHIR_INIT_VAR(&bump);
+	zephir_create_closure_bound(&bump, &_0, NULL, stub_44__closure_ce, SL("__invoke"));
+	zephir_create_array(return_value, 1, 0);
+	zephir_array_fast_append(return_value, &bump);
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2667
+ *
+ * Here two closures hold the same reference, so a rebind keeps sharing it.
+ */
+PHP_METHOD(Stub_Closures, issue2667ByRefShared)
+{
+	zval counter, bump, read, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+
+	ZVAL_UNDEF(&counter);
+	ZVAL_UNDEF(&bump);
+	ZVAL_UNDEF(&read);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&counter);
+	zephir_make_local_reference(&counter);
+
+	ZVAL_LONG(Z_REFVAL_P(&counter), 0);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_45__closure_ce);
+	zephir_update_property_reference(&_0, SL("counter"), &counter);
+	ZEPHIR_INIT_VAR(&bump);
+	zephir_create_closure_bound(&bump, &_0, NULL, stub_45__closure_ce, SL("__invoke"));
+	ZEPHIR_INIT_VAR(&_1);
+	object_init_ex(&_1, stub_46__closure_ce);
+	zephir_update_property_reference(&_1, SL("counter"), &counter);
+	ZEPHIR_INIT_VAR(&read);
+	zephir_create_closure_bound(&read, &_1, NULL, stub_46__closure_ce, SL("__invoke"));
+	zephir_create_array(return_value, 2, 0);
+	zephir_array_fast_append(return_value, &bump);
+	zephir_array_fast_append(return_value, &read);
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2667
+ *
+ * A closure with no captures binds no carrier and rebinds unchanged.
+ */
+PHP_METHOD(Stub_Closures, issue2667Plain)
+{
+
+	zephir_create_closure_ex(return_value, NULL, stub_47__closure_ce, SL("__invoke"));
+	return;
+}
+

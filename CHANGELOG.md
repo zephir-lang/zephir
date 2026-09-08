@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Widened the `conditional-initialization` warning to every local that can be read before it is assigned, instead of only one assigned exactly once in a deeper branch [#2679](https://github.com/zephir-lang/zephir/issues/2679)
 
 ### Fixed
+- Fixed `Closure::bindTo()`, `Closure::bind()` and `Closure::call()` dropping a closure's `use (...)` captures, which read back as `null` or crashed the process [#2667](https://github.com/zephir-lang/zephir/issues/2667)
+- Fixed `var_dump()` and `print_r()` of a closure crashing the process on PHP 8.4 and later, and reporting the internal capture carrier as `$this` instead of the enclosing object on every version [#2667](https://github.com/zephir-lang/zephir/issues/2667)
 - Fixed a compile error being replaced by a deprecation notice on PHP 8.4 and later, by marking six implicitly nullable parameters as nullable and letting a deprecation report as PHP reports it [#2663](https://github.com/zephir-lang/zephir/issues/2663)
 - Fixed a by-reference call argument reading a copy of the container instead of its storage slot, which lost or aliased a write to a shared array, reported a missing element PHP creates, and freed the property's array when the callee replaced its argument [#2691](https://github.com/zephir-lang/zephir/issues/2691)
 - Fixed a by-reference subscript argument borrowing the container value, which lost the write whenever the value was shared and leaked the `offsetGet()` result for an `ArrayAccess` container [#2691](https://github.com/zephir-lang/zephir/issues/2691)

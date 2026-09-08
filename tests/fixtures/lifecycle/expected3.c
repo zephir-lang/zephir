@@ -44,16 +44,26 @@ static PHP_MINIT_FUNCTION(lifecycle)
 	return SUCCESS;
 }
 
-#ifndef ZEPHIR_RELEASE
 static PHP_MSHUTDOWN_FUNCTION(lifecycle)
 {
+#ifndef ZEPHIR_RELEASE
 	ext_takedown_module();
 	ext_kill_module();
 	zephir_deinitialize_memory();
+#endif
+	/**
+	 * Both of these have to run in every build, release included.
+	 *
+	 * module_destructor() unregisters a module's INI entries for it only when
+	 * the module has no MSHUTDOWN of its own, so declaring one takes over that
+	 * duty; skipping it leaves zend_ini_entry records pointing into an
+	 * unloaded extension. And the kernel installs process-wide hooks that
+	 * point into this extension and must not outlive it.
+	 */
 	UNREGISTER_INI_ENTRIES();
+	zephir_module_shutdown();
 	return SUCCESS;
 }
-#endif
 
 /**
  * Initialize globals on each request or each thread started
@@ -161,11 +171,7 @@ zend_module_entry lifecycle_module_entry = {
 	PHP_LIFECYCLE_EXTNAME,
 	php_lifecycle_functions,
 	PHP_MINIT(lifecycle),
-#ifndef ZEPHIR_RELEASE
 	PHP_MSHUTDOWN(lifecycle),
-#else
-	NULL,
-#endif
 	PHP_RINIT(lifecycle),
 	PHP_RSHUTDOWN(lifecycle),
 	PHP_MINFO(lifecycle),

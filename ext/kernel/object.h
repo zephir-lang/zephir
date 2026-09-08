@@ -118,6 +118,10 @@ int zephir_create_closure_bound(zval *return_value, zval *bound_this, zval *scop
 int zephir_update_property_reference(zval *object, const char *property_name, uint32_t property_length, zval *value);
 void zephir_make_local_reference(zval *var);
 
+/** Rebinding a closure that owns a capture carrier (issue #2667) */
+void zephir_closure_module_init(void);
+void zephir_closure_module_shutdown(void);
+
 /** Create instances */
 int zephir_create_instance(zval *return_value, const zval *class_name);
 int zephir_create_instance_params(zval *return_value, const zval *class_name, zval *params);
