@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-09-08
+
 ### Added
 - Added PHP compatible string offsets, so reading, writing, `isset()`, `empty()` and `unset()` on a string behave as they do in PHP, including negative offsets, out of range warnings, dynamically typed sources and `for c in s` [#760](https://github.com/zephir-lang/zephir/issues/760)
 - Added an `unassigned-variable` warning, on by default, for a local that is read but never assigned [#2654](https://github.com/zephir-lang/zephir/issues/2654)
