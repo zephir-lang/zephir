@@ -1,0 +1,194 @@
+--TEST--
+Rebinding a closure keeps its `use (...)` captures (issue #2667)
+--FILE--
+namespace Stub;
+
+/**
+ * A `use (...)` capture lives on a per-creation carrier object that is bound as
+ * the closure's `$this`, because that is the only per-instance slot the engine
+ * gives an internal-function closure. Rebinding replaces `$this`, so every
+ * rebinding entry point has to carry the captures across to the new closure.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2667
+ */
+class Bind2667
+{
+	protected tag = "carrier";
+
+	public function scalar(int n) -> <\Closure>
+	{
+		return function () use (n) {
+			return n;
+		};
+	}
+
+	public function withThis(int n) -> <\Closure>
+	{
+		return function () use (n) {
+			return n . ":" . this->tag;
+		};
+	}
+
+	public function multi(string name, array items) -> <\Closure>
+	{
+		return function () use (name, items) {
+			return name . ":" . implode(",", items);
+		};
+	}
+
+	/**
+	 * The reference ends up held by this one closure only, so PHP's
+	 * `zend_array_dup_value()` dereferences it on a rebind and the rebound
+	 * closure gets an independent copy.
+	 */
+	public function byRef() -> array
+	{
+		var counter, bump;
+
+		let counter = 0;
+
+		let bump = function () use (&counter) {
+			let counter = counter + 1;
+
+			return counter;
+		};
+
+		return [bump];
+	}
+
+	/**
+	 * Here two closures hold the same reference, so its refcount is above one
+	 * and a rebind shares the slot instead of copying it.
+	 */
+	public function byRefShared() -> array
+	{
+		var counter, bump, read;
+
+		let counter = 0;
+
+		let bump = function () use (&counter) {
+			let counter = counter + 1;
+
+			return counter;
+		};
+
+		let read = function () use (&counter) {
+			return counter;
+		};
+
+		return [bump, read];
+	}
+
+	public function plain() -> <\Closure>
+	{
+		return function () {
+			return "plain";
+		};
+	}
+}
+--USAGE--
+use Stub\Bind2667;
+
+/**
+ * Userland on purpose: every Zephir class is a ZEND_INTERNAL_CLASS, and PHP
+ * refuses to rebind a closure's scope to an internal class, which is what
+ * Closure::call() always does.
+ */
+class Target2667
+{
+	public $tag = "target";
+}
+
+$t = new Bind2667();
+$o = new Target2667();
+
+// The issue's own repro: the capture must survive the rebind, and the original
+// closure must be untouched by it.
+$c = $t->scalar(7);
+echo $c(), "\n";
+echo $c->bindTo($o)(), "\n";
+echo $c(), "\n";
+
+// A rebind also has to swap `$this` for the body that uses it.
+$w = $t->withThis(3);
+echo $w(), "\n";
+echo $w->bindTo($o)(), "\n";
+echo $w(), "\n";
+
+// The static form is resolved without consulting the closure's object handlers.
+echo Closure::bind($c, $o)(), "\n";
+echo Closure::bind($w, $o)(), "\n";
+
+// Closure::call() binds and invokes in one step, building no lasting closure.
+echo $c->call($o), "\n";
+echo $w->call($o), "\n";
+
+[$bump] = $t->byRef();
+echo $bump(), ",", $bump->bindTo($o)(), ",", $bump(), "\n";
+
+$m = $t->multi("k", [1, 2, 3]);
+echo $m(), "\n";
+echo $m->bindTo($o)(), "\n";
+
+echo $c->bindTo($o)->bindTo(new Target2667())(), "\n";
+
+$cl = clone $c;
+echo $cl(), "\n";
+echo $cl->bindTo($o)(), "\n";
+
+// A closure with no captures binds no carrier and was never affected.
+$p = $t->plain();
+echo $p(), "\n";
+echo $p->bindTo($o)(), "\n";
+
+// Unbinding is allowed when the body never reads `$this`, and keeps captures.
+$u = Closure::bind($c, null, null);
+echo $u === null ? "NULL" : $u(), "\n";
+
+// Unbinding a body that does read `$this` is refused, as PHP refuses it. The
+// message gained a ", this will be an error in PHP 9" suffix in 8.5, so only
+// the part before the comma is compared.
+set_error_handler(function ($n, $s) { echo "WARN: ", strtok($s, ","), "\n"; return true; });
+$u2 = Closure::bind($w, null, null);
+echo $u2 === null ? "NULL" : $u2(), "\n";
+restore_error_handler();
+
+$b = $c->bindTo($o);
+echo get_class($b), " ", ($b === $c ? "same" : "distinct"), "\n";
+
+// A by-ref capture held by one closure is copied, not shared, on a rebind.
+[$solo] = $t->byRef();
+$sb = $solo->bindTo($o);
+$sb(); $sb();
+echo "solo:", $solo(), "\n";
+
+// One held by two closures stays shared.
+[$bump2, $read2] = $t->byRefShared();
+$rb = $bump2->bindTo($o);
+$rb(); $rb();
+echo "shared:", $read2(), "\n";
+--EXPECT--
+7
+7
+7
+3:carrier
+3:target
+3:carrier
+7
+3:target
+7
+3:target
+1,2,2
+k:1,2,3
+k:1,2,3
+7
+7
+7
+plain
+plain
+7
+WARN: Cannot unbind $this of closure using $this
+NULL
+Closure distinct
+solo:1
+shared:2

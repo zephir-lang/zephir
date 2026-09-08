@@ -564,4 +564,118 @@ class Closures
 
         return reader;
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2667
+     *
+     * Captures live on a carrier object bound as the closure's `$this`, so
+     * every rebinding entry point has to carry them across to the closure it
+     * builds.
+     */
+    public function issue2667Scalar(int n) -> <\Closure>
+    {
+        return function () use (n) {
+            return n;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2667
+     */
+    public function issue2667Str(string name) -> <\Closure>
+    {
+        return function () use (name) {
+            return name;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2667
+     */
+    public function issue2667Arr(array items) -> <\Closure>
+    {
+        return function () use (items) {
+            return items;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2667
+     */
+    public function issue2667Obj(var box) -> <\Closure>
+    {
+        return function () use (box) {
+            return box;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2667
+     *
+     * A body that reads `this` gets the enclosing object off the carrier, so a
+     * rebind has to replace that too.
+     */
+    public function issue2667WithThis(var tag) -> <\Closure>
+    {
+        return function () use (tag) {
+            return tag . ":" . this->_name;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2667
+     *
+     * The reference ends up held by this one closure, so a rebind splits off a
+     * private copy, exactly as PHP's `zend_array_dup_value()` does.
+     */
+    public function issue2667ByRef() -> array
+    {
+        var counter, bump;
+
+        let counter = 0;
+
+        let bump = function () use (&counter) {
+            let counter = counter + 1;
+
+            return counter;
+        };
+
+        return [bump];
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2667
+     *
+     * Here two closures hold the same reference, so a rebind keeps sharing it.
+     */
+    public function issue2667ByRefShared() -> array
+    {
+        var counter, bump, read;
+
+        let counter = 0;
+
+        let bump = function () use (&counter) {
+            let counter = counter + 1;
+
+            return counter;
+        };
+
+        let read = function () use (&counter) {
+            return counter;
+        };
+
+        return [bump, read];
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2667
+     *
+     * A closure with no captures binds no carrier and rebinds unchanged.
+     */
+    public function issue2667Plain() -> <\Closure>
+    {
+        return function () {
+            return "plain";
+        };
+    }
 }

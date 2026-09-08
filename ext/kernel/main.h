@@ -526,6 +526,7 @@ void zephir_get_arg(zval* return_value, zend_long idx);
 void zephir_get_args_from(zval* return_value, uint32_t skip);
 
 void zephir_module_init();
+void zephir_module_shutdown(void);
 
 /**
  * Z_PARAM_ARRAY(dest) expands to a call to zend_parse_arg_array(_arg, &dest, ...).

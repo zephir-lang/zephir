@@ -97,10 +97,10 @@ PHP_METHOD(Stub_Issue2654, captureInClosure)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
-	object_init_ex(&_0, stub_45__closure_ce);
+	object_init_ex(&_0, stub_54__closure_ce);
 	zephir_update_property_zval(&_0, SL("x"), &x);
 	ZEPHIR_INIT_VAR(&capture);
-	zephir_create_closure_bound(&capture, &_0, NULL, stub_45__closure_ce, SL("__invoke"));
+	zephir_create_closure_bound(&capture, &_0, NULL, stub_54__closure_ce, SL("__invoke"));
 	ZEPHIR_CALL_USER_FUNC(return_value, &capture);
 	zephir_check_call_status();
 	RETURN_MM();

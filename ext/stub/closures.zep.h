@@ -49,6 +49,14 @@ PHP_METHOD(Stub_Closures, issue2652BodyMutation);
 PHP_METHOD(Stub_Closures, issue2652ByRefShared);
 PHP_METHOD(Stub_Closures, issue2652ByRefWritesOut);
 PHP_METHOD(Stub_Closures, issue2652ByRefReadsLateWrite);
+PHP_METHOD(Stub_Closures, issue2667Scalar);
+PHP_METHOD(Stub_Closures, issue2667Str);
+PHP_METHOD(Stub_Closures, issue2667Arr);
+PHP_METHOD(Stub_Closures, issue2667Obj);
+PHP_METHOD(Stub_Closures, issue2667WithThis);
+PHP_METHOD(Stub_Closures, issue2667ByRef);
+PHP_METHOD(Stub_Closures, issue2667ByRefShared);
+PHP_METHOD(Stub_Closures, issue2667Plain);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_closures_simple1, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -212,6 +220,35 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2652byrefreadslatewrite, 0, 0, Closure, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2667scalar, 0, 1, Closure, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2667str, 0, 1, Closure, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2667arr, 0, 1, Closure, 0)
+	ZEND_ARG_ARRAY_INFO(0, items, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2667obj, 0, 1, Closure, 0)
+	ZEND_ARG_INFO(0, box)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2667withthis, 0, 1, Closure, 0)
+	ZEND_ARG_INFO(0, tag)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_closures_issue2667byref, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_closures_issue2667byrefshared, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2667plain, 0, 0, Closure, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_closures_method_entry) {
 PHP_ME(Stub_Closures, simple1, arginfo_stub_closures_simple1, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Closures, simple2, arginfo_stub_closures_simple2, ZEND_ACC_PUBLIC)
@@ -259,5 +296,13 @@ PHP_ME(Stub_Closures, issue1036Call, arginfo_stub_closures_issue1036call, ZEND_A
 	PHP_ME(Stub_Closures, issue2652ByRefShared, arginfo_stub_closures_issue2652byrefshared, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Closures, issue2652ByRefWritesOut, arginfo_stub_closures_issue2652byrefwritesout, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Closures, issue2652ByRefReadsLateWrite, arginfo_stub_closures_issue2652byrefreadslatewrite, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2667Scalar, arginfo_stub_closures_issue2667scalar, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2667Str, arginfo_stub_closures_issue2667str, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2667Arr, arginfo_stub_closures_issue2667arr, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2667Obj, arginfo_stub_closures_issue2667obj, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2667WithThis, arginfo_stub_closures_issue2667withthis, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2667ByRef, arginfo_stub_closures_issue2667byref, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2667ByRefShared, arginfo_stub_closures_issue2667byrefshared, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2667Plain, arginfo_stub_closures_issue2667plain, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

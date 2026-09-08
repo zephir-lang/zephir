@@ -337,5 +337,14 @@
 #include "stub/46__closure.zep.h"
 #include "stub/47__closure.zep.h"
 #include "stub/48__closure.zep.h"
+#include "stub/49__closure.zep.h"
+#include "stub/50__closure.zep.h"
+#include "stub/51__closure.zep.h"
+#include "stub/52__closure.zep.h"
+#include "stub/53__closure.zep.h"
+#include "stub/54__closure.zep.h"
+#include "stub/55__closure.zep.h"
+#include "stub/56__closure.zep.h"
+#include "stub/57__closure.zep.h"
 
 #endif

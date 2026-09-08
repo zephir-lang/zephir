@@ -600,10 +600,10 @@ PHP_METHOD(Stub_Issue2679, conditionalCapturedByClosure)
 		ZVAL_STRING(&x, "set");
 	}
 	ZEPHIR_INIT_VAR(&_0);
-	object_init_ex(&_0, stub_46__closure_ce);
+	object_init_ex(&_0, stub_55__closure_ce);
 	zephir_update_property_zval(&_0, SL("x"), &x);
 	ZEPHIR_INIT_VAR(&fnc);
-	zephir_create_closure_bound(&fnc, &_0, NULL, stub_46__closure_ce, SL("__invoke"));
+	zephir_create_closure_bound(&fnc, &_0, NULL, stub_55__closure_ce, SL("__invoke"));
 	ZEPHIR_CALL_USER_FUNC(return_value, &fnc);
 	zephir_check_call_status();
 	RETURN_MM();
