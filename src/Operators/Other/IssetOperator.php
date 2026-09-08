@@ -62,6 +62,17 @@ class IssetOperator extends AbstractOperator
                     case 'variable':
                         break;
 
+                    /**
+                     * `isset(s[i])` on a declared string. The kernel isset
+                     * helpers dispatch on the container's runtime type, so the
+                     * ordinary emission below already does the right thing for
+                     * a string: PHP's silent, negative-aware offset test.
+                     */
+                    case 'string':
+                    case 'istring':
+                        $compilationContext->headersManager->add('kernel/string');
+                        break;
+
                     default:
                         throw new CompilerException(
                             'Variable type: ' . $variable->getType() . ' cannot be used as array',

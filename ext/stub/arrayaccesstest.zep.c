@@ -65,8 +65,9 @@ PHP_METHOD(Stub_ArrayAccessTest, get)
 	object_init_ex(&arr, stub_arrayaccessarr_ce);
 	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 4);
 	zephir_check_call_status();
-	zephir_array_fetch_string(&_0, &arr, SL("two"), PH_NOISY | PH_READONLY, "stub/arrayaccesstest.zep", 29);
-	RETURN_CTOR(&_0);
+	zephir_memory_observe(&_0);
+	zephir_array_fetch_string(&_0, &arr, SL("two"), PH_NOISY, "stub/arrayaccesstest.zep", 29);
+	RETURN_CCTOR(&_0);
 }
 
 PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromArray)

@@ -44,7 +44,7 @@ PHP_METHOD(Stub_BuiltIn_CharMethods, getHex)
 
 PHP_METHOD(Stub_BuiltIn_CharMethods, getHexForString)
 {
-	long _0;
+	zend_long _0;
 	char ch = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval str_zv, o, _1$$3, _2$$3, _3$$3;

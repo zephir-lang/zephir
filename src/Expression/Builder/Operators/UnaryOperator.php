@@ -68,7 +68,7 @@ class UnaryOperator extends AbstractOperator
      * @param null                 $operator
      * @param AbstractBuilder|null $expression
      */
-    public function __construct($operator = null, AbstractBuilder $expression = null)
+    public function __construct($operator = null, ?AbstractBuilder $expression = null)
     {
         if (null !== $operator) {
             $this->setOperator($operator);

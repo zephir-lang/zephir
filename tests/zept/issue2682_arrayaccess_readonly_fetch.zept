@@ -1,0 +1,112 @@
+--TEST--
+a read-only subscript read of an ArrayAccess object owns the offsetGet() result
+--FILE--
+namespace Zept;
+
+class Issue2682
+{
+    /**
+     * The throw is what moves the last call line ahead of the read, which is
+     * what makes the emitter promote the target to read-only. Without it the
+     * flag is never set and this file tests nothing.
+     */
+    public function fetchReleasedEarly(container) -> bool
+    {
+        var value, copy;
+
+        if typeof container === "null" {
+            throw new \RuntimeException("A container is required");
+        }
+
+        if fetch value, container["namespace"] {
+            let copy = value;
+            let copy = null;
+
+            return container->destroyed;
+        }
+
+        return true;
+    }
+
+    public function readReleasedEarly(container) -> bool
+    {
+        var value, copy;
+
+        if typeof container === "null" {
+            throw new \RuntimeException("A container is required");
+        }
+
+        let value = container["namespace"];
+        let copy = value;
+        let copy = null;
+
+        return container->destroyed;
+    }
+
+    public function nativeArrayStaysReadOnly(int mode) -> string
+    {
+        var table, value;
+
+        if mode < 0 {
+            throw new \RuntimeException("Not reachable, it only moves the last call line");
+        }
+
+        let table = ["namespace": "kept"];
+        let value = table["namespace"];
+
+        return value;
+    }
+}
+--USAGE--
+class Probe
+{
+    private $owner;
+
+    public function __construct(Container $owner)
+    {
+        $this->owner = $owner;
+    }
+
+    public function __destruct()
+    {
+        $this->owner->destroyed = true;
+    }
+}
+
+class Container implements ArrayAccess
+{
+    public $destroyed = false;
+
+    public function offsetExists(mixed $offset): bool { return true; }
+
+    // Keeps no reference of its own: the caller owns what it gets.
+    public function offsetGet(mixed $offset): mixed { return new Probe($this); }
+
+    public function offsetSet(mixed $offset, mixed $value): void {}
+    public function offsetUnset(mixed $offset): void {}
+}
+
+$p = new Zept\Issue2682();
+
+$fetch = new Container();
+$read  = new Container();
+
+$fetchEarly = $p->fetchReleasedEarly($fetch);
+$readEarly  = $p->readReleasedEarly($read);
+
+// The same shape in PHP, which owns the value and releases it once.
+$php   = new Container();
+$value = $php['namespace'];
+$copy  = $value;
+$copy  = null;
+$phpEarly = $php->destroyed;
+$value    = null;
+
+echo json_encode([
+    'fetch' => [$fetchEarly, $fetch->destroyed],
+    'read'  => [$readEarly, $read->destroyed],
+    'php'   => [$phpEarly, $php->destroyed],
+    'array' => $p->nativeArrayStaysReadOnly(0),
+]), "\n";
+--EXPECT--
+{"fetch":[false,true],"read":[false,true],"php":[false,true],"array":"kept"}

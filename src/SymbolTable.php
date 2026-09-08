@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Zephir;
 
 use Zephir\Exception\CompilerException;
+use Zephir\Passes\DefiniteAssignmentPass;
 use Zephir\Passes\LocalContextPass;
+use Zephir\Passes\NativeArrayPass;
 use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
 
@@ -36,9 +38,20 @@ class SymbolTable
 
     protected Globals $globalsManager;
 
-    protected ?LocalContextPass $localContext = null;
+    protected ?DefiniteAssignmentPass $definiteAssignment = null;
+    protected ?NativeArrayPass        $nativeArray        = null;
+    protected ?LocalContextPass       $localContext       = null;
 
     protected bool $mustGrownStack = false;
+
+    /**
+     * Names of locals a closure in this method captures with `use (&x)`. They
+     * have to be references from their first use, which is why the set is
+     * collected before the body is compiled.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2652
+     */
+    protected array $closureReferences = [];
 
     protected int $tempVarCount = 0;
 
@@ -123,6 +136,10 @@ class SymbolTable
         $variable = new Variable($type, $varName, $currentBranch);
         $variable->setUsed(true);
 
+        if (isset($this->closureReferences[$name])) {
+            $variable->setIsClosureReference(true);
+        }
+
         /**
          * Checks whether a variable can be optimized to be static or not
          */
@@ -137,6 +154,34 @@ class SymbolTable
         $this->branchVariables[$branchId][$name] = $variable;
 
         return $variable;
+    }
+
+    /**
+     * Whether a local has to be initialised to null at its declaration because
+     * it is read somewhere nothing has assigned it yet. Gathered by the
+     * DefiniteAssignmentPass, which is not really part of the symbol table but
+     * reaches DeclareStatement through it, as the local context does.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2679
+     */
+    public function requiresNullInitialization(string $variable): bool
+    {
+        return $this->definiteAssignment?->requiresNullInitialization($variable) ?? false;
+    }
+
+    /**
+     * Whether every value this local can hold is a native array, so a
+     * subscript read of it may borrow instead of taking a reference. Gathered
+     * by the NativeArrayPass, which reaches the emitters through the symbol
+     * table as the local context does.
+     *
+     * Without the pass nothing is proven, which is the safe answer.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2682
+     */
+    public function isProvenNativeArray(string $variable): bool
+    {
+        return $this->nativeArray?->isProvenNativeArray($variable) ?? false;
     }
 
     /**
@@ -582,6 +627,17 @@ class SymbolTable
                         /**
                          * Check if last assignment
                          * Variable was initialized in a sub-branch, and it's being used in a parent branch.
+                         *
+                         * This used to also raise `conditional-initialization`, but it could only
+                         * see a variable assigned exactly once, in a branch deeper than the read.
+                         * The warning now comes from Method::compile(), off the same
+                         * definite-assignment decision that adds the initialization, which covers
+                         * the shapes this misses: several conditional writes, a loop or `try` that
+                         * may not run, a `switch` with no `default`, and a read before the only
+                         * write.
+                         *
+                         * @see Variable::isReadBeforeAssignment()
+                         * @see https://github.com/zephir-lang/zephir/issues/2679
                          */
                         $possibleBadAssignment = $currentBranch->getLevel() < $branches[0]->getLevel();
                         if ($possibleBadAssignment && count($branches) === 1) {
@@ -598,10 +654,6 @@ class SymbolTable
                                     );
                                 } else {
                                     $variable->enableDefaultAutoInitValue();
-                                    $compilationContext->logger->warning(
-                                        "Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration",
-                                        ['conditional-initialization', $statement]
-                                    );
                                 }
                             } else {
                                 if (Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
@@ -614,10 +666,6 @@ class SymbolTable
                                         );
                                     } else {
                                         $variable->enableDefaultAutoInitValue();
-                                        $compilationContext->logger->warning(
-                                            "Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration",
-                                            ['conditional-initialization', $statement]
-                                        );
                                     }
                                 }
                             }
@@ -794,8 +842,20 @@ class SymbolTable
     }
 
     /**
-     * Return a variable in the symbol table, it will be used for a write operation.
+     * Records which locals a closure captures with `use (&x)`.
+     *
+     * @param string[] $names
      */
+    public function setClosureReferences(array $names): void
+    {
+        $this->closureReferences = array_fill_keys($names, true);
+    }
+
+    public function isClosureReference(string $name): bool
+    {
+        return isset($this->closureReferences[$name]);
+    }
+
     public function mustGrownStack(bool $mustGrownStack): void
     {
         $this->mustGrownStack = $mustGrownStack;
@@ -814,6 +874,22 @@ class SymbolTable
         } while (null != $currentBranch);
 
         return null;
+    }
+
+    /**
+     * Sets the definite-assignment information.
+     */
+    public function setDefiniteAssignment(DefiniteAssignmentPass $definiteAssignment): void
+    {
+        $this->definiteAssignment = $definiteAssignment;
+    }
+
+    /**
+     * Sets the native-array information.
+     */
+    public function setNativeArray(NativeArrayPass $nativeArray): void
+    {
+        $this->nativeArray = $nativeArray;
     }
 
     /**
@@ -857,6 +933,17 @@ class SymbolTable
             foreach ($this->branchTempVariables[$branchId][$location][$type] as $variable) {
                 if (!$variable->isDoublePointer() && $variable->isIdle()) {
                     $variable->setIdle(false);
+
+                    /**
+                     * Whether the kernel already made the slot a reference is
+                     * true of one fetch, not of the slot. Left set, the next
+                     * by-reference argument to land in this temp would be
+                     * wrapped conditionally and never unwrapped, so the caller
+                     * would read an IS_REFERENCE back out of it.
+                     *
+                     * @see https://github.com/zephir-lang/zephir/issues/2691
+                     */
+                    $variable->setIsWriteContextReference(false);
 
                     return $variable;
                 }

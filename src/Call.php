@@ -46,6 +46,14 @@ class Call
      * @var mixed|null
      */
     protected $reflection;
+    /**
+     * Positions of the callee's by-reference parameters, when the callee is
+     * known. Populated before the arguments are resolved, because a subscript
+     * argument has to be fetched differently for one.
+     *
+     * @var array<int, true>
+     */
+    protected array $byReferenceParameters = [];
 
     protected array $resolvedDynamicTypes = [];
 
@@ -663,7 +671,7 @@ class Call
         }
 
         $params = [];
-        foreach ($parameters as $parameter) {
+        foreach ($parameters as $position => $parameter) {
             if (is_array($parameter['parameter'])) {
                 $paramExpr = new Expression($parameter['parameter']);
 
@@ -672,6 +680,29 @@ class Call
                     case 'array-access':
                     case 'static-property-access':
                         $paramExpr->setReadOnly(true);
+                        /**
+                         * A by-reference parameter is written by the callee, so
+                         * the fetch runs in write context and the element itself
+                         * becomes a reference, exactly as PHP does it. Never a
+                         * borrow, whatever the container is.
+                         *
+                         * @see \Zephir\Expression\NativeArrayAccess::setWriteThrough()
+                         */
+                        $paramExpr->setWriteThrough(isset($this->byReferenceParameters[$position]));
+                        break;
+
+                    case 'property-string-access':
+                    case 'property-dynamic-access':
+                        /**
+                         * A property named at runtime reaches the same write
+                         * context. Its read is left as it was: unlike the three
+                         * above it never borrowed, so forcing read-only here
+                         * would be a change with nothing behind it.
+                         *
+                         * @see \Zephir\Expression\PropertyDynamicAccess::setWriteThrough()
+                         */
+                        $paramExpr->setReadOnly($readOnly);
+                        $paramExpr->setWriteThrough(isset($this->byReferenceParameters[$position]));
                         break;
 
                     default:

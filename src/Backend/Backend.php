@@ -901,13 +901,86 @@ class Backend
         }
     }
 
-    public function createClosure(Variable $variable, $classDefinition, CompilationContext $context, bool $bindThis = false): void
-    {
-        $symbol = $this->getVariableCode($variable);
-        $thisArg = $bindThis ? 'this_ptr' : 'NULL';
+    public function createClosure(
+        Variable $variable,
+        $classDefinition,
+        CompilationContext $context,
+        bool $bindThis = false,
+        ?Variable $carrier = null
+    ): void {
+        $symbol     = $this->getVariableCode($variable);
+        $classEntry = $classDefinition->getClassEntry();
+        $thisArg    = $bindThis ? 'this_ptr' : 'NULL';
+
+        /*
+         * Without captures the closure needs no state of its own, so the
+         * enclosing object (or nothing) is bound directly, exactly as before.
+         */
+        if (null === $carrier) {
+            $context->codePrinter->output(
+                'zephir_create_closure_ex(' . $symbol . ', ' . $thisArg . ', ' . $classEntry . ', SL("__invoke"));'
+            );
+
+            return;
+        }
+
+        /*
+         * With captures the carrier takes the closure's single per-instance
+         * slot, and the scope keeps coming from the enclosing object so the
+         * body still reaches its protected/private members.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2652
+         */
         $context->codePrinter->output(
-            'zephir_create_closure_ex(' . $symbol . ', ' . $thisArg . ', ' . $classDefinition->getClassEntry(
-            ) . ', SL("__invoke"));'
+            'zephir_create_closure_bound(' . $symbol . ', ' . $this->getVariableCode($carrier) . ', '
+            . $thisArg . ', ' . $classEntry . ', SL("__invoke"));'
+        );
+    }
+
+    /**
+     * Writes one by-reference closure capture into the carrier object.
+     *
+     * The reference itself has to land in the property, undereferenced, so the
+     * closure and the enclosing scope keep sharing one storage slot.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function updateClosureReferenceCapture(
+        Variable $carrier,
+        string $property,
+        Variable $reference,
+        CompilationContext $context
+    ): void {
+        $context->codePrinter->output(
+            sprintf(
+                'zephir_update_property_reference(%s, SL("%s"), &%s);',
+                $this->getVariableCode($carrier),
+                $property,
+                $reference->getName()
+            )
+        );
+    }
+
+    /**
+     * Writes one closure capture into the carrier object.
+     *
+     * Deliberately not routed through updateProperty(): the cached emitter
+     * would register an interned-name slot in the enclosing method for a cache
+     * slot that is forced to 0 on a non-`this` object anyway.
+     */
+    public function updateClosureCapture(
+        Variable $carrier,
+        string $property,
+        $value,
+        CompilationContext $context
+    ): void {
+        $context->codePrinter->output(
+            sprintf(
+                'zephir_update_property_zval(%s, SL("%s"), %s);',
+                $this->getVariableCode($carrier),
+                $property,
+                $this->resolveValue($value, $context)
+            )
         );
     }
 
@@ -1354,6 +1427,81 @@ class Backend
     }
 
     /**
+     * Fetches a property in write context, as the storage slot itself.
+     *
+     * PHP's `ZEND_FETCH_OBJ_W` produces an IS_INDIRECT to the property, and
+     * everything a by-reference argument needs follows from that: the container
+     * can be separated where its owner will see it, a missing element can be
+     * created, and a callee that assigns to its argument replaces what the
+     * property holds. A copy of the property gives none of those, and the last
+     * one frees the property's array under it.
+     *
+     * `$slot` is a double pointer, so it is emitted without an ampersand and is
+     * never registered with the memory frame: it points into a live object.
+     * `$fallback` is, because the object may have no slot to give and the value
+     * that comes back instead is owned.
+     *
+     * `$property` is a Variable when the name is only known at runtime,
+     * `this->{name}`, which PHP fetches through the same handler.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2691
+     */
+    public function fetchPropertyWrite(
+        Variable $slot,
+        Variable $variableVariable,
+        string|Variable $property,
+        Variable $fallback,
+        CompilationContext $context
+    ): void {
+        if ($property instanceof Variable) {
+            $context->codePrinter->output(
+                sprintf(
+                    '%s = zephir_fetch_property_write_zval(%s, %s, %s);',
+                    $this->getVariableCode($slot),
+                    $this->getVariableCode($variableVariable),
+                    $this->getVariableCode($property),
+                    $this->getVariableCode($fallback)
+                )
+            );
+
+            return;
+        }
+
+        $context->codePrinter->output(
+            sprintf(
+                '%s = zephir_fetch_property_write(%s, %s, %s);',
+                $this->getVariableCode($slot),
+                $this->getVariableCode($variableVariable),
+                $this->internedPropertyName($property, $context),
+                $this->getVariableCode($fallback)
+            )
+        );
+    }
+
+    /**
+     * The same for a static property, `ZEND_FETCH_STATIC_PROP_W`.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2691
+     */
+    public function fetchStaticPropertyWrite(
+        Variable $slot,
+        $classDefinition,
+        string $property,
+        Variable $fallback,
+        CompilationContext $context
+    ): void {
+        $context->codePrinter->output(
+            sprintf(
+                '%s = zephir_fetch_static_property_write_ce(%s, SL("%s"), %s);',
+                $this->getVariableCode($slot),
+                $classDefinition->getClassEntry(),
+                $property,
+                $this->getVariableCode($fallback)
+            )
+        );
+    }
+
+    /**
      * Registers (once per property name per method) a method-scope interned
      * zend_string slot for a compile-time-known object-property name and
      * returns its C variable. The `static` declaration and lazy init are
@@ -1781,7 +1929,7 @@ class Backend
 
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable): ?string
     {
-        $isComplex = in_array($type, ['variable', 'string', 'array', 'resource', 'callable', 'object', 'mixed'], true);
+        $isComplex = in_array($type, Variable::COMPLEX_ZVAL_TYPES, true);
 
         if ($isComplex && !$variable->isDoublePointer()) {
             $groupVariables[] = $variable->getName();
@@ -1790,11 +1938,24 @@ class Backend
                 '__$null'  => "\t" . 'ZVAL_NULL(&' . $variable->getName() . ');',
                 '__$true'  => "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 1);',
                 '__$false' => "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 0);',
-                default    => "\t" . 'ZVAL_UNDEF(&' . $variable->getName() . ');',
+                /**
+                 * A local the user declared without a value and never assigned
+                 * would otherwise keep the IS_UNDEF left here and hand it to
+                 * userland, where var_dump() prints it as `UNKNOWN:0`. PHP
+                 * evaluates an unset variable as null.
+                 *
+                 * Every other zval has to start undefined: that is what makes
+                 * its first write register it with the memory frame.
+                 *
+                 * @see Variable::isNeverAssigned()
+                 * @see https://github.com/zephir-lang/zephir/issues/2654
+                 */
+                default    => "\t" . ($variable->isNeverAssigned() ? 'ZVAL_NULL' : 'ZVAL_UNDEF')
+                    . '(&' . $variable->getName() . ');',
             };
         }
 
-        if ($variable->isLocalOnly()) {
+        if ($variable->isLocalOnly() && !$variable->isDoublePointer()) {
             $groupVariables[] = $variable->getName();
 
             return null;
@@ -1980,12 +2141,20 @@ class Backend
                 $code = 'unsigned char';
                 break;
 
+            /**
+             * All four integer types describe a PHP `int`, which the engine
+             * keeps in a `zend_long` (`int64_t`). A C `long` would instead
+             * follow the data model: 64-bit under LP64, 32-bit under LLP64
+             * (Windows x64).
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2666
+             */
             case 'long':
-                $code = 'long';
+                $code = 'zend_long';
                 break;
 
             case 'ulong':
-                $code = 'unsigned long';
+                $code = 'zend_ulong';
                 break;
 
             case 'bool':
@@ -2094,6 +2263,19 @@ class Backend
 
         if ($variable->isNativeString()) {
             return '&' . $variable->getName() . '_zv';
+        }
+
+        /*
+         * A `use (&x)` capture is one storage slot shared by the enclosing
+         * scope and the closure. Routing every access through the reference is
+         * enough to give both sides PHP's semantics: reads see the other
+         * side's writes, and writes land in the shared slot rather than
+         * re-pointing a local.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2652
+         */
+        if ($variable->isClosureReference()) {
+            return 'Z_REFVAL_P(&' . $variable->getName() . ')';
         }
 
         return '&' . $variable->getName();
@@ -2403,6 +2585,153 @@ class Backend
         );
     }
 
+    /**
+     * Renders the offset for the kernel string-offset helpers.
+     *
+     * A native integer goes straight through. Everything else has to reach the
+     * runtime as a zval, because PHP's offset rules -- numeric strings,
+     * "String offset cast occurred", the TypeError for arrays and objects --
+     * depend on the value, not just its type. The `_zval` suffix selects the
+     * helper variant that applies them.
+     *
+     * @return array{suffix: string, code: string}
+     *
+     * @throws CompilerException
+     */
+    public function resolveStringOffset(
+        CompiledExpression $exprIndex,
+        CompilationContext $compilationContext,
+        array $node
+    ): array {
+        switch ($exprIndex->getType()) {
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+                return ['suffix' => '', 'code' => $exprIndex->getCode()];
+
+            case 'char':
+            case 'uchar':
+                return ['suffix' => '', 'code' => "'" . $exprIndex->getCode() . "'"];
+
+            case 'variable':
+                $variableIndex = $compilationContext->symbolTable->getVariableForRead(
+                    $exprIndex->getCode(),
+                    $compilationContext,
+                    $node
+                );
+
+                switch ($variableIndex->getType()) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'ulong':
+                    case 'char':
+                    case 'uchar':
+                        return ['suffix' => '', 'code' => $variableIndex->getName()];
+
+                    case 'variable':
+                    case 'mixed':
+                    case 'string':
+                    case 'istring':
+                    case 'array':
+                        return [
+                            'suffix' => '_zval',
+                            'code'   => $this->getVariableCode($variableIndex),
+                        ];
+
+                    case 'double':
+                        return $this->boxStringOffset('assignDouble', $variableIndex->getName(), $compilationContext);
+
+                    case 'bool':
+                        return $this->boxStringOffset('assignBool', $variableIndex->getName(), $compilationContext);
+                }
+
+                throw new CompilerException(
+                    'Cannot use index type ' . $variableIndex->getType() . ' as offset',
+                    $node
+                );
+
+            case 'string':
+            case 'istring':
+                return $this->boxStringOffset(
+                    'assignString',
+                    Name::addSlashes($exprIndex->getCode()),
+                    $compilationContext
+                );
+
+            case 'double':
+                return $this->boxStringOffset('assignDouble', $exprIndex->getCode(), $compilationContext);
+
+            case 'bool':
+                return $this->boxStringOffset('assignBool', $exprIndex->getCode(), $compilationContext);
+
+            case 'null':
+                return $this->boxStringOffset('assignNull', null, $compilationContext);
+        }
+
+        throw new CompilerException(
+            'Cannot use index type ' . $exprIndex->getType() . ' as offset',
+            $node
+        );
+    }
+
+    /**
+     * Boxes a non-integer offset into a temp zval so the runtime can coerce it
+     * the way PHP does.
+     *
+     * @return array{suffix: string, code: string}
+     */
+    private function boxStringOffset(string $assign, ?string $value, CompilationContext $compilationContext): array
+    {
+        $temp = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
+
+        if (null === $value) {
+            $this->assignNull($temp, $compilationContext);
+        } else {
+            $this->{$assign}($temp, $value, $compilationContext);
+        }
+
+        return ['suffix' => '_zval', 'code' => $this->getVariableCode($temp)];
+    }
+
+    /**
+     * Emits `let s[i] = value` for a declared string, PHP's `$s[$i] = $v`.
+     *
+     * The target must be a zval-backed string. A `string` parameter can also
+     * be a bare `zend_string *` with a companion `_zv` zval, and separating or
+     * extending the string would leave that pointer dangling. Being the target
+     * of an offset write is enough to keep the compiler off that
+     * representation today; the guard below turns a future regression into a
+     * build error rather than a use-after-free.
+     *
+     * @throws CompilerException
+     */
+    public function updateStringOffset(
+        Variable $symbolVariable,
+        CompiledExpression $key,
+        $value,
+        CompilationContext $compilationContext,
+        array $node
+    ): void {
+        if ($symbolVariable->isNativeString()) {
+            throw new CompilerException(
+                'Cannot write to an offset of the native string ' . $symbolVariable->getName(),
+                $node
+            );
+        }
+
+        $offset = $this->resolveStringOffset($key, $compilationContext, $node);
+
+        $compilationContext->codePrinter->output(sprintf(
+            'zephir_string_offset_write%s(%s, %s, %s);',
+            $offset['suffix'],
+            $this->getVariableCode($symbolVariable),
+            $offset['code'],
+            $this->resolveValue($value, $compilationContext, true)
+        ));
+    }
+
     public function updateArray(
         Variable $symbolVariable,
         $key,
@@ -2603,6 +2932,27 @@ class Backend
      *
      * @throws CompilerException
      */
+    /**
+     * An `l` index reaches zephir_array_update_multi() and friends through a
+     * variadic slot, where the callee reads it back with `va_arg(ap,
+     * zend_long)`. An argument passed as a plain C `int` (every integer
+     * literal is one) therefore has its upper half read as whatever the ABI
+     * left there: on Windows that produced keys like 140733193388033 instead
+     * of 1. The cast makes the argument's type match the read on every ABI.
+     *
+     * A cast binds tighter than any binary operator, so this relies on the
+     * offset's code being an atom or already parenthesised. Every producer
+     * that reaches here satisfies that: integer literals and constants fold to
+     * a single token, and ArithmeticalBaseOperator wraps its result in
+     * parentheses.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2666
+     */
+    private function castMultiIndex(string $code): string
+    {
+        return '(zend_long) ' . $code;
+    }
+
     private function resolveOffsetExprs(array $offsetExprs, CompilationContext $compilationContext): array
     {
         $keys         = '';
@@ -2622,7 +2972,7 @@ class Backend
                 case 'long':
                 case 'ulong':
                     $keys          .= 'l';
-                    $offsetItems[] = $offsetExpr->getCode();
+                    $offsetItems[] = $this->castMultiIndex($offsetExpr->getCode());
                     ++$numberParams;
                     break;
 
@@ -2643,8 +2993,15 @@ class Backend
                         case 'uint':
                         case 'long':
                         case 'ulong':
-                            $keys          .= 'l';
-                            $offsetItems[] = $this->getVariableCode($variableIndex);
+                            $keys .= 'l';
+                            /**
+                             * A native integer local is the value itself, not
+                             * a zval, so getVariableCode() would hand the
+                             * variadic slot a `&name` pointer for `uint` and
+                             * `ulong` (it only bypasses `int` and `long`).
+                             */
+                            $variableIndex->setUsed(true);
+                            $offsetItems[] = $this->castMultiIndex($variableIndex->getName());
                             ++$numberParams;
                             break;
                         case 'string':

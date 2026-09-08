@@ -111,6 +111,20 @@ class ForStatement extends StatementAbstract
         );
         switch ($exprVariable->getType()) {
             case 'variable':
+                /**
+                 * A generator step resumes by jumping straight back into the
+                 * loop, past anything computed ahead of it, so the alias below
+                 * would be stale on the second pass. Traversing a dynamically
+                 * typed string is not supported there; it keeps raising the
+                 * not-iterable exception, as it always has.
+                 */
+                $exprVariable = $compilationContext->currentMethod?->isGeneratorStep()
+                    ? $exprVariable
+                    : $this->materializeDynamicString($exprVariable, $compilationContext);
+
+                $this->compileHashTraverse($compilationContext, $exprVariable);
+                break;
+
             case 'array':
                 $this->compileHashTraverse($compilationContext, $exprVariable);
                 break;
@@ -122,6 +136,74 @@ class ForStatement extends StatementAbstract
             default:
                 throw new CompilerException('Cannot traverse value type: ' . $exprVariable->getType(), $exprRaw);
         }
+    }
+
+    /**
+     * Lets a dynamically typed source hold a string.
+     *
+     * A declared `string` traverses its bytes, so a `var` holding one should
+     * too, but only the runtime knows which it is. Materialising the bytes
+     * into an array keeps the loop body emitted once: the alternative, a
+     * second loop header with its own copy of the body, doubles the generated
+     * code of every dynamic `for..in` in the project.
+     *
+     * @throws Exception
+     */
+    private function materializeDynamicString(
+        Variable $exprVariable,
+        CompilationContext $compilationContext
+    ): Variable {
+        $compilationContext->headersManager->add('kernel/string');
+
+        $codePrinter = $compilationContext->codePrinter;
+        $source      = $compilationContext->backend->getVariableCode($exprVariable);
+
+        /**
+         * The loop iterates through a pointer, so a non-string source is
+         * aliased rather than copied. Taking a reference to it instead would
+         * make the container shared, and a body that writes back to it -- the
+         * `for key, _ in _SESSION { unset _SESSION[key]; }` idiom -- would
+         * separate the array mid-iteration.
+         */
+        $iterable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
+        $iterable->setIsDoublePointer(true);
+
+        /**
+         * `Backend::forStatement()` drops the array or the Iterator branch
+         * when inference proves one unreachable. The alias has to carry the
+         * source's inferred types across, plus the array the characters go
+         * into, or every dynamic loop would grow a second branch it can never
+         * enter. An unknown source keeps both branches, exactly as before.
+         */
+        $sourceTypes = $exprVariable->getDynamicTypes();
+
+        if (!isset($sourceTypes['unknown'])) {
+            $iterable->setDynamicTypes(array_merge(array_keys($sourceTypes), ['array']));
+        }
+
+        $codePrinter->output(sprintf('if (Z_TYPE_P(%s) == IS_STRING) {', $source));
+        $codePrinter->increaseLevel();
+
+        $characters = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+
+        $codePrinter->output(sprintf(
+            'zephir_string_to_char_array(%s, %s);',
+            $compilationContext->backend->getVariableCode($characters),
+            $source
+        ));
+        $codePrinter->output(sprintf(
+            '%s = %s;',
+            $iterable->getName(),
+            $compilationContext->backend->getVariableCode($characters)
+        ));
+        $codePrinter->decreaseLevel();
+        $codePrinter->output('} else {');
+        $codePrinter->increaseLevel();
+        $codePrinter->output(sprintf('%s = %s;', $iterable->getName(), $source));
+        $codePrinter->decreaseLevel();
+        $codePrinter->output('}');
+
+        return $iterable;
     }
 
     /**

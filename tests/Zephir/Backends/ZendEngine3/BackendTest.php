@@ -50,4 +50,32 @@ final class BackendTest extends TestCase
 
         $this->assertSame($expected, $actual);
     }
+
+    /**
+     * Zephir's four integer types all describe a PHP `int`, which the engine
+     * stores in a `zend_long` (`int64_t` on every 64-bit target). Mapping any
+     * of them to a C `long` makes the width follow the data model: 64-bit on
+     * LP64 (Linux, macOS), 32-bit on LLP64 (Windows x64).
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2666
+     */
+    public function integerTypeDefinitionProvider(): array
+    {
+        return [
+            'int'   => ['int', 'zend_long'],
+            'uint'  => ['uint', 'zend_ulong'],
+            'long'  => ['long', 'zend_long'],
+            'ulong' => ['ulong', 'zend_ulong'],
+        ];
+    }
+
+    /**
+     * @dataProvider integerTypeDefinitionProvider
+     */
+    public function testIntegerTypesMapToAFixedWidthCType(string $type, string $expected): void
+    {
+        $backend = new Backend(new Config(), '', '');
+
+        $this->assertSame([null, $expected], $backend->getTypeDefinition($type));
+    }
 }

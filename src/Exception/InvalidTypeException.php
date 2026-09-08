@@ -23,7 +23,7 @@ final class InvalidTypeException extends CompilerException
      * @param string     $type
      * @param array|null $expression
      */
-    public function __construct(string $type, array $expression = null)
+    public function __construct(string $type, ?array $expression = null)
     {
         $message = sprintf(
             'Returning type: %s but this type is not compatible with return-type hints declared in the method',

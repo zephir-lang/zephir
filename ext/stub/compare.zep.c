@@ -186,7 +186,7 @@ PHP_METHOD(Stub_Compare, testNotIdenticalZeroInt)
 
 PHP_METHOD(Stub_Compare, testNotIdenticalZeroLong)
 {
-	long a;
+	zend_long a;
 	a = 5;
 	RETURN_BOOL(0 != a);
 }

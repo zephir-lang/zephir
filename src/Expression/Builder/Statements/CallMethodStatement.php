@@ -29,7 +29,7 @@ class CallMethodStatement extends CallFunctionStatement
     public function __construct(
         $variable = null,
         $name = null,
-        array $parameters = null,
+        ?array $parameters = null,
         $type = self::TYPE_CALL_DIRECT
     ) {
         parent::__construct($name, $parameters, $type);

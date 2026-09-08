@@ -114,7 +114,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex)
 	zval result;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval text_zv, item, _1, *_3, _4$$3, _6$$3, _7$$3;
+	zval text_zv, item, _1, *_3, _4$$3, _6$$3;
 	zend_string *text = NULL;
 	zval *this_ptr = getThis();
 
@@ -123,7 +123,6 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_4$$3);
 	ZVAL_UNDEF(&_6$$3);
-	ZVAL_UNDEF(&_7$$3);
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&elements);
 	ZVAL_UNDEF(&_0);
@@ -172,8 +171,9 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex)
 		ZEPHIR_OBS_NVAR(&_6$$3);
 		zephir_array_fetch_long(&_6$$3, &item, 0, PH_NOISY, "stub/invokes/abstractprotected.zep", 46);
 		zephir_array_fast_append(&_5$$3, &_6$$3);
-		zephir_array_fetch_long(&_7$$3, &item, 1, PH_NOISY | PH_READONLY, "stub/invokes/abstractprotected.zep", 46);
-		ZEPHIR_CALL_USER_FUNC_ARRAY(&_4$$3, &_5$$3, &_7$$3);
+		ZEPHIR_OBS_NVAR(&_6$$3);
+		zephir_array_fetch_long(&_6$$3, &item, 1, PH_NOISY, "stub/invokes/abstractprotected.zep", 46);
+		ZEPHIR_CALL_USER_FUNC_ARRAY(&_4$$3, &_5$$3, &_6$$3);
 		zephir_check_call_status();
 		zephir_concat_self(&result, &_4$$3);
 	} ZEND_HASH_FOREACH_END();

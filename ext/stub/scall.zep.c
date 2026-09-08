@@ -130,7 +130,7 @@ PHP_METHOD(Stub_Scall, testCall3)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_SELF("testmethod3", &_0, 102);
+	ZEPHIR_RETURN_CALL_SELF("testmethod3", &_0, 104);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -191,7 +191,7 @@ PHP_METHOD(Stub_Scall, testCall6)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &b);
-	ZEPHIR_RETURN_CALL_SELF("testmethod6", &_0, 103, a, b);
+	ZEPHIR_RETURN_CALL_SELF("testmethod6", &_0, 105, a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -228,7 +228,7 @@ PHP_METHOD(Stub_Scall, testCall9)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_SELF("testmethod3", &_0, 102);
+	ZEPHIR_RETURN_CALL_SELF("testmethod3", &_0, 104);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -289,7 +289,7 @@ PHP_METHOD(Stub_Scall, testCall12)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &b);
-	ZEPHIR_RETURN_CALL_SELF("testmethod6", &_0, 103, a, b);
+	ZEPHIR_RETURN_CALL_SELF("testmethod6", &_0, 105, a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -333,7 +333,7 @@ PHP_METHOD(Stub_Scall, testCall15)
 PHP_METHOD(Stub_Scall, testMethod16)
 {
 	zval *a_param = NULL, *b_param = NULL;
-	long a, b;
+	zend_long a, b;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(a)
@@ -350,7 +350,7 @@ PHP_METHOD(Stub_Scall, testCall17)
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1;
 	zephir_fcall_cache_entry *_4 = NULL;
 	zval *k_param = NULL, *p, p_sub, _3$$3;
-	long k, i = 0, j, _2;
+	zend_long k, i = 0, j, _2;
 
 	ZVAL_UNDEF(&p_sub);
 	ZVAL_UNDEF(&_3$$3);
@@ -391,7 +391,7 @@ PHP_METHOD(Stub_Scall, testCall18)
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1;
 	zephir_fcall_cache_entry *_4 = NULL;
 	zval *k_param = NULL, *p, p_sub, _3$$3;
-	long k, i = 0, j, _2;
+	zend_long k, i = 0, j, _2;
 
 	ZVAL_UNDEF(&p_sub);
 	ZVAL_UNDEF(&_3$$3);

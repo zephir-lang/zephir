@@ -6,6 +6,49 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-09-08
+
+### Added
+- Added PHP compatible string offsets, so reading, writing, `isset()`, `empty()` and `unset()` on a string behave as they do in PHP, including negative offsets, out of range warnings, dynamically typed sources and `for c in s` [#760](https://github.com/zephir-lang/zephir/issues/760)
+- Added an `unassigned-variable` warning, on by default, for a local that is read but never assigned [#2654](https://github.com/zephir-lang/zephir/issues/2654)
+
+### Changed
+- Widened the `conditional-initialization` warning to every local that can be read before it is assigned, instead of only one assigned exactly once in a deeper branch [#2679](https://github.com/zephir-lang/zephir/issues/2679)
+
+### Fixed
+- Fixed `Closure::bindTo()`, `Closure::bind()` and `Closure::call()` dropping a closure's `use (...)` captures, which read back as `null` or crashed the process [#2667](https://github.com/zephir-lang/zephir/issues/2667)
+- Fixed `var_dump()` and `print_r()` of a closure crashing the process on PHP 8.4 and later, and reporting the internal capture carrier as `$this` instead of the enclosing object on every version [#2667](https://github.com/zephir-lang/zephir/issues/2667)
+- Fixed a compile error being replaced by a deprecation notice on PHP 8.4 and later, by marking six implicitly nullable parameters as nullable and letting a deprecation report as PHP reports it [#2663](https://github.com/zephir-lang/zephir/issues/2663)
+- Fixed a by-reference call argument reading a copy of the container instead of its storage slot, which lost or aliased a write to a shared array, reported a missing element PHP creates, and freed the property's array when the callee replaced its argument [#2691](https://github.com/zephir-lang/zephir/issues/2691)
+- Fixed a by-reference subscript argument borrowing the container value, which lost the write whenever the value was shared and leaked the `offsetGet()` result for an `ArrayAccess` container [#2691](https://github.com/zephir-lang/zephir/issues/2691)
+- Fixed a read-only subscript read of an `ArrayAccess` object releasing the value `offsetGet()` owns, which leaked 96 bytes per call or corrupted the heap, and limited the read-only shortcut to a container proven to hold a native array [#2682](https://github.com/zephir-lang/zephir/issues/2682)
+- Fixed `explode()` returning the `limit = 2` result for a limit of `0`, `1` or negative, and looping forever on an empty separator where PHP throws `ValueError` [#2674](https://github.com/zephir-lang/zephir/issues/2674)
+- Fixed `fetch` and `empty()` on an `ArrayAccess` object releasing the string offset before `offsetGet()` received it, so the object was silently handed the key `offsetget` [#2656](https://github.com/zephir-lang/zephir/issues/2656)
+- Fixed the array `isset` helpers never releasing the `offsetExists()` return value, and holding no reference to the container across the two userland calls, as PHP's own `zend_std_read_dimension()` does [#2656](https://github.com/zephir-lang/zephir/issues/2656)
+- Fixed `unset obj->property` leaking the property name string on every call [#2656](https://github.com/zephir-lang/zephir/issues/2656)
+- Fixed a leaked exception instance when a `throw` cannot construct its exception, a leaked callable when an internal call names an unknown function, and an uninitialized return slot in the `zephir_return_call_*()` helpers [#2656](https://github.com/zephir-lang/zephir/issues/2656)
+- Fixed a declared but never assigned variable reaching userland as an uninitialized zval, printed by `var_dump()` as `UNKNOWN:0`, where PHP evaluates an unset variable as `null` [#2654](https://github.com/zephir-lang/zephir/issues/2654)
+- Fixed a variable assigned only inside a conditional branch reaching userland as an uninitialized zval on a path that skips the assignment [#2679](https://github.com/zephir-lang/zephir/issues/2679)
+- Fixed the `zephir_array_*_long()` helpers truncating a negative or large index to 32 bits on Windows, where `unsigned long` is narrower than `zend_long`, so `s[-1]` read index 4294967295 and a write tried to grow the string to 4 GB [#2666](https://github.com/zephir-lang/zephir/issues/2666)
+- Fixed Zephir `long`/`ulong` mapping to a C `long`, 32-bit on Windows, so a 64-bit value truncated and `Z_PARAM_LONG()` stored 8 bytes into a 4-byte local [#2666](https://github.com/zephir-lang/zephir/issues/2666)
+- Fixed the kernel signatures that carry a PHP integer (`zephir_get_intval_ex()`, the comparison, division and modulo helpers, `zephir_substr()`, `zephir_fast_explode()`, `zephir_preg_match()` and the multi-dimensional array key) using a C `long` [#2666](https://github.com/zephir-lang/zephir/issues/2666)
+- Fixed a multi-dimensional array index reaching `zephir_array_update_multi()` as a C `int` where the callee reads a `zend_long`, so `a[0][1]` produced keys such as 140733193388033 on Windows [#2666](https://github.com/zephir-lang/zephir/issues/2666)
+- Fixed a `uint`/`ulong` multi-dimensional array index being passed by address, so the pointer value became the array key [#2666](https://github.com/zephir-lang/zephir/issues/2666)
+- Fixed six `zephir_safe_mod_*()` helpers being declared and emitted but never defined, so any `%` with a float operand died at load with `undefined symbol` [#2666](https://github.com/zephir-lang/zephir/issues/2666)
+- Fixed `%` yielding a float instead of an `int`, which lost every result above 2^53 [#2666](https://github.com/zephir-lang/zephir/issues/2666)
+- Fixed `/ 0` and `% 0` raising an `E_WARNING` and returning 0 instead of throwing `DivisionByZeroError` as PHP 8 does [#2666](https://github.com/zephir-lang/zephir/issues/2666)
+- Fixed `PHP_INT_MIN % -1` crashing the process with SIGFPE [#2666](https://github.com/zephir-lang/zephir/issues/2666)
+- Fixed a float divisor being silently truncated to an integer by `/` and `%` [#2666](https://github.com/zephir-lang/zephir/issues/2666)
+- Fixed a `-Wformat` warning in `zephir_fclose()` by casting the resource handle to `zend_long` and formatting it with the portable `ZEND_LONG_FMT` macro instead of `%d`, preserving compatibility with PHP 8.0's `int` handle.
+- A variable whose only consumer is a closure's `use (...)` clause now counts as used: it is no longer reported as `unused-variable`, and it is declared in the generated C. A declared-but-unassigned capture was skipped by both, so the generated code referenced an undeclared identifier and the extension failed to build. Capturing a variable that was never declared now fails with `Cannot capture variable 'x' because it wasn't declared` instead of a PHP fatal error [#2029](https://github.com/zephir-lang/zephir/issues/2029)
+- Fixed array defaults on a class (typed `array` property defaults, trait array property defaults and array class constants), which were one shared table that every instance mutated in place instead of being copy-on-write [#2651](https://github.com/zephir-lang/zephir/issues/2651)
+- Fixed the unchecked length arithmetic in the `zephir_concat_*()` helpers, which now throw `String size overflow` like PHP instead of writing past the allocation [#2657](https://github.com/zephir-lang/zephir/issues/2657)
+- Fixed `let s .= n` with an integer operand calling the declared but never defined `zephir_concat_self_long()`, so the extension built and then died at load with `undefined symbol`, and made the same append work on a `var` left-hand side [#2660](https://github.com/zephir-lang/zephir/issues/2660)
+- Fixed closure `use (...)` captures being shared by every closure created from the same source line, and implemented `use (&x)` as a real reference [#2652](https://github.com/zephir-lang/zephir/issues/2652)
+- Fixed the closure `use (...)` clause dropping `const`, which is now a read-only capture, and a by-reference capture of an explicitly typed local [#2653](https://github.com/zephir-lang/zephir/issues/2653)
+- Fixed a closure declared inside another closure never having its source file generated, so the extension failed to link, and `this` inside it resolving against the outer closure instead of the enclosing class [#2655](https://github.com/zephir-lang/zephir/issues/2655)
+- Fixed every closure invocation leaking one reference of the closure object and of each captured value [#2652](https://github.com/zephir-lang/zephir/issues/2652)
+
 ## [1.3.0] - 2026-08-25
 
 ### Added

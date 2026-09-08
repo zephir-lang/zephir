@@ -16,6 +16,7 @@
 #include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
+#include "kernel/string.h"
 #include "kernel/fcall.h"
 #include "kernel/array.h"
 #include "kernel/exception.h"
@@ -234,15 +235,16 @@ PHP_METHOD(Stub_Generators, relay)
 
 PHP_METHOD(Stub_Generators, consume)
 {
-	zend_bool _1;
+	zend_bool _4;
 	zval result;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *it, it_sub, v, _0;
+	zval *it, it_sub, v, *_0, _1, *_2, _3;
 
 	ZVAL_UNDEF(&it_sub);
 	ZVAL_UNDEF(&v);
-	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&result);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(it, zend_ce_iterator)
@@ -252,25 +254,41 @@ PHP_METHOD(Stub_Generators, consume)
 	zephir_fetch_params(1, 1, 0, &it);
 	ZEPHIR_INIT_VAR(&result);
 	array_init(&result);
-	zephir_is_iterable(it, 0, "stub/generators.zep", 139);
-	ZEPHIR_CALL_METHOD(NULL, it, "rewind", NULL, 0);
-	zephir_check_call_status();
-	_1 = 1;
-	while (1) {
-		if (_1) {
-			_1 = 0;
-		} else {
-			ZEPHIR_CALL_METHOD(NULL, it, "next", NULL, 0);
-			zephir_check_call_status();
-		}
-		ZEPHIR_CALL_METHOD(&_0, it, "valid", NULL, 0);
-		zephir_check_call_status();
-		if (!zend_is_true(&_0)) {
-			break;
-		}
-		ZEPHIR_CALL_METHOD(&v, it, "current", NULL, 0);
-		zephir_check_call_status();
+	if (Z_TYPE_P(it) == IS_STRING) {
+		ZEPHIR_INIT_VAR(&_1);
+		zephir_string_to_char_array(&_1, it);
+		_0 = &_1;
+	} else {
+		_0 = it;
+	}
+	zephir_is_iterable(_0, 0, "stub/generators.zep", 139);
+	if (Z_TYPE_P(_0) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_0), _2)
+		{
+			ZEPHIR_INIT_NVAR(&v);
+			ZVAL_COPY(&v, _2);
 			zephir_array_append(&result, &v, PH_SEPARATE, "stub/generators.zep", 137);
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, _0, "rewind", NULL, 0);
+		zephir_check_call_status();
+		_4 = 1;
+		while (1) {
+			if (_4) {
+				_4 = 0;
+			} else {
+				ZEPHIR_CALL_METHOD(NULL, _0, "next", NULL, 0);
+				zephir_check_call_status();
+			}
+			ZEPHIR_CALL_METHOD(&_3, _0, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_3)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&v, _0, "current", NULL, 0);
+			zephir_check_call_status();
+				zephir_array_append(&result, &v, PH_SEPARATE, "stub/generators.zep", 137);
+		}
 	}
 	ZEPHIR_INIT_NVAR(&v);
 	RETURN_CTOR(&result);

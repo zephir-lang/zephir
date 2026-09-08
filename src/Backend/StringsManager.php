@@ -16,6 +16,7 @@ namespace Zephir\Backend;
 use Zephir\FileSystem\HardDisk;
 use Zephir\StringsManager as BaseStringsManager;
 
+use function array_shift;
 use function count;
 use function implode;
 use function ksort;
@@ -150,7 +151,16 @@ class StringsManager extends BaseStringsManager
                 $code .= "\t" . '}' . PHP_EOL . PHP_EOL;
             }
 
-            $code .= "\t" . 'length = ' . implode(' + ', $lengths) . ';' . PHP_EOL;
+            // The first operand seeds the length: a single zend_string is never longer
+            // than ZSTR_MAX_LEN, so only the additions can wrap. Each one is checked the
+            // way concat_function() checks its own in Zend/zend_operators.c.
+            $code .= "\t" . 'length = ' . array_shift($lengths) . ';' . PHP_EOL;
+            foreach ($lengths as $length) {
+                $code .= "\t" . 'if (UNEXPECTED(' . $length . ' > ZSTR_MAX_LEN - length)) {' . PHP_EOL;
+                $code .= "\t\t" . 'goto zephir_concat_overflow;' . PHP_EOL;
+                $code .= "\t" . '}' . PHP_EOL;
+                $code .= "\t" . 'length += ' . $length . ';' . PHP_EOL;
+            }
             $code .= "\t" . 'if (self_var) {' . PHP_EOL;
             $code .= PHP_EOL;
             $code .= "\t\t" . 'if (Z_TYPE_P(result) != IS_STRING) {' . PHP_EOL;
@@ -160,6 +170,9 @@ class StringsManager extends BaseStringsManager
             $code .= "\t\t\t" . '}' . PHP_EOL;
             $code .= "\t\t" . '}' . PHP_EOL . PHP_EOL;
             $code .= "\t\t" . 'offset = Z_STRLEN_P(result);' . PHP_EOL;
+            $code .= "\t\t" . 'if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {' . PHP_EOL;
+            $code .= "\t\t\t" . 'goto zephir_concat_overflow;' . PHP_EOL;
+            $code .= "\t\t" . '}' . PHP_EOL;
             $code .= "\t\t" . 'length += offset;' . PHP_EOL;
             $code .= "\t\t" . 'Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);' . PHP_EOL;
             $code .= PHP_EOL;
@@ -180,6 +193,19 @@ class StringsManager extends BaseStringsManager
 
             $code .= "\t" . 'Z_STRVAL_P(result)[length] = 0;' . PHP_EOL;
             $code .= "\t" . 'zend_string_forget_hash_val(Z_STR_P(result));' . PHP_EOL;
+            $code .= "\t" . 'goto zephir_concat_cleanup;' . PHP_EOL . PHP_EOL;
+
+            // Both paths share the cleanup below, because the printable copies of the
+            // operands already exist by the time an overflow can be detected. Leaving
+            // result undefined mirrors concat_function(), which only spares it when it is
+            // also the left operand, that is when self_var is set.
+            $code .= 'zephir_concat_overflow:' . PHP_EOL;
+            $code .= "\t" . 'zend_throw_error(NULL, "String size overflow");' . PHP_EOL;
+            $code .= "\t" . 'if (!self_var) {' . PHP_EOL;
+            $code .= "\t\t" . 'ZVAL_UNDEF(result);' . PHP_EOL;
+            $code .= "\t" . '}' . PHP_EOL . PHP_EOL;
+
+            $code .= 'zephir_concat_cleanup:' . PHP_EOL;
 
             foreach ($zvars as $zvar) {
                 $code .= "\t" . 'if (use_copy' . $zvar . ') {' . PHP_EOL;

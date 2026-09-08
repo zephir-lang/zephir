@@ -476,4 +476,70 @@ class Bench
         }
         return sum;
     }
+
+    /**
+     * The cost of #2679: a local assigned only inside a conditional is
+     * registered with the memory frame at its declaration, so every call pays
+     * one extra zephir_memory_observe(). The call is the unit being measured,
+     * so the loop lives in the caller.
+     */
+    public function conditionalLocalLoop(long iterations) -> long
+    {
+        long i = 0, hits = 0;
+
+        while i < iterations {
+            let hits += this->conditionalLocalStep((i % 2) == 0);
+            let i++;
+        }
+
+        return hits;
+    }
+
+    public function conditionalLocalStep(bool flag) -> long
+    {
+        var x;
+
+        if flag {
+            let x = "set";
+        }
+
+        if typeof x == "string" {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    /**
+     * The control: identical shape with the local assigned on every path, so
+     * the compiler adds nothing to it. A difference here is noise, not cost.
+     */
+    public function definiteLocalLoop(long iterations) -> long
+    {
+        long i = 0, hits = 0;
+
+        while i < iterations {
+            let hits += this->definiteLocalStep((i % 2) == 0);
+            let i++;
+        }
+
+        return hits;
+    }
+
+    public function definiteLocalStep(bool flag) -> long
+    {
+        var x;
+
+        if flag {
+            let x = "set";
+        } else {
+            let x = 1;
+        }
+
+        if typeof x == "string" {
+            return 1;
+        }
+
+        return 0;
+    }
 }

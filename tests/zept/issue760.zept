@@ -1,0 +1,126 @@
+--TEST--
+Issue #760: string offsets behave as PHP's do, including on dynamically typed values
+--FILE--
+namespace Stub;
+
+class Issue760Zept
+{
+    public function read(var s, var i)
+    {
+        var ch;
+        let ch = s[i];
+        return ch;
+    }
+
+    public function write(var s, var i, var v)
+    {
+        let s[i] = v;
+        return s;
+    }
+
+    public function has(var s, var i) -> bool
+    {
+        return isset s[i];
+    }
+
+    public function blank(var s, var i) -> bool
+    {
+        return empty s[i];
+    }
+
+    public function typed(string s, int i)
+    {
+        var ch;
+        let ch = s[i];
+        return ch;
+    }
+
+    public function characters(var s) -> array
+    {
+        var c;
+        array out = [];
+        for c in s {
+            let out[] = c;
+        }
+        return out;
+    }
+}
+--USAGE--
+use Stub\Issue760Zept;
+
+$t = new Issue760Zept();
+$s = "abcdef";
+
+// A dynamically typed source now reads like PHP's $s[$i].
+echo var_export($t->read($s, 1), true), "\n";
+echo var_export($t->typed($s, 1), true), "\n";
+
+// Negative offsets count from the end.
+echo var_export($t->read($s, -1), true), "\n";
+echo var_export($t->typed($s, -6), true), "\n";
+
+// A numeric-string offset is accepted, as PHP accepts it.
+echo var_export($t->read($s, "2"), true), "\n";
+
+// Out of range yields an empty string, and warns exactly once.
+set_error_handler(function (int $code, string $message): bool {
+    echo $message, "\n";
+
+    return true;
+});
+echo var_export($t->read($s, 99), true), "\n";
+restore_error_handler();
+
+// isset() and empty() are silent for every offset, legal or not.
+echo var_export($t->has($s, 1), true), "\n";
+echo var_export($t->has($s, -1), true), "\n";
+echo var_export($t->has($s, 99), true), "\n";
+echo var_export($t->has($s, "nope"), true), "\n";
+echo var_export($t->blank("a0b", 1), true), "\n";
+echo var_export($t->blank($s, 99), true), "\n";
+
+// Writing stores a single byte and pads past the end with spaces.
+echo var_export($t->write($s, 1, "Z"), true), "\n";
+echo var_export($t->write($s, -1, "Z"), true), "\n";
+echo var_export($t->write("ab", 5, "Z"), true), "\n";
+
+try {
+    $t->write($s, 1, "");
+} catch (\Error $e) {
+    echo $e->getMessage(), "\n";
+}
+
+// A string is passed by value, so the caller keeps its own copy.
+echo var_export($s, true), "\n";
+
+// for..in walks the bytes whether the source is declared string or var.
+echo var_export($t->characters("abc"), true), "\n";
+echo var_export($t->characters([1, 2]), true), "\n";
+--EXPECT--
+'b'
+'b'
+'f'
+'a'
+'c'
+Uninitialized string offset 99
+''
+true
+true
+false
+false
+true
+true
+'aZcdef'
+'abcdeZ'
+'ab   Z'
+Cannot assign an empty string to a string offset
+'abcdef'
+array (
+  0 => 'a',
+  1 => 'b',
+  2 => 'c',
+)
+array (
+  0 => 1,
+  1 => 2,
+)

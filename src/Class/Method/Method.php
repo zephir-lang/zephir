@@ -31,7 +31,9 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Name;
 use Zephir\Passes\CallGathererPass;
+use Zephir\Passes\DefiniteAssignmentPass;
 use Zephir\Passes\LocalContextPass;
+use Zephir\Passes\NativeArrayPass;
 use Zephir\Passes\StaticTypeInference;
 use Zephir\StatementsBlock;
 use Zephir\SymbolTable;
@@ -114,7 +116,9 @@ class Method
      * Whether the method is static or not.
      */
     protected bool              $isStatic     = false;
-    protected ?LocalContextPass $localContext = null;
+    protected ?DefiniteAssignmentPass $definiteAssignment = null;
+    protected ?LocalContextPass       $localContext       = null;
+    protected ?NativeArrayPass        $nativeArray        = null;
     /**
      * Maps a Zephir return-type name to its Zend `MAY_BE_*` type-mask bit.
      *
@@ -155,7 +159,27 @@ class Method
      * Raw-types returned by the method.
      */
     protected ?array $returnTypesRaw  = null;
+    /**
+     * Carrier property holding the enclosing object of a capturing closure.
+     *
+     * A capturing closure spends its only per-instance slot - the bound
+     * `$this` - on the capture carrier, so the enclosing object travels as one
+     * more capture. `$` cannot appear in a Zephir identifier, so no user
+     * capture can collide with this name.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public const CLOSURE_BOUND_THIS = '__$zephir_this';
+
+    /**
+     * Closure `use (...)` captures, keyed by name.
+     */
     protected array  $staticVariables = [];
+    /**
+     * Captures read off the carrier with a ZVAL_COPY, keyed by name. They are
+     * the ones the memory frame has to release again.
+     */
+    private array    $capturesToRelease = [];
     /**
      * Static Type Inference Pass.
      */
@@ -809,8 +833,8 @@ class Method
 
             case 'char':
             case 'uchar':
-                // zephir_get_charval() yields a long; the declared C type
-                // (char / unsigned char) narrows it to the byte. See #1629.
+                // zephir_get_charval() yields a zend_long; the declared C
+                // type (char / unsigned char) narrows it to the byte. See #1629.
                 return "\t" . $parameter['name'] . ' = zephir_get_charval(' . $parameterCode . ');' . PHP_EOL;
 
             case 'bool':
@@ -989,7 +1013,48 @@ class Method
             $symbolTable->setLocalContext($this->localContext);
         }
 
+        if ($this->definiteAssignment instanceof DefiniteAssignmentPass) {
+            $symbolTable->setDefiniteAssignment($this->definiteAssignment);
+        }
+
+        if ($this->nativeArray instanceof NativeArrayPass) {
+            $symbolTable->setNativeArray($this->nativeArray);
+        }
+
+        /**
+         * `use (&x)` makes one storage slot shared between this method and the
+         * closure, so the local has to be a reference from its very first use.
+         * That means knowing about the capture before the body is compiled.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2652
+         */
+        $byRefCaptures = self::astByRefCaptures($this->statements?->getStatements() ?? []);
+        $this->assertByRefCapturesAreLocals($byRefCaptures);
+        $symbolTable->setClosureReferences($byRefCaptures);
+
+        $this->capturesToRelease = [];
         foreach ($this->staticVariables as $var) {
+            /**
+             * A refcountable capture is read off the carrier with a ZVAL_COPY,
+             * so the closure needs a memory frame to release it again -
+             * without one, every invocation leaked one reference of the
+             * captured value. The enclosing object is excluded: it is borrowed
+             * with PH_READONLY, pinned by the carrier for the whole call.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2652
+             */
+            if (
+                self::CLOSURE_BOUND_THIS !== $var->getName()
+                && !$var->isClosureReference()
+                && in_array(
+                    $var->getType(),
+                    ['variable', 'string', 'array', 'resource', 'callable', 'object', 'mixed'],
+                    true
+                )
+            ) {
+                $this->capturesToRelease[$var->getName()] = true;
+            }
+
             $localVar = clone $var;
             $localVar->setIsExternal(true);
             $localVar->setLocalOnly(true);
@@ -997,9 +1062,18 @@ class Method
             $localVar->setType('variable');
             $localVar->setIsDoublePointer(false);
             // Captured string params are zend_string * outside, but inside the
-            // closure they live as a zval (the static property). See #2562.
+            // closure they live as a zval on the carrier. See #2562.
             $localVar->setIsNativeString(false);
             $symbolTable->addRawVariable($localVar);
+        }
+
+        /**
+         * Set here and not next to the read itself: ReturnStatement consults
+         * this flag while the body is compiled, to choose between the MM and
+         * non-MM form of its return macros.
+         */
+        if ([] !== $this->capturesToRelease) {
+            $symbolTable->mustGrownStack(true);
         }
 
         /**
@@ -1716,7 +1790,47 @@ class Method
         $compilationContext->headersManager->add('kernel/object');
 
         /**
-         * Fetch used superglobals
+         * Promote every `use (&x)` local to a PHP reference before the body
+         * runs, so the closure and this method share one storage slot.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2652
+         */
+        foreach ($symbolTable->getVariables() as $variable) {
+            if ($variable->isClosureReference() && !$variable->isClosureCapture()) {
+                $codePrinter->preOutput(
+                    "\t" . 'zephir_make_local_reference(&' . $variable->getName() . ');'
+                );
+                $codePrinter->preOutput(
+                    "\t" . 'zephir_memory_observe(&' . $variable->getName() . ');'
+                );
+            }
+        }
+
+        /**
+         * A capturing closure binds its capture carrier as `$this`, so the
+         * captures are read off it below and `this_ptr` is then re-pointed at
+         * the enclosing object that rode along on the carrier. `preOutput()`
+         * prepends, so the re-point is emitted first in order to land last.
+         *
+         * Resolving the carrier through getVariableCode() instead of writing
+         * `this_ptr` literally is load-bearing: it marks `this` as used, and
+         * otherwise the strip in compile() deletes the
+         * `zval *this_ptr = getThis();` line these reads need, for any closure
+         * whose body never mentions `this`.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2652
+         */
+        $carrierCode = null;
+        if ($this->hasCaptures()) {
+            $carrierCode = $compilationContext->backend->getVariableCode($symbolTable->getVariable('this'));
+
+            if ($symbolTable->hasVariable(self::CLOSURE_BOUND_THIS)) {
+                $codePrinter->preOutput("\t" . 'this_ptr = &' . self::CLOSURE_BOUND_THIS . ';');
+            }
+        }
+
+        /**
+         * Fetch used superglobals and closure captures
          */
         foreach ($symbolTable->getVariables() as $name => $variable) {
             if ($variable->isSuperGlobal()) {
@@ -1726,18 +1840,24 @@ class Method
                 );
             }
 
-            if ($variable->isLocalStatic()) {
-                $staticVar = $symbolTable->getVariable($name);
+            if ($variable->isClosureCapture()) {
+                $capture     = $symbolTable->getVariable($name);
+                $captureName = $capture->getName();
+                $mustRelease = isset($this->capturesToRelease[$captureName]);
 
                 $codePrinter->preOutput(
                     sprintf(
-                        "\t" . 'zephir_read_static_property_ce(&%s, %s, SL("%s"), PH_NOISY_CC%s);',
-                        $staticVar->getName(),
-                        $this->classDefinition->getClassEntry(),
-                        $staticVar->getName(),
-                        ''
+                        "\t" . 'zephir_read_property(&%s, %s, SL("%s"), %s);',
+                        $captureName,
+                        $carrierCode,
+                        $captureName,
+                        $mustRelease ? 'PH_NOISY_CC' : 'PH_NOISY_CC | PH_READONLY'
                     )
                 );
+
+                if ($mustRelease) {
+                    $codePrinter->preOutput("\t" . 'zephir_memory_observe(&' . $captureName . ');');
+                }
             }
         }
 
@@ -1858,6 +1978,52 @@ class Method
                         ['unused-variable', $variable->getOriginal()]
                     );
                 }
+            }
+
+            /**
+             * The counterpart of the check above: read, but nothing ever wrote
+             * to it. The value now reads as null, which is what PHP evaluates
+             * an unset variable to, and PHP says so at runtime. Zephir knows it
+             * at compile time, so it says so here.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2654
+             */
+            if ($variable->getNumberUses() > 0 && $variable->isNeverAssigned()) {
+                $compilationContext->logger->warning(
+                    'Variable "'
+                    . $variable->getName()
+                    . '" read but never assigned in '
+                    . $completeName
+                    . '::'
+                    . $this->getDeclaredName(),
+                    ['unassigned-variable', $variable->getOriginal()]
+                );
+            }
+
+            /**
+             * The middle case between the two above: something does write to
+             * it, but not on every path that reaches a read. PHP evaluates such
+             * a read as null and says so at runtime; the compiler now makes the
+             * value null too and says so here.
+             *
+             * Never both this and `unassigned-variable`: registering the slot
+             * leaves a variant init behind, which is what isNeverAssigned()
+             * rules out.
+             *
+             * @see Variable::isReadBeforeAssignment()
+             * @see https://github.com/zephir-lang/zephir/issues/2679
+             */
+            if ($variable->isReadBeforeAssignment()) {
+                $compilationContext->logger->warning(
+                    'Variable "'
+                    . $variable->getName()
+                    . '" may be read before it is assigned in '
+                    . $completeName
+                    . '::'
+                    . $this->getDeclaredName()
+                    . ', consider initializing it at its declaration',
+                    ['conditional-initialization', $variable->getOriginal()]
+                );
             }
         }
 
@@ -2926,7 +3092,7 @@ class Method
         }
         if (
             $variable->isSuperGlobal()
-            || $variable->isLocalStatic()
+            || $variable->isClosureCapture()
             || $variable->isDoublePointer()
             || $variable->isNativeString()
             /* Non-tracked temps are statement-scoped by construction and are
@@ -3315,12 +3481,40 @@ class Method
      */
     public function preCompile(CompilationContext $compilationContext): void
     {
-        $localContext     = null;
-        $typeInference    = null;
-        $callGathererPass = null;
+        $definiteAssignment = null;
+        $localContext       = null;
+        $typeInference      = null;
+        $callGathererPass   = null;
+        $nativeArray        = null;
 
         if (is_object($this->statements)) {
             $compilationContext->currentMethod = $this;
+
+            /**
+             * Which locals the user declared without a value are read before
+             * anything assigns them. Not an optimization and so not switchable:
+             * it decides whether such a read produces null, as PHP does, or
+             * hands userland the IS_UNDEF the declaration left behind.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2679
+             */
+            $definiteAssignment = new DefiniteAssignmentPass();
+            $definiteAssignment->pass($this->statements);
+
+            /**
+             * Which locals can only hold a native array, so a subscript read
+             * of one may borrow the value the container owns instead of taking
+             * a reference to it. Not an optimization either: an ArrayAccess
+             * container owns nothing after offsetGet() returns, so borrowing
+             * from one leaks the value or frees it under its own target.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2682
+             */
+            $nativeArray = new NativeArrayPass();
+            if ($this->parameters instanceof Parameters) {
+                $nativeArray->passParameters($this->parameters->getParameters());
+            }
+            $nativeArray->pass($this->statements);
 
             /**
              * This pass checks for zval variables than can be potentially
@@ -3362,9 +3556,11 @@ class Method
             }
         }
 
-        $this->localContext     = $localContext;
-        $this->typeInference    = $typeInference;
-        $this->callGathererPass = $callGathererPass;
+        $this->definiteAssignment = $definiteAssignment;
+        $this->localContext       = $localContext;
+        $this->nativeArray        = $nativeArray;
+        $this->typeInference      = $typeInference;
+        $this->callGathererPass   = $callGathererPass;
     }
 
     /**
@@ -3404,6 +3600,76 @@ class Method
         $containerCode = str_replace('RETURN_MM()', 'return', $containerCode);
 
         return preg_replace('/[ \t]+ZEPHIR_MM_RESTORE\(\);' . PHP_EOL . '/s', '', $containerCode);
+    }
+
+    /**
+     * A `use (&x)` capture needs `x` to be a plain zval local it can turn into
+     * a reference. A parameter arrives in a shape that cannot be promoted - a
+     * `zval *` borrowed from the caller, or an unboxed C scalar - so say so
+     * rather than emit C that does not compile.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * @param string[] $names
+     */
+    private function assertByRefCapturesAreLocals(array $names): void
+    {
+        if ([] === $names || null === $this->parameters) {
+            return;
+        }
+
+        foreach ($this->parameters->getParameters() as $parameter) {
+            if (in_array($parameter['name'], $names, true)) {
+                throw new CompilerException(
+                    "Cannot capture parameter '" . $parameter['name'] . "' by reference in "
+                    . $this->getDeclaredName() . '(); copy it into a local variable first',
+                    $parameter
+                );
+            }
+        }
+    }
+
+    /**
+     * Names captured by reference by any closure literal in this AST.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2652
+     *
+     * @return string[]
+     */
+    private static function astByRefCaptures(mixed $node): array
+    {
+        if (!is_array($node)) {
+            return [];
+        }
+
+        $names = [];
+
+        if (($node['type'] ?? null) === 'closure' && is_array($node['use'] ?? null)) {
+            foreach ($node['use'] as $parameter) {
+                if (!empty($parameter['reference']) && isset($parameter['name'])) {
+                    $names[] = $parameter['name'];
+                }
+            }
+        }
+
+        foreach ($node as $child) {
+            if (is_array($child)) {
+                $names = array_merge($names, self::astByRefCaptures($child));
+            }
+        }
+
+        return array_values(array_unique($names));
+    }
+
+    /**
+     * Whether this method is a closure `__invoke` whose `$this` is a capture
+     * carrier rather than the enclosing object.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function hasCaptures(): bool
+    {
+        return [] !== $this->staticVariables;
     }
 
     /**

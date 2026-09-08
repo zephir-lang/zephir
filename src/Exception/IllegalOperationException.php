@@ -26,7 +26,7 @@ class IllegalOperationException extends CompilerException
      * @param TypeAwareInterface $type      Operator type
      * @param array|null         $extra     extra info [optional]
      */
-    public function __construct(array $statement, TypeAwareInterface $type, array $extra = null)
+    public function __construct(array $statement, TypeAwareInterface $type, ?array $extra = null)
     {
         $message = sprintf(
             "Operator '%s' is not supported for variable type: %s",

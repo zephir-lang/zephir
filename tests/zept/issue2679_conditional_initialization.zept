@@ -1,0 +1,101 @@
+--TEST--
+A variable assigned only inside a branch reads as null, as PHP does
+--FILE--
+namespace Zept;
+
+class Conditional
+{
+    public function ifWithoutElse(bool flag)
+    {
+        var x;
+
+        if flag {
+            let x = "set";
+        }
+
+        return x;
+    }
+
+    public function twoBranches(bool a, bool b)
+    {
+        var x;
+
+        if a {
+            let x = "a";
+        }
+
+        if b {
+            let x = "b";
+        }
+
+        return x;
+    }
+
+    public function loopThatMayNotRun(array items)
+    {
+        var x, item;
+
+        for item in items {
+            let x = item;
+        }
+
+        return x;
+    }
+
+    public function switchWithoutDefault(int n)
+    {
+        var x;
+
+        switch n {
+            case 1:
+                let x = "one";
+                break;
+        }
+
+        return x;
+    }
+
+    public function assignmentSkippedByAThrow(bool boom)
+    {
+        var x;
+
+        try {
+            if boom {
+                throw new \RuntimeException("boom");
+            }
+
+            let x = "ok";
+        } catch \RuntimeException {
+            let boom = true;
+        }
+
+        return x;
+    }
+
+    public function passedToAFunction(bool flag) -> string
+    {
+        var x;
+
+        if flag {
+            let x = "set";
+        }
+
+        return gettype(x);
+    }
+}
+--USAGE--
+$c = new Zept\Conditional();
+
+var_dump($c->ifWithoutElse(false));
+var_dump($c->twoBranches(false, false));
+var_dump($c->loopThatMayNotRun([]));
+var_dump($c->switchWithoutDefault(9));
+var_dump($c->assignmentSkippedByAThrow(true));
+var_dump($c->passedToAFunction(false));
+--EXPECT--
+NULL
+NULL
+NULL
+NULL
+NULL
+string(4) "NULL"

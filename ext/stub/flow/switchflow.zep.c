@@ -224,7 +224,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a_param = NULL, _0, _1, _2;
-	long a;
+	zend_long a;
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);

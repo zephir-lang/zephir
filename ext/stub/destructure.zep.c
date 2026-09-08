@@ -17,6 +17,7 @@
 #include "kernel/object.h"
 #include "kernel/operators.h"
 #include "kernel/fcall.h"
+#include "kernel/string.h"
 
 
 /**
@@ -388,9 +389,11 @@ PHP_METHOD(Stub_Destructure, typedTargets)
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "x");
 	zephir_array_fast_append(&_0, &_1);
-	zephir_array_fetch_long(&_2, &_0, 0, PH_NOISY | PH_READONLY, "stub/destructure.zep", 112);
+	zephir_memory_observe(&_2);
+	zephir_array_fetch_long(&_2, &_0, 0, PH_NOISY, "stub/destructure.zep", 112);
 	i = zephir_get_numberval(&_2);
-	zephir_array_fetch_long(&_3, &_0, 1, PH_NOISY | PH_READONLY, "stub/destructure.zep", 112);
+	zephir_memory_observe(&_3);
+	zephir_array_fetch_long(&_3, &_0, 1, PH_NOISY, "stub/destructure.zep", 112);
 	zephir_get_strval(&s, &_3);
 	zephir_create_array(return_value, 2, 0);
 	ZEPHIR_INIT_NVAR(&_1);
@@ -428,7 +431,7 @@ PHP_METHOD(Stub_Destructure, keyedSource)
 PHP_METHOD(Stub_Destructure, inLoop)
 {
 	zval _0;
-	zval pairs, item, out, k, v, _1, *_2, _3$$3;
+	zval pairs, item, out, k, v, _1, *_2, *_3, _4$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
@@ -438,7 +441,7 @@ PHP_METHOD(Stub_Destructure, inLoop)
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_3$$3);
+	ZVAL_UNDEF(&_4$$3);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -465,18 +468,25 @@ PHP_METHOD(Stub_Destructure, inLoop)
 	zephir_array_fast_append(&pairs, &_0);
 	ZEPHIR_INIT_VAR(&out);
 	array_init(&out);
-	zephir_is_iterable(&pairs, 0, "stub/destructure.zep", 138);
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&pairs), _2)
+	if (Z_TYPE_P(&pairs) == IS_STRING) {
+		ZEPHIR_INIT_NVAR(&_1);
+		zephir_string_to_char_array(&_1, &pairs);
+		_2 = &_1;
+	} else {
+		_2 = &pairs;
+	}
+	zephir_is_iterable(_2, 0, "stub/destructure.zep", 138);
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_2), _3)
 	{
 		ZEPHIR_INIT_NVAR(&item);
-		ZVAL_COPY(&item, _2);
+		ZVAL_COPY(&item, _3);
 		ZEPHIR_OBS_NVAR(&k);
 		zephir_array_fetch_long(&k, &item, 0, PH_NOISY, "stub/destructure.zep", 134);
 		ZEPHIR_OBS_NVAR(&v);
 		zephir_array_fetch_long(&v, &item, 1, PH_NOISY, "stub/destructure.zep", 134);
-		ZEPHIR_INIT_NVAR(&_3$$3);
-		zephir_add_function(&_3$$3, &k, &v);
-		zephir_array_append(&out, &_3$$3, PH_SEPARATE, "stub/destructure.zep", 135);
+		ZEPHIR_INIT_NVAR(&_4$$3);
+		zephir_add_function(&_4$$3, &k, &v);
+		zephir_array_append(&out, &_4$$3, PH_SEPARATE, "stub/destructure.zep", 135);
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&item);
 	RETURN_CCTOR(&out);

@@ -33,6 +33,23 @@ class Variable implements TypeAwareInterface
     public const BRANCH_MAGIC     = '$$';
     public const VAR_RETURN_VALUE = 'return_value';
     public const VAR_THIS_POINTER = 'this_ptr';
+    /**
+     * Types that are a zval in the generated C, as opposed to a native local
+     * such as `zend_long`. Only these carry the IS_UNDEF that reaches userland
+     * as `UNKNOWN:0`, and only these take part in the memory frame.
+     *
+     * @see Backend::generateInitCode()
+     * @see self::isComplexZval()
+     */
+    public const COMPLEX_ZVAL_TYPES = [
+        'variable',
+        'string',
+        'array',
+        'resource',
+        'callable',
+        'object',
+        'mixed',
+    ];
     protected Definition | ReflectionClass | null $associatedClass  = null;
     protected array                               $classTypes       = [];
     protected mixed                               $defaultInitValue = null;
@@ -62,6 +79,49 @@ class Variable implements TypeAwareInterface
     protected bool $initialized = false;
     protected bool $isExternal  = false;
     protected bool $localOnly   = false;
+
+    /**
+     * Whether some path can reach a read of this local before anything has
+     * assigned it. Decided once, by DeclareStatement from the
+     * DefiniteAssignmentPass, and read by both the emitter that adds the
+     * initialization and the `conditional-initialization` warning, so the two
+     * cannot disagree about which locals are affected.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2679
+     */
+    protected bool $readBeforeAssignment = false;
+
+    /**
+     * Whether the user wrote a declaration for this local and gave it no value,
+     * as in `var x;` rather than `var x = 1;`.
+     *
+     * Provenance, not policy: it is set only by DeclareStatement, which is the
+     * sole producer of a user-written declaration. That is what separates a
+     * real local from the compiler's own symbols, several of which are created
+     * with a bare addVariable() and written by raw codegen, so they carry no
+     * mutation record while very much being written.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2654
+     */
+    protected bool $declaredWithoutValue = false;
+
+    /**
+     * Whether this local holds a PHP reference shared with a closure that
+     * captured it with `use (&x)`. Every read and write goes through
+     * Z_REFVAL_P(), so both scopes see one storage slot.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2652
+     */
+    protected bool $closureReference = false;
+    /**
+     * Whether this temp already holds a PHP reference, because the kernel made
+     * one when it fetched a subscript in write context. Wrapping it again with
+     * ZEPHIR_MAKE_REF() would give a reference to a reference, and the matching
+     * ZEPHIR_UNREF() would free a zend_reference the container still points at.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2682
+     */
+    protected bool $writeContextReference = false;
     /**
      * When true, the variable is a string parameter using native zend_string *
      * instead of zval. getType() still returns 'string' for compatibility.
@@ -433,6 +493,17 @@ class Variable implements TypeAwareInterface
          * the second, third, etc. times are allocated using ZEPHIR_INIT_NVAR
          * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
          */
+        if ($this->closureReference) {
+            /*
+             * The reference is created once in the method prologue; re-running
+             * ZEPHIR_INIT_VAR here would drop it and unshare the storage.
+             * @see https://github.com/zephir-lang/zephir/issues/2652
+             */
+            $compilationContext->symbolTable->mustGrownStack(true);
+
+            return;
+        }
+
         if (self::VAR_THIS_POINTER !== $this->getName() && self::VAR_RETURN_VALUE !== $this->getName()) {
             if (!$this->initBranch) {
                 $this->initBranch = $compilationContext->currentBranch === 0;
@@ -544,11 +615,54 @@ class Variable implements TypeAwareInterface
     }
 
     /**
-     * Checks if a variable is a local static.
+     * Whether this local holds a PHP reference shared with a closure that
+     * captured it with `use (&x)`.
      */
-    public function isLocalStatic(): bool
+    public function isClosureReference(): bool
+    {
+        return $this->closureReference;
+    }
+
+    public function setIsClosureReference(bool $closureReference): void
+    {
+        $this->closureReference = $closureReference;
+    }
+
+    /**
+     * Whether the kernel already made this temp a PHP reference, fetching a
+     * subscript in write context.
+     */
+    public function isWriteContextReference(): bool
+    {
+        return $this->writeContextReference;
+    }
+
+    public function setIsWriteContextReference(bool $writeContextReference): void
+    {
+        $this->writeContextReference = $writeContextReference;
+    }
+
+    /**
+     * Whether this is a closure `use (...)` capture: a local seeded from the
+     * closure's capture carrier at the top of `__invoke` rather than declared
+     * or assigned by the body.
+     */
+    public function isClosureCapture(): bool
     {
         return $this->isExternal && $this->localOnly;
+    }
+
+    /**
+     * Whether the user declared this local and gave it no value.
+     */
+    public function isDeclaredWithoutValue(): bool
+    {
+        return $this->declaredWithoutValue;
+    }
+
+    public function setDeclaredWithoutValue(bool $declaredWithoutValue): void
+    {
+        $this->declaredWithoutValue = $declaredWithoutValue;
     }
 
     /**
@@ -565,6 +679,55 @@ class Variable implements TypeAwareInterface
     public function isMixed(): bool
     {
         return 'mixed' === $this->type;
+    }
+
+    /**
+     * Whether the user declared this local without a value and nothing ever
+     * wrote to it, so every read of it sees whatever the declaration left
+     * behind.
+     *
+     * IS_UNDEF at declaration is load-bearing, which is why this is deliberately
+     * narrow. The memory frame registers a zval lazily: ZEPHIR_INIT_NVAR,
+     * ZEPHIR_CPY_WRT, ZEPHIR_OBS_NVAR, ZEPHIR_OBS_COPY_OR_DUP and
+     * ZEPHIR_GEN_RESTORE_ZVAL all call zephir_memory_observe() only while the
+     * target is still undefined. A variable any of those reach has to keep
+     * IS_UNDEF or the value it later holds is never freed. With no writes at all
+     * there is nothing to free, because IS_NULL is not refcounted.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2654
+     */
+    public function isNeverAssigned(): bool
+    {
+        return $this->declaredWithoutValue
+            && 0 === $this->numberMutates
+            && 0 === $this->variantInits
+            // Covers parameters, superglobals and closure captures.
+            && !$this->isExternal
+            && !$this->temporal
+            && !$this->closureReference;
+    }
+
+    /**
+     * Whether some path can reach a read of this local before anything has
+     * assigned it.
+     */
+    public function isReadBeforeAssignment(): bool
+    {
+        return $this->readBeforeAssignment;
+    }
+
+    public function setReadBeforeAssignment(bool $readBeforeAssignment): void
+    {
+        $this->readBeforeAssignment = $readBeforeAssignment;
+    }
+
+    /**
+     * Whether this variable is a zval in the generated C rather than a native
+     * local, and so takes part in the memory frame.
+     */
+    public function isComplexZval(): bool
+    {
+        return in_array($this->type, self::COMPLEX_ZVAL_TYPES, true);
     }
 
     /**

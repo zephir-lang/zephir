@@ -38,7 +38,7 @@ PHP_METHOD(Stub_RegexDNA, process)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_3 = NULL;
-	zval *path, path_sub, variants, vIUB, vIUBnew, stuffToRemove, contents, initialLength, regex, codeLength, discard, _0, _1, _2, *_4, _5$$3, _6$$3;
+	zval *path, path_sub, variants, vIUB, vIUBnew, stuffToRemove, contents, initialLength, regex, codeLength, discard, _0, _1, _2, *_4, *_5, _6$$3, _7$$3;
 
 	ZVAL_UNDEF(&path_sub);
 	ZVAL_UNDEF(&variants);
@@ -53,8 +53,8 @@ PHP_METHOD(Stub_RegexDNA, process)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
-	ZVAL_UNDEF(&_5$$3);
 	ZVAL_UNDEF(&_6$$3);
+	ZVAL_UNDEF(&_7$$3);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(path)
 	ZEND_PARSE_PARAMETERS_END();
@@ -179,18 +179,25 @@ PHP_METHOD(Stub_RegexDNA, process)
 	ZEPHIR_CPY_WRT(&contents, &_2);
 	ZEPHIR_INIT_VAR(&codeLength);
 	ZVAL_LONG(&codeLength, zephir_fast_strlen_ev(&contents));
-	zephir_is_iterable(&variants, 0, "stub/regexdna.zep", 58);
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&variants), _4)
+	if (Z_TYPE_P(&variants) == IS_STRING) {
+		ZEPHIR_INIT_NVAR(&_0);
+		zephir_string_to_char_array(&_0, &variants);
+		_4 = &_0;
+	} else {
+		_4 = &variants;
+	}
+	zephir_is_iterable(_4, 0, "stub/regexdna.zep", 58);
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_4), _5)
 	{
 		ZEPHIR_INIT_NVAR(&regex);
-		ZVAL_COPY(&regex, _4);
+		ZVAL_COPY(&regex, _5);
 		zend_print_zval(&regex, 0);
 		php_printf("%s", " ");
-		ZEPHIR_INIT_NVAR(&_5$$3);
-		ZEPHIR_CONCAT_SVS(&_5$$3, "/", &regex, "/iS");
 		ZEPHIR_INIT_NVAR(&_6$$3);
-		zephir_preg_match(&_6$$3, &_5$$3, &contents, &discard, 1, 0 , 0 );
-		zend_print_zval(&_6$$3, 0);
+		ZEPHIR_CONCAT_SVS(&_6$$3, "/", &regex, "/iS");
+		ZEPHIR_INIT_NVAR(&_7$$3);
+		zephir_preg_match(&_7$$3, &_6$$3, &contents, &discard, 1, 0 , 0 );
+		zend_print_zval(&_7$$3, 0);
 		php_printf("%c", '\n');
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&regex);

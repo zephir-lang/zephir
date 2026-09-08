@@ -164,9 +164,9 @@ PHP_METHOD(Stub_Chars, arrayOfChars)
 
 	ZEPHIR_INIT_VAR(&name);
 	ZVAL_STRING(&name, "peter");
-	ch1 = ZEPHIR_STRING_OFFSET(&name, 0);
+	ch1 = zephir_string_offset_byte(&name, 0, PH_NOISY);
 	ch1 = ch1;
-	ch2 = ZEPHIR_STRING_OFFSET(&name, 1);
+	ch2 = zephir_string_offset_byte(&name, 1, PH_NOISY);
 	ch2 = ch2;
 	zephir_create_array(return_value, 3, 0);
 	ZEPHIR_INIT_VAR(&_0);

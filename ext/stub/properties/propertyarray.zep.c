@@ -64,7 +64,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, __construct)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	zephir_array_fast_append(&_0, &_1);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 82, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 88, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -103,7 +103,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, setOtherArray)
 		Z_PARAM_ZVAL(arr)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &arr);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 83, arr);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 89, arr);
 }
 
 PHP_METHOD(Stub_Properties_PropertyArray, getOtherArray)
@@ -114,18 +114,18 @@ PHP_METHOD(Stub_Properties_PropertyArray, getOtherArray)
 
 PHP_METHOD(Stub_Properties_PropertyArray, testIssues1831)
 {
-	zval info, headers, _0$$3, _2$$3, _3$$3, _5$$5;
+	zval info, headers, _0$$3, *_1$$3, _3$$3, _4$$3, _6$$5, *_7$$5;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_1 = NULL, *_4 = NULL, *_6 = NULL;
+	zephir_fcall_cache_entry *_2 = NULL, *_5 = NULL, *_8 = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&info);
 	ZVAL_UNDEF(&headers);
 	ZVAL_UNDEF(&_0$$3);
-	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_3$$3);
-	ZVAL_UNDEF(&_5$$5);
+	ZVAL_UNDEF(&_4$$3);
+	ZVAL_UNDEF(&_6$$5);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("otherArray", 10, 1);
@@ -139,23 +139,25 @@ PHP_METHOD(Stub_Properties_PropertyArray, testIssues1831)
 		if (!(1)) {
 			break;
 		}
-		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 83, PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_MAKE_REF(&_0$$3);
-		ZEPHIR_CALL_FUNCTION(&info, "array_shift", &_1, 90, &_0$$3);
-		ZEPHIR_UNREF(&_0$$3);
+		ZEPHIR_OBS_NVAR(&_0$$3);
+		_1$$3 = zephir_fetch_property_write(this_ptr, _zephir_prop_0, &_0$$3);
+		ZEPHIR_MAKE_WRITE_REF(_1$$3);
+		ZEPHIR_CALL_FUNCTION(&info, "array_shift", &_2, 69, _1$$3);
+		ZEPHIR_UNREF_WRITE(_1$$3);
 		zephir_check_call_status();
-		ZEPHIR_INIT_NVAR(&_2$$3);
-		ZVAL_STRING(&_2$$3, "header");
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "stripos", &_4, 91, &info, &_2$$3);
+		ZEPHIR_INIT_NVAR(&_3$$3);
+		ZVAL_STRING(&_3$$3, "header");
+		ZEPHIR_CALL_FUNCTION(&_4$$3, "stripos", &_5, 93, &info, &_3$$3);
 		zephir_check_call_status();
-		if (!ZEPHIR_IS_FALSE_IDENTICAL(&_3$$3)) {
+		if (!ZEPHIR_IS_FALSE_IDENTICAL(&_4$$3)) {
 			zephir_array_append(&headers, &info, PH_SEPARATE, "stub/properties/propertyarray.zep", 51);
 			continue;
 		} else {
-			zephir_read_property_cached(&_5$$5, this_ptr, _zephir_prop_0, 83, PH_NOISY_CC | PH_READONLY);
-			ZEPHIR_MAKE_REF(&_5$$5);
-			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_6, 92, &_5$$5, &info);
-			ZEPHIR_UNREF(&_5$$5);
+			ZEPHIR_OBS_NVAR(&_6$$5);
+			_7$$5 = zephir_fetch_property_write(this_ptr, _zephir_prop_0, &_6$$5);
+			ZEPHIR_MAKE_WRITE_REF(_7$$5);
+			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_8, 94, _7$$5, &info);
+			ZEPHIR_UNREF_WRITE(_7$$5);
 			zephir_check_call_status();
 			break;
 		}

@@ -149,7 +149,16 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2565.zep.c
 	stub/issue2635/caller.zep.c
 	stub/issue2635/impl.zep.c
+	stub/issue2651.zep.c
+	stub/issue2654.zep.c
+	stub/issue2656.zep.c
+	stub/issue2666.zep.c
+	stub/issue2674.zep.c
+	stub/issue2679.zep.c
+	stub/issue2682.zep.c
+	stub/issue2691.zep.c
 	stub/issue663.zep.c
+	stub/issue760.zep.c
 	stub/issue808.zep.c
 	stub/issue820.zep.c
 	stub/issue882.zep.c
@@ -316,7 +325,32 @@ if test "$PHP_STUB" = "yes"; then
 	stub/29__closure.zep.c
 	stub/30__closure.zep.c
 	stub/31__closure.zep.c
-	stub/32__closure.zep.c "
+	stub/32__closure.zep.c
+	stub/33__closure.zep.c
+	stub/34__closure.zep.c
+	stub/35__closure.zep.c
+	stub/36__closure.zep.c
+	stub/37__closure.zep.c
+	stub/38__closure.zep.c
+	stub/39__closure.zep.c
+	stub/40__closure.zep.c
+	stub/41__closure.zep.c
+	stub/42__closure.zep.c
+	stub/43__closure.zep.c
+	stub/44__closure.zep.c
+	stub/45__closure.zep.c
+	stub/46__closure.zep.c
+	stub/47__closure.zep.c
+	stub/48__closure.zep.c
+	stub/49__closure.zep.c
+	stub/50__closure.zep.c
+	stub/51__closure.zep.c
+	stub/52__closure.zep.c
+	stub/53__closure.zep.c
+	stub/54__closure.zep.c
+	stub/55__closure.zep.c
+	stub/56__closure.zep.c
+	stub/57__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
 	for dir in "stub stub/args/single stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/issue2635 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/traits stub/typehinting stub/types"; do

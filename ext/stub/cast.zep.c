@@ -1118,7 +1118,7 @@ PHP_METHOD(Stub_Cast, issue1841ToInt)
 	zval s;
 	zend_bool b;
 	double d;
-	long l;
+	zend_long l;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, i;
 	zval *dyn, dyn_sub, _0, _1, _3, _4;
@@ -1335,7 +1335,7 @@ PHP_METHOD(Stub_Cast, issue1841ToLong)
 	zval s;
 	zend_bool b;
 	double d;
-	long l;
+	zend_long l;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, i;
 	zval *dyn, dyn_sub, _0, _1, _3;
@@ -1446,7 +1446,7 @@ PHP_METHOD(Stub_Cast, issue1841ToFloat)
 	zval s;
 	zend_bool b;
 	double d;
-	long l;
+	zend_long l;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, i;
 	zval *dyn, dyn_sub, _0, _1, _3, _4;
@@ -1569,7 +1569,7 @@ PHP_METHOD(Stub_Cast, issue1841ToBool)
 	zval s, zero;
 	zend_bool b;
 	double d;
-	long l;
+	zend_long l;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, i;
 	zval *dyn, dyn_sub, _0, _1, _2, _3, _5;
@@ -1809,7 +1809,7 @@ PHP_METHOD(Stub_Cast, issue1841ToString)
 	zval s, _1, _3, _5, _7, _9, _11, _14, _16, _18, _20, _21, _22, _24, _25, _27;
 	zend_bool b;
 	double d;
-	long l;
+	zend_long l;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, i;
 	zval *dyn, dyn_sub, _0, _2, _4, _6, _8, _10, _12, _13, _15, _17, _19, _23, _26;
@@ -2282,7 +2282,7 @@ PHP_METHOD(Stub_Cast, issue1841CastKeepsOperandIntact)
  */
 PHP_METHOD(Stub_Cast, issue1841DeclarationInitializers)
 {
-	unsigned long w;
+	zend_ulong w;
 	zend_ulong u;
 	zval _1, _3;
 	double y;

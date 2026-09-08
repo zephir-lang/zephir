@@ -1045,6 +1045,18 @@ class Variable
                         );
                         break;
 
+                    case 'concat-assign':
+                        /**
+                         * `getCode()` is already a valid C integer literal, so the helper
+                         * renders both bases the grammar accepts (`5`, `0xff`) the way
+                         * PHP does.
+                         */
+                        $compilationContext->headersManager->add('kernel/operators');
+                        $codePrinter->output(
+                            'zephir_concat_self_long(&' . $variable . ', ' . $resolvedExpr->getCode() . ');'
+                        );
+                        break;
+
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
                 }
@@ -1276,6 +1288,22 @@ class Variable
                                     $symbolVariable,
                                     $tempVariable->getName() . ' - ' . $itemVariable->getName(),
                                     $compilationContext
+                                );
+                                break;
+
+                            case 'concat-assign':
+                                /**
+                                 * The six integer-ish types share this branch, but a
+                                 * `char`/`uchar` appends its raw byte while the rest are
+                                 * rendered as decimal, the same split `doStringAssignment()`
+                                 * makes.
+                                 */
+                                $compilationContext->headersManager->add('kernel/operators');
+                                $helper = in_array($itemVariable->getType(), ['char', 'uchar'], true)
+                                    ? 'zephir_concat_self_char'
+                                    : 'zephir_concat_self_long';
+                                $codePrinter->output(
+                                    $helper . '(&' . $variable . ', ' . $itemVariable->getName() . ');'
                                 );
                                 break;
                             default:

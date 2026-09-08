@@ -85,8 +85,33 @@ zend_class_entry *stub_2__closure_ce;
 zend_class_entry *stub_30__closure_ce;
 zend_class_entry *stub_31__closure_ce;
 zend_class_entry *stub_32__closure_ce;
+zend_class_entry *stub_33__closure_ce;
+zend_class_entry *stub_34__closure_ce;
+zend_class_entry *stub_35__closure_ce;
+zend_class_entry *stub_36__closure_ce;
+zend_class_entry *stub_37__closure_ce;
+zend_class_entry *stub_38__closure_ce;
+zend_class_entry *stub_39__closure_ce;
 zend_class_entry *stub_3__closure_ce;
+zend_class_entry *stub_40__closure_ce;
+zend_class_entry *stub_41__closure_ce;
+zend_class_entry *stub_42__closure_ce;
+zend_class_entry *stub_43__closure_ce;
+zend_class_entry *stub_44__closure_ce;
+zend_class_entry *stub_45__closure_ce;
+zend_class_entry *stub_46__closure_ce;
+zend_class_entry *stub_47__closure_ce;
+zend_class_entry *stub_48__closure_ce;
+zend_class_entry *stub_49__closure_ce;
 zend_class_entry *stub_4__closure_ce;
+zend_class_entry *stub_50__closure_ce;
+zend_class_entry *stub_51__closure_ce;
+zend_class_entry *stub_52__closure_ce;
+zend_class_entry *stub_53__closure_ce;
+zend_class_entry *stub_54__closure_ce;
+zend_class_entry *stub_55__closure_ce;
+zend_class_entry *stub_56__closure_ce;
+zend_class_entry *stub_57__closure_ce;
 zend_class_entry *stub_5__closure_ce;
 zend_class_entry *stub_6__closure_ce;
 zend_class_entry *stub_7__closure_ce;
@@ -199,7 +224,16 @@ zend_class_entry *stub_issue2564padfactory_ce;
 zend_class_entry *stub_issue2565_ce;
 zend_class_entry *stub_issue2635_caller_ce;
 zend_class_entry *stub_issue2635_impl_ce;
+zend_class_entry *stub_issue2651_ce;
+zend_class_entry *stub_issue2654_ce;
+zend_class_entry *stub_issue2656_ce;
+zend_class_entry *stub_issue2666_ce;
+zend_class_entry *stub_issue2674_ce;
+zend_class_entry *stub_issue2679_ce;
+zend_class_entry *stub_issue2682_ce;
+zend_class_entry *stub_issue2691_ce;
 zend_class_entry *stub_issue663_ce;
+zend_class_entry *stub_issue760_ce;
 zend_class_entry *stub_issue808_ce;
 zend_class_entry *stub_issue820_ce;
 zend_class_entry *stub_issue882_ce;
@@ -494,7 +528,16 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Issue2565);
 	ZEPHIR_INIT(Stub_Issue2635_Caller);
 	ZEPHIR_INIT(Stub_Issue2635_Impl);
+	ZEPHIR_INIT(Stub_Issue2651);
+	ZEPHIR_INIT(Stub_Issue2654);
+	ZEPHIR_INIT(Stub_Issue2656);
+	ZEPHIR_INIT(Stub_Issue2666);
+	ZEPHIR_INIT(Stub_Issue2674);
+	ZEPHIR_INIT(Stub_Issue2679);
+	ZEPHIR_INIT(Stub_Issue2682);
+	ZEPHIR_INIT(Stub_Issue2691);
 	ZEPHIR_INIT(Stub_Issue663);
+	ZEPHIR_INIT(Stub_Issue760);
 	ZEPHIR_INIT(Stub_Issue808);
 	ZEPHIR_INIT(Stub_Issue820);
 	ZEPHIR_INIT(Stub_Issue882);
@@ -652,8 +695,33 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(stub_30__closure);
 	ZEPHIR_INIT(stub_31__closure);
 	ZEPHIR_INIT(stub_32__closure);
+	ZEPHIR_INIT(stub_33__closure);
+	ZEPHIR_INIT(stub_34__closure);
+	ZEPHIR_INIT(stub_35__closure);
+	ZEPHIR_INIT(stub_36__closure);
+	ZEPHIR_INIT(stub_37__closure);
+	ZEPHIR_INIT(stub_38__closure);
+	ZEPHIR_INIT(stub_39__closure);
 	ZEPHIR_INIT(stub_3__closure);
+	ZEPHIR_INIT(stub_40__closure);
+	ZEPHIR_INIT(stub_41__closure);
+	ZEPHIR_INIT(stub_42__closure);
+	ZEPHIR_INIT(stub_43__closure);
+	ZEPHIR_INIT(stub_44__closure);
+	ZEPHIR_INIT(stub_45__closure);
+	ZEPHIR_INIT(stub_46__closure);
+	ZEPHIR_INIT(stub_47__closure);
+	ZEPHIR_INIT(stub_48__closure);
+	ZEPHIR_INIT(stub_49__closure);
 	ZEPHIR_INIT(stub_4__closure);
+	ZEPHIR_INIT(stub_50__closure);
+	ZEPHIR_INIT(stub_51__closure);
+	ZEPHIR_INIT(stub_52__closure);
+	ZEPHIR_INIT(stub_53__closure);
+	ZEPHIR_INIT(stub_54__closure);
+	ZEPHIR_INIT(stub_55__closure);
+	ZEPHIR_INIT(stub_56__closure);
+	ZEPHIR_INIT(stub_57__closure);
 	ZEPHIR_INIT(stub_5__closure);
 	ZEPHIR_INIT(stub_6__closure);
 	ZEPHIR_INIT(stub_7__closure);
@@ -663,15 +731,25 @@ static PHP_MINIT_FUNCTION(stub)
 	return SUCCESS;
 }
 
-#ifndef ZEPHIR_RELEASE
 static PHP_MSHUTDOWN_FUNCTION(stub)
 {
+#ifndef ZEPHIR_RELEASE
 	
 	zephir_deinitialize_memory();
+#endif
+	/**
+	 * Both of these have to run in every build, release included.
+	 *
+	 * module_destructor() unregisters a module's INI entries for it only when
+	 * the module has no MSHUTDOWN of its own, so declaring one takes over that
+	 * duty; skipping it leaves zend_ini_entry records pointing into an
+	 * unloaded extension. And the kernel installs process-wide hooks that
+	 * point into this extension and must not outlive it.
+	 */
 	UNREGISTER_INI_ENTRIES();
+	zephir_module_shutdown();
 	return SUCCESS;
 }
-#endif
 
 /**
  * Initialize globals on each request or each thread started
@@ -717,6 +795,7 @@ static void php_zephir_init_module_globals(zend_stub_globals *stub_globals)
 }
 
 void zephir_init_static_properties_Stub_Issue1629();
+void zephir_init_static_properties_Stub_Issue2691();
 void zephir_init_static_properties_Stub_Properties_StaticPropertyArray();
 void zephir_init_static_properties_Stub_SPropertyAccess();
 static PHP_RINIT_FUNCTION(stub)
@@ -728,6 +807,7 @@ static PHP_RINIT_FUNCTION(stub)
 	zephir_initialize_memory(stub_globals_ptr);
 
 		zephir_init_static_properties_Stub_Issue1629();
+		zephir_init_static_properties_Stub_Issue2691();
 		zephir_init_static_properties_Stub_Properties_StaticPropertyArray();
 		zephir_init_static_properties_Stub_SPropertyAccess();
 	
@@ -849,11 +929,7 @@ zend_module_entry stub_module_entry = {
 	PHP_STUB_EXTNAME,
 	php_stub_functions,
 	PHP_MINIT(stub),
-#ifndef ZEPHIR_RELEASE
 	PHP_MSHUTDOWN(stub),
-#else
-	NULL,
-#endif
 	PHP_RINIT(stub),
 	PHP_RSHUTDOWN(stub),
 	PHP_MINFO(stub),

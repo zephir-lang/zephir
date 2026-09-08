@@ -68,7 +68,7 @@ class DeclareStatement extends StatementAbstract
             $currentType = $this->statement['data-type'];
 
             /**
-             * Replace original data type by the pre-processed infered type
+             * Replace original data type by the pre-processed infered type.
              */
             if ($typeInference) {
                 if ('variable' === $currentType) {
@@ -89,6 +89,20 @@ class DeclareStatement extends StatementAbstract
                 case 'scall':
                     $currentType = 'variable';
                     break;
+            }
+
+            /**
+             * A local captured with `use (&x)` becomes a PHP reference shared
+             * with the closure, so it has to be a zval however narrow its type
+             * looks - whether that type was inferred or written out. `int n`
+             * kept its `zend_long` shape and got the zval-only
+             * zephir_make_local_reference() emitted against it.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2652
+             * @see https://github.com/zephir-lang/zephir/issues/2653
+             */
+            if ($symbolTable->isClosureReference($varName)) {
+                $currentType = 'variable';
             }
 
             /**
@@ -118,7 +132,50 @@ class DeclareStatement extends StatementAbstract
                 $letStatement = new LetStatement($letBuilder->build());
                 $letStatement->compile($compilationContext);
             } else {
+                /**
+                 * The only place a user-written declaration with no value is
+                 * recorded. The emitter starts such a local at IS_NULL when
+                 * nothing ever writes to it, because PHP evaluates an unset
+                 * variable as null while an IS_UNDEF zval reaches userland as
+                 * `UNKNOWN:0`.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2654
+                 */
+                $symbolVariable->setDeclaredWithoutValue(true);
                 $symbolVariable->enableDefaultAutoInitValue();
+
+                /**
+                 * The conditional half of the same problem: something does
+                 * write to this local, but not on every path that reaches a
+                 * read of it, so the read can still see the IS_UNDEF.
+                 *
+                 * Recorded on the variable rather than acted on twice, because
+                 * Method::compile() reports the same fact as the
+                 * `conditional-initialization` warning. One decision, two
+                 * consumers, no way for them to disagree.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2679
+                 */
+                $symbolVariable->setReadBeforeAssignment(
+                    $symbolTable->requiresNullInitialization($varName)
+                );
+
+                /**
+                 * The declaration cannot simply start at IS_NULL here, because
+                 * IS_UNDEF is what makes the first write register the variable
+                 * with the memory frame. Registering it up front instead keeps
+                 * that registration and costs one ZEPHIR_INIT_VAR: every later
+                 * write reads Variable::$variantInits and downgrades itself to
+                 * ZEPHIR_INIT_NVAR or ZEPHIR_OBS_NVAR, which observe only while
+                 * the target is still undefined, so the slot is registered
+                 * exactly once either way.
+                 *
+                 * A native local has no IS_UNDEF to hand to userland and is not
+                 * in the memory frame, so it is only reported, never touched.
+                 */
+                if ($symbolVariable->isReadBeforeAssignment() && $symbolVariable->isComplexZval()) {
+                    $symbolVariable->initVariant($compilationContext);
+                }
             }
         }
     }

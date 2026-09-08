@@ -31,7 +31,7 @@ class CallStaticStatement extends AbstractStatement
      * @param null       $method
      * @param array|null $parameters
      */
-    public function __construct($class = null, $method = null, array $parameters = null)
+    public function __construct($class = null, $method = null, ?array $parameters = null)
     {
         if (null !== $class) {
             $this->setClass($class);

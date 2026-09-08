@@ -121,7 +121,7 @@ class Reference
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
+    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
     {
         $this->expecting         = $expecting;
         $this->expectingVariable = $expectingVariable;

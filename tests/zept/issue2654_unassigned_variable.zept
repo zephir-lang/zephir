@@ -1,0 +1,35 @@
+--TEST--
+A declared but never assigned variable reads as null, as PHP does
+--FILE--
+namespace Zept;
+
+class Unassigned
+{
+    public function readVar()
+    {
+        var x;
+
+        return x;
+    }
+
+    public function readString()
+    {
+        string s;
+
+        return s;
+    }
+
+    public function readArray()
+    {
+        array a;
+
+        return a;
+    }
+}
+--USAGE--
+$p = new Zept\Unassigned();
+var_dump($p->readVar(), $p->readString(), $p->readArray());
+--EXPECT--
+NULL
+NULL
+NULL

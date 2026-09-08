@@ -20,10 +20,10 @@
 #include "kernel/exception.h"
 #include "ext/spl/spl_array.h"
 #include "kernel/array.h"
+#include "kernel/string.h"
 #include "kernel/concat.h"
 #include "kernel/main.h"
 #include "kernel/generator.h"
-#include "kernel/string.h"
 #include "math.h"
 
 
@@ -80,7 +80,7 @@ PHP_METHOD(Stub_Bench, __construct)
 PHP_METHOD(Stub_Bench, forOverArray)
 {
 	zend_bool _2;
-	long sum;
+	zend_long sum;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *arr_param = NULL, v, *_0, _1;
@@ -136,17 +136,17 @@ PHP_METHOD(Stub_Bench, forOverArray)
  */
 PHP_METHOD(Stub_Bench, forOverIterator)
 {
-	zend_bool _3;
+	zend_bool _5;
 	zval _0;
-	long sum;
-	zval v, iter, _1, _2;
+	zend_long sum;
+	zval v, iter, _1, *_2, *_3, _4;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&iter);
 	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -188,25 +188,41 @@ PHP_METHOD(Stub_Bench, forOverIterator)
 	zephir_array_fast_append(&_0, &_1);
 	ZEPHIR_CALL_METHOD(NULL, &iter, "__construct", NULL, 8, &_0);
 	zephir_check_call_status();
-	zephir_is_iterable(&iter, 0, "stub/bench.zep", 48);
-	ZEPHIR_CALL_METHOD(NULL, &iter, "rewind", NULL, 0);
-	zephir_check_call_status();
-	_3 = 1;
-	while (1) {
-		if (_3) {
-			_3 = 0;
-		} else {
-			ZEPHIR_CALL_METHOD(NULL, &iter, "next", NULL, 0);
-			zephir_check_call_status();
-		}
-		ZEPHIR_CALL_METHOD(&_2, &iter, "valid", NULL, 0);
-		zephir_check_call_status();
-		if (!zend_is_true(&_2)) {
-			break;
-		}
-		ZEPHIR_CALL_METHOD(&v, &iter, "current", NULL, 0);
-		zephir_check_call_status();
+	if (Z_TYPE_P(&iter) == IS_STRING) {
+		ZEPHIR_INIT_NVAR(&_1);
+		zephir_string_to_char_array(&_1, &iter);
+		_2 = &_1;
+	} else {
+		_2 = &iter;
+	}
+	zephir_is_iterable(_2, 0, "stub/bench.zep", 48);
+	if (Z_TYPE_P(_2) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_2), _3)
+		{
+			ZEPHIR_INIT_NVAR(&v);
+			ZVAL_COPY(&v, _3);
 			sum += zephir_get_intval(&v);
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, _2, "rewind", NULL, 0);
+		zephir_check_call_status();
+		_5 = 1;
+		while (1) {
+			if (_5) {
+				_5 = 0;
+			} else {
+				ZEPHIR_CALL_METHOD(NULL, _2, "next", NULL, 0);
+				zephir_check_call_status();
+			}
+			ZEPHIR_CALL_METHOD(&_4, _2, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_4)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&v, _2, "current", NULL, 0);
+			zephir_check_call_status();
+				sum += zephir_get_intval(&v);
+		}
 	}
 	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(sum);
@@ -221,17 +237,17 @@ PHP_METHOD(Stub_Bench, forOverIterator)
  */
 PHP_METHOD(Stub_Bench, forOverIteratorWithContinue)
 {
-	zend_bool _3;
+	zend_bool _5;
 	zval _0;
-	long sum, iv;
-	zval v, iter, _1, _2;
+	zend_long sum, iv;
+	zval v, iter, _1, *_2, *_3, _4;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&iter);
 	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -274,29 +290,49 @@ PHP_METHOD(Stub_Bench, forOverIteratorWithContinue)
 	zephir_array_fast_append(&_0, &_1);
 	ZEPHIR_CALL_METHOD(NULL, &iter, "__construct", NULL, 8, &_0);
 	zephir_check_call_status();
-	zephir_is_iterable(&iter, 0, "stub/bench.zep", 70);
-	ZEPHIR_CALL_METHOD(NULL, &iter, "rewind", NULL, 0);
-	zephir_check_call_status();
-	_3 = 1;
-	while (1) {
-		if (_3) {
-			_3 = 0;
-		} else {
-			ZEPHIR_CALL_METHOD(NULL, &iter, "next", NULL, 0);
-			zephir_check_call_status();
-		}
-		ZEPHIR_CALL_METHOD(&_2, &iter, "valid", NULL, 0);
-		zephir_check_call_status();
-		if (!zend_is_true(&_2)) {
-			break;
-		}
-		ZEPHIR_CALL_METHOD(&v, &iter, "current", NULL, 0);
-		zephir_check_call_status();
+	if (Z_TYPE_P(&iter) == IS_STRING) {
+		ZEPHIR_INIT_NVAR(&_1);
+		zephir_string_to_char_array(&_1, &iter);
+		_2 = &_1;
+	} else {
+		_2 = &iter;
+	}
+	zephir_is_iterable(_2, 0, "stub/bench.zep", 70);
+	if (Z_TYPE_P(_2) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_2), _3)
+		{
+			ZEPHIR_INIT_NVAR(&v);
+			ZVAL_COPY(&v, _3);
 			iv = zephir_get_intval(&v);
 			if (zephir_safe_mod_long_long(iv, 2) == 0) {
 				continue;
 			}
 			sum += iv;
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, _2, "rewind", NULL, 0);
+		zephir_check_call_status();
+		_5 = 1;
+		while (1) {
+			if (_5) {
+				_5 = 0;
+			} else {
+				ZEPHIR_CALL_METHOD(NULL, _2, "next", NULL, 0);
+				zephir_check_call_status();
+			}
+			ZEPHIR_CALL_METHOD(&_4, _2, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_4)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&v, _2, "current", NULL, 0);
+			zephir_check_call_status();
+				iv = zephir_get_intval(&v);
+				if (zephir_safe_mod_long_long(iv, 2) == 0) {
+					continue;
+				}
+				sum += iv;
+		}
 	}
 	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(sum);
@@ -309,7 +345,7 @@ PHP_METHOD(Stub_Bench, propertyReadLoop)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n_param = NULL, _0$$3;
-	long n, i, sum;
+	zend_long n, i, sum;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0$$3);
@@ -345,7 +381,7 @@ PHP_METHOD(Stub_Bench, propertyReadLoop)
 PHP_METHOD(Stub_Bench, arrayFetchStringLoop)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	long n, i, sum;
+	zend_long n, i, sum;
 	zval *arr_param = NULL, *n_param = NULL, _0$$3, _1$$3;
 	zval arr;
 
@@ -385,7 +421,7 @@ PHP_METHOD(Stub_Bench, methodDispatchLoop)
 	zephir_fcall_cache_entry *_1 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *n_param = NULL, _0$$3;
-	long n, i, sum;
+	zend_long n, i, sum;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0$$3);
@@ -421,7 +457,7 @@ PHP_METHOD(Stub_Bench, returnConst)
 PHP_METHOD(Stub_Bench, stringConcatLoop)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	long n, i;
+	zend_long n, i;
 	zval base_zv, *n_param = NULL, out, _0$$3;
 	zend_string *base = NULL;
 
@@ -461,7 +497,7 @@ PHP_METHOD(Stub_Bench, newInstanceLoop)
 	zephir_fcall_cache_entry *_0 = NULL, *_2 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *n_param = NULL, obj, _1$$3;
-	long n, i, sum;
+	zend_long n, i, sum;
 
 	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&_1$$3);
@@ -495,13 +531,14 @@ PHP_METHOD(Stub_Bench, newInstanceLoop)
  */
 PHP_METHOD(Stub_Bench, variadicSum)
 {
-	long sum;
+	zend_long sum;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval numbers, v, *_0;
+	zval numbers, v, *_0, _1, *_2;
 
 	ZVAL_UNDEF(&numbers);
 	ZVAL_UNDEF(&v);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(0, -1)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -509,11 +546,18 @@ PHP_METHOD(Stub_Bench, variadicSum)
 	ZEPHIR_INIT_VAR(&numbers);
 	zephir_get_args_from(&numbers, 0);
 	sum = 0;
-	zephir_is_iterable(&numbers, 0, "stub/bench.zep", 159);
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&numbers), _0)
+	if (Z_TYPE_P(&numbers) == IS_STRING) {
+		ZEPHIR_INIT_VAR(&_1);
+		zephir_string_to_char_array(&_1, &numbers);
+		_0 = &_1;
+	} else {
+		_0 = &numbers;
+	}
+	zephir_is_iterable(_0, 0, "stub/bench.zep", 159);
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_0), _2)
 	{
 		ZEPHIR_INIT_NVAR(&v);
-		ZVAL_COPY(&v, _0);
+		ZVAL_COPY(&v, _2);
 		sum += zephir_get_intval(&v);
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&v);
@@ -530,7 +574,7 @@ PHP_METHOD(Stub_Bench, variadicSumNarrowLoop)
 	zephir_fcall_cache_entry *_6 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *n_param = NULL, _0$$3, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3;
-	long n, i, sum;
+	zend_long n, i, sum;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0$$3);
@@ -574,7 +618,7 @@ PHP_METHOD(Stub_Bench, variadicSumWideLoop)
 	zephir_fcall_cache_entry *_16 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *n_param = NULL, _0$$3, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3, _6$$3, _7$$3, _8$$3, _9$$3, _10$$3, _11$$3, _12$$3, _13$$3, _14$$3, _15$$3;
-	long n, i, sum;
+	zend_long n, i, sum;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0$$3);
@@ -635,11 +679,10 @@ PHP_METHOD(Stub_Bench, variadicSumWideLoop)
  */
 PHP_METHOD(Stub_Bench, funcGetArgsSum)
 {
-	zend_bool _2;
-	long sum;
+	zend_long sum;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *a, a_sub, *b, b_sub, *c, c_sub, *d, d_sub, *e, e_sub, args, v, *_0, _1;
+	zval *a, a_sub, *b, b_sub, *c, c_sub, *d, d_sub, *e, e_sub, args, v, *_0, _1, *_2;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
@@ -662,35 +705,20 @@ PHP_METHOD(Stub_Bench, funcGetArgsSum)
 	sum = 0;
 	ZEPHIR_INIT_VAR(&args);
 	zephir_get_args(&args);
-	zephir_is_iterable(&args, 0, "stub/bench.zep", 203);
-	if (Z_TYPE_P(&args) == IS_ARRAY) {
-		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&args), _0)
-		{
-			ZEPHIR_INIT_NVAR(&v);
-			ZVAL_COPY(&v, _0);
-			sum += zephir_get_intval(&v);
-		} ZEND_HASH_FOREACH_END();
+	if (Z_TYPE_P(&args) == IS_STRING) {
+		ZEPHIR_INIT_VAR(&_1);
+		zephir_string_to_char_array(&_1, &args);
+		_0 = &_1;
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, &args, "rewind", NULL, 0);
-		zephir_check_call_status();
-		_2 = 1;
-		while (1) {
-			if (_2) {
-				_2 = 0;
-			} else {
-				ZEPHIR_CALL_METHOD(NULL, &args, "next", NULL, 0);
-				zephir_check_call_status();
-			}
-			ZEPHIR_CALL_METHOD(&_1, &args, "valid", NULL, 0);
-			zephir_check_call_status();
-			if (!zend_is_true(&_1)) {
-				break;
-			}
-			ZEPHIR_CALL_METHOD(&v, &args, "current", NULL, 0);
-			zephir_check_call_status();
-				sum += zephir_get_intval(&v);
-		}
+		_0 = &args;
 	}
+	zephir_is_iterable(_0, 0, "stub/bench.zep", 203);
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_0), _2)
+	{
+		ZEPHIR_INIT_NVAR(&v);
+		ZVAL_COPY(&v, _2);
+		sum += zephir_get_intval(&v);
+	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(sum);
 }
@@ -701,7 +729,7 @@ PHP_METHOD(Stub_Bench, funcGetArgsSumLoop)
 	zephir_fcall_cache_entry *_6 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *n_param = NULL, _0$$3, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3;
-	long n, i, sum;
+	zend_long n, i, sum;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0$$3);
@@ -759,7 +787,7 @@ PHP_METHOD(Stub_Bench, finalDispatchLoop)
 	zephir_fcall_cache_entry *_1 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *n_param = NULL, _0$$3;
-	long n, i, sum;
+	zend_long n, i, sum;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0$$3);
@@ -789,7 +817,7 @@ PHP_METHOD(Stub_Bench, staticDispatchLoop)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_1 = NULL;
 	zval *n_param = NULL, _0$$3;
-	long n, i, sum;
+	zend_long n, i, sum;
 
 	ZVAL_UNDEF(&_0$$3);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -820,7 +848,7 @@ PHP_METHOD(Stub_Bench, staticDispatchLoop)
 PHP_METHOD(Stub_Bench, generatorRange)
 {
 	zval *n_param = NULL;
-	long n;
+	zend_long n;
 	zval *this_ptr = getThis();
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -837,7 +865,7 @@ PHP_METHOD(Stub_Bench, arrayRange)
 	zval result;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n_param = NULL, _0$$3;
-	long n, i;
+	zend_long n, i;
 
 	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&result);
@@ -893,17 +921,18 @@ PHP_METHOD(Stub_Bench, generatorOverArray)
  */
 PHP_METHOD(Stub_Bench, sumViaGenerator)
 {
-	zend_bool _4;
+	zend_bool _6;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *n_param = NULL, v, _0, _1, *_2, _3;
-	long n, total;
+	zval *n_param = NULL, v, _0, _1, *_2, _3, *_4, _5;
+	zend_long n, total;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
+	ZVAL_UNDEF(&_5);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(n)
 	ZEND_PARSE_PARAMETERS_END();
@@ -914,31 +943,38 @@ PHP_METHOD(Stub_Bench, sumViaGenerator)
 	ZVAL_LONG(&_1, n);
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "generatorrange", NULL, 0, &_1);
 	zephir_check_call_status();
-	zephir_is_iterable(&_0, 0, "stub/bench.zep", 300);
-	if (Z_TYPE_P(&_0) == IS_ARRAY) {
-		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&_0), _2)
+	if (Z_TYPE_P(&_0) == IS_STRING) {
+		ZEPHIR_INIT_VAR(&_3);
+		zephir_string_to_char_array(&_3, &_0);
+		_2 = &_3;
+	} else {
+		_2 = &_0;
+	}
+	zephir_is_iterable(_2, 0, "stub/bench.zep", 300);
+	if (Z_TYPE_P(_2) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_2), _4)
 		{
 			ZEPHIR_INIT_NVAR(&v);
-			ZVAL_COPY(&v, _2);
+			ZVAL_COPY(&v, _4);
 			total += zephir_get_intval(&v);
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD(NULL, _2, "rewind", NULL, 0);
 		zephir_check_call_status();
-		_4 = 1;
+		_6 = 1;
 		while (1) {
-			if (_4) {
-				_4 = 0;
+			if (_6) {
+				_6 = 0;
 			} else {
-				ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
+				ZEPHIR_CALL_METHOD(NULL, _2, "next", NULL, 0);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_3, &_0, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD(&_5, _2, "valid", NULL, 0);
 			zephir_check_call_status();
-			if (!zend_is_true(&_3)) {
+			if (!zend_is_true(&_5)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&v, &_0, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD(&v, _2, "current", NULL, 0);
 			zephir_check_call_status();
 				total += zephir_get_intval(&v);
 		}
@@ -949,17 +985,18 @@ PHP_METHOD(Stub_Bench, sumViaGenerator)
 
 PHP_METHOD(Stub_Bench, sumViaArray)
 {
-	zend_bool _4;
+	zend_bool _6;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *n_param = NULL, v, _0, _1, *_2, _3;
-	long n, total;
+	zval *n_param = NULL, v, _0, _1, *_2, _3, *_4, _5;
+	zend_long n, total;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
+	ZVAL_UNDEF(&_5);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(n)
 	ZEND_PARSE_PARAMETERS_END();
@@ -970,31 +1007,38 @@ PHP_METHOD(Stub_Bench, sumViaArray)
 	ZVAL_LONG(&_1, n);
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "arrayrange", NULL, 0, &_1);
 	zephir_check_call_status();
-	zephir_is_iterable(&_0, 0, "stub/bench.zep", 310);
-	if (Z_TYPE_P(&_0) == IS_ARRAY) {
-		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&_0), _2)
+	if (Z_TYPE_P(&_0) == IS_STRING) {
+		ZEPHIR_INIT_VAR(&_3);
+		zephir_string_to_char_array(&_3, &_0);
+		_2 = &_3;
+	} else {
+		_2 = &_0;
+	}
+	zephir_is_iterable(_2, 0, "stub/bench.zep", 310);
+	if (Z_TYPE_P(_2) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_2), _4)
 		{
 			ZEPHIR_INIT_NVAR(&v);
-			ZVAL_COPY(&v, _2);
+			ZVAL_COPY(&v, _4);
 			total += zephir_get_intval(&v);
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD(NULL, _2, "rewind", NULL, 0);
 		zephir_check_call_status();
-		_4 = 1;
+		_6 = 1;
 		while (1) {
-			if (_4) {
-				_4 = 0;
+			if (_6) {
+				_6 = 0;
 			} else {
-				ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
+				ZEPHIR_CALL_METHOD(NULL, _2, "next", NULL, 0);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_3, &_0, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD(&_5, _2, "valid", NULL, 0);
 			zephir_check_call_status();
-			if (!zend_is_true(&_3)) {
+			if (!zend_is_true(&_5)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&v, &_0, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD(&v, _2, "current", NULL, 0);
 			zephir_check_call_status();
 				total += zephir_get_intval(&v);
 		}
@@ -1014,7 +1058,7 @@ PHP_METHOD(Stub_Bench, sumRangeOperator)
 	zend_long _1;
 	zend_bool _0;
 	zval *n_param = NULL;
-	long n, i, total, _2;
+	zend_long n, i, total, _2;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(n)
@@ -1047,7 +1091,7 @@ PHP_METHOD(Stub_Bench, sumRangeFn)
 	zend_long _1;
 	zend_bool _0;
 	zval *n_param = NULL;
-	long n, i, total, _2;
+	zend_long n, i, total, _2;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(n)
@@ -1086,7 +1130,7 @@ PHP_METHOD(Stub_Bench, buildMatrix)
 	zend_bool _0, _4$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n_param = NULL, output, i, j, _3$$3, _7$$4;
-	long n, _2, _6$$3;
+	zend_long n, _2, _6$$3;
 
 	ZVAL_UNDEF(&output);
 	ZVAL_UNDEF(&i);
@@ -1160,7 +1204,7 @@ PHP_METHOD(Stub_Bench, addAssignUnionLiteral)
 	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *count_param = NULL, a, _3$$3;
-	long count, i, _2;
+	zend_long count, i, _2;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_3$$3);
@@ -1233,7 +1277,7 @@ PHP_METHOD(Stub_Bench, addAssignUnionVar)
 	zend_bool _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *count_param = NULL, a, b, _0, _4$$3;
-	long count, i, _3;
+	zend_long count, i, _3;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
@@ -1307,7 +1351,7 @@ PHP_METHOD(Stub_Bench, addAssignAccumulate)
 	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *count_param = NULL, a, b, _3$$3;
-	long count, i, _2;
+	zend_long count, i, _2;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
@@ -1353,7 +1397,7 @@ PHP_METHOD(Stub_Bench, addAssignAccumulate)
 PHP_METHOD(Stub_Bench, countOptimizedLoop)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	long n, i, sum;
+	zend_long n, i, sum;
 	zval *arr_param = NULL, *n_param = NULL;
 	zval arr;
 
@@ -1389,7 +1433,7 @@ PHP_METHOD(Stub_Bench, countUnoptimizedLoop)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_2 = NULL;
-	long n, i, sum;
+	zend_long n, i, sum;
 	zval *arr_param = NULL, *n_param = NULL, _0$$3, _1$$3;
 	zval arr;
 
@@ -1426,7 +1470,7 @@ PHP_METHOD(Stub_Bench, countUnoptimizedLoop)
 PHP_METHOD(Stub_Bench, implodeOptimizedLoop)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	long n, i;
+	zend_long n, i;
 	zval *arr_param = NULL, *n_param = NULL, out;
 	zval arr;
 
@@ -1464,7 +1508,7 @@ PHP_METHOD(Stub_Bench, implodeUnoptimizedLoop)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
-	long n, i;
+	zend_long n, i;
 	zval *arr_param = NULL, *n_param = NULL, out;
 	zval arr;
 
@@ -1501,7 +1545,7 @@ PHP_METHOD(Stub_Bench, acosLoop)
 {
 	double x, sum;
 	zval *n_param = NULL, _0$$3;
-	long n, i;
+	zend_long n, i;
 
 	ZVAL_UNDEF(&_0$$3);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -1522,11 +1566,134 @@ PHP_METHOD(Stub_Bench, acosLoop)
 	RETURN_DOUBLE(sum);
 }
 
+/**
+ * The cost of #2679: a local assigned only inside a conditional is
+ * registered with the memory frame at its declaration, so every call pays
+ * one extra zephir_memory_observe(). The call is the unit being measured,
+ * so the loop lives in the caller.
+ */
+PHP_METHOD(Stub_Bench, conditionalLocalLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zephir_fcall_cache_entry *_2 = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *iterations_param = NULL, _0$$3, _1$$3;
+	zend_long iterations, i, hits;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0$$3);
+	ZVAL_UNDEF(&_1$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(iterations)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &iterations_param);
+	i = 0;
+	hits = 0;
+	while (1) {
+		if (!(i < iterations)) {
+			break;
+		}
+		ZVAL_BOOL(&_1$$3, (zephir_safe_mod_long_long(i, 2)) == 0);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "conditionallocalstep", &_2, 0, &_1$$3);
+		zephir_check_call_status();
+		hits += zephir_get_numberval(&_0$$3);
+		i++;
+	}
+	RETURN_MM_LONG(hits);
+}
+
+PHP_METHOD(Stub_Bench, conditionalLocalStep)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *flag_param = NULL, x;
+	zend_bool flag;
+
+	ZVAL_UNDEF(&x);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_BOOL(flag)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &flag_param);
+	ZEPHIR_INIT_VAR(&x);
+	if (flag) {
+		ZEPHIR_INIT_NVAR(&x);
+		ZVAL_STRING(&x, "set");
+	}
+	if (Z_TYPE_P(&x) == IS_STRING) {
+		RETURN_MM_LONG(1);
+	}
+	RETURN_MM_LONG(0);
+}
+
+/**
+ * The control: identical shape with the local assigned on every path, so
+ * the compiler adds nothing to it. A difference here is noise, not cost.
+ */
+PHP_METHOD(Stub_Bench, definiteLocalLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zephir_fcall_cache_entry *_2 = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *iterations_param = NULL, _0$$3, _1$$3;
+	zend_long iterations, i, hits;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0$$3);
+	ZVAL_UNDEF(&_1$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(iterations)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &iterations_param);
+	i = 0;
+	hits = 0;
+	while (1) {
+		if (!(i < iterations)) {
+			break;
+		}
+		ZVAL_BOOL(&_1$$3, (zephir_safe_mod_long_long(i, 2)) == 0);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "definitelocalstep", &_2, 0, &_1$$3);
+		zephir_check_call_status();
+		hits += zephir_get_numberval(&_0$$3);
+		i++;
+	}
+	RETURN_MM_LONG(hits);
+}
+
+PHP_METHOD(Stub_Bench, definiteLocalStep)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *flag_param = NULL, x;
+	zend_bool flag;
+
+	ZVAL_UNDEF(&x);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_BOOL(flag)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &flag_param);
+	ZEPHIR_INIT_VAR(&x);
+	if (flag) {
+		ZVAL_STRING(&x, "set");
+	} else {
+		ZVAL_LONG(&x, 1);
+	}
+	if (Z_TYPE_P(&x) == IS_STRING) {
+		RETURN_MM_LONG(1);
+	}
+	RETURN_MM_LONG(0);
+}
+
 void zep_Stub_Bench_zephir_gen_step_generatorRange(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext )
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *zephir_gen, zephir_gen_sub, _0$$3;
-	long n, i;
+	zend_long n, i;
 		ZVAL_UNDEF(&zephir_gen_sub);
 	ZVAL_UNDEF(&_0$$3);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -1534,9 +1701,9 @@ void zep_Stub_Bench_zephir_gen_step_generatorRange(int ht, zend_execute_data *ex
 	zephir_gen = zephir_gen_ext;
 	/* Generator resume dispatch (issue #1849) */
 	zephir_generator_slots_ensure(zephir_gen, 3);
-	if (Z_TYPE_P(zephir_generator_slot(zephir_gen, 0)) != IS_UNDEF) { n = (long) Z_LVAL_P(zephir_generator_slot(zephir_gen, 0)); }
+	if (Z_TYPE_P(zephir_generator_slot(zephir_gen, 0)) != IS_UNDEF) { n = (zend_long) Z_LVAL_P(zephir_generator_slot(zephir_gen, 0)); }
 	ZEPHIR_GEN_RESTORE_ZVAL(zephir_gen, 1, &_0$$3);
-	if (Z_TYPE_P(zephir_generator_slot(zephir_gen, 2)) != IS_UNDEF) { i = (long) Z_LVAL_P(zephir_generator_slot(zephir_gen, 2)); }
+	if (Z_TYPE_P(zephir_generator_slot(zephir_gen, 2)) != IS_UNDEF) { i = (zend_long) Z_LVAL_P(zephir_generator_slot(zephir_gen, 2)); }
 	switch (zephir_generator_get_state(zephir_gen)) {
 		case 1: goto zephir_yield_resume_1;
 		default: break;

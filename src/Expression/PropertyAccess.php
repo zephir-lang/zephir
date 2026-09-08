@@ -20,6 +20,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Traits\VariablesTrait;
+use Zephir\Traits\WriteContextSlotTrait;
 use Zephir\Variable\Variable;
 
 use function current;
@@ -30,11 +31,13 @@ use function current;
 class PropertyAccess
 {
     use VariablesTrait;
+    use WriteContextSlotTrait;
 
     protected bool      $expecting = true;
     protected ?Variable $expectingVariable;
-    protected bool      $noisy     = true;
-    protected bool      $readOnly  = false;
+    protected bool      $noisy        = true;
+    protected bool      $readOnly     = false;
+    protected bool      $writeThrough = false;
 
     /**
      * Resolves the access to a property in an object.
@@ -185,6 +188,17 @@ class PropertyAccess
         }
 
         /**
+         * A write context does not read the property at all, it takes the slot
+         * the property lives in. Everything a by-reference argument needs
+         * follows from that, and none of the symbol resolution below applies:
+         * the target is a pointer, not a value the caller could have promoted
+         * to read-only or asked to be put in a variable of its own.
+         */
+        if ($this->writeThrough) {
+            return $this->fetchWritableSlot($variableVariable, $property, $expression, $compilationContext);
+        }
+
+        /**
          * Resolves the symbol that expects the value.
          */
         $readOnly           = false;
@@ -299,5 +313,42 @@ class PropertyAccess
     public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
+    }
+
+    /**
+     * Sets whether the caller will write through the property instead of only
+     * reading it, which is what a by-reference call argument does.
+     *
+     * @see \Zephir\Expression\NativeArrayAccess::setWriteThrough()
+     * @see https://github.com/zephir-lang/zephir/issues/2691
+     */
+    public function setWriteThrough(bool $writeThrough): void
+    {
+        $this->writeThrough = $writeThrough;
+    }
+
+    /**
+     * The property's storage slot, in a temp the memory frame does not own.
+     *
+     * @see \Zephir\Traits\WriteContextSlotTrait
+     * @see https://github.com/zephir-lang/zephir/issues/2691
+     */
+    private function fetchWritableSlot(
+        Variable $variableVariable,
+        string $property,
+        array $expression,
+        CompilationContext $compilationContext
+    ): CompiledExpression {
+        [$slot, $fallback] = $this->writeContextSlot($compilationContext);
+
+        $compilationContext->backend->fetchPropertyWrite(
+            $slot,
+            $variableVariable,
+            $property,
+            $fallback,
+            $compilationContext
+        );
+
+        return new CompiledExpression('variable', $slot->getRealName(), $expression);
     }
 }

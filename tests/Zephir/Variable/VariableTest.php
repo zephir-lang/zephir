@@ -72,7 +72,7 @@ final class VariableTest extends TestCase
         $this->assertSame(0, $this->zephirVar->getSkipVariant());
         $this->assertSame(0, $this->zephirVar->getVariantInits());
         $this->assertTrue($this->zephirVar->isVariable());
-        $this->assertFalse($this->zephirVar->isLocalStatic());
+        $this->assertFalse($this->zephirVar->isClosureCapture());
         $this->assertFalse($this->zephirVar->isSuperGlobal());
         $this->assertFalse($this->zephirVar->isBoolean());
         $this->assertFalse($this->zephirVar->isString());
@@ -168,7 +168,7 @@ final class VariableTest extends TestCase
 
         $this->zephirVar->setLocalOnly(true);
         $this->zephirVar->setIsExternal(true);
-        $this->assertTrue($this->zephirVar->isLocalStatic());
+        $this->assertTrue($this->zephirVar->isClosureCapture());
 
         $superglobalVar = new Variable('', '_SERVER');
         $superglobalVar->setIsExternal(true);

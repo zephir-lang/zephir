@@ -64,7 +64,7 @@ PHP_METHOD(Stub_ScallExternal, testCall2)
 PHP_METHOD(Stub_ScallExternal, testMethod3)
 {
 	zval *a_param = NULL, *b_param = NULL;
-	long a, b;
+	zend_long a, b;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(a)

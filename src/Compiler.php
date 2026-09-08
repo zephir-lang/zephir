@@ -41,6 +41,7 @@ use Zephir\FileSystem\FileSystemInterface;
 use Zephir\FileSystem\HardDisk;
 use Zephir\Parser\Manager;
 
+use function array_diff_key;
 use function array_filter;
 use function array_map;
 use function array_merge;
@@ -1279,30 +1280,47 @@ final class Compiler
 
         /**
          * Round 3.2. Compile anonymous classes
+         *
+         * A closure body may itself contain a closure, and that inner class is
+         * registered by Closure::compile() while this very loop is compiling
+         * the outer one. A `foreach` walks a copy-on-write snapshot, so the
+         * appended file was never written, while the project files - built
+         * later from the live list - still emitted its ZEPHIR_INIT() call and
+         * the extension failed to link. Drain the queue instead, so any nesting
+         * depth is covered.
+         *
+         * Terminates because every closure class gets a unique complete name.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2655
          */
-        foreach ($this->anonymousFiles as $compileFile) {
-            $compileFile->compile($this, $this->stringManager);
-            $compiledFile = $compileFile->getCompiledFile();
+        $compiledAnonymous = [];
+        while ([] !== ($pending = array_diff_key($this->anonymousFiles, $compiledAnonymous))) {
+            foreach ($pending as $completeName => $compileFile) {
+                $compiledAnonymous[$completeName] = true;
 
-            $methods         = [];
-            $classDefinition = $compileFile->getClassDefinition();
-            foreach ($classDefinition->getMethods() as $method) {
-                $methods[] = '['
-                    . $method->getName()
+                $compileFile->compile($this, $this->stringManager);
+                $compiledFile = $compileFile->getCompiledFile();
+
+                $methods         = [];
+                $classDefinition = $compileFile->getClassDefinition();
+                foreach ($classDefinition->getMethods() as $method) {
+                    $methods[] = '['
+                        . $method->getName()
+                        . ':'
+                        . implode('-', $method->getVisibility())
+                        . ']';
+                }
+
+                $files[] = $compiledFile;
+
+                $hash .= '|'
+                    . $compiledFile
                     . ':'
-                    . implode('-', $method->getVisibility())
+                    . $classDefinition->getClassEntry()
+                    . '['
+                    . implode('|', $methods)
                     . ']';
             }
-
-            $files[] = $compiledFile;
-
-            $hash .= '|'
-                . $compiledFile
-                . ':'
-                . $classDefinition->getClassEntry()
-                . '['
-                . implode('|', $methods)
-                . ']';
         }
 
         $hash                = md5($hash);

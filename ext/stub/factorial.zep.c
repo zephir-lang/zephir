@@ -28,7 +28,7 @@ ZEPHIR_INIT_CLASS(Stub_Factorial)
 PHP_METHOD(Stub_Factorial, intIterativeFactorial)
 {
 	zend_bool _0;
-	long result, i = 0;
+	zend_long result, i = 0;
 	zval *n_param = NULL;
 	zend_long n, _1, _2;
 

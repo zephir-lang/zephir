@@ -88,7 +88,9 @@ class ClosureArrow extends Closure
          */
         $bindThis = self::astReferencesThis($expression['right']);
         if ($bindThis) {
-            $classDefinition->setEnclosingClassDefinition($compilationContext->classDefinition);
+            $classDefinition->setEnclosingClassDefinition(
+                self::enclosingUserClass($compilationContext->classDefinition)
+            );
 
             // Ensure this_ptr is declared and not stripped in the enclosing method
             if ($compilationContext->symbolTable->hasVariable('this')) {

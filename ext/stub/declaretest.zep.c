@@ -99,7 +99,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare6)
 
 PHP_METHOD(Stub_DeclareTest, testDeclare7)
 {
-	long a;
+	zend_long a;
 	a = 1;
 	RETURN_LONG(a);
 }

@@ -371,6 +371,16 @@ class FunctionCall extends Call
         }
 
         /**
+         * Which parameters the callee takes by reference has to be known
+         * before the arguments are compiled, not only when markReferences()
+         * wraps them: a subscript argument for one of those has to be fetched
+         * as a borrowed pointer or the write never reaches the container.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2682
+         */
+        $this->byReferenceParameters = $this->byReferenceParameterPositions($funcName);
+
+        /**
          * Resolve parameters
          */
         if (isset($expression['parameters'])) {
@@ -495,8 +505,20 @@ class FunctionCall extends Call
         if (is_array($references)) {
             foreach ($references as $reference) {
                 $variable = $compilationContext->symbolTable->getVariable($reference, $compilationContext);
+
+                /**
+                 * A write-context slot is the storage itself, so it is unwrapped
+                 * again rather than released, and only when nothing else kept
+                 * the reference. See ZEPHIR_UNREF_WRITE(). Everything else was
+                 * wrapped unconditionally by ZEPHIR_MAKE_REF() and is unwrapped
+                 * the same way.
+                 */
+                $unref = $variable->isWriteContextReference() && $variable->isDoublePointer()
+                    ? 'ZEPHIR_UNREF_WRITE('
+                    : 'ZEPHIR_UNREF(';
+
                 $compilationContext->codePrinter->output(
-                    'ZEPHIR_UNREF(' . $compilationContext->backend->getVariableCode($variable) . ');'
+                    $unref . $compilationContext->backend->getVariableCode($variable) . ');'
                 );
             }
         }
@@ -588,6 +610,35 @@ class FunctionCall extends Call
     }
 
     /**
+     * Positions of the parameters this function takes by reference.
+     *
+     * Mirrors the conditions markReferences() applies, so the two cannot
+     * disagree about which argument is a reference.
+     *
+     * @return array<int, true>
+     */
+    protected function byReferenceParameterPositions(string $funcName): array
+    {
+        if ($this->isBuiltInFunction($funcName)) {
+            return [];
+        }
+
+        $reflector = $this->getReflector($funcName);
+        if (null === $reflector) {
+            return [];
+        }
+
+        $positions = [];
+        foreach ($reflector->getParameters() as $position => $parameter) {
+            if ($parameter->isPassedByReference()) {
+                $positions[$position] = true;
+            }
+        }
+
+        return $positions;
+    }
+
+    /**
      * Once the function processes the parameters we should mark
      * specific parameters to be passed by reference.
      *
@@ -630,12 +681,51 @@ class FunctionCall extends Call
                                 continue;
                             }
 
+                            /**
+                             * The callee writes through the reference, so this is
+                             * a write however much it reads like a read here.
+                             * Without the record the variable looks
+                             * never-assigned to the compiler.
+                             *
+                             * @see https://github.com/zephir-lang/zephir/issues/2654
+                             */
                             $variable = $compilationContext->symbolTable->getVariable($parameters[$n - 1]);
                             if ($variable) {
+                                $variable->increaseMutates();
                                 $variable->setDynamicTypes('undefined');
                                 $referenceSymbol = $compilationContext->backend->getVariableCode($variable);
-                                $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF(' . $referenceSymbol . ');');
-                                $references[] = $parameters[$n - 1];
+
+                                if ($variable->isWriteContextReference()) {
+                                    /**
+                                     * A subscript fetched in write context comes
+                                     * back as a reference into a native array
+                                     * container, and as the owned offsetGet()
+                                     * result for an ArrayAccess one, so only the
+                                     * second needs wrapping.
+                                     *
+                                     * Only a slot is registered for the unwrap.
+                                     * A value fetched out of a container is not:
+                                     * the reference there belongs to the
+                                     * container as much as to the argument, and
+                                     * ZVAL_UNREF() would efree what it is still
+                                     * pointing at.
+                                     *
+                                     * @see https://github.com/zephir-lang/zephir/issues/2682
+                                     * @see https://github.com/zephir-lang/zephir/issues/2691
+                                     */
+                                    $compilationContext->codePrinter->output(
+                                        'ZEPHIR_MAKE_WRITE_REF(' . $referenceSymbol . ');'
+                                    );
+
+                                    if ($variable->isDoublePointer()) {
+                                        $references[] = $parameters[$n - 1];
+                                    }
+                                } else {
+                                    $compilationContext->codePrinter->output(
+                                        'ZEPHIR_MAKE_REF(' . $referenceSymbol . ');'
+                                    );
+                                    $references[] = $parameters[$n - 1];
+                                }
                             }
                         }
                     }
