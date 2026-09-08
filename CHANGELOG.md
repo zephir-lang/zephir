@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Widened the `conditional-initialization` warning to every local that can be read before it is assigned, instead of only one assigned exactly once in a deeper branch [#2679](https://github.com/zephir-lang/zephir/issues/2679)
 
 ### Fixed
+- Fixed a compile error being replaced by a deprecation notice on PHP 8.4 and later, by marking six implicitly nullable parameters as nullable and letting a deprecation report as PHP reports it [#2663](https://github.com/zephir-lang/zephir/issues/2663)
 - Fixed a by-reference call argument reading a copy of the container instead of its storage slot, which lost or aliased a write to a shared array, reported a missing element PHP creates, and freed the property's array when the callee replaced its argument [#2691](https://github.com/zephir-lang/zephir/issues/2691)
 - Fixed a by-reference subscript argument borrowing the container value, which lost the write whenever the value was shared and leaked the `offsetGet()` result for an `ArrayAccess` container [#2691](https://github.com/zephir-lang/zephir/issues/2691)
 - Fixed a read-only subscript read of an `ArrayAccess` object releasing the value `offsetGet()` owns, which leaked 96 bytes per call or corrupted the heap, and limited the read-only shortcut to a container proven to hold a native array [#2682](https://github.com/zephir-lang/zephir/issues/2682)
