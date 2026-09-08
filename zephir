@@ -55,6 +55,19 @@ if (!class_exists('Composer\Autoload\ClassLoader', false)) {
 
 set_error_handler(static function ($code, $message, $file = '', $line = -1) {
     if (error_reporting() & $code) {
+        /**
+         * A deprecation is a diagnostic, not a failure, and PHP reports one
+         * from the compiler. For a lazily autoloaded class that is the moment
+         * of its first use, so throwing here replaces the exception that was
+         * being constructed at a `throw new ...` site and the compile error it
+         * carried is lost. Hand it back and let PHP report it as PHP would.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2663
+         */
+        if (E_DEPRECATED === $code || E_USER_DEPRECATED === $code) {
+            return false;
+        }
+
         throw new ErrorException($message, 0, $code, (string) $file, $line);
     }
 });
