@@ -990,7 +990,14 @@ int zephir_update_property_array(zval *object, const char *property, uint32_t pr
 		zval new_zv;
 		ZVAL_DUP(&new_zv, &tmp);
 		ZVAL_COPY_VALUE(&tmp, &new_zv);
-		Z_TRY_DELREF(new_zv);
+		/**
+		 * ZVAL_DUP() leaves the copy with the single reference `tmp` now holds,
+		 * and that is the reference the zval_ptr_dtor() at the end of this
+		 * function releases. Dropping it here left the refcount at zero, so the
+		 * dtor decremented zero instead of freeing: the separated array, and
+		 * every object in it, leaked. The branch above only survives the same
+		 * Z_TRY_DELREF() because it puts the reference straight back.
+		 */
 		separated = 1;
 	}
 

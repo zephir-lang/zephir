@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+- Fixed `zephir_update_property_array()` leaking the separated array, and every object it held, on the first write to an array property [#2698](https://github.com/zephir-lang/zephir/issues/2698)
+
 ## [1.4.0] - 2026-09-08
 
 ### Added
