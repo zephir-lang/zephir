@@ -15,6 +15,7 @@ env:
   RE2C_VERSION: 2.2
   ZEPHIR_PARSER_VERSION: 2.8.0
   PSR_VERSION: 1.2.0
+  XDEBUG_VERSION: 3.5.3
   CACHE_DIR: .cache
 
 jobs:
@@ -84,7 +85,15 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '${{ matrix.php }}'
-          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
+          # Xdebug is pinned rather than left to `coverage: xdebug`, which
+          # installs the newest build the platform offers. On Ubuntu that is
+          # the ondrej PPA, which ships 3.6.0alpha1 for PHP >= 8.2, and that
+          # alpha segfaults (exit 139) the moment PHPUnit starts collecting
+          # with --coverage-php. Every other leg already resolves to 3.5.3, so
+          # the pin only changes the Linux 8.2-8.5 legs. It wins over the
+          # `coverage:` input below because setup-php's add_extension() is a
+          # no-op once the extension is loaded, and `extensions:` runs first.
+          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}, xdebug-${{ env.XDEBUG_VERSION }}
           tools: pecl, phpize, php-config
           coverage: xdebug
           # variables_order: https://github.com/zephir-lang/zephir/pull/1537
