@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Added
 - Added PHP attributes on a class, interface, trait, property, class constant, method and parameter, reported by Reflection as they are for a PHP class [#2466](https://github.com/zephir-lang/zephir/issues/2466)
 - Added `#[\Attribute]` support, so a Zephir class can be used as an attribute class [#2466](https://github.com/zephir-lang/zephir/issues/2466)
+- Added PHP attributes on a top-level function and its parameters. On a ZTS PHP up to 8.2 a *named* argument of a function attribute is reported positionally, because php-src's `function_copy_ctor()` copies an attribute argument's value without its name; php-src 8.3 removed that copy and reports the name [#2466](https://github.com/zephir-lang/zephir/issues/2466)
 
 ### Changed
 - Attribute arguments are folded at compile time, so an argument that is not a constant expression is a compile error [#2466](https://github.com/zephir-lang/zephir/issues/2466)

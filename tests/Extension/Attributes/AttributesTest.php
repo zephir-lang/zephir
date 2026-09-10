@@ -204,8 +204,22 @@ final class AttributesTest extends TestCase
         $function = new \ReflectionFunction('Stub\\Attributes\\tagged');
 
         $this->assertSame([Marker::class], $this->names($function->getAttributes()));
+
+        // A ZTS php-src up to 8.2 re-creates every internal function once per
+        // thread in function_copy_ctor() (Zend/zend.c). Its attribute loop is
+        // `ZVAL_DUP(&attr->args[i].value, &old_attr->args[i].value)`: the value
+        // is carried over, args[i].name never is, so a named argument arrives
+        // positionally. 8.3 deleted that copy ctor -- the function table is
+        // copied with a NULL ctor and internal functions are shared -- and the
+        // name survives. Nothing on this side can influence it: the copy runs
+        // from zend_post_startup(), after every module's MINIT. A non-ZTS build
+        // never copies at all, which is why only the ts legs see this.
+        $expected = PHP_ZTS && PHP_VERSION_ID < 80300
+            ? ['on-a-function', 7]
+            : ['on-a-function', 'number' => 7];
+
         $this->assertSame(
-            ['on-a-function', 'number' => 7],
+            $expected,
             $function->getAttributes()[0]->getArguments(),
             '`4 + 3` is folded at compile time'
         );
