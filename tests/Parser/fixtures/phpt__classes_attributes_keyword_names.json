@@ -1,0 +1,223 @@
+[
+    {
+        "type": "class",
+        "name": "A",
+        "abstract": 0,
+        "final": 0,
+        "file": "phpt__classes_attributes_keyword_names.zep",
+        "line": 2,
+        "char": 5,
+        "attributes": [
+            {
+                "type": "attribute",
+                "name": "Deprecated",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 1,
+                "char": 14
+            }
+        ]
+    },
+    {
+        "type": "class",
+        "name": "B",
+        "abstract": 0,
+        "final": 0,
+        "file": "phpt__classes_attributes_keyword_names.zep",
+        "line": 5,
+        "char": 5,
+        "attributes": [
+            {
+                "type": "attribute",
+                "name": "Deprecated",
+                "arguments": [
+                    {
+                        "parameter": {
+                            "type": "string",
+                            "value": "since 2.0",
+                            "file": "phpt__classes_attributes_keyword_names.zep",
+                            "line": 4,
+                            "char": 23
+                        },
+                        "file": "phpt__classes_attributes_keyword_names.zep",
+                        "line": 4,
+                        "char": 23
+                    }
+                ],
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 4,
+                "char": 24
+            }
+        ]
+    },
+    {
+        "type": "class",
+        "name": "C",
+        "abstract": 0,
+        "final": 0,
+        "file": "phpt__classes_attributes_keyword_names.zep",
+        "line": 8,
+        "char": 5,
+        "attributes": [
+            {
+                "type": "attribute",
+                "name": "Deprecated",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 7,
+                "char": 13
+            }
+        ]
+    },
+    {
+        "type": "class",
+        "name": "D",
+        "abstract": 0,
+        "final": 0,
+        "file": "phpt__classes_attributes_keyword_names.zep",
+        "line": 11,
+        "char": 5,
+        "attributes": [
+            {
+                "type": "attribute",
+                "name": "Deprecated",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 10,
+                "char": 13
+            }
+        ]
+    },
+    {
+        "type": "class",
+        "name": "E",
+        "abstract": 0,
+        "final": 0,
+        "file": "phpt__classes_attributes_keyword_names.zep",
+        "line": 14,
+        "char": 5,
+        "attributes": [
+            {
+                "type": "attribute",
+                "name": "Final",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 13,
+                "char": 8
+            },
+            {
+                "type": "attribute",
+                "name": "Static",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 13,
+                "char": 16
+            },
+            {
+                "type": "attribute",
+                "name": "Internal",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 13,
+                "char": 26
+            },
+            {
+                "type": "attribute",
+                "name": "Readonly",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 13,
+                "char": 36
+            },
+            {
+                "type": "attribute",
+                "name": "Default",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 13,
+                "char": 45
+            },
+            {
+                "type": "attribute",
+                "name": "Case",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 13,
+                "char": 51
+            },
+            {
+                "type": "attribute",
+                "name": "Empty",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 13,
+                "char": 58
+            },
+            {
+                "type": "attribute",
+                "name": "Void",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 13,
+                "char": 64
+            },
+            {
+                "type": "attribute",
+                "name": "Reverse",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 13,
+                "char": 73
+            },
+            {
+                "type": "attribute",
+                "name": "Inline",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 13,
+                "char": 81
+            }
+        ]
+    },
+    {
+        "type": "class",
+        "name": "F",
+        "abstract": 0,
+        "final": 0,
+        "file": "phpt__classes_attributes_keyword_names.zep",
+        "line": 17,
+        "char": 5,
+        "attributes": [
+            {
+                "type": "attribute",
+                "name": "\\Deprecated",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 16,
+                "char": 14
+            }
+        ]
+    },
+    {
+        "type": "class",
+        "name": "G",
+        "abstract": 0,
+        "final": 0,
+        "file": "phpt__classes_attributes_keyword_names.zep",
+        "line": 20,
+        "char": 5,
+        "attributes": [
+            {
+                "type": "attribute",
+                "name": "App\\Case",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 19,
+                "char": 11
+            }
+        ]
+    },
+    {
+        "type": "class",
+        "name": "H",
+        "abstract": 0,
+        "final": 0,
+        "file": "phpt__classes_attributes_keyword_names.zep",
+        "line": 23,
+        "char": 5,
+        "attributes": [
+            {
+                "type": "attribute",
+                "name": "Override",
+                "file": "phpt__classes_attributes_keyword_names.zep",
+                "line": 22,
+                "char": 11
+            }
+        ]
+    }
+]

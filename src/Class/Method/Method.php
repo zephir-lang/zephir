@@ -17,6 +17,7 @@ use ReflectionException;
 use Zephir\Branch;
 use Zephir\BranchManager;
 use Zephir\Cache\Manager;
+use Zephir\Class\Attribute;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Definition\GeneratorTransformer;
 use Zephir\Class\Entry as ClassEntry;
@@ -79,6 +80,8 @@ class Method
      * Statement types that loop, and so can capture a `break`/`continue`.
      */
     private const LOOP_TYPES = ['while', 'do-while', 'for', 'loop'];
+
+    private ?array $attributes = null;
 
     public bool $optimizable = true;
 
@@ -2378,6 +2381,16 @@ class Method
     }
 
     /**
+     * Whether the call gatherer pass ran, which it only does for a method with
+     * a body. Callers that reach for the pass outside compilation have to ask,
+     * because the getter above is not nullable.
+     */
+    public function hasCallGathererPass(): bool
+    {
+        return null !== $this->callGathererPass;
+    }
+
+    /**
      * Returns the class definition where the method was declared.
      */
     public function getClassDefinition(): ?Definition
@@ -2988,6 +3001,17 @@ class Method
     public function getExpression(): array
     {
         return $this->expression ?: [];
+    }
+
+    /**
+     * The `#[...]` attributes written on this method. Parameter attributes are
+     * read straight off the raw parameter nodes, which Parameters keeps as-is.
+     *
+     * @return Attribute[]
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes ??= Attribute::listFromNode($this->expression);
     }
 
     /**

@@ -1,0 +1,44 @@
+--TEST--
+#[\AllowDynamicProperties] takes effect on a compiled class, whose flag no engine validator would have set (#2466)
+--SKIPIF--
+<?php if (PHP_VERSION_ID < 80200) { echo "skip #[\\AllowDynamicProperties] is PHP 8.2+"; }
+--FILE--
+namespace Stub\Flags;
+
+#[\AllowDynamicProperties]
+class Loose
+{
+    public int declared = 1;
+}
+--FILE--
+namespace Stub\Flags;
+
+class Strict
+{
+    public int declared = 1;
+}
+--USAGE--
+// A Zephir class is registered at MINIT, where the engine's attribute
+// validator never runs, so the ZEND_ACC_ALLOW_DYNAMIC_PROPERTIES flag has to
+// be co-emitted. Without it the attribute would be readable but inert.
+set_error_handler(function ($no, $str) {
+    echo "NOTICE: ", $str, "\n";
+
+    return true;
+});
+
+$loose = new Stub\Flags\Loose();
+$loose->extra = 1;
+echo "loose=", $loose->extra, "\n";
+
+$strict = new Stub\Flags\Strict();
+$strict->extra = 1;
+echo "strict=", $strict->extra, "\n";
+
+restore_error_handler();
+echo "attribute-readable=", (new ReflectionClass("Stub\\Flags\\Loose"))->getAttributes()[0]->getName(), "\n";
+--EXPECT--
+loose=1
+NOTICE: Creation of dynamic property Stub\Flags\Strict::$extra is deprecated
+strict=1
+attribute-readable=AllowDynamicProperties

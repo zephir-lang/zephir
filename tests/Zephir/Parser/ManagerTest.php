@@ -32,6 +32,7 @@ final class ManagerTest extends TestCase
 
     public function testOutdatedExtensionIsNotUsable(): void
     {
+        $this->assertFalse(Manager::isExtensionUsable('2.7.0'));
         $this->assertFalse(Manager::isExtensionUsable('2.6.0'));
         $this->assertFalse(Manager::isExtensionUsable('2.0.4'));
         $this->assertFalse(Manager::isExtensionUsable('1.5.0'));
@@ -40,7 +41,6 @@ final class ManagerTest extends TestCase
     public function testCurrentAndNewerExtensionsAreUsable(): void
     {
         $this->assertTrue(Manager::isExtensionUsable(Manager::MINIMUM_PARSER_VERSION));
-        $this->assertTrue(Manager::isExtensionUsable('2.7.0'));
         $this->assertTrue(Manager::isExtensionUsable('2.8.0'));
         $this->assertTrue(Manager::isExtensionUsable('3.0.0'));
     }
@@ -49,6 +49,6 @@ final class ManagerTest extends TestCase
     {
         // Guards against raising a grammar feature without raising the floor:
         // the released parser that introduced it is the minimum.
-        $this->assertSame('2.7.0', Manager::MINIMUM_PARSER_VERSION);
+        $this->assertSame('2.8.0', Manager::MINIMUM_PARSER_VERSION);
     }
 }

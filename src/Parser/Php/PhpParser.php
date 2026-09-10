@@ -114,6 +114,34 @@ final class PhpParser
     ];
 
     /**
+     * Keyword tokens accepted as an attribute name, mapped to the canonical
+     * spelling the node records. Zephir matches its keywords
+     * case-insensitively, so `#[Deprecated]` arrives as T_DEPRECATED and
+     * `#[deprecated]` normalizes to the same name — lossless, because PHP looks
+     * classes up case-insensitively.
+     *
+     * This list must stay identical to the `xx_attribute_name ::= <KEYWORD>`
+     * rules in the C grammar. It deliberately omits every keyword whose token
+     * matches two spellings (T_TYPE_DOUBLE is both `double` and `float`,
+     * T_TYPE_BOOL both `bool` and `boolean`, T_FUNCTION both `function` and
+     * `fn`), because a mapping there would silently rewrite `#[Float]` to
+     * `#[Double]`. Such a name must be written qualified.
+     */
+    private const ATTRIBUTE_NAME_KEYWORDS = [
+        TokenType::T_DEPRECATED => 'Deprecated',
+        TokenType::T_FINAL      => 'Final',
+        TokenType::T_INTERNAL   => 'Internal',
+        TokenType::T_READONLY   => 'Readonly',
+        TokenType::T_STATIC     => 'Static',
+        TokenType::T_DEFAULT    => 'Default',
+        TokenType::T_CASE       => 'Case',
+        TokenType::T_EMPTY      => 'Empty',
+        TokenType::T_VOID       => 'Void',
+        TokenType::T_REVERSE    => 'Reverse',
+        TokenType::T_INLINE     => 'Inline',
+    ];
+
+    /**
      * Max depth for nested expressions. The C extension turns very deep nesting
      * into an error node, because its parser stack only grows up to the process
      * memory limit. This does the same, so wild input returns an error node
@@ -340,11 +368,135 @@ final class PhpParser
                 return $this->parseInterface();
             case TokenType::T_TRAIT:
                 return $this->parseTrait();
+            case TokenType::T_ATTRIBUTE_OPEN:
+                return $this->parseAttributedTopStatement();
             default:
                 break;
         }
 
         $this->syntaxError();
+    }
+
+    /**
+     * `#[Attr]` prefix on a top-level declaration. Only the four declarations
+     * the C grammar wraps are accepted, so `#[A] namespace X;` stays a syntax
+     * error. A docblock is its own `comment` statement and therefore precedes
+     * the attributes; the reverse order is a syntax error on both backends.
+     */
+    private function parseAttributedTopStatement(): array
+    {
+        $attributes = $this->parseAttributeGroupList();
+
+        switch ($this->peekType()) {
+            case TokenType::T_ABSTRACT:
+            case TokenType::T_FINAL:
+            case TokenType::T_CLASS:
+                return $this->attachPrefix($this->parseClass(), null, $attributes);
+            case TokenType::T_FUNCTION:
+                return $this->attachPrefix($this->parseFunction(), null, $attributes);
+            case TokenType::T_INTERFACE:
+                return $this->attachPrefix($this->parseInterface(), null, $attributes);
+            case TokenType::T_TRAIT:
+                return $this->attachPrefix($this->parseTrait(), null, $attributes);
+            default:
+                break;
+        }
+
+        $this->syntaxError();
+    }
+
+    /**
+     * Bolts the `docblock` / `attributes` prefix keys onto an already built host
+     * node. Mirrors xx_ret_attach_prefix(): both keys are *updated*, so a
+     * `docblock` the member baked in itself keeps its original position, while
+     * `attributes` — never present beforehand — is appended last, exactly like
+     * the `variadic` flag on a parameter.
+     *
+     * @param list<array>|null $attributes
+     */
+    private function attachPrefix(array $node, ?Token $docblock, ?array $attributes): array
+    {
+        if ($docblock !== null) {
+            $node['docblock'] = $this->remap((string) $docblock->value);
+        }
+
+        if ($attributes !== null) {
+            $node['attributes'] = $attributes;
+        }
+
+        return $node;
+    }
+
+    /**
+     * One or more `#[...]` groups, flattened into a single list: `#[A] #[B]` and
+     * `#[A, B]` are equivalent, because the grouping carries no meaning in PHP
+     * either. Never empty — the caller has already seen `#[`.
+     *
+     * @return list<array>
+     */
+    private function parseAttributeGroupList(): array
+    {
+        $attributes = [];
+        do {
+            $this->expect(TokenType::T_ATTRIBUTE_OPEN);
+            $attributes[] = $this->parseAttribute();
+            while ($this->accept(TokenType::T_COMMA)) {
+                $attributes[] = $this->parseAttribute();
+            }
+            $this->expect(TokenType::T_SBRACKET_CLOSE);
+        } while ($this->check(TokenType::T_ATTRIBUTE_OPEN));
+
+        return $attributes;
+    }
+
+    /**
+     * A single attribute. Arguments reuse the call-argument nodes, so a named
+     * argument (`key: expr`) needs no special handling.
+     *
+     * Position is stamped before the delimiter that follows the attribute (`,`
+     * or `]`) is consumed, which is where the C grammar's reduce happens.
+     */
+    private function parseAttribute(): array
+    {
+        $name      = $this->parseAttributeName();
+        $arguments = $this->check(TokenType::T_PARENTHESES_OPEN)
+            ? $this->parseCallArguments()
+            : null;
+
+        $node = [
+            'type' => 'attribute',
+            'name' => $this->remap($name),
+        ];
+        if ($arguments !== null) {
+            $node['arguments'] = $arguments;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
+    }
+
+    /**
+     * Zephir matches its keywords case-insensitively, so an attribute named
+     * after one arrives as that keyword token instead of an identifier. A
+     * keyword token carries no text, so the canonical spelling is supplied
+     * here, exactly as the `xx_attribute_name ::= <KEYWORD>` rules do.
+     *
+     * A keyword terminal that matches two spellings is deliberately absent, so
+     * such a name must be written qualified — see ATTRIBUTE_NAME_KEYWORDS.
+     */
+    private function parseAttributeName(): string
+    {
+        $type = $this->peekType();
+
+        if (isset(self::ATTRIBUTE_NAME_KEYWORDS[$type])) {
+            $this->advance();
+
+            return self::ATTRIBUTE_NAME_KEYWORDS[$type];
+        }
+
+        return (string) $this->expectNameToken()->value;
     }
 
     private function parseComment(): array
@@ -573,11 +725,36 @@ final class PhpParser
 
     private function parseClassMember(): array
     {
-        $docblock = null;
+        $leadingDocblock = null;
         if ($this->check(TokenType::T_COMMENT)) {
-            $docblock = $this->advance();
+            $leadingDocblock = $this->advance();
         }
 
+        if (!$this->check(TokenType::T_ATTRIBUTE_OPEN)) {
+            return $this->parseClassMemberInner($leadingDocblock);
+        }
+
+        $attributes = $this->parseAttributeGroupList();
+
+        /*
+         * A docblock scanned BEFORE the attributes is re-attached once the
+         * member node is built, so it lands in the key tail; one scanned after
+         * them is passed down and keeps its inline position. The C grammar
+         * splits the same way, because only the leading form needs a wrapper
+         * rule — the trailing one is already covered by the member's own
+         * COMMENT(C) variants.
+         */
+        $inlineDocblock = $this->check(TokenType::T_COMMENT) ? $this->advance() : null;
+
+        return $this->attachPrefix(
+            $this->parseClassMemberInner($inlineDocblock),
+            $leadingDocblock,
+            $attributes
+        );
+    }
+
+    private function parseClassMemberInner(?Token $docblock): array
+    {
         if ($this->check(TokenType::T_CONST)) {
             return $this->parseClassConst($docblock);
         }
@@ -675,16 +852,36 @@ final class PhpParser
         $methods   = [];
         $constants = [];
         while (!$this->check(TokenType::T_BRACKET_CLOSE)) {
-            $docblock = null;
+            $leadingDocblock = null;
             if ($this->check(TokenType::T_COMMENT)) {
-                $docblock = $this->advance();
+                $leadingDocblock = $this->advance();
             }
+
+            // Interface members do not flow through parseClassMember(), so the
+            // same two-slot docblock/attribute split is repeated here.
+            $attributes = null;
+            $docblock   = $leadingDocblock;
+            if ($this->check(TokenType::T_ATTRIBUTE_OPEN)) {
+                $attributes      = $this->parseAttributeGroupList();
+                $docblock        = $this->check(TokenType::T_COMMENT) ? $this->advance() : null;
+            } else {
+                $leadingDocblock = null;
+            }
+
             if ($this->check(TokenType::T_CONST)) {
-                $constants[] = $this->parseClassConst($docblock);
+                $constants[] = $this->attachPrefix(
+                    $this->parseClassConst($docblock),
+                    $leadingDocblock,
+                    $attributes
+                );
                 continue;
             }
             $visibility = $this->parseVisibilityList();
-            $methods[]  = $this->parseInterfaceMethod($visibility, $docblock);
+            $methods[]  = $this->attachPrefix(
+                $this->parseInterfaceMethod($visibility, $docblock),
+                $leadingDocblock,
+                $attributes
+            );
         }
 
         // The interface_definition non-terminal reduces with the closing `}` as
@@ -974,13 +1171,29 @@ final class PhpParser
             return null;
         }
 
-        $params = [$this->parseParameter()];
+        $params = [$this->parseAttributedParameter()];
         while ($this->accept(TokenType::T_COMMA)) {
-            $params[] = $this->parseParameter();
+            $params[] = $this->parseAttributedParameter();
         }
         $this->expect(TokenType::T_PARENTHESES_CLOSE);
 
         return $params;
+    }
+
+    /**
+     * A parameter with an optional `#[Attr]` prefix. Because the parameter list
+     * is shared, this one method covers methods, interface methods, free
+     * functions and closures.
+     */
+    private function parseAttributedParameter(): array
+    {
+        if (!$this->check(TokenType::T_ATTRIBUTE_OPEN)) {
+            return $this->parseParameter();
+        }
+
+        $attributes = $this->parseAttributeGroupList();
+
+        return $this->attachPrefix($this->parseParameter(), null, $attributes);
     }
 
     /** @return list<array>|null statement list, or null for an empty `{}` / `;` body */

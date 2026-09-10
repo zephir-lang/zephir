@@ -65,11 +65,11 @@ PHP_METHOD(Stub_Bench, __construct)
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 42);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 20, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 26, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "hello");
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 21, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 27, &_1);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -186,7 +186,7 @@ PHP_METHOD(Stub_Bench, forOverIterator)
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 10);
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_CALL_METHOD(NULL, &iter, "__construct", NULL, 8, &_0);
+	ZEPHIR_CALL_METHOD(NULL, &iter, "__construct", NULL, 9, &_0);
 	zephir_check_call_status();
 	if (Z_TYPE_P(&iter) == IS_STRING) {
 		ZEPHIR_INIT_NVAR(&_1);
@@ -288,7 +288,7 @@ PHP_METHOD(Stub_Bench, forOverIteratorWithContinue)
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 10);
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_CALL_METHOD(NULL, &iter, "__construct", NULL, 8, &_0);
+	ZEPHIR_CALL_METHOD(NULL, &iter, "__construct", NULL, 9, &_0);
 	zephir_check_call_status();
 	if (Z_TYPE_P(&iter) == IS_STRING) {
 		ZEPHIR_INIT_NVAR(&_1);
@@ -367,7 +367,7 @@ PHP_METHOD(Stub_Bench, propertyReadLoop)
 			break;
 		}
 		ZEPHIR_OBS_NVAR(&_0$$3);
-		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 20, PH_NOISY_CC);
+		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 26, PH_NOISY_CC);
 		sum += zephir_get_intval(&_0$$3);
 		i++;
 	}
@@ -515,9 +515,9 @@ PHP_METHOD(Stub_Bench, newInstanceLoop)
 		}
 		ZEPHIR_INIT_NVAR(&obj);
 		object_init_ex(&obj, stub_bench_ce);
-		ZEPHIR_CALL_METHOD(NULL, &obj, "__construct", &_0, 9);
+		ZEPHIR_CALL_METHOD(NULL, &obj, "__construct", &_0, 10);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&_1$$3, &obj, "returnconst", &_2, 10);
+		ZEPHIR_CALL_METHOD(&_1$$3, &obj, "returnconst", &_2, 11);
 		zephir_check_call_status();
 		sum += zephir_get_numberval(&_1$$3);
 		i++;
@@ -803,7 +803,7 @@ PHP_METHOD(Stub_Bench, finalDispatchLoop)
 		if (!(i < n)) {
 			break;
 		}
-		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "finalreturnconst", &_1, 11);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "finalreturnconst", &_1, 12);
 		zephir_check_call_status();
 		sum += zephir_get_numberval(&_0$$3);
 		i++;
@@ -1455,7 +1455,7 @@ PHP_METHOD(Stub_Bench, countUnoptimizedLoop)
 			break;
 		}
 		ZVAL_LONG(&_0$$3, 0);
-		ZEPHIR_CALL_FUNCTION(&_1$$3, "count", &_2, 12, &arr, &_0$$3);
+		ZEPHIR_CALL_FUNCTION(&_1$$3, "count", &_2, 13, &arr, &_0$$3);
 		zephir_check_call_status();
 		sum += zephir_get_numberval(&_1$$3);
 		i++;
@@ -1529,7 +1529,7 @@ PHP_METHOD(Stub_Bench, implodeUnoptimizedLoop)
 		if (!(i < n)) {
 			break;
 		}
-		ZEPHIR_CALL_FUNCTION(&out, "implode", &_0, 13, &arr);
+		ZEPHIR_CALL_FUNCTION(&out, "implode", &_0, 14, &arr);
 		zephir_check_call_status();
 		i++;
 	}

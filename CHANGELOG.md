@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+- Added PHP attributes on a class, interface, trait, property, class constant, method and parameter, reported by Reflection as they are for a PHP class [#2466](https://github.com/zephir-lang/zephir/issues/2466)
+- Added `#[\Attribute]` support, so a Zephir class can be used as an attribute class [#2466](https://github.com/zephir-lang/zephir/issues/2466)
+
+### Changed
+- Attribute arguments are folded at compile time, so an argument that is not a constant expression is a compile error [#2466](https://github.com/zephir-lang/zephir/issues/2466)
+- Raised the minimum `ext-zephir_parser` to 2.8.0 for the attribute grammar [#2466](https://github.com/zephir-lang/zephir/issues/2466)
+
 ## [1.4.0] - 2026-09-08
 
 ### Added

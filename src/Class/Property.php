@@ -39,6 +39,8 @@ use function sprintf;
  */
 class Property
 {
+    private ?array $attributes = null;
+
     public function __construct(
         protected Definition $classDefinition,
         protected array $visibility,
@@ -381,6 +383,16 @@ class Property
     public function getOriginal(): ?array
     {
         return $this->original;
+    }
+
+    /**
+     * The `#[...]` attributes written on this property.
+     *
+     * @return Attribute[]
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes ??= Attribute::listFromNode($this->original);
     }
 
     public function getType()
