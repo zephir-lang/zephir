@@ -1,0 +1,64 @@
+--TEST--
+A persistent array default survives a copy written with a runtime built key (issue #2699)
+--FILE--
+namespace Zept;
+
+class Acl
+{
+    const MAP = ["*": true, "a": 1];
+
+    protected array components = ["*": true];
+
+    protected array nested = ["outer": ["inner": true]];
+
+    public function add(string key) -> void
+    {
+        let this->components[key] = true;
+    }
+
+    public function getComponents() -> array
+    {
+        return this->components;
+    }
+
+    public function getNested() -> array
+    {
+        return this->nested;
+    }
+}
+--USAGE--
+// A copy of a persistent default borrows the module's key strings and inherits
+// HASH_FLAG_STATIC_KEYS without addref'ing anything. Inserting a key that is
+// NOT interned clears the flag, and destroying the copy then releases the
+// borrowed keys. A literal offset is interned by the PHP compiler, so every
+// key below is built at runtime.
+for ($i = 0; $i < 200; $i++) {
+    $constant           = Zept\Acl::MAP;
+    $constant['c' . $i] = true;
+    unset($constant);
+
+    $acl = new Zept\Acl();
+
+    $components                    = $acl->getComponents();
+    $components['component-' . $i] = true;
+    unset($components);
+
+    $nested                         = $acl->getNested();
+    $nested['outer']['inner-' . $i] = true;
+    unset($nested);
+
+    $acl->add('Login-' . $i);
+    unset($acl);
+
+    // Encourage the allocator to reuse anything that was wrongly freed.
+    $churn = array_fill(0, 32, str_repeat('c', 8));
+    unset($churn);
+}
+
+echo json_encode(Zept\Acl::MAP), "\n";
+echo json_encode((new Zept\Acl())->getComponents()), "\n";
+echo json_encode((new Zept\Acl())->getNested()), "\n";
+--EXPECT--
+{"*":true,"a":1}
+{"*":true}
+{"outer":{"inner":true}}

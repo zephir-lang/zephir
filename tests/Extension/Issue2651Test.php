@@ -96,16 +96,20 @@ final class Issue2651Test extends TestCase
      * non-refcounted and the table carries HASH_FLAG_STATIC_KEYS, the first
      * cycle frees strings the shared table still points at, and every later read
      * is a use-after-free.
+     *
+     * The added keys are built rather than written: a literal offset is
+     * interned by the PHP compiler, which leaves HASH_FLAG_STATIC_KEYS set on
+     * the copy and hides the borrowed-key half of the same hazard (#2699).
      */
     public function testRepeatedSeparationDoesNotFreeTheSharedDefault(): void
     {
         for ($i = 0; $i < 200; ++$i) {
-            $preset       = (new Issue2651())->getPreset();
-            $preset['z']  = 'three';
+            $preset          = (new Issue2651())->getPreset();
+            $preset['z'.$i]  = 'three';
             unset($preset);
 
-            $constant      = Issue2651::MAP;
-            $constant['c'] = 'third';
+            $constant         = Issue2651::MAP;
+            $constant['c'.$i] = 'third';
             unset($constant);
 
             // Encourage the allocator to reuse anything that was wrongly freed.

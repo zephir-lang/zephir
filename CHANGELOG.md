@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Attribute arguments are folded at compile time, so an argument that is not a constant expression is a compile error [#2466](https://github.com/zephir-lang/zephir/issues/2466)
 - Raised the minimum `ext-zephir_parser` to 2.8.0 for the attribute grammar [#2466](https://github.com/zephir-lang/zephir/issues/2466)
 
+### Fixed
+- Fixed the persistent keys of an array class constant or array property default being freed by a copy written with a runtime built key, which corrupted the heap [#2699](https://github.com/zephir-lang/zephir/issues/2699)
+
 ## [1.4.0] - 2026-09-08
 
 ### Added
