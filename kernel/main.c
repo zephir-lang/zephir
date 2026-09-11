@@ -428,6 +428,41 @@ int zephir_declare_class_constant(zend_class_entry *ce, const char *name, size_t
 }
 
 /**
+ * A string owned by the module for the life of the process: persistent, and
+ * marked interned so that nothing may addref or release it.
+ *
+ * The interned mark is what lets zephir_persist_constant_zval() below keep
+ * HASH_FLAG_STATIC_KEYS truthful. zend_string_addref(), zend_string_delref()
+ * and zend_string_release() are all gated on !ZSTR_IS_INTERNED
+ * (Zend/zend_string.h), so zend_hash_add_new() neither addrefs such a key nor
+ * clears the flag, and a copy of the table that later loses the flag still
+ * cannot free what it only borrowed.
+ *
+ * These strings are deliberately NOT registered in CG(interned_strings).
+ * zend_string_init_interned() is the permanent allocator only until
+ * php_request_startup() swaps in zend_string_init_interned_request(), which
+ * ignores its `permanent` argument and returns a string freed at the end of the
+ * request (Zend/zend_string.c; under ZEND_RC_DEBUG it asserts on `permanent`,
+ * commented "at least dl() may do this"). An extension loaded with dl() -- which
+ * is how tests/ext-bootstrap.php loads this one -- runs MINIT after that swap.
+ * Stamping the flags on memory we allocated ourselves keeps the string's
+ * lifetime equal to the table's no matter when MINIT runs. php-src does the same
+ * in opcache's zend_set_str_gc_flags(), whose file-cache branch marks a string
+ * it allocated IS_STR_INTERNED without interning it.
+ */
+static zend_string *zephir_persist_string(const char *val, size_t len)
+{
+	/* zend_string_init(..., 1) already sets IS_STR_PERSISTENT. */
+	zend_string *str = zend_string_init(val, len, 1);
+
+	GC_ADD_FLAGS(str, IS_STR_INTERNED | IS_STR_PERMANENT);
+	/* An interned string is expected to carry its hash. */
+	zend_string_hash_val(str);
+
+	return str;
+}
+
+/**
  * Deep-copies a (request) zval into persistent, immutable memory so it can be
  * stored as a constant or as a property default on a persistently-registered
  * (internal) class. Only the value kinds that may appear in a Zephir array
@@ -442,28 +477,29 @@ int zephir_declare_class_constant(zend_class_entry *ce, const char *name, size_t
  *      fires and a userland write duplicates instead of mutating this table.
  *      The count never moves: SEPARATE_ARRAY releases via GC_TRY_DELREF(), a
  *      no-op on GC_IMMUTABLE, and ZVAL_COPY never addrefs a non-refcounted zval.
- *   2. every string inside is non-refcounted, and
+ *   2. every string inside, key or value, is interned, and
  *   3. the table carries HASH_FLAG_STATIC_KEYS.
  *
  * (2) and (3) exist because zend_array_dup()'s immutable branch is a raw memcpy
  * of the buckets with no addref on keys or values, while the copy it produces
- * gets pDestructor = ZVAL_PTR_DTOR. A refcounted string value or a non-static
- * string key would therefore be released by a copy that never referenced it,
- * freeing memory this table still points at.
+ * gets pDestructor = ZVAL_PTR_DTOR and inherits HASH_FLAG_STATIC_KEYS. That copy
+ * therefore borrows every string this table owns, and it keeps the flag only
+ * until something inserts a key that is not interned. From then on, destroying
+ * it releases every key it holds -- including the borrowed ones -- freeing
+ * memory this table still points at.
  *
  * @see https://github.com/zephir-lang/zephir/issues/2533
  * @see https://github.com/zephir-lang/zephir/issues/2651
+ * @see https://github.com/zephir-lang/zephir/issues/2699
  */
 static void zephir_persist_constant_zval(zval *dst, zval *src)
 {
 	switch (Z_TYPE_P(src)) {
 		case IS_STRING:
-			ZVAL_STR(dst, zend_string_init(Z_STRVAL_P(src), Z_STRLEN_P(src), 1));
-			GC_ADD_FLAGS(Z_STR_P(dst), IS_STR_PERSISTENT);
-			/* Non-refcounted, like opcache's `Z_TYPE_FLAGS_P(z) = 0`: a copy of the
-			 * owning array borrows this string without an addref and must never
-			 * release it. */
-			Z_TYPE_INFO_P(dst) = IS_STRING;
+			/* ZVAL_STR reads ZSTR_IS_INTERNED and stores IS_INTERNED_STRING_EX,
+			 * which is plain IS_STRING: non-refcounted, so a copy of the owning
+			 * array borrows this string without an addref. */
+			ZVAL_STR(dst, zephir_persist_string(Z_STRVAL_P(src), Z_STRLEN_P(src)));
 			break;
 
 		case IS_ARRAY: {
@@ -479,20 +515,19 @@ static void zephir_persist_constant_zval(zval *dst, zval *src)
 				zval copy;
 				zephir_persist_constant_zval(&copy, val);
 				if (key) {
-					zend_string *pkey = zend_string_init(ZSTR_VAL(key), ZSTR_LEN(key), 1);
-					GC_ADD_FLAGS(pkey, IS_STR_PERSISTENT);
-					zend_hash_add_new(ht, pkey, &copy);
-					zend_string_release(pkey);
+					/* No release afterwards: an interned key is not addref'd by
+					 * the insert, so there is no reference of ours to give back.
+					 * The table holds this key until the process exits. */
+					zend_hash_add_new(ht, zephir_persist_string(ZSTR_VAL(key), ZSTR_LEN(key)), &copy);
 				} else {
 					zend_hash_index_add_new(ht, idx, &copy);
 				}
 			} ZEND_HASH_FOREACH_END();
 
 			ZVAL_ARR(dst, ht);
-			/* A non-interned key cleared this flag on every insert above. Restore it
-			 * (as zend_hash_persist() does) so neither this table nor a copy made by
-			 * zend_array_dup() releases keys it does not own; the flag is inside
-			 * HASH_FLAG_MASK, so the copy inherits it. */
+			/* Set by zend_hash_init() and left alone by every insert above, since
+			 * every key is interned. Stated here because a copy of this table
+			 * inherits the flag and its correctness depends on it. */
 			HT_FLAGS(ht) |= HASH_FLAG_STATIC_KEYS;
 			GC_SET_REFCOUNT(ht, 2);
 			GC_ADD_FLAGS(ht, IS_ARRAY_IMMUTABLE);
@@ -950,8 +985,9 @@ void zephir_mark_class_constant_flags(zend_class_entry *ce, const char *constant
  *     zval_internal_ptr_dtor() asserts the string is not.
  *   - an ARRAY becomes the shared-immutable, NON-refcounted table
  *     zephir_persist_constant_zval() already builds for an array class constant
- *     (refcount 2 + IS_ARRAY_IMMUTABLE + HASH_FLAG_STATIC_KEYS + non-refcounted
- *     nested strings), which zval_internal_ptr_dtor() correctly leaves alone.
+ *     (refcount 2 + IS_ARRAY_IMMUTABLE + HASH_FLAG_STATIC_KEYS + interned,
+ *     non-refcounted nested strings), which zval_internal_ptr_dtor()
+ *     correctly leaves alone.
  *   - a scalar is copied by value and needs no allocation at all.
  *
  * Readers go through zend_get_attribute_value()'s ZVAL_COPY_OR_DUP, which for a
