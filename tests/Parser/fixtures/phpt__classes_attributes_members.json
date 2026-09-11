@@ -1,0 +1,347 @@
+[
+    {
+        "type": "class",
+        "name": "Members",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "plain",
+                    "default": {
+                        "type": "int",
+                        "value": "0",
+                        "file": "phpt__classes_attributes_members.zep",
+                        "line": 15,
+                        "char": 18
+                    },
+                    "file": "phpt__classes_attributes_members.zep",
+                    "line": 17,
+                    "char": 3,
+                    "attributes": [
+                        {
+                            "type": "attribute",
+                            "name": "Marker",
+                            "file": "phpt__classes_attributes_members.zep",
+                            "line": 14,
+                            "char": 10
+                        }
+                    ]
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "readonly"
+                    ],
+                    "type": "property",
+                    "name": "typed",
+                    "data-type": "int",
+                    "file": "phpt__classes_attributes_members.zep",
+                    "line": 20,
+                    "char": 3,
+                    "attributes": [
+                        {
+                            "type": "attribute",
+                            "name": "Marker",
+                            "arguments": [
+                                {
+                                    "parameter": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "phpt__classes_attributes_members.zep",
+                                        "line": 17,
+                                        "char": 12
+                                    },
+                                    "file": "phpt__classes_attributes_members.zep",
+                                    "line": 17,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "phpt__classes_attributes_members.zep",
+                            "line": 17,
+                            "char": 13
+                        },
+                        {
+                            "type": "attribute",
+                            "name": "Other",
+                            "file": "phpt__classes_attributes_members.zep",
+                            "line": 17,
+                            "char": 20
+                        }
+                    ]
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "reversed",
+                    "default": {
+                        "type": "int",
+                        "value": "0",
+                        "file": "phpt__classes_attributes_members.zep",
+                        "line": 24,
+                        "char": 22
+                    },
+                    "docblock": "**\n\t * Attribute then doc.\n\t *",
+                    "file": "phpt__classes_attributes_members.zep",
+                    "line": 26,
+                    "char": 7,
+                    "attributes": [
+                        {
+                            "type": "attribute",
+                            "name": "Marker",
+                            "file": "phpt__classes_attributes_members.zep",
+                            "line": 20,
+                            "char": 10
+                        }
+                    ]
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "unmarked",
+                    "default": {
+                        "type": "int",
+                        "value": "0",
+                        "file": "phpt__classes_attributes_members.zep",
+                        "line": 26,
+                        "char": 21
+                    },
+                    "file": "phpt__classes_attributes_members.zep",
+                    "line": 28,
+                    "char": 3
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "run",
+                    "file": "phpt__classes_attributes_members.zep",
+                    "line": 29,
+                    "last-line": 35,
+                    "char": 16,
+                    "attributes": [
+                        {
+                            "type": "attribute",
+                            "name": "Marker",
+                            "file": "phpt__classes_attributes_members.zep",
+                            "line": 28,
+                            "char": 10
+                        }
+                    ]
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "build",
+                    "file": "phpt__classes_attributes_members.zep",
+                    "line": 37,
+                    "last-line": 41,
+                    "char": 23,
+                    "docblock": "**\n\t * Doc then attribute.\n\t *",
+                    "attributes": [
+                        {
+                            "type": "attribute",
+                            "name": "Marker",
+                            "arguments": [
+                                {
+                                    "name": "key",
+                                    "parameter": {
+                                        "type": "string",
+                                        "value": "v",
+                                        "file": "phpt__classes_attributes_members.zep",
+                                        "line": 36,
+                                        "char": 17
+                                    },
+                                    "file": "phpt__classes_attributes_members.zep",
+                                    "line": 36,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "phpt__classes_attributes_members.zep",
+                            "line": 36,
+                            "char": 18
+                        }
+                    ]
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "unmarked",
+                    "file": "phpt__classes_attributes_members.zep",
+                    "line": 41,
+                    "last-line": 44,
+                    "char": 16
+                }
+            ],
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "PLAIN",
+                    "default": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__classes_attributes_members.zep",
+                        "line": 4,
+                        "char": 17
+                    },
+                    "file": "phpt__classes_attributes_members.zep",
+                    "line": 8,
+                    "char": 3,
+                    "attributes": [
+                        {
+                            "type": "attribute",
+                            "name": "Marker",
+                            "file": "phpt__classes_attributes_members.zep",
+                            "line": 3,
+                            "char": 10
+                        }
+                    ]
+                },
+                {
+                    "type": "const",
+                    "name": "DOCUMENTED",
+                    "default": {
+                        "type": "int",
+                        "value": "2",
+                        "file": "phpt__classes_attributes_members.zep",
+                        "line": 10,
+                        "char": 22
+                    },
+                    "file": "phpt__classes_attributes_members.zep",
+                    "line": 12,
+                    "char": 6,
+                    "docblock": "**\n\t * Doc then attribute.\n\t *",
+                    "attributes": [
+                        {
+                            "type": "attribute",
+                            "name": "Marker",
+                            "arguments": [
+                                {
+                                    "parameter": {
+                                        "type": "string",
+                                        "value": "c",
+                                        "file": "phpt__classes_attributes_members.zep",
+                                        "line": 9,
+                                        "char": 12
+                                    },
+                                    "file": "phpt__classes_attributes_members.zep",
+                                    "line": 9,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "phpt__classes_attributes_members.zep",
+                            "line": 9,
+                            "char": 13
+                        }
+                    ]
+                },
+                {
+                    "type": "const",
+                    "name": "UNMARKED",
+                    "default": {
+                        "type": "int",
+                        "value": "3",
+                        "file": "phpt__classes_attributes_members.zep",
+                        "line": 12,
+                        "char": 20
+                    },
+                    "file": "phpt__classes_attributes_members.zep",
+                    "line": 14,
+                    "char": 3
+                }
+            ],
+            "file": "phpt__classes_attributes_members.zep",
+            "line": 1,
+            "char": 6
+        },
+        "file": "phpt__classes_attributes_members.zep",
+        "line": 1,
+        "char": 6
+    },
+    {
+        "type": "interface",
+        "name": "Contract",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "handle",
+                    "file": "phpt__classes_attributes_members.zep",
+                    "line": 52,
+                    "last-line": 54,
+                    "char": 16,
+                    "attributes": [
+                        {
+                            "type": "attribute",
+                            "name": "Marker",
+                            "file": "phpt__classes_attributes_members.zep",
+                            "line": 51,
+                            "char": 10
+                        }
+                    ]
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "plain",
+                    "file": "phpt__classes_attributes_members.zep",
+                    "line": 54,
+                    "last-line": 55,
+                    "char": 16
+                }
+            ],
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "LIMIT",
+                    "default": {
+                        "type": "int",
+                        "value": "10",
+                        "file": "phpt__classes_attributes_members.zep",
+                        "line": 49,
+                        "char": 18
+                    },
+                    "file": "phpt__classes_attributes_members.zep",
+                    "line": 51,
+                    "char": 3,
+                    "attributes": [
+                        {
+                            "type": "attribute",
+                            "name": "Marker",
+                            "file": "phpt__classes_attributes_members.zep",
+                            "line": 48,
+                            "char": 10
+                        }
+                    ]
+                }
+            ],
+            "file": "phpt__classes_attributes_members.zep",
+            "line": 55,
+            "char": 1
+        },
+        "file": "phpt__classes_attributes_members.zep",
+        "line": 1,
+        "char": 6
+    }
+]

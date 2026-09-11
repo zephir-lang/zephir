@@ -16,6 +16,7 @@ namespace Zephir\Class\Definition;
 use ReflectionClass;
 use ReflectionException;
 use Zephir\AliasManager;
+use Zephir\Class\Attribute;
 use Zephir\Class\Constant;
 use Zephir\Class\Entry;
 use Zephir\Class\Method\Method;
@@ -130,6 +131,7 @@ final class Definition extends AbstractDefinition
     protected array $methods = [];
 
     protected array $originalNode = [];
+    private ?array $attributes  = null;
 
     protected ?Docblock $parsedDocblock = null;
 
@@ -548,6 +550,14 @@ final class Definition extends AbstractDefinition
         $codePrinter->outputBlankLine();
 
         /**
+         * Attach the attributes of the class itself and of every method and
+         * parameter. This has to precede zend_class_implements() below; see
+         * AttributeEmitter::emitClassLevel().
+         */
+        $attributeEmitter = new AttributeEmitter($compilationContext);
+        $attributeEmitter->emitClassLevel($this);
+
+        /**
          * Compile properties.
          */
         foreach ($this->getProperties() as $property) {
@@ -557,7 +567,13 @@ final class Definition extends AbstractDefinition
             }
 
             $property->compile($compilationContext);
+            /**
+             * A property declare is emitted without a trailing EOL, so this
+             * blank line terminates it — which is why the property's
+             * attributes can only be attached after it, unlike a constant's.
+             */
             $codePrinter->outputBlankLine();
+            $attributeEmitter->emitProperty($this, $property);
         }
 
         $initMethod = $this->getInitMethod();
@@ -579,6 +595,7 @@ final class Definition extends AbstractDefinition
             }
 
             $constant->compile($compilationContext);
+            $attributeEmitter->emitConstant($this, $constant);
             $codePrinter->outputBlankLine();
         }
 
@@ -1521,6 +1538,20 @@ final class Definition extends AbstractDefinition
     }
 
     /**
+     * The `#[...]` attributes written on the class, interface or trait itself.
+     *
+     * Memoized so the emitter and the stub generator share one instance: the
+     * emitter reduces each argument in place, and the stub generator renders
+     * the reduced form (it runs after code generation).
+     *
+     * @return Attribute[]
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes ??= Attribute::listFromNode($this->originalNode);
+    }
+
+    /**
      * Set the class' type (class/interface).
      */
     public function setType(string $type): void
@@ -1596,6 +1627,100 @@ final class Definition extends AbstractDefinition
      *
      * @see self::getMethodFromInterfaces()
      */
+    /**
+     * Whether a parent class or an implemented interface declares $name, which
+     * is what a `#[\Override]` on one of this class's own members needs in
+     * order to be overriding anything.
+     *
+     * Deliberately excludes this class's own members, unlike hasMethod() and
+     * friends. `$kind` is 'method', 'constant' or 'property' — the three
+     * targets PHP allows `#[\Override]` on.
+     */
+    public function hasInheritedMember(string $kind, string $name): bool
+    {
+        $parent = $this->resolveExtendsDefinition();
+
+        if (null !== $parent) {
+            $found = match ($kind) {
+                'method'   => $parent->hasMethod($name),
+                'constant' => $parent->hasConstant($name),
+                default    => $parent->hasProperty($name),
+            };
+
+            if ($found) {
+                return true;
+            }
+        }
+
+        return match ($kind) {
+            'method'   => $this->hasMethodFromInterfaces($name),
+            'constant' => $this->hasConstantFromInterfaces($name),
+            default    => false,
+        };
+    }
+
+    /**
+     * Whether every ancestor of this class is visible to
+     * {@see hasInheritedMember()}.
+     *
+     * PHP validates `#[\Override]` against the real class hierarchy, which it
+     * always has. Zephir may not: a parent or interface that is neither a
+     * Zephir class nor loadable by reflection is invisible here, and rejecting
+     * correct code is worse than missing the diagnostic, so the check is
+     * skipped instead.
+     *
+     * The two methods must agree on what "visible" means, which is why this
+     * requires each interface to have resolved to a full Definition — the only
+     * shape hasMethodFromInterfaces() can look inside.
+     */
+    public function hasResolvableAncestors(): bool
+    {
+        if ($this->extendsClass && null === $this->resolveExtendsDefinition()) {
+            return false;
+        }
+
+        $resolved = 0;
+        foreach ($this->getImplementedInterfaceDefinitions() as $interface) {
+            if ($interface instanceof self) {
+                ++$resolved;
+            }
+        }
+
+        return count($this->interfaces) === $resolved;
+    }
+
+    /**
+     * The parent definition with a reflection-backed placeholder resolved, the
+     * way hasMethod() already does for its own walk, or null when the parent
+     * cannot be seen at compile time.
+     *
+     * The registry is consulted before getExtendsClassDefinition(), because
+     * that setter rejects the `false` Compiler::getClassDefinition() returns
+     * for an unknown name.
+     */
+    private function resolveExtendsDefinition(): ?self
+    {
+        if (!$this->extendsClass) {
+            return null;
+        }
+
+        if (!$this->compiler->isClass($this->extendsClass) && !$this->compiler->isBundledClass($this->extendsClass)) {
+            return null;
+        }
+
+        $parent = $this->getExtendsClassDefinition();
+
+        if ($parent instanceof DefinitionRuntime) {
+            try {
+                $parent = $this->compiler->getInternalClassDefinition($parent->getName());
+            } catch (ReflectionException) {
+                return null;
+            }
+        }
+
+        return $parent instanceof self ? $parent : null;
+    }
+
     protected function hasMethodFromInterfaces(string $methodName): bool
     {
         foreach ($this->getImplementedInterfaceDefinitions() as $interface) {

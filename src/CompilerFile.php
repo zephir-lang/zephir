@@ -898,6 +898,13 @@ final class CompilerFile implements FileInterface
         $classDefinition = new Definition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->external);
 
+        /**
+         * Needed here, not only at the end of compile(): Definition::compile()
+         * reads the class node for its `#[...]` attributes, and it runs first.
+         * Idempotent with the assignment there, which stores the same node.
+         */
+        $classDefinition->setOriginalNode($topStatement);
+
         if (isset($topStatement['extends'])) {
             $classDefinition->setExtendsClass($this->getFullName($topStatement['extends']));
         }
@@ -1049,7 +1056,8 @@ final class CompilerFile implements FileInterface
                     new Constant(
                         $constant['name'],
                         $constant['default'] ?? null,
-                        $constant['docblock'] ?? null
+                        $constant['docblock'] ?? null,
+                        $constant
                     )
                 );
             }
@@ -1087,6 +1095,19 @@ final class CompilerFile implements FileInterface
     {
         $names = [];
         foreach ($topStatement['definition']['uses'] ?? [] as $useStatement) {
+            /**
+             * A use-trait statement is an ordinary class member, so the grammar
+             * accepts a `#[...]` prefix on it. PHP has no such attribute target,
+             * and silently dropping the attribute would be worse than saying so.
+             */
+            if (isset($useStatement['attributes'])) {
+                throw new CompilerException(
+                    'Attributes are not supported on a `use` statement; PHP allows them on a class, '
+                    . 'interface, trait, property, class constant, method or parameter',
+                    $useStatement['attributes'][0]
+                );
+            }
+
             foreach ($useStatement['traits'] as $traitReference) {
                 $names[] = $this->getFullName($traitReference['value']);
             }
@@ -1102,6 +1123,7 @@ final class CompilerFile implements FileInterface
     {
         $classDefinition = new Definition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->external);
+        $classDefinition->setOriginalNode($topStatement);
 
         if (isset($topStatement['extends'])) {
             foreach ($topStatement['extends'] as &$extend) {
@@ -1127,7 +1149,8 @@ final class CompilerFile implements FileInterface
                     $classConstant = new Constant(
                         $constant['name'],
                         $constant['default'] ?? null,
-                        $constant['docblock'] ?? null
+                        $constant['docblock'] ?? null,
+                        $constant
                     );
                     $classDefinition->addConstant($classConstant);
                 }

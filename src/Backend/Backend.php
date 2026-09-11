@@ -1189,6 +1189,74 @@ class Backend
     }
 
     /**
+     * Emits the MINIT-time attachment of one PHP attribute (issue #2466).
+     *
+     * `$target` is the pre-rendered `zephir_add_*_attribute(<target>` prefix;
+     * the attribute name and the argument count are appended here. With no
+     * arguments there is no handle worth keeping, so a single call is emitted
+     * and no local is declared — the same shape php-src's own generated arginfo
+     * uses.
+     *
+     * Otherwise one zval per argument is materialized in a shared block, an
+     * array through buildConstantArray() and a scalar through
+     * typedScalarInit(), and handed to the kernel setter, which makes it
+     * persistent in the one shape attr_free() can dispose of. Declarations are
+     * interleaved with statements, exactly as the array class-constant emitter
+     * already does.
+     *
+     * @param string                                      $target    e.g. 'zephir_add_class_attribute(stub_demo_ce'
+     * @param string                                      $name      escaped FQCN, e.g. 'Stub\\Attributes\\Marker'
+     * @param list<array{name: string|null, expr: array}> $arguments already reduced to literals
+     */
+    public function declareAttribute(
+        string $target,
+        string $name,
+        array $arguments,
+        CompilationContext $context
+    ): void {
+        $printer = $context->codePrinter;
+        $call    = sprintf('%s, SL("%s"), %d);', $target, $name, count($arguments));
+
+        if ([] === $arguments) {
+            $printer->output($call);
+
+            return;
+        }
+
+        $printer->output('{');
+        $printer->increaseLevel();
+        $printer->output('zend_attribute *_za = ' . $call);
+
+        $counter = 0;
+        foreach ($arguments as $offset => $argument) {
+            $node  = $argument['expr'];
+            $lines = [];
+
+            if (in_array($node['type'], ['array', 'empty-array'], true)) {
+                $var = $this->buildConstantArray($node, $lines, $counter);
+            } else {
+                $var     = '_zc' . $counter++;
+                $lines[] = sprintf('zval %s;', $var);
+                $lines[] = $this->typedScalarInit($var, $node);
+            }
+
+            $lines[] = sprintf(
+                'zephir_attribute_set_arg(_za, %d, %s, &%s);',
+                $offset,
+                null === $argument['name'] ? 'NULL, 0' : sprintf('SL("%s")', Name::addSlashes($argument['name'])),
+                $var
+            );
+
+            foreach ($lines as $line) {
+                $printer->output($line);
+            }
+        }
+
+        $printer->decreaseLevel();
+        $printer->output('}');
+    }
+
+    /**
      * Renders the ZVAL_* initializer for a scalar typed-property default.
      */
     private function typedScalarInit(string $var, array $default): string

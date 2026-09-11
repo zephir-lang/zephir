@@ -1,0 +1,306 @@
+[
+    {
+        "type": "class",
+        "name": "Handler",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "run",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "token",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "phpt__functions_attributes_parameters.zep",
+                            "line": 3,
+                            "char": 47,
+                            "attributes": [
+                                {
+                                    "type": "attribute",
+                                    "name": "Sensitive",
+                                    "file": "phpt__functions_attributes_parameters.zep",
+                                    "line": 3,
+                                    "char": 33
+                                }
+                            ]
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "retries",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "int",
+                                "value": "3",
+                                "file": "phpt__functions_attributes_parameters.zep",
+                                "line": 3,
+                                "char": 77
+                            },
+                            "reference": 0,
+                            "file": "phpt__functions_attributes_parameters.zep",
+                            "line": 3,
+                            "char": 77,
+                            "attributes": [
+                                {
+                                    "type": "attribute",
+                                    "name": "A",
+                                    "file": "phpt__functions_attributes_parameters.zep",
+                                    "line": 3,
+                                    "char": 52
+                                },
+                                {
+                                    "type": "attribute",
+                                    "name": "B",
+                                    "arguments": [
+                                        {
+                                            "parameter": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "phpt__functions_attributes_parameters.zep",
+                                                "line": 3,
+                                                "char": 59
+                                            },
+                                            "file": "phpt__functions_attributes_parameters.zep",
+                                            "line": 3,
+                                            "char": 59
+                                        }
+                                    ],
+                                    "file": "phpt__functions_attributes_parameters.zep",
+                                    "line": 3,
+                                    "char": 60
+                                }
+                            ]
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "plain",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "phpt__functions_attributes_parameters.zep",
+                                "line": 3,
+                                "char": 91
+                            },
+                            "reference": 0,
+                            "file": "phpt__functions_attributes_parameters.zep",
+                            "line": 3,
+                            "char": 91
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "rest",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "phpt__functions_attributes_parameters.zep",
+                            "line": 3,
+                            "char": 105,
+                            "variadic": 1,
+                            "attributes": [
+                                {
+                                    "type": "attribute",
+                                    "name": "C",
+                                    "file": "phpt__functions_attributes_parameters.zep",
+                                    "line": 3,
+                                    "char": 96
+                                }
+                            ]
+                        }
+                    ],
+                    "file": "phpt__functions_attributes_parameters.zep",
+                    "line": 3,
+                    "last-line": 7,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "make",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "callback",
+                                    "expr": {
+                                        "type": "closure",
+                                        "left": [
+                                            {
+                                                "type": "parameter",
+                                                "name": "value",
+                                                "const": 0,
+                                                "data-type": "int",
+                                                "mandatory": 0,
+                                                "reference": 0,
+                                                "file": "phpt__functions_attributes_parameters.zep",
+                                                "line": 9,
+                                                "char": 44,
+                                                "attributes": [
+                                                    {
+                                                        "type": "attribute",
+                                                        "name": "D",
+                                                        "arguments": [
+                                                            {
+                                                                "parameter": {
+                                                                    "type": "string",
+                                                                    "value": "x",
+                                                                    "file": "phpt__functions_attributes_parameters.zep",
+                                                                    "line": 9,
+                                                                    "char": 32
+                                                                },
+                                                                "file": "phpt__functions_attributes_parameters.zep",
+                                                                "line": 9,
+                                                                "char": 32
+                                                            }
+                                                        ],
+                                                        "file": "phpt__functions_attributes_parameters.zep",
+                                                        "line": 9,
+                                                        "char": 33
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "right": [
+                                            {
+                                                "type": "return",
+                                                "expr": {
+                                                    "type": "variable",
+                                                    "value": "value",
+                                                    "file": "phpt__functions_attributes_parameters.zep",
+                                                    "line": 10,
+                                                    "char": 16
+                                                },
+                                                "file": "phpt__functions_attributes_parameters.zep",
+                                                "line": 11,
+                                                "char": 3
+                                            }
+                                        ],
+                                        "file": "phpt__functions_attributes_parameters.zep",
+                                        "line": 11,
+                                        "char": 4
+                                    },
+                                    "file": "phpt__functions_attributes_parameters.zep",
+                                    "line": 11,
+                                    "char": 4
+                                }
+                            ],
+                            "file": "phpt__functions_attributes_parameters.zep",
+                            "line": 12,
+                            "char": 2
+                        }
+                    ],
+                    "file": "phpt__functions_attributes_parameters.zep",
+                    "line": 9,
+                    "last-line": 13,
+                    "char": 25
+                }
+            ],
+            "file": "phpt__functions_attributes_parameters.zep",
+            "line": 1,
+            "char": 6
+        },
+        "file": "phpt__functions_attributes_parameters.zep",
+        "line": 1,
+        "char": 6
+    },
+    {
+        "type": "interface",
+        "name": "Contract",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "handle",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "secret",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "phpt__functions_attributes_parameters.zep",
+                            "line": 17,
+                            "char": 51,
+                            "attributes": [
+                                {
+                                    "type": "attribute",
+                                    "name": "Sensitive",
+                                    "file": "phpt__functions_attributes_parameters.zep",
+                                    "line": 17,
+                                    "char": 36
+                                }
+                            ]
+                        }
+                    ],
+                    "file": "phpt__functions_attributes_parameters.zep",
+                    "line": 17,
+                    "last-line": 18,
+                    "char": 16
+                }
+            ],
+            "file": "phpt__functions_attributes_parameters.zep",
+            "line": 18,
+            "char": 1
+        },
+        "file": "phpt__functions_attributes_parameters.zep",
+        "line": 1,
+        "char": 6
+    },
+    {
+        "type": "function",
+        "name": "topLevel",
+        "parameters": [
+            {
+                "type": "parameter",
+                "name": "input",
+                "const": 0,
+                "data-type": "variable",
+                "mandatory": 0,
+                "reference": 0,
+                "file": "phpt__functions_attributes_parameters.zep",
+                "line": 20,
+                "char": 36,
+                "attributes": [
+                    {
+                        "type": "attribute",
+                        "name": "E",
+                        "file": "phpt__functions_attributes_parameters.zep",
+                        "line": 20,
+                        "char": 22
+                    },
+                    {
+                        "type": "attribute",
+                        "name": "F",
+                        "file": "phpt__functions_attributes_parameters.zep",
+                        "line": 20,
+                        "char": 25
+                    }
+                ]
+            }
+        ],
+        "file": "phpt__functions_attributes_parameters.zep",
+        "line": 20,
+        "char": 8
+    }
+]

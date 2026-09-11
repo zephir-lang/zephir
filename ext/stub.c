@@ -33,6 +33,8 @@ zend_class_entry *stub_issue2165_issueinterface_ce;
 zend_class_entry *stub_methodinterface_ce;
 zend_class_entry *stub_oo_scopes_scopetesterinterface_ce;
 zend_class_entry *stub_ooimpl_zbeginning_ce;
+zend_class_entry *stub_attributes_contract_ce;
+zend_class_entry *stub_attributes_counter_ce;
 zend_class_entry *stub_diinterface_ce;
 zend_class_entry *stub_extendedinterface_ce;
 zend_class_entry *stub_integration_psr_http_message_messageinterfaceex_ce;
@@ -131,6 +133,10 @@ zend_class_entry *stub_arraymanipulation_ce;
 zend_class_entry *stub_arrayobject_ce;
 zend_class_entry *stub_arraysearch_ce;
 zend_class_entry *stub_assign_ce;
+zend_class_entry *stub_attributes_counteruser_ce;
+zend_class_entry *stub_attributes_demo_ce;
+zend_class_entry *stub_attributes_marker_ce;
+zend_class_entry *stub_attributes_tools_ce;
 zend_class_entry *stub_bench_ce;
 zend_class_entry *stub_bench_foo_ce;
 zend_class_entry *stub_bitwise_ce;
@@ -395,6 +401,8 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_MethodInterface);
 	ZEPHIR_INIT(Stub_OoImpl_ZBeginning);
 	ZEPHIR_INIT(Stub_Oo_Scopes_ScopeTesterInterface);
+	ZEPHIR_INIT(Stub_Attributes_Contract);
+	ZEPHIR_INIT(Stub_Attributes_Counter);
 	ZEPHIR_INIT(Stub_DiInterface);
 	ZEPHIR_INIT(Stub_ExtendedInterface);
 	ZEPHIR_INIT(Stub_Integration_Psr_Http_Message_MessageInterfaceEx);
@@ -435,6 +443,10 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_ArrayObject);
 	ZEPHIR_INIT(Stub_ArraySearch);
 	ZEPHIR_INIT(Stub_Assign);
+	ZEPHIR_INIT(Stub_Attributes_CounterUser);
+	ZEPHIR_INIT(Stub_Attributes_Demo);
+	ZEPHIR_INIT(Stub_Attributes_Marker);
+	ZEPHIR_INIT(Stub_Attributes_Tools);
 	ZEPHIR_INIT(Stub_Bench);
 	ZEPHIR_INIT(Stub_Bench_Foo);
 	ZEPHIR_INIT(Stub_Bitwise);
@@ -727,6 +739,21 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(stub_7__closure);
 	ZEPHIR_INIT(stub_8__closure);
 	ZEPHIR_INIT(stub_9__closure);
+	{
+		zend_attribute *_za = zephir_add_function_attribute(SL("stub\\attributes\\tagged"), SL("Stub\\Attributes\\Marker"), 2);
+		zval _zc0;
+		ZVAL_STRINGL(&_zc0, "on-a-function", sizeof("on-a-function") - 1);
+		zephir_attribute_set_arg(_za, 0, NULL, 0, &_zc0);
+		zval _zc1;
+		ZVAL_LONG(&_zc1, 7);
+		zephir_attribute_set_arg(_za, 1, SL("number"), &_zc1);
+	}
+	{
+		zend_attribute *_za = zephir_add_function_parameter_attribute(SL("stub\\attributes\\tagged"), 0, SL("Stub\\Attributes\\Marker"), 1);
+		zval _zc0;
+		ZVAL_STRINGL(&_zc0, "on-a-function-parameter", sizeof("on-a-function-parameter") - 1);
+		zephir_attribute_set_arg(_za, 0, NULL, 0, &_zc0);
+	}
 	
 	return SUCCESS;
 }
@@ -865,6 +892,11 @@ static PHP_GSHUTDOWN_FUNCTION(stub)
 	
 }
 
+PHP_FUNCTION(f_Stub_Attributes_tagged);
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_stub_attributes_tagged, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 PHP_FUNCTION(g_stub_zephir_global_method_test);
 ZEND_BEGIN_ARG_INFO_EX(arginfo_g_stub_zephir_global_method_test, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
@@ -902,7 +934,8 @@ ZEND_END_ARG_INFO()
 
 
 zend_function_entry php_stub_functions[] = {
-	ZEND_NAMED_FE(zephir_global_method_test, ZEND_FN(g_stub_zephir_global_method_test), arginfo_g_stub_zephir_global_method_test)
+	ZEND_NS_NAMED_FE("Stub\\Attributes", tagged, ZEND_FN(f_Stub_Attributes_tagged), arginfo_f_stub_attributes_tagged)
+ZEND_NAMED_FE(zephir_global_method_test, ZEND_FN(g_stub_zephir_global_method_test), arginfo_g_stub_zephir_global_method_test)
 ZEND_NAMED_FE(zephir_global_method_with_type_casting, ZEND_FN(g_stub_zephir_global_method_with_type_casting), arginfo_g_stub_zephir_global_method_with_type_casting)
 ZEND_NS_NAMED_FE("Stub", zephir_namespaced_method_test, ZEND_FN(f_Stub_zephir_namespaced_method_test), arginfo_f_stub_zephir_namespaced_method_test)
 ZEND_NS_NAMED_FE("Stub", test_call_relative_object_hint, ZEND_FN(f_Stub_test_call_relative_object_hint), arginfo_f_stub_test_call_relative_object_hint)

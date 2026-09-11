@@ -20,11 +20,12 @@ class Manager
 {
     /**
      * Oldest `ext-zephir_parser` whose grammar covers the syntax this Zephir
-     * accepts. 2.7.0 added expressions in constant initializers and property
-     * defaults (zephir#2061); 2.1.0 had added trait AST nodes (zephir#504).
+     * accepts. 2.8.0 added PHP attributes (zephir#2466); 2.7.0 had added
+     * expressions in constant initializers and property defaults
+     * (zephir#2061); 2.1.0 had added trait AST nodes (zephir#504).
      * Raise this in the same change that adds a grammar feature.
      */
-    public const MINIMUM_PARSER_VERSION = '2.7.0';
+    public const MINIMUM_PARSER_VERSION = '2.8.0';
     public const PARSER_HOME_PAGE       = 'https://github.com/zephir-lang/php-zephir-parser';
 
     public function __construct(protected Parser $parser)

@@ -34,7 +34,13 @@ class FunctionDefinition extends Method
         ?array $returnType = null,
         protected ?array $expression = [],
     ) {
-        parent::__construct(null, [], $name, $parameters, $statements);
+        /**
+         * The raw node has to reach Method, whose own promoted `$expression`
+         * would otherwise overwrite it with its `[]` default — which is why
+         * getExpression() on a function used to come back empty. It carries the
+         * function's `#[...]` attributes [#2466].
+         */
+        parent::__construct(null, [], $name, $parameters, $statements, null, null, $expression);
 
         $this->setReturnTypes($returnType);
     }

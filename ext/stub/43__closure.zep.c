@@ -46,7 +46,7 @@ PHP_METHOD(stub_43__closure, __invoke)
 	zephir_read_property(&tag, this_ptr, SL("tag"), PH_NOISY_CC);
 	this_ptr = &__$zephir_this;
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 145, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 151, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CONCAT_VSV(return_value, &tag, ":", &_0);
 	RETURN_MM();
 }
