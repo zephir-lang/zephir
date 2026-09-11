@@ -987,10 +987,14 @@ int zephir_update_property_array(zval *object, const char *property, uint32_t pr
 			}
 		}
 	} else {
+		/* ZVAL_DUP() hands back a fresh array at refcount 1: the single
+		 * reference tmp now holds, and the one the zval_ptr_dtor(&tmp)
+		 * below releases. Do not drop it here. The property does not take it
+		 * either, because zephir_update_property_zval() dups the value in.
+		 * See https://github.com/zephir-lang/zephir/issues/2698 */
 		zval new_zv;
 		ZVAL_DUP(&new_zv, &tmp);
 		ZVAL_COPY_VALUE(&tmp, &new_zv);
-		Z_TRY_DELREF(new_zv);
 		separated = 1;
 	}
 
@@ -1064,6 +1068,10 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 			}
 		}
 	} else {
+		/* Unlike its siblings this branch is balanced: the Z_TRY_DELREF() below
+		 * is put back by the Z_ADDREF() at the end of the block, so the
+		 * reference ZVAL_DUP() created survives to the zval_ptr_dtor(&tmp).
+		 * Removing either one alone reintroduces #2698. */
 		zval new_zv;
 		ZVAL_DUP(&new_zv, &tmp);
 		ZVAL_COPY_VALUE(&tmp, &new_zv);
@@ -1194,10 +1202,13 @@ int zephir_update_property_array_multi(zval *object, const char *property, uint3
 				}
 			}
 		} else {
+			/* ZVAL_DUP() hands back a fresh array at refcount 1: the single
+			 * reference tmp_arr now holds, and the one the
+			 * zval_ptr_dtor(&tmp_arr) below releases. Do not drop it here.
+			 * See https://github.com/zephir-lang/zephir/issues/2698 */
 			zval new_zv;
 			ZVAL_DUP(&new_zv, &tmp_arr);
 			ZVAL_COPY_VALUE(&tmp_arr, &new_zv);
-			Z_TRY_DELREF(new_zv);
 			separated = 1;
 		}
 
@@ -1296,18 +1307,23 @@ int zephir_unset_property_array(zval *object, char *property, unsigned int prope
 		if (Z_REFCOUNTED(tmp)) {
 			if (Z_REFCOUNT(tmp) > 1) {
 				if (!Z_ISREF(tmp)) {
+					/* Unlike zephir_update_property_array(), this branch never
+					 * put the reference back with Z_ADDREF(), so it leaked the
+					 * separated array on a shared property too. #2698 */
 					zval new_zv;
 					ZVAL_DUP(&new_zv, &tmp);
 					ZVAL_COPY_VALUE(&tmp, &new_zv);
-					Z_TRY_DELREF(new_zv);
 					separated = 1;
 				}
 			}
 		} else {
+			/* ZVAL_DUP() hands back a fresh array at refcount 1: the single
+			 * reference tmp now holds, and the one the zval_ptr_dtor(&tmp)
+			 * below releases. Do not drop it here.
+			 * See https://github.com/zephir-lang/zephir/issues/2698 */
 			zval new_zv;
 			ZVAL_DUP(&new_zv, &tmp);
 			ZVAL_COPY_VALUE(&tmp, &new_zv);
-			Z_TRY_DELREF(new_zv);
 			separated = 1;
 		}
 
@@ -1315,6 +1331,9 @@ int zephir_unset_property_array(zval *object, char *property, unsigned int prope
 
 		if (separated) {
 			zephir_update_property_zval(object, property, property_length, &tmp);
+			/* Only a separated tmp is ours. An unseparated one still aliases
+			 * the property's own array, which this function must not release. */
+			zval_ptr_dtor(&tmp);
 		}
 	}
 
@@ -1452,6 +1471,13 @@ int zephir_update_static_property_array_multi_ce(
 			}
 		}
 	} else {
+		/* This Z_TRY_DELREF() stays, unlike the one #2698 removed from the
+		 * instance-property helpers. Those write back with
+		 * zephir_update_property_zval(), which dups and leaves the caller
+		 * owning tmp; this one writes back with zend_update_static_property(),
+		 * which addrefs and then takes the reference
+		 * (zend_assign_to_variable(..., IS_TMP_VAR)). Keeping our reference
+		 * here would leave the array at refcount 2 with nothing to release it. */
 		zval new_zv;
 		ZVAL_DUP(&new_zv, &tmp_arr);
 		ZVAL_COPY_VALUE(&tmp_arr, &new_zv);

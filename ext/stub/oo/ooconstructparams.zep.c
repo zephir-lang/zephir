@@ -49,8 +49,8 @@ PHP_METHOD(Stub_Oo_OoConstructParams, __construct)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 79, a);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 80, b);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 80, a);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 81, b);
 }
 
 PHP_METHOD(Stub_Oo_OoConstructParams, getA)

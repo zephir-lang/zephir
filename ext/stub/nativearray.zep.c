@@ -1807,7 +1807,7 @@ PHP_METHOD(Stub_NativeArray, issue709)
 			ZVAL_LONG(&_3$$3, 2);
 			zephir_array_fast_append(&arr, &_3$$3);
 			ZEPHIR_OBS_NVAR(&_4$$3);
-			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 82, &arr);
+			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 87, &arr);
 			zephir_check_call_status();
 			zephir_array_fetch(&_4$$3, &arr, &_5$$3, PH_NOISY, "stub/nativearray.zep", 626);
 			ZEPHIR_CPY_WRT(&arr, &_4$$3);
@@ -1852,7 +1852,7 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 	ZVAL_STR_COPY(&prefix_zv, prefix);
 	zephir_memory_observe(&baseDir_zv);
 	ZVAL_STR_COPY(&baseDir_zv, baseDir);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 75, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 76, PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_isset_value(&_0, &prefix_zv))) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		array_init(&_1$$3);
