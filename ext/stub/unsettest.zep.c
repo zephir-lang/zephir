@@ -72,23 +72,15 @@ PHP_METHOD(Stub_Unsettest, addValueToProperty)
 
 PHP_METHOD(Stub_Unsettest, testUnsetValueFromProperty)
 {
-	zval *key, key_sub, _0;
+	zval *key, key_sub;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&key_sub);
-	ZVAL_UNDEF(&_0);
-	static zend_string *_zephir_prop_0 = NULL;
-	if (UNEXPECTED(!_zephir_prop_0)) {
-		_zephir_prop_0 = zend_string_init("property", 8, 1);
-	}
-
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(key)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &key);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("property"), key);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 146, PH_NOISY_CC | PH_READONLY);
-	zephir_array_unset(&_0, key, PH_SEPARATE);
 }
 
 PHP_METHOD(Stub_Unsettest, testUnsetFromArray)

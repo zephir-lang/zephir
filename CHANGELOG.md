@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Fixed
 - Fixed the first write or unset of an array property leaking the separated array, and every object it held, because the dup's only reference was dropped before the release [#2698](https://github.com/zephir-lang/zephir/issues/2698)
 - Fixed the persistent keys of an array class constant or array property default being freed by a copy written with a runtime built key, which corrupted the heap [#2699](https://github.com/zephir-lang/zephir/issues/2699)
+- Fixed `unset` of a literal offset on a property leaking the offset and emitting the unset twice, which gave an `ArrayAccess` property two `offsetUnset()` calls [#2702](https://github.com/zephir-lang/zephir/issues/2702)
+- Fixed `unset` of an offset held in a native `int` variable not compiling [#2702](https://github.com/zephir-lang/zephir/issues/2702)
+- Fixed `unset` of an offset on a plain object, on a reference, and from PHP 8.1 on a scalar or `false`, which stayed silent where PHP reports an error [#2702](https://github.com/zephir-lang/zephir/issues/2702)
 
 ## [1.4.0] - 2026-09-08
 
