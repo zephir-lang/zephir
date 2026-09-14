@@ -92,24 +92,16 @@ PHP_METHOD(Stub_ArrayAccessArr, offsetExists)
 
 PHP_METHOD(Stub_ArrayAccessArr, offsetUnset)
 {
-	zval offset_sub, _0;
+	zval offset_sub;
 	zval *offset;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&offset_sub);
-	ZVAL_UNDEF(&_0);
-	static zend_string *_zephir_prop_0 = NULL;
-	if (UNEXPECTED(!_zephir_prop_0)) {
-		_zephir_prop_0 = zend_string_init("test", 4, 1);
-	}
-
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &offset);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("test"), offset);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 9, PH_NOISY_CC | PH_READONLY);
-	zephir_array_unset(&_0, offset, PH_SEPARATE);
 }
 
 PHP_METHOD(Stub_ArrayAccessArr, offsetGet)

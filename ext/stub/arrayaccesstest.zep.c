@@ -96,12 +96,11 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromProperty)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval dataFromProperty;
-	zval key_zv, *dataFromProperty_param = NULL, _0;
+	zval key_zv, *dataFromProperty_param = NULL;
 	zend_string *key = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&key_zv);
-	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&dataFromProperty);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
@@ -119,8 +118,6 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromProperty)
 	zephir_get_arrval(&dataFromProperty, dataFromProperty_param);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 12, &dataFromProperty);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("assigedFromMethod"), &key_zv);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 12, PH_NOISY_CC | PH_READONLY);
-	zephir_array_unset(&_0, &key_zv, PH_SEPARATE);
 	RETURN_MM_MEMBER_TYPED(getThis(), "assigedFromMethod", IS_ARRAY);
 }
 
@@ -408,7 +405,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetKeyFromArrayInternalVariable)
  */
 PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetStringKeyFromArrayProperty)
 {
-	zval _0, _1, _2, _3;
+	zval _0, _1, _2;
 	zval ret;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -417,7 +414,6 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetStringKeyFromArrayProperty)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
-	ZVAL_UNDEF(&_3);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("unsetData", 9, 1);
@@ -429,19 +425,17 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetStringKeyFromArrayProperty)
 	array_init(&ret);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 14, PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/arrayaccesstest.zep", 185);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 14, PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "key_a");
 	zephir_unset_property_array(this_ptr, ZEND_STRL("unsetData"), &_1);
 	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 14, PH_NOISY_CC | PH_READONLY);
-	zephir_array_unset_string(&_2, SL("key_a"), PH_SEPARATE);
-	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 14, PH_NOISY_CC | PH_READONLY);
-	zephir_array_append(&ret, &_3, PH_SEPARATE, "stub/arrayaccesstest.zep", 187);
+	zephir_array_append(&ret, &_2, PH_SEPARATE, "stub/arrayaccesstest.zep", 187);
 	RETURN_CTOR(&ret);
 }
 
 PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetLongKeyFromArrayProperty)
 {
-	zval _0, _1, _2, _3;
+	zval _0, _1, _2;
 	zval ret;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -450,7 +444,6 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetLongKeyFromArrayProperty)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
-	ZVAL_UNDEF(&_3);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("unsetData", 9, 1);
@@ -462,13 +455,11 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetLongKeyFromArrayProperty)
 	array_init(&ret);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 14, PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/arrayaccesstest.zep", 196);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 14, PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 3);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("unsetData"), &_1);
 	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 14, PH_NOISY_CC | PH_READONLY);
-	zephir_array_unset_long(&_2, 3, PH_SEPARATE);
-	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 14, PH_NOISY_CC | PH_READONLY);
-	zephir_array_append(&ret, &_3, PH_SEPARATE, "stub/arrayaccesstest.zep", 198);
+	zephir_array_append(&ret, &_2, PH_SEPARATE, "stub/arrayaccesstest.zep", 198);
 	RETURN_CTOR(&ret);
 }
 

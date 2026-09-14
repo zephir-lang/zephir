@@ -113,24 +113,16 @@ PHP_METHOD(Stub_PropertyCacheMagic, __isset)
 
 PHP_METHOD(Stub_PropertyCacheMagic, __unset)
 {
-	zval name_zv, _0;
+	zval name_zv;
 	zend_string *name = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&name_zv);
-	ZVAL_UNDEF(&_0);
-	static zend_string *_zephir_prop_0 = NULL;
-	if (UNEXPECTED(!_zephir_prop_0)) {
-		_zephir_prop_0 = zend_string_init("store", 5, 1);
-	}
-
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("store"), &name_zv);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 106, PH_NOISY_CC | PH_READONLY);
-	zephir_array_unset(&_0, &name_zv, PH_SEPARATE);
 }
 
 PHP_METHOD(Stub_PropertyCacheMagic, readVirtual)

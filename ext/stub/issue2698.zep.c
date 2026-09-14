@@ -144,24 +144,16 @@ PHP_METHOD(Stub_Issue2698, writeNested)
 
 PHP_METHOD(Stub_Issue2698, removeOffset)
 {
-	zval key_zv, _0;
+	zval key_zv;
 	zend_string *key = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&key_zv);
-	ZVAL_UNDEF(&_0);
-	static zend_string *_zephir_prop_0 = NULL;
-	if (UNEXPECTED(!_zephir_prop_0)) {
-		_zephir_prop_0 = zend_string_init("removable", 9, 1);
-	}
-
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(key)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&key_zv, key);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("removable"), &key_zv);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 71, PH_NOISY_CC | PH_READONLY);
-	zephir_array_unset(&_0, &key_zv, PH_SEPARATE);
 }
 
 PHP_METHOD(Stub_Issue2698, getItems)

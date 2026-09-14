@@ -1,0 +1,146 @@
+--TEST--
+A literal offset unset on a property retains nothing, runs once, and reports what PHP reports (issue #2702)
+--FILE--
+namespace Zept;
+
+/**
+ * The offset of `unset this->data["key_a"]` used to be stamped into a temp
+ * borrowed from a read-only property fetch, so its zend_string was never
+ * released; and the statement was emitted twice, which on an ArrayAccess
+ * container meant two offsetUnset() calls.
+ */
+class Holder
+{
+    protected array data = ["key_a": 1, "key_b": 2, 3: "three"];
+
+    protected retained = [];
+
+    public container;
+
+    public function getData() -> array
+    {
+        return this->data;
+    }
+
+    public function removeLiteral() -> void
+    {
+        unset this->data["key_a"];
+    }
+
+    public function unsetContainerLiteral() -> void
+    {
+        unset this->container["k"];
+    }
+
+    public function literalProbe(int iterations) -> int
+    {
+        int i;
+        var before, after;
+
+        let before = memory_get_usage();
+
+        let i = 0;
+        while i < iterations {
+            this->removeLiteral();
+            let i++;
+        }
+
+        let after = memory_get_usage();
+
+        return after - before;
+    }
+
+    public function controlProbe(int iterations) -> int
+    {
+        int i;
+        var before, after;
+
+        let before = memory_get_usage();
+
+        let i = 0;
+        while i < iterations {
+            let this->retained[] = str_repeat("x", 64);
+            let i++;
+        }
+
+        let after = memory_get_usage();
+
+        return after - before;
+    }
+}
+--USAGE--
+$h = new Zept\Holder();
+
+$h->literalProbe(100);                       // settle interned strings and call caches
+printf("%-11s %s\n", 'leak', $h->literalProbe(1000) === $h->literalProbe(50000) ? 'flat' : 'GROWS');
+
+// The probe above only means something if the measurement itself works.
+$h->controlProbe(200);
+printf("%-11s %s\n", 'control', $h->controlProbe(50000) > $h->controlProbe(1000) ? 'GROWS' : 'BROKEN');
+
+$keys = new Zept\Holder();
+$keys->removeLiteral();
+printf("%-11s %s\n", 'keys', implode(',', array_keys($keys->getData())));
+
+class Bag implements ArrayAccess
+{
+    public $items = ['k' => 1, 'j' => 2];
+    public $calls = 0;
+
+    public function offsetExists($offset): bool { return isset($this->items[$offset]); }
+    #[\ReturnTypeWillChange] public function offsetGet($offset) { return $this->items[$offset] ?? null; }
+    public function offsetSet($offset, $value): void { $this->items[$offset] = $value; }
+    public function offsetUnset($offset): void { ++$this->calls; unset($this->items[$offset]); }
+}
+
+$bag = new Bag();
+$holder = new Zept\Holder();
+$holder->container = $bag;
+$holder->unsetContainerLiteral();
+printf("%-11s %d call, left %s\n", 'offsetUnset', $bag->calls, implode(',', array_keys($bag->items)));
+
+// PHP 8.0 reports nothing for a scalar container and 8.1 and later raise an
+// Error, so the containers are compared against PHP running the same statement
+// rather than against text this file would have to version.
+$outcome = function (callable $statement): string {
+    $seen = [];
+    set_error_handler(function (int $number, string $message) use (&$seen): bool {
+        $seen[] = $number . ': ' . $message;
+        return true;
+    });
+
+    try {
+        $statement();
+        $error = 'no error';
+    } catch (\Throwable $thrown) {
+        $error = get_class($thrown) . ': ' . $thrown->getMessage();
+    } finally {
+        restore_error_handler();
+    }
+
+    return $error . ' | ' . implode(' | ', $seen);
+};
+
+foreach (['array' => ['k' => 1], 'object' => new stdClass(), 'string' => 'hello', 'int' => 5, 'false' => false, 'null' => null] as $label => $value) {
+    $php = new stdClass();
+    $php->container = $value;
+
+    $zephir = new Zept\Holder();
+    $zephir->container = $value;
+
+    $same = $outcome(function () use ($php) { unset($php->container['k']); })
+        === $outcome(function () use ($zephir) { $zephir->unsetContainerLiteral(); });
+
+    printf("%-11s %s\n", $label, $same ? 'same as PHP' : 'DIFFERS');
+}
+--EXPECT--
+leak        flat
+control     GROWS
+keys        key_b,3
+offsetUnset 1 call, left j
+array       same as PHP
+object      same as PHP
+string      same as PHP
+int         same as PHP
+false       same as PHP
+null        same as PHP

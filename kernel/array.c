@@ -18,6 +18,7 @@
 #include <ext/standard/php_array.h>
 #include <Zend/zend_hash.h>
 #include <Zend/zend_interfaces.h>
+#include <Zend/zend_execute.h>
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
@@ -748,23 +749,63 @@ int zephir_isempty_dim_string(zval *container, char *offset, uint32_t offset_len
 	);
 }
 
+/**
+ * Reports the container errors PHP's ZEND_UNSET_DIM reports, in its order.
+ *
+ * Zend/zend_vm_def.h: an object without array access and a string are errors on
+ * every version, and from PHP 8.1 so is any other non-null scalar; `false` is
+ * deprecated there, while null and undefined stay silent everywhere. PHP 8.0
+ * has neither the scalar branch nor zend_false_to_array_deprecated(), so both
+ * are gated rather than back-ported.
+ *
+ * The caller has already established that the container is not an array and is
+ * not something it can handle itself.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2702
+ */
+static void zephir_unset_dim_illegal_container(zval *arr)
+{
+	if (Z_TYPE_P(arr) == IS_OBJECT) {
+		zend_throw_error(NULL, "Cannot use object of type %s as array", ZSTR_VAL(Z_OBJCE_P(arr)->name));
+
+		return;
+	}
+
+	if (Z_TYPE_P(arr) == IS_STRING) {
+		zend_throw_error(NULL, "Cannot unset string offsets");
+
+		return;
+	}
+
+#if PHP_VERSION_ID >= 80100
+	if (Z_TYPE_P(arr) > IS_FALSE) {
+		zend_throw_error(NULL, "Cannot unset offset in a non-array variable");
+	} else if (Z_TYPE_P(arr) == IS_FALSE) {
+		zend_false_to_array_deprecated();
+	}
+#endif
+}
+
 int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags)
 {
 	HashTable *ht;
 
-	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
-		zend_long ZEPHIR_LAST_CALL_STATUS;
-		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(NULL, arr, "offsetunset", NULL, 0, index);
-		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			return 1;
+	/* PHP follows the reference before it looks at the container. */
+	ZVAL_DEREF(arr);
+
+	if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
+		if (Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess)) {
+			zend_long ZEPHIR_LAST_CALL_STATUS;
+			ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(NULL, arr, "offsetunset", NULL, 0, index);
+			if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+				return 1;
+			}
+
+			return 0;
 		}
 
-		return 0;
-	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
-		zend_throw_error(NULL, "Cannot unset string offsets");
+		zephir_unset_dim_illegal_container(arr);
 
-		return 0;
-	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		return 0;
 	}
 
@@ -802,22 +843,24 @@ int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags)
 
 int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint32_t index_length, int flags)
 {
-	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
-		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval offset;
-		ZVAL_STRINGL(&offset, index, index_length);
-		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(NULL, arr, "offsetunset", NULL, 0, &offset);
-		zval_ptr_dtor(&offset);
-		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			return 1;
+	ZVAL_DEREF(arr);
+
+	if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
+		if (Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess)) {
+			zend_long ZEPHIR_LAST_CALL_STATUS;
+			zval offset;
+			ZVAL_STRINGL(&offset, index, index_length);
+			ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(NULL, arr, "offsetunset", NULL, 0, &offset);
+			zval_ptr_dtor(&offset);
+			if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+				return 1;
+			}
+
+			return 0;
 		}
 
-		return 0;
-	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
-		zend_throw_error(NULL, "Cannot unset string offsets");
+		zephir_unset_dim_illegal_container(arr);
 
-		return 0;
-	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		return 0;
 	}
 
@@ -830,22 +873,24 @@ int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint
 
 int ZEPHIR_FASTCALL zephir_array_unset_long(zval *arr, zend_long index, int flags)
 {
-	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
-		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval offset;
-		ZVAL_LONG(&offset, index);
-		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(NULL, arr, "offsetunset", NULL, 0, &offset);
+	ZVAL_DEREF(arr);
 
-		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			return 1;
+	if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
+		if (Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess)) {
+			zend_long ZEPHIR_LAST_CALL_STATUS;
+			zval offset;
+			ZVAL_LONG(&offset, index);
+			ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(NULL, arr, "offsetunset", NULL, 0, &offset);
+
+			if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+				return 1;
+			}
+
+			return 0;
 		}
 
-		return 0;
-	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_STRING)) {
-		zend_throw_error(NULL, "Cannot unset string offsets");
+		zephir_unset_dim_illegal_container(arr);
 
-		return 0;
-	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		return 0;
 	}
 
