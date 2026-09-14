@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `unset` of a literal offset on a property leaking the offset and emitting the unset twice, which gave an `ArrayAccess` property two `offsetUnset()` calls [#2702](https://github.com/zephir-lang/zephir/issues/2702)
 - Fixed `unset` of an offset held in a native `int` variable not compiling [#2702](https://github.com/zephir-lang/zephir/issues/2702)
 - Fixed `unset` of an offset on a plain object, on a reference, and from PHP 8.1 on a scalar or `false`, which stayed silent where PHP reports an error [#2702](https://github.com/zephir-lang/zephir/issues/2702)
+- Fixed a literal numeric string array offset not resolving to the integer key PHP resolves it to, so `a["3"]` and `a[3]` now name the same element [#2708](https://github.com/zephir-lang/zephir/issues/2708)
+- Fixed three duplicated code generation branches emitting a string array offset with a length one byte too long [#2708](https://github.com/zephir-lang/zephir/issues/2708)
 
 ## [1.4.0] - 2026-09-08
 

@@ -302,20 +302,6 @@ class Backend
                     $expression
                 );
             }
-        }
-
-        if (!($resolvedExpr instanceof Variable)) {
-            if ('string' == $resolvedExpr->getType()) {
-                return new CompiledExpression(
-                    'bool',
-                    'zephir_array_isset_value_string('
-                    . $this->getVariableCode($var)
-                    . ', SS("'
-                    . $resolvedExpr->getCode()
-                    . '"))',
-                    $expression
-                );
-            }
 
             return new CompiledExpression(
                 'bool',
@@ -362,41 +348,13 @@ class Backend
         $expression,
         CompilationContext $context
     ) {
-        if (!($resolvedExpr instanceof Variable)) {
-            $code = $this->getVariableCode($target) . ', ' . $this->getVariableCode($var);
-            if ('string' == $resolvedExpr->getType()) {
-                return new CompiledExpression(
-                    'bool',
-                    'zephir_array_isset_string_fetch('
-                    . $code
-                    . ', SL("'
-                    . $resolvedExpr->getCode()
-                    . '"), '
-                    . $flags
-                    . ')',
-                    $expression
-                );
-            }
-        }
-
-        return $this->arrayIssetFetch2($target, $var, $resolvedExpr, $flags, $expression, $context);
-    }
-
-    public function arrayIssetFetch2(
-        Variable $target,
-        Variable $var,
-        $resolvedExpr,
-        $flags,
-        $expression,
-        CompilationContext $context
-    ) {
         $code = $this->getVariableCode($target) . ', ' . $this->getVariableCode($var);
 
         if (!($resolvedExpr instanceof Variable)) {
             if ('string' === $resolvedExpr->getType()) {
                 return new CompiledExpression(
                     'bool',
-                    'zephir_array_isset_string_fetch(' . $code . ', SS("' . $resolvedExpr->getCode(
+                    'zephir_array_isset_string_fetch(' . $code . ', SL("' . $resolvedExpr->getCode(
                     ) . '"), ' . $flags . ')',
                     $expression
                 );
@@ -432,22 +390,21 @@ class Backend
         throw new CompilerException('arrayIssetFetch [' . $resolvedExpr->getType() . ']', $expression);
     }
 
-    public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context): void
-    {
-        $context->headersManager->add('kernel/array');
-        $variableCode = $this->getVariableCode($variable);
-        if ('string' == $exprIndex->getType()) {
-            $context->codePrinter->output(
-                'zephir_array_unset_string(' . $variableCode . ', SL("' . $exprIndex->getCode() . '"), ' . $flags . ');'
-            );
-
-            return;
-        }
-
-        $this->arrayUnset2($variable, $exprIndex, $flags, $context);
+    /**
+     * @deprecated Use arrayIssetFetch() instead.
+     */
+    public function arrayIssetFetch2(
+        Variable $target,
+        Variable $var,
+        $resolvedExpr,
+        $flags,
+        $expression,
+        CompilationContext $context
+    ) {
+        return $this->arrayIssetFetch($target, $var, $resolvedExpr, $flags, $expression, $context);
     }
 
-    public function arrayUnset2(Variable $variable, $exprIndex, $flags, CompilationContext $context): void
+    public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context): void
     {
         $context->headersManager->add('kernel/array');
         $variableCode = $this->getVariableCode($variable);
@@ -462,7 +419,7 @@ class Backend
 
             case 'string':
                 $context->codePrinter->output(
-                    'zephir_array_unset_string(' . $variableCode . ', SS("' . $exprIndex->getCode(
+                    'zephir_array_unset_string(' . $variableCode . ', SL("' . $exprIndex->getCode(
                     ) . '"), ' . $flags . ');'
                 );
                 break;
@@ -504,6 +461,14 @@ class Backend
                     'Cannot use expression: ' . $exprIndex->getType() . ' as array index without cast'
                 );
         }
+    }
+
+    /**
+     * @deprecated Use arrayUnset() instead.
+     */
+    public function arrayUnset2(Variable $variable, $exprIndex, $flags, CompilationContext $context): void
+    {
+        $this->arrayUnset($variable, $exprIndex, $flags, $context);
     }
 
     public function assignArrayMulti(

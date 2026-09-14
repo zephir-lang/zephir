@@ -34,7 +34,7 @@ class ExportSymbolString extends ExportSymbol
     ): void {
         $symbol = $compilationContext->backend->getVariableCode($variable);
         $codePrinter->output(
-            'if (zephir_set_symbol_str(SS("' . $statement['variable'] . '"), ' . $symbol . ') == FAILURE) {'
+            'if (zephir_set_symbol_str(SL("' . $statement['variable'] . '"), ' . $symbol . ') == FAILURE) {'
         );
         $codePrinter->output('  return;');
         $codePrinter->output('}');

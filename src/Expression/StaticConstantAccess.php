@@ -174,7 +174,7 @@ class StaticConstantAccess
             $compilationContext->headersManager->add('kernel/object');
             $compilationContext->codePrinter->output(
                 sprintf(
-                    'zephir_get_class_constant(%s, %s, SS("%s"));',
+                    'zephir_get_class_constant(%s, %s, SL("%s"));',
                     $symbolVariable->getName(),
                     $classDefinition->getClassEntry($compilationContext),
                     $constant
