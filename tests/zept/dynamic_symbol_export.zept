@@ -1,0 +1,83 @@
+--TEST--
+Dynamic symbol export: `let {"name"} = value` writes the local into the active symbol table, as PHP's `${'name'} = $value` does
+--FILE--
+namespace Stub;
+
+class DynamicSymbolExport
+{
+	public function renderWithLiteralName(string! templatePath, var value) -> var
+	{
+		create_symbol_table();
+
+		let {"exported"} = value;
+
+		return require templatePath;
+	}
+
+	public function renderWithVariableName(string! templatePath, var name, var value) -> var
+	{
+		create_symbol_table();
+
+		let {name} = value;
+
+		return require templatePath;
+	}
+
+	public function exportNumericName() -> array
+	{
+		create_symbol_table();
+
+		let {"3"} = "numeric";
+
+		return get_defined_vars();
+	}
+}
+--USAGE--
+$template = tempnam(sys_get_temp_dir(), 'zept') . '.php';
+file_put_contents($template, '<?php echo var_export($exported, true), "\n"; return "returned";');
+
+function php_render_with_literal_name($templatePath, $value)
+{
+    ${'exported'} = $value;
+
+    return require $templatePath;
+}
+
+$test = new \Stub\DynamicSymbolExport();
+
+echo var_export($test->renderWithLiteralName($template, 'hello'), true), "\n";
+echo var_export($test->renderWithVariableName($template, 'exported', 'hello'), true), "\n";
+echo var_export(php_render_with_literal_name($template, 'hello'), true), "\n";
+
+unlink($template);
+
+/**
+ * A variable name is not an array key: PHP never folds a numeric one to an
+ * integer, so the kernel has to use zend_hash_str_update() rather than the
+ * zend_symtable_str_update() an array subscript would take.
+ */
+function php_export_numeric_name()
+{
+    ${'3'} = 'numeric';
+
+    return get_defined_vars();
+}
+
+$zephir = $test->exportNumericName();
+$plain  = php_export_numeric_name();
+
+foreach (array_keys($zephir) as $key) {
+    printf("zephir key %s is %s\n", var_export($key, true), gettype($key));
+}
+foreach (array_keys($plain) as $key) {
+    printf("php    key %s is %s\n", var_export($key, true), gettype($key));
+}
+--EXPECT--
+'hello'
+'returned'
+'hello'
+'returned'
+'hello'
+'returned'
+zephir key '3' is string
+php    key '3' is string

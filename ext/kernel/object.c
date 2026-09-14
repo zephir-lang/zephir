@@ -17,6 +17,8 @@
 #include "php_ext.h"
 
 #include <Zend/zend_closures.h>
+#include <Zend/zend_constants.h>
+#include <Zend/zend_execute.h>
 #include <Zend/zend_string.h>
 #include <Zend/zend_interfaces.h>
 
@@ -104,6 +106,54 @@ void zephir_get_called_class(zval *return_value)
 	if (!zend_get_executed_scope())  {
 		php_error_docref(NULL, E_WARNING, "zephir_get_called_class() called from outside a class");
 	}
+}
+
+/**
+ * Reads a class constant into `return_value`.
+ *
+ * Emitted for `Foo::BAR` only when the `static-constant-class-folding`
+ * optimization is off, which is the one state where the value is not inlined
+ * at compile time. That branch has emitted a call to this function since
+ * before the current history, and the function has never existed, so the
+ * option could not be turned off without the generated C failing to compile.
+ *
+ * `ce` is passed as the scope, so the read ignores visibility exactly as the
+ * folding path does. Both halves of the option have to answer alike.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2711
+ */
+void zephir_get_class_constant(zval *return_value, zend_class_entry *ce, const char *constant_name, size_t constant_length)
+{
+	zend_string *name = zend_string_init(constant_name, constant_length, 0);
+
+#if PHP_VERSION_ID >= 80100
+	zval *value = zend_get_class_constant_ex(ce->name, name, ce, 0);
+
+	if (EXPECTED(value != NULL)) {
+		ZVAL_COPY(return_value, value);
+	} else {
+		ZVAL_NULL(return_value);
+	}
+#else
+	/* PHP 8.0 has neither zend_get_class_constant_ex() nor
+	 * CE_CONSTANTS_TABLE(), so the table is read directly. Inherited and
+	 * interface constants are copied into the child during inheritance, so
+	 * one lookup covers them. A constant still held as an AST is evaluated
+	 * in its own declaring scope, which is what the 8.0 VM does at
+	 * ZEND_FETCH_CLASS_CONSTANT. */
+	zend_class_constant *c = zend_hash_find_ptr(&ce->constants_table, name);
+
+	if (UNEXPECTED(c == NULL)) {
+		zend_throw_error(NULL, "Undefined constant %s::%s", ZSTR_VAL(ce->name), ZSTR_VAL(name));
+		ZVAL_NULL(return_value);
+	} else if (UNEXPECTED(zval_update_constant_ex(&c->value, c->ce) == FAILURE)) {
+		ZVAL_NULL(return_value);
+	} else {
+		ZVAL_COPY(return_value, &c->value);
+	}
+#endif
+
+	zend_string_release(name);
 }
 
 zend_class_entry *zephir_fetch_class_str_ex(const char *class_name, size_t length, int fetch_type)
