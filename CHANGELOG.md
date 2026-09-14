@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Attribute arguments are folded at compile time, so an argument that is not a constant expression is a compile error [#2466](https://github.com/zephir-lang/zephir/issues/2466)
 - Raised the minimum `ext-zephir_parser` to 2.8.0 for the attribute grammar [#2466](https://github.com/zephir-lang/zephir/issues/2466)
 
+### Removed
+- Removed the `is_private_property()` builtin, whose optimizer emitted a kernel function that does not exist [#2712](https://github.com/zephir-lang/zephir/issues/2712)
+
 ### Fixed
 - Fixed the first write or unset of an array property leaking the separated array, and every object it held, because the dup's only reference was dropped before the release [#2698](https://github.com/zephir-lang/zephir/issues/2698)
 - Fixed the persistent keys of an array class constant or array property default being freed by a copy written with a runtime built key, which corrupted the heap [#2699](https://github.com/zephir-lang/zephir/issues/2699)
@@ -23,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `unset` of an offset on a plain object, on a reference, and from PHP 8.1 on a scalar or `false`, which stayed silent where PHP reports an error [#2702](https://github.com/zephir-lang/zephir/issues/2702)
 - Fixed a literal numeric string array offset not resolving to the integer key PHP resolves it to, so `a["3"]` and `a[3]` now name the same element [#2708](https://github.com/zephir-lang/zephir/issues/2708)
 - Fixed three duplicated code generation branches emitting a string array offset with a length one byte too long [#2708](https://github.com/zephir-lang/zephir/issues/2708)
+- Fixed `let {"name"} = value` emitting a kernel function removed in 0.18.0, so the generated C did not compile [#2710](https://github.com/zephir-lang/zephir/issues/2710)
+- Fixed reading a class constant with `static-constant-class-folding` off emitting an undeclared kernel function, and a value where its address was required [#2711](https://github.com/zephir-lang/zephir/issues/2711)
+- Fixed an unreachable variable defaults path that called an undefined `add_slashes()`, by deleting it [#2707](https://github.com/zephir-lang/zephir/issues/2707)
 
 ## [1.4.0] - 2026-09-08
 

@@ -15,7 +15,6 @@ namespace Zephir\Backend;
 
 use Zephir\Cache\PropertyCacheSlots;
 use Zephir\Class\Method\Method;
-use Zephir\Code\Printer;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
@@ -2428,47 +2427,6 @@ class Backend
         }
 
         return $code;
-    }
-
-    /**
-     * @param Variable[]         $variables
-     * @param CompilationContext $context
-     *
-     * @return string
-     *
-     * @throws CompilerException
-     */
-    public function initializeVariableDefaults(array $variables, CompilationContext $context): string
-    {
-        $codePrinter = new Printer();
-        $codePrinter->increaseLevel();
-
-        $oldCodePrinter       = $context->codePrinter;
-        $context->codePrinter = $codePrinter;
-
-        $variablesManager = new VariablesManager();
-
-        /* Initialize default values in dynamic variables */
-        foreach ($variables as $variable) {
-            /* Do not initialize unused variable */
-            if ($variable->getNumberUses() < 1) {
-                continue;
-            }
-
-            /* The default init value to be used bellow.
-               Actually this value should be in array form and
-               provide 'type' and 'value' keys. */
-            $value = $variable->getDefaultInitValue();
-            if (!is_array($value)) {
-                continue;
-            }
-
-            $variablesManager->initializeDefaults($variable, $value, $context);
-        }
-
-        $context->codePrinter = $oldCodePrinter;
-
-        return $codePrinter->getOutput();
     }
 
     public function onPostCompile(Method $method, CompilationContext $context): void

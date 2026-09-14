@@ -1,0 +1,95 @@
+--TEST--
+Declare defaults: a local declared with a literal value holds exactly what the same PHP literal holds, for every declarable type
+--FILE--
+namespace Stub;
+
+class DeclareDefaults
+{
+	public function dynamicString()
+	{
+		var a = "she said \"hi\" and \\ left";
+		return a;
+	}
+
+	public function nativeString() -> string
+	{
+		string s = "tab\there";
+		return s;
+	}
+
+	public function nativeChar() -> int
+	{
+		char c = 'z';
+		return c;
+	}
+
+	public function nativeInt() -> int
+	{
+		int i = 42;
+		return i;
+	}
+
+	public function nativeBool() -> bool
+	{
+		bool b = true;
+		return b;
+	}
+
+	public function nativeDouble() -> double
+	{
+		double d = 1.5;
+		return d;
+	}
+
+	public function nativeArray() -> array
+	{
+		array items = [1, "two", 3.5];
+		return items;
+	}
+
+	public function emptyArray() -> array
+	{
+		array items = [];
+		return items;
+	}
+
+	public function dynamicNull()
+	{
+		var n = null;
+		return n;
+	}
+}
+--USAGE--
+$test = new \Stub\DeclareDefaults();
+
+$php = [
+    'dynamicString' => "she said \"hi\" and \\ left",
+    'nativeString'  => "tab\there",
+    'nativeChar'    => ord('z'),
+    'nativeInt'     => 42,
+    'nativeBool'    => true,
+    'nativeDouble'  => 1.5,
+    'nativeArray'   => [1, "two", 3.5],
+    'emptyArray'    => [],
+    'dynamicNull'   => null,
+];
+
+foreach ($php as $method => $expected) {
+    $actual = $test->$method();
+    printf(
+        "%s: %s %s\n",
+        $method,
+        json_encode($actual),
+        $actual === $expected ? 'same as PHP' : 'DIFFERS from ' . json_encode($expected)
+    );
+}
+--EXPECT--
+dynamicString: "she said \"hi\" and \\ left" same as PHP
+nativeString: "tab\there" same as PHP
+nativeChar: 122 same as PHP
+nativeInt: 42 same as PHP
+nativeBool: true same as PHP
+nativeDouble: 1.5 same as PHP
+nativeArray: [1,"two",3.5] same as PHP
+emptyArray: [] same as PHP
+dynamicNull: null same as PHP

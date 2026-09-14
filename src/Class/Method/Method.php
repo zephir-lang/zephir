@@ -1449,14 +1449,6 @@ class Method
         }
 
         /**
-         * Initialize variable default values.
-         */
-        $initVarCode = $compilationContext->backend->initializeVariableDefaults(
-            $symbolTable->getVariables(),
-            $compilationContext
-        );
-
-        /**
          * Fetch parameters from vm-top.
          */
         $initCode       = '';
@@ -1767,7 +1759,7 @@ class Method
             }
         }
 
-        $code .= $initCode . $initVarCode;
+        $code .= $initCode;
 
         /**
          * Populate the variadic parameter with the trailing arguments.
