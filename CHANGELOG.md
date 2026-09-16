@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Changed
 - Attribute arguments are folded at compile time, so an argument that is not a constant expression is a compile error [#2466](https://github.com/zephir-lang/zephir/issues/2466)
 - Raised the minimum `ext-zephir_parser` to 2.8.0 for the attribute grammar [#2466](https://github.com/zephir-lang/zephir/issues/2466)
+- A call to an undefined function or method now throws `Error` with PHP's own message and raises no warning first, instead of `RuntimeException` [#2712](https://github.com/zephir-lang/zephir/issues/2712)
 
 ### Removed
 - Removed the `is_private_property()` builtin, whose optimizer emitted a kernel function that does not exist [#2712](https://github.com/zephir-lang/zephir/issues/2712)
