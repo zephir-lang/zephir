@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `let {"name"} = value` emitting a kernel function removed in 0.18.0, so the generated C did not compile [#2710](https://github.com/zephir-lang/zephir/issues/2710)
 - Fixed reading a class constant with `static-constant-class-folding` off emitting an undeclared kernel function, and a value where its address was required [#2711](https://github.com/zephir-lang/zephir/issues/2711)
 - Fixed an unreachable variable defaults path that called an undefined `add_slashes()`, by deleting it [#2707](https://github.com/zephir-lang/zephir/issues/2707)
+- Fixed a method with an empty or comment only body never releasing the memory frame its parameter conversion opened, which retained 232 to 288 bytes per call [#2716](https://github.com/zephir-lang/zephir/issues/2716)
+- Fixed a `try` without a `catch` clause never releasing its memory frame when its body throws, since the exception is cleared and control carries on [#2716](https://github.com/zephir-lang/zephir/issues/2716)
 
 ## [1.4.0] - 2026-09-08
 
