@@ -77,6 +77,7 @@ PHP_METHOD(Stub_MethodsWithDefaultValues, testString)
 	} else {
 		zephir_get_strval(&param, param_param);
 	}
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_MethodsWithDefaultValues, testNullableString)
@@ -99,6 +100,7 @@ PHP_METHOD(Stub_MethodsWithDefaultValues, testNullableString)
 	} else {
 		zephir_get_strval(&param, param_param);
 	}
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_MethodsWithDefaultValues, testInt)

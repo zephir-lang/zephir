@@ -73,9 +73,17 @@ class Method
      */
     private const OUTCOME_JUMPS = 'jumps';
     /**
-     * Control leaves the method (a `return` or a `throw`).
+     * Control leaves the method through a `return`.
      */
     private const OUTCOME_RETURNS = 'returns';
+    /**
+     * Control leaves the method through a `throw`. Distinct from
+     * OUTCOME_RETURNS because a `try` without `catch` clauses clears the
+     * exception, so a throw inside one does not leave the method after all.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2716
+     */
+    private const OUTCOME_THROWS = 'throws';
     /**
      * Statement types that loop, and so can capture a `break`/`continue`.
      */
@@ -2122,43 +2130,54 @@ class Method
         $codePrinter->preOutput($initCode);
 
         /**
-         * Finalize the method compilation
+         * Finalize the method compilation.
+         *
+         * Whether control can reach the closing brace of the body that was just
+         * emitted. A method with no body at all reaches it: converting its
+         * parameters already opened the memory frame, and there is nothing left
+         * to close it. A generator creator does not - generatorCreatorCode()
+         * replaced its body and ended it with its own restore and `return`.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2716
          */
-        if (is_object($this->statements) && !empty($this->statements->getLastStatement())) {
+        $reachesEnd = !$this->isGeneratorCreator()
+            && !$this->leavesMethod(
+                $this->statementsOutcome($this->statements?->getStatements() ?? [])
+            );
+
+        if ($reachesEnd) {
+            if ($this->isGeneratorStep()) {
+                /* Falling off the end finishes the generator (getReturn() => NULL). */
+                $genVariable = $compilationContext->symbolTable->getVariableForRead(
+                    GeneratorTransformer::GEN_PARAM,
+                    $compilationContext
+                );
+                $codePrinter->output(
+                    "\t" . 'zephir_generator_finish('
+                    . $compilationContext->backend->getVariableCode($genVariable)
+                    . ', NULL);'
+                );
+            }
+
+            if ($symbolTable->getMustGrownStack()) {
+                $compilationContext->headersManager->add('kernel/memory');
+                $codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
+            }
+
             /**
-             * When control cannot reach the end of the body there is nothing to
-             * restore and no `return` missing. Otherwise the memory stack has to
-             * be restored, and a declared return type is left unsatisfied.
+             * If a method has return-type hints we need to ensure the last
+             * statement is a 'return' statement.
+             *
+             * A method with no body of its own is exempt. Writing `{}` is how
+             * an interface-shaped stub is declared in Zephir - see
+             * stub/oo/oonativeimplements.zep - and the error has no statement to
+             * point at, which is exactly when getLastStatement() is empty.
              */
-            if (self::OUTCOME_RETURNS !== $this->statementsOutcome($this->statements->getStatements())) {
-                if ($this->isGeneratorStep()) {
-                    /* Falling off the end finishes the generator (getReturn() => NULL). */
-                    $genVariable = $compilationContext->symbolTable->getVariableForRead(
-                        GeneratorTransformer::GEN_PARAM,
-                        $compilationContext
-                    );
-                    $codePrinter->output(
-                        "\t" . 'zephir_generator_finish('
-                        . $compilationContext->backend->getVariableCode($genVariable)
-                        . ', NULL);'
-                    );
-                }
-
-                if ($symbolTable->getMustGrownStack()) {
-                    $compilationContext->headersManager->add('kernel/memory');
-                    $codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
-                }
-
-                /**
-                 * If a method has return-type hints we need to ensure the last
-                 * statement is a 'return' statement
-                 */
-                if ($this->hasReturnTypes()) {
-                    throw new CompilerException(
-                        'Reached end of the method without returning a valid type specified in the return-type hints',
-                        $this->expression['return-type']
-                    );
-                }
+            if ($this->hasReturnTypes() && !empty($this->statements?->getLastStatement())) {
+                throw new CompilerException(
+                    'Reached end of the method without returning a valid type specified in the return-type hints',
+                    $this->expression['return-type']
+                );
             }
         }
 
@@ -2622,20 +2641,19 @@ class Method
     }
 
     /**
-     * Issue #1706: tells whether a `switch` statement is guaranteed to return
-     * (or throw) on every path.
+     * Issue #1706: how control leaves a `switch` statement.
      *
-     * Every clause has to end up returning, because any of them can be the one
-     * that matches. A clause that neither returns nor jumps away falls through
-     * into the clause written after it (issue #1704), so it returns exactly
-     * when that next clause does - which leaves the last clause having to
-     * return on its own. Without a `default` clause a non-matching value skips
-     * the whole `switch`, so it is never exhaustive.
+     * Every clause has to end up leaving the method, because any of them can be
+     * the one that matches. A clause that neither leaves nor jumps away falls
+     * through into the clause written after it (issue #1704), so it leaves
+     * exactly when that next clause does - which leaves the last clause having
+     * to leave on its own. Without a `default` clause a non-matching value
+     * skips the whole `switch`, so it is never exhaustive.
      */
-    private function switchAlwaysReturns(array $statement): bool
+    private function switchOutcome(array $statement): string
     {
         if (empty($statement['clauses']) || !is_array($statement['clauses'])) {
-            return false;
+            return self::OUTCOME_FALLS;
         }
 
         $clauses    = array_values($statement['clauses']);
@@ -2648,34 +2666,36 @@ class Method
         }
 
         if (!$hasDefault) {
-            return false;
+            return self::OUTCOME_FALLS;
         }
 
         /**
-         * Walk backwards so that each clause can be answered against the one
-         * it falls into. Past the last clause control leaves the `switch`
-         * without returning, hence the initial false.
+         * Walk backwards so that each clause can be answered against the one it
+         * falls into. Past the last clause control leaves the `switch` without
+         * leaving the method, hence the initial false.
          */
-        $nextClauseReturns = false;
+        $nextClauseLeaves = false;
+        $throws           = false;
         for ($index = count($clauses) - 1; $index >= 0; --$index) {
             $outcome = $this->statementsOutcome($clauses[$index]['statements'] ?? []);
 
             if (self::OUTCOME_JUMPS === $outcome) {
                 /**
-                 * A `break`/`continue` leaves the `switch` without returning,
-                 * so the method can still fall off its end.
+                 * A `break`/`continue` leaves the `switch` without leaving the
+                 * method, so the method can still fall off its end.
                  */
-                return false;
+                return self::OUTCOME_FALLS;
             }
 
-            if (self::OUTCOME_FALLS === $outcome && !$nextClauseReturns) {
-                return false;
+            if (self::OUTCOME_FALLS === $outcome && !$nextClauseLeaves) {
+                return self::OUTCOME_FALLS;
             }
 
-            $nextClauseReturns = true;
+            $throws           = $throws || self::OUTCOME_THROWS === $outcome;
+            $nextClauseLeaves = true;
         }
 
-        return true;
+        return $throws ? self::OUTCOME_THROWS : self::OUTCOME_RETURNS;
     }
 
     /**
@@ -2702,6 +2722,17 @@ class Method
     }
 
     /**
+     * Whether an outcome takes control out of the method, by either of the two
+     * ways it can go: a `return` or a `throw`. The two are told apart only so
+     * that a catch-less `try` can swallow the throw; everywhere else they mean
+     * the same thing.
+     */
+    private function leavesMethod(string $outcome): bool
+    {
+        return self::OUTCOME_RETURNS === $outcome || self::OUTCOME_THROWS === $outcome;
+    }
+
+    /**
      * How control leaves a single statement. Anything that does not transfer
      * control of its own accord just falls through to the next one.
      */
@@ -2709,8 +2740,12 @@ class Method
     {
         $type = $statement['type'] ?? null;
 
-        if ('return' === $type || 'throw' === $type) {
+        if ('return' === $type) {
             return self::OUTCOME_RETURNS;
+        }
+
+        if ('throw' === $type) {
+            return self::OUTCOME_THROWS;
         }
 
         if ('break' === $type || 'continue' === $type) {
@@ -2731,12 +2766,10 @@ class Method
 
         if ('switch' === $type) {
             /**
-             * A `switch` swallows its own `break`s, so it either returns on
-             * every path or control continues after it.
+             * A `switch` swallows its own `break`s, so it either leaves the
+             * method on every path or control continues after it.
              */
-            return $this->switchAlwaysReturns($statement)
-                ? self::OUTCOME_RETURNS
-                : self::OUTCOME_FALLS;
+            return $this->switchOutcome($statement);
         }
 
         return self::OUTCOME_FALLS;
@@ -2746,15 +2779,27 @@ class Method
      * How control leaves a `try`/`catch`.
      *
      * Without `catch` clauses normal flow simply continues with the outcome of
-     * the `try` body. With them every body has to leave the method for the
-     * statement as a whole to do so, because any of them can be the one that
-     * runs.
+     * the `try` body - and a body that leaves by throwing is no exception:
+     * TryCatchStatement::compile() emits `zend_clear_exception()` for a
+     * catch-less `try`, so the throw is swallowed and control carries on after
+     * the statement. With `catch` clauses every body has to leave the method
+     * for the statement as a whole to do so, because any of them can be the one
+     * that runs.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2716
      */
     private function tryCatchOutcome(array $statement): string
     {
-        $outcomes = [$this->statementsOutcome($statement['statements'] ?? [])];
+        $bodyOutcome = $this->statementsOutcome($statement['statements'] ?? []);
+        $catches     = $statement['catches'] ?? [];
 
-        foreach ($statement['catches'] ?? [] as $catch) {
+        if (empty($catches)) {
+            return self::OUTCOME_THROWS === $bodyOutcome ? self::OUTCOME_FALLS : $bodyOutcome;
+        }
+
+        $outcomes = [$bodyOutcome];
+
+        foreach ($catches as $catch) {
             $outcomes[] = $this->statementsOutcome($catch['statements'] ?? []);
         }
 
@@ -2762,9 +2807,16 @@ class Method
             return self::OUTCOME_JUMPS;
         }
 
-        return in_array(self::OUTCOME_FALLS, $outcomes, true)
-            ? self::OUTCOME_FALLS
-            : self::OUTCOME_RETURNS;
+        if (in_array(self::OUTCOME_FALLS, $outcomes, true)) {
+            return self::OUTCOME_FALLS;
+        }
+
+        /**
+         * A `catch` clause may match the thrown class, so the statement is not
+         * reported as throwing on to an enclosing catch-less `try`. Whether the
+         * clauses really cover every thrown class is not decidable here.
+         */
+        return self::OUTCOME_RETURNS;
     }
 
     /**
@@ -2775,6 +2827,10 @@ class Method
      * after it. An infinite loop is left only by a `break` that targets it;
      * without one the code after the loop is unreachable and the sole way out
      * is a `return`/`throw`.
+     *
+     * The two are not told apart here: a loop whose only exit is a `throw` is
+     * reported as returning, so an enclosing catch-less `try` does not learn
+     * that it would swallow that throw. Nothing in the tree writes that shape.
      */
     private function loopOutcome(array $statement): string
     {
@@ -2882,8 +2938,17 @@ class Method
             return self::OUTCOME_JUMPS;
         }
 
-        return in_array(self::OUTCOME_FALLS, $arms, true)
-            ? self::OUTCOME_FALLS
+        if (in_array(self::OUTCOME_FALLS, $arms, true)) {
+            return self::OUTCOME_FALLS;
+        }
+
+        /**
+         * Every arm leaves the method. Saying so as a throw when any of them
+         * throws keeps that visible to an enclosing catch-less `try`, which
+         * would swallow it and carry on.
+         */
+        return in_array(self::OUTCOME_THROWS, $arms, true)
+            ? self::OUTCOME_THROWS
             : self::OUTCOME_RETURNS;
     }
 
