@@ -198,7 +198,7 @@ PHP_METHOD(Stub_Fasta, main)
 	add_assoc_double_ex(&homoSap, SL("t"), 0.3015094502008);
 	php_printf("%s", ">ONE Homo sapiens alu");
 	ZVAL_LONG(&_1, (2 * (zend_long) zephir_get_numberval(n)));
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "fastarepeat", NULL, 0, &_1, &alu);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "fastaRepeat", NULL, 0, &_1, &alu);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 }

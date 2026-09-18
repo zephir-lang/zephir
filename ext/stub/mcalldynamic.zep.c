@@ -49,7 +49,7 @@ PHP_METHOD(Stub_McallDynamic, testMagicCall1)
 
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "method1", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_1, this_ptr, "method1", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_1, this_ptr, "METHOD1", NULL, 0);
 	zephir_check_call_status();
 	zephir_add_function(return_value, &_0, &_1);
 	RETURN_MM();

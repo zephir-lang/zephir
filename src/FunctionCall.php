@@ -437,6 +437,15 @@ class FunctionCall extends Call
         $cachePointer  = $functionCache->get($funcName, $compilationContext, $exists);
 
         /**
+         * The lowered name resolves optimizers and the compile time lookups
+         * above; the call itself carries the name as it was written, which is
+         * the spelling PHP prints when the function turns out not to exist.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2715
+         */
+        $callName = $expression['name'];
+
+        /**
          * Add the last call status to the current symbol table
          */
         $this->addCallStatusFlag($compilationContext);
@@ -445,7 +454,7 @@ class FunctionCall extends Call
             if ($this->isExpectingReturn()) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output(
-                        'ZEPHIR_RETURN_CALL_FUNCTION("' . $funcName . '", ' . $cachePointer . ');'
+                        'ZEPHIR_RETURN_CALL_FUNCTION("' . $callName . '", ' . $cachePointer . ');'
                     );
                 } else {
                     if ($this->mustInitSymbolVariable()) {
@@ -453,18 +462,18 @@ class FunctionCall extends Call
                         $symbolVariable->trackVariant($compilationContext);
                     }
                     $codePrinter->output(
-                        'ZEPHIR_CALL_FUNCTION(' . $symbol . ', "' . $funcName . '", ' . $cachePointer . ');'
+                        'ZEPHIR_CALL_FUNCTION(' . $symbol . ', "' . $callName . '", ' . $cachePointer . ');'
                     );
                 }
             } else {
-                $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", ' . $cachePointer . ');');
+                $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $callName . '", ' . $cachePointer . ');');
             }
         } else {
             if ($this->isExpectingReturn()) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output(
                         strtr('ZEPHIR_RETURN_CALL_FUNCTION(":func", :pointer, :params);', [
-                            ':func'    => $funcName,
+                            ':func'    => $callName,
                             ':pointer' => $cachePointer,
                             ':params'  => implode(', ', $params),
                         ])
@@ -478,7 +487,7 @@ class FunctionCall extends Call
                     $codePrinter->output(
                         strtr('ZEPHIR_CALL_FUNCTION(:symbol, ":func", :pointer, :params);', [
                             ':symbol'  => $symbol,
-                            ':func'    => $funcName,
+                            ':func'    => $callName,
                             ':pointer' => $cachePointer,
                             ':params'  => implode(', ', $params),
                         ])
@@ -487,7 +496,7 @@ class FunctionCall extends Call
             } else {
                 $codePrinter->output(
                     strtr('ZEPHIR_CALL_FUNCTION(NULL, ":func", :pointer, :params);', [
-                        ':func'    => $funcName,
+                        ':func'    => $callName,
                         ':pointer' => $cachePointer,
                         ':params'  => implode(', ', $params),
                     ])

@@ -69,7 +69,7 @@ PHP_METHOD(Stub_Geometry, run)
 		zephir_array_fetch_long(&_7$$3, &list, i, PH_NOISY | PH_READONLY, "stub/geometry.zep", 11);
 		ZEPHIR_OBS_NVAR(&_8$$3);
 		zephir_array_fetch_long(&_8$$3, &_7$$3, 3, PH_NOISY, "stub/geometry.zep", 11);
-		ZEPHIR_CALL_STATIC(NULL, "distancestatic", &_0, 0, &_2$$3, &_4$$3, &_6$$3, &_8$$3);
+		ZEPHIR_CALL_STATIC(NULL, "distanceStatic", &_0, 0, &_2$$3, &_4$$3, &_6$$3, &_8$$3);
 		zephir_check_call_status();
 		i = (i + 1);
 	}
@@ -113,7 +113,7 @@ PHP_METHOD(Stub_Geometry, runOptimize)
 		zephir_array_fetch_long(&_3$$3, &item, 2, PH_NOISY, "stub/geometry.zep", 24);
 		ZEPHIR_OBS_NVAR(&_4$$3);
 		zephir_array_fetch_long(&_4$$3, &item, 3, PH_NOISY, "stub/geometry.zep", 24);
-		ZEPHIR_CALL_STATIC(NULL, "distancestatic", &_0, 0, &_1$$3, &_2$$3, &_3$$3, &_4$$3);
+		ZEPHIR_CALL_STATIC(NULL, "distanceStatic", &_0, 0, &_1$$3, &_2$$3, &_3$$3, &_4$$3);
 		zephir_check_call_status();
 		i++;
 	}

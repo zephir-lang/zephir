@@ -84,7 +84,7 @@ PHP_METHOD(Stub_Router_Route, __construct)
 		httpMethods = &httpMethods_sub;
 		httpMethods = &__$null;
 	}
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "reconfigure", NULL, 0, pattern, paths);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "reConfigure", NULL, 0, pattern, paths);
 	zephir_check_call_status();
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 127, httpMethods);
 	ZEPHIR_MM_RESTORE();
@@ -581,7 +581,7 @@ PHP_METHOD(Stub_Router_Route, reConfigure)
 	}
 	if (!(zephir_start_with_str(pattern, SL("#")))) {
 		if (zephir_memnstr_str(pattern, SL("{"), "stub/router/route.zep", 348)) {
-			ZEPHIR_CALL_METHOD(&extracted, this_ptr, "extractnamedparams", NULL, 0, pattern);
+			ZEPHIR_CALL_METHOD(&extracted, this_ptr, "extractNamedParams", NULL, 0, pattern);
 			zephir_check_call_status();
 			zephir_memory_observe(&pcrePattern);
 			zephir_array_fetch_long(&pcrePattern, &extracted, 0, PH_NOISY, "stub/router/route.zep", 351);
@@ -593,7 +593,7 @@ PHP_METHOD(Stub_Router_Route, reConfigure)
 		} else {
 			ZEPHIR_CPY_WRT(&pcrePattern, pattern);
 		}
-		ZEPHIR_CALL_METHOD(&compiledPattern, this_ptr, "compilepattern", NULL, 0, &pcrePattern);
+		ZEPHIR_CALL_METHOD(&compiledPattern, this_ptr, "compilePattern", NULL, 0, &pcrePattern);
 		zephir_check_call_status();
 	} else {
 		ZEPHIR_CPY_WRT(&compiledPattern, pattern);

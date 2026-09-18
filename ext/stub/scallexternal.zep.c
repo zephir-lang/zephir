@@ -36,7 +36,7 @@ PHP_METHOD(Stub_ScallExternal, testCall1)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_CE_STATIC(stub_scall_ce, "testmethod1", NULL, 0);
+	ZEPHIR_RETURN_CALL_CE_STATIC(stub_scall_ce, "testMethod1", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -56,7 +56,7 @@ PHP_METHOD(Stub_ScallExternal, testCall2)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &b);
-	ZEPHIR_RETURN_CALL_CE_STATIC(stub_scall_ce, "testmethod4", NULL, 0, a, b);
+	ZEPHIR_RETURN_CALL_CE_STATIC(stub_scall_ce, "testMethod4", NULL, 0, a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }

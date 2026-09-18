@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+- Fixed a called method name being lower-cased at code generation, so `__call()` and `__callStatic()` now receive the name as it was written at the call site, as they do in PHP [#2715](https://github.com/zephir-lang/zephir/issues/2715)
+- Fixed a method name held in a variable being lower-cased again at runtime by the call macros [#2715](https://github.com/zephir-lang/zephir/issues/2715)
+- Fixed a call to an undefined method or function being reported with the lower-cased name instead of the spelling at the call site [#2715](https://github.com/zephir-lang/zephir/issues/2715)
+
 ## [1.5.0] - 2026-09-18
 
 ### Added

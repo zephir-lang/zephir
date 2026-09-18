@@ -228,19 +228,19 @@ PHP_METHOD(Stub_Issue2654, leakProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "readvar", &_1, 0);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "readVar", &_1, 0);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "readstring", &_2, 0);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "readString", &_2, 0);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "readarray", &_3, 0);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "readArray", &_3, 0);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "passasargument", &_4, 0);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "passAsArgument", &_4, 0);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "captureinclosure", &_5, 0);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "captureInClosure", &_5, 0);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "concatunassigned", &_6, 0);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "concatUnassigned", &_6, 0);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "optionalparam", &_7, 0);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "optionalParam", &_7, 0);
 		zephir_check_call_status();
 		i++;
 	}

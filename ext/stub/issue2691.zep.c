@@ -763,7 +763,7 @@ PHP_METHOD(Stub_Issue2691, writeLeakProbe)
 		ZVAL_STRING(&_2$$3, "next");
 		zephir_array_fast_append(&_1$$3, &_2$$3);
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 69, &_1$$3);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "shiftrows", &_3, 0);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "shiftRows", &_3, 0);
 		zephir_check_call_status();
 		i++;
 	}

@@ -38,7 +38,7 @@ PHP_METHOD(Stub_Issue2565, resolveType)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &type);
 	if (zephir_is_instance_of(type, SL("ReflectionNamedType"))) {
-		ZEPHIR_RETURN_CALL_METHOD(type, "getname", NULL, 0);
+		ZEPHIR_RETURN_CALL_METHOD(type, "getName", NULL, 0);
 		zephir_check_call_status();
 		RETURN_MM();
 	}

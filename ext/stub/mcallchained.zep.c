@@ -57,9 +57,9 @@ PHP_METHOD(Stub_McallChained, testChained1)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod1", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testMethod1", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(&_0, "testmethod2", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD(&_0, "testMethod2", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -76,11 +76,11 @@ PHP_METHOD(Stub_McallChained, testChained2)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod1", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testMethod1", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_1, &_0, "testmethod3", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_1, &_0, "testMethod3", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(&_1, "testmethod2", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD(&_1, "testMethod2", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -97,11 +97,11 @@ PHP_METHOD(Stub_McallChained, testChained3)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod3", NULL, 87);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testMethod3", NULL, 87);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_1, &_0, "testmethod2", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_1, &_0, "testMethod2", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(&_1, "testmethod1", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD(&_1, "testMethod1", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -124,9 +124,9 @@ PHP_METHOD(Stub_McallChained, testChained4)
 
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 74, this_ptr);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 74, PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_CALL_METHOD(&_1, &_0, "testmethod1", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_1, &_0, "testMethod1", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(&_1, "testmethod2", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD(&_1, "testMethod2", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

@@ -1734,7 +1734,7 @@ PHP_METHOD(Stub_Flow, testFor35)
 			ZVAL_LONG(&i, _1);
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_STRING(&_3$$3, "hello");
-			ZEPHIR_CALL_METHOD(NULL, this_ptr, "testfor35aux", &_4, 0, &_3$$3);
+			ZEPHIR_CALL_METHOD(NULL, this_ptr, "testFor35Aux", &_4, 0, &_3$$3);
 			zephir_check_call_status();
 		}
 	}
@@ -1786,7 +1786,7 @@ PHP_METHOD(Stub_Flow, testFor36)
 			ZVAL_LONG(&i, _1);
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_STRING(&_3$$3, "hello");
-			ZEPHIR_CALL_METHOD(NULL, this_ptr, "testfor36aux", &_4, 0, &_3$$3);
+			ZEPHIR_CALL_METHOD(NULL, this_ptr, "testFor36Aux", &_4, 0, &_3$$3);
 			zephir_check_call_status();
 		}
 	}
