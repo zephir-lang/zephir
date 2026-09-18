@@ -33,7 +33,7 @@ PHP_METHOD(Stub_InternalClasses, testStaticCall)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	_0 = zephir_fetch_class_str_ex(SL("Phalcon\\Di"), ZEND_FETCH_CLASS_AUTO);
-	ZEPHIR_RETURN_CALL_CE_STATIC(_0, "getdefault", NULL, 0);
+	ZEPHIR_RETURN_CALL_CE_STATIC(_0, "getDefault", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

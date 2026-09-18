@@ -435,7 +435,7 @@ PHP_METHOD(Stub_Closures, issue2321CallPrivateCallback)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&value_zv);
 	ZVAL_STR_COPY(&value_zv, value);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2321filterquery", NULL, 39, &value_zv);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2321filterQuery", NULL, 39, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }

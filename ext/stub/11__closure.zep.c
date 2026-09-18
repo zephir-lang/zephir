@@ -32,7 +32,7 @@ PHP_METHOD(stub_11__closure, __invoke)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2497helper", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2497Helper", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

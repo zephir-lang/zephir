@@ -221,7 +221,7 @@ PHP_METHOD(Stub_Issue2698, writeProbe)
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "added");
 		ZVAL_LONG(&_2$$3, 1);
-		ZEPHIR_CALL_METHOD(NULL, &subject, "writeoffset", &_3, 72, &_1$$3, &_2$$3);
+		ZEPHIR_CALL_METHOD(NULL, &subject, "writeOffset", &_3, 72, &_1$$3, &_2$$3);
 		zephir_check_call_status();
 		i++;
 	}
@@ -270,7 +270,7 @@ PHP_METHOD(Stub_Issue2698, appendProbe)
 		}
 
 		ZVAL_LONG(&_1$$3, 1);
-		ZEPHIR_CALL_METHOD(NULL, &subject, "appendvalue", &_2, 73, &_1$$3);
+		ZEPHIR_CALL_METHOD(NULL, &subject, "appendValue", &_2, 73, &_1$$3);
 		zephir_check_call_status();
 		i++;
 	}
@@ -324,7 +324,7 @@ PHP_METHOD(Stub_Issue2698, nestedProbe)
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		ZVAL_STRING(&_2$$3, "added");
 		ZVAL_LONG(&_3$$3, 1);
-		ZEPHIR_CALL_METHOD(NULL, &subject, "writenested", &_4, 74, &_1$$3, &_2$$3, &_3$$3);
+		ZEPHIR_CALL_METHOD(NULL, &subject, "writeNested", &_4, 74, &_1$$3, &_2$$3, &_3$$3);
 		zephir_check_call_status();
 		i++;
 	}
@@ -373,7 +373,7 @@ PHP_METHOD(Stub_Issue2698, unsetProbe)
 
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "a");
-		ZEPHIR_CALL_METHOD(NULL, &subject, "removeoffset", &_2, 75, &_1$$3);
+		ZEPHIR_CALL_METHOD(NULL, &subject, "removeOffset", &_2, 75, &_1$$3);
 		zephir_check_call_status();
 		i++;
 	}
@@ -428,13 +428,13 @@ PHP_METHOD(Stub_Issue2698, unsetSharedProbe)
 
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "a");
-		ZEPHIR_CALL_METHOD(NULL, &subject, "removeoffset", &_2, 75, &_1$$3);
+		ZEPHIR_CALL_METHOD(NULL, &subject, "removeOffset", &_2, 75, &_1$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&held, &subject, "getremovable", &_3, 76);
+		ZEPHIR_CALL_METHOD(&held, &subject, "getRemovable", &_3, 76);
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "b");
-		ZEPHIR_CALL_METHOD(NULL, &subject, "removeoffset", &_2, 75, &_1$$3);
+		ZEPHIR_CALL_METHOD(NULL, &subject, "removeOffset", &_2, 75, &_1$$3);
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(&held);
 		ZVAL_NULL(&held);

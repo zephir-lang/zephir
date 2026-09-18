@@ -995,10 +995,10 @@ PHP_METHOD(Stub_Bitwise, testbitwiseXor)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, 123);
-	ZEPHIR_CALL_METHOD(&i, this_ptr, "getint", NULL, 0, &_0);
+	ZEPHIR_CALL_METHOD(&i, this_ptr, "getInt", NULL, 0, &_0);
 	zephir_check_call_status();
 	ZVAL_LONG(&_0, 321);
-	ZEPHIR_CALL_METHOD(&j, this_ptr, "getint", NULL, 0, &_0);
+	ZEPHIR_CALL_METHOD(&j, this_ptr, "getInt", NULL, 0, &_0);
 	zephir_check_call_status();
 	zephir_bitwise_xor_function(return_value, &i, &j);
 	RETURN_MM();

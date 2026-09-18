@@ -175,7 +175,7 @@ PHP_METHOD(Stub_Oo_OoParams, setStrictNameFromZephirLand)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, 12345);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "setstrictname", NULL, 0, &_0);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "setStrictName", NULL, 0, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

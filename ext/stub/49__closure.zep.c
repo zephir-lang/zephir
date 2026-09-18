@@ -39,7 +39,7 @@ PHP_METHOD(stub_49__closure, __invoke)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &carry, &row);
-	ZEPHIR_RETURN_CALL_CE_STATIC(stub_issue2167_ce, "imploderow", NULL, 0, carry, row);
+	ZEPHIR_RETURN_CALL_CE_STATIC(stub_issue2167_ce, "implodeRow", NULL, 0, carry, row);
 	zephir_check_call_status();
 	RETURN_MM();
 }

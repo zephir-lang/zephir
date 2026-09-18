@@ -230,7 +230,7 @@ PHP_METHOD(Stub_Issue2716, stringProbe)
 		}
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "name");
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "emptywithstring", &_2, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "emptyWithString", &_2, 0, &_1$$3);
 		zephir_check_call_status();
 		i++;
 	}
@@ -266,7 +266,7 @@ PHP_METHOD(Stub_Issue2716, arrayProbe)
 		}
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		array_init(&_1$$3);
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "emptywitharray", &_2, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "emptyWithArray", &_2, 0, &_1$$3);
 		zephir_check_call_status();
 		i++;
 	}
@@ -299,7 +299,7 @@ PHP_METHOD(Stub_Issue2716, commentProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "commentonlybody", &_1, 0);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "commentOnlyBody", &_1, 0);
 		zephir_check_call_status();
 		i++;
 	}
@@ -335,7 +335,7 @@ PHP_METHOD(Stub_Issue2716, throwProbe)
 		}
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		array_init(&_1$$3);
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "swallowedthrow", &_2, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "swallowedThrow", &_2, 0, &_1$$3);
 		zephir_check_call_status();
 		i++;
 	}

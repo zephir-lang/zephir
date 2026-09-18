@@ -40,7 +40,7 @@ PHP_METHOD(Stub_Invokes_AbstractInvokerComplex, __toString)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 2, PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "renderarrayelementscomplex", NULL, 0, &_0);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "renderArrayElementsComplex", NULL, 0, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

@@ -185,7 +185,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclareMcallExpression)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(&a, this_ptr, "testdeclare14", NULL, 0);
+	ZEPHIR_CALL_METHOD(&a, this_ptr, "testDeclare14", NULL, 0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&a);
 }

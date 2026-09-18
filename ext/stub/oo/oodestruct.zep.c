@@ -447,7 +447,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CALL_SELF(&version, "getversion", NULL, 0);
+	ZEPHIR_CALL_SELF(&version, "getVersion", NULL, 0);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_4);
 	ZVAL_STRING(&_4, "2.0.1");

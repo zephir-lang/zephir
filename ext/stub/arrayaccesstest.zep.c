@@ -321,7 +321,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithStr
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 123);
 	zephir_array_update_string(&params, SL("test"), &_0, PH_COPY | PH_SEPARATE);
-	ZEPHIR_CALL_SELF(NULL, "issue1086strict", NULL, 0, &params);
+	ZEPHIR_CALL_SELF(NULL, "issue1086Strict", NULL, 0, &params);
 	zephir_check_call_status();
 	RETURN_CTOR(&params);
 }
@@ -370,7 +370,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithout
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 123);
 	zephir_array_update_string(&params, SL("test"), &_0, PH_COPY | PH_SEPARATE);
-	ZEPHIR_CALL_SELF(NULL, "issue1086notstrictparams", NULL, 0, &params);
+	ZEPHIR_CALL_SELF(NULL, "issue1086NotStrictParams", NULL, 0, &params);
 	zephir_check_call_status();
 	RETURN_CTOR(&params);
 }

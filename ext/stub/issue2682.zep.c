@@ -223,9 +223,9 @@ PHP_METHOD(Stub_Issue2682, leakProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchonly", &_1, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchOnly", &_1, 0, container);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "plainread", &_2, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "plainRead", &_2, 0, container);
 		zephir_check_call_status();
 		i++;
 	}
@@ -492,7 +492,7 @@ PHP_METHOD(Stub_Issue2682, writeLeakProbe)
 		}
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "v");
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "pushintocontainer", &_2, 0, container, &_1$$3);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "pushIntoContainer", &_2, 0, container, &_1$$3);
 		zephir_check_call_status();
 		i++;
 	}

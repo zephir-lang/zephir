@@ -33,7 +33,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, run)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "callprivatemethod", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "callPrivateMethod", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -146,7 +146,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getNewVars)
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(&_0, &className_zv);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "getobjvars", NULL, 0, &_0);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "getObjVars", NULL, 0, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

@@ -287,21 +287,21 @@ PHP_METHOD(Stub_Issue2656, leakProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchliteral", &_1, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchLiteral", &_1, 0, container);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchliteralmissing", &_2, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchLiteralMissing", &_2, 0, container);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchlong", &_3, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchLong", &_3, 0, container);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchdynamic", &_4, 0, container, key);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchDynamic", &_4, 0, container, key);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "issetliteral", &_5, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "issetLiteral", &_5, 0, container);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "issetlong", &_6, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "issetLong", &_6, 0, container);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "issetdynamic", &_7, 0, container, key);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "issetDynamic", &_7, 0, container, key);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "emptyliteral", &_8, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "emptyLiteral", &_8, 0, container);
 		zephir_check_call_status();
 		i++;
 	}

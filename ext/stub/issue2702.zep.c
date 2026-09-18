@@ -359,7 +359,7 @@ PHP_METHOD(Stub_Issue2702, literalProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "removeliteral", &_1, 0);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "removeLiteral", &_1, 0);
 		zephir_check_call_status();
 		i++;
 	}
@@ -392,7 +392,7 @@ PHP_METHOD(Stub_Issue2702, longLiteralProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "removelongliteral", &_1, 0);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "removeLongLiteral", &_1, 0);
 		zephir_check_call_status();
 		i++;
 	}

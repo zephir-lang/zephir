@@ -442,7 +442,7 @@ PHP_METHOD(Stub_TryTest, testTry9)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod1", NULL, 127);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "someMethod1", NULL, 127);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched");
 
@@ -474,7 +474,7 @@ PHP_METHOD(Stub_TryTest, testTry10)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod2", NULL, 128);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "someMethod2", NULL, 128);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched");
 

@@ -44,7 +44,7 @@ PHP_METHOD(stub_19__closure, __invoke)
 	zephir_read_property(&name, this_ptr, SL("name"), PH_NOISY_CC);
 	this_ptr = &__$zephir_this;
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "issue2497helper", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "issue2497Helper", NULL, 0);
 	zephir_check_call_status();
 	ZEPHIR_CONCAT_VSV(return_value, &_0, ":", &name);
 	RETURN_MM();

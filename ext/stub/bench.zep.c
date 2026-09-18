@@ -437,7 +437,7 @@ PHP_METHOD(Stub_Bench, methodDispatchLoop)
 		if (!(i < n)) {
 			break;
 		}
-		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "returnconst", &_1, 0);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "returnConst", &_1, 0);
 		zephir_check_call_status();
 		sum += zephir_get_numberval(&_0$$3);
 		i++;
@@ -517,7 +517,7 @@ PHP_METHOD(Stub_Bench, newInstanceLoop)
 		object_init_ex(&obj, stub_bench_ce);
 		ZEPHIR_CALL_METHOD(NULL, &obj, "__construct", &_0, 10);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&_1$$3, &obj, "returnconst", &_2, 11);
+		ZEPHIR_CALL_METHOD(&_1$$3, &obj, "returnConst", &_2, 11);
 		zephir_check_call_status();
 		sum += zephir_get_numberval(&_1$$3);
 		i++;
@@ -600,7 +600,7 @@ PHP_METHOD(Stub_Bench, variadicSumNarrowLoop)
 		ZVAL_LONG(&_3$$3, 3);
 		ZVAL_LONG(&_4$$3, 4);
 		ZVAL_LONG(&_5$$3, 5);
-		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "variadicsum", &_6, 0, &_1$$3, &_2$$3, &_3$$3, &_4$$3, &_5$$3);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "variadicSum", &_6, 0, &_1$$3, &_2$$3, &_3$$3, &_4$$3, &_5$$3);
 		zephir_check_call_status();
 		sum += zephir_get_numberval(&_0$$3);
 		i++;
@@ -664,7 +664,7 @@ PHP_METHOD(Stub_Bench, variadicSumWideLoop)
 		ZVAL_LONG(&_13$$3, 13);
 		ZVAL_LONG(&_14$$3, 14);
 		ZVAL_LONG(&_15$$3, 15);
-		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "variadicsum", &_16, 0, &_1$$3, &_2$$3, &_3$$3, &_4$$3, &_5$$3, &_6$$3, &_7$$3, &_8$$3, &_9$$3, &_10$$3, &_11$$3, &_12$$3, &_13$$3, &_14$$3, &_15$$3);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "variadicSum", &_16, 0, &_1$$3, &_2$$3, &_3$$3, &_4$$3, &_5$$3, &_6$$3, &_7$$3, &_8$$3, &_9$$3, &_10$$3, &_11$$3, &_12$$3, &_13$$3, &_14$$3, &_15$$3);
 		zephir_check_call_status();
 		sum += zephir_get_numberval(&_0$$3);
 		i++;
@@ -755,7 +755,7 @@ PHP_METHOD(Stub_Bench, funcGetArgsSumLoop)
 		ZVAL_LONG(&_3$$3, 3);
 		ZVAL_LONG(&_4$$3, 4);
 		ZVAL_LONG(&_5$$3, 5);
-		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "funcgetargssum", &_6, 0, &_1$$3, &_2$$3, &_3$$3, &_4$$3, &_5$$3);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "funcGetArgsSum", &_6, 0, &_1$$3, &_2$$3, &_3$$3, &_4$$3, &_5$$3);
 		zephir_check_call_status();
 		sum += zephir_get_numberval(&_0$$3);
 		i++;
@@ -803,7 +803,7 @@ PHP_METHOD(Stub_Bench, finalDispatchLoop)
 		if (!(i < n)) {
 			break;
 		}
-		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "finalreturnconst", &_1, 12);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "finalReturnConst", &_1, 12);
 		zephir_check_call_status();
 		sum += zephir_get_numberval(&_0$$3);
 		i++;
@@ -832,7 +832,7 @@ PHP_METHOD(Stub_Bench, staticDispatchLoop)
 		if (!(i < n)) {
 			break;
 		}
-		ZEPHIR_CALL_SELF(&_0$$3, "staticreturnconst", &_1, 0);
+		ZEPHIR_CALL_SELF(&_0$$3, "staticReturnConst", &_1, 0);
 		zephir_check_call_status();
 		sum += zephir_get_numberval(&_0$$3);
 		i++;
@@ -941,7 +941,7 @@ PHP_METHOD(Stub_Bench, sumViaGenerator)
 	zephir_fetch_params(1, 1, 0, &n_param);
 	total = 0;
 	ZVAL_LONG(&_1, n);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "generatorrange", NULL, 0, &_1);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "generatorRange", NULL, 0, &_1);
 	zephir_check_call_status();
 	if (Z_TYPE_P(&_0) == IS_STRING) {
 		ZEPHIR_INIT_VAR(&_3);
@@ -1005,7 +1005,7 @@ PHP_METHOD(Stub_Bench, sumViaArray)
 	zephir_fetch_params(1, 1, 0, &n_param);
 	total = 0;
 	ZVAL_LONG(&_1, n);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "arrayrange", NULL, 0, &_1);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "arrayRange", NULL, 0, &_1);
 	zephir_check_call_status();
 	if (Z_TYPE_P(&_0) == IS_STRING) {
 		ZEPHIR_INIT_VAR(&_3);
@@ -1596,7 +1596,7 @@ PHP_METHOD(Stub_Bench, conditionalLocalLoop)
 			break;
 		}
 		ZVAL_BOOL(&_1$$3, (zephir_safe_mod_long_long(i, 2)) == 0);
-		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "conditionallocalstep", &_2, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "conditionalLocalStep", &_2, 0, &_1$$3);
 		zephir_check_call_status();
 		hits += zephir_get_numberval(&_0$$3);
 		i++;
@@ -1656,7 +1656,7 @@ PHP_METHOD(Stub_Bench, definiteLocalLoop)
 			break;
 		}
 		ZVAL_BOOL(&_1$$3, (zephir_safe_mod_long_long(i, 2)) == 0);
-		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "definitelocalstep", &_2, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "definiteLocalStep", &_2, 0, &_1$$3);
 		zephir_check_call_status();
 		hits += zephir_get_numberval(&_0$$3);
 		i++;

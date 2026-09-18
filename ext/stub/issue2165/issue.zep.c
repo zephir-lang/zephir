@@ -423,7 +423,7 @@ PHP_METHOD(Stub_Issue2165_Issue, reciprocal)
 	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 56, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_SELF(&_0, "ones", NULL, 0, &_1, &_2);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(&_0, "dividematrix", NULL, 0, this_ptr);
+	ZEPHIR_RETURN_CALL_METHOD(&_0, "divideMatrix", NULL, 0, this_ptr);
 	zephir_check_call_status();
 	RETURN_MM();
 }

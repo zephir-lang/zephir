@@ -36,7 +36,7 @@ PHP_METHOD(Stub_ScallLateConstruct, __construct)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "testpublicinit", NULL, 0);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "testPublicInit", NULL, 0);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 }
@@ -62,7 +62,7 @@ PHP_METHOD(Stub_ScallLateConstruct, testPublicInit)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_SELF(&_0, "teststaticinit", NULL, 0);
+	ZEPHIR_CALL_SELF(&_0, "testStaticInit", NULL, 0);
 	zephir_check_call_status();
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 134, &_0);
 	ZEPHIR_MM_RESTORE();

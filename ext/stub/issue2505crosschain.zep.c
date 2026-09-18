@@ -57,9 +57,9 @@ PHP_METHOD(Stub_Issue2505CrossChain, crossClassChain)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &instance);
-	ZEPHIR_CALL_METHOD(&_0, instance, "makestatic", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_0, instance, "makeStatic", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(&_0, "checkprivate", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD(&_0, "checkPrivate", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -78,9 +78,9 @@ PHP_METHOD(Stub_Issue2505CrossChain, crossClassChainSelf)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &instance);
-	ZEPHIR_CALL_METHOD(&_0, instance, "makeself", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_0, instance, "makeSelf", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(&_0, "checkprivate", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD(&_0, "checkPrivate", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
