@@ -1,0 +1,117 @@
+--TEST--
+A call to something that does not exist fails the way PHP fails it: an `Error` carrying PHP's own message, with no diagnostic raised first
+--FILE--
+namespace Stub;
+
+class Issue2712
+{
+	public function callUndefinedFunction(var name)
+	{
+		return is_private_property(name);
+	}
+
+	public function callUndefinedFunctionByVariable(var name)
+	{
+		var handler;
+
+		let handler = "is_private_property";
+
+		return {handler}(name);
+	}
+
+	public function callUndefinedMethod(var receiver)
+	{
+		return receiver->nope();
+	}
+}
+--USAGE--
+/**
+ * `is_private_property()` was a Zephir builtin whose optimizer emitted a kernel
+ * function that never existed, so no .zep calling it ever compiled. The builtin
+ * is gone, which turns the call into an ordinary call to a function that does
+ * not exist, and Zephir has to fail that the way PHP does.
+ *
+ * Every case prints the Zephir transcript and then the transcript of the same
+ * statement in plain PHP, so a divergence shows up as a diff rather than as a
+ * hand-written expectation.
+ *
+ * Method names are lower-cased by codegen, so the message can only ever carry
+ * the lower-cased spelling; PHP echoes the source spelling. Every case here
+ * uses an already lower-case name to keep that separate question out of it.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2712
+ */
+set_error_handler(static function (int $severity, string $message): bool {
+    // PHP raises no diagnostic before any of these errors, so anything printed
+    // here is a failure rather than noise.
+    printf("DIAGNOSTIC: %s\n", $message);
+
+    return true;
+});
+
+function transcript(callable $call): string
+{
+    try {
+        $call();
+
+        return 'no throwable';
+    } catch (\Throwable $e) {
+        return sprintf('%s: %s', get_class($e), $e->getMessage());
+    }
+}
+
+$test    = new \Stub\Issue2712();
+$handler = 'is_private_property';
+$object  = new \stdClass();
+$null    = null;
+$true    = true;
+
+$cases = [
+    'undefined function'             => [
+        static fn() => $test->callUndefinedFunction('x'),
+        static fn() => is_private_property('x'),
+    ],
+    'undefined function by variable' => [
+        static fn() => $test->callUndefinedFunctionByVariable('x'),
+        static fn() => $handler('x'),
+    ],
+    'undefined method'               => [
+        static fn() => $test->callUndefinedMethod($object),
+        static fn() => $object->nope(),
+    ],
+    'method on null'                 => [
+        static fn() => $test->callUndefinedMethod($null),
+        static fn() => $null->nope(),
+    ],
+];
+
+foreach ($cases as $label => [$zephir, $php]) {
+    echo $label, "\n";
+    printf("  zephir %s\n", transcript($zephir));
+    printf("  php    %s\n", transcript($php));
+}
+
+/**
+ * PHP 8.3 swapped this message's tail from the type name to the value name, so
+ * `on bool` became `on true`. Comparing the two transcripts keeps the case in
+ * the suite without pinning a version-specific string.
+ */
+printf(
+    "method on true: zephir matches php: %s\n",
+    transcript(static fn() => $test->callUndefinedMethod($true))
+        === transcript(static fn() => $true->nope()) ? 'yes' : 'no'
+);
+--EXPECT--
+undefined function
+  zephir Error: Call to undefined function is_private_property()
+  php    Error: Call to undefined function is_private_property()
+undefined function by variable
+  zephir Error: Call to undefined function is_private_property()
+  php    Error: Call to undefined function is_private_property()
+undefined method
+  zephir Error: Call to undefined method stdClass::nope()
+  php    Error: Call to undefined method stdClass::nope()
+method on null
+  zephir Error: Call to a member function nope() on null
+  php    Error: Call to a member function nope() on null
+method on true: zephir matches php: yes

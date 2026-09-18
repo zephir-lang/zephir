@@ -32,11 +32,31 @@ class Constant
     /** Guards against a constant whose initializer reads itself. */
     private bool $folding = false;
 
+    private ?array $attributes = null;
+
     public function __construct(
         protected string $name,
         protected array $value,
         protected ?string $docblock = null,
+        protected ?array $original = null,
     ) {
+    }
+
+    /**
+     * The raw AST node, kept for the `#[...]` attributes written on this
+     * constant. Mirrors Property::getOriginal().
+     */
+    public function getOriginal(): ?array
+    {
+        return $this->original;
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes ??= Attribute::listFromNode($this->original);
     }
 
     /**

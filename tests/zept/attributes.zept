@@ -1,0 +1,85 @@
+--TEST--
+PHP attributes on every target: names, positional and named arguments, newInstance(), trait propagation (#2466)
+--FILE--
+namespace Stub\Attrs;
+
+#[\Attribute(\Attribute::TARGET_ALL)]
+class Tag
+{
+    public string text = "";
+    public int number = 0;
+
+    public function __construct(string text = "", int number = 0)
+    {
+        let this->text = text;
+        let this->number = number;
+    }
+}
+--FILE--
+namespace Stub\Attrs;
+
+#[Tag("on-a-trait")]
+trait Shared
+{
+    #[Tag("trait-method")]
+    public function shared() -> int
+    {
+        return 1;
+    }
+}
+--FILE--
+namespace Stub\Attrs;
+
+use Stub\Attrs\Tag as T;
+
+#[T("on-a-class", number: 2 * 3)]
+class Target
+{
+    use Shared;
+
+    #[T("on-a-constant")]
+    const VERSION = "1.0";
+
+    #[T("on-a-property")]
+    public int counter = 0;
+
+    #[T(self::VERSION)]
+    public function run(#[T("on-a-parameter")] string name) -> string
+    {
+        return name;
+    }
+}
+--USAGE--
+$c = new ReflectionClass("Stub\\Attrs\\Target");
+
+function show($label, $attributes) {
+    $parts = [];
+    foreach ($attributes as $a) {
+        $parts[] = $a->getName() . json_encode($a->getArguments());
+    }
+    echo $label, "=", implode(" ", $parts), "\n";
+}
+
+show("class", $c->getAttributes());
+show("const", $c->getReflectionConstant("VERSION")->getAttributes());
+show("property", $c->getProperty("counter")->getAttributes());
+show("method", $c->getMethod("run")->getAttributes());
+show("parameter", $c->getMethod("run")->getParameters()[0]->getAttributes());
+show("from-trait", $c->getMethod("shared")->getAttributes());
+show("trait-itself", (new ReflectionClass("Stub\\Attrs\\Shared"))->getAttributes());
+
+$instance = $c->getAttributes()[0]->newInstance();
+echo "instance=", get_class($instance), " text=", $instance->text, " number=", $instance->number, "\n";
+// The numeric TARGET_* flags were renumbered in 8.5 and are folded against the
+// building PHP, so only the marker itself is asserted here.
+echo "is-attribute-class=", (new ReflectionClass("Stub\\Attrs\\Tag"))->getAttributes()[0]->getName(), "\n";
+--EXPECT--
+class=Stub\Attrs\Tag{"0":"on-a-class","number":6}
+const=Stub\Attrs\Tag["on-a-constant"]
+property=Stub\Attrs\Tag["on-a-property"]
+method=Stub\Attrs\Tag["1.0"]
+parameter=Stub\Attrs\Tag["on-a-parameter"]
+from-trait=Stub\Attrs\Tag["trait-method"]
+trait-itself=Stub\Attrs\Tag["on-a-trait"]
+instance=Stub\Attrs\Tag text=on-a-class number=6
+is-attribute-class=Attribute

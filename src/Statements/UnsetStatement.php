@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Name;
+use Zephir\Types\Types;
 
 use function in_array;
 
@@ -44,10 +46,20 @@ class UnsetStatement extends StatementAbstract
         switch ($expression['type']) {
             case 'array-access':
                 /**
-                 * Unset of object property
+                 * Unset of object property.
+                 *
+                 * zephir_unset_property_array() reads the property, separates
+                 * it, unsets and writes it back, so it is the whole statement.
+                 * Falling through to the generic array-access path below
+                 * emitted it a second time, which for an ArrayAccess property
+                 * meant two offsetUnset() calls where PHP makes one.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2702
                  */
                 if (isset($expression['left']['type']) && $expression['left']['type'] === 'property-access') {
-                    $compilationContext = $this->generateUnsetPropertyFromObject($expression, $compilationContext);
+                    $this->generateUnsetPropertyFromObject($expression, $compilationContext);
+
+                    return;
                 }
 
                 $expr = new Expression($expression['left']);
@@ -143,55 +155,16 @@ class UnsetStatement extends StatementAbstract
     }
 
     /**
+     * Emits `unset obj->property[offset]`.
+     *
      * @throws Exception
      * @throws ReflectionException
      */
     private function generateUnsetPropertyFromObject(
         array $expression,
         CompilationContext $compilationContext
-    ): CompilationContext {
-        $expr = new Expression($expression['right']);
-        $expr->setReadOnly(true);
-        $exprVar = $expr->compile($compilationContext);
-
-        switch ($exprVar->getType()) {
-            case 'variable':
-                $variable    = $compilationContext->symbolTable->getVariableForRead(
-                    $exprVar->getCode(),
-                    $compilationContext,
-                    $this->statement
-                );
-                $variableRef = $compilationContext->backend->getVariableCode($variable);
-                break;
-
-            default:
-                $expr = new Expression($expression['left']);
-                $expr->setReadOnly(true);
-                $exprVar  = $expr->compile($compilationContext);
-                $variable = $compilationContext->symbolTable->getVariableForWrite(
-                    $exprVar->getCode(),
-                    $compilationContext,
-                    $this->statement
-                );
-
-                $variableRef = $compilationContext->backend->getVariableCode($variable);
-
-                // TODO: Add more types check when parser will support them, see ArrayAccessTest.zep
-                switch ($expression['right']['type']) {
-                    case 'string':
-                        $compilationContext->codePrinter->output(
-                            'ZVAL_STRING(' . $variableRef . ', "' . $expression['right']['value'] . '");'
-                        );
-                        break;
-
-                    case 'int':
-                        $compilationContext->codePrinter->output(
-                            'ZVAL_LONG(' . $variableRef . ', ' . $expression['right']['value'] . ');'
-                        );
-                        break;
-                }
-                break;
-        }
+    ): void {
+        $offsetCode = $this->resolveOffsetAsZval($expression['right'], $compilationContext);
 
         $expr = new Expression($expression['left']['left']);
         $expr->setReadOnly(true);
@@ -205,9 +178,87 @@ class UnsetStatement extends StatementAbstract
 
         $compilationContext->headersManager->add('kernel/object');
         $compilationContext->codePrinter->output(
-            'zephir_unset_property_array(' . $variableCode . ', ZEND_STRL("' . $expression['left']['right']['value'] . '"), ' . $variableRef . ');'
+            'zephir_unset_property_array(' . $variableCode . ', ZEND_STRL("'
+            . $expression['left']['right']['value'] . '"), ' . $offsetCode . ');'
         );
+    }
 
-        return $compilationContext;
+    /**
+     * Resolves an offset expression to C code denoting a `zval *`.
+     *
+     * zephir_unset_property_array() takes the offset as a zval, so a literal
+     * and a native `int` local both have to be boxed. The box is a temporary
+     * the memory manager observes, which is what releases the zend_string a
+     * string offset owns; the old code reused the temp a read-only property
+     * fetch had filled, and nothing released that.
+     *
+     * The accepted types are those Backend::arrayUnset() accepts, so
+     * `unset obj->prop[x]` and `unset arr[x]` reject the same expressions.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2702
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function resolveOffsetAsZval(array $offsetAst, CompilationContext $compilationContext): string
+    {
+        $expr = new Expression($offsetAst);
+        $expr->setReadOnly(true);
+        $resolved = $expr->compile($compilationContext);
+
+        $backend     = $compilationContext->backend;
+        $symbolTable = $compilationContext->symbolTable;
+
+        switch ($resolved->getType()) {
+            case Types::T_STRING:
+                $temp = $symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                $backend->assignString($temp, Name::addSlashes($resolved->getCode()), $compilationContext);
+
+                return $backend->getVariableCode($temp);
+
+            case Types::T_INT:
+            case Types::T_UINT:
+            case Types::T_LONG:
+                $temp = $symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                $backend->assignLong($temp, $resolved->getCode(), $compilationContext);
+
+                return $backend->getVariableCode($temp);
+
+            case Types::T_VARIABLE:
+                $variable = $symbolTable->getVariableForRead(
+                    $resolved->getCode(),
+                    $compilationContext,
+                    $offsetAst
+                );
+
+                switch ($variable->getType()) {
+                    case Types::T_INT:
+                    case Types::T_UINT:
+                    case Types::T_LONG:
+                        $temp = $symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                        $backend->assignLong($temp, $variable->getName(), $compilationContext);
+
+                        return $backend->getVariableCode($temp);
+
+                    case Types::T_STRING:
+                    case Types::T_VARIABLE:
+                    case Types::T_MIXED:
+                        return $backend->getVariableCode($variable);
+
+                    default:
+                        throw new CompilerException(
+                            'Variable type: ' . $variable->getType()
+                            . ' cannot be used as array index without cast',
+                            $offsetAst
+                        );
+                }
+
+                // no break (all paths return or throw)
+            default:
+                throw new CompilerException(
+                    'Cannot use expression: ' . $resolved->getType() . ' as array index without cast',
+                    $offsetAst
+                );
+        }
     }
 }

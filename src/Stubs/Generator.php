@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Stubs;
 
 use Zephir\AliasManager;
+use Zephir\Class\Attribute;
 use Zephir\Class\Constant;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
@@ -141,6 +142,8 @@ class Generator
             $source .= $docBlock . PHP_EOL;
         }
 
+        $source .= $this->buildAttributeLines($class->getAttributes(), '');
+
         if ($class->isFinal()) {
             $source .= 'final ';
         } elseif ($class->isAbstract()) {
@@ -259,7 +262,9 @@ class Generator
             'default' => $constant->getValue(),
         ]);
 
-        return $this->fetchDocBlock($constant->getDocBlock(), $indent) . $indent . $source . ' = ' . $value . ';';
+        return $this->fetchDocBlock($constant->getDocBlock(), $indent)
+            . $this->buildAttributeLines($constant->getAttributes(), $indent)
+            . $indent . $source . ' = ' . $value . ';';
     }
 
     protected function buildMethod(Method $method, bool $isInterface, string $indent): string
@@ -287,7 +292,7 @@ class Generator
                 $nullable = isset($parameter['default']['type'])
                     && 'null' === $parameter['default']['type'];
 
-                $paramStr = '';
+                $paramStr = $this->buildAttributeInline(Attribute::listFromNode($parameter));
                 if (!empty($parameter['data-types'])) {
                     /**
                      * Union parameter types (#2613) arrive as an ordered
@@ -400,7 +405,7 @@ class Generator
         $docs = $docBlock->processMethodDocBlock();
         $docs = $docs ? $docs . PHP_EOL : '';
 
-        return $docs . $methodBody;
+        return $docs . $this->buildAttributeLines($method->getAttributes(), $indent) . $methodBody;
     }
 
     /**
@@ -481,7 +486,74 @@ class Generator
                 ]);
         }
 
-        return $this->fetchDocBlock($property->getDocBlock(), $indent) . $source . ';';
+        return $this->fetchDocBlock($property->getDocBlock(), $indent)
+            . $this->buildAttributeLines($property->getAttributes(), $indent)
+            . $source . ';';
+    }
+
+    /**
+     * One `#[...]` line per attribute, at $indent (issue #2466).
+     *
+     * PHP accepts several attributes in one group, but one group per attribute
+     * reads like the .zep source it came from.
+     *
+     * @param Attribute[] $attributes
+     *
+     * @throws Exception\LogicException
+     */
+    protected function buildAttributeLines(array $attributes, string $indent): string
+    {
+        $lines = '';
+        foreach ($attributes as $attribute) {
+            $lines .= $indent . $this->renderAttribute($attribute) . PHP_EOL;
+        }
+
+        return $lines;
+    }
+
+    /**
+     * Parameter attributes are inline: `#[Marker] string $name`.
+     *
+     * @param Attribute[] $attributes
+     *
+     * @throws Exception\LogicException
+     */
+    protected function buildAttributeInline(array $attributes): string
+    {
+        if ([] === $attributes) {
+            return '';
+        }
+
+        $rendered = [];
+        foreach ($attributes as $attribute) {
+            $rendered[] = $this->renderAttribute($attribute);
+        }
+
+        return implode(' ', $rendered) . ' ';
+    }
+
+    /**
+     * The name is emitted exactly as written — an alias, a relative name or a
+     * leading `\` all resolve to what the .zep source meant, because the stub
+     * carries the same namespace and the same `use` statements.
+     *
+     * Arguments come from the reduced list, which is why this runs after code
+     * generation (Compiler::stubs() calls generate() first): an expression
+     * argument such as `2 * 3` has no PHP spelling as an AST node, exactly as
+     * for a property default.
+     *
+     * @throws Exception\LogicException
+     */
+    protected function renderAttribute(Attribute $attribute): string
+    {
+        $arguments = [];
+        foreach ($attribute->getArguments() as $argument) {
+            $value       = $this->wrapPHPValue(['default' => $argument['expr']]);
+            $arguments[] = null === $argument['name'] ? $value : $argument['name'] . ': ' . $value;
+        }
+
+        return '#[' . $attribute->getName()
+            . ([] === $arguments ? '' : '(' . implode(', ', $arguments) . ')') . ']';
     }
 
     /**
@@ -497,6 +569,7 @@ class Generator
                 break;
 
             case 'string':
+            case 'istring':
             case 'char':
                 $returnValue = '\'' . addslashes($parameter['default']['value']) . '\'';
                 break;
@@ -532,7 +605,11 @@ class Generator
                 break;
 
             case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
             case 'double':
+            case 'float':
             case 'bool':
                 $returnValue = $parameter['default']['value'];
                 break;

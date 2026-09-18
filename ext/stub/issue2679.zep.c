@@ -420,7 +420,7 @@ PHP_METHOD(Stub_Issue2679, tryOnly)
 			object_init_ex(&_0$$4, spl_ce_RuntimeException);
 			ZEPHIR_INIT_VAR(&_1$$4);
 			ZVAL_STRING(&_1$$4, "boom");
-			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 67, &_1$$4);
+			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 68, &_1$$4);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_0$$4, "stub/issue2679.zep", 206);
 			goto try_end_1;
@@ -636,7 +636,7 @@ PHP_METHOD(Stub_Issue2679, conditionalHeap)
 		ZEPHIR_INIT_VAR(&_0$$3);
 		ZVAL_STRING(&_0$$3, "x");
 		ZVAL_LONG(&_1$$3, 256);
-		ZEPHIR_CALL_FUNCTION(&x, "str_repeat", NULL, 29, &_0$$3, &_1$$3);
+		ZEPHIR_CALL_FUNCTION(&x, "str_repeat", NULL, 30, &_0$$3, &_1$$3);
 		zephir_check_call_status();
 	}
 	ZEPHIR_INIT_VAR(&_2);
@@ -673,7 +673,7 @@ PHP_METHOD(Stub_Issue2679, leakProbe)
 	zephir_fetch_params(1, 1, 0, &iterations_param);
 	ZEPHIR_INIT_VAR(&sink);
 	ZVAL_NULL(&sink);
-	ZEPHIR_CALL_FUNCTION(&before, "memory_get_usage", &_0, 48);
+	ZEPHIR_CALL_FUNCTION(&before, "memory_get_usage", &_0, 49);
 	zephir_check_call_status();
 	i = 0;
 	while (1) {
@@ -726,7 +726,7 @@ PHP_METHOD(Stub_Issue2679, leakProbe)
 		zephir_check_call_status();
 		i++;
 	}
-	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 48);
+	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
 	RETURN_MM();
@@ -755,7 +755,7 @@ PHP_METHOD(Stub_Issue2679, leakProbeControl)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &iterations_param);
-	ZEPHIR_CALL_FUNCTION(&before, "memory_get_usage", &_0, 48);
+	ZEPHIR_CALL_FUNCTION(&before, "memory_get_usage", &_0, 49);
 	zephir_check_call_status();
 	i = 0;
 	while (1) {
@@ -768,7 +768,7 @@ PHP_METHOD(Stub_Issue2679, leakProbeControl)
 		zephir_update_property_array_append(this_ptr, SL("retained"), &_1$$3);
 		i++;
 	}
-	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 48);
+	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
 	RETURN_MM();

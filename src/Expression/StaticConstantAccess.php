@@ -172,10 +172,17 @@ class StaticConstantAccess
 
             $symbolVariable->setDynamicTypes('undefined');
             $compilationContext->headersManager->add('kernel/object');
+            /**
+             * The destination is a `zval *` parameter, so it goes through
+             * getVariableCode() like every other emitter here. A bare name
+             * hands over the zval itself and the generated C does not compile.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2711
+             */
             $compilationContext->codePrinter->output(
                 sprintf(
-                    'zephir_get_class_constant(%s, %s, SS("%s"));',
-                    $symbolVariable->getName(),
+                    'zephir_get_class_constant(%s, %s, SL("%s"));',
+                    $compilationContext->backend->getVariableCode($symbolVariable),
                     $classDefinition->getClassEntry($compilationContext),
                     $constant
                 )

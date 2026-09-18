@@ -188,6 +188,7 @@ final class TokenType
     public const T_ASSIGN_BITWISE_XOR          = 456;
     public const T_ASSIGN_BITWISE_SHIFTLEFT    = 457;
     public const T_ASSIGN_BITWISE_SHIFTRIGHT   = 458;
+    public const T_ATTRIBUTE_OPEN              = 463;
 
     private function __construct()
     {

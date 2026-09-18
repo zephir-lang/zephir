@@ -74,10 +74,10 @@ PHP_METHOD(Stub_ConstantParameterDefault, __construct)
 		rounds = 12;
 	} else {
 		}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 26, &cipher);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 32, &cipher);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, rounds);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 27, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 33, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 

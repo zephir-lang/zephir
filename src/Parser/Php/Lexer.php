@@ -166,6 +166,7 @@ final class Lexer
         '..'  => [TokenType::T_INCLUSIVE_RANGE, 2],
         '.='  => [TokenType::T_ASSIGN_CONCAT, 1],
         '::'  => [TokenType::T_DOUBLECOLON, 2],
+        '#['  => [TokenType::T_ATTRIBUTE_OPEN, 2],
         // 1-character
         '('   => [TokenType::T_PARENTHESES_OPEN, 1],
         ')'   => [TokenType::T_PARENTHESES_CLOSE, 1],

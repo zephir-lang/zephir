@@ -15,7 +15,6 @@ namespace Zephir\Backend;
 
 use Zephir\Cache\PropertyCacheSlots;
 use Zephir\Class\Method\Method;
-use Zephir\Code\Printer;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
@@ -302,20 +301,6 @@ class Backend
                     $expression
                 );
             }
-        }
-
-        if (!($resolvedExpr instanceof Variable)) {
-            if ('string' == $resolvedExpr->getType()) {
-                return new CompiledExpression(
-                    'bool',
-                    'zephir_array_isset_value_string('
-                    . $this->getVariableCode($var)
-                    . ', SS("'
-                    . $resolvedExpr->getCode()
-                    . '"))',
-                    $expression
-                );
-            }
 
             return new CompiledExpression(
                 'bool',
@@ -362,41 +347,13 @@ class Backend
         $expression,
         CompilationContext $context
     ) {
-        if (!($resolvedExpr instanceof Variable)) {
-            $code = $this->getVariableCode($target) . ', ' . $this->getVariableCode($var);
-            if ('string' == $resolvedExpr->getType()) {
-                return new CompiledExpression(
-                    'bool',
-                    'zephir_array_isset_string_fetch('
-                    . $code
-                    . ', SL("'
-                    . $resolvedExpr->getCode()
-                    . '"), '
-                    . $flags
-                    . ')',
-                    $expression
-                );
-            }
-        }
-
-        return $this->arrayIssetFetch2($target, $var, $resolvedExpr, $flags, $expression, $context);
-    }
-
-    public function arrayIssetFetch2(
-        Variable $target,
-        Variable $var,
-        $resolvedExpr,
-        $flags,
-        $expression,
-        CompilationContext $context
-    ) {
         $code = $this->getVariableCode($target) . ', ' . $this->getVariableCode($var);
 
         if (!($resolvedExpr instanceof Variable)) {
             if ('string' === $resolvedExpr->getType()) {
                 return new CompiledExpression(
                     'bool',
-                    'zephir_array_isset_string_fetch(' . $code . ', SS("' . $resolvedExpr->getCode(
+                    'zephir_array_isset_string_fetch(' . $code . ', SL("' . $resolvedExpr->getCode(
                     ) . '"), ' . $flags . ')',
                     $expression
                 );
@@ -432,22 +389,21 @@ class Backend
         throw new CompilerException('arrayIssetFetch [' . $resolvedExpr->getType() . ']', $expression);
     }
 
-    public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context): void
-    {
-        $context->headersManager->add('kernel/array');
-        $variableCode = $this->getVariableCode($variable);
-        if ('string' == $exprIndex->getType()) {
-            $context->codePrinter->output(
-                'zephir_array_unset_string(' . $variableCode . ', SL("' . $exprIndex->getCode() . '"), ' . $flags . ');'
-            );
-
-            return;
-        }
-
-        $this->arrayUnset2($variable, $exprIndex, $flags, $context);
+    /**
+     * @deprecated Use arrayIssetFetch() instead.
+     */
+    public function arrayIssetFetch2(
+        Variable $target,
+        Variable $var,
+        $resolvedExpr,
+        $flags,
+        $expression,
+        CompilationContext $context
+    ) {
+        return $this->arrayIssetFetch($target, $var, $resolvedExpr, $flags, $expression, $context);
     }
 
-    public function arrayUnset2(Variable $variable, $exprIndex, $flags, CompilationContext $context): void
+    public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context): void
     {
         $context->headersManager->add('kernel/array');
         $variableCode = $this->getVariableCode($variable);
@@ -462,7 +418,7 @@ class Backend
 
             case 'string':
                 $context->codePrinter->output(
-                    'zephir_array_unset_string(' . $variableCode . ', SS("' . $exprIndex->getCode(
+                    'zephir_array_unset_string(' . $variableCode . ', SL("' . $exprIndex->getCode(
                     ) . '"), ' . $flags . ');'
                 );
                 break;
@@ -504,6 +460,14 @@ class Backend
                     'Cannot use expression: ' . $exprIndex->getType() . ' as array index without cast'
                 );
         }
+    }
+
+    /**
+     * @deprecated Use arrayUnset() instead.
+     */
+    public function arrayUnset2(Variable $variable, $exprIndex, $flags, CompilationContext $context): void
+    {
+        $this->arrayUnset($variable, $exprIndex, $flags, $context);
     }
 
     public function assignArrayMulti(
@@ -1184,6 +1148,74 @@ class Backend
                 count($classNames)
             )
         );
+        $printer->decreaseLevel();
+        $printer->output('}');
+    }
+
+    /**
+     * Emits the MINIT-time attachment of one PHP attribute (issue #2466).
+     *
+     * `$target` is the pre-rendered `zephir_add_*_attribute(<target>` prefix;
+     * the attribute name and the argument count are appended here. With no
+     * arguments there is no handle worth keeping, so a single call is emitted
+     * and no local is declared — the same shape php-src's own generated arginfo
+     * uses.
+     *
+     * Otherwise one zval per argument is materialized in a shared block, an
+     * array through buildConstantArray() and a scalar through
+     * typedScalarInit(), and handed to the kernel setter, which makes it
+     * persistent in the one shape attr_free() can dispose of. Declarations are
+     * interleaved with statements, exactly as the array class-constant emitter
+     * already does.
+     *
+     * @param string                                      $target    e.g. 'zephir_add_class_attribute(stub_demo_ce'
+     * @param string                                      $name      escaped FQCN, e.g. 'Stub\\Attributes\\Marker'
+     * @param list<array{name: string|null, expr: array}> $arguments already reduced to literals
+     */
+    public function declareAttribute(
+        string $target,
+        string $name,
+        array $arguments,
+        CompilationContext $context
+    ): void {
+        $printer = $context->codePrinter;
+        $call    = sprintf('%s, SL("%s"), %d);', $target, $name, count($arguments));
+
+        if ([] === $arguments) {
+            $printer->output($call);
+
+            return;
+        }
+
+        $printer->output('{');
+        $printer->increaseLevel();
+        $printer->output('zend_attribute *_za = ' . $call);
+
+        $counter = 0;
+        foreach ($arguments as $offset => $argument) {
+            $node  = $argument['expr'];
+            $lines = [];
+
+            if (in_array($node['type'], ['array', 'empty-array'], true)) {
+                $var = $this->buildConstantArray($node, $lines, $counter);
+            } else {
+                $var     = '_zc' . $counter++;
+                $lines[] = sprintf('zval %s;', $var);
+                $lines[] = $this->typedScalarInit($var, $node);
+            }
+
+            $lines[] = sprintf(
+                'zephir_attribute_set_arg(_za, %d, %s, &%s);',
+                $offset,
+                null === $argument['name'] ? 'NULL, 0' : sprintf('SL("%s")', Name::addSlashes($argument['name'])),
+                $var
+            );
+
+            foreach ($lines as $line) {
+                $printer->output($line);
+            }
+        }
+
         $printer->decreaseLevel();
         $printer->output('}');
     }
@@ -2395,47 +2427,6 @@ class Backend
         }
 
         return $code;
-    }
-
-    /**
-     * @param Variable[]         $variables
-     * @param CompilationContext $context
-     *
-     * @return string
-     *
-     * @throws CompilerException
-     */
-    public function initializeVariableDefaults(array $variables, CompilationContext $context): string
-    {
-        $codePrinter = new Printer();
-        $codePrinter->increaseLevel();
-
-        $oldCodePrinter       = $context->codePrinter;
-        $context->codePrinter = $codePrinter;
-
-        $variablesManager = new VariablesManager();
-
-        /* Initialize default values in dynamic variables */
-        foreach ($variables as $variable) {
-            /* Do not initialize unused variable */
-            if ($variable->getNumberUses() < 1) {
-                continue;
-            }
-
-            /* The default init value to be used bellow.
-               Actually this value should be in array form and
-               provide 'type' and 'value' keys. */
-            $value = $variable->getDefaultInitValue();
-            if (!is_array($value)) {
-                continue;
-            }
-
-            $variablesManager->initializeDefaults($variable, $value, $context);
-        }
-
-        $context->codePrinter = $oldCodePrinter;
-
-        return $codePrinter->getOutput();
     }
 
     public function onPostCompile(Method $method, CompilationContext $context): void

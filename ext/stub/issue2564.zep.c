@@ -84,13 +84,13 @@ PHP_METHOD(Stub_Issue2564, __construct)
 		padFactory = &padFactory_sub;
 		padFactory = &__$null;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 56, &cipher_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 62, &cipher_zv);
 	if (useSigning) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 57, &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 63, &__$true);
 	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 57, &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 63, &__$false);
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 58, padFactory);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 64, padFactory);
 	ZEPHIR_MM_RESTORE();
 }
 

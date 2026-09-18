@@ -58,7 +58,7 @@ PHP_METHOD(Stub_Exceptions, testException2)
 	ZVAL_STRING(&msg, "hello2");
 	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, stub_exception_ce);
-	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 41, &msg);
+	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 42, &msg);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&_0, "stub/exceptions.zep", 23);
 	ZEPHIR_MM_RESTORE();
@@ -80,7 +80,7 @@ PHP_METHOD(Stub_Exceptions, testException3)
 	ZVAL_STRING(&msg, "hello3");
 	ZEPHIR_INIT_VAR(&ex);
 	object_init_ex(&ex, stub_exception_ce);
-	ZEPHIR_CALL_METHOD(NULL, &ex, "__construct", NULL, 41, &msg);
+	ZEPHIR_CALL_METHOD(NULL, &ex, "__construct", NULL, 42, &msg);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&ex, "stub/exceptions.zep", 31);
 	ZEPHIR_MM_RESTORE();
@@ -100,7 +100,7 @@ PHP_METHOD(Stub_Exceptions, getException)
 	object_init_ex(return_value, stub_exception_ce);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "hello4");
-	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 41, &_0);
+	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 42, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -138,7 +138,7 @@ PHP_METHOD(Stub_Exceptions, testException5)
 	object_init_ex(&exception, stub_exception_ce);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "hello5");
-	ZEPHIR_CALL_METHOD(NULL, &exception, "__construct", NULL, 41, &_0);
+	ZEPHIR_CALL_METHOD(NULL, &exception, "__construct", NULL, 42, &_0);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&exception, "stub/exceptions.zep", 49);
 	ZEPHIR_MM_RESTORE();
@@ -195,7 +195,7 @@ PHP_METHOD(Stub_Exceptions, testExceptionSprintf)
 	ZVAL_STR_COPY(&name_zv, name);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "Hello, %s");
-	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, 25, &_0, &name_zv);
+	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, 26, &_0, &name_zv);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&_1, "stub/exceptions.zep", 68);
 	ZEPHIR_MM_RESTORE();
@@ -298,9 +298,9 @@ PHP_METHOD(Stub_Exceptions, testMultiException)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &returnValue, &exception);
 	zephir_memory_observe(&iexc);
-	zephir_read_property_cached(&iexc, this_ptr, _zephir_prop_0, 32, PH_NOISY_CC);
+	zephir_read_property_cached(&iexc, this_ptr, _zephir_prop_0, 38, PH_NOISY_CC);
 	zephir_memory_observe(&exc);
-	zephir_read_property_cached(&exc, this_ptr, _zephir_prop_1, 33, PH_NOISY_CC);
+	zephir_read_property_cached(&exc, this_ptr, _zephir_prop_1, 39, PH_NOISY_CC);
 
 	/* try_start_1: */
 
@@ -398,7 +398,7 @@ PHP_METHOD(Stub_Exceptions, issue1325)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(&status, this_ptr, "donoopexception", NULL, 42);
+		ZEPHIR_CALL_METHOD(&status, this_ptr, "donoopexception", NULL, 43);
 		zephir_check_call_status_or_jump(try_end_1);
 
 	try_end_1:

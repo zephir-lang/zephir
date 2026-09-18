@@ -1,0 +1,161 @@
+--TEST--
+A separating write or unset of an array property retains nothing (issue #2698)
+--FILE--
+namespace Zept;
+
+/**
+ * Every property is typed, so its default is persistent and non-refcounted and
+ * the first write really separates. Each probe builds a fresh instance per
+ * iteration because the defect fires only while the property still holds that
+ * default. The writes go through methods so they compile to the
+ * this_ptr form of the kernel helpers.
+ */
+class Holder
+{
+    protected array items = ["seed": 1];
+
+    protected array bag = ["seed"];
+
+    protected array matrix = ["row": ["col": 1]];
+
+    protected array removable = ["a": 1, "b": 2];
+
+    protected retained = [];
+
+    public function writeOffset() -> void
+    {
+        let this->items["added"] = 1;
+    }
+
+    public function appendValue() -> void
+    {
+        let this->bag[] = 1;
+    }
+
+    public function writeNested() -> void
+    {
+        let this->matrix["row"]["added"] = 1;
+    }
+
+    public function removeOffset(string key) -> void
+    {
+        unset this->removable[key];
+    }
+
+    public function writeProbe(int iterations) -> int
+    {
+        int i;
+        var before, after, subject;
+
+        let subject = null;
+        let before = memory_get_usage();
+
+        let i = 0;
+        while i < iterations {
+            let subject = new Holder();
+            subject->writeOffset();
+            let i++;
+        }
+
+        let after = memory_get_usage();
+
+        return after - before;
+    }
+
+    public function appendProbe(int iterations) -> int
+    {
+        int i;
+        var before, after, subject;
+
+        let subject = null;
+        let before = memory_get_usage();
+
+        let i = 0;
+        while i < iterations {
+            let subject = new Holder();
+            subject->appendValue();
+            let i++;
+        }
+
+        let after = memory_get_usage();
+
+        return after - before;
+    }
+
+    public function nestedProbe(int iterations) -> int
+    {
+        int i;
+        var before, after, subject;
+
+        let subject = null;
+        let before = memory_get_usage();
+
+        let i = 0;
+        while i < iterations {
+            let subject = new Holder();
+            subject->writeNested();
+            let i++;
+        }
+
+        let after = memory_get_usage();
+
+        return after - before;
+    }
+
+    public function unsetProbe(int iterations) -> int
+    {
+        int i;
+        var before, after, subject;
+
+        let subject = null;
+        let before = memory_get_usage();
+
+        let i = 0;
+        while i < iterations {
+            let subject = new Holder();
+            subject->removeOffset("a");
+            let i++;
+        }
+
+        let after = memory_get_usage();
+
+        return after - before;
+    }
+
+    public function controlProbe(int iterations) -> int
+    {
+        int i;
+        var before, after;
+
+        let before = memory_get_usage();
+
+        let i = 0;
+        while i < iterations {
+            let this->retained[] = str_repeat("x", 64);
+            let i++;
+        }
+
+        let after = memory_get_usage();
+
+        return after - before;
+    }
+}
+--USAGE--
+$h = new Zept\Holder();
+
+foreach (['write' => 'writeProbe', 'append' => 'appendProbe', 'nested' => 'nestedProbe', 'unset' => 'unsetProbe'] as $label => $probe) {
+    $h->$probe(100);                     // settle interned strings and call caches
+    $small = $h->$probe(1000);
+    $large = $h->$probe(50000);
+    printf("%-7s %s\n", $label, $small === $large ? 'flat' : 'GROWS');
+}
+
+// The probes above only mean something if the measurement itself works.
+$h->controlProbe(200);
+printf("%-7s %s\n", 'control', $h->controlProbe(50000) > $h->controlProbe(1000) ? 'GROWS' : 'BROKEN');
+--EXPECT--
+write   flat
+append  flat
+nested  flat
+unset   flat
+control GROWS

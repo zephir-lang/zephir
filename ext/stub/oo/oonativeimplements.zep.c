@@ -160,6 +160,7 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, unserialize)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &serialized_param);
 	zephir_get_strval(&serialized, serialized_param);
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Oo_OoNativeImplements, __serialize)
@@ -183,5 +184,6 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, __unserialize)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &data_param);
 	zephir_get_arrval(&data, data_param);
+	ZEPHIR_MM_RESTORE();
 }
 

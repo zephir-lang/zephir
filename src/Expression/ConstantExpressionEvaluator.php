@@ -152,6 +152,55 @@ final class ConstantExpressionEvaluator
     }
 
     /**
+     * Reduces $node to a literal node, resolving the two leaf kinds
+     * {@see fold()} deliberately passes through — a global or PHP `constant`
+     * and a `static-constant-access` — including when either sits *inside* an
+     * array literal.
+     *
+     * `fold()` leaves those alone because every one of its callers resolves
+     * them itself (see {@see \Zephir\Class\Constant::processValue()}). An
+     * attribute argument has no such caller, and it may be an array whose
+     * elements are `self::FOO` or `PHP_INT_MAX`, so the resolution has to
+     * recurse here.
+     *
+     * PHP evaluates an attribute argument lazily, at reflection time, from a
+     * stored constant AST. An extension has to hand the engine a zval at MINIT
+     * instead, which is why the same expressions are reduced now and anything
+     * unresolvable is a compile error rather than a deferred one.
+     *
+     * @throws CompilerException when $node is not a compile-time constant
+     */
+    public function reduce(array $node, CompilationContext $compilationContext): array
+    {
+        // `(expr)` parses to a single-child `list` node.
+        while ('list' === $node['type']) {
+            $node = $node['left'];
+        }
+
+        if ('array' === $node['type']) {
+            foreach ($node['left'] as $index => $item) {
+                if (isset($item['key'])) {
+                    $node['left'][$index]['key'] = $this->reduce($item['key'], $compilationContext);
+                }
+
+                $node['left'][$index]['value'] = $this->reduce($item['value'], $compilationContext);
+            }
+
+            return $node;
+        }
+
+        if ('empty-array' === $node['type']) {
+            return $node;
+        }
+
+        if ('constant' === $node['type'] || 'static-constant-access' === $node['type']) {
+            return $this->toNode($this->leafValue($node, $compilationContext), $node);
+        }
+
+        return $this->fold($node, $compilationContext);
+    }
+
+    /**
      * Rebuilds an array node with every key and value folded, preserving the
      * shape {@see \Zephir\Backend\Backend::declareArrayConstant()} expects.
      */

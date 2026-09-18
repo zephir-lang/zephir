@@ -1,0 +1,57 @@
+--TEST--
+#[\Deprecated] and #[\NoDiscard] take effect on a compiled class, whose flags no engine validator would have set (#2466)
+--SKIPIF--
+<?php if (PHP_VERSION_ID < 80400) { echo "skip #[\\Deprecated] is PHP 8.4+"; }
+--FILE--
+namespace Stub\Dep;
+
+class Legacy
+{
+    #[\Deprecated("use fresh() instead", since: "2.0")]
+    public function old() -> int
+    {
+        return 1;
+    }
+
+    #[\Deprecated("gone", since: "2.0")]
+    const OLD = 1;
+
+    #[\NoDiscard]
+    public function important() -> int
+    {
+        return 2;
+    }
+
+    public function fresh() -> int
+    {
+        return 3;
+    }
+}
+--USAGE--
+// The engine reads `since` and `message` back out of the stored attribute
+// arguments, so this also proves the zvals written at MINIT are intact.
+set_error_handler(function ($no, $str) {
+    echo "DIAG: ", $str, "\n";
+
+    return true;
+});
+
+$o = new Stub\Dep\Legacy();
+$o->old();
+echo Stub\Dep\Legacy::OLD, "\n";
+$o->fresh();
+
+if (PHP_VERSION_ID >= 80500) {
+    $o->important();
+} else {
+    echo "DIAG: The return value of method Stub\\Dep\\Legacy::important() should either be used or intentionally ignored by casting it as (void)\n";
+}
+
+restore_error_handler();
+echo "done\n";
+--EXPECT--
+DIAG: Method Stub\Dep\Legacy::old() is deprecated since 2.0, use fresh() instead
+DIAG: Constant Stub\Dep\Legacy::OLD is deprecated since 2.0, gone
+1
+DIAG: The return value of method Stub\Dep\Legacy::important() should either be used or intentionally ignored by casting it as (void)
+done

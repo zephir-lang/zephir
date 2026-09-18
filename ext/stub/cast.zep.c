@@ -1220,7 +1220,7 @@ PHP_METHOD(Stub_Cast, issue1841ToInt)
 	ZEPHIR_INIT_NVAR(&_3);
 	ZVAL_LONG(&_3, zephir_get_intval(dyn));
 	zephir_array_fast_append(return_value, &_3);
-	ZEPHIR_CALL_METHOD(&_4, this_ptr, "issue1841helper", NULL, 36);
+	ZEPHIR_CALL_METHOD(&_4, this_ptr, "issue1841helper", NULL, 37);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(&_3);
 	ZVAL_LONG(&_3, zephir_get_intval(&_4));
@@ -1428,7 +1428,7 @@ PHP_METHOD(Stub_Cast, issue1841ToLong)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_LONG(&_0, zephir_get_intval(dyn));
 	zephir_array_fast_append(return_value, &_0);
-	ZEPHIR_CALL_METHOD(&_3, this_ptr, "issue1841helper", NULL, 36);
+	ZEPHIR_CALL_METHOD(&_3, this_ptr, "issue1841helper", NULL, 37);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_LONG(&_0, zephir_get_intval(&_3));
@@ -1548,7 +1548,7 @@ PHP_METHOD(Stub_Cast, issue1841ToFloat)
 	ZEPHIR_INIT_NVAR(&_3);
 	ZVAL_DOUBLE(&_3, zephir_get_doubleval(dyn));
 	zephir_array_fast_append(return_value, &_3);
-	ZEPHIR_CALL_METHOD(&_4, this_ptr, "issue1841helper", NULL, 36);
+	ZEPHIR_CALL_METHOD(&_4, this_ptr, "issue1841helper", NULL, 37);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(&_3);
 	ZVAL_DOUBLE(&_3, zephir_get_doubleval(&_4));
@@ -1691,7 +1691,7 @@ PHP_METHOD(Stub_Cast, issue1841ToBool)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_BOOL(&_0, zephir_get_boolval(dyn));
 	zephir_array_fast_append(return_value, &_0);
-	ZEPHIR_CALL_METHOD(&_5, this_ptr, "issue1841helper", NULL, 36);
+	ZEPHIR_CALL_METHOD(&_5, this_ptr, "issue1841helper", NULL, 37);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_BOOL(&_0, zephir_get_boolval(&_5));
@@ -1916,7 +1916,7 @@ PHP_METHOD(Stub_Cast, issue1841ToString)
 	zephir_array_fast_append(return_value, &_24);
 	zephir_cast_to_string(&_25, dyn);
 	zephir_array_fast_append(return_value, &_25);
-	ZEPHIR_CALL_METHOD(&_26, this_ptr, "issue1841helper", NULL, 36);
+	ZEPHIR_CALL_METHOD(&_26, this_ptr, "issue1841helper", NULL, 37);
 	zephir_check_call_status();
 	zephir_cast_to_string(&_27, &_26);
 	zephir_array_fast_append(return_value, &_27);

@@ -24,6 +24,7 @@ use Zephir\Backend\Backend;
 use Zephir\Cache\PropertyCacheSlots;
 use Zephir\Backend\FcallManagerInterface;
 use Zephir\Backend\StringsManager;
+use Zephir\Class\Definition\AttributeEmitter;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Definition\TraitMerger;
 use Zephir\Code\ArgInfoDefinition;
@@ -828,6 +829,13 @@ final class Compiler
         }
 
         /**
+         * Attributes on a top-level function are attached from MINIT, next to
+         * the class initializers: the engine has already registered the
+         * module's functions into CG(function_table) by then [#2466].
+         */
+        $functionAttributes = $this->generateFunctionAttributes();
+
+        /**
          * Round 3. Process extension globals
          */
         [$globalCode, $globalStruct, $globalsDefault, $initEntries] = $this->processExtensionGlobals($project);
@@ -919,7 +927,7 @@ final class Compiler
             ),
             '%CLASS_INITS%'          => implode(
                 PHP_EOL . "\t",
-                array_merge($completeInterfaceInits, $completeClassInits)
+                array_merge($completeInterfaceInits, $completeClassInits, $functionAttributes)
             ),
             '%INIT_GLOBALS%'         => implode(
                 PHP_EOL . "\t",
@@ -1403,6 +1411,73 @@ final class Compiler
         $this->precompiledHeader         = null;
 
         return $needConfigure;
+    }
+
+    /**
+     * The MINIT lines that attach `#[...]` to a top-level function and to its
+     * parameters (issue #2466).
+     *
+     * Unlike a class, a function has no initializer of its own to write into,
+     * so the emitter is pointed at a throwaway printer and its output is folded
+     * into %CLASS_INITS% — which keeps templates/engine/project.c untouched and
+     * therefore leaves the generate golden fixture alone.
+     *
+     * @return list<string>
+     */
+    private function generateFunctionAttributes(): array
+    {
+        $lines = [];
+
+        foreach ($this->functionDefinitions as $func) {
+            if ([] === $func->getAttributes() && !$this->hasParameterAttributes($func)) {
+                continue;
+            }
+
+            /**
+             * The pass only runs for a function with a body, and there is no
+             * other route to a compilation context here. A bodyless function
+             * already fails in generateFunctionInformation() below, so
+             * skipping keeps this from being a second, earlier crash.
+             */
+            if (!$func->hasCallGathererPass()) {
+                continue;
+            }
+
+            $context               = $func->getCallGathererPass()->getCompilationContext();
+            $previousPrinter       = $context->codePrinter;
+            $context->codePrinter  = new Printer();
+
+            try {
+                (new AttributeEmitter($context))->emitFunction($func);
+                $output = trim($context->codePrinter->getOutput());
+            } finally {
+                $context->codePrinter = $previousPrinter;
+            }
+
+            if ('' !== $output) {
+                // The %CLASS_INITS% join only indents the first line of an
+                // entry, so carry the tab onto the rest of the block.
+                $lines[] = implode(PHP_EOL . "\t", explode(PHP_EOL, $output));
+            }
+        }
+
+        return $lines;
+    }
+
+    private function hasParameterAttributes(FunctionDefinition $func): bool
+    {
+        $parameters = $func->getParameters();
+        if (null === $parameters) {
+            return false;
+        }
+
+        foreach ($parameters->getParameters() as $parameter) {
+            if (isset($parameter['attributes'])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function generateFunctionInformation(): array
