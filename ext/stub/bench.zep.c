@@ -1689,6 +1689,103 @@ PHP_METHOD(Stub_Bench, definiteLocalStep)
 	RETURN_MM_LONG(0);
 }
 
+/**
+ * Sums a <Ns>\Buffer through the plain `buf[i]` indexing a user would
+ * write. Pairs with bufferSumOverArray so the report shows the kernel
+ * Buffer fast path against an ordinary PHP array read.
+ */
+PHP_METHOD(Stub_Bench, bufferSumLoop)
+{
+	double total;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long n, i;
+	zval *buf, buf_sub, *n_param = NULL, _0$$3;
+
+	ZVAL_UNDEF(&buf_sub);
+	ZVAL_UNDEF(&_0$$3);
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(buf)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 2, 0, &buf, &n_param);
+	total =  (0.0);
+	i = 0;
+	while (1) {
+		if (!(i < n)) {
+			break;
+		}
+		ZEPHIR_OBS_NVAR(&_0$$3);
+		zephir_array_fetch_long(&_0$$3, buf, i, PH_NOISY, "stub/bench.zep", 557);
+		total +=  (zephir_get_doubleval(&_0$$3));
+		i++;
+	}
+	RETURN_MM_DOUBLE(total);
+}
+
+PHP_METHOD(Stub_Bench, bufferSumOverArray)
+{
+	double total;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long n, i;
+	zval *arr_param = NULL, *n_param = NULL, _0$$3;
+	zval arr;
+
+	ZVAL_UNDEF(&arr);
+	ZVAL_UNDEF(&_0$$3);
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		ZEPHIR_Z_PARAM_ARRAY(arr, arr_param)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 2, 0, &arr_param, &n_param);
+	ZEPHIR_OBS_COPY_OR_DUP(&arr, arr_param);
+	total =  (0.0);
+	i = 0;
+	while (1) {
+		if (!(i < n)) {
+			break;
+		}
+		ZEPHIR_OBS_NVAR(&_0$$3);
+		zephir_array_fetch_long(&_0$$3, &arr, i, PH_NOISY, "stub/bench.zep", 570);
+		total +=  (zephir_get_doubleval(&_0$$3));
+		i++;
+	}
+	RETURN_MM_DOUBLE(total);
+}
+
+/** Write side of the same comparison. */
+PHP_METHOD(Stub_Bench, bufferWriteLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long n, i;
+	zval *buf, buf_sub, *n_param = NULL, _0$$3;
+
+	ZVAL_UNDEF(&buf_sub);
+	ZVAL_UNDEF(&_0$$3);
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(buf)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 2, 0, &buf, &n_param);
+	ZEPHIR_SEPARATE_PARAM(buf);
+	i = 0;
+	while (1) {
+		if (!(i < n)) {
+			break;
+		}
+		ZEPHIR_INIT_NVAR(&_0$$3);
+		ZVAL_DOUBLE(&_0$$3, 1.5);
+		zephir_array_update_long(buf, i, &_0$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+		i++;
+	}
+	ZEPHIR_MM_RESTORE();
+}
+
 void zep_Stub_Bench_zephir_gen_step_generatorRange(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext )
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;

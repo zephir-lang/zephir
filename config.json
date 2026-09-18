@@ -168,5 +168,8 @@
         ]
       ]
     }
-  ]
+  ],
+  "kernel-classes": {
+    "buffer": true
+  }
 }

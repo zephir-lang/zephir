@@ -542,4 +542,46 @@ class Bench
 
         return 0;
     }
+
+    /**
+     * Sums a <Ns>\Buffer through the plain `buf[i]` indexing a user would
+     * write. Pairs with bufferSumOverArray so the report shows the kernel
+     * Buffer fast path against an ordinary PHP array read.
+     */
+    public function bufferSumLoop(var buf, long n) -> double
+    {
+        double total = 0.0;
+        long i = 0;
+
+        while i < n {
+            let total += (double) buf[i];
+            let i++;
+        }
+
+        return total;
+    }
+
+    public function bufferSumOverArray(array! arr, long n) -> double
+    {
+        double total = 0.0;
+        long i = 0;
+
+        while i < n {
+            let total += (double) arr[i];
+            let i++;
+        }
+
+        return total;
+    }
+
+    /** Write side of the same comparison. */
+    public function bufferWriteLoop(var buf, long n) -> void
+    {
+        long i = 0;
+
+        while i < n {
+            let buf[i] = 1.5;
+            let i++;
+        }
+    }
 }
