@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Added
+- Added a warning for unrecognized top-level settings in `config.json` [#2449](https://github.com/zephir-lang/zephir/issues/2449)
 - Added an opt-in `<Ns>\Buffer` kernel class holding a fixed-size contiguous C array of doubles or integers, readable from C as a raw pointer [#2721](https://github.com/zephir-lang/zephir/issues/2721)
 - Added a kernel fast path so `buffer[i]` in Zephir source reads and writes the element directly instead of dispatching `offsetGet()` or `offsetSet()` [#2721](https://github.com/zephir-lang/zephir/issues/2721)
 
 ### Fixed
+- Fixed `int`, `uint`, `long`, `ulong`, `double` and `char` extension globals not registering a php.ini directive [#2449](https://github.com/zephir-lang/zephir/issues/2449)
+- Fixed a string extension global's php.ini directive never reaching the global [#2449](https://github.com/zephir-lang/zephir/issues/2449)
+- Fixed php.ini values for extension globals being discarded at the start of every request [#2449](https://github.com/zephir-lang/zephir/issues/2449)
+- Fixed `globals_set()` on a namespaced extension global leaking into the next request [#2449](https://github.com/zephir-lang/zephir/issues/2449)
+- Fixed an `int` extension global being declared as a C `int` instead of `zend_long` [#2449](https://github.com/zephir-lang/zephir/issues/2449)
 - Fixed `ZEPHIR_USE_PHP_JSON` never being defined on PHP 8.4 and 8.5, where php-src no longer declares `HAVE_JSON`
 - Fixed a called method name being lower-cased at code generation, so `__call()` and `__callStatic()` now receive the name as it was written at the call site, as they do in PHP [#2715](https://github.com/zephir-lang/zephir/issues/2715)
 - Fixed a method name held in a variable being lower-cased again at runtime by the call macros [#2715](https://github.com/zephir-lang/zephir/issues/2715)

@@ -104,6 +104,21 @@ $logger = new Logger('zephir', [
     $consoleStdErrorHandler,
     $consoleStdOutHandler,
 ]);
+
+/**
+ * config.json is read by Config::fromServer() above, before a logger exists,
+ * so anything it wants to report has to wait until here.
+ */
+foreach ($config->getUnknownSettings() as $setting => $closest) {
+    $logger->warning(sprintf(
+        'config.json setting "%s" is not recognized and will be ignored. %s',
+        $setting,
+        null !== $closest
+            ? sprintf('Did you mean "%s"?', $closest)
+            : 'See https://docs.zephir-lang.com/latest/config for the supported settings.'
+    ));
+}
+
 $compilerFactory = new Compiler\CompilerFileFactory($config, $disk, $logger);
 $backend = new Backend($config, $rootPath.'/kernel', $rootPath.'/templates');
 

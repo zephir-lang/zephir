@@ -25,12 +25,12 @@
 
 typedef struct _zephir_struct_db { 
 	zend_bool my_setting_1;
-	int my_setting_2;
+	zend_long my_setting_2;
 	double my_setting_3;
 } zephir_struct_db;
 
 typedef struct _zephir_struct_orm { 
-	int cache_level;
+	zend_long cache_level;
 	zend_bool cache_enable;
 	char * cache_prefix;
 } zephir_struct_orm;
@@ -65,10 +65,12 @@ ZEND_BEGIN_MODULE_GLOBALS(stub)
 	zephir_struct_extension extension;
 	zend_bool my_setting_1;
 	zend_bool test_setting_1;
-	int my_setting_2;
+	zend_long my_setting_2;
 	double my_setting_3;
 	char my_setting_4;
 	char * my_setting_5;
+	zend_ulong my_setting_6;
+	zend_bool module_setting;
 
 ZEND_END_MODULE_GLOBALS(stub)
 
