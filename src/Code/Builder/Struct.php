@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Code\Builder;
 
 use Zephir\Exception\InvalidArgumentException;
-use Zephir\Exception\RuntimeException;
-use Zephir\Types\Types;
 
 use function sprintf;
 use function substr;
@@ -23,7 +21,11 @@ use function substr;
 use const PHP_EOL;
 
 /**
- * Represents an internal extension global structure
+ * Represents an internal extension global structure.
+ *
+ * Declares the C type only. Everything else about a member - its php.ini
+ * directive, its compiled default - comes from ExtensionGlobal, so a dotted
+ * global and a plain one cannot be emitted differently.
  */
 class Struct
 {
@@ -65,101 +67,6 @@ class Struct
             throw new InvalidArgumentException('Property was defined more than once');
         }
 
-        $this->properties[$field] = $this->convertToCType($type);
-    }
-
-    /**
-     * Returns the C code that initializes the extension global.
-     *
-     * @throws RuntimeException
-     * @throws InvalidArgumentException
-     */
-    public function getCDefault(string $name, array $global, string $namespace): string
-    {
-        if (!isset($global['default'])) {
-            throw new RuntimeException('Field "' . $name . '" does not have a default value');
-        }
-
-        return match ($global['type']) {
-            Types::T_BOOL,
-            Types::T_BOOLEAN => '',
-            Types::T_STRING  => "\t" . $namespace
-                . '_globals->' . $this->simpleName . '.' . $name
-                . ' = ZSTR_VAL(zend_string_init(ZEND_STRL("' . $global['default'] . '"), 0));',
-            Types::T_INT,
-            Types::T_UINT,
-            Types::T_LONG,
-            Types::T_DOUBLE,
-            Types::T_HASH    => "\t" . $namespace
-                . '_globals->' . $this->simpleName . '.' . $name
-                . ' = ' . $global['default'] . ';',
-            default          => throw new InvalidArgumentException(
-                'Unknown global type: ' . $global['type']
-            ),
-        };
-    }
-
-    /**
-     * Process Globals for phpinfo() page.
-     *
-     * @see https://docs.zephir-lang.com/latest/en/globals
-     *
-     * @param string $name      - global-name
-     * @param array  $global    - global structure (type, default...)
-     * @param string $namespace - global namespace
-     *
-     * @return string
-     */
-    public function getInitEntry(string $name, array $global, string $namespace): string
-    {
-        $structName = $this->simpleName . '.' . $name;
-        $iniEntry   = $global['ini-entry'] ?? [];
-        $iniName    = $iniEntry['name'] ?? $namespace . '.' . $structName;
-        $scope      = $iniEntry['scope'] ?? 'PHP_INI_ALL';
-
-        return match ($global['type']) {
-            Types::T_BOOLEAN,
-            Types::T_BOOL   => 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "'
-                . (int)(true === $global['default']) . '", ' . $scope
-                . ', OnUpdateBool, ' . $structName . ', zend_' . $namespace
-                . '_globals, ' . $namespace . '_globals)',
-            Types::T_STRING => sprintf(
-                'STD_PHP_INI_ENTRY(%s, %s, %s, NULL, %s, %s, %s)',
-                '"' . $iniName . '"',
-                '"' . $global['default'] . '"',
-                $scope,
-                $structName,
-                'zend_' . $namespace . '_globals',
-                $namespace . '_globals',
-            ),
-            default         => '',
-        };
-    }
-
-    /**
-     * Generates the internal c-type according to the php's type.
-     *
-     * @throws InvalidArgumentException
-     */
-    protected function convertToCType(string $type): string
-    {
-        // Mirrors Backend::getTypeDefinition(): `uint`, `ulong` and `uchar` are
-        // Zephir type names, not C ones, and have to be spelled out. See #1629.
-        // `long`/`ulong` spell out to `zend_long`/`zend_ulong` rather than a C
-        // `long`, whose width follows the data model. See #2666.
-        return match ($type) {
-            'boolean', 'bool'       => 'zend_bool',
-            'hash'                  => 'HashTable* ',
-            // Use a plain C string pointer for struct globals to align with STD_PHP_INI_ENTRY expectations
-            'string'                => 'char *',
-            'uint'                  => 'zend_ulong',
-            'long'                  => 'zend_long',
-            'ulong'                 => 'zend_ulong',
-            'uchar'                 => 'unsigned char',
-            'int', 'char', 'double' => $type,
-            default                 => throw new InvalidArgumentException(
-                'Unknown global type: ' . $type
-            ),
-        };
+        $this->properties[$field] = ExtensionGlobal::cTypeOf($type);
     }
 }

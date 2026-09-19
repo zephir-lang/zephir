@@ -1,0 +1,49 @@
+--TEST--
+Issue #2449: a module-scoped extension global still takes its php.ini value
+--CONFIG--
+{"globals": {
+    "per_request": {"type": "int", "default": 10},
+    "per_process": {"type": "int", "default": 10, "module": true},
+    "renamed":     {"type": "bool", "default": true, "module": true, "ini-entry": {"name": "stub-module.renamed", "scope": "PHP_INI_ALL"}}
+}}
+--INI--
+stub.per_request=1
+stub.per_process=2
+stub-module.renamed=0
+--FILE--
+namespace Stub;
+
+class Settings
+{
+	public function perRequest()
+	{
+		return globals_get("per_request");
+	}
+
+	public function perProcess()
+	{
+		return globals_get("per_process");
+	}
+
+	public function renamed()
+	{
+		return globals_get("renamed");
+	}
+}
+--USAGE--
+$s = new \Stub\Settings();
+
+// A module-scoped global is set up once per process, in GINIT, which runs
+// before MINIT registers the directives. REGISTER_INI_ENTRIES() therefore has
+// the last word either way.
+echo 'per_request ', var_export($s->perRequest(), true), "\n";
+echo 'per_process ', var_export($s->perProcess(), true), "\n";
+echo 'renamed     ', var_export($s->renamed(), true), "\n";
+echo 'renamed ini ', var_export(ini_get('stub-module.renamed'), true), "\n";
+echo 'default name is gone ', var_export(ini_get('stub.renamed'), true), "\n";
+--EXPECT--
+per_request 1
+per_process 2
+renamed     false
+renamed ini '0'
+default name is gone false

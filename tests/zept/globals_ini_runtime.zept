@@ -1,0 +1,84 @@
+--TEST--
+Issue #2449: ini_set() reaches the extension global it backs, and globals_set() does not move the directive
+--CONFIG--
+{"globals": {
+    "a_bool":   {"type": "bool",   "default": true},
+    "an_int":   {"type": "int",    "default": 10},
+    "a_double": {"type": "double", "default": 15.2},
+    "a_char":   {"type": "char",   "default": "A"},
+    "a_string": {"type": "string", "default": "compiled"},
+    "locked":   {"type": "int",    "default": 3, "ini-entry": {"name": "stub.locked", "scope": "PHP_INI_SYSTEM"}}
+}}
+--FILE--
+namespace Stub;
+
+class Settings
+{
+	public function aBool()
+	{
+		return globals_get("a_bool");
+	}
+
+	public function anInt()
+	{
+		return globals_get("an_int");
+	}
+
+	public function aDouble()
+	{
+		return globals_get("a_double");
+	}
+
+	public function aChar()
+	{
+		return globals_get("a_char");
+	}
+
+	public function aString()
+	{
+		return globals_get("a_string");
+	}
+
+	public function locked()
+	{
+		return globals_get("locked");
+	}
+
+	public function setInt(value) -> void
+	{
+		globals_set("an_int", value);
+	}
+}
+--USAGE--
+$s = new \Stub\Settings();
+
+ini_set('stub.a_bool', '0');
+ini_set('stub.an_int', '99');
+ini_set('stub.a_double', '0.5');
+ini_set('stub.a_char', 'Q');
+ini_set('stub.a_string', 'runtime');
+
+echo 'bool   ', var_export($s->aBool(), true), "\n";
+echo 'int    ', var_export($s->anInt(), true), "\n";
+echo 'double ', var_export($s->aDouble(), true), "\n";
+echo 'char   ', var_export($s->aChar(), true), "\n";
+echo 'string ', var_export($s->aString(), true), "\n";
+
+// PHP_INI_SYSTEM cannot be changed at runtime, exactly as for a core directive.
+echo 'locked set  ', var_export(@ini_set('stub.locked', '7'), true), "\n";
+echo 'locked      ', var_export($s->locked(), true), "\n";
+
+// globals_set() writes the struct member and nothing else; the directive keeps
+// reporting the value the engine knows about.
+$s->setInt(1234);
+echo 'after globals_set global=', var_export($s->anInt(), true),
+     ' ini=', var_export(ini_get('stub.an_int'), true), "\n";
+--EXPECT--
+bool   false
+int    99
+double 0.5
+char   81
+string 'runtime'
+locked set  false
+locked      3
+after globals_set global=1234 ini='99'

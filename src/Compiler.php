@@ -28,6 +28,7 @@ use Zephir\Class\Definition\AttributeEmitter;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Definition\TraitMerger;
 use Zephir\Code\ArgInfoDefinition;
+use Zephir\Code\Builder\ExtensionGlobal;
 use Zephir\Code\Builder\Struct;
 use Zephir\Code\Printer;
 use Zephir\Compiler\CompilerFileFactory;
@@ -838,7 +839,8 @@ final class Compiler
         /**
          * Round 3. Process extension globals
          */
-        [$globalCode, $globalStruct, $globalsDefault, $initEntries] = $this->processExtensionGlobals($project);
+        [$globalCode, $globalStruct, $globalsDefault, $initEntries, $requestIniGlobals] =
+            $this->processExtensionGlobals($project);
         if ('zend' == $project) {
             $safeProject = 'zend_';
         } else {
@@ -966,6 +968,10 @@ final class Compiler
             '%FE_HEADER%'            => $feHeader,
             '%FE_ENTRIES%'           => $feEntries,
             '%PROJECT_INI_ENTRIES%'  => implode(PHP_EOL . "\t", $initEntries),
+            '%PROJECT_REQUEST_INI_ENTRIES%' => implode(
+                PHP_EOL . "\t",
+                array_map(static fn(string $name): string => '"' . $name . '",', $requestIniGlobals)
+            ),
             '%PROJECT_DEPENDENCIES%' => implode(PHP_EOL . "\t", $modRequires),
         ];
         foreach ($toReplace as $mark => $replace) {
@@ -2232,18 +2238,21 @@ final class Compiler
     /**
      * Process extension globals.
      *
+     * Returns, in order: the globals struct members, the typedefs of the
+     * compound ones, the [request, module] default assignments, the
+     * PHP_INI_BEGIN() entries, and the names of the request-scoped directives
+     * that have to be re-applied at the start of every request.
+     *
      * @throws Exception
      */
     public function processExtensionGlobals(string $namespace): array
     {
-        $globalCode     = '';
-        $globalStruct   = '';
-        $globalsDefault = [[], []];
-        $initEntries    = [];
+        $globalCode        = '';
+        $globalStruct      = '';
+        $globalsDefault    = [[], []];
+        $initEntries       = [];
+        $requestIniGlobals = [];
 
-        /**
-         * Generate the extensions globals declaration.
-         */
         $globals = $this->config->get('globals');
         if (is_array($globals)) {
             $structures = [];
@@ -2272,10 +2281,13 @@ final class Compiler
                     }
 
                     $structBuilder->addProperty($field, $global['type']);
-
-                    $isModuleGlobal                    = (int)!empty($global['module']);
-                    $globalsDefault[$isModuleGlobal][] = $structBuilder->getCDefault($field, $global, $namespace);
-                    $initEntries[]                     = $structBuilder->getInitEntry($field, $global, $namespace);
+                    $this->collectExtensionGlobal(
+                        new ExtensionGlobal($structureName . '.' . $field, $global),
+                        $namespace,
+                        $globalsDefault,
+                        $initEntries,
+                        $requestIniGlobals,
+                    );
                 }
 
                 $globalStruct .= $structBuilder . PHP_EOL;
@@ -2294,89 +2306,60 @@ final class Compiler
                     throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
                 }
 
-                if (!isset($global['default'])) {
-                    throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
-                }
+                $extensionGlobal = new ExtensionGlobal($name, $global);
+                $this->collectExtensionGlobal(
+                    $extensionGlobal,
+                    $namespace,
+                    $globalsDefault,
+                    $initEntries,
+                    $requestIniGlobals,
+                );
 
-                $isModuleGlobal = (int)!empty($global['module']);
-                $type           = $global['type'];
-                // TODO: Add support for 'hash'
-                // TODO: Zephir\Optimizers\FunctionCall\GlobalsSetOptimizer
-                switch ($global['type']) {
-                    case 'boolean':
-                    case 'bool':
-                        $type = 'zend_bool';
-                        if (true === $global['default']) {
-                            $globalsDefault[$isModuleGlobal][] = "\t" . $namespace . '_globals->' . $name . ' = 1;';
-                        } else {
-                            $globalsDefault[$isModuleGlobal][] = "\t" . $namespace . '_globals->' . $name . ' = 0;';
-                        }
-                        break;
-
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'double':
-                        $globalsDefault[$isModuleGlobal][] = "\t" . $namespace . '_globals->' . $name . ' = ' . $global['default'] . ';';
-                        break;
-
-                    case 'char':
-                    case 'uchar':
-                        $globalsDefault[$isModuleGlobal][] = "\t" . $namespace . '_globals->' . $name . ' = \'' . $global['default'] . '\';';
-                        break;
-                    case 'string':
-                        $type                              = 'char *';
-                        $globalsDefault[$isModuleGlobal][] = "\t" . $namespace . '_globals->' . $name . ' = ZSTR_VAL(zend_string_init(ZEND_STRL("' . $global['default'] . '"), 0));';
-                        break;
-                    default:
-                        throw new Exception(
-                            "Unknown type '" . $global['type'] . "' for extension global '" . $name . "'"
-                        );
-                }
-
-                $globalCode .= "\t" . $type . ' ' . $name . ';' . PHP_EOL;
-
-                $iniEntry = $global['ini-entry'] ?? [];
-                $iniName  = $iniEntry['name'] ?? $namespace . '.' . $name;
-                $scope    = $iniEntry['scope'] ?? 'PHP_INI_ALL';
-
-                switch ($global['type']) {
-                    case 'boolean':
-                    case 'bool':
-                        $initEntries[] =
-                            'STD_PHP_INI_BOOLEAN("' .
-                            $iniName .
-                            '", "' .
-                            (int)(true === $global['default']) .
-                            '", ' .
-                            $scope .
-                            ', OnUpdateBool, ' .
-                            $name .
-                            ', zend_' .
-                            $namespace .
-                            '_globals, ' .
-                            $namespace . '_globals)';
-                        break;
-
-                    case 'string':
-                        $initEntries[] = sprintf(
-                            'STD_PHP_INI_ENTRY(%s, %s, %s, NULL, %s, %s, %s)',
-                            '"' . $iniName . '"',
-                            '"' . $global['default'] . '"',
-                            $scope,
-                            $name,
-                            'zend_' . $namespace . '_globals',
-                            $namespace . '_globals',
-                        );
-                        break;
-                }
+                $globalCode .= "\t" . $extensionGlobal->cType() . ' ' . $name . ';' . PHP_EOL;
             }
         }
 
-        $globalsDefault[0] = implode(PHP_EOL, $globalsDefault[0]);
-        $globalsDefault[1] = implode(PHP_EOL, $globalsDefault[1]);
+        $globalsDefault[0] = implode(PHP_EOL . "\t", $globalsDefault[0]);
+        $globalsDefault[1] = implode(PHP_EOL . "\t", $globalsDefault[1]);
 
-        return [$globalCode, $globalStruct, $globalsDefault, $initEntries];
+        return [$globalCode, $globalStruct, $globalsDefault, $initEntries, $requestIniGlobals];
+    }
+
+    /**
+     * Records one global's default, its php.ini directive, and whether that
+     * directive has to be re-applied each request.
+     *
+     * @param array $globalsDefault    [request, module] assignment lists
+     * @param array $initEntries       PHP_INI_BEGIN() lines
+     * @param array $requestIniGlobals directive names reset on every request
+     *
+     * @throws Exception
+     */
+    private function collectExtensionGlobal(
+        ExtensionGlobal $global,
+        string $namespace,
+        array &$globalsDefault,
+        array &$initEntries,
+        array &$requestIniGlobals,
+    ): void {
+        $default = $global->cDefault($namespace);
+        if ('' !== $default) {
+            $globalsDefault[(int) $global->isModule()][] = $default;
+        }
+
+        if (!$global->isIniCapable()) {
+            return;
+        }
+
+        $initEntries[] = $global->iniEntry($namespace);
+
+        /**
+         * A module-scoped global is set up once per process, so it must not be
+         * put back to its php.ini value at the start of every request.
+         */
+        if (!$global->isModule()) {
+            $requestIniGlobals[] = $global->iniName($namespace);
+        }
     }
 
     /**

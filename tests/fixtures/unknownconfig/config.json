@@ -1,0 +1,16 @@
+{
+  "namespace": "unknownconfig",
+  "name": "Unknown Config Test",
+  "ini": {
+    "unknownconfig.some_setting": {
+      "type": "int",
+      "default": 10
+    }
+  },
+  "gobals": {
+    "typo": {
+      "type": "bool",
+      "default": true
+    }
+  }
+}

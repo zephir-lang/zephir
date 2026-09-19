@@ -101,6 +101,19 @@
       "type": "string",
       "default": "custom_value"
     },
+    "my_setting_6": {
+      "type": "uint",
+      "default": 64
+    },
+    "module_setting": {
+      "type": "bool",
+      "default": true,
+      "module": true,
+      "ini-entry": {
+        "name": "stub.module_setting",
+        "scope": "PHP_INI_ALL"
+      }
+    },
     "db.my_setting_1": {
       "type": "bool",
       "default": false

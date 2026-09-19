@@ -121,4 +121,66 @@ class Globals
     {
         return globals_get("orm.cache_prefix");
     }
+
+	/* Globals that had no accessor at all before #2449 */
+
+	public function setUIntValue(value) -> void
+	{
+		globals_set("my_setting_6", value);
+	}
+
+	public function setIntValue(value) -> void
+	{
+		globals_set("my_setting_2", value);
+	}
+
+	public function setDoubleValue(value) -> void
+	{
+		globals_set("my_setting_3", value);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getUIntValue()
+	{
+		return globals_get("my_setting_6");
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getTestSetting1()
+	{
+		return globals_get("test_setting_1");
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getDefaultGlobalsOrmCacheEnable()
+	{
+		return globals_get("orm.cache_enable");
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getTestIniVariable()
+	{
+		return globals_get("extension.test_ini_variable");
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getModuleSetting()
+	{
+		return globals_get("module_setting");
+	}
+
+	public function setModuleSetting(value) -> void
+	{
+		globals_set("module_setting", value);
+	}
 }

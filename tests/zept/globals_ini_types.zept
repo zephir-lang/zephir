@@ -1,0 +1,92 @@
+--TEST--
+Issue #2449: a php.ini value reaches an extension global of every scalar type
+--CONFIG--
+{"globals": {
+    "a_bool":   {"type": "bool",   "default": true},
+    "an_int":   {"type": "int",    "default": 10},
+    "a_uint":   {"type": "uint",   "default": 64},
+    "a_long":   {"type": "long",   "default": 7},
+    "a_double": {"type": "double", "default": 15.2},
+    "a_char":   {"type": "char",   "default": "A"},
+    "a_string": {"type": "string", "default": "compiled"}
+}}
+--INI--
+stub.a_bool=0
+stub.an_int=42
+stub.a_uint=7
+stub.a_long=-3
+stub.a_double=2.5
+stub.a_char=Z
+stub.a_string=from-ini
+--FILE--
+namespace Stub;
+
+class Settings
+{
+	public function aBool()
+	{
+		return globals_get("a_bool");
+	}
+
+	public function anInt()
+	{
+		return globals_get("an_int");
+	}
+
+	public function aUint()
+	{
+		return globals_get("a_uint");
+	}
+
+	public function aLong()
+	{
+		return globals_get("a_long");
+	}
+
+	public function aDouble()
+	{
+		return globals_get("a_double");
+	}
+
+	public function aChar()
+	{
+		return globals_get("a_char");
+	}
+
+	public function aString()
+	{
+		return globals_get("a_string");
+	}
+}
+--USAGE--
+$s = new \Stub\Settings();
+
+// Every one of these is registered as a directive, so phpinfo() and ini_get()
+// can see it too.
+foreach (['a_bool', 'an_int', 'a_uint', 'a_long', 'a_double', 'a_char', 'a_string'] as $name) {
+    echo $name, ' ini=', var_export(ini_get('stub.' . $name), true), "\n";
+}
+
+echo 'bool   ', var_export($s->aBool(), true), "\n";
+echo 'int    ', var_export($s->anInt(), true), "\n";
+echo 'uint   ', var_export($s->aUint(), true), "\n";
+echo 'long   ', var_export($s->aLong(), true), "\n";
+echo 'double ', var_export($s->aDouble(), true), "\n";
+// A char global reads back as its character code, not a one-character string.
+echo 'char   ', var_export($s->aChar(), true), "\n";
+echo 'string ', var_export($s->aString(), true), "\n";
+--EXPECT--
+a_bool ini='0'
+an_int ini='42'
+a_uint ini='7'
+a_long ini='-3'
+a_double ini='2.5'
+a_char ini='Z'
+a_string ini='from-ini'
+bool   false
+int    42
+uint   7
+long   -3
+double 2.5
+char   90
+string 'from-ini'
