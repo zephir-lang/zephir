@@ -187,10 +187,41 @@ final class GlobalsIniTest extends TestCase
      * Runs a snippet in a fresh process with one directive set at startup.
      *
      * `php -n` is not usable here: the stub extension needs psr and mysqli,
-     * which only the container's php.ini loads.
+     * which only php.ini loads.
      */
     private function runWithDirective(string $directive, string $value, string $code): string
     {
+        $arguments   = $this->extensionArguments();
+        $arguments[] = '-d ' . escapeshellarg($directive . '=' . $value);
+        $arguments[] = '-r ' . escapeshellarg($code);
+
+        return trim((string) shell_exec(
+            escapeshellarg(PHP_BINARY) . ' ' . implode(' ', $arguments) . ' 2>&1'
+        ));
+    }
+
+    /**
+     * The arguments needed to give the subprocess the extension, if any.
+     *
+     * CI enables the stub through a conf.d ini file, so a subprocess already
+     * has it; loading it again prints `Module "stub" is already loaded` into
+     * the output this test parses. Locally the extension is passed to PHPUnit
+     * on the command line instead, and a subprocess inherits nothing.
+     *
+     * @return list<string>
+     */
+    private function extensionArguments(): array
+    {
+        static $arguments;
+
+        if (isset($arguments)) {
+            return $arguments;
+        }
+
+        if ($this->subprocessLoadsStub()) {
+            return $arguments = [];
+        }
+
         /* Windows names it php_stub.dll, the way tests/ext-bootstrap.php does. */
         $prefix    = 'dll' === PHP_SHLIB_SUFFIX ? 'php_' : '';
         $extension = __DIR__ . '/../../ext/modules/' . $prefix . 'stub.' . PHP_SHLIB_SUFFIX;
@@ -199,14 +230,17 @@ final class GlobalsIniTest extends TestCase
             $this->markTestSkipped('The built stub extension is needed to set a directive at startup.');
         }
 
-        $command = sprintf(
-            '%s -d %s -d %s -r %s 2>&1',
-            escapeshellarg(PHP_BINARY),
-            escapeshellarg('extension=' . $extension),
-            escapeshellarg($directive . '=' . $value),
-            escapeshellarg($code),
-        );
+        return $arguments = ['-d ' . escapeshellarg('extension=' . $extension)];
+    }
 
-        return trim((string) shell_exec($command));
+    private function subprocessLoadsStub(): bool
+    {
+        $probe = shell_exec(sprintf(
+            '%s -r %s 2>/dev/null',
+            escapeshellarg(PHP_BINARY),
+            escapeshellarg('echo (int) extension_loaded("stub");'),
+        ));
+
+        return '1' === trim((string) $probe);
     }
 }

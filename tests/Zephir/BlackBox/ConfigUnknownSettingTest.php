@@ -43,10 +43,10 @@ namespace Stub;
 
 class Settings
 {
-	public function run() -> int
-	{
-		return 1;
-	}
+    public function run() -> int
+    {
+        return 1;
+    }
 }
 ZEP);
     }

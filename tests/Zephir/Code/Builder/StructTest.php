@@ -36,7 +36,8 @@ final class StructTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Struct name must not be empty');
 
-        new Struct('', 'db');
+        /* The constructor rejects it, so addProperty() is never reached. */
+        (new Struct('', 'db'))->addProperty('a_bool', 'bool');
     }
 
     public function testShouldRejectADuplicateProperty(): void

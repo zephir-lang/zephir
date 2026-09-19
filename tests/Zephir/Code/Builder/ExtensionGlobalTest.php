@@ -191,6 +191,7 @@ final class ExtensionGlobalTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Extension global "setting" has no default value');
 
-        new ExtensionGlobal('setting', ['type' => 'int']);
+        /* The constructor rejects it, so cType() is never reached. */
+        (new ExtensionGlobal('setting', ['type' => 'int']))->cType();
     }
 }
