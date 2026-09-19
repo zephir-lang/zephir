@@ -24,12 +24,15 @@ use function current;
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
+use function in_array;
 use function is_array;
 use function json_decode;
 use function json_encode;
 use function json_last_error;
 use function key;
+use function levenshtein;
 use function preg_match;
+use function strlen;
 
 use const JSON_ERROR_CTRL_CHAR;
 use const JSON_ERROR_DEPTH;
@@ -45,9 +48,58 @@ use const JSON_PRETTY_PRINT;
 class Config implements ArrayAccess, JsonSerializable
 {
     /**
+     * Every top-level setting Zephir reads.
+     *
+     * A config.json key outside this list has no effect at all, and used to
+     * be swallowed without a word, which is how someone spent a build cycle
+     * on an `ini` section that never existed (#2449). Only the top level is
+     * checked: several sections legitimately carry keys the compiler no
+     * longer reads.
+     */
+    private const KNOWN_SETTINGS = [
+        'api',
+        'author',
+        'backend',
+        'constants-sources',
+        'description',
+        'destructors',
+        'extension-name',
+        'external-dependencies',
+        'extra',
+        'extra-cflags',
+        'extra-classes',
+        'extra-libs',
+        'extra-sources',
+        'globals',
+        'info',
+        'initializers',
+        'kernel-classes',
+        'name',
+        'namespace',
+        'optimizations',
+        'optimizer-dirs',
+        'package-dependencies',
+        'prototype-dir',
+        'requires',
+        'silent',
+        'stubs',
+        'verbose',
+        'version',
+        'warnings',
+    ];
+
+    /**
      * Is config changed?
      */
     protected bool $changed = false;
+
+    /**
+     * Settings found in config.json that Zephir does not read, mapped to the
+     * closest setting it does read, or null when nothing is close.
+     *
+     * @var array<string, string|null>
+     */
+    private array $unknownSettings = [];
 
     /**
      * Default configuration for project.
@@ -255,6 +307,20 @@ class Config implements ArrayAccess, JsonSerializable
     }
 
     /**
+     * Settings found in config.json that Zephir does not read.
+     *
+     * The value is the closest known setting, or null when there is none.
+     * They are still kept in the container, so a project carrying private
+     * keys keeps building.
+     *
+     * @return array<string, string|null>
+     */
+    public function getUnknownSettings(): array
+    {
+        return $this->unknownSettings;
+    }
+
+    /**
      * Specify data which should be serialized to JSON.
      */
     public function jsonSerialize(): array
@@ -370,6 +436,10 @@ class Config implements ArrayAccess, JsonSerializable
         switch (json_last_error()) {
             case JSON_ERROR_NONE:
                 foreach ($config as $key => $configSection) {
+                    if (!in_array((string) $key, self::KNOWN_SETTINGS, true)) {
+                        $this->unknownSettings[$key] = $this->closestSetting((string) $key);
+                    }
+
                     $this->offsetSet($key, $configSection);
                 }
 
@@ -394,5 +464,29 @@ class Config implements ArrayAccess, JsonSerializable
         }
 
         throw new Exception($message);
+    }
+
+    /**
+     * The setting closest to a misspelled one, or null when nothing is close.
+     *
+     * A suggestion is only useful for an actual typo. `ini` is seven edits
+     * away from `globals`, and guessing there would send the reader somewhere
+     * worse than the documentation.
+     */
+    private function closestSetting(string $key): ?string
+    {
+        $closest  = null;
+        $distance = 1 + (int) (strlen($key) / 2);
+
+        foreach (self::KNOWN_SETTINGS as $setting) {
+            $candidate = levenshtein($key, $setting);
+
+            if ($candidate < $distance) {
+                $distance = $candidate;
+                $closest  = $setting;
+            }
+        }
+
+        return $closest;
     }
 }

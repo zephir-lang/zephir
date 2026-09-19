@@ -1201,3 +1201,33 @@ void zephir_module_shutdown(void)
 {
 	zephir_closure_module_shutdown();
 }
+
+ZEND_INI_MH(zephir_OnUpdateChar)
+{
+	char *p = (char *) ZEND_INI_GET_ADDR();
+
+	*p = (new_value && ZSTR_LEN(new_value)) ? ZSTR_VAL(new_value)[0] : '\0';
+
+	return SUCCESS;
+}
+
+void zephir_ini_activate_globals(const char *const *names)
+{
+	for (; *names; names++) {
+		zend_ini_entry *entry = zend_hash_str_find_ptr(EG(ini_directives), *names, strlen(*names));
+
+		/* An entry the engine refused to register (a duplicate name) leaves
+		 * its global at whatever MINIT left behind, which is the same
+		 * outcome as before this call existed. */
+		if (entry && entry->on_modify) {
+			entry->on_modify(
+				entry,
+				entry->value,
+				entry->mh_arg1,
+				entry->mh_arg2,
+				entry->mh_arg3,
+				ZEND_INI_STAGE_ACTIVATE
+			);
+		}
+	}
+}

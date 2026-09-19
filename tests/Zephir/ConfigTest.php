@@ -89,6 +89,31 @@ final class ConfigTest extends TestCase
     }
 
     /**
+     * A setting Zephir does not know about is kept, so a project carrying
+     * private keys still builds, but it is reported instead of vanishing.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2449
+     */
+    public function testShouldReportUnrecognizedSettings(): void
+    {
+        chdir(\constant('ZEPHIRPATH') . '/tests/fixtures/unknownconfig');
+        $config = new Config();
+
+        $this->assertSame(
+            ['ini' => null, 'gobals' => 'globals'],
+            $config->getUnknownSettings()
+        );
+
+        /* Reporting it must not drop it */
+        $this->assertIsArray($config->get('ini'));
+    }
+
+    public function testShouldReportNoUnrecognizedSettingsForAValidConfig(): void
+    {
+        $this->assertSame([], $this->config->getUnknownSettings());
+    }
+
+    /**
      * Test data provider.
      *
      * [

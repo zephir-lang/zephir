@@ -383,16 +383,46 @@ ZEND_DECLARE_MODULE_GLOBALS(stub)
 
 PHP_INI_BEGIN()
 	STD_PHP_INI_BOOLEAN("stub.db.my_setting_1", "0", PHP_INI_ALL, OnUpdateBool, db.my_setting_1, zend_stub_globals, stub_globals)
-	
-	
-	
+	STD_PHP_INI_ENTRY("stub.db.my_setting_2", "100", PHP_INI_ALL, OnUpdateLong, db.my_setting_2, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.db.my_setting_3", "7.5", PHP_INI_ALL, OnUpdateReal, db.my_setting_3, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.orm.cache_level", "3", PHP_INI_ALL, OnUpdateLong, orm.cache_level, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("stub.orm.cache_enable", "1", PHP_INI_ALL, OnUpdateBool, orm.cache_enable, zend_stub_globals, stub_globals)
-	STD_PHP_INI_ENTRY("stub.orm.cache_prefix", "prefix-string-", PHP_INI_ALL, NULL, orm.cache_prefix, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.orm.cache_prefix", "prefix-string-", PHP_INI_ALL, OnUpdateString, orm.cache_prefix, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("extension.test_ini_variable", "1", PHP_INI_ALL, OnUpdateBool, extension.test_ini_variable, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("ini-entry.my_setting_1", "1", PHP_INI_ALL, OnUpdateBool, my_setting_1, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("stub.test_setting_1", "1", PHP_INI_ALL, OnUpdateBool, test_setting_1, zend_stub_globals, stub_globals)
-	STD_PHP_INI_ENTRY("stub.my_setting_5", "custom_value", PHP_INI_ALL, NULL, my_setting_5, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.my_setting_2", "10", PHP_INI_ALL, OnUpdateLong, my_setting_2, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.my_setting_3", "15.2", PHP_INI_ALL, OnUpdateReal, my_setting_3, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.my_setting_4", "A", PHP_INI_ALL, zephir_OnUpdateChar, my_setting_4, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.my_setting_5", "custom_value", PHP_INI_ALL, OnUpdateString, my_setting_5, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.my_setting_6", "64", PHP_INI_ALL, OnUpdateLongGEZero, my_setting_6, zend_stub_globals, stub_globals)
+	STD_PHP_INI_BOOLEAN("stub.module_setting", "1", PHP_INI_ALL, OnUpdateBool, module_setting, zend_stub_globals, stub_globals)
 PHP_INI_END()
+
+/**
+ * Directives whose globals are put back to their php.ini value at the start
+ * of every request. globals_set() writes the struct member directly, so the
+ * engine cannot restore it the way it restores an ini_set(); without this the
+ * value would survive into the next request. Module-scoped globals are
+ * deliberately absent: they are set up once per process.
+ */
+static const char *const zephir_request_ini_entries[] = {
+	"stub.db.my_setting_1",
+	"stub.db.my_setting_2",
+	"stub.db.my_setting_3",
+	"stub.orm.cache_level",
+	"stub.orm.cache_enable",
+	"stub.orm.cache_prefix",
+	"extension.test_ini_variable",
+	"ini-entry.my_setting_1",
+	"stub.test_setting_1",
+	"stub.my_setting_2",
+	"stub.my_setting_3",
+	"stub.my_setting_4",
+	"stub.my_setting_5",
+	"stub.my_setting_6",
+	NULL
+};
 
 static PHP_MINIT_FUNCTION(stub)
 {
@@ -812,18 +842,6 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
 	memset(stub_globals->pcache, '\0', sizeof(void*) * ZEPHIR_MAX_PROPERTY_CACHE_SLOTS * ZEPHIR_PROPERTY_CACHE_SLOT_SIZE);
 
 	
-	stub_globals->db.my_setting_2 = 100;
-	stub_globals->db.my_setting_3 = 7.5;
-	stub_globals->orm.cache_level = 3;
-
-	stub_globals->orm.cache_prefix = ZSTR_VAL(zend_string_init(ZEND_STRL("prefix-string-"), 0));
-
-	stub_globals->my_setting_1 = 1;
-	stub_globals->test_setting_1 = 1;
-	stub_globals->my_setting_2 = 10;
-	stub_globals->my_setting_3 = 15.2;
-	stub_globals->my_setting_4 = 'A';
-	stub_globals->my_setting_5 = ZSTR_VAL(zend_string_init(ZEND_STRL("custom_value"), 0));
 	
 }
 
@@ -845,6 +863,7 @@ static PHP_RINIT_FUNCTION(stub)
 	stub_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(stub_globals_ptr);
+	zephir_ini_activate_globals(zephir_request_ini_entries);
 	zephir_initialize_memory(stub_globals_ptr);
 
 		zephir_init_static_properties_Stub_Issue1629();
