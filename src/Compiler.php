@@ -1044,6 +1044,7 @@ final class Compiler
             '%EXTENSION_GLOBALS%'        => $globalCode,
             '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct,
             '%GENERATOR_DEFINES%'        => $this->generatorDefines(),
+            '%BUFFER_DEFINES%'           => $this->bufferDefines(),
         ];
 
         foreach ($toReplace as $mark => $replace) {
@@ -1079,6 +1080,60 @@ final class Compiler
 
         return '#define ZEPHIR_GENERATOR_ENABLED 1' . PHP_EOL
             . '#define ZEPHIR_GENERATOR_NAMESPACE "' . addslashes($this->generatorNamespace) . '"';
+    }
+
+    /**
+     * Emits the defines enabling the kernel <Ns>\Buffer class when the project
+     * opts in through `kernel-classes.buffer`; empty otherwise (the class is
+     * then compiled out entirely).
+     *
+     * Unlike the generator runtime this cannot be inferred from the source:
+     * there is no syntax that implies a Buffer, and a class reference can be
+     * dynamic (`new {var}`). So it stays an explicit switch, which also keeps
+     * every existing extension free of a class it never asked for.
+     */
+    private function bufferDefines(): string
+    {
+        if (true !== $this->config->get('buffer', 'kernel-classes')) {
+            return '';
+        }
+
+        $namespace   = $this->properCaseRootNamespace();
+        $bufferClass = strtolower($namespace . '\\Buffer');
+
+        foreach ($this->definitions as $completeName => $definition) {
+            if (strtolower((string)$completeName) === $bufferClass) {
+                throw new CompilerException(
+                    'Class "' . $completeName . '" collides with the compiler-provided buffer '
+                    . 'class registered by `kernel-classes.buffer`. Rename the class, or turn '
+                    . 'the option off in config.json.'
+                );
+            }
+        }
+
+        return '#define ZEPHIR_BUFFER_ENABLED 1' . PHP_EOL
+            . '#define ZEPHIR_BUFFER_NAMESPACE "' . addslashes($namespace) . '"';
+    }
+
+    /**
+     * The project's root namespace as it is spelled in the source.
+     *
+     * config.json's `namespace` is lower case by convention, but the kernel
+     * classes are registered under the namespace the .zep files actually
+     * declare, so take it from a compiled class and fall back to the config
+     * only for a project that defines none.
+     */
+    private function properCaseRootNamespace(): string
+    {
+        foreach (array_keys($this->definitions) as $completeName) {
+            $root = explode('\\', (string)$completeName)[0];
+
+            if ('' !== $root) {
+                return $root;
+            }
+        }
+
+        return ucfirst((string)$this->config->get('namespace'));
     }
 
     /**

@@ -141,6 +141,7 @@ zend_class_entry *stub_bench_ce;
 zend_class_entry *stub_bench_foo_ce;
 zend_class_entry *stub_bitwise_ce;
 zend_class_entry *stub_branchprediction_ce;
+zend_class_entry *stub_bufferops_ce;
 zend_class_entry *stub_builtin_arraymethods_ce;
 zend_class_entry *stub_builtin_charmethods_ce;
 zend_class_entry *stub_builtin_intmethods_ce;
@@ -457,6 +458,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Bench_Foo);
 	ZEPHIR_INIT(Stub_Bitwise);
 	ZEPHIR_INIT(Stub_BranchPrediction);
+	ZEPHIR_INIT(Stub_BufferOps);
 	ZEPHIR_INIT(Stub_BuiltIn_ArrayMethods);
 	ZEPHIR_INIT(Stub_BuiltIn_CharMethods);
 	ZEPHIR_INIT(Stub_BuiltIn_IntMethods);

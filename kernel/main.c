@@ -26,6 +26,7 @@
 #include "kernel/fcall.h"
 #include "kernel/object.h"
 #include "kernel/exception.h"
+#include "kernel/buffer.h"
 #include "kernel/generator.h"
 
 
@@ -1184,6 +1185,7 @@ void zephir_module_init()
 	i_static = zend_new_interned_string(zend_string_init(ZEND_STRL("static"), 1));
 	i_self   = zend_new_interned_string(zend_string_init(ZEND_STRL("self"), 1));
 
+	zephir_buffer_module_init();
 	zephir_generator_module_init();
 	zephir_closure_module_init();
 }

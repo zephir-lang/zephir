@@ -114,6 +114,14 @@ class Config implements ArrayAccess, JsonSerializable
             'indent'         => 'spaces',
             'export-classes' => false,
         ],
+        /**
+         * Hand-written kernel classes a project can opt into. Each one is
+         * registered as <Ns>\<Name> and compiled out entirely when false, so
+         * an extension never gains a class it did not ask for.
+         */
+        'kernel-classes' => [
+            'buffer' => false,
+        ],
         'namespace'     => '',
         'name'          => '',
         'description'   => '',

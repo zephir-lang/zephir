@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+- Added an opt-in `<Ns>\Buffer` kernel class holding a fixed-size contiguous C array of doubles or integers, readable from C as a raw pointer [#2721](https://github.com/zephir-lang/zephir/issues/2721)
+- Added a kernel fast path so `buffer[i]` in Zephir source reads and writes the element directly instead of dispatching `offsetGet()` or `offsetSet()` [#2721](https://github.com/zephir-lang/zephir/issues/2721)
+
 ### Fixed
+- Fixed `ZEPHIR_USE_PHP_JSON` never being defined on PHP 8.4 and 8.5, where php-src no longer declares `HAVE_JSON`
 - Fixed a called method name being lower-cased at code generation, so `__call()` and `__callStatic()` now receive the name as it was written at the call site, as they do in PHP [#2715](https://github.com/zephir-lang/zephir/issues/2715)
 - Fixed a method name held in a variable being lower-cased again at runtime by the call macros [#2715](https://github.com/zephir-lang/zephir/issues/2715)
 - Fixed a call to an undefined method or function being reported with the lower-cased name instead of the spelling at the call site [#2715](https://github.com/zephir-lang/zephir/issues/2715)

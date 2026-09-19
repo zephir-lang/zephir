@@ -57,6 +57,7 @@
 #include "stub/bench/foo.zep.h"
 #include "stub/bitwise.zep.h"
 #include "stub/branchprediction.zep.h"
+#include "stub/bufferops.zep.h"
 #include "stub/builtin/arraymethods.zep.h"
 #include "stub/builtin/charmethods.zep.h"
 #include "stub/builtin/intmethods.zep.h"
