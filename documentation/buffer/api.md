@@ -34,11 +34,11 @@ final class <Ns>\Buffer implements ArrayAccess, Countable, IteratorAggregate, Js
 Two details the synopsis smooths over:
 
 - `__construct()` and `fromArray()` declare **no return type** in their arg-info
-  (`kernel/buffer.c:810`, `:815`).
-- The `$type` default is applied in C (`kernel/buffer.c:597`, `:621`), not in arg-info, so
+  (`kernel/buffer.c:815`, `:815`).
+- The `$type` default is applied in C (`kernel/buffer.c:602`, `:621`), not in arg-info, so
   reflection reports the parameter as optional but shows no default-value expression.
 
-The class is `final` and carries `ZEND_ACC_NO_DYNAMIC_PROPERTIES` (`kernel/buffer.c:884`), so it can
+The class is `final` and carries `ZEND_ACC_NO_DYNAMIC_PROPERTIES` (`kernel/buffer.c:889`), so it can
 neither be extended nor grow ad-hoc properties.
 
 ## Constants
@@ -48,7 +48,7 @@ neither be extended nor grow ad-hoc properties.
 | `TYPE_DOUBLE` | `1` | C `double` |
 | `TYPE_LONG` | `2` | C `zend_long` |
 
-Declared at `kernel/buffer.c:887`. The kind is fixed at construction and never changes.
+Declared at `kernel/buffer.c:892`. The kind is fixed at construction and never changes.
 
 ## Methods
 
@@ -63,7 +63,7 @@ Allocates `$size` zero-filled elements. `$size === 0` is legal and allocates not
 ### `static fromArray(array $values, int $type = self::TYPE_DOUBLE)`
 
 Builds a buffer from the **values** of `$values` in iteration order. Keys are discarded — a buffer
-is positional (`kernel/buffer.c:447`). Each value is converted with the same cast a write uses.
+is positional (`kernel/buffer.c:452`). Each value is converted with the same cast a write uses.
 
 - `$type` invalid → `ValueError`, argument #2.
 
@@ -83,7 +83,7 @@ Element count. `count($buffer)` reaches the same value through the `count_elemen
 
 ### `fill(mixed $value): void`
 
-Converts `$value` once, then writes it to every element (`kernel/buffer.c:658`).
+Converts `$value` once, then writes it to every element (`kernel/buffer.c:663`).
 
 ### `offsetExists` / `offsetGet` / `offsetSet` / `offsetUnset`
 
@@ -98,18 +98,18 @@ Semantics:
 ### `getIterator(): Traversable`
 
 Returns an `ArrayIterator` over a **fully materialised** copy of the elements
-(`kernel/buffer.c:740`). There is no lazy iterator: stepping through the VM one element at a time is
+(`kernel/buffer.c:745`). There is no lazy iterator: stepping through the VM one element at a time is
 the slow path the class exists to avoid, so `foreach` is an O(n)-allocation convenience, not a fast
 path.
 
 ### `jsonSerialize(): mixed`
 
 Returns the element list, so `json_encode($buffer)` emits `[1.5,2.5]`. Without this the engine would
-serialise an object with no properties as `{}` and drop every element (`kernel/buffer.c:755`).
+serialise an object with no properties as `{}` and drop every element (`kernel/buffer.c:760`).
 
 ### `__serialize(): array` / `__unserialize(array $data): void`
 
-The payload is a two-element list: `[kind, elements]` (`kernel/buffer.c:764`). `__unserialize()`
+The payload is a two-element list: `[kind, elements]` (`kernel/buffer.c:769`). `__unserialize()`
 validates it and throws on anything else.
 
 ## Offset conversion
@@ -169,13 +169,13 @@ keeps working on 8.4.
 
 `tests/Extension/BufferTest.php` asserts parity by evaluating the same statement against a live
 `SplFixedArray` and comparing transcripts, rewriting the class name in the message
-(`tests/Extension/BufferTest.php:529`). That is the right oracle for offset diagnostics and the
+(`tests/Extension/BufferTest.php:621`). That is the right oracle for offset diagnostics and the
 reason the table above tracks php-src at all.
 
 It is the wrong oracle for one thing. `SplFixedArray` slots start out `null`, so
 `isset($fixed[0])` is **false** on a freshly constructed instance. A numeric buffer's zero is a
-value like any other, so `isset($buffer[0])` is **true** (`kernel/buffer.c:381`, asserted separately
-at `tests/Extension/BufferTest.php:317`). If you are comparing the two, fill both sides first and
+value like any other, so `isset($buffer[0])` is **true** (`kernel/buffer.c:386`, asserted separately
+at `tests/Extension/BufferTest.php:409`). If you are comparing the two, fill both sides first and
 assert the `isset()` difference on its own.
 
 ## Behaviour of the standard operations

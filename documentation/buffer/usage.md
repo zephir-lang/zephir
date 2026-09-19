@@ -227,14 +227,15 @@ $buffer[0] = $buffer[0] + 1.0;        // do this instead of ++
 ```
 
 This is not specific to `Buffer` — it is what any `ArrayAccess` object does when it does not hand
-back a reference, which is why `tests/Extension/BufferTest.php:251` asserts it against a plain
-`ArrayAccess` class rather than against `SplFixedArray` (whose elements really are zvals).
+back a reference, which is why `tests/Extension/BufferTest.php:260` asserts compound assignment, and
+`tests/Extension/BufferTest.php:318` the reference-taking forms, against a plain `ArrayAccess` class
+rather than against `SplFixedArray` (whose elements really are zvals).
 
 In Zephir the same rule applies: read into a local, compute, write back — which is what `scale()`
 above does.
 
 **`foreach` materialises the whole buffer.** `getIterator()` builds an `ArrayIterator` over a full
-PHP array copy (`kernel/buffer.c:740`). That is deliberate — stepping one element at a time through
+PHP array copy (`kernel/buffer.c:745`). That is deliberate — stepping one element at a time through
 the VM is the slow path by definition — but it means `foreach` over a million-element buffer
 allocates the million-element array you were trying to avoid. In hot code, index:
 
@@ -246,7 +247,7 @@ for ($i = 0, $n = count($buffer); $i < $n; $i++) {
 
 **Every in-range element is set, including zero.** A buffer holds numbers, and no number reads as
 absent, so `isset()` is true for any in-range index on a freshly constructed buffer
-(`kernel/buffer.c:381`). This is the one place where the class deliberately disagrees with
+(`kernel/buffer.c:386`). This is the one place where the class deliberately disagrees with
 `SplFixedArray`, whose slots start out `null`.
 
 ```php
@@ -256,7 +257,7 @@ isset($buffer[2]);                    // false (out of range)
 $buffer[9] ?? 'fallback';             // 'fallback', no exception
 ```
 
-**`unset()` zeroes, it does not remove.** There is no hole to make (`kernel/buffer.c:394`):
+**`unset()` zeroes, it does not remove.** There is no hole to make (`kernel/buffer.c:399`):
 
 ```php
 $buffer = Buffer::fromArray([1.5, 2.5]);
@@ -337,7 +338,7 @@ unserialize(serialize($buffer))->toArray();      // round-trips type and values
 ```
 
 `json_encode()` emits a JSON list rather than `{}` because the class implements `JsonSerializable`
-(`kernel/buffer.c:757`).
+(`kernel/buffer.c:762`).
 
 **Clone is a deep copy.** The element array is copied, not shared (`kernel/buffer.c:251`):
 

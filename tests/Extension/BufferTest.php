@@ -13,12 +13,18 @@ declare(strict_types=1);
 
 namespace Extension;
 
+use ArrayAccess;
+use Issue2721Overloaded;
 use PHPUnit\Framework\TestCase;
 use SplFixedArray;
 use Stub\Buffer;
 use Throwable;
 
+use function array_map;
 use function get_class;
+use function restore_error_handler;
+use function set_error_handler;
+use function settype;
 use function str_replace;
 
 /**
@@ -243,10 +249,13 @@ final class BufferTest extends TestCase
 
     /**
      * An element is a raw C scalar, so there is no zval to hand back as an
-     * lvalue. That is the ordinary situation for an overloaded element, and
-     * PHP already has a defined behaviour for it -- a notice, and the write is
-     * dropped. Assert it against a plain ArrayAccess class rather than against
-     * SplFixedArray, whose elements *are* zvals and so can be modified in place.
+     * lvalue. That does not stop compound assignment: PHP implements
+     * `$x[0] += 1` on an object as offsetGet() plus offsetSet(), so it works
+     * here exactly as it does on any other overloaded element. Assert it
+     * against a plain ArrayAccess class rather than against SplFixedArray,
+     * whose elements *are* zvals and so can be modified in place -- what is
+     * being pinned down is parity with an overloaded element, not with a real
+     * array.
      */
     public function testCompoundAssignmentBehavesAsAnyOverloadedElementDoes(): void
     {
@@ -289,6 +298,89 @@ final class BufferTest extends TestCase
                 return $overloaded[0];
             },
         );
+    }
+
+    /**
+     * `$buffer[0]++` and `$r =& $buffer[0]` both need a reference to the
+     * element, and there is none to give: offsetGet() hands back a value, so
+     * the increment and the alias have nowhere to land. PHP's defined
+     * behaviour for that is a notice and no effect, and a plain ArrayAccess
+     * container gets exactly the same treatment, which is what this pins down.
+     *
+     * The container's class name is the one legitimate difference -- PHP puts
+     * it inside the notice -- so normalise it away, the way renamed() does for
+     * a thrown message. The wording itself is deliberately not asserted: this
+     * file's whole premise is that PHP moves its diagnostics, so the assertion
+     * is that a diagnostic was raised and the element did not change.
+     *
+     * @dataProvider referenceTakingOperations
+     */
+    public function testAnOperationNeedingAReferenceRaisesANoticeAndHasNoEffect(callable $operation): void
+    {
+        $extension = $this->overloadedTranscript($operation, Buffer::fromArray([10.0]), Buffer::class);
+        $php       = $this->overloadedTranscript(
+            $operation,
+            new Issue2721Overloaded(10.0),
+            Issue2721Overloaded::class
+        );
+
+        $this->assertSame($php, $extension, 'The extension must behave exactly as PHP does');
+        $this->assertNotEmpty($extension['diagnostics'], 'the engine must report the element as unmodifiable');
+        $this->assertSame(10.0, $extension['value'], 'the write must have no effect');
+    }
+
+    /**
+     * @return array<string, array{0: callable}>
+     */
+    public static function referenceTakingOperations(): array
+    {
+        return [
+            'post-increment' => [static function (ArrayAccess $container): void {
+                $container[0]++;
+            }],
+            'pre-decrement' => [static function (ArrayAccess $container): void {
+                --$container[0];
+            }],
+            'reference' => [static function (ArrayAccess $container): void {
+                $alias = &$container[0];
+                $alias = 99.0;
+            }],
+            'by-reference argument' => [static function (ArrayAccess $container): void {
+                settype($container[0], 'integer');
+            }],
+        ];
+    }
+
+    /**
+     * Runs $operation against $container and reports what happened: the
+     * diagnostics raised, with the container's own class name replaced so two
+     * different containers can be compared, and the element afterwards.
+     *
+     * @return array{diagnostics: list<string>, value: mixed}
+     */
+    private function overloadedTranscript(callable $operation, ArrayAccess $container, string $name): array
+    {
+        $diagnostics = [];
+
+        set_error_handler(static function (int $code, string $message) use (&$diagnostics): bool {
+            $diagnostics[] = $message;
+
+            return true;
+        });
+
+        try {
+            $operation($container);
+        } finally {
+            restore_error_handler();
+        }
+
+        return [
+            'diagnostics' => array_map(
+                static fn (string $message): string => str_replace($name, '<container>', $message),
+                $diagnostics
+            ),
+            'value' => $container[0],
+        ];
     }
 
     public function testForeachYieldsEveryElementInOrder(): void

@@ -26,7 +26,7 @@ typedef struct _zephir_buffer_object {
 `kernel/buffer.h:42`. Three things matter here:
 
 - **`zend_object std` must stay last.** The handler table sets
-  `handlers.offset = XtOffsetOf(zephir_buffer_object, std)` (`kernel/buffer.c:891`), which is how the
+  `handlers.offset = XtOffsetOf(zephir_buffer_object, std)` (`kernel/buffer.c:896`), which is how the
   engine walks back from a `zend_object *` to the containing struct. Move the member and every
   access silently reads the wrong memory.
 - **The union is the point.** The elements are never zvals. `kind` selects which arm is live;
@@ -58,11 +58,11 @@ static inline int zephir_is_buffer(const zval *zv);
 Contract:
 
 - `zephir_buffer_doubles()` / `zephir_buffer_longs()` return `NULL` for a non-buffer, for a buffer of
-  the **other** kind, and for an empty buffer (`kernel/buffer.c:492`). Asking for the wrong arm is
+  the **other** kind, and for an empty buffer (`kernel/buffer.c:497`). Asking for the wrong arm is
   always a `NULL`, never a silently reinterpreted pointer.
 - The pointer stays valid until the object is destroyed. Fixed size, no reallocation.
 - The `create` helpers report failure with `FAILURE` **and** `ZVAL_NULL(ret)` — they do not throw
-  (`kernel/buffer.c:417`). The PHP-visible constructor throws; the C entry points do not.
+  (`kernel/buffer.c:422`). The PHP-visible constructor throws; the C entry points do not.
 - `zephir_buffer_kind()` and `zephir_buffer_len()` return `0` for a non-buffer, so a length of zero
   is not by itself proof that you were handed a buffer.
 
@@ -116,7 +116,7 @@ Note the ordering: check the length **before** the pointers. An empty buffer leg
 
 ## Registration
 
-`zephir_buffer_module_init()` (`kernel/buffer.c:878`) does the whole job:
+`zephir_buffer_module_init()` (`kernel/buffer.c:883`) does the whole job:
 
 ```c
 INIT_NS_CLASS_ENTRY(ce, ZEPHIR_BUFFER_NAMESPACE, "Buffer", zephir_buffer_methods);
@@ -133,7 +133,7 @@ is declared outside the enable guard (`kernel/buffer.h:62`) precisely so that th
 compiles whether the project opted in or not; when it did not, the whole translation unit collapses
 to an empty function (`kernel/buffer.c:19`).
 
-Handlers overridden (`kernel/buffer.c:890`): `offset`, `free_obj`, `clone_obj`, `get_debug_info`,
+Handlers overridden (`kernel/buffer.c:895`): `offset`, `free_obj`, `clone_obj`, `get_debug_info`,
 `count_elements`, `read_dimension`, `write_dimension`, `has_dimension`, `unset_dimension`.
 
 Deliberately **not** overridden: `compare` (so `==` is the default object comparison, not
@@ -201,7 +201,7 @@ placed as the **first** container test — ahead of the generic
 | `zephir_array_update_zval` | `zephir_buffer_dim_write` |
 | `zephir_array_update_long` | `zephir_buffer_dim_write_long` |
 
-Implementations at `kernel/buffer.c:520`. They raise the same diagnostics as the object handlers, so
+Implementations at `kernel/buffer.c:525`. They raise the same diagnostics as the object handlers, so
 `buf[i]` from Zephir and `$buffer[$i]` from PHP report identically — which is exactly what
 `tests/Extension/BufferZephirTest.php` asserts.
 
@@ -231,9 +231,8 @@ comment at `kernel/array.c:1120` says so in the source.
 
 Note that plain compound assignment (`$b[0] += 1`) is *not* affected — the engine implements it on
 an object as a read plus a write, so it goes through the read fast path and then the write fast path
-and works normally. The comments at `kernel/buffer.c:306` and
-`tests/Extension/BufferTest.php:244` name `+= ` as a dropped write, which overstates it; the test
-below them asserts only parity with a plain `ArrayAccess` class, which is what actually holds.
+and works normally. Only the reference-taking forms lose. The docblock at `kernel/buffer.c:306`
+spells out which is which.
 
 ## Porting traps
 
@@ -250,7 +249,7 @@ until a different container runs the build.
   plus an explicitly assigned `ce->get_iterator` is also accepted. This class took neither exotic
   route — `getIterator()` returns an `ArrayIterator` over a materialised copy, because iterating one
   element at a time through the VM is the slow path the class exists to avoid
-  (`kernel/buffer.c:735`). A lazy custom iterator would additionally have to cope with the iterator
+  (`kernel/buffer.c:740`). A lazy custom iterator would additionally have to cope with the iterator
   `valid` function changing from `int` to `zend_result` at 8.4.
 - **A stub fixture's filename must match its class.** `Stub\BufferOps` lives in
   `stub/bufferops.zep`, not `stub/BufferOps.zep`.
@@ -315,14 +314,24 @@ Two suites, with different jobs:
 - `tests/Extension/BufferTest.php` asserts **PHP parity**. Offset diagnostics moved three times
   between 8.0 and 8.5, so rather than hard-coding message strings it evaluates the same statement
   against a live `SplFixedArray` and compares transcripts, rewriting the class name in the message
-  (`AssertsPhpParity::assertMatchesPhp()`, and `renamed()` at `tests/Extension/BufferTest.php:529`).
+  (`AssertsPhpParity::assertMatchesPhp()`, and `renamed()` at `tests/Extension/BufferTest.php:621`).
   The one place it cannot agree — `isset()` on a fresh instance — is asserted separately.
 - `tests/Extension/BufferZephirTest.php` asserts **equivalence**. The fast path is a speed change
   only, so every test there compares the compiled `buf[i]` path against the PHP `$buffer[$i]` path
   and requires them to agree, exceptions included.
 
+The lvalue rules have their own oracle. `Issue2721Overloaded`
+(`tests/fixtures/mocks/Issue2721Overloaded.php`) is the plainest possible `ArrayAccess` container —
+`offsetGet()` returns a value, never a reference, which is the position a buffer element is in — and
+`tests/Extension/BufferTest.php:318` runs `$b[0]++`, `--$b[0]`, `$r =& $b[0]` and a by-reference
+argument against both, asserting that the diagnostics and the resulting element agree. The container
+name inside the notice is normalised away, the way `renamed()` does for a thrown message; the
+*wording* is deliberately not asserted, since the premise of this file is that PHP moves its
+diagnostics. The fixture is named rather than anonymous because PHP truncates an anonymous class
+name at the NUL byte when printing it in that notice, so `get_class()` would not match the text.
+
 Both carry a heap-growth probe: construct, convert, clone, read, write and fail in a loop, and
-require `memory_get_usage()` not to move (`tests/Extension/BufferTest.php:464`, `tests/Extension/BufferZephirTest.php:166`).
+require `memory_get_usage()` not to move (`tests/Extension/BufferTest.php:556`, `tests/Extension/BufferZephirTest.php:166`).
 
 ## See also
 

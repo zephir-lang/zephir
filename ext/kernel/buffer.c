@@ -307,11 +307,16 @@ static int zephir_buffer_has_dimension(zend_object *object, zval *offset, int ch
  * `$buffer[$i]`.
  *
  * The value is returned in `rv`, never as a pointer into the buffer -- the
- * elements are raw C scalars, not zvals, so there is nothing to point at. In a
- * write context (`$buffer[0] += 1`, `$r =& $buffer[0]`) the engine therefore
- * raises its standard "Indirect modification of overloaded element" notice and
- * the write is dropped, exactly as it does for any ArrayAccess object that
- * does not hand back a reference.
+ * elements are raw C scalars, not zvals, so there is nothing to point at.
+ *
+ * That does not stop compound assignment. The engine implements `$buffer[0]
+ * += 1` on an object as a read followed by a write, so it arrives here and
+ * then at zephir_buffer_write_dimension() and behaves normally. What cannot
+ * work is anything needing a reference to the element -- `$buffer[0]++`,
+ * `$r =& $buffer[0]`, passing it to a by-reference parameter. The engine
+ * raises its standard "Indirect modification of overloaded element" notice for
+ * those and the write has no effect, exactly as it does for any ArrayAccess
+ * object that does not hand back a reference.
  */
 static zval *zephir_buffer_read_dimension(zend_object *object, zval *offset, int type, zval *rv)
 {
