@@ -113,8 +113,9 @@ final class CompilerFormatterTest extends TestCase
         $testContext['context'][0] = 'no-such-warning';
         unset($testContext['context'][1]['file']);
 
+        /* SIMPLE_FORMAT ends in a literal "\n", not PHP_EOL, so this holds on Windows too */
         $expected = ' Warning: Variable "param1" declared but not used in test\3__closure::__invoke'
-            . ' in unknown on line 0 [no-such-warning: unregistered warning key]' . PHP_EOL;
+            . " in unknown on line 0 [no-such-warning: unregistered warning key]\n";
 
         $this->assertSame($expected, $compilerFormatter->format($testContext));
     }
