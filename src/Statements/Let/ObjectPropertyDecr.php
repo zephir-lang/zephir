@@ -27,6 +27,7 @@ class ObjectPropertyDecr
 {
     use VariablesTrait;
 
+    protected string $warningText  = 'decrement';
     protected string $zephirMethod = 'zephir_property_decr';
 
     /**
@@ -65,8 +66,8 @@ class ObjectPropertyDecr
          */
         if ($symbolVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
             $compilationContext->logger->warning(
-                'Possible attempt to increment non-object dynamic variable',
-                ['non-object-update', $statement]
+                'Possible attempt to ' . $this->warningText . ' non-object dynamic variable',
+                ['non-valid-objectupdate', $statement]
             );
         }
 

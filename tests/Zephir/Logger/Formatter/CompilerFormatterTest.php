@@ -94,6 +94,50 @@ final class CompilerFormatterTest extends TestCase
         $this->assertSame($expected, $compilerFormatter->format($testContext));
     }
 
+    /**
+     * A warning key nobody registered reads back as null, which is falsy,
+     * which the formatter used to treat as "turned off". Six warnings
+     * shipped for years that no setting could ever switch on, and the only
+     * sign of it was silence.
+     *
+     * An unknown key now prints and says what is wrong with it, because a
+     * diagnostic the compiler bothered to raise should never be lost to a
+     * missing line in a config file.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2727
+     */
+    public function testShouldPrintAnUnregisteredWarningInsteadOfSwallowingIt(): void
+    {
+        $compilerFormatter = new CompilerFormatter($this->config);
+        $testContext = $this->getWarningContext();
+        $testContext['context'][0] = 'no-such-warning';
+        unset($testContext['context'][1]['file']);
+
+        /* SIMPLE_FORMAT ends in a literal "\n", not PHP_EOL, so this holds on Windows too */
+        $expected = ' Warning: Variable "param1" declared but not used in test\3__closure::__invoke'
+            . " in unknown on line 0 [no-such-warning: unregistered warning key]\n";
+
+        $this->assertSame($expected, $compilerFormatter->format($testContext));
+    }
+
+    /**
+     * Turning the unknown key on or off must not silence it either: the point
+     * is that the key itself is wrong.
+     */
+    public function testShouldPrintAnUnregisteredWarningEvenWhenSetToFalse(): void
+    {
+        $this->config->offsetSet(['warnings' => 'no-such-warning'], false);
+        $compilerFormatter = new CompilerFormatter($this->config);
+        $testContext = $this->getWarningContext();
+        $testContext['context'][0] = 'no-such-warning';
+        unset($testContext['context'][1]['file']);
+
+        $this->assertStringContainsString(
+            '[no-such-warning: unregistered warning key]',
+            $compilerFormatter->format($testContext)
+        );
+    }
+
     public function testShouldFormatWithStripInfoLevels(): void
     {
         $this->config->offsetSet(['warnings' => 'unused-variable-external'], true);

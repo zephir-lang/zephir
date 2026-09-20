@@ -119,6 +119,24 @@ foreach ($config->getUnknownSettings() as $setting => $closest) {
     ));
 }
 
+/**
+ * The same for a key inside a section, wherever it came from: a `warnings`
+ * or `optimizations` block, or a -W/-w/-f/-fno- flag. All of them used to
+ * take any string and quietly do nothing with it.
+ */
+foreach ($config->getUnknownSectionKeys() as $section => $keys) {
+    foreach ($keys as $key => $closest) {
+        $logger->warning(sprintf(
+            '"%s" is not a recognized %s key and will be ignored. %s',
+            $key,
+            $section,
+            null !== $closest
+                ? sprintf('Did you mean "%s"?', $closest)
+                : sprintf('See https://docs.zephir-lang.com/latest/%s for the supported keys.', $section)
+        ));
+    }
+}
+
 $compilerFactory = new Compiler\CompilerFileFactory($config, $disk, $logger);
 $backend = new Backend($config, $rootPath.'/kernel', $rootPath.'/templates');
 

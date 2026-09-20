@@ -114,6 +114,116 @@ final class ConfigTest extends TestCase
     }
 
     /**
+     * A `warnings` block used to replace the defaults wholesale, so every key
+     * it left out was deleted rather than defaulted, and the warning went
+     * dead. That is how `deprecated-strict-type` stopped working for any
+     * build run from this repo's own root.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2727
+     */
+    public function testShouldKeepDefaultsForWarningsOmittedFromConfigJson(): void
+    {
+        chdir(\constant('ZEPHIRPATH') . '/tests/fixtures/partialwarnings');
+        $config = new Config();
+
+        /* What the file says wins */
+        $this->assertFalse($config->get('unused-variable', 'warnings'));
+
+        /* What it does not mention keeps its default */
+        $this->assertTrue($config->get('nonexistent-function', 'warnings'));
+        $this->assertTrue($config->get('deprecated-strict-type', 'warnings'));
+        $this->assertFalse($config->get('missing-optimizer', 'warnings'));
+    }
+
+    /**
+     * `optimizations` keeps replacing, because a project that omits a key
+     * there is relying on it being off and turning it back on would change
+     * the generated C.
+     */
+    public function testShouldStillReplaceTheOptimizationsSection(): void
+    {
+        chdir(\constant('ZEPHIRPATH') . '/tests/fixtures/partialwarnings');
+        $config = new Config();
+
+        $this->assertFalse($config->get('local-context-pass', 'optimizations'));
+        $this->assertNull($config->get('constant-folding', 'optimizations'));
+    }
+
+    public function testShouldReportUnrecognizedKeysInsideASection(): void
+    {
+        chdir(\constant('ZEPHIRPATH') . '/tests/fixtures/partialwarnings');
+        $config = new Config();
+
+        $this->assertSame(
+            [
+                'warnings'      => ['unusd-variable' => 'unused-variable', 'zzz' => null],
+                'optimizations' => ['local-contxt-pass' => 'local-context-pass'],
+            ],
+            $config->getUnknownSectionKeys()
+        );
+
+        /* Reporting it must not drop it */
+        $this->assertTrue($config->get('unusd-variable', 'warnings'));
+    }
+
+    public function testShouldReportNoUnrecognizedSectionKeysForAValidConfig(): void
+    {
+        $this->assertSame([], $this->config->getUnknownSectionKeys());
+    }
+
+    /**
+     * `-W<key>` and `-w<key>` took any string and created the entry, so a
+     * misspelled key silently turned nothing on or off.
+     */
+    public function testShouldReportAnUnrecognizedWarningFlag(): void
+    {
+        $config = $this->configFromArgv(['zephir', 'build', '-Wunusd-variable']);
+
+        $this->assertSame(
+            ['warnings' => ['unusd-variable' => 'unused-variable']],
+            $config->getUnknownSectionKeys()
+        );
+
+        /* A key nothing reads must not be invented */
+        $this->assertNull($config->get('unusd-variable', 'warnings'));
+    }
+
+    public function testShouldReportAnUnrecognizedOptimizationFlag(): void
+    {
+        $config = $this->configFromArgv(['zephir', 'build', '-fno-local-contxt-pass']);
+
+        $this->assertSame(
+            ['optimizations' => ['local-contxt-pass' => 'local-context-pass']],
+            $config->getUnknownSectionKeys()
+        );
+    }
+
+    public function testShouldApplyARecognizedWarningFlag(): void
+    {
+        $config = $this->configFromArgv(['zephir', 'build', '-Wunused-variable', '-wmissing-optimizer']);
+
+        $this->assertFalse($config->get('unused-variable', 'warnings'));
+        $this->assertTrue($config->get('missing-optimizer', 'warnings'));
+        $this->assertSame([], $config->getUnknownSectionKeys());
+    }
+
+    private function configFromArgv(array $argv): Config
+    {
+        $argvBackup = $_SERVER['argv'];
+        $argcBackup = $_SERVER['argc'];
+
+        $_SERVER['argv'] = $argv;
+        $_SERVER['argc'] = count($argv);
+
+        try {
+            return Config::fromServer();
+        } finally {
+            $_SERVER['argv'] = $argvBackup;
+            $_SERVER['argc'] = $argcBackup;
+        }
+    }
+
+    /**
      * Test data provider.
      *
      * [

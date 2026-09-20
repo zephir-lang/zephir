@@ -18,5 +18,6 @@ namespace Zephir\Statements\Let;
  */
 class ObjectPropertyIncr extends ObjectPropertyDecr
 {
+    protected string $warningText  = 'increment';
     protected string $zephirMethod = 'zephir_property_incr';
 }
