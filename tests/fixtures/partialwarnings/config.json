@@ -1,0 +1,13 @@
+{
+  "namespace": "stub",
+  "name": "Test Extension",
+  "warnings": {
+    "unused-variable": false,
+    "unusd-variable": true,
+    "zzz": true
+  },
+  "optimizations": {
+    "local-context-pass": false,
+    "local-contxt-pass": true
+  }
+}

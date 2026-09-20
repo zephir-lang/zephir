@@ -8,10 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Added
 - Added a warning for unrecognized top-level settings in `config.json` [#2449](https://github.com/zephir-lang/zephir/issues/2449)
+- Added a report for an unrecognized key in the `warnings` or `optimizations` section, and for an unrecognized `-W`, `-w`, `-f` or `-fno-` flag [#2727](https://github.com/zephir-lang/zephir/issues/2727)
 - Added an opt-in `<Ns>\Buffer` kernel class holding a fixed-size contiguous C array of doubles or integers, readable from C as a raw pointer [#2721](https://github.com/zephir-lang/zephir/issues/2721)
 - Added a kernel fast path so `buffer[i]` in Zephir source reads and writes the element directly instead of dispatching `offsetGet()` or `offsetSet()` [#2721](https://github.com/zephir-lang/zephir/issues/2721)
 
 ### Fixed
+- Fixed a compiler warning being discarded in silence when its key was not registered [#2727](https://github.com/zephir-lang/zephir/issues/2727)
+- Fixed `non-valid-unset`, `non-valid-require`, `non-valid-require-once` and `extra-parentheses` never printing [#2727](https://github.com/zephir-lang/zephir/issues/2727)
+- Fixed `invalid-array-index` and `non-valid-objectupdate` being raised under an unregistered key [#2727](https://github.com/zephir-lang/zephir/issues/2727)
+- Fixed a `warnings` key omitted from `config.json` losing its default instead of keeping it [#2727](https://github.com/zephir-lang/zephir/issues/2727)
+- Fixed the non-object property increment warning naming the wrong operation [#2727](https://github.com/zephir-lang/zephir/issues/2727)
 - Fixed `int`, `uint`, `long`, `ulong`, `double` and `char` extension globals not registering a php.ini directive [#2449](https://github.com/zephir-lang/zephir/issues/2449)
 - Fixed a string extension global's php.ini directive never reaching the global [#2449](https://github.com/zephir-lang/zephir/issues/2449)
 - Fixed php.ini values for extension globals being discarded at the start of every request [#2449](https://github.com/zephir-lang/zephir/issues/2449)

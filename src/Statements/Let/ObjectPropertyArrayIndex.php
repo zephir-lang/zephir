@@ -207,10 +207,17 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             }
 
             if ('variable' == $indexVariable->getType()) {
-                if ($indexVariable->hasDifferentDynamicType(['undefined', 'int', 'string'])) {
+                /**
+                 * An integer assigned to a dynamic variable is recorded as
+                 * `long`; `int` only ever appears for a declared one, which
+                 * the test above has already excluded. Listing `int` alone
+                 * meant the check could not match an integer at all, so every
+                 * computed offset was reported (#2727).
+                 */
+                if ($indexVariable->hasDifferentDynamicType(['undefined', 'int', 'long', 'string'])) {
                     $compilationContext->logger->warning(
                         'Possible attempt to use non string/long dynamic variable as array index',
-                        ['invalid-array-offset', $statement]
+                        ['invalid-array-index', $statement]
                     );
                 }
             }

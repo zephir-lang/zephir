@@ -58,6 +58,11 @@
     "invalid-reference": true,
     "invalid-typeof-comparison": true,
     "conditional-initialization": true,
+    "deprecated-strict-type": true,
+    "non-valid-unset": true,
+    "non-valid-require": true,
+    "non-valid-require-once": true,
+    "extra-parentheses": true,
     "missing-optimizer": false
   },
   "optimizations": {
@@ -68,9 +73,7 @@
     "static-constant-class-folding": true,
     "call-gatherer-pass": true,
     "check-invalid-reads": false,
-    "private-internal-methods": false,
-    "public-internal-methods": false,
-    "public-internal-functions": true
+    "internal-call-transformation": false
   },
   "globals": {
     "my_setting_1": {

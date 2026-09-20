@@ -144,7 +144,17 @@ class UnsetStatement extends StatementAbstract
             );
         }
 
-        if ($variable->hasDifferentDynamicType(['undefined', 'array', 'object', 'null'])) {
+        /**
+         * Only a dynamic variable can carry a wrong dynamic type. A native
+         * `array` passes the check above and has no dynamic types at all, so
+         * testing it here reported every `unset arr[key]` on a declared array
+         * as suspicious. The sibling sites all narrow first; this one did not,
+         * and the key was unregistered so the noise never surfaced (#2727).
+         */
+        if (
+            'variable' === $variable->getType()
+            && $variable->hasDifferentDynamicType(['undefined', 'array', 'object', 'null'])
+        ) {
             $compilationContext->logger->warning(
                 'Possible attempt to use non array/object in unset operator',
                 ['non-valid-unset', $expression['left']]

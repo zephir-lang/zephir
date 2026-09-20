@@ -18,6 +18,8 @@ use JsonSerializable;
 use ReturnTypeWillChange;
 
 use function array_key_exists;
+use function array_keys;
+use function array_merge;
 use function array_values;
 use function count;
 use function current;
@@ -32,6 +34,7 @@ use function json_last_error;
 use function key;
 use function levenshtein;
 use function preg_match;
+use function sort;
 use function strlen;
 
 use const JSON_ERROR_CTRL_CHAR;
@@ -89,9 +92,42 @@ class Config implements ArrayAccess, JsonSerializable
     ];
 
     /**
+     * Sections whose file contents are merged into the defaults rather than
+     * replacing them.
+     *
+     * A `warnings` block that omits a key used to delete it, so the key read
+     * back as null, which is falsy, which the formatter took for "off". That
+     * is how `deprecated-strict-type` went dead for every build run from this
+     * repo's own root (#2727).
+     *
+     * `optimizations` is deliberately absent: cphalcon's config.json omits
+     * `call-gatherer-pass`, so merging would switch it on and change the
+     * generated C. That one needs its own change and its own validation.
+     */
+    private const MERGED_SECTIONS = ['warnings'];
+
+    /**
+     * Sections whose keys are checked against the ones Zephir reads.
+     *
+     * A misspelling here is inert, exactly like a misspelled top-level
+     * setting, and used to be just as silent.
+     */
+    private const VALIDATED_SECTIONS = ['warnings', 'optimizations'];
+
+    /**
      * Is config changed?
      */
     protected bool $changed = false;
+
+    /**
+     * The built-in configuration, captured before config.json is read.
+     *
+     * `populate()` overwrites whole sections of `$container`, so the container
+     * cannot answer "is this a setting Zephir knows about?" once a project
+     * file has been loaded. This snapshot can, and it is the single registry
+     * of warning keys (#2727).
+     */
+    private array $defaults;
 
     /**
      * Settings found in config.json that Zephir does not read, mapped to the
@@ -100,6 +136,15 @@ class Config implements ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     private array $unknownSettings = [];
+
+    /**
+     * Keys found inside a validated section that Zephir does not read, per
+     * section, mapped to the closest key it does read or null when there is
+     * none. Fed by config.json and by the -W/-w/-f/-fno- flags alike.
+     *
+     * @var array<string, array<string, string|null>>
+     */
+    private array $unknownSectionKeys = [];
 
     /**
      * Default configuration for project.
@@ -150,6 +195,10 @@ class Config implements ArrayAccess, JsonSerializable
             'invalid-typeof-comparison'          => true,
             'conditional-initialization'         => true,
             'deprecated-strict-type'             => true,
+            'non-valid-unset'                    => true,
+            'non-valid-require'                  => true,
+            'non-valid-require-once'             => true,
+            'extra-parentheses'                  => true,
             'missing-optimizer'                  => false,
         ],
         'optimizations' => [
@@ -190,6 +239,8 @@ class Config implements ArrayAccess, JsonSerializable
      */
     public function __construct()
     {
+        $this->defaults = $this->container;
+
         $this->populate();
     }
 
@@ -226,25 +277,25 @@ class Config implements ArrayAccess, JsonSerializable
                 $parameter = $argv[$i];
 
                 if (preg_match('/^-fno-([a-z0-9\-]+)$/', $parameter, $matches)) {
-                    $config->set($matches[1], false, 'optimizations');
+                    $config->setFlag('optimizations', $matches[1], false);
                     unset($argv[$i]);
                     continue;
                 }
 
                 if (preg_match('/^-f([a-z0-9\-]+)$/', $parameter, $matches)) {
-                    $config->set($matches[1], true, 'optimizations');
+                    $config->setFlag('optimizations', $matches[1], true);
                     unset($argv[$i]);
                     continue;
                 }
 
                 if (preg_match('/^-W([a-z0-9\-]+)$/', $parameter, $matches)) {
-                    $config->set($matches[1], false, 'warnings');
+                    $config->setFlag('warnings', $matches[1], false);
                     unset($argv[$i]);
                     continue;
                 }
 
                 if (preg_match('/^-w([a-z0-9\-]+)$/', $parameter, $matches)) {
-                    $config->set($matches[1], true, 'warnings');
+                    $config->setFlag('warnings', $matches[1], true);
                     unset($argv[$i]);
                     continue;
                 }
@@ -318,6 +369,47 @@ class Config implements ArrayAccess, JsonSerializable
     public function getUnknownSettings(): array
     {
         return $this->unknownSettings;
+    }
+
+    /**
+     * Keys inside a section that Zephir does not read, per section.
+     *
+     * They are still kept, so a project carrying private keys keeps building,
+     * and the CLI reports them rather than letting a typo pass for a setting.
+     *
+     * @return array<string, array<string, string|null>>
+     */
+    public function getUnknownSectionKeys(): array
+    {
+        return $this->unknownSectionKeys;
+    }
+
+    /**
+     * Every warning key the compiler recognizes, sorted.
+     *
+     * Read from the defaults rather than the container: a project's
+     * `warnings` block may add keys of its own, and those are not warnings
+     * the compiler knows how to raise.
+     *
+     * @return string[]
+     */
+    public function getKnownWarnings(): array
+    {
+        $keys = array_keys($this->defaults['warnings']);
+        sort($keys);
+
+        return $keys;
+    }
+
+    /**
+     * Whether a warning key is one the compiler recognizes.
+     *
+     * The formatter needs this to tell "turned off" from "never registered".
+     * Reading the flag alone cannot: both read back as falsy.
+     */
+    public function isKnownWarning(string $key): bool
+    {
+        return array_key_exists($key, $this->defaults['warnings']);
     }
 
     /**
@@ -437,7 +529,16 @@ class Config implements ArrayAccess, JsonSerializable
             case JSON_ERROR_NONE:
                 foreach ($config as $key => $configSection) {
                     if (!in_array((string) $key, self::KNOWN_SETTINGS, true)) {
-                        $this->unknownSettings[$key] = $this->closestSetting((string) $key);
+                        $this->unknownSettings[$key] = $this->closest((string) $key, self::KNOWN_SETTINGS);
+                    }
+
+                    if (is_array($configSection) && in_array((string) $key, self::VALIDATED_SECTIONS, true)) {
+                        $this->collectUnknownSectionKeys((string) $key, $configSection);
+                    }
+
+                    if (is_array($configSection) && in_array((string) $key, self::MERGED_SECTIONS, true)) {
+                        $this->container[$key] = array_merge($this->defaults[$key], $configSection);
+                        continue;
                     }
 
                     $this->offsetSet($key, $configSection);
@@ -467,26 +568,65 @@ class Config implements ArrayAccess, JsonSerializable
     }
 
     /**
-     * The setting closest to a misspelled one, or null when nothing is close.
+     * The name closest to a misspelled one, or null when nothing is close.
      *
      * A suggestion is only useful for an actual typo. `ini` is seven edits
      * away from `globals`, and guessing there would send the reader somewhere
      * worse than the documentation.
+     *
+     * @param string[] $candidates
      */
-    private function closestSetting(string $key): ?string
+    private function closest(string $key, array $candidates): ?string
     {
         $closest  = null;
         $distance = 1 + (int) (strlen($key) / 2);
 
-        foreach (self::KNOWN_SETTINGS as $setting) {
-            $candidate = levenshtein($key, $setting);
+        foreach ($candidates as $name) {
+            $score = levenshtein($key, $name);
 
-            if ($candidate < $distance) {
-                $distance = $candidate;
-                $closest  = $setting;
+            if ($score < $distance) {
+                $distance = $score;
+                $closest  = $name;
             }
         }
 
         return $closest;
+    }
+
+    /**
+     * Records the keys of one config.json section that Zephir does not read.
+     */
+    private function collectUnknownSectionKeys(string $section, array $values): void
+    {
+        $candidates = array_keys($this->defaults[$section]);
+
+        foreach (array_keys($values) as $key) {
+            if (array_key_exists((string) $key, $this->defaults[$section])) {
+                continue;
+            }
+
+            $this->unknownSectionKeys[$section][(string) $key] = $this->closest((string) $key, $candidates);
+        }
+    }
+
+    /**
+     * Sets a `-W`/`-w`/`-f`/`-fno-` flag.
+     *
+     * An unrecognized key is reported instead of being created: the entry
+     * would be one nothing ever reads, so the flag silently did nothing and
+     * the reader had no way to tell (#2727).
+     */
+    private function setFlag(string $section, string $key, bool $value): void
+    {
+        if (!array_key_exists($key, $this->defaults[$section])) {
+            $this->unknownSectionKeys[$section][$key] = $this->closest(
+                $key,
+                array_keys($this->defaults[$section])
+            );
+
+            return;
+        }
+
+        $this->set($key, $value, $section);
     }
 }
