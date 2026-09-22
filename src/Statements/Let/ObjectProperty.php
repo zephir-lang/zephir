@@ -19,6 +19,7 @@ use Zephir\Exception as ZephirException;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\CompilerException as Exception;
 use Zephir\Expression as ZephirExpression;
+use Zephir\Traits\ConcatSelfTrait;
 use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
@@ -29,6 +30,7 @@ use function sprintf;
  */
 class ObjectProperty
 {
+    use ConcatSelfTrait;
     use VariablesTrait;
 
     /**
@@ -117,6 +119,21 @@ class ObjectProperty
         $codePrinter = $context->codePrinter;
 
         $context->headersManager->add('kernel/object');
+
+        /**
+         * `.=` is a read-modify-write on the property whatever the right-hand
+         * side is: read the current value, append to it, store it back. The
+         * type switch below decides how to *replace* the property, so every
+         * operand type it did not special-case used to overwrite the property
+         * instead of appending to it.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2664
+         */
+        if ('concat-assign' === $statement['operator']) {
+            $this->assignConcat($variable, $symbolVariable, $propertyName, $expression, $context, $statement);
+
+            return;
+        }
 
         switch ($expression->getType()) {
             case 'null':
@@ -260,26 +277,21 @@ class ObjectProperty
 
             case 'string':
                 switch ($statement['operator']) {
-                    case 'concat-assign':
-                        /**
-                         * Issue #2063: read the current property value first,
-                         * then append the literal; otherwise the property is
-                         * overwritten rather than concatenated.
-                         */
-                        $context->headersManager->add('kernel/operators');
-                        $tempVariable = $this->fetchPropertyValue($variable, $propertyName, $context);
-                        $codePrinter->output(sprintf(
-                            'zephir_concat_self_str(%s, SL("%s"));',
-                            $context->backend->getVariableCode($tempVariable),
-                            $expression->getCode()
-                        ));
-                        break;
                     case 'assign':
                         /* We only can use nonReferenced variables for not refcounted stuff in ZE3 */
                         $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context, false);
                         $tempVariable->initVariant($context);
                         $context->backend->assignString($tempVariable, $expression->getCode(), $context);
                         break;
+
+                    default:
+                        throw new Exception(
+                            "Operator '"
+                            . $statement['operator']
+                            . "' is not supported for object property: "
+                            . $expression->getType(),
+                            $statement
+                        );
                 }
 
                 $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
@@ -379,21 +391,7 @@ class ObjectProperty
                     case 'string':
                     case 'variable':
                     case 'mixed':
-                        /**
-                         * Issue #2063: concat-assign (.=) must read the current
-                         * property value and append to it, otherwise the
-                         * property is simply overwritten.
-                         */
-                        if ('concat-assign' === $statement['operator']) {
-                            $tempVariable = $this->fetchPropertyValue($variable, $propertyName, $context);
-                            $rhsCode      = $context->backend->getVariableCode($variableVariable);
-                            $tempCode     = $context->backend->getVariableCode($tempVariable);
-                            $codePrinter->output('SEPARATE_ZVAL(' . $rhsCode . ');');
-                            $codePrinter->output(
-                                'zephir_concat_function(' . $rhsCode . ', ' . $tempCode . ', ' . $rhsCode . ');'
-                            );
-                            $context->backend->updateProperty($symbolVariable, $propertyName, $variableVariable, $context);
-                        } elseif (null !== ($assignMacro = $this->arithmeticAssignMacro($statement['operator']))) {
+                        if (null !== ($assignMacro = $this->arithmeticAssignMacro($statement['operator']))) {
                             /**
                              * Arithmetic compound-assign (+=, -=, *=) with a
                              * variable operand: read the current property, apply
@@ -427,6 +425,31 @@ class ObjectProperty
             default:
                 throw new Exception("Unknown type {$expression->getType()}", $statement);
         }
+    }
+
+    /**
+     * Compiles `foo->x .= {expr}` as a read-modify-write: read the current
+     * property value into a temp, append the operand onto it, write it back.
+     */
+    private function assignConcat(
+        string $variable,
+        ZephirVariable $symbolVariable,
+        string $propertyName,
+        Expression $expression,
+        Context $context,
+        array $statement
+    ): void {
+        $tempVariable = $this->fetchPropertyValue($variable, $propertyName, $context);
+
+        $this->concatSelfOntoTarget(
+            $context->backend->getVariableCode($tempVariable),
+            $expression,
+            $context,
+            $statement
+        );
+
+        $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
+        $tempVariable->setIdle(true);
     }
 
     /**

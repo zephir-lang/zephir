@@ -20,6 +20,7 @@ use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
 use Zephir\Name;
+use Zephir\Traits\ConcatSelfTrait;
 use Zephir\Traits\VariablesTrait;
 use Zephir\Types\TypeRegistry;
 use Zephir\Variable\Variable as ZephirVariable;
@@ -31,6 +32,7 @@ use function array_keys;
  */
 class Variable
 {
+    use ConcatSelfTrait;
     use VariablesTrait;
 
     /**
@@ -730,6 +732,16 @@ class Variable
                         $symbolVariable->initVariant($compilationContext);
                         $compilationContext->backend->assignString($symbolVariable, null, $compilationContext);
                         break;
+
+                    case 'concat-assign':
+                        /**
+                         * PHP appends nothing for `null`, but the left operand
+                         * still becomes a string, so the call is not dropped.
+                         */
+                        $compilationContext->headersManager->add('kernel/operators');
+                        $codePrinter->output('zephir_concat_self_str(&' . $variable . ', SL(""));');
+                        break;
+
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr);
                 }
@@ -808,6 +820,68 @@ class Variable
                         $codePrinter->output(
                             'zephir_concat_self_str(&' . $variable . ', "' . $resolvedExpr->getCode(
                             ) . '", sizeof("' . $resolvedExpr->getCode() . '") - 1);'
+                        );
+                        break;
+
+                    default:
+                        throw new IllegalOperationException($statement, $resolvedExpr);
+                }
+                break;
+
+            case 'double':
+                switch ($statement['operator']) {
+                    case 'concat-assign':
+                        /**
+                         * A double is boxed and rendered by the engine rather
+                         * than by the compiler: PHP converts a float with
+                         * `zend_double_to_str()`, which reads `EG(precision)`
+                         * at run time, so folding the literal here would freeze
+                         * that precision at build time.
+                         */
+                        $compilationContext->headersManager->add('kernel/operators');
+                        $codePrinter->output(
+                            'zephir_concat_self_double(&' . $variable . ', ' . $resolvedExpr->getCode() . ');'
+                        );
+                        break;
+
+                    default:
+                        throw new IllegalOperationException($statement, $resolvedExpr);
+                }
+                break;
+
+            case 'bool':
+                switch ($statement['operator']) {
+                    case 'concat-assign':
+                        /**
+                         * `false` appends nothing, but it is not a no-op: the
+                         * left operand still becomes a string, which is what
+                         * PHP does for `$v .= false`.
+                         */
+                        $compilationContext->headersManager->add('kernel/operators');
+                        $codePrinter->output(
+                            'zephir_concat_self_bool(&' . $variable . ', ' . $resolvedExpr->getBooleanCode() . ');'
+                        );
+                        break;
+
+                    default:
+                        throw new IllegalOperationException($statement, $resolvedExpr);
+                }
+                break;
+
+            case 'array':
+            case 'empty-array':
+                switch ($statement['operator']) {
+                    case 'concat-assign':
+                        /**
+                         * PHP raises "Array to string conversion" and appends
+                         * "Array"; `zephir_concat_self()` reaches the same
+                         * conversion, warning included.
+                         */
+                        $this->concatSelfOntoTarget(
+                            '&' . $variable,
+                            $resolvedExpr,
+                            $compilationContext,
+                            $statement
                         );
                         break;
 
@@ -904,6 +978,50 @@ class Variable
                         }
                         break;
 
+                    case 'double':
+                        switch ($statement['operator']) {
+                            case 'concat-assign':
+                                $compilationContext->headersManager->add('kernel/operators');
+                                $codePrinter->output(
+                                    'zephir_concat_self_double(&' . $variable . ', ' . $itemVariable->getName() . ');'
+                                );
+                                break;
+
+                            default:
+                                throw new IllegalOperationException($statement, $itemVariable);
+                        }
+                        break;
+
+                    case 'bool':
+                        switch ($statement['operator']) {
+                            case 'concat-assign':
+                                $compilationContext->headersManager->add('kernel/operators');
+                                $codePrinter->output(
+                                    'zephir_concat_self_bool(&' . $variable . ', ' . $itemVariable->getName() . ');'
+                                );
+                                break;
+
+                            default:
+                                throw new IllegalOperationException($statement, $itemVariable);
+                        }
+                        break;
+
+                    case 'array':
+                        switch ($statement['operator']) {
+                            case 'concat-assign':
+                                $this->concatSelfOntoTarget(
+                                    '&' . $variable,
+                                    $resolvedExpr,
+                                    $compilationContext,
+                                    $statement
+                                );
+                                break;
+
+                            default:
+                                throw new IllegalOperationException($statement, $itemVariable);
+                        }
+                        break;
+
                     case 'variable':
                     case 'mixed':
                         switch ($statement['operator']) {
@@ -959,6 +1077,18 @@ class Variable
     ): void {
         switch ($resolvedExpr->getType()) {
             case 'null':
+                if ('concat-assign' === $statement['operator']) {
+                    /**
+                     * PHP appends nothing for `null`, but the left operand still
+                     * becomes a string: `$v = 5; $v .= null;` leaves the *string*
+                     * "5". Emitting nothing here left the variable an integer.
+                     */
+                    $compilationContext->headersManager->add('kernel/operators');
+                    $symbolVariable->setDynamicTypes('string');
+                    $codePrinter->output('zephir_concat_self_str(&' . $variable . ', SL(""));');
+                    break;
+                }
+
                 if ($statement['operator'] == 'assign') {
                     $symbolVariable->initVariant($compilationContext);
                     $symbolVariable->setDynamicTypes('null');
@@ -1096,6 +1226,20 @@ class Variable
 
             case 'double':
                 switch ($statement['operator']) {
+                    case 'concat-assign':
+                        /**
+                         * A double is boxed and rendered by the engine rather
+                         * than by the compiler: PHP converts a float with
+                         * `zend_double_to_str()`, which reads `EG(precision)`
+                         * at run time, so folding the literal here would freeze
+                         * that precision at build time.
+                         */
+                        $compilationContext->headersManager->add('kernel/operators');
+                        $codePrinter->output(
+                            'zephir_concat_self_double(&' . $variable . ', ' . $resolvedExpr->getCode() . ');'
+                        );
+                        break;
+
                     case 'mul-assign':
                     case 'sub-assign':
                     case 'add-assign':
@@ -1150,6 +1294,18 @@ class Variable
 
             case 'bool':
                 switch ($statement['operator']) {
+                    case 'concat-assign':
+                        /**
+                         * `false` appends nothing, but it is not a no-op: the
+                         * left operand still becomes a string, which is what
+                         * PHP does for `$v .= false`.
+                         */
+                        $compilationContext->headersManager->add('kernel/operators');
+                        $codePrinter->output(
+                            'zephir_concat_self_bool(&' . $variable . ', ' . $resolvedExpr->getBooleanCode() . ');'
+                        );
+                        break;
+
                     case 'assign':
                         $symbolVariable->setDynamicTypes('bool');
                         if ('true' == $resolvedExpr->getCode()) {
@@ -1215,6 +1371,16 @@ class Variable
                 break;
 
             case 'array':
+                if ('concat-assign' === $statement['operator']) {
+                    $this->concatSelfOntoTarget(
+                        '&' . $variable,
+                        $resolvedExpr,
+                        $compilationContext,
+                        $statement
+                    );
+                    break;
+                }
+
                 $this->doArrayAssignmentProcess(
                     $statement,
                     $resolvedExpr,
@@ -1313,6 +1479,13 @@ class Variable
 
                     case 'double':
                         switch ($statement['operator']) {
+                            case 'concat-assign':
+                                $compilationContext->headersManager->add('kernel/operators');
+                                $codePrinter->output(
+                                    'zephir_concat_self_double(&' . $variable . ', ' . $itemVariable->getName() . ');'
+                                );
+                                break;
+
                             case 'assign':
                                 $symbolVariable->initVariant($compilationContext);
                                 $symbolVariable->setDynamicTypes('double');
@@ -1329,6 +1502,13 @@ class Variable
 
                     case 'bool':
                         switch ($statement['operator']) {
+                            case 'concat-assign':
+                                $compilationContext->headersManager->add('kernel/operators');
+                                $codePrinter->output(
+                                    'zephir_concat_self_bool(&' . $variable . ', ' . $itemVariable->getName() . ');'
+                                );
+                                break;
+
                             case 'assign':
                                 $symbolVariable->initVariant($compilationContext);
                                 $symbolVariable->setDynamicTypes('bool');
@@ -1344,6 +1524,16 @@ class Variable
                         break;
 
                     case 'array':
+                        if ('concat-assign' === $statement['operator']) {
+                            $this->concatSelfOntoTarget(
+                                '&' . $variable,
+                                $resolvedExpr,
+                                $compilationContext,
+                                $statement
+                            );
+                            break;
+                        }
+
                         $this->doArrayAssignmentProcess(
                             $statement,
                             $resolvedExpr,

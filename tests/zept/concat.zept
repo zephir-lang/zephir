@@ -1,11 +1,15 @@
 --TEST--
-Concat: static-property concat, string append/prepend, integer-like strings (#1573), float/double concat (#1893), integer operand on a `string` and on a `var` (#2660) (port of tests/Extension/ConcatTest.php)
+Concat: static-property concat, string append/prepend, integer-like strings (#1573), float/double concat (#1893), integer operand on a `string` and on a `var` (#2660), double/bool/null operand on a `string`, a `var`, an object property, a static property and the `.` operator (#2664) (port of tests/Extension/ConcatTest.php)
 --FILE--
 namespace Stub;
 
 class Concat
 {
     protected static testProperty = null;
+
+    protected static appended = "";
+
+    protected store = "";
 
     static public function getTestProperty() -> string | null
     {
@@ -128,6 +132,94 @@ class Concat
         let retval .= 5;
         return retval;
     }
+
+    public function testConcatStringWithDoubleVar(double number) -> string
+    {
+        string retval = "n=";
+        let retval .= number;
+        return retval;
+    }
+
+    public function testConcatStringWithBoolVar(bool flag) -> string
+    {
+        string retval = "n=";
+        let retval .= flag;
+        return retval;
+    }
+
+    public function testConcatStringWithLiterals() -> string
+    {
+        string retval = "n=";
+        let retval .= 1.5;
+        let retval .= true;
+        let retval .= false;
+        let retval .= null;
+        return retval;
+    }
+
+    public function testConcatVarWithLiterals() -> string
+    {
+        var retval = "n=";
+        let retval .= 1.5;
+        let retval .= true;
+        let retval .= false;
+        let retval .= null;
+        return retval;
+    }
+
+    public function testConcatIntVarWithFalseLiteral() -> string
+    {
+        var retval = 5;
+        let retval .= false;
+        return retval;
+    }
+
+    public function getStore() -> string
+    {
+        return this->store;
+    }
+
+    public function appendPropertyLiterals() -> void
+    {
+        let this->store .= "s";
+        let this->store .= 5;
+        let this->store .= 1.5;
+        let this->store .= true;
+    }
+
+    public function appendPropertyVariables(int number, double fraction, bool flag) -> void
+    {
+        char c = 'A';
+
+        let this->store .= number;
+        let this->store .= fraction;
+        let this->store .= flag;
+        let this->store .= c;
+    }
+
+    static public function getAppended() -> string
+    {
+        return self::appended;
+    }
+
+    static public function appendStaticLiterals() -> void
+    {
+        let self::appended .= "s";
+        let self::appended .= 5;
+        let self::appended .= 1.5;
+        let self::appended .= true;
+    }
+
+    public function testConcatExprWithBoolVar(bool flag) -> string
+    {
+        return "n=" . flag;
+    }
+
+    public function testConcatExprWithCharVar() -> string
+    {
+        char c = 'A';
+        return "n=" . c;
+    }
 }
 --USAGE--
 $test = new \Stub\Concat();
@@ -151,6 +243,20 @@ echo var_export($test->testConcatStringWithCharVar(), true), "\n";
 echo var_export($test->testConcatVarWithIntVar(-5), true), "\n";
 echo var_export($test->testConcatVarWithCharVar(), true), "\n";
 echo var_export($test->testConcatVarWithIntLiteral(), true), "\n";
+echo var_export($test->testConcatStringWithDoubleVar(1.5), true), "\n";
+echo var_export($test->testConcatStringWithBoolVar(true), true), "\n";
+echo var_export($test->testConcatStringWithBoolVar(false), true), "\n";
+echo var_export($test->testConcatStringWithLiterals(), true), "\n";
+echo var_export($test->testConcatVarWithLiterals(), true), "\n";
+echo var_export($test->testConcatIntVarWithFalseLiteral(), true), "\n";
+$test->appendPropertyLiterals();
+$test->appendPropertyVariables(5, 1.5, true);
+echo var_export($test->getStore(), true), "\n";
+\Stub\Concat::appendStaticLiterals();
+echo var_export(\Stub\Concat::getAppended(), true), "\n";
+echo var_export($test->testConcatExprWithBoolVar(true), true), "\n";
+echo var_export($test->testConcatExprWithBoolVar(false), true), "\n";
+echo var_export($test->testConcatExprWithCharVar(), true), "\n";
 --EXPECT--
 NULL
 'test'
@@ -170,3 +276,14 @@ NULL
 'n=-5'
 'n=A'
 'n=5'
+'n=1.5'
+'n=1'
+'n='
+'n=1.51'
+'n=1.51'
+'5'
+'s51.5151.51A'
+'s51.51'
+'n=1'
+'n='
+'n=A'

@@ -64,7 +64,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, __construct)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	zephir_array_fast_append(&_0, &_1);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 95, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 96, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -103,7 +103,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, setOtherArray)
 		Z_PARAM_ZVAL(arr)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &arr);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 96, arr);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 97, arr);
 }
 
 PHP_METHOD(Stub_Properties_PropertyArray, getOtherArray)
