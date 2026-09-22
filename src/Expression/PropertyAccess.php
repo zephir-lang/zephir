@@ -155,7 +155,7 @@ class PropertyAccess
                  * Protected variables only can be read in the class context
                  * where they were declared
                  */
-                if ($classDefinition == $currentClassDefinition) {
+                if ($classDefinition === $currentClassDefinition) {
                     if ($propertyDefinition->isPrivate()) {
                         $declarationDefinition = $propertyDefinition->getClassDefinition();
                         if ($declarationDefinition !== $currentClassDefinition) {

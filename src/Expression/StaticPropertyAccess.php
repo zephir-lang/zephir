@@ -103,7 +103,7 @@ class StaticPropertyAccess
         );
 
         if ($propertyDefinition->isPrivate()) {
-            if ($classDefinition != $compilationContext->classDefinition) {
+            if ($classDefinition !== $compilationContext->classDefinition) {
                 throw new CompilerException(
                     "Cannot access private static property '"
                     . $classDefinition->getCompleteName()
@@ -117,8 +117,8 @@ class StaticPropertyAccess
 
         if (
             $propertyDefinition->isProtected() &&
-            $classDefinition != $compilationContext->classDefinition &&
-            $classDefinition != $compilationContext->classDefinition->getExtendsClassDefinition()
+            $classDefinition !== $compilationContext->classDefinition &&
+            $classDefinition !== $compilationContext->classDefinition->getExtendsClassDefinition()
         ) {
             throw new CompilerException(
                 "Cannot access protected static property '"

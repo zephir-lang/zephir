@@ -272,7 +272,7 @@ class StaticCall extends Call
             } else {
                 if (
                     in_array($className, ['self', 'static']) ||
-                    $classDefinition == $compilationContext->classDefinition
+                    $classDefinition === $compilationContext->classDefinition
                 ) {
                     $this->call(
                         strtoupper($className),
