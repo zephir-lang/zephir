@@ -357,11 +357,11 @@ PHP_METHOD(Stub_Issue2682, pushShared)
 	ZVAL_STR_COPY(&value_zv, value);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 66, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 67, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	array_init(&_1);
 	zephir_update_property_array(this_ptr, SL("shelf"), &key_zv, &_1);
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 66, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 67, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&alias);
 	zephir_array_fetch(&alias, &_2, &key_zv, PH_NOISY, "stub/issue2682.zep", 200);
 	zephir_memory_observe(&_3);
@@ -372,7 +372,7 @@ PHP_METHOD(Stub_Issue2682, pushShared)
 	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 69, &_5, &value_zv);
 	zephir_check_call_status();
 	zephir_create_array(return_value, 2, 0);
-	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_0, 66, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_0, 67, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_7);
 	zephir_array_fetch(&_7, &_6, &key_zv, PH_NOISY, "stub/issue2682.zep", 204);
 	zephir_array_update_string(return_value, SL("shelf"), &_7, PH_COPY | PH_SEPARATE);

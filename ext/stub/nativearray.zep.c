@@ -1852,7 +1852,7 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 	ZVAL_STR_COPY(&prefix_zv, prefix);
 	zephir_memory_observe(&baseDir_zv);
 	ZVAL_STR_COPY(&baseDir_zv, baseDir);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 76, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 77, PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_isset_value(&_0, &prefix_zv))) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		array_init(&_1$$3);

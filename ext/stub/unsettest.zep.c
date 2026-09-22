@@ -51,7 +51,7 @@ PHP_METHOD(Stub_Unsettest, has)
 		Z_PARAM_ZVAL(key)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &key);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 146, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 147, PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_array_isset_value(&_0, key));
 }
 

@@ -326,12 +326,12 @@ PHP_METHOD(Stub_Issue2702, snapshotAroundLiteralUnset)
 
 	ZEPHIR_INIT_VAR(&ret);
 	array_init(&ret);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 71, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 72, PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/issue2702.zep", 144);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "a");
 	zephir_unset_property_array(this_ptr, ZEND_STRL("removable"), &_1);
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 71, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 72, PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_2, PH_SEPARATE, "stub/issue2702.zep", 146);
 	RETURN_CTOR(&ret);
 }

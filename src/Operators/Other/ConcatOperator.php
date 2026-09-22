@@ -196,6 +196,46 @@ class ConcatOperator extends AbstractOperator
                             $concatParts[] = $compilationContext->backend->getVariableCode($tempVariable);
                             break;
 
+                        case 'bool':
+                            $key          .= 'v';
+                            $tempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite(
+                                'variable',
+                                $compilationContext
+                            );
+                            $compilationContext->codePrinter->output(
+                                sprintf(
+                                    'ZVAL_BOOL(&%s, %s);',
+                                    $tempVariable->getName(),
+                                    $variable->getName()
+                                )
+                            );
+                            $concatParts[] = '&' . $tempVariable->getName();
+                            break;
+
+                        case 'char':
+                        case 'uchar':
+                            /**
+                             * A `char` is one byte, and `.` appends that byte
+                             * the way `.=` does. Boxing it as a `long` would
+                             * append the ordinal instead, so it is boxed as a
+                             * one-byte string in a tracked temp, which the
+                             * memory frame releases.
+                             */
+                            $key          .= 'v';
+                            $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                                'variable',
+                                $compilationContext
+                            );
+                            $compilationContext->codePrinter->output(
+                                sprintf(
+                                    'ZVAL_STRINGL(%s, (char *) &%s, 1);',
+                                    $compilationContext->backend->getVariableCode($tempVariable),
+                                    $variable->getName()
+                                )
+                            );
+                            $concatParts[] = $compilationContext->backend->getVariableCode($tempVariable);
+                            break;
+
                         default:
                             throw new CompilerException(
                                 sprintf(
@@ -245,6 +285,29 @@ class ConcatOperator extends AbstractOperator
                         )
                     );
                     $concatParts[] = '&' . $tempVariable->getName();
+                    break;
+
+                case 'bool':
+                    $key          .= 'v';
+                    $tempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite(
+                        'variable',
+                        $compilationContext
+                    );
+                    $compilationContext->codePrinter->output(
+                        sprintf(
+                            'ZVAL_BOOL(&%s, %s);',
+                            $tempVariable->getName(),
+                            $compiledExpr->getBooleanCode()
+                        )
+                    );
+                    $concatParts[] = '&' . $tempVariable->getName();
+                    break;
+
+                case 'char':
+                case 'uchar':
+                    /* A char literal is known at build time, so it needs no zval. */
+                    $key           .= 's';
+                    $concatParts[] = '"' . Name::addSlashes($compiledExpr->getCode()) . '"';
                     break;
 
                 default:

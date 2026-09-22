@@ -209,6 +209,41 @@ void zephir_concat_self_long(zval *left, const zend_long right)
 }
 
 /**
+ * Appends the string form of the right operator to the left operator.
+ *
+ * Mirrors what PHP does for `$s .= $d` with an `IS_DOUBLE` right operand:
+ * `concat_function()` renders it through `zval_get_string()`, which reads
+ * `EG(precision)` at run time. Rendering the value here with `printf()` would
+ * freeze that precision at build time, and `zend_double_to_str()` reaches the
+ * conversion directly but only exists on PHP 8.1 and later. Boxing the operand
+ * and letting `zephir_concat_self()` call `zephir_make_printable_zval()` is the
+ * same conversion on every supported version.
+ */
+void zephir_concat_self_double(zval *left, const double right)
+{
+	zval right_zv;
+
+	ZVAL_DOUBLE(&right_zv, right);
+	zephir_concat_self(left, &right_zv);
+}
+
+/**
+ * Appends the string form of a boolean right operator to the left operator.
+ *
+ * PHP renders `true` as "1" and `false` as the empty string. Appending nothing
+ * is not the same as doing nothing: `$v = 5; $v .= false;` leaves PHP holding
+ * the *string* "5", so `false` goes through the same conversion rather than
+ * returning early.
+ */
+void zephir_concat_self_bool(zval *left, const zend_bool right)
+{
+	zval right_zv;
+
+	ZVAL_BOOL(&right_zv, right);
+	zephir_concat_self(left, &right_zv);
+}
+
+/**
  * Natural compare with long operandus on right
  */
 int zephir_compare_strict_long(zval *op1, zend_long op2)

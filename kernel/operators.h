@@ -85,6 +85,8 @@ void zephir_concat_self(zval *left, zval *right);
 void zephir_concat_self_str(zval *left, const char *right, int right_length);
 void zephir_concat_self_long(zval *left, const zend_long right);
 void zephir_concat_self_char(zval *left, unsigned char right);
+void zephir_concat_self_double(zval *left, const double right);
+void zephir_concat_self_bool(zval *left, const zend_bool right);
 
 /** Strict comparing */
 int zephir_compare_strict_string(zval *op1, const char *op2, int op2_length);
