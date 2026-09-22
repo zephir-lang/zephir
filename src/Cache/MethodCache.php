@@ -144,7 +144,7 @@ class MethodCache
 
             $staticCacheable = !$method->getClassDefinition()->isInterface() &&
                 (
-                    $compilationContext->currentMethod == $method ||
+                    $compilationContext->currentMethod === $method ||
                     $method->getClassDefinition()->isFinal() ||
                     $method->isFinal() ||
                     $method->isPrivate()
