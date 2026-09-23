@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/operators.h"
-#include "kernel/object.h"
 #include "kernel/memory.h"
+#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(stub_35__closure)
@@ -38,6 +38,7 @@ PHP_METHOD(stub_35__closure, __invoke)
 	zephir_read_property(&counter, this_ptr, SL("counter"), PH_NOISY_CC | PH_READONLY);
 
 	_0 = (zephir_get_numberval(Z_REFVAL_P(&counter)) + 1);
+	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&counter));
 	ZVAL_LONG(Z_REFVAL_P(&counter), _0);
 	RETVAL_ZVAL(Z_REFVAL_P(&counter), 1, 0);
 	RETURN_MM();

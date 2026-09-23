@@ -15,6 +15,7 @@ namespace Zephir\Backend;
 
 use Zephir\Cache\PropertyCacheSlots;
 use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
@@ -915,6 +916,22 @@ class Backend
         Variable $reference,
         CompilationContext $context
     ): void {
+        /**
+         * zephir_update_property_reference() copies whatever zval it is given,
+         * so a variable that never became a reference is stored happily and the
+         * capture silently degrades to by-value. Every path that forgets to
+         * promote the enclosing variable has to fail here instead.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2668
+         */
+        if (!$reference->isClosureReference()) {
+            throw new CompilerException(
+                "Cannot capture '" . $reference->getName()
+                . "' by reference: it was never promoted to a PHP reference",
+                $reference->getOriginal()
+            );
+        }
+
         $context->codePrinter->output(
             sprintf(
                 'zephir_update_property_reference(%s, SL("%s"), &%s);',
@@ -1587,9 +1604,15 @@ class Backend
         // TODO: maybe optimizations as well as above
         $context->codePrinter->output(
             sprintf(
-                'zephir_read_static_property_ce(%s%s, %s, SL("%s"), PH_NOISY_CC%s);',
-                $symbolVariable->isDoublePointer() ? '' : '&',
-                $symbolVariable->getName(),
+                'zephir_read_static_property_ce(%s, %s, SL("%s"), PH_NOISY_CC%s);',
+                /**
+                 * Resolved rather than spelled out: hand-building `&` + name
+                 * wrote over the `zend_reference` of a `use (&x)` capture
+                 * instead of into the slot it shares.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2668
+                 */
+                $this->getVariableCode($symbolVariable),
                 $classDefinition->getClassEntry(),
                 $property,
                 $readOnly ? ' | PH_READONLY' : ''
@@ -2096,7 +2119,22 @@ class Backend
         $signatureParameters = [];
         $parameters          = $method->getParameters();
         if (is_object($parameters)) {
+            /**
+             * A by-reference captured parameter's value lives under a shadow C
+             * identifier, and the body reads its trailing `_ext` pointer by
+             * that same name.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2668
+             */
+            $byRefCaptured = $method instanceof Method
+                ? array_fill_keys($method->byRefCapturedParameterNames(), true)
+                : [];
+
             foreach ($parameters->getParameters() as $parameter) {
+                if (isset($byRefCaptured[$parameter['name']])) {
+                    $parameter['name'] .= Parameters::BYREF_SHADOW_SUFFIX;
+                }
+
                 switch ($parameter['data-type']) {
                     case 'int':
                     case 'uint':

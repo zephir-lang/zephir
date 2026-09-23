@@ -21,6 +21,7 @@
 #include "kernel/operators.h"
 #include "kernel/string.h"
 #include "kernel/concat.h"
+#include "kernel/main.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Closures)
@@ -983,6 +984,7 @@ PHP_METHOD(Stub_Closures, issue2652ByRefShared)
 	zephir_memory_observe(&counter);
 	zephir_make_local_reference(&counter);
 
+	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&counter));
 	ZVAL_LONG(Z_REFVAL_P(&counter), 0);
 	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, stub_35__closure_ce);
@@ -1022,6 +1024,7 @@ PHP_METHOD(Stub_Closures, issue2652ByRefWritesOut)
 	zephir_memory_observe(&value);
 	zephir_make_local_reference(&value);
 
+	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&value));
 	ZVAL_LONG(Z_REFVAL_P(&value), 0);
 	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, stub_37__closure_ce);
@@ -1056,12 +1059,14 @@ PHP_METHOD(Stub_Closures, issue2652ByRefReadsLateWrite)
 	zephir_memory_observe(&value);
 	zephir_make_local_reference(&value);
 
+	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&value));
 	ZVAL_LONG(Z_REFVAL_P(&value), 1);
 	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, stub_38__closure_ce);
 	zephir_update_property_reference(&_0, SL("value"), &value);
 	ZEPHIR_INIT_VAR(&reader);
 	zephir_create_closure_bound(&reader, &_0, NULL, stub_38__closure_ce, SL("__invoke"));
+	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&value));
 	ZVAL_LONG(Z_REFVAL_P(&value), 42);
 	RETURN_CCTOR(&reader);
 }
@@ -1216,6 +1221,7 @@ PHP_METHOD(Stub_Closures, issue2667ByRef)
 	zephir_memory_observe(&counter);
 	zephir_make_local_reference(&counter);
 
+	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&counter));
 	ZVAL_LONG(Z_REFVAL_P(&counter), 0);
 	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, stub_44__closure_ce);
@@ -1247,6 +1253,7 @@ PHP_METHOD(Stub_Closures, issue2667ByRefShared)
 	zephir_memory_observe(&counter);
 	zephir_make_local_reference(&counter);
 
+	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&counter));
 	ZVAL_LONG(Z_REFVAL_P(&counter), 0);
 	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, stub_45__closure_ce);
@@ -1274,5 +1281,473 @@ PHP_METHOD(Stub_Closures, issue2667Plain)
 
 	zephir_create_closure_ex(return_value, NULL, stub_47__closure_ce, SL("__invoke"));
 	return;
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2668
+ *
+ * The shape from the issue. A parameter keeps its native C shape under a
+ * shadow name and the declared name becomes the shared reference, so the
+ * closure carries the parameter's slot the way PHP's `use (&$param)` does.
+ */
+PHP_METHOD(Stub_Closures, issue2668ByRefParam)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *seed_byref, seed_byref_sub, seed, _0;
+
+	ZVAL_UNDEF(&seed_byref_sub);
+	ZVAL_UNDEF(&seed);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(seed_byref)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&seed);
+	zephir_make_local_reference(&seed);
+	zephir_fetch_params(1, 1, 0, &seed_byref);
+	ZVAL_COPY_DEREF(Z_REFVAL_P(&seed), seed_byref);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_48__closure_ce);
+	zephir_update_property_reference(&_0, SL("seed"), &seed);
+	zephir_create_closure_bound(return_value, &_0, NULL, stub_48__closure_ce, SL("__invoke"));
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2668
+ *
+ * Two closures over one parameter get one reference between them, the way
+ * PHP's second by-reference bind reuses the reference the first one made.
+ */
+PHP_METHOD(Stub_Closures, issue2668ByRefParamShared)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *seed_byref, seed_byref_sub, seed, bump, read, _0, _1;
+
+	ZVAL_UNDEF(&seed_byref_sub);
+	ZVAL_UNDEF(&seed);
+	ZVAL_UNDEF(&bump);
+	ZVAL_UNDEF(&read);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(seed_byref)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&seed);
+	zephir_make_local_reference(&seed);
+	zephir_fetch_params(1, 1, 0, &seed_byref);
+	ZVAL_COPY_DEREF(Z_REFVAL_P(&seed), seed_byref);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_49__closure_ce);
+	zephir_update_property_reference(&_0, SL("seed"), &seed);
+	ZEPHIR_INIT_VAR(&bump);
+	zephir_create_closure_bound(&bump, &_0, NULL, stub_49__closure_ce, SL("__invoke"));
+	ZEPHIR_INIT_VAR(&_1);
+	object_init_ex(&_1, stub_50__closure_ce);
+	zephir_update_property_reference(&_1, SL("seed"), &seed);
+	ZEPHIR_INIT_VAR(&read);
+	zephir_create_closure_bound(&read, &_1, NULL, stub_50__closure_ce, SL("__invoke"));
+	zephir_create_array(return_value, 2, 0);
+	zephir_array_fast_append(return_value, &bump);
+	zephir_array_fast_append(return_value, &read);
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2668
+ *
+ * A by-value capture is a snapshot taken when the closure is created; the
+ * by-reference one keeps seeing the enclosing scope's later writes.
+ */
+PHP_METHOD(Stub_Closures, issue2668ByRefAndByValue)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *seed_byref, seed_byref_sub, seed, byRef, byValue, _0, _1;
+
+	ZVAL_UNDEF(&seed_byref_sub);
+	ZVAL_UNDEF(&seed);
+	ZVAL_UNDEF(&byRef);
+	ZVAL_UNDEF(&byValue);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(seed_byref)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&seed);
+	zephir_make_local_reference(&seed);
+	zephir_fetch_params(1, 1, 0, &seed_byref);
+	ZVAL_COPY_DEREF(Z_REFVAL_P(&seed), seed_byref);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_51__closure_ce);
+	zephir_update_property_reference(&_0, SL("seed"), &seed);
+	ZEPHIR_INIT_VAR(&byRef);
+	zephir_create_closure_bound(&byRef, &_0, NULL, stub_51__closure_ce, SL("__invoke"));
+	ZEPHIR_INIT_VAR(&_1);
+	object_init_ex(&_1, stub_52__closure_ce);
+	zephir_update_property_zval(&_1, SL("seed"), Z_REFVAL_P(&seed));
+	ZEPHIR_INIT_VAR(&byValue);
+	zephir_create_closure_bound(&byValue, &_1, NULL, stub_52__closure_ce, SL("__invoke"));
+	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&seed));
+	ZVAL_LONG(Z_REFVAL_P(&seed), 100);
+	zephir_create_array(return_value, 2, 0);
+	zephir_array_fast_append(return_value, &byRef);
+	zephir_array_fast_append(return_value, &byValue);
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2668
+ *
+ * Zephir has no by-reference parameters, so the argument is the caller's
+ * own copy: a write through the capture stays inside this call.
+ */
+PHP_METHOD(Stub_Closures, issue2668ByRefParamIsLocal)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *seed_byref, seed_byref_sub, seed, write, _0, _1;
+
+	ZVAL_UNDEF(&seed_byref_sub);
+	ZVAL_UNDEF(&seed);
+	ZVAL_UNDEF(&write);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(seed_byref)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&seed);
+	zephir_make_local_reference(&seed);
+	zephir_fetch_params(1, 1, 0, &seed_byref);
+	ZVAL_COPY_DEREF(Z_REFVAL_P(&seed), seed_byref);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_53__closure_ce);
+	zephir_update_property_reference(&_0, SL("seed"), &seed);
+	ZEPHIR_INIT_VAR(&write);
+	zephir_create_closure_bound(&write, &_0, NULL, stub_53__closure_ce, SL("__invoke"));
+	ZEPHIR_INIT_VAR(&_1);
+	ZEPHIR_CALL_USER_FUNC(&_1, &write);
+	zephir_check_call_status();
+	zephir_create_array(return_value, 1, 0);
+	zephir_array_fast_append(return_value, Z_REFVAL_P(&seed));
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2668
+ *
+ * A write before the closure is created is the value it starts from.
+ */
+PHP_METHOD(Stub_Closures, issue2668ByRefParamWrittenFirst)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *seed_byref, seed_byref_sub, seed, _0;
+
+	ZVAL_UNDEF(&seed_byref_sub);
+	ZVAL_UNDEF(&seed);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(seed_byref)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&seed);
+	zephir_make_local_reference(&seed);
+	zephir_fetch_params(1, 1, 0, &seed_byref);
+	ZVAL_COPY_DEREF(Z_REFVAL_P(&seed), seed_byref);
+	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&seed));
+	ZVAL_LONG(Z_REFVAL_P(&seed), 7);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_54__closure_ce);
+	zephir_update_property_reference(&_0, SL("seed"), &seed);
+	zephir_create_closure_bound(return_value, &_0, NULL, stub_54__closure_ce, SL("__invoke"));
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2668
+ *
+ * A typed parameter is unboxed into a C scalar, so its shadow is what the
+ * `ZEND_PARSE_PARAMETERS` block fills and the reference is seeded from it.
+ */
+PHP_METHOD(Stub_Closures, issue2668ByRefTypedInt)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *n_byref_param = NULL, n, _0;
+	zend_long n_byref;
+
+	ZVAL_UNDEF(&n);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n_byref)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&n);
+	zephir_make_local_reference(&n);
+	zephir_fetch_params(1, 1, 0, &n_byref_param);
+	ZVAL_LONG(Z_REFVAL_P(&n), n_byref);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_55__closure_ce);
+	zephir_update_property_reference(&_0, SL("n"), &n);
+	zephir_create_closure_bound(return_value, &_0, NULL, stub_55__closure_ce, SL("__invoke"));
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2668
+ *
+ * A `string` parameter is a native `zend_string *`; the reference is
+ * seeded from the companion zval the prologue always fills.
+ */
+PHP_METHOD(Stub_Closures, issue2668ByRefTypedString)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval s_byref_zv, s, _0;
+	zend_string *s_byref = NULL;
+
+	ZVAL_UNDEF(&s_byref_zv);
+	ZVAL_UNDEF(&s);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(s_byref)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&s);
+	zephir_make_local_reference(&s);
+	zephir_memory_observe(&s_byref_zv);
+	ZVAL_STR_COPY(&s_byref_zv, s_byref);
+	ZVAL_COPY(Z_REFVAL_P(&s), &s_byref_zv);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_56__closure_ce);
+	zephir_update_property_reference(&_0, SL("s"), &s);
+	zephir_create_closure_bound(return_value, &_0, NULL, stub_56__closure_ce, SL("__invoke"));
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2668
+ *
+ * Rewriting the array through the shared slot has to keep working after
+ * the method that owned the parameter returned. It is reassigned rather
+ * than appended to because `let x[] = ...` on a capture is rejected for
+ * every capture, by value or by reference (#2736).
+ */
+PHP_METHOD(Stub_Closures, issue2668ByRefTypedArray)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *items_byref_param = NULL, items, _0;
+	zval items_byref;
+
+	ZVAL_UNDEF(&items_byref);
+	ZVAL_UNDEF(&items);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		ZEPHIR_Z_PARAM_ARRAY(items_byref, items_byref_param)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&items);
+	zephir_make_local_reference(&items);
+	zephir_fetch_params(1, 1, 0, &items_byref_param);
+	zephir_get_arrval(&items_byref, items_byref_param);
+	ZVAL_COPY(Z_REFVAL_P(&items), &items_byref);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_57__closure_ce);
+	zephir_update_property_reference(&_0, SL("items"), &items);
+	zephir_create_closure_bound(return_value, &_0, NULL, stub_57__closure_ce, SL("__invoke"));
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2668
+ *
+ * An optional parameter's default is assigned to the shadow by the usual
+ * default-value machinery before the reference is seeded from it.
+ */
+PHP_METHOD(Stub_Closures, issue2668ByRefOptionalParam)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *seed_byref = NULL, seed_byref_sub, seed, _0;
+
+	ZVAL_UNDEF(&seed_byref_sub);
+	ZVAL_UNDEF(&seed);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ZVAL(seed_byref)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&seed);
+	zephir_make_local_reference(&seed);
+	zephir_fetch_params(1, 0, 1, &seed_byref);
+	if (!seed_byref) {
+		seed_byref = &seed_byref_sub;
+		ZEPHIR_INIT_VAR(seed_byref);
+		ZVAL_LONG(seed_byref, 3);
+	}
+	ZVAL_COPY_DEREF(Z_REFVAL_P(&seed), seed_byref);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_58__closure_ce);
+	zephir_update_property_reference(&_0, SL("seed"), &seed);
+	zephir_create_closure_bound(return_value, &_0, NULL, stub_58__closure_ce, SL("__invoke"));
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2668
+ *
+ * A variadic is collected into a plain local, so it only needs the same
+ * copy into the reference.
+ */
+PHP_METHOD(Stub_Closures, issue2668ByRefVariadicParam)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval rest_byref, rest, _0;
+
+	ZVAL_UNDEF(&rest_byref);
+	ZVAL_UNDEF(&rest);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(0, -1)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&rest);
+	zephir_make_local_reference(&rest);
+	ZEPHIR_INIT_VAR(&rest_byref);
+	zephir_get_args_from(&rest_byref, 0);
+	ZVAL_COPY(Z_REFVAL_P(&rest), &rest_byref);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_59__closure_ce);
+	zephir_update_property_reference(&_0, SL("rest"), &rest);
+	zephir_create_closure_bound(return_value, &_0, NULL, stub_59__closure_ce, SL("__invoke"));
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2668
+ *
+ * Rewriting a refcounted value through the shared slot has to release the
+ * one it replaces. A literal is the shape that shows it: `ZVAL_STRING()`
+ * allocates a fresh `zend_string` and overwrites without a destructor, so
+ * without the release every rewrite drops one on the floor.
+ */
+PHP_METHOD(Stub_Closures, issue2668ByRefRewrite)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS, i;
+	zval s_byref_zv, s, hold, _0;
+	zend_string *s_byref = NULL;
+
+	ZVAL_UNDEF(&s_byref_zv);
+	ZVAL_UNDEF(&s);
+	ZVAL_UNDEF(&hold);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(s_byref)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&s);
+	zephir_make_local_reference(&s);
+	zephir_memory_observe(&s_byref_zv);
+	ZVAL_STR_COPY(&s_byref_zv, s_byref);
+	ZVAL_COPY(Z_REFVAL_P(&s), &s_byref_zv);
+	i = 0;
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_60__closure_ce);
+	zephir_update_property_reference(&_0, SL("s"), &s);
+	ZEPHIR_INIT_VAR(&hold);
+	zephir_create_closure_bound(&hold, &_0, NULL, stub_60__closure_ce, SL("__invoke"));
+	while (1) {
+		if (!(i < 20)) {
+			break;
+		}
+		ZEPHIR_INIT_NVAR(Z_REFVAL_P(&s));
+		ZVAL_STRING(Z_REFVAL_P(&s), "a rewritten value long enough not to be interned by luck");
+		i = (i + 1);
+	}
+	ZEPHIR_CALL_USER_FUNC(return_value, &hold);
+	zephir_check_call_status();
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2668
+ *
+ * Same shape for an array: `zephir_create_array()` builds a new
+ * `zend_array` over whatever the slot held.
+ */
+PHP_METHOD(Stub_Closures, issue2668ByRefRewriteArray)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS, i;
+	zval *items_byref_param = NULL, items, hold, _0, _1$$3;
+	zval items_byref;
+
+	ZVAL_UNDEF(&items_byref);
+	ZVAL_UNDEF(&items);
+	ZVAL_UNDEF(&hold);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		ZEPHIR_Z_PARAM_ARRAY(items_byref, items_byref_param)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&items);
+	zephir_make_local_reference(&items);
+	zephir_fetch_params(1, 1, 0, &items_byref_param);
+	zephir_get_arrval(&items_byref, items_byref_param);
+	ZVAL_COPY(Z_REFVAL_P(&items), &items_byref);
+	i = 0;
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_61__closure_ce);
+	zephir_update_property_reference(&_0, SL("items"), &items);
+	ZEPHIR_INIT_VAR(&hold);
+	zephir_create_closure_bound(&hold, &_0, NULL, stub_61__closure_ce, SL("__invoke"));
+	while (1) {
+		if (!(i < 50)) {
+			break;
+		}
+		ZEPHIR_INIT_NVAR(Z_REFVAL_P(&items));
+		zephir_create_array(Z_REFVAL_P(&items), 8, 0);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		ZVAL_LONG(&_1$$3, 1);
+		zephir_array_fast_append(Z_REFVAL_P(&items), &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		ZVAL_LONG(&_1$$3, 2);
+		zephir_array_fast_append(Z_REFVAL_P(&items), &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		ZVAL_LONG(&_1$$3, 3);
+		zephir_array_fast_append(Z_REFVAL_P(&items), &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		ZVAL_LONG(&_1$$3, 4);
+		zephir_array_fast_append(Z_REFVAL_P(&items), &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		ZVAL_LONG(&_1$$3, 5);
+		zephir_array_fast_append(Z_REFVAL_P(&items), &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		ZVAL_LONG(&_1$$3, 6);
+		zephir_array_fast_append(Z_REFVAL_P(&items), &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		ZVAL_LONG(&_1$$3, 7);
+		zephir_array_fast_append(Z_REFVAL_P(&items), &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		ZVAL_LONG(&_1$$3, 8);
+		zephir_array_fast_append(Z_REFVAL_P(&items), &_1$$3);
+		i = (i + 1);
+	}
+	ZEPHIR_CALL_USER_FUNC(return_value, &hold);
+	zephir_check_call_status();
+	RETURN_MM();
 }
 

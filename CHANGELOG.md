@@ -11,8 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Added a report for an unrecognized key in the `warnings` or `optimizations` section, and for an unrecognized `-W`, `-w`, `-f` or `-fno-` flag [#2727](https://github.com/zephir-lang/zephir/issues/2727)
 - Added an opt-in `<Ns>\Buffer` kernel class holding a fixed-size contiguous C array of doubles or integers, readable from C as a raw pointer [#2721](https://github.com/zephir-lang/zephir/issues/2721)
 - Added a kernel fast path so `buffer[i]` in Zephir source reads and writes the element directly instead of dispatching `offsetGet()` or `offsetSet()` [#2721](https://github.com/zephir-lang/zephir/issues/2721)
+- Added support for capturing a method parameter by reference in a closure `use (&x)` clause [#2668](https://github.com/zephir-lang/zephir/issues/2668)
 
 ### Fixed
+- Fixed a value written through a `use (&x)` capture never releasing the one it replaced [#2668](https://github.com/zephir-lang/zephir/issues/2668)
+- Fixed a `use (&x)` capture inside a nested closure being attributed to a same-named parameter of the enclosing method [#2668](https://github.com/zephir-lang/zephir/issues/2668)
+- Fixed a static property read and a by-reference function argument writing over a `use (&x)` capture instead of into its shared slot [#2668](https://github.com/zephir-lang/zephir/issues/2668)
 - Fixed a compiler warning being discarded in silence when its key was not registered [#2727](https://github.com/zephir-lang/zephir/issues/2727)
 - Fixed `non-valid-unset`, `non-valid-require`, `non-valid-require-once` and `extra-parentheses` never printing [#2727](https://github.com/zephir-lang/zephir/issues/2727)
 - Fixed `invalid-array-index` and `non-valid-objectupdate` being raised under an unregistered key [#2727](https://github.com/zephir-lang/zephir/issues/2727)

@@ -13,30 +13,25 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(stub_54__closure)
 {
 	ZEPHIR_REGISTER_CLASS(stub, 54__closure, stub, 54__closure, stub_54__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
-	zend_declare_property_null(stub_54__closure_ce, SL("x"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(stub_54__closure_ce, SL("seed"), ZEND_ACC_PUBLIC);
 	return SUCCESS;
 }
 
 PHP_METHOD(stub_54__closure, __invoke)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval x;
+	zval seed;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&x);
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_memory_observe(&x);
-	zephir_read_property(&x, this_ptr, SL("x"), PH_NOISY_CC);
+	ZVAL_UNDEF(&seed);
+	zephir_read_property(&seed, this_ptr, SL("seed"), PH_NOISY_CC | PH_READONLY);
 
-	RETVAL_ZVAL(&x, 1, 0);
-	RETURN_MM();
+	RETVAL_ZVAL(Z_REFVAL_P(&seed), 1, 0);
+	return;
 }
 
