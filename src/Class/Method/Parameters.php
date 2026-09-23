@@ -37,6 +37,14 @@ class Parameters implements Countable, Iterator, ArrayAccess
     private array $requiredParameters = [];
 
     /**
+     * Mirrors Method::BYREF_SHADOW_SUFFIX: the C identifier a by-reference
+     * captured parameter keeps its native value under.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public const BYREF_SHADOW_SUFFIX = '_byref';
+
+    /**
      * @throws CompilerException
      */
     public function __construct(private array $parameters)
@@ -94,7 +102,15 @@ class Parameters implements Countable, Iterator, ArrayAccess
         return null;
     }
 
-    public function fetchParameters(bool $isMethodInternal): array
+    /**
+     * @param array<string, true> $byRefCaptured parameter names a closure
+     *                                           captures by reference, whose
+     *                                           value lives under a shadow C
+     *                                           identifier
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function fetchParameters(bool $isMethodInternal, array $byRefCaptured = []): array
     {
         $parameters = [];
 
@@ -109,6 +125,10 @@ class Parameters implements Countable, Iterator, ArrayAccess
 
             $name     = $parameter['name'];
             $dataType = $parameter['data-type'] ?? 'variable';
+
+            if (isset($byRefCaptured[$name])) {
+                $name .= self::BYREF_SHADOW_SUFFIX;
+            }
 
             $parameters[] = match ($dataType) {
                 Types::T_OBJECT,

@@ -15,6 +15,7 @@ namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 use Stub\Closures;
+use TypeError;
 
 final class ClosureTest extends TestCase
 {
@@ -442,5 +443,200 @@ final class ClosureTest extends TestCase
         $test = new Closures();
 
         $this->assertSame(42, $test->issue2652ByRefReadsLateWrite()());
+    }
+
+    /**
+     * The shape from the issue: PHP's `make(1)` closure yields 2 then 3.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testIssue2668AParameterCanBeCapturedByReference(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue2668ByRefParam(1);
+
+        $this->assertSame(2, $closure());
+        $this->assertSame(3, $closure());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testIssue2668TwoClosuresShareOneParameterSlot(): void
+    {
+        $test = new Closures();
+
+        [$bump, $read] = $test->issue2668ByRefParamShared(1);
+
+        $this->assertSame(11, $bump());
+        $this->assertSame(11, $read());
+        $this->assertSame(21, $bump());
+        $this->assertSame(21, $read());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testIssue2668EachCallGetsItsOwnSlot(): void
+    {
+        $test = new Closures();
+
+        $first  = $test->issue2668ByRefParam(10);
+        $second = $test->issue2668ByRefParam(20);
+
+        $this->assertSame(11, $first());
+        $this->assertSame(21, $second());
+        $this->assertSame(12, $first());
+    }
+
+    /**
+     * A by-value capture is a snapshot; the by-reference one keeps seeing the
+     * enclosing scope.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testIssue2668ByValueCaptureOfTheSameParameterStaysASnapshot(): void
+    {
+        $test = new Closures();
+
+        [$byRef, $byValue] = $test->issue2668ByRefAndByValue(1);
+
+        $this->assertSame(101, $byRef());
+        $this->assertSame(1, $byValue());
+    }
+
+    /**
+     * Zephir has no by-reference parameters, so the write stays in the call.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testIssue2668AWriteThroughTheCaptureNeverReachesTheCaller(): void
+    {
+        $test  = new Closures();
+        $outer = 5;
+
+        $this->assertSame([999], $test->issue2668ByRefParamIsLocal($outer));
+        $this->assertSame(5, $outer);
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testIssue2668AWriteBeforeTheClosureIsTheStartingValue(): void
+    {
+        $test = new Closures();
+
+        $this->assertSame(7, $test->issue2668ByRefParamWrittenFirst(1)());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testIssue2668ATypedIntParameterCanBeCaptured(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue2668ByRefTypedInt(5);
+
+        $this->assertSame(6, $closure());
+        $this->assertSame(7, $closure());
+    }
+
+    /**
+     * The declared type is still enforced, because the shadow keeps the typed
+     * `ZEND_PARSE_PARAMETERS` macro the parameter always had - `Z_PARAM_ZVAL`
+     * would accept anything. This file is `strict_types=1`, so PHP rejects the
+     * string here exactly as it does for a plain `function f(int $n)`.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testIssue2668ATypedIntParameterStillEnforcesItsType(): void
+    {
+        $test = new Closures();
+
+        $this->expectException(TypeError::class);
+        $this->expectExceptionMessage('must be of type int, string given');
+
+        $test->issue2668ByRefTypedInt('5');
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testIssue2668ATypedStringParameterCanBeCaptured(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue2668ByRefTypedString('a');
+
+        $this->assertSame('a!', $closure());
+        $this->assertSame('a!!', $closure());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testIssue2668ATypedArrayParameterCanBeCaptured(): void
+    {
+        $test = new Closures();
+
+        $empty = $test->issue2668ByRefTypedArray([]);
+        $this->assertSame(1, $empty());
+        $this->assertSame(2, $empty());
+
+        $seeded = $test->issue2668ByRefTypedArray([9, 9]);
+        $this->assertSame(3, $seeded());
+        $this->assertSame(4, $seeded());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testIssue2668AnOptionalParameterCanBeCaptured(): void
+    {
+        $test = new Closures();
+
+        $default = $test->issue2668ByRefOptionalParam();
+        $this->assertSame(6, $default());
+        $this->assertSame(12, $default());
+
+        $given = $test->issue2668ByRefOptionalParam(5);
+        $this->assertSame(10, $given());
+        $this->assertSame(20, $given());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testIssue2668AVariadicParameterCanBeCaptured(): void
+    {
+        $test = new Closures();
+
+        $none = $test->issue2668ByRefVariadicParam();
+        $this->assertSame(1, $none());
+        $this->assertSame(2, $none());
+
+        $two = $test->issue2668ByRefVariadicParam('a', 'b');
+        $this->assertSame(3, $two());
+        $this->assertSame(4, $two());
+    }
+
+    /**
+     * Every rewrite through the shared slot releases the value it replaces,
+     * and the closure still reads the last one. Measured: without the release
+     * these two shapes leaked 364 KB and 3.6 MB over 200 calls.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testIssue2668RewritingThroughTheSharedSlotKeepsTheLastValue(): void
+    {
+        $test = new Closures();
+
+        $this->assertSame(
+            'a rewritten value long enough not to be interned by luck',
+            $test->issue2668ByRefRewrite('a')
+        );
+        $this->assertSame(8, $test->issue2668ByRefRewriteArray([1]));
     }
 }

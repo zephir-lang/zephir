@@ -374,6 +374,67 @@ final class InternalCallTransformationTest extends TestCase
     /**
      * Compile a single-class fixture and return the whole emitted `.zep.c`.
      */
+    /**
+     * A by-reference captured parameter keeps its native value under a shadow
+     * C identifier, and an internal method reads its arguments through
+     * trailing `_ext` pointers named after that same identifier. The twin's C
+     * signature and its body have to agree on the name, or the twin references
+     * an undeclared one.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testTheInternalTwinNamesTheShadowOfAByReferenceCapturedParameter(): void
+    {
+        $c = $this->compileZep(
+            'ByRefCapture',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                class ByRefCapture
+                {
+                    public function make(int seed) -> <\Closure>
+                    {
+                        return function () use (&seed) {
+                            let seed = seed + 1;
+
+                            return seed;
+                        };
+                    }
+
+                    public function call() -> int
+                    {
+                        var closure;
+
+                        let closure = this->make(1);
+
+                        return call_user_func(closure);
+                    }
+                }
+                ZEP
+        );
+
+        $this->assertStringContainsString(
+            'zval *seed_byref_param_ext)',
+            $c,
+            "The twin's signature has to declare the shadow's _ext pointer.\n$c"
+        );
+        $this->assertStringContainsString(
+            'seed_byref_param = seed_byref_param_ext;',
+            $c,
+            "And its body has to read that same pointer.\n$c"
+        );
+        $this->assertStringContainsString(
+            'seed_byref = zephir_get_intval(seed_byref_param);',
+            $c,
+            "The declared type is still applied to the shadow inside the twin.\n$c"
+        );
+        $this->assertStringContainsString(
+            'ZVAL_LONG(Z_REFVAL_P(&seed), seed_byref);',
+            $c,
+            "The reference is still seeded from the shadow inside the twin.\n$c"
+        );
+    }
+
     private function compileZep(string $className, string $zep): string
     {
         $relPath = 'stub/issue2021/' . strtolower($className) . '.zep';

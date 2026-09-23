@@ -84,6 +84,24 @@ final class GeneratorTransformer
                 $original
             );
         }
+
+        /**
+         * A generator's parameters are re-registered as locals of the generated
+         * step and restored from the generator object on every resume, so a
+         * reference made for them in the prologue would be replaced each time
+         * the generator is advanced and the closure would stop sharing the
+         * slot. Copy the parameter into a local and capture that instead.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2668
+         */
+        $byRefParameters = $method->byRefCapturedParameterNames();
+        if ([] !== $byRefParameters) {
+            throw new CompilerException(
+                "Cannot capture parameter '" . $byRefParameters[0] . "' by reference in the generator "
+                . $method->getName() . '(); copy it into a local variable first',
+                $original
+            );
+        }
         $this->checkReturnTypes($method, $compilationContext);
 
         $visibility = ['internal'];

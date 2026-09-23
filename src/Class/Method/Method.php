@@ -183,9 +183,29 @@ class Method
     public const CLOSURE_BOUND_THIS = '__$zephir_this';
 
     /**
+     * Suffix of the C local a by-reference captured parameter keeps its native
+     * shape under.
+     *
+     * The parameter's own name becomes a `zend_reference` shared with the
+     * closure, so arg-info, the `ZEND_PARSE_PARAMETERS` block, the fetch, the
+     * type coercion and the default value all keep working against this shadow
+     * and the reference is seeded from it once they are done.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2668
+     */
+    private const BYREF_SHADOW_SUFFIX = Parameters::BYREF_SHADOW_SUFFIX;
+
+    /**
      * Closure `use (...)` captures, keyed by name.
      */
     protected array  $staticVariables = [];
+    /**
+     * Parameters a closure in this method's body captures by reference, keyed
+     * by name. Those are the ones that get a shadow.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2668
+     */
+    private array    $byRefParameters = [];
     /**
      * Captures read off the carrier with a ZVAL_COPY, keyed by name. They are
      * the ones the memory frame has to release again.
@@ -1039,8 +1059,9 @@ class Method
          *
          * @see https://github.com/zephir-lang/zephir/issues/2652
          */
-        $byRefCaptures = self::astByRefCaptures($this->statements?->getStatements() ?? []);
-        $this->assertByRefCapturesAreLocals($byRefCaptures);
+        $byRefCaptures         = self::astByRefCaptures($this->statements?->getStatements() ?? []);
+        $this->byRefParameters = array_fill_keys($this->byRefCapturedParameterNames(), true);
+        $this->assertByRefCapturedParametersAreWritable();
         $symbolTable->setClosureReferences($byRefCaptures);
 
         $this->capturesToRelease = [];
@@ -1178,7 +1199,16 @@ class Method
              * Round 1. Create variables in parameters in the symbol table.
              */
             $substituteVars = [];
-            foreach ($this->parameters->getParameters() as $parameter) {
+            foreach ($this->parameters->getParameters() as $declaredParameter) {
+                /**
+                 * A by-reference captured parameter keeps its native C shape
+                 * under a shadow name, because its own name is taken by the
+                 * `zend_reference` it shares with the closure. Everything below
+                 * registers the shadow; the reference is registered after it.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2668
+                 */
+                $parameter   = $this->shadowParameter($declaredParameter);
                 $symbolParam = null;
 
                 /**
@@ -1233,8 +1263,22 @@ class Method
                              * static-constant-access defaults → follow-up.
                              */
                             $mutations = ($this->localContext instanceof LocalContextPass)
-                                ? $this->localContext->getNumberOfMutations($parameter['name'])
+                                ? $this->localContext->getNumberOfMutations($declaredParameter['name'])
                                 : PHP_INT_MAX;
+
+                            /**
+                             * A by-reference captured parameter's shadow is
+                             * filled once in the prologue and never written
+                             * again - every assignment in the body lands in the
+                             * reference instead - so it always qualifies for
+                             * the native `zend_string *` strategy, however many
+                             * times the source mutates the name.
+                             *
+                             * @see https://github.com/zephir-lang/zephir/issues/2668
+                             */
+                            if ($this->isByRefCapturedParameter($declaredParameter['name'])) {
+                                $mutations = 0;
+                            }
 
                             $defaultType = $parameter['default']['type'] ?? null;
 
@@ -1420,6 +1464,56 @@ class Method
                     }
                 }
             }
+
+            /**
+             * The declared name itself is a plain zval local that the prologue
+             * turns into a PHP reference and seeds from the shadow registered
+             * above. addVariable() stamps it as a closure reference, because
+             * the name is already in the symbol table's by-ref capture set, so
+             * every read and write in the body routes through `Z_REFVAL_P()`
+             * from here on.
+             *
+             * A separate pass so the variadic parameter, whose branch above
+             * short-circuits the rest of the loop, gets one too.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2668
+             */
+            foreach ($this->parameters->getParameters() as $declaredParameter) {
+                if (!$this->isByRefCapturedParameter($declaredParameter['name'])) {
+                    continue;
+                }
+
+                $reference = $symbolTable->addVariable(
+                    'variable',
+                    $declaredParameter['name'],
+                    $compilationContext
+                );
+                $reference->setMustInitNull(true);
+                $reference->setIsInitialized(true, $compilationContext);
+                $reference->setOriginal($declaredParameter);
+                $reference->increaseUses();
+
+                /**
+                 * It is a local of this method, never a capture read off a
+                 * carrier: isClosureCapture() is `external && localOnly`, and a
+                 * true reading there would route it into the closure
+                 * prologue's carrier reads.
+                 */
+                $reference->setLocalOnly(false);
+
+                if (isset($declaredParameter['cast'])) {
+                    $reference->setDynamicTypes('object');
+                    $reference->setClassTypes(
+                        $compilationContext->getFullName($declaredParameter['cast']['value'])
+                    );
+                } else {
+                    $reference->setDynamicTypes('undefined');
+                }
+
+                $symbolTable->mustGrownStack(true);
+                $compilationContext->headersManager->add('kernel/memory');
+                $compilationContext->headersManager->add('kernel/object');
+            }
         }
 
         $compilationContext->backend->onPreCompile($this, $compilationContext);
@@ -1467,7 +1561,7 @@ class Method
             /**
              * Round 2. Fetch the parameters in the method.
              */
-            $params               = $this->parameters->fetchParameters($this->isInternal);
+            $params               = $this->parameters->fetchParameters($this->isInternal, $this->byRefParameters);
             $numberRequiredParams = $this->parameters->countRequiredParameters();
             $numberOptionalParams = $this->parameters->countOptionalParameters();
             $requiredParams       = $this->parameters->getRequiredParameters();
@@ -1487,7 +1581,7 @@ class Method
                     continue;
                 }
                 $totalParamCount++;
-                $name = $parameter['name'];
+                $name = $this->shadowName($parameter['name']);
                 $variable = $compilationContext->symbolTable->getVariable($name);
                 if ($variable && $variable->isNativeString()) {
                     $nativeStringCount++;
@@ -1508,7 +1602,7 @@ class Method
                         continue;
                     }
                     $position = $index + 1; // 1-based
-                    $pName = $parameter['name'];
+                    $pName = $this->shadowName($parameter['name']);
                     $pVariable = $compilationContext->symbolTable->getVariable($pName);
                     if ($pVariable && $pVariable->isNativeString()) {
                         continue; // Z_PARAM_STR already populates it
@@ -1550,6 +1644,19 @@ class Method
                     if (!empty($parameter['variadic'])) {
                         continue;
                     }
+
+                    /**
+                     * A by-reference captured parameter is read once, into a
+                     * reference the body then writes through, so its shadow is
+                     * never mutated and there is nothing to separate from the
+                     * caller's argument.
+                     *
+                     * @see https://github.com/zephir-lang/zephir/issues/2668
+                     */
+                    if ($this->isByRefCapturedParameter($parameter['name'])) {
+                        continue;
+                    }
+
                     $dataType = $parameter['data-type'] ?? 'variable';
 
                     switch ($dataType) {
@@ -1604,6 +1711,7 @@ class Method
              * Initialize required parameters
              */
             foreach ($requiredParams as $parameter) {
+                $parameter = $this->shadowParameter($parameter);
                 $mandatory = $parameter['mandatory'] ?? 0;
                 $dataType  = $this->getParamDataType($parameter);
 
@@ -1635,6 +1743,7 @@ class Method
              * Initialize optional parameters
              */
             foreach ($optionalParams as $parameter) {
+                $parameter = $this->shadowParameter($parameter);
                 $mandatory = $parameter['mandatory'] ?? 0;
                 $dataType  = $this->getParamDataType($parameter);
 
@@ -1774,7 +1883,7 @@ class Method
          */
         if ($this->parameters instanceof Parameters && $this->parameters->hasVariadicParameter()) {
             $variadicParameter = $this->parameters->getVariadicParameter();
-            $variadicName      = $variadicParameter['name'];
+            $variadicName      = $this->shadowName($variadicParameter['name']);
             $fixedCount        = 0;
             foreach ($this->parameters->getParameters() as $parameter) {
                 if (empty($parameter['variadic'])) {
@@ -1787,6 +1896,8 @@ class Method
             $code .= "\t" . 'ZEPHIR_INIT_VAR(&' . $variadicName . ');' . PHP_EOL;
             $code .= "\t" . 'zephir_get_args_from(&' . $variadicName . ', ' . $fixedCount . ');' . PHP_EOL;
         }
+
+        $code .= $this->byRefParameterSeedCode($compilationContext);
 
         $codePrinter->preOutput($code);
 
@@ -2074,14 +2185,18 @@ class Method
             );
 
             foreach ($requiredParams as $requiredParam) {
-                $tempCodePrinter->output("\t\t" . $this->detectParam($requiredParam, $compilationContext));
+                $tempCodePrinter->output(
+                    "\t\t" . $this->detectParam($this->shadowParameter($requiredParam), $compilationContext)
+                );
             }
 
             if (!empty($optionalParams)) {
                 $tempCodePrinter->output("\t\t" . 'Z_PARAM_OPTIONAL');
 
                 foreach ($optionalParams as $optionalParam) {
-                    $tempCodePrinter->output("\t\t" . $this->detectParam($optionalParam, $compilationContext));
+                    $tempCodePrinter->output(
+                        "\t\t" . $this->detectParam($this->shadowParameter($optionalParam), $compilationContext)
+                    );
                 }
             }
 
@@ -3684,36 +3799,186 @@ class Method
     }
 
     /**
-     * A `use (&x)` capture needs `x` to be a plain zval local it can turn into
-     * a reference. A parameter arrives in a shape that cannot be promoted - a
-     * `zval *` borrowed from the caller, or an unboxed C scalar - so say so
-     * rather than emit C that does not compile.
+     * A `const` parameter is read only, and the enclosing scope is already
+     * refused a write to it. The capture clone the closure receives is a fresh
+     * writable variable, so a by-reference capture would be a way around the
+     * modifier rather than a use of it.
      *
-     * @see https://github.com/zephir-lang/zephir/issues/2652
-     *
-     * @param string[] $names
+     * @see https://github.com/zephir-lang/zephir/issues/2668
      */
-    private function assertByRefCapturesAreLocals(array $names): void
+    private function assertByRefCapturedParametersAreWritable(): void
     {
-        if ([] === $names || null === $this->parameters) {
+        if ([] === $this->byRefParameters || null === $this->parameters) {
             return;
         }
 
         foreach ($this->parameters->getParameters() as $parameter) {
-            if (in_array($parameter['name'], $names, true)) {
-                throw new CompilerException(
-                    "Cannot capture parameter '" . $parameter['name'] . "' by reference in "
-                    . $this->getDeclaredName() . '(); copy it into a local variable first',
-                    $parameter
-                );
+            if (empty($parameter['const']) || !$this->isByRefCapturedParameter($parameter['name'])) {
+                continue;
             }
+
+            throw new CompilerException(
+                "Cannot capture read-only parameter '" . $parameter['name'] . "' by reference in "
+                . $this->getDeclaredName() . '(); a by-reference capture is a write channel',
+                $parameter
+            );
         }
     }
 
     /**
-     * Names captured by reference by any closure literal in this AST.
+     * Seeds every by-reference captured parameter's reference from its shadow.
+     *
+     * The reference itself is created by the `use (&x)` loop further down,
+     * which `preOutput()` places between `ZEPHIR_MM_GROW` and the parameter
+     * fetch. This runs at the end of the prologue instead, once the fetch, the
+     * type coercion and any default value have finished filling the shadow.
+     *
+     * The value is copied rather than aliased: Zephir has no by-reference
+     * parameters (#203), so the argument is the caller's by-value copy and a
+     * write through the capture must stay inside this call - which is exactly
+     * what PHP does for `use (&$param)`.
+     *
+     * Never point a `ZEPHIR_*` macro at `Z_REFVAL_P()`: those observe their
+     * destination, which would register the reference's inner slot with the
+     * memory frame and free it twice.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2668
+     */
+    private function byRefParameterSeedCode(CompilationContext $compilationContext): string
+    {
+        if ([] === $this->byRefParameters || !$this->parameters instanceof Parameters) {
+            return '';
+        }
+
+        $code = '';
+        foreach ($this->parameters->getParameters() as $parameter) {
+            $name = $parameter['name'];
+            if (!$this->isByRefCapturedParameter($name)) {
+                continue;
+            }
+
+            $shadow = $this->shadowName($name);
+            $slot   = 'Z_REFVAL_P(&' . $name . ')';
+
+            /**
+             * A variadic is already a plain zval holding the collected array.
+             */
+            if (!empty($parameter['variadic'])) {
+                $code .= "\t" . 'ZVAL_COPY(' . $slot . ', &' . $shadow . ');' . PHP_EOL;
+
+                continue;
+            }
+
+            $code .= "\t" . match ($parameter['data-type'] ?? 'variable') {
+                'int', 'uint', 'long', 'ulong', 'char', 'uchar' => 'ZVAL_LONG('
+                    . $slot . ', ' . $shadow . ');',
+                'double' => 'ZVAL_DOUBLE(' . $slot . ', ' . $shadow . ');',
+                'bool'   => 'ZVAL_BOOL(' . $slot . ', ' . $shadow . ');',
+                /**
+                 * A `zval *` borrowed straight out of the call frame, which
+                 * zephir_fetch_parameters() hands over without dereferencing.
+                 */
+                'object', 'callable', 'resource', 'variable', 'mixed' => 'ZVAL_COPY_DEREF('
+                    . $slot . ', ' . $shadow . ');',
+                /**
+                 * A native `zend_string *` parameter has no zval of its own,
+                 * but the prologue always fills its `_zv` companion, and that
+                 * one is also what an optional `string s = null` leaves behind.
+                 */
+                'string' => $compilationContext->symbolTable->getVariable($shadow)?->isNativeString()
+                    ? 'ZVAL_COPY(' . $slot . ', &' . $shadow . '_zv);'
+                    : 'ZVAL_COPY(' . $slot . ', &' . $shadow . ');',
+                default  => 'ZVAL_COPY(' . $slot . ', &' . $shadow . ');',
+            } . PHP_EOL;
+        }
+
+        return $code;
+    }
+
+    /**
+     * Whether this parameter name is one a closure captures by reference.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2668
+     */
+    private function isByRefCapturedParameter(string $name): bool
+    {
+        return isset($this->byRefParameters[$name]);
+    }
+
+    /**
+     * The C identifier a parameter's native value lives under.
+     *
+     * Identical to the declared name except for a by-reference captured
+     * parameter, whose own name is taken by the shared `zend_reference`.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2668
+     */
+    private function shadowName(string $name): string
+    {
+        return $this->isByRefCapturedParameter($name)
+            ? $name . self::BYREF_SHADOW_SUFFIX
+            : $name;
+    }
+
+    /**
+     * The same parameter node, renamed to the C identifier its native value
+     * lives under.
+     *
+     * Handed to every emitter that treats `name` as a C identifier, so none of
+     * them has to know about the shadow. `$this->parameters` is never mutated:
+     * arg-info, named arguments, Reflection and the stub generator read the
+     * declared name straight off the AST.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2668
+     */
+    private function shadowParameter(array $parameter): array
+    {
+        $parameter['name'] = $this->shadowName($parameter['name']);
+
+        return $parameter;
+    }
+
+    /**
+     * This method's own parameters that a closure in its body captures by
+     * reference. Those keep their native C shape under a `<name>_byref` shadow
+     * while the name itself becomes the shared reference.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2668
+     *
+     * @return string[]
+     */
+    public function byRefCapturedParameterNames(): array
+    {
+        if (null === $this->parameters) {
+            return [];
+        }
+
+        $names = self::astByRefCaptures($this->statements?->getStatements() ?? []);
+        if ([] === $names) {
+            return [];
+        }
+
+        $captured = [];
+        foreach ($this->parameters->getParameters() as $parameter) {
+            if (in_array($parameter['name'], $names, true)) {
+                $captured[] = $parameter['name'];
+            }
+        }
+
+        return $captured;
+    }
+
+    /**
+     * Names captured by reference by a closure literal written *in this scope*.
+     *
+     * A closure body is a scope of its own: its locals, its parameters and any
+     * closure nested inside it belong to its own `__invoke`, not here. So a
+     * closure node contributes its `use (...)` clause and nothing else -
+     * descending further used to attribute an inner closure's capture to a
+     * same-named parameter of the enclosing method.
      *
      * @see https://github.com/zephir-lang/zephir/issues/2652
+     * @see https://github.com/zephir-lang/zephir/issues/2668
      *
      * @return string[]
      */
@@ -3725,12 +3990,14 @@ class Method
 
         $names = [];
 
-        if (($node['type'] ?? null) === 'closure' && is_array($node['use'] ?? null)) {
-            foreach ($node['use'] as $parameter) {
+        if (in_array($node['type'] ?? null, ['closure', 'closure-arrow'], true)) {
+            foreach ($node['use'] ?? [] as $parameter) {
                 if (!empty($parameter['reference']) && isset($parameter['name'])) {
                     $names[] = $parameter['name'];
                 }
             }
+
+            return array_values(array_unique($names));
         }
 
         foreach ($node as $child) {

@@ -12,7 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/fcall.h"
+#include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
 
@@ -21,26 +21,26 @@ ZEPHIR_INIT_CLASS(stub_49__closure)
 {
 	ZEPHIR_REGISTER_CLASS(stub, 49__closure, stub, 49__closure, stub_49__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
+	zend_declare_property_null(stub_49__closure_ce, SL("seed"), ZEND_ACC_PUBLIC);
 	return SUCCESS;
 }
 
 PHP_METHOD(stub_49__closure, __invoke)
 {
+	zend_long _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *carry, carry_sub, *row, row_sub;
+	zval seed;
+	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&carry_sub);
-	ZVAL_UNDEF(&row_sub);
-	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(carry)
-		Z_PARAM_ZVAL(row)
-	ZEND_PARSE_PARAMETERS_END();
+	ZVAL_UNDEF(&seed);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &carry, &row);
-	ZEPHIR_RETURN_CALL_CE_STATIC(stub_issue2167_ce, "implodeRow", NULL, 0, carry, row);
-	zephir_check_call_status();
+	zephir_read_property(&seed, this_ptr, SL("seed"), PH_NOISY_CC | PH_READONLY);
+
+	_0 = (zephir_get_numberval(Z_REFVAL_P(&seed)) + 10);
+	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&seed));
+	ZVAL_LONG(Z_REFVAL_P(&seed), _0);
+	RETVAL_ZVAL(Z_REFVAL_P(&seed), 1, 0);
 	RETURN_MM();
 }
 
