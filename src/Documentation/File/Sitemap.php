@@ -30,7 +30,7 @@ class Sitemap implements FileInterface
     {
         $this->classes    = $classList;
         $this->namespaces = $namespaceList;
-        $this->baseUrl    = rtrim($baseUrl, '\\/') . DIRECTORY_SEPARATOR;
+        $this->baseUrl    = rtrim((string) $baseUrl, '\\/') . DIRECTORY_SEPARATOR;
         $this->baseDir    = $baseDir;
     }
 

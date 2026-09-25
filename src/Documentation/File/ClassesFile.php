@@ -13,12 +13,15 @@ declare(strict_types=1);
 
 namespace Zephir\Documentation\File;
 
-use Zephir\Class\Definition\Definition;
+use Zephir\CompilerFile;
 use Zephir\Documentation\FileInterface;
 
 class ClassesFile implements FileInterface
 {
-    public function __construct(protected Definition $classes)
+    /**
+     * @param CompilerFile[] $classes
+     */
+    public function __construct(protected array $classes)
     {
     }
 

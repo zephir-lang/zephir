@@ -160,7 +160,7 @@ class Theme
             foreach ($files as $f) {
                 foreach ($this->options as $optName => $opt) {
                     $fcontent = file_get_contents($f);
-                    $fcontent = str_replace('%_' . $optName . '_%', $opt, $fcontent);
+                    $fcontent = str_replace('%_' . $optName . '_%', (string) $opt, $fcontent);
 
                     file_put_contents($f, $fcontent);
                 }

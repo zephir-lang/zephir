@@ -96,7 +96,7 @@ class Documentation
             $this->theme->drawFile($cfile);
 
             // class source file (source/ns1/n2/class.html)
-            $sfile = new File\SourceFile($this->config, $class);
+            $sfile = new File\SourceFile($class);
             $this->theme->drawFile($sfile);
         }
 
