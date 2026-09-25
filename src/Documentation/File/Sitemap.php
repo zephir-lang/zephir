@@ -17,8 +17,6 @@ use Zephir\Documentation\FileInterface;
 
 use function rtrim;
 
-use const DIRECTORY_SEPARATOR;
-
 class Sitemap implements FileInterface
 {
     protected $baseUrl;
@@ -30,7 +28,8 @@ class Sitemap implements FileInterface
     {
         $this->classes    = $classList;
         $this->namespaces = $namespaceList;
-        $this->baseUrl    = rtrim((string) $baseUrl, '\\/') . DIRECTORY_SEPARATOR;
+        // A URL, so always "/", never the platform's DIRECTORY_SEPARATOR.
+        $this->baseUrl    = rtrim((string) $baseUrl, '\\/') . '/';
         $this->baseDir    = $baseDir;
     }
 

@@ -18,6 +18,7 @@ use Zephir\CompilerFile;
 use Zephir\Config;
 use Zephir\Documentation;
 use Zephir\Exception;
+use Zephir\Os;
 
 use function array_merge;
 use function file_exists;
@@ -181,7 +182,7 @@ class Template
 
     private function getTemplatePath($fileName)
     {
-        if ('/' == $fileName[0] || str_starts_with($fileName, 'phar://')) {
+        if (Os::isAbsolutePath($fileName)) {
             return $fileName;
         }
 

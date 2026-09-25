@@ -113,11 +113,17 @@ final class Issue2431Test extends TestCase
     {
         $this->writeProject();
 
-        $result = $this->runZephir('api --no-ansi -o ' . escapeshellarg($this->cwd . '/out'), $this->cwd);
+        $result = $this->runZephir(
+            'api --no-ansi --url=https://example.com/api -o ' . escapeshellarg($this->cwd . '/out'),
+            $this->cwd
+        );
 
         $this->assertSame(0, $result['exitCode'], $result['stdout'] . $result['stderr']);
         $this->assertFileExists($this->cwd . '/out/index.html');
-        $this->assertFileExists($this->cwd . '/out/sitemap.xml');
+        $this->assertStringContainsString(
+            '<loc>https://example.com/api/index.html</loc>',
+            (string) file_get_contents($this->cwd . '/out/sitemap.xml')
+        );
         $this->assertStringContainsString('say', (string) file_get_contents($this->cwd . '/out/class/Stub/Greeting.html'));
         $this->assertStringContainsString('hello', (string) file_get_contents($this->cwd . '/out/source/Stub/Greeting.html'));
         $this->assertFileExists($this->cwd . '/out/namespace/Stub/Sub.html');
@@ -140,6 +146,9 @@ final class Issue2431Test extends TestCase
         $this->cwd = sys_get_temp_dir() . '/zephir-issue2431-' . bin2hex(random_bytes(6));
         mkdir($this->cwd, 0777, true);
         $this->cleanupPath($this->cwd);
+        // The command reports getcwd(), which is canonical: macOS resolves the
+        // /var -> /private/var symlink and Windows uses backslashes.
+        $this->cwd = realpath($this->cwd);
     }
 
     protected function tearDown(): void

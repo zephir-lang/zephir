@@ -257,7 +257,7 @@ class Documentation
     {
         $outputDir = str_replace('%version%', $this->config->get('version'), $outputDir);
 
-        if ('/' !== $outputDir[0]) {
+        if (!Os::isAbsolutePath($outputDir)) {
             $outputDir = getcwd() . '/' . $outputDir;
         }
 
