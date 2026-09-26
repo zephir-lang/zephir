@@ -96,7 +96,7 @@ class Documentation
             $this->theme->drawFile($cfile);
 
             // class source file (source/ns1/n2/class.html)
-            $sfile = new File\SourceFile($this->config, $class);
+            $sfile = new File\SourceFile($class);
             $this->theme->drawFile($sfile);
         }
 
@@ -257,7 +257,7 @@ class Documentation
     {
         $outputDir = str_replace('%version%', $this->config->get('version'), $outputDir);
 
-        if ('/' !== $outputDir[0]) {
+        if (!Os::isAbsolutePath($outputDir)) {
             $outputDir = getcwd() . '/' . $outputDir;
         }
 

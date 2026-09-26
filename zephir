@@ -222,8 +222,8 @@ HELP);
             }, ARRAY_FILTER_USE_BOTH);
 
             foreach ($options as $option => $value) {
-                // Prevent "" values
-                if (empty($value) || !preg_match('/.+/', $value)) {
+                // Prevent "" values, and a bare "--path", which parses to true
+                if (!is_string($value) || '' === $value || !preg_match('/.+/', $value)) {
                     throw new InvalidArgumentException(
                         sprintf('The "--%s" option requires a value.', $option)
                     );
@@ -232,6 +232,27 @@ HELP);
 
             return $options;
         };
+
+        /**
+         * The short forms the Symfony-based ApiCommand accepted before #2440.
+         * Nothing called the compiler from here since then, so "zephir api"
+         * did nothing at all.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2431
+         */
+        $input = $params;
+        foreach (['p' => 'path', 'o' => 'output'] as $short => $long) {
+            if (isset($input[$short]) && !isset($input[$long])) {
+                $input[$long] = $input[$short];
+            }
+        }
+
+        try {
+            $compiler->api(array_merge($defaultOptions, $sanitizeOptionsFromInput($input)));
+        } catch (ExceptionInterface | Exception $e) {
+            fwrite(STDERR, $e->getMessage() . PHP_EOL);
+            exit(1);
+        }
 
         break;
 
@@ -288,10 +309,13 @@ EOT);
 
         try {
             $disk->clean();
-            if (Os::isWindows()) {
-                system('cd ext && nmake clean-all');
-            } else {
-                system('cd ext && make clean > /dev/null');
+            // Outside a project, or before the first build, there is nothing to clean.
+            if (is_dir('ext')) {
+                if (Os::isWindows()) {
+                    system('cd ext && nmake clean-all');
+                } else {
+                    system('cd ext && make clean > /dev/null');
+                }
             }
         } catch (FileSystemException $e) {
             fwrite(
@@ -474,7 +498,12 @@ EOT);
             exit(0);
         }
 
-        $compiler->stubs();
+        try {
+            $compiler->stubs();
+        } catch (ExceptionInterface | Exception $e) {
+            fwrite(STDERR, $e->getMessage() . PHP_EOL);
+            exit(1);
+        }
 
         break;
 
@@ -667,7 +696,7 @@ function compile(bool $development = false, ?int $jobs = null, mixed $phpConfig 
             PhpToolchain::fromPhpConfig($phpConfig),
         );
         return true;
-    } catch (CompilerException $e) {
+    } catch (CompilerException | Exception $e) {
         fwrite(STDERR, $e->getMessage() . PHP_EOL);
         return false;
     }

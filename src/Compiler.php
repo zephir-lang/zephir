@@ -69,6 +69,7 @@ use function filemtime;
 use function fwrite;
 use function getcwd;
 use function getenv;
+use function glob;
 use function htmlentities;
 use function implode;
 use function in_array;
@@ -78,6 +79,7 @@ use function is_dir;
 use function is_file;
 use function is_readable;
 use function is_string;
+use function json_decode;
 use function json_encode;
 use function krsort;
 use function md5;
@@ -89,6 +91,7 @@ use function phpinfo;
 use function preg_match;
 use function preg_replace;
 use function realpath;
+use function sort;
 use function sprintf;
 use function str_contains;
 use function str_replace;
@@ -2540,11 +2543,29 @@ final class Compiler
      */
     private function checkDirectory(): string
     {
+        /**
+         * Config silently falls back to its defaults without a config.json,
+         * so a command run from the wrong directory, most often the one
+         * `zephir init` was run in, only shows up here as an empty namespace.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2431
+         */
         $namespace = $this->config->get('namespace');
         if (!$namespace) {
-            // TODO: Add more user friendly message.
-            // For example assume if the user call the command from the wrong dir
-            throw new Exception('Extension namespace cannot be loaded');
+            if (file_exists('config.json')) {
+                throw new Exception('config.json has no "namespace" setting');
+            }
+
+            $message = sprintf(
+                'No config.json found in "%s". Run this command from the root of a Zephir project '
+                . '(the directory created by "zephir init").',
+                getcwd()
+            );
+            foreach ($this->findProjectsBelow() as $project) {
+                $message .= sprintf(' Found a project in "%s": run "cd %s" first.', $project, $project);
+            }
+
+            throw new Exception($message);
         }
 
         if (!is_string($namespace)) {
@@ -2575,6 +2596,27 @@ final class Compiler
         }
 
         return $namespace;
+    }
+
+    /**
+     * Names the immediate subdirectories holding a Zephir project, that is a
+     * config.json with a namespace, sorted so the hint is deterministic.
+     *
+     * @return list<string>
+     */
+    private function findProjectsBelow(): array
+    {
+        $projects = [];
+        foreach (glob('*/config.json') ?: [] as $configFile) {
+            $config = json_decode((string) file_get_contents($configFile), true);
+            if (is_array($config) && is_string($config['namespace'] ?? null) && '' !== $config['namespace']) {
+                $projects[] = dirname($configFile);
+            }
+        }
+
+        sort($projects);
+
+        return $projects;
     }
 
     /**

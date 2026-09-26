@@ -37,6 +37,11 @@ class NamespaceHelper
         $this->parentName = implode('\\', $ex);
     }
 
+    public function addNamespace(self $namespace): void
+    {
+        $this->namespaces[$namespace->getFullNamespace()] ??= $namespace;
+    }
+
     public function addClass(CompilerFile $c): void
     {
         $this->classes[] = $c;

@@ -37,6 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `.=` on a static property overwriting it instead of appending for a literal operand [#2664](https://github.com/zephir-lang/zephir/issues/2664)
 - Fixed the `.` operator rejecting a `bool` or `char` operand [#2664](https://github.com/zephir-lang/zephir/issues/2664)
 - Fixed `.=` rejecting an array operand on a local variable, where PHP appends `Array` and raises `Array to string conversion` [#2664](https://github.com/zephir-lang/zephir/issues/2664)
+- Fixed a project command run outside a Zephir project to name the missing `config.json` and the subdirectory holding one, instead of `Extension namespace cannot be loaded` [#2431](https://github.com/zephir-lang/zephir/issues/2431)
+- Fixed `zephir compile` and `zephir stubs` ending in an uncaught fatal error instead of reporting it and exiting with 1 [#2431](https://github.com/zephir-lang/zephir/issues/2431)
+- Fixed `zephir clean` printing a shell `cd` error when there is no `ext/` directory [#2431](https://github.com/zephir-lang/zephir/issues/2431)
+- Fixed `zephir api` doing nothing, and the HTML API generation it runs failing on PHP 8 and on Windows [#2431](https://github.com/zephir-lang/zephir/issues/2431)
 
 ## [1.5.0] - 2026-09-18
 
