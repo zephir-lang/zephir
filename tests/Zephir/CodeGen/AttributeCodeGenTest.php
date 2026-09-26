@@ -476,4 +476,147 @@ class Demo
 }
 ZEP);
     }
+
+    /**
+     * PHP 8.5 renumbered `Attribute::TARGET_ALL` and `IS_REPEATABLE` and added
+     * `TARGET_CONSTANT`, so a number read from the PHP running Zephir is wrong
+     * wherever the C is compiled against another version. php-src's own
+     * arginfo writes the engine macro instead, and so does Zephir.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2738
+     */
+    public function testAttributeConstantsAreEmittedAsEngineMacros(): void
+    {
+        $c = $this->compileDemo(<<<'ZEP'
+namespace Stub\Attributes;
+
+#[Marker(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+class Demo
+{
+}
+ZEP);
+
+        $this->assertStringContainsString(
+            'ZVAL_LONG(&_zc0, ZEND_ATTRIBUTE_TARGET_METHOD | ZEND_ATTRIBUTE_IS_REPEATABLE);',
+            $c
+        );
+    }
+
+    /** @return array<string, array{0: string, 1: string}> */
+    public static function attributeMacroProvider(): array
+    {
+        return [
+            'class constant target' => ['\Attribute::TARGET_CLASS_CONSTANT', 'ZEND_ATTRIBUTE_TARGET_CLASS_CONST'],
+            'global constant target, 8.5+ only' => ['\Attribute::TARGET_CONSTANT', 'ZEND_ATTRIBUTE_TARGET_CONST'],
+            'every other target'    => ['\Attribute::TARGET_ALL', 'ZEND_ATTRIBUTE_TARGET_ALL'],
+            'alias'                 => ['A::TARGET_FUNCTION | A::TARGET_PARAMETER', 'ZEND_ATTRIBUTE_TARGET_FUNCTION | ZEND_ATTRIBUTE_TARGET_PARAMETER'],
+            'mask and complement'   => ['\Attribute::TARGET_ALL & ~\Attribute::TARGET_PROPERTY', 'ZEND_ATTRIBUTE_TARGET_ALL & ~ZEND_ATTRIBUTE_TARGET_PROPERTY'],
+            'parentheses and a literal' => [
+                '(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD) ^ 0x1',
+                '(ZEND_ATTRIBUTE_TARGET_CLASS | ZEND_ATTRIBUTE_TARGET_METHOD) ^ 0x1',
+            ],
+            'folded operand'        => ['\Attribute::TARGET_CLASS | (2 * 4)', 'ZEND_ATTRIBUTE_TARGET_CLASS | 8'],
+        ];
+    }
+
+    /**
+     * @dataProvider attributeMacroProvider
+     */
+    public function testAttributeConstantSpellingsMapToTheirMacro(string $argument, string $expected): void
+    {
+        $c = $this->compileDemo(<<<ZEP
+namespace Stub\\Attributes;
+
+use Attribute as A;
+
+#[Marker({$argument})]
+class Demo
+{
+}
+ZEP);
+
+        $this->assertStringContainsString('ZVAL_LONG(&_zc0, ' . $expected . ');', $c);
+    }
+
+    public function testAttributeConstantInsideAnArrayArgumentIsAMacro(): void
+    {
+        $c = $this->compileDemo(<<<'ZEP'
+namespace Stub\Attributes;
+
+#[Marker(["flags": \Attribute::TARGET_CLASS])]
+class Demo
+{
+}
+ZEP);
+
+        $this->assertStringContainsString('ZEND_ATTRIBUTE_TARGET_CLASS);', $c);
+    }
+
+    /**
+     * A class constant initialized from an `Attribute` constant is itself
+     * version-shaped, so reading it through `self::` keeps the macro.
+     */
+    public function testChainedClassConstantKeepsTheMacro(): void
+    {
+        $c = $this->compileDemo(<<<'ZEP'
+namespace Stub\Attributes;
+
+#[Marker(self::FLAGS | \Attribute::IS_REPEATABLE)]
+class Demo
+{
+    const FLAGS = \Attribute::TARGET_METHOD;
+}
+ZEP);
+
+        $this->assertStringContainsString(
+            'ZVAL_LONG(&_zc0, (ZEND_ATTRIBUTE_TARGET_METHOD) | ZEND_ATTRIBUTE_IS_REPEATABLE);',
+            $c
+        );
+        $this->assertStringContainsString('SL("FLAGS"), ZEND_ATTRIBUTE_TARGET_METHOD);', $c);
+    }
+
+    /** @return array<string, array{0: string, 1: string}> */
+    public static function rejectedAttributeConstantProvider(): array
+    {
+        return [
+            'arithmetic'       => ['\Attribute::TARGET_CLASS + 1', 'can only be combined with'],
+            'unknown constant' => ['\Attribute::TARGET_NOTHING', 'does not have a constant called'],
+        ];
+    }
+
+    /**
+     * @dataProvider rejectedAttributeConstantProvider
+     */
+    public function testUnsupportedAttributeConstantExpressionIsRejected(string $argument, string $expected): void
+    {
+        $this->expectException(CompilerException::class);
+        $this->expectExceptionMessageMatches('/' . preg_quote($expected, '/') . '/');
+
+        $this->compileDemo(<<<ZEP
+namespace Stub\\Attributes;
+
+#[Marker({$argument})]
+class Demo
+{
+}
+ZEP);
+    }
+
+    /**
+     * Looking for a version-dependent constant must not resolve a leaf the
+     * evaluator never reaches: a dead ternary branch still folds.
+     */
+    public function testDeadBranchIsNotResolvedWhileLookingForAttributeConstants(): void
+    {
+        $c = $this->compileDemo(<<<'ZEP'
+namespace Stub\Attributes;
+
+#[Marker(true ? 1 : \Nowhere\Missing::VALUE)]
+class Demo
+{
+}
+ZEP);
+
+        $this->assertStringContainsString('ZVAL_LONG(&_zc0, 1);', $c);
+    }
 }

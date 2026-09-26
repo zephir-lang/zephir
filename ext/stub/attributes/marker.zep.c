@@ -23,10 +23,9 @@
  * `#[\Attribute(...)]` on an internal class is all `newInstance()` needs: it
  * reads the marker straight off `ce->attributes` and then calls the constructor
  * with the stored arguments, so the properties below are what reflection
- * observes. `\Attribute::TARGET_ALL` is a class constant of an internal class
- * and is folded at compile time, exactly as php-src's own stubs do — which
- * means the emitted literal follows the building PHP, where 8.5 renumbered
- * these flags.
+ * observes. PHP 8.5 renumbered the `\Attribute::TARGET_*` flags, so they are
+ * emitted as the engine's `ZEND_ATTRIBUTE_*` macros, exactly as php-src's own
+ * arginfo does, and follow the PHP that compiles the extension (#2738).
  *
  * Every constructor parameter is typed on purpose: only a typed parameter gets
  * its default into arg_info, and without that PHP cannot skip one to honour a
@@ -41,7 +40,7 @@ ZEPHIR_INIT_CLASS(Stub_Attributes_Marker)
 	{
 		zend_attribute *_za = zephir_add_class_attribute(stub_attributes_marker_ce, SL("Attribute"), 1);
 		zval _zc0;
-		ZVAL_LONG(&_zc0, 127);
+		ZVAL_LONG(&_zc0, ZEND_ATTRIBUTE_TARGET_ALL | ZEND_ATTRIBUTE_IS_REPEATABLE);
 		zephir_attribute_set_arg(_za, 0, NULL, 0, &_zc0);
 	}
 

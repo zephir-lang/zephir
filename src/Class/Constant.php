@@ -144,9 +144,15 @@ class Constant
      */
     public function processValue(CompilationContext $compilationContext): void
     {
-        if (ConstantExpressionEvaluator::needsFolding($this->value)) {
-            $this->foldValue($compilationContext);
+        /**
+         * Every value goes through the evaluator, even one that needs no
+         * folding, so an `Attribute::*` flag, alone or inside an array, keeps
+         * its C macro instead of the value of the PHP running Zephir [#2738].
+         * Anything else comes back untouched.
+         */
+        $this->foldValue($compilationContext);
 
+        if (isset($this->value['native'])) {
             return;
         }
 
