@@ -132,14 +132,15 @@ class Property
     {
         /**
          * A default may be a full expression (`public size = 1024 * 8;`); reduce
-         * it to a literal before any emitter looks at its type [#2061].
+         * it to a literal before any emitter looks at its type [#2061]. Every
+         * default goes through, even one that needs no folding, so an
+         * `Attribute::*` flag, alone or inside an array, keeps its C macro
+         * [#2738]. Anything else comes back untouched.
          */
-        if (ConstantExpressionEvaluator::needsFolding($this->defaultValue)) {
-            $this->defaultValue = (new ConstantExpressionEvaluator())->fold(
-                $this->defaultValue,
-                $compilationContext
-            );
-        }
+        $this->defaultValue = (new ConstantExpressionEvaluator())->fold(
+            $this->defaultValue,
+            $compilationContext
+        );
 
         if ($this->dataTypes !== null && $this->emitTypedUnion($compilationContext)) {
             return;

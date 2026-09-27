@@ -189,7 +189,7 @@ final class AttributesTest extends TestCase
         $this->assertSame(
             \Attribute::TARGET_ALL | \Attribute::IS_REPEATABLE,
             $marker[0]->newInstance()->flags,
-            'the internal class constants are folded against the PHP that built the extension'
+            'the flags are the engine macros of the PHP that compiled the extension (#2738)'
         );
     }
 

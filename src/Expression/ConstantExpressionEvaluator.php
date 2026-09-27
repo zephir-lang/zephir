@@ -140,12 +140,18 @@ final class ConstantExpressionEvaluator
             $node = $node['left'];
         }
 
-        if (!self::needsFolding($node)) {
-            return $node;
+        $native = $this->native($node, $compilationContext);
+        if (null !== $native) {
+            return $native;
         }
 
+        // Always recursed into, so an element can still become native.
         if ('array' === $node['type']) {
             return $this->foldArray($node, $compilationContext);
+        }
+
+        if (!self::needsFolding($node)) {
+            return $node;
         }
 
         return $this->toNode($this->evaluate($node, $compilationContext), $node);
@@ -177,6 +183,11 @@ final class ConstantExpressionEvaluator
             $node = $node['left'];
         }
 
+        $native = $this->native($node, $compilationContext);
+        if (null !== $native) {
+            return $native;
+        }
+
         if ('array' === $node['type']) {
             foreach ($node['left'] as $index => $item) {
                 if (isset($item['key'])) {
@@ -198,6 +209,165 @@ final class ConstantExpressionEvaluator
         }
 
         return $this->fold($node, $compilationContext);
+    }
+
+    /**
+     * Rebuilds $node as an `int` node whose `value` is a C expression, when it
+     * reads a constant whose value depends on the PHP that compiles the C (an
+     * `Attribute::*` flag, see {@see AttributeConstants}). Returns null for any
+     * other node, which then folds as usual.
+     *
+     * Folding such a node would freeze the value of the PHP running Zephir. The
+     * node keeps two PHP spellings next to the C one: `source`, as written, for
+     * a stub that carries the same `use` statements, and `qualified`, for an
+     * arg_info default the engine evaluates without them.
+     *
+     * Only `|`, `&`, `^` and `~` may combine such a constant: PHP and C agree on
+     * both their precedence and their result for any int, so the source
+     * parentheses alone make every spelling correct.
+     *
+     * @return array{type: 'int', value: string, native: array{source: string, qualified: string}}|null
+     *
+     * @throws CompilerException
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2738
+     */
+    public function native(array $node, CompilationContext $compilationContext): ?array
+    {
+        $spelling = $this->nativeSpelling($node, $compilationContext);
+
+        if (null === $spelling) {
+            return null;
+        }
+
+        return [
+            'type'   => 'int',
+            'value'  => $spelling['c'],
+            'native' => ['source' => $spelling['source'], 'qualified' => $spelling['qualified']],
+        ];
+    }
+
+    /**
+     * @return array{c: string, source: string, qualified: string}|null
+     *
+     * @throws CompilerException
+     */
+    private function nativeSpelling(array $node, CompilationContext $compilationContext): ?array
+    {
+        switch ($node['type']) {
+            case 'static-constant-access':
+                $leaf = (new StaticConstantAccess())->resolveNative($node, $compilationContext);
+
+                if (null === $leaf) {
+                    return null;
+                }
+
+                return [
+                    'c'         => $leaf['c'],
+                    'source'    => $node['left']['value'] . '::' . $node['right']['value'],
+                    'qualified' => $leaf['qualified'],
+                ];
+
+            case 'list':
+                $inner = $this->nativeSpelling($node['left'], $compilationContext);
+
+                return null === $inner ? null : [
+                    'c'         => '(' . $inner['c'] . ')',
+                    'source'    => '(' . $inner['source'] . ')',
+                    'qualified' => '(' . $inner['qualified'] . ')',
+                ];
+
+            case 'bitwise_not':
+                $inner = $this->nativeSpelling($node['left'], $compilationContext);
+
+                return null === $inner ? null : [
+                    'c'         => '~' . $inner['c'],
+                    'source'    => '~' . $inner['source'],
+                    'qualified' => '~' . $inner['qualified'],
+                ];
+
+            case 'bitwise_or':
+            case 'bitwise_and':
+            case 'bitwise_xor':
+                $left  = $this->nativeSpelling($node['left'], $compilationContext);
+                $right = $this->nativeSpelling($node['right'], $compilationContext);
+
+                if (null === $left && null === $right) {
+                    return null;
+                }
+
+                $left     ??= $this->literalSpelling($node['left'], $compilationContext);
+                $right    ??= $this->literalSpelling($node['right'], $compilationContext);
+                $operator = ['bitwise_or' => ' | ', 'bitwise_and' => ' & ', 'bitwise_xor' => ' ^ '][$node['type']];
+
+                return [
+                    'c'         => $left['c'] . $operator . $right['c'],
+                    'source'    => $left['source'] . $operator . $right['source'],
+                    'qualified' => $left['qualified'] . $operator . $right['qualified'],
+                ];
+        }
+
+        if ($this->hasNativeLeaf($node, $compilationContext)) {
+            throw new CompilerException(
+                'A PHP-version-dependent constant such as Attribute::TARGET_ALL can only be combined '
+                . 'with |, &, ^ and ~ in a constant expression',
+                $node
+            );
+        }
+
+        return null;
+    }
+
+    /**
+     * The same spelling in C and in PHP for an operand without a
+     * version-dependent constant. A written integer is kept verbatim (a hex
+     * literal reads the same in both), anything else is folded to an int.
+     *
+     * @return array{c: string, source: string, qualified: string}
+     *
+     * @throws CompilerException
+     */
+    private function literalSpelling(array $node, CompilationContext $compilationContext): array
+    {
+        if (in_array($node['type'], ['int', 'uint', 'long', 'ulong'], true)) {
+            $value = (string) $node['value'];
+
+            return ['c' => $value, 'source' => $value, 'qualified' => $value];
+        }
+
+        $value = $this->evaluate($node, $compilationContext);
+
+        if (!is_int($value)) {
+            throw new CompilerException(
+                'A PHP-version-dependent constant such as Attribute::TARGET_ALL can only be combined with an int',
+                $node
+            );
+        }
+
+        return ['c' => (string) $value, 'source' => (string) $value, 'qualified' => (string) $value];
+    }
+
+    /**
+     * Whether a version-dependent constant sits anywhere below $node.
+     *
+     * @throws CompilerException
+     */
+    private function hasNativeLeaf(array $node, CompilationContext $compilationContext): bool
+    {
+        if ('static-constant-access' === $node['type']) {
+            return null !== (new StaticConstantAccess())->resolveNative($node, $compilationContext);
+        }
+
+        foreach (['left', 'right', 'extra'] as $operand) {
+            if (
+                isset($node[$operand]['type'])
+                && $this->hasNativeLeaf($node[$operand], $compilationContext)
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

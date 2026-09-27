@@ -452,7 +452,7 @@ class ArgInfoDefinition
         if ($gotDefault) {
             $default = $this->foldConstantDefault($parameter['default']);
 
-            if (isset($default['value']) && $zendType === 'IS_STRING') {
+            if (isset($default['value']) && $zendType === 'IS_STRING' && !isset($default['native'])) {
                 $args[] = $this->escapeString((string)$default['value']);
             } else {
                 $args[] = $default['value'] ?? 'null';
@@ -481,6 +481,16 @@ class ArgInfoDefinition
     {
         if (($default['type'] ?? null) !== 'static-constant-access') {
             return $default;
+        }
+
+        /**
+         * A PHP-version-dependent constant is handed to the engine as PHP
+         * source, which it evaluates when reflection asks: a folded number
+         * would be the value of the PHP running Zephir [#2738].
+         */
+        $native = (new StaticConstantAccess())->resolveNative($default, $this->compilationContext);
+        if (null !== $native) {
+            return ['type' => 'int', 'value' => Entry::escape($native['qualified']), 'native' => true];
         }
 
         if (!$this->compilationContext->config->get('static-constant-class-folding', 'optimizations')) {

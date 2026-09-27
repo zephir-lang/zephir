@@ -15,6 +15,7 @@ namespace Zephir\Expression;
 
 use ReflectionException;
 use Zephir\Class\Constant;
+use Zephir\Class\Definition\AbstractDefinition;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -44,45 +45,14 @@ class StaticConstantAccess
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
-        $compiler  = &$compilationContext->compiler;
         $className = $expression['left']['value'];
         $constant  = $expression['right']['value'];
 
-        /**
-         * Fetch the class definition according to the class where the constant
-         * is supposed to be declared
-         */
         if (!in_array($className, ['this', 'self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
-            if ($compiler->isClass($className) || $compiler->isInterface($className)) {
-                $classDefinition = $compiler->getClassDefinition($className);
-            } else {
-                if ($compiler->isBundledClass($className) || $compiler->isBundledInterface($className)) {
-                    $classDefinition = $compiler->getInternalClassDefinition($className);
-                } else {
-                    throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
-                }
-            }
-        } else {
-            if (in_array($className, ['self', 'static', 'this'])) {
-                $classDefinition = $compilationContext->classDefinition;
-            } elseif ('parent' === $className) {
-                $classDefinition = $compilationContext->classDefinition;
-                $extendsClass    = $classDefinition->getExtendsClass();
-                if (!$extendsClass) {
-                    throw new CompilerException(
-                        sprintf(
-                            'Cannot find constant called "%s" on parent because class %s does not extend any class',
-                            $constant,
-                            $classDefinition->getCompleteName()
-                        ),
-                        $expression
-                    );
-                } else {
-                    $classDefinition = $classDefinition->getExtendsClassDefinition();
-                }
-            }
         }
+
+        $classDefinition = $this->resolveClassDefinition($className, $expression, $compilationContext);
 
         /**
          * The `::class` postfix is not a real constant: it resolves to the
@@ -117,6 +87,16 @@ class StaticConstantAccess
                 Name::addSlashes($classDefinition->getCompleteName()),
                 $expression
             );
+        }
+
+        /**
+         * A version-shaped engine constant is emitted as its C macro, before
+         * the existence check: the PHP running Zephir may not have it at all
+         * (`Attribute::TARGET_CONSTANT` before 8.5). See #2738.
+         */
+        $native = $this->nativeOf($className, $classDefinition, $constant, $compilationContext);
+        if (null !== $native) {
+            return new CompiledExpression('int', $native['c'], $expression);
         }
 
         /**
@@ -238,6 +218,158 @@ class StaticConstantAccess
         }
 
         return new CompiledExpression($type, $value, $expression);
+    }
+
+    /**
+     * The C and fully-qualified PHP spellings of a constant whose value depends
+     * on the PHP version that compiles the C, or null for any other constant.
+     *
+     * That is an `Attribute::*` flag, or a Zephir class constant initialized
+     * from one, so `self::FLAGS` keeps the macro of what it was declared as.
+     *
+     * @return array{c: string, qualified: string}|null
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2738
+     */
+    public function resolveNative(array $expression, CompilationContext $compilationContext): ?array
+    {
+        $className = $expression['left']['value'];
+        $constant  = $expression['right']['value'];
+
+        if ('class' === $constant) {
+            return null;
+        }
+
+        if (!in_array($className, ['this', 'self', 'static', 'parent'])) {
+            $className = $compilationContext->getFullName($className);
+        }
+
+        /**
+         * A class this lookup cannot see is simply not native. The leaf may
+         * sit in a branch the evaluator never reaches, and compile() reports
+         * it wherever it is actually read.
+         */
+        if (!$this->isResolvable($className, $compilationContext)) {
+            return null;
+        }
+
+        return $this->nativeOf(
+            $className,
+            $this->resolveClassDefinition($className, $expression, $compilationContext),
+            $constant,
+            $compilationContext
+        );
+    }
+
+    /**
+     * @return array{c: string, qualified: string}|null
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function nativeOf(
+        string $className,
+        AbstractDefinition $classDefinition,
+        string $constant,
+        CompilationContext $compilationContext
+    ): ?array {
+        $macro = AttributeConstants::macro($className, $constant);
+        if (null !== $macro) {
+            return ['c' => $macro, 'qualified' => '\\Attribute::' . $constant];
+        }
+
+        if (!$classDefinition->hasConstant($constant)) {
+            return null;
+        }
+
+        $constantDefinition = $classDefinition->getConstant($constant);
+        if (!$constantDefinition instanceof Constant) {
+            return null;
+        }
+
+        $constantDefinition->processValue($compilationContext);
+        $value = $constantDefinition->getValue();
+
+        if (!isset($value['native'])) {
+            return null;
+        }
+
+        return [
+            'c'         => '(' . $value['value'] . ')',
+            'qualified' => '\\' . $classDefinition->getCompleteName() . '::' . $constant,
+        ];
+    }
+
+    /**
+     * Whether resolveClassDefinition() would find a definition for $className.
+     */
+    private function isResolvable(string $className, CompilationContext $compilationContext): bool
+    {
+        $compiler = $compilationContext->compiler;
+
+        if (in_array($className, ['self', 'static', 'this'])) {
+            return null !== $compilationContext->classDefinition;
+        }
+
+        if ('parent' === $className) {
+            return null !== $compilationContext->classDefinition
+                && (bool) $compilationContext->classDefinition->getExtendsClass();
+        }
+
+        return $compiler->isClass($className)
+            || $compiler->isInterface($className)
+            || $compiler->isBundledClass($className)
+            || $compiler->isBundledInterface($className);
+    }
+
+    /**
+     * Fetches the class definition according to the class where the constant
+     * is supposed to be declared.
+     *
+     * @param string $className resolved name, or one of this/self/static/parent
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function resolveClassDefinition(
+        string $className,
+        array $expression,
+        CompilationContext $compilationContext
+    ): AbstractDefinition {
+        $compiler = $compilationContext->compiler;
+
+        if (in_array($className, ['self', 'static', 'this'])) {
+            return $compilationContext->classDefinition;
+        }
+
+        if ('parent' === $className) {
+            $classDefinition = $compilationContext->classDefinition;
+            if (!$classDefinition->getExtendsClass()) {
+                throw new CompilerException(
+                    sprintf(
+                        'Cannot find constant called "%s" on parent because class %s does not extend any class',
+                        $expression['right']['value'],
+                        $classDefinition->getCompleteName()
+                    ),
+                    $expression
+                );
+            }
+
+            return $classDefinition->getExtendsClassDefinition();
+        }
+
+        if ($compiler->isClass($className) || $compiler->isInterface($className)) {
+            return $compiler->getClassDefinition($className);
+        }
+
+        if ($compiler->isBundledClass($className) || $compiler->isBundledInterface($className)) {
+            return $compiler->getInternalClassDefinition($className);
+        }
+
+        throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
     }
 
     /**

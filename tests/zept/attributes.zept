@@ -70,9 +70,13 @@ show("trait-itself", (new ReflectionClass("Stub\\Attrs\\Shared"))->getAttributes
 
 $instance = $c->getAttributes()[0]->newInstance();
 echo "instance=", get_class($instance), " text=", $instance->text, " number=", $instance->number, "\n";
-// The numeric TARGET_* flags were renumbered in 8.5 and are folded against the
-// building PHP, so only the marker itself is asserted here.
 echo "is-attribute-class=", (new ReflectionClass("Stub\\Attrs\\Tag"))->getAttributes()[0]->getName(), "\n";
+// 8.5 renumbered the TARGET_* flags; the C carries the engine macro, so the
+// flag always matches the PHP that built the extension (#2738).
+echo "flags-follow-php=", var_export(
+    (new ReflectionClass("Stub\\Attrs\\Tag"))->getAttributes()[0]->getArguments() === [Attribute::TARGET_ALL],
+    true
+), "\n";
 --EXPECT--
 class=Stub\Attrs\Tag{"0":"on-a-class","number":6}
 const=Stub\Attrs\Tag["on-a-constant"]
@@ -83,3 +87,4 @@ from-trait=Stub\Attrs\Tag["trait-method"]
 trait-itself=Stub\Attrs\Tag["on-a-trait"]
 instance=Stub\Attrs\Tag text=on-a-class number=6
 is-attribute-class=Attribute
+flags-follow-php=true

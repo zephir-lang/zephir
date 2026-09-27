@@ -563,6 +563,15 @@ class Generator
      */
     protected function wrapPHPValue(array $parameter): string
     {
+        /**
+         * A PHP-version-dependent constant (`\Attribute::TARGET_ALL`) keeps its
+         * source spelling: the number is only right for the PHP that ran
+         * Zephir, which 8.5 renumbered [#2738].
+         */
+        if (isset($parameter['default']['native'])) {
+            return $parameter['default']['native']['source'];
+        }
+
         switch ($parameter['default']['type']) {
             case 'null':
                 $returnValue = 'null';

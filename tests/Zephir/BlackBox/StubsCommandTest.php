@@ -102,6 +102,7 @@ final class StubsCommandTest extends TestCase
             'Issue 2613 union params and properties' => ['Issue_2613.php'],
             'Issue 2614 readonly properties' => ['Issue_2614.php'],
             'Issue 2466 attributes' => ['Issue_2466.php'],
+            'Issue 2738 version-shaped Attribute constants' => ['Issue_2738.php'],
         ];
     }
 
