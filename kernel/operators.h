@@ -137,19 +137,27 @@ int zephir_greater_equal(zval *op1, zval *op2);
 int zephir_greater_equal_long(zval *op1, zend_long op2);
 
 /*
- * A zero divisor throws DivisionByZeroError, as PHP 8 does; the helper still
- * returns 0 because it has no way to abort its caller, so the rest of the
- * generated method body runs with the exception pending and the engine
- * discards the return value on the way out.
+ * PHP's `/`: an exact integer quotient is an int, anything else a float. The
+ * zval operand variants go through div_function(), so a TypeError or a
+ * DivisionByZeroError is the one PHP throws.
+ */
+void zephir_div_long_long(zval *result, zend_long op1, zend_long op2);
+void zephir_div_zval_long(zval *result, zval *op1, zend_long op2);
+void zephir_div_long_zval(zval *result, zend_long op1, zval *op2);
+void zephir_div_zval_double(zval *result, zval *op1, double op2);
+void zephir_div_double_zval(zval *result, double op1, zval *op2);
+
+/*
+ * `/` for a C double result: a double operand, or two integers whose consumer
+ * is a C double. A zero divisor throws DivisionByZeroError, as PHP 8 does; the
+ * helper still returns 0 because it has no way to abort its caller, so the
+ * rest of the generated method body runs with the exception pending and the
+ * engine discards the return value on the way out.
  */
 double zephir_safe_div_long_long(zend_long op1, zend_long op2);
 double zephir_safe_div_long_double(zend_long op1, double op2);
 double zephir_safe_div_double_long(double op1, zend_long op2);
 double zephir_safe_div_double_double(double op1, double op2);
-double zephir_safe_div_zval_long(zval *op1, zend_long op2);
-double zephir_safe_div_zval_double(zval *op1, double op2);
-double zephir_safe_div_long_zval(zend_long op1, zval *op2);
-double zephir_safe_div_double_zval(double op1, zval *op2);
 
 /*
  * PHP's `%` converts both operands to `zend_long` and yields a `zend_long`.

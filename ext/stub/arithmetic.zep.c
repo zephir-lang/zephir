@@ -1631,7 +1631,8 @@ PHP_METHOD(Stub_Arithmetic, div1)
 {
 	zend_long a;
 	a = 100;
-	RETURN_DOUBLE(zephir_safe_div_long_long(((a - 1)), 4));
+	zephir_div_long_long(return_value, ((a - 1)), 4);
+	return;
 }
 
 PHP_METHOD(Stub_Arithmetic, div2)
@@ -1645,7 +1646,8 @@ PHP_METHOD(Stub_Arithmetic, div2)
 		_zephir_prop_0 = zend_string_init("tmp1", 4, 1);
 	}
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 8, PH_NOISY_CC | PH_READONLY);
-	RETURN_DOUBLE(zephir_safe_div_long_long(((zephir_get_numberval(&_0) - 1)), 4));
+	zephir_div_long_long(return_value, ((zephir_get_numberval(&_0) - 1)), 4);
+	return;
 }
 
 /**

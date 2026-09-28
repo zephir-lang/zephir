@@ -130,17 +130,18 @@ PHP_METHOD(Stub_Concat, testConcat3)
  */
 PHP_METHOD(Stub_Concat, testConcat4)
 {
-	zval query, _1, _3;
-	double min = 0, max = 0;
+	zval query;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *value, value_sub, _0, _2;
+	zval *value, value_sub, min, max, _0, _1, _2, _3;
 
 	ZVAL_UNDEF(&value_sub);
+	ZVAL_UNDEF(&min);
+	ZVAL_UNDEF(&max);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_2);
-	ZVAL_UNDEF(&query);
 	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+	ZVAL_UNDEF(&query);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
@@ -149,17 +150,23 @@ PHP_METHOD(Stub_Concat, testConcat4)
 	zephir_fetch_params(1, 1, 0, &value);
 	ZEPHIR_INIT_VAR(&query);
 	ZVAL_STRING(&query, "");
-	min =  ((zephir_safe_div_zval_long(value, 100) * (double) (25)));
-	max =  ((zephir_safe_div_zval_long(value, 100) * (double) (50)));
 	ZEPHIR_INIT_VAR(&_0);
-	ZVAL_DOUBLE(&_0, max);
+	zephir_div_zval_long(&_0, value, 100);
 	ZEPHIR_INIT_VAR(&_1);
-	ZEPHIR_CONCAT_SV(&_1, "SELECT * FROM TEST WHERE value <= ", &_0);
-	zephir_concat_self(&query, &_1);
+	ZVAL_LONG(&_1, 25);
+	ZEPHIR_INIT_VAR(&min);
+	mul_function(&min, &_0, &_1);
+	ZEPHIR_INIT_NVAR(&_0);
+	zephir_div_zval_long(&_0, value, 100);
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 50);
+	ZEPHIR_INIT_VAR(&max);
+	mul_function(&max, &_0, &_1);
 	ZEPHIR_INIT_VAR(&_2);
-	ZVAL_DOUBLE(&_2, min);
+	ZEPHIR_CONCAT_SV(&_2, "SELECT * FROM TEST WHERE value <= ", &max);
+	zephir_concat_self(&query, &_2);
 	ZEPHIR_INIT_VAR(&_3);
-	ZEPHIR_CONCAT_SV(&_3, " AND value >= ", &_2);
+	ZEPHIR_CONCAT_SV(&_3, " AND value >= ", &min);
 	zephir_concat_self(&query, &_3);
 	RETURN_CTOR(&query);
 }

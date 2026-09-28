@@ -23,6 +23,7 @@ use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\AssignVariableOperator;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Statements\Let\AssignmentFactory;
+use Zephir\Variable\Variable;
 
 /**
  * Let statement is used to assign variables
@@ -95,6 +96,7 @@ class LetStatement extends StatementAbstract
                  * TODO: Replace on supported native bitwise-assignment
                  */
                 $assignment = $this->replaceAssignBitwiseOnDirect($assignment);
+                $assignment = $this->replaceDivAssignOnDirect($assignment, $symbolVariable);
 
                 $expr = new Expression($assignment['expr']);
 
@@ -170,6 +172,60 @@ class LetStatement extends StatementAbstract
         unset($assignment['left']);
 
         return $assignment;
+    }
+
+    /**
+     * Rewrites `x /= e` as `x = x / e` for a zval variable and for an object
+     * property, so DivOperator produces the int or float PHP does. A typed
+     * local keeps the native C `/=`, since it cannot change type.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2675
+     */
+    protected function replaceDivAssignOnDirect(array $assignment, ?Variable $symbolVariable): array
+    {
+        if (AssignVariableOperator::OPERATOR_DIV !== ($assignment['operator'] ?? null)) {
+            return $assignment;
+        }
+
+        $dividend = match ($assignment['assign-type']) {
+            'variable'        => in_array($symbolVariable?->getType(), ['variable', 'mixed'], true)
+                ? $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']])
+                : null,
+            'object-property' => $this->astNode($assignment, [
+                'type'  => 'property-access',
+                'left'  => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']]),
+                'right' => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['property']]),
+            ]),
+            default           => null,
+        };
+
+        if (null === $dividend) {
+            return $assignment;
+        }
+
+        $assignment['expr']     = $this->astNode($assignment, [
+            'type'  => BinaryOperator::OPERATOR_DIV,
+            'left'  => $dividend,
+            'right' => $assignment['expr'],
+        ]);
+        $assignment['operator'] = AssignVariableOperator::OPERATOR_ASSIGN;
+
+        return $assignment;
+    }
+
+    /**
+     * Copies the source position of the statement onto a synthesized node, so
+     * a diagnostic about it points at the original `/=`.
+     */
+    private function astNode(array $assignment, array $node): array
+    {
+        foreach (['file', 'line', 'char'] as $position) {
+            if (isset($assignment[$position])) {
+                $node[$position] = $assignment[$position];
+            }
+        }
+
+        return $node;
     }
 
     /**

@@ -350,7 +350,8 @@ PHP_METHOD(Stub_Issue2666, divLongLong)
 		Z_PARAM_LONG(b)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
-	RETURN_DOUBLE(zephir_safe_div_long_long(a, b));
+	zephir_div_long_long(return_value, a, b);
+	return;
 }
 
 PHP_METHOD(Stub_Issue2666, divLongDouble)
@@ -404,7 +405,8 @@ PHP_METHOD(Stub_Issue2666, divVarLong)
 		Z_PARAM_LONG(b)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
-	RETURN_DOUBLE(zephir_safe_div_zval_long(a, b));
+	zephir_div_zval_long(return_value, a, b);
+	return;
 }
 
 PHP_METHOD(Stub_Issue2666, divVarDouble)
@@ -416,7 +418,8 @@ PHP_METHOD(Stub_Issue2666, divVarDouble)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	RETURN_DOUBLE(zephir_safe_div_zval_double(a, 2.5));
+	zephir_div_zval_double(return_value, a, 2.5);
+	return;
 }
 
 PHP_METHOD(Stub_Issue2666, divLongVar)
@@ -430,7 +433,8 @@ PHP_METHOD(Stub_Issue2666, divLongVar)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b);
-	RETURN_DOUBLE(zephir_safe_div_long_zval(a, b));
+	zephir_div_long_zval(return_value, a, b);
+	return;
 }
 
 PHP_METHOD(Stub_Issue2666, divDoubleVar)
@@ -445,7 +449,8 @@ PHP_METHOD(Stub_Issue2666, divDoubleVar)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b);
 	a = zephir_get_doubleval(a_param);
-	RETURN_DOUBLE(zephir_safe_div_double_zval(a, b));
+	zephir_div_double_zval(return_value, a, b);
+	return;
 }
 
 PHP_METHOD(Stub_Issue2666, modLongLong)
