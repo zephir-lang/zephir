@@ -166,6 +166,7 @@
 #include "stub/issue2715.zep.h"
 #include "stub/issue2716.zep.h"
 #include "stub/issue2738.zep.h"
+#include "stub/issue2739.zep.h"
 #include "stub/issue663.zep.h"
 #include "stub/issue760.zep.h"
 #include "stub/issue808.zep.h"
