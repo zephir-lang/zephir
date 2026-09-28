@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Added support for capturing a method parameter by reference in a closure `use (&x)` clause [#2668](https://github.com/zephir-lang/zephir/issues/2668)
 
 ### Fixed
+- Fixed `time()` returning the previous second shortly after a second boundary, because it read a different clock than PHP `time()` [#2739](https://github.com/zephir-lang/zephir/issues/2739)
 - Fixed `Attribute::*` constants in attribute arguments, class constants, property defaults, parameter defaults and method bodies being frozen to the values of the PHP that ran `zephir generate` [#2738](https://github.com/zephir-lang/zephir/issues/2738)
 - Fixed IDE stubs printing a frozen number instead of the source `Attribute::*` expression [#2738](https://github.com/zephir-lang/zephir/issues/2738)
 - Fixed a typed property default that is a single `Attribute::*` constant being rejected [#2738](https://github.com/zephir-lang/zephir/issues/2738)
