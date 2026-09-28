@@ -727,25 +727,78 @@ static zend_long zephir_mod_operand(zval *op)
 }
 
 /**
- * The operand coercion `/` performs. Unlike `%` the result is a double, so a
- * non-integral operand is kept as one.
+ * PHP's `/` for two integers, from div_function_base() in
+ * Zend/zend_operators.c: an exact quotient is an int, anything else a float.
+ * `ZEND_LONG_MIN / -1` overflows a zend_long and raises SIGFPE on x86, so it
+ * is computed as a double first, as php-src does.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2675
  */
-static double zephir_div_operand(zval *op)
+void zephir_div_long_long(zval *result, zend_long op1, zend_long op2)
 {
-	switch (Z_TYPE_P(op)) {
-		case IS_ARRAY:
-		case IS_OBJECT:
-		case IS_RESOURCE:
-			/* PHP 8 throws a TypeError here instead. See #2676. */
-			zend_error(E_WARNING, "Unsupported operand types");
-			break;
+	if (!op2) {
+		zephir_throw_division_by_zero();
+		ZVAL_LONG(result, 0);
+		return;
 	}
 
-	return (double) zephir_get_numberval(op);
+	if (op2 == -1 && op1 == ZEND_LONG_MIN) {
+		ZVAL_DOUBLE(result, (double) ZEND_LONG_MIN / -1);
+		return;
+	}
+
+	if (op1 % op2 == 0) {
+		ZVAL_LONG(result, op1 / op2);
+		return;
+	}
+
+	ZVAL_DOUBLE(result, ((double) op1) / op2);
 }
 
 /**
- * Do safe divisions between two longs
+ * A zval operand can be anything, so the division is PHP's own div_function():
+ * the TypeError for an array or a non-numeric string, the "non-numeric value"
+ * warning, bool and null coercion and the int narrowing all come from it.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2676
+ */
+void zephir_div_zval_long(zval *result, zval *op1, zend_long op2)
+{
+	zval divisor;
+
+	ZVAL_LONG(&divisor, op2);
+	div_function(result, op1, &divisor);
+}
+
+void zephir_div_long_zval(zval *result, zend_long op1, zval *op2)
+{
+	zval dividend;
+
+	ZVAL_LONG(&dividend, op1);
+	div_function(result, &dividend, op2);
+}
+
+void zephir_div_zval_double(zval *result, zval *op1, double op2)
+{
+	zval divisor;
+
+	ZVAL_DOUBLE(&divisor, op2);
+	div_function(result, op1, &divisor);
+}
+
+void zephir_div_double_zval(zval *result, double op1, zval *op2)
+{
+	zval dividend;
+
+	ZVAL_DOUBLE(&dividend, op1);
+	div_function(result, &dividend, op2);
+}
+
+/**
+ * Two integers divided for a C double consumer (a `double` local or a
+ * `-> double` return). PHP coerces the int quotient to float there, so an
+ * exact quotient is computed as an integer first: `(double) op1 / op2` would
+ * round the dividend before dividing and miss above 2^53.
  */
 double zephir_safe_div_long_long(zend_long op1, zend_long op2)
 {
@@ -753,7 +806,15 @@ double zephir_safe_div_long_long(zend_long op1, zend_long op2)
 		return zephir_throw_division_by_zero();
 	}
 
-	return (double) op1 / (double) op2;
+	if (op2 == -1 && op1 == ZEND_LONG_MIN) {
+		return (double) ZEND_LONG_MIN / -1;
+	}
+
+	if (op1 % op2 == 0) {
+		return (double) (op1 / op2);
+	}
+
+	return ((double) op1) / op2;
 }
 
 /**
@@ -766,20 +827,6 @@ double zephir_safe_div_long_double(zend_long op1, double op2)
 	}
 
 	return (double) op1 / op2;
-}
-
-/**
- * Do safe divisions between two double/zval
- */
-double zephir_safe_div_double_zval(double op1, zval *op2)
-{
-	double divisor = zephir_div_operand(op2);
-
-	if (!divisor) {
-		return zephir_throw_division_by_zero();
-	}
-
-	return op1 / divisor;
 }
 
 /**
@@ -804,48 +851,6 @@ double zephir_safe_div_double_double(double op1, double op2)
 	}
 
 	return op1 / op2;
-}
-
-/**
- * Do safe divisions between two zval/long
- */
-double zephir_safe_div_zval_long(zval *op1, zend_long op2)
-{
-	double dividend = zephir_div_operand(op1);
-
-	if (!op2) {
-		return zephir_throw_division_by_zero();
-	}
-
-	return dividend / (double) op2;
-}
-
-/**
- * Do safe divisions between two long/zval
- */
-double zephir_safe_div_long_zval(zend_long op1, zval *op2)
-{
-	double divisor = zephir_div_operand(op2);
-
-	if (!divisor) {
-		return zephir_throw_division_by_zero();
-	}
-
-	return (double) op1 / divisor;
-}
-
-/**
- * Do safe divisions between two zval/double
- */
-double zephir_safe_div_zval_double(zval *op1, double op2)
-{
-	double dividend = zephir_div_operand(op1);
-
-	if (!op2) {
-		return zephir_throw_division_by_zero();
-	}
-
-	return dividend / op2;
 }
 
 /**

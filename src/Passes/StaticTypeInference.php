@@ -15,6 +15,7 @@ namespace Zephir\Passes;
 
 use Zephir\StatementsBlock;
 
+use function in_array;
 use function is_string;
 
 /**
@@ -256,8 +257,25 @@ class StaticTypeInference
 
                 return 'variable';
 
+            /**
+             * PHP's `/` is a float when an operand is one, and an int or a
+             * float otherwise, depending on whether the quotient is exact.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2675
+             */
             case 'div':
-                return 'double';
+                $left    = $this->passExpression($expression['left']);
+                $right   = $this->passExpression($expression['right']);
+                $numeric = ['int', 'uint', 'long', 'ulong', 'bool', 'double'];
+                if (
+                    in_array($left, $numeric, true) &&
+                    in_array($right, $numeric, true) &&
+                    ('double' === $left || 'double' === $right)
+                ) {
+                    return 'double';
+                }
+
+                return 'variable';
 
             case 'sub':
             case 'add':
@@ -429,6 +447,14 @@ class StaticTypeInference
             switch ($assignment['assign-type']) {
                 case 'variable':
                     $type = $this->passExpression($assignment['expr']);
+                    /**
+                     * `x /= n` can turn an int into a float, so `x` must stay a zval.
+                     *
+                     * @see https://github.com/zephir-lang/zephir/issues/2675
+                     */
+                    if ('div-assign' === ($assignment['operator'] ?? null)) {
+                        $type = 'variable';
+                    }
                     if (is_string($type)) {
                         $this->markVariable($assignment['variable'], $type);
                     }

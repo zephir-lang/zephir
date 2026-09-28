@@ -341,6 +341,7 @@ class LocalContextPass
                         case 'mul-assign':
                         case 'sub-assign':
                         case 'add-assign':
+                        case 'div-assign':
                             $this->markVariableNoLocal($assignment['variable']);
                             break;
                     }

@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Added support for capturing a method parameter by reference in a closure `use (&x)` clause [#2668](https://github.com/zephir-lang/zephir/issues/2668)
 
 ### Fixed
+- Fixed `/` always returning a float where PHP returns an int for an exact integer division [#2675](https://github.com/zephir-lang/zephir/issues/2675)
+- Fixed `/=` on a `var` variable or an object property overwriting the value instead of dividing it [#2675](https://github.com/zephir-lang/zephir/issues/2675)
+- Fixed `/` with a bool operand compiling to a subtraction [#2677](https://github.com/zephir-lang/zephir/issues/2677)
+- Fixed `/` with an array, object or non-numeric string operand not throwing `TypeError` as PHP does [#2676](https://github.com/zephir-lang/zephir/issues/2676)
 - Fixed `time()` returning the previous second shortly after a second boundary, because it read a different clock than PHP `time()` [#2739](https://github.com/zephir-lang/zephir/issues/2739)
 - Fixed `Attribute::*` constants in attribute arguments, class constants, property defaults, parameter defaults and method bodies being frozen to the values of the PHP that ran `zephir generate` [#2738](https://github.com/zephir-lang/zephir/issues/2738)
 - Fixed IDE stubs printing a frozen number instead of the source `Attribute::*` expression [#2738](https://github.com/zephir-lang/zephir/issues/2738)

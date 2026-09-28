@@ -24,6 +24,7 @@ use Zephir\Operators\AbstractOperator;
 use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
+use function in_array;
 use function sprintf;
 
 /**
@@ -62,6 +63,11 @@ class ArithmeticalBaseOperator extends AbstractOperator
         $rightExpr = new Expression($expression['right']);
         $rightExpr->setReadOnly(true);
         $right = $rightExpr->compile($compilationContext);
+
+        $floatAware = $this->compileFloatZvalWithInteger($left, $right, $expression, $compilationContext);
+        if (null !== $floatAware) {
+            return $floatAware;
+        }
 
         switch ($left->getType()) {
             case 'int':
@@ -821,6 +827,105 @@ class ArithmeticalBaseOperator extends AbstractOperator
 
         $compilationContext->headersManager->add('kernel/operators');
         return [$left, $right];
+    }
+
+    /**
+     * The zval-with-integer fast paths below read the zval as a number and
+     * type the result `int`, which truncates a float. A zval known to hold a
+     * float, such as a `/` quotient, is combined through the zval operator
+     * instead, with the integer boxed, so the result is PHP's int or float.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2675
+     */
+    private function compileFloatZvalWithInteger(
+        CompiledExpression $left,
+        CompiledExpression $right,
+        array $expression,
+        CompilationContext $compilationContext
+    ): ?CompiledExpression {
+        $leftVariable  = $this->floatZval($left, $compilationContext, $expression);
+        $rightVariable = $this->floatZval($right, $compilationContext, $expression);
+        if (null === $leftVariable && null === $rightVariable) {
+            return null;
+        }
+
+        $leftVariable ??= $this->boxedInteger($left, $compilationContext, $expression);
+        $rightVariable ??= $this->boxedInteger($right, $compilationContext, $expression);
+        if (null === $leftVariable || null === $rightVariable) {
+            return null;
+        }
+
+        $compilationContext->headersManager->add('kernel/operators');
+
+        $expected = $this->getExpected($compilationContext, $expression);
+        $compilationContext->backend->zvalOperator(
+            $this->zvalOperator,
+            $expected,
+            $leftVariable,
+            $rightVariable,
+            $compilationContext
+        );
+
+        $this->checkVariableTemporal($leftVariable);
+        $this->checkVariableTemporal($rightVariable);
+
+        $expected->setDynamicTypes([Types::T_LONG, Types::T_DOUBLE]);
+
+        return new CompiledExpression('variable', $expected->getName(), $expression);
+    }
+
+    private function floatZval(
+        CompiledExpression $operand,
+        CompilationContext $compilationContext,
+        array $expression
+    ): ?Variable {
+        if ('variable' !== $operand->getType()) {
+            return null;
+        }
+
+        $variable = $compilationContext->symbolTable->getVariableForRead(
+            $operand->getCode(),
+            $compilationContext,
+            $expression
+        );
+
+        if (Types::T_VARIABLE !== $variable->getType() || !$variable->hasAnyDynamicType(Types::T_DOUBLE)) {
+            return null;
+        }
+
+        return $variable;
+    }
+
+    /**
+     * An integer operand, literal or typed local, copied into a temporary zval.
+     */
+    private function boxedInteger(
+        CompiledExpression $operand,
+        CompilationContext $compilationContext,
+        array $expression
+    ): ?Variable {
+        $integerTypes = [Types::T_INT, Types::T_UINT, Types::T_LONG, Types::T_ULONG];
+
+        if (in_array($operand->getType(), $integerTypes, true)) {
+            $code = $operand->getCode();
+        } elseif ('variable' === $operand->getType()) {
+            $variable = $compilationContext->symbolTable->getVariableForRead(
+                $operand->getCode(),
+                $compilationContext,
+                $expression
+            );
+            if (!in_array($variable->getType(), $integerTypes, true)) {
+                return null;
+            }
+            $code = $variable->getName();
+        } else {
+            return null;
+        }
+
+        $boxed = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
+        $compilationContext->backend->assignLong($boxed, $code, $compilationContext);
+
+        return $boxed;
     }
 
     /**

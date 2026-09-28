@@ -17,7 +17,7 @@
 #include "kernel/object.h"
 #include "kernel/fcall.h"
 #include "ext/spl/spl_fixedarray.h"
-#include "math.h"
+#include "kernel/math.h"
 
 
 /**
@@ -35,12 +35,14 @@ ZEPHIR_INIT_CLASS(Stub_SpectralNorm)
 PHP_METHOD(Stub_SpectralNorm, Ax)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *i, i_sub, *j, j_sub, _0, _1;
+	zval *i, i_sub, *j, j_sub, _0, _1, _2, _3;
 
 	ZVAL_UNDEF(&i_sub);
 	ZVAL_UNDEF(&j_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_3);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(i)
 		Z_PARAM_ZVAL(j)
@@ -52,7 +54,22 @@ PHP_METHOD(Stub_SpectralNorm, Ax)
 	zephir_add_function(&_0, i, j);
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_add_function(&_1, i, j);
-	RETURN_MM_DOUBLE(zephir_safe_div_long_double((double) 1, ((zephir_safe_div_long_long((zephir_get_numberval(&_0) * (zephir_get_numberval(&_1) + 1)), 2) + zephir_get_numberval(i)) + (double) (1))));
+	ZEPHIR_INIT_VAR(&_2);
+	ZVAL_LONG(&_2, 1);
+	ZEPHIR_INIT_VAR(&_3);
+	zephir_add_function(&_3, &_1, &_2);
+	ZEPHIR_INIT_NVAR(&_1);
+	mul_function(&_1, &_0, &_3);
+	ZEPHIR_INIT_NVAR(&_0);
+	zephir_div_zval_long(&_0, &_1, 2);
+	ZEPHIR_INIT_NVAR(&_1);
+	zephir_add_function(&_1, &_0, i);
+	ZEPHIR_INIT_NVAR(&_2);
+	ZVAL_LONG(&_2, 1);
+	ZEPHIR_INIT_NVAR(&_0);
+	zephir_add_function(&_0, &_1, &_2);
+	zephir_div_long_zval(return_value, 1, &_0);
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_SpectralNorm, Au)
@@ -239,7 +256,7 @@ PHP_METHOD(Stub_SpectralNorm, process)
 	zend_bool _1, _7, _12;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_6 = NULL, *_11 = NULL, *_17 = NULL;
-	zval *n_param = NULL, u, v, w, _0, _4$$3, _5$$3, _10$$4, _15$$5, _16$$5, _18$$5, _19$$5, _20$$5;
+	zval *n_param = NULL, u, v, w, _0, _21, _4$$3, _5$$3, _10$$4, _15$$5, _16$$5, _18$$5, _19$$5, _20$$5;
 	zend_long n, ZEPHIR_LAST_CALL_STATUS, i = 0, vv, vBv, _2, _3, _8, _9, _13, _14;
 	zval *this_ptr = getThis();
 
@@ -247,6 +264,7 @@ PHP_METHOD(Stub_SpectralNorm, process)
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&w);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_21);
 	ZVAL_UNDEF(&_4$$3);
 	ZVAL_UNDEF(&_5$$3);
 	ZVAL_UNDEF(&_10$$4);
@@ -362,7 +380,8 @@ PHP_METHOD(Stub_SpectralNorm, process)
 			vv += zephir_get_numberval(&_20$$5);
 		}
 	}
-	ZVAL_DOUBLE(&_0, zephir_safe_div_long_long(vBv, vv));
-	RETURN_MM_DOUBLE(sqrt(zephir_safe_div_long_long(vBv, vv)));
+	ZEPHIR_INIT_VAR(&_21);
+	zephir_div_long_long(&_21, vBv, vv);
+	RETURN_MM_DOUBLE(zephir_sqrt(&_21));
 }
 

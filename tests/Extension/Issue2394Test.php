@@ -45,7 +45,7 @@ final class Issue2394Test extends TestCase
 
     public function testDivisionDefault(): void
     {
-        $this->assertSame(2.0, $this->sut->division(4));
+        $this->assertSame(2, $this->sut->division(4));
     }
 
     public function testModuloDefault(): void

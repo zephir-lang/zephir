@@ -94,16 +94,20 @@ PHP_METHOD(Stub_Issue2394, multiplication)
 
 PHP_METHOD(Stub_Issue2394, division)
 {
-	double x;
-	zval *a_param = NULL;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *a_param = NULL, x;
 	zend_long a;
 
+	ZVAL_UNDEF(&x);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(a)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
-	x =  (zephir_safe_div_long_long(a, 2));
-	RETURN_DOUBLE(x);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &a_param);
+	ZEPHIR_INIT_VAR(&x);
+	zephir_div_long_long(&x, a, 2);
+	RETURN_CCTOR(&x);
 }
 
 PHP_METHOD(Stub_Issue2394, modulo)

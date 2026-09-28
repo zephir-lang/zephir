@@ -18,13 +18,29 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
+use Zephir\Variable\Variable;
+
+use function array_diff;
+use function array_keys;
 
 /**
- * Generates an arithmetical operation according to the operands
+ * Generates PHP's `/`.
+ *
+ * The result type follows div_function_base() in Zend/zend_operators.c: a
+ * float operand always yields a float, two integers yield an int when the
+ * quotient is exact and a float otherwise, and any other operand is left to
+ * PHP's own div_function(). A bool operand is an integer 0 or 1, as in PHP.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2675
+ * @see https://github.com/zephir-lang/zephir/issues/2676
+ * @see https://github.com/zephir-lang/zephir/issues/2677
  */
 class DivOperator extends ArithmeticalBaseOperator
 {
-    protected string $bitOperator  = '-';
+    private const KIND_LONG   = 'long';
+    private const KIND_DOUBLE = 'double';
+    private const KIND_ZVAL   = 'zval';
+
     protected string $operator     = '/';
     protected string $zvalOperator = 'div_function';
 
@@ -38,592 +54,204 @@ class DivOperator extends ArithmeticalBaseOperator
     {
         [$left, $right] = $this->preCompileChecks($expression, $compilationContext);
 
-        switch ($left->getType()) {
+        $leftOperand  = $this->operand($left, $expression, $compilationContext);
+        $rightOperand = $this->operand($right, $expression, $compilationContext);
+        /**
+         * Against a zval a bool stays a bool, so a TypeError names it as PHP does.
+         */
+        if (self::KIND_ZVAL === $leftOperand['kind'] && isset($rightOperand['bool'])) {
+            $rightOperand = $this->boxedBool($rightOperand['bool'], $compilationContext);
+        }
+        if (self::KIND_ZVAL === $rightOperand['kind'] && isset($leftOperand['bool'])) {
+            $leftOperand = $this->boxedBool($leftOperand['bool'], $compilationContext);
+        }
+
+        $shape = $leftOperand['kind'] . '_' . $rightOperand['kind'];
+
+        return match ($shape) {
+            'long_long'     => $this->consumerIsDouble($compilationContext)
+                ? $this->doubleResult('zephir_safe_div_long_long', $leftOperand, $rightOperand, $expression)
+                : $this->zvalResult('zephir_div_long_long', $leftOperand, $rightOperand, $expression, $compilationContext),
+            'long_double'   => $this->doubleResult('zephir_safe_div_long_double', $leftOperand, $rightOperand, $expression),
+            'double_long'   => $this->doubleResult('zephir_safe_div_double_long', $leftOperand, $rightOperand, $expression),
+            'double_double' => $this->doubleResult('zephir_safe_div_double_double', $leftOperand, $rightOperand, $expression),
+            'zval_long'     => $this->zvalResult('zephir_div_zval_long', $leftOperand, $rightOperand, $expression, $compilationContext),
+            'long_zval'     => $this->zvalResult('zephir_div_long_zval', $leftOperand, $rightOperand, $expression, $compilationContext),
+            'zval_double'   => $this->zvalResult('zephir_div_zval_double', $leftOperand, $rightOperand, $expression, $compilationContext),
+            'double_zval'   => $this->zvalResult('zephir_div_double_zval', $leftOperand, $rightOperand, $expression, $compilationContext),
+            'zval_zval'     => $this->zvalResult($this->zvalOperator, $leftOperand, $rightOperand, $expression, $compilationContext),
+        };
+    }
+
+    /**
+     * Classifies one compiled operand as a C integer, a C double or a zval,
+     * and returns the C code that reads it as that kind.
+     *
+     * @return array{kind: string, code: string, variable: ?Variable}
+     *
+     * @throws CompilerException
+     */
+    private function operand(
+        CompiledExpression $operand,
+        array $expression,
+        CompilationContext $compilationContext
+    ): array {
+        switch ($operand->getType()) {
             case 'int':
             case 'uint':
             case 'long':
             case 'ulong':
-                switch ($right->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
-                        return new CompiledExpression(
-                            'double',
-                            'zephir_safe_div_long_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                            $expression
-                        );
-
-                    case 'double':
-                        return new CompiledExpression(
-                            'double',
-                            'zephir_safe_div_long_double((double) ' . $left->getCode() . ', ' . $right->getCode() . ')',
-                            $expression
-                        );
-
-                    case 'bool':
-                        return new CompiledExpression(
-                            'bool',
-                            '(' . $left->getCode() . ' - ' . $right->getBooleanCode() . ')',
-                            $expression
-                        );
-
-                    case 'variable':
-                        $variableRight = $compilationContext->symbolTable->getVariableForRead(
-                            $right->getCode(),
-                            $compilationContext,
-                            $expression
-                        );
-                        switch ($variableRight->getType()) {
-                            case 'int':
-                            case 'uint':
-                            case 'long':
-                            case 'ulong':
-                            case 'bool':
-                                return new CompiledExpression(
-                                    'double',
-                                    'zephir_safe_div_long_long(' . $left->getCode() . ', ' . $variableRight->getName(
-                                    ) . ')',
-                                    $expression
-                                );
-
-                            case 'double':
-                                return new CompiledExpression(
-                                    'double',
-                                    'zephir_safe_div_long_double(' . $left->getCode() . ', ' . $variableRight->getName(
-                                    ) . ')',
-                                    $expression
-                                );
-
-                            case 'variable':
-                                $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
-
-                                return new CompiledExpression(
-                                    'double',
-                                    'zephir_safe_div_long_zval(' . $left->getCode() . ', ' . $variableRightCode . ')',
-                                    $expression
-                                );
-
-                            default:
-                                throw new CompilerException(
-                                    "Cannot operate variable('int') with variable('" . $variableRight->getType() . "')",
-                                    $expression
-                                );
-                        }
-
-
-                    default:
-                        throw new CompilerException(
-                            "Cannot operate 'int' with '" . $right->getType() . "'",
-                            $expression
-                        );
-                }
-
+                return ['kind' => self::KIND_LONG, 'code' => $operand->getCode(), 'variable' => null];
 
             case 'bool':
-                return $this->processLeftBoolean($right, $left, $expression);
-
+                return $this->boolOperand($operand->getBooleanCode());
 
             case 'double':
-                switch ($right->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
-                        return new CompiledExpression(
-                            'double',
-                            'zephir_safe_div_double_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                            $expression
-                        );
-
-                    case 'double':
-                        return new CompiledExpression(
-                            'double',
-                            'zephir_safe_div_double_double(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                            $expression
-                        );
-
-                    case 'bool':
-                        return new CompiledExpression(
-                            'double',
-                            'zephir_safe_div_double_long(' . $left->getCode() . ', ' . $right->getBooleanCode() . ')',
-                            $expression
-                        );
-
-                    case 'variable':
-                        $variableRight = $compilationContext->symbolTable->getVariableForRead(
-                            $right->getCode(),
-                            $compilationContext,
-                            $expression
-                        );
-                        switch ($variableRight->getType()) {
-                            case 'int':
-                            case 'uint':
-                            case 'long':
-                            case 'ulong':
-                            case 'bool':
-                                return new CompiledExpression(
-                                    'double',
-                                    'zephir_safe_div_double_long(' . $left->getCode() . ', ' . $variableRight->getName(
-                                    ) . ')',
-                                    $expression
-                                );
-
-                            case 'double':
-                                return new CompiledExpression(
-                                    'double',
-                                    'zephir_safe_div_double_double(' . $left->getCode(
-                                    ) . ', ' . $variableRight->getName() . ')',
-                                    $expression
-                                );
-
-                            case 'variable':
-                                $symbolRight = $compilationContext->backend->getVariableCode($variableRight);
-
-                                return new CompiledExpression(
-                                    'double',
-                                    'zephir_safe_div_double_zval(' . $left->getCode() . ', ' . $symbolRight . ')',
-                                    $expression
-                                );
-
-
-                            default:
-                                throw new CompilerException(
-                                    "Cannot operate variable('double') with variable('" . $variableRight->getType(
-                                    ) . "')",
-                                    $expression
-                                );
-                        }
-
-
-                    default:
-                        throw new CompilerException(
-                            "Cannot operate 'double' with '" . $right->getType() . "'",
-                            $expression
-                        );
-                }
-
-
-            case 'string':
-            case 'array':
-                throw match ($right->getType()) {
-                    default => new CompilerException(
-                        'Operation is not supported between ' . $right->getType(),
-                        $expression
-                    ),
-                };
-
+                return ['kind' => self::KIND_DOUBLE, 'code' => $operand->getCode(), 'variable' => null];
 
             case 'variable':
-                $variableLeft = $compilationContext->symbolTable->getVariableForRead(
-                    $left->resolve(null, $compilationContext),
+                $variable = $compilationContext->symbolTable->getVariableForRead(
+                    $operand->getCode(),
                     $compilationContext,
                     $expression
                 );
-                switch ($variableLeft->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
-                        switch ($right->getType()) {
-                            case 'int':
-                            case 'uint':
-                            case 'long':
-                            case 'ulong':
-                                return new CompiledExpression(
-                                    'double',
-                                    'zephir_safe_div_long_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                                    $expression
-                                );
 
-                            case 'double':
-                                return new CompiledExpression(
-                                    'double',
-                                    'zephir_safe_div_long_double(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                                    $expression
-                                );
-
-                            case 'variable':
-                                $variableRight = $compilationContext->symbolTable->getVariableForRead(
-                                    $right->getCode(),
-                                    $compilationContext,
-                                    $expression['right']
-                                );
-                                switch ($variableRight->getType()) {
-                                    case 'int':
-                                    case 'uint':
-                                    case 'long':
-                                    case 'ulong':
-                                    case 'bool':
-                                        return new CompiledExpression(
-                                            'double',
-                                            'zephir_safe_div_long_long(' . $variableLeft->getName(
-                                            ) . ', ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
-
-                                    case 'double':
-                                        return new CompiledExpression(
-                                            'double',
-                                            'zephir_safe_div_long_double(' . $variableLeft->getName(
-                                            ) . ', ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
-
-                                    case 'variable':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableRight->isLocalOnly()) {
-                                            return new CompiledExpression(
-                                                'double',
-                                                'zephir_safe_div_long_zval(' . $variableLeft->getName(
-                                                ) . ', &' . $variableRight->getName() . ')',
-                                                $expression
-                                            );
-                                        } else {
-                                            $variableRightCode = $compilationContext->backend->getVariableCode(
-                                                $variableRight
-                                            );
-
-                                            return new CompiledExpression(
-                                                'double',
-                                                'zephir_safe_div_long_zval(' . $variableLeft->getName(
-                                                ) . ', ' . $variableRightCode . ')',
-                                                $expression
-                                            );
-                                        }
-
-                                    default:
-                                        throw new CompilerException(
-                                            "Cannot operate variable('int') with variable('" . $variableRight->getType(
-                                            ) . "')",
-                                            $expression
-                                        );
-                                }
-
-
-                            default:
-                                throw new CompilerException(
-                                    "Cannot operate variable('int') with '" . $right->getType() . "'",
-                                    $expression
-                                );
-                        }
-
-
-                    case 'bool':
-                        switch ($right->getType()) {
-                            case 'int':
-                            case 'uint':
-                            case 'long':
-                            case 'ulong':
-                                return new CompiledExpression(
-                                    'bool',
-                                    '(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                                    $expression
-                                );
-
-                            case 'bool':
-                                return new CompiledExpression(
-                                    'bool',
-                                    '(' . $left->getCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode(
-                                    ) . ')',
-                                    $expression
-                                );
-
-                            case 'variable':
-                                $variableRight = $compilationContext->symbolTable->getVariableForRead(
-                                    $right->getCode(),
-                                    $compilationContext,
-                                    $expression['right']
-                                );
-                                switch ($variableRight->getType()) {
-                                    case 'int':
-                                    case 'uint':
-                                    case 'long':
-                                    case 'ulong':
-                                        return new CompiledExpression(
-                                            'double',
-                                            'zephir_safe_div_long_long('
-                                            . $variableLeft->getName()
-                                            . ', '
-                                            . $variableRight->getName()
-                                            . ')',
-                                            $expression
-                                        );
-
-                                    case 'double':
-                                        return new CompiledExpression(
-                                            'double',
-                                            'zephir_safe_div_long_double('
-                                            . $variableLeft->getName()
-                                            . ', '
-                                            . $variableRight->getName()
-                                            . ')',
-                                            $expression
-                                        );
-
-                                    case 'bool':
-                                        return new CompiledExpression(
-                                            'double',
-                                            'zephir_safe_div_long_long('
-                                            . $variableLeft->getName()
-                                            . ' '
-                                            . $this->bitOperator
-                                            . ' '
-                                            . $variableRight->getName()
-                                            . ')',
-                                            $expression
-                                        );
-
-                                    case 'variable':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableRight->isLocalOnly()) {
-                                            return new CompiledExpression(
-                                                'double',
-                                                'zephir_safe_div_long_zval('
-                                                . $variableLeft->getName()
-                                                . ', &'
-                                                . $variableRight->getName()
-                                                . ')',
-                                                $expression
-                                            );
-                                        } else {
-                                            $variableRightCode = $compilationContext->backend->getVariableCode(
-                                                $variableRight
-                                            );
-
-                                            return new CompiledExpression(
-                                                'double',
-                                                'zephir_safe_div_long_zval('
-                                                . $variableLeft->getName()
-                                                . ', '
-                                                . $variableRightCode
-                                                . ')',
-                                                $expression
-                                            );
-                                        }
-
-
-                                    default:
-                                        throw new CompilerException(
-                                            "Cannot operate variable('int') with variable('"
-                                            . $variableRight->getType()
-                                            . "')",
-                                            $expression
-                                        );
-                                }
-
-
-                            default:
-                                throw new CompilerException(
-                                    "Cannot operate variable('int') with '" . $right->getType() . "'",
-                                    $expression
-                                );
-                        }
-
-
-                    case 'double':
-                        switch ($right->getType()) {
-                            case 'int':
-                            case 'uint':
-                            case 'long':
-                            case 'ulong':
-                                return new CompiledExpression(
-                                    'double',
-                                    'zephir_safe_div_double_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                                    $expression
-                                );
-
-                            case 'double':
-                                return new CompiledExpression(
-                                    'double',
-                                    'zephir_safe_div_double_double('
-                                    . $left->getCode() . ', ' . $right->getCode() . ')',
-                                    $expression
-                                );
-
-                            case 'bool':
-                                return new CompiledExpression(
-                                    'bool',
-                                    '(' . $left->getCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode(
-                                    ) . ')',
-                                    $expression
-                                );
-
-                            case 'variable':
-                                $variableRight = $compilationContext->symbolTable->getVariableForRead(
-                                    $right->getCode(),
-                                    $compilationContext,
-                                    $expression['right']
-                                );
-                                switch ($variableRight->getType()) {
-                                    case 'int':
-                                    case 'uint':
-                                    case 'long':
-                                    case 'ulong':
-                                        return new CompiledExpression(
-                                            'double',
-                                            'zephir_safe_div_double_long(' . $variableLeft->getName(
-                                            ) . ', ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
-
-                                    case 'double':
-                                        return new CompiledExpression(
-                                            'double',
-                                            'zephir_safe_div_double_double(' . $variableLeft->getName(
-                                            ) . ', ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
-
-                                    case 'bool':
-                                        return new CompiledExpression(
-                                            'bool',
-                                            '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->bitOperator . ' ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
-
-                                    case 'variable':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        $symbolRight = $compilationContext->backend->getVariableCode($variableRight);
-
-                                        return new CompiledExpression(
-                                            'double',
-                                            'zephir_safe_div_double_zval('
-                                            . $variableLeft->getName()
-                                            . ', '
-                                            . $symbolRight
-                                            . ')',
-                                            $expression
-                                        );
-
-                                    default:
-                                        throw new CompilerException(
-                                            "Cannot operate variable('double') with variable('" . $variableRight->getType(
-                                            ) . "')",
-                                            $expression
-                                        );
-                                }
-
-
-                            default:
-                                throw new CompilerException(
-                                    "Cannot operate variable('int') with '" . $right->getType() . "'",
-                                    $expression
-                                );
-                        }
-
-
-                    case 'string':
-                    case 'array':
-                        throw new CompilerException(
-                            'Cannot operate ' . $variableLeft->getType() . " variables'",
-                            $expression
-                        );
-                    case 'variable':
-                        $op1 = $compilationContext->backend->getVariableCode($variableLeft);
-                        switch ($right->getType()) {
-                            /* a + 1 */
-                            case 'int':
-                            case 'uint':
-                            case 'long':
-                            case 'ulong':
-                                $op2 = $right->getCode();
-
-                                return new CompiledExpression(
-                                    'double',
-                                    'zephir_safe_div_zval_long(' . $op1 . ', ' . $op2 . ')',
-                                    $expression
-                                );
-
-                            case 'double':
-                                $op2 = $right->getCode();
-
-                                return new CompiledExpression(
-                                    'double',
-                                    'zephir_safe_div_zval_double(' . $op1 . ', ' . $op2 . ')',
-                                    $expression
-                                );
-
-                            /* a(var) + a(x) */
-                            case 'variable':
-                                $variableRight = $compilationContext->symbolTable->getVariableForRead(
-                                    $right->resolve(null, $compilationContext),
-                                    $compilationContext,
-                                    $expression
-                                );
-                                switch ($variableRight->getType()) {
-                                    /* a(var) + a(int) */
-                                    case 'int':
-                                    case 'uint':
-                                    case 'long':
-                                    case 'ulong':
-                                        return new CompiledExpression(
-                                            'double',
-                                            'zephir_safe_div_zval_long(' . $op1 . ', ' . $variableRight->getName(
-                                            ) . ')',
-                                            $expression
-                                        );
-
-                                    case 'double':
-                                        return new CompiledExpression(
-                                            'double',
-                                            'zephir_safe_div_zval_double(' . $op1 . ', ' . $variableRight->getName(
-                                            ) . ')',
-                                            $expression
-                                        );
-
-                                    /* a(var) + a(bool) */
-                                    case 'bool':
-                                        return new CompiledExpression(
-                                            'int',
-                                            'zephir_safe_div_zval_long(' . $op1 . ', ' . $variableRight->getName(
-                                            ) . ')',
-                                            $expression
-                                        );
-
-                                    /* a(var) + a(var) */
-                                    case 'variable':
-                                        $op2 = $compilationContext->backend->getVariableCode($variableRight);
-
-                                        $expected     = $this->getExpected($compilationContext, $expression);
-                                        $expectedCode = $compilationContext->backend->getVariableCode($expected);
-                                        $compilationContext->codePrinter->output(
-                                            $this->zvalOperator . '(' . $expectedCode . ', ' . $op1 . ', ' . $op2 . ');'
-                                        );
-
-                                        $this->checkVariableTemporal($variableLeft);
-                                        $this->checkVariableTemporal($variableRight);
-
-                                        return new CompiledExpression(
-                                            'variable',
-                                            $expected->getName(),
-                                            $expression
-                                        );
-
-                                    default:
-                                        throw new CompilerException(
-                                            "Cannot operate 'variable' with variable ('" . $variableRight->getType(
-                                            ) . "')",
-                                            $expression
-                                        );
-                                }
-
-
-                            default:
-                                throw new CompilerException(
-                                    "Cannot operate 'variable' with '"
-                                    . $right->getType() . "'",
-                                    $expression
-                                );
-                        }
-
-                    default:
-                        throw CompilerException::unknownType($variableLeft, $expression);
-                }
+                return $this->variableOperand($variable, $expression, $compilationContext);
 
             default:
-                throw CompilerException::unsupportedType($left, $expression);
+                throw new CompilerException(
+                    'Cannot operate ' . $operand->getType() . ' with the division operator',
+                    $expression
+                );
         }
+    }
+
+    /**
+     * @return array{kind: string, code: string, variable: ?Variable}
+     *
+     * @throws CompilerException
+     */
+    private function variableOperand(
+        Variable $variable,
+        array $expression,
+        CompilationContext $compilationContext
+    ): array {
+        switch ($variable->getType()) {
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+                return ['kind' => self::KIND_LONG, 'code' => $variable->getName(), 'variable' => null];
+
+            case 'bool':
+                return $this->boolOperand($variable->getName());
+
+            case 'double':
+                return ['kind' => self::KIND_DOUBLE, 'code' => $variable->getName(), 'variable' => null];
+
+            case 'variable':
+            case 'mixed':
+                return [
+                    'kind'     => self::KIND_ZVAL,
+                    'code'     => $compilationContext->backend->getVariableCode($variable),
+                    'variable' => $variable,
+                ];
+
+            default:
+                throw new CompilerException(
+                    'Cannot operate ' . $variable->getType() . ' variables with the division operator',
+                    $expression
+                );
+        }
+    }
+
+    /**
+     * A bool divides as the integer 0 or 1; `bool` keeps its C code for boxing.
+     *
+     * @return array{kind: string, code: string, variable: ?Variable, bool: string}
+     */
+    private function boolOperand(string $code): array
+    {
+        return ['kind' => self::KIND_LONG, 'code' => '(zend_long) ' . $code, 'variable' => null, 'bool' => $code];
+    }
+
+    /**
+     * @return array{kind: string, code: string, variable: ?Variable}
+     */
+    private function boxedBool(string $code, CompilationContext $compilationContext): array
+    {
+        $boxed = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
+        $compilationContext->backend->assignBool($boxed, $code, $compilationContext);
+
+        return [
+            'kind'     => self::KIND_ZVAL,
+            'code'     => $compilationContext->backend->getVariableCode($boxed),
+            'variable' => $boxed,
+        ];
+    }
+
+    /**
+     * True when the quotient lands in a C double, where PHP coerces an int
+     * quotient to float anyway: a `double` local, or the return value of a
+     * method declared `-> double` (optionally nullable).
+     */
+    private function consumerIsDouble(CompilationContext $compilationContext): bool
+    {
+        $target = $this->expectingVariable;
+        if (!$this->expecting || null === $target) {
+            return false;
+        }
+
+        if ('double' === $target->getType()) {
+            return true;
+        }
+
+        $method = $compilationContext->currentMethod;
+        if ('return_value' !== $target->getName() || null === $method || $method->isMixed()) {
+            return false;
+        }
+
+        $returnTypes = array_keys($method->getReturnTypes());
+
+        return $method->areReturnTypesDoubleCompatible() && [] === array_diff($returnTypes, ['double', 'null']);
+    }
+
+    private function doubleResult(string $helper, array $left, array $right, array $expression): CompiledExpression
+    {
+        return new CompiledExpression(
+            'double',
+            $helper . '(' . $left['code'] . ', ' . $right['code'] . ')',
+            $expression
+        );
+    }
+
+    /**
+     * Writes the quotient into a zval, which holds an int or a float.
+     *
+     * @throws CompilerException
+     */
+    private function zvalResult(
+        string $helper,
+        array $left,
+        array $right,
+        array $expression,
+        CompilationContext $compilationContext
+    ): CompiledExpression {
+        $expected     = $this->getExpected($compilationContext, $expression);
+        $expectedCode = $compilationContext->backend->getVariableCode($expected);
+
+        $compilationContext->codePrinter->output(
+            $helper . '(' . $expectedCode . ', ' . $left['code'] . ', ' . $right['code'] . ');'
+        );
+
+        foreach ([$left['variable'], $right['variable']] as $operandVariable) {
+            if (null !== $operandVariable) {
+                $this->checkVariableTemporal($operandVariable);
+            }
+        }
+
+        $expected->setDynamicTypes(['long', 'double']);
+
+        return new CompiledExpression('variable', $expected->getName(), $expression);
     }
 }
