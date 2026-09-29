@@ -64,9 +64,9 @@ class ArithmeticalBaseOperator extends AbstractOperator
         $rightExpr->setReadOnly(true);
         $right = $rightExpr->compile($compilationContext);
 
-        $floatAware = $this->compileFloatZvalWithInteger($left, $right, $expression, $compilationContext);
-        if (null !== $floatAware) {
-            return $floatAware;
+        $zvalAware = $this->compileZvalWithScalar($left, $right, $expression, $compilationContext);
+        if (null !== $zvalAware) {
+            return $zvalAware;
         }
 
         switch ($left->getType()) {
@@ -123,17 +123,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                     'double',
                                     '(double) (' . $left->getCode(
                                     ) . ' ' . $this->operator . ' ' . $variableRight->getName() . ')',
-                                    $expression
-                                );
-
-                            case 'variable':
-                                $compilationContext->headersManager->add('kernel/operators');
-                                $variableRight = $compilationContext->backend->getVariableCode($variableRight);
-
-                                return new CompiledExpression(
-                                    'int',
-                                    '(' . $left->getCode(
-                                    ) . ' ' . $this->operator . ' (zend_long) zephir_get_numberval(' . $variableRight . '))',
                                     $expression
                                 );
 
@@ -226,20 +215,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                     $expression
                                 );
 
-                            case 'variable':
-                                $compilationContext->headersManager->add('kernel/operators');
-                                $variableRight = $compilationContext->backend->getVariableCode(
-                                    $variableRight,
-                                    $compilationContext
-                                );
-
-                                return new CompiledExpression(
-                                    'double',
-                                    '(' . $left->getCode(
-                                    ) . ' ' . $this->operator . ' zephir_get_numberval(' . $variableRight . '))',
-                                    $expression
-                                );
-
                             default:
                                 throw new CompilerException(
                                     "Cannot operate variable('double') with variable('" . $variableRight->getType(
@@ -315,20 +290,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             $expression
                                         );
 
-                                    case 'variable':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        $variableRight = $compilationContext->backend->getVariableCode(
-                                            $variableRight,
-                                            $compilationContext
-                                        );
-
-                                        return new CompiledExpression(
-                                            'int',
-                                            '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' (zend_long) zephir_get_numberval(' . $variableRight . '))',
-                                            $expression
-                                        );
-
                                     default:
                                         throw new CompilerException(
                                             "Cannot operate variable('int') with variable('" . $variableRight->getType(
@@ -371,20 +332,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             'int',
                                             '(' . $variableLeft->getName(
                                             ) . ' ' . $this->operator . ' ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
-
-                                    case 'variable':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        $variableRight = $compilationContext->backend->getVariableCode(
-                                            $variableRight,
-                                            $compilationContext
-                                        );
-
-                                        return new CompiledExpression(
-                                            'int',
-                                            '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' (zend_long) zephir_get_numberval(' . $variableRight . '))',
                                             $expression
                                         );
 
@@ -449,20 +396,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             'bool',
                                             '(' . $variableLeft->getName(
                                             ) . ' ' . $this->bitOperator . ' ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
-
-                                    case 'variable':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        $variableRight = $compilationContext->backend->getVariableCode(
-                                            $variableRight,
-                                            $compilationContext
-                                        );
-
-                                        return new CompiledExpression(
-                                            'int',
-                                            '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' (zend_long) zephir_get_numberval(' . $variableRight . '))',
                                             $expression
                                         );
 
@@ -545,17 +478,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             $expression
                                         );
 
-                                    case 'variable':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        $variableRight = $compilationContext->backend->getVariableCode($variableRight);
-
-                                        return new CompiledExpression(
-                                            'int',
-                                            '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' (zend_long) zephir_get_numberval(' . $variableRight . '))',
-                                            $expression
-                                        );
-
                                     default:
                                         throw new CompilerException(
                                             "Cannot operate variable('double') with variable('" . $variableRight->getType(
@@ -621,32 +543,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
 
                     case 'variable':
                         switch ($right->getType()) {
-                            /* a + 1 */
-                            case 'int':
-                            case 'uint':
-                            case 'long':
-                            case 'ulong':
-                            case 'double':
-                                $compilationContext->headersManager->add('kernel/operators');
-                                $op = $this->operator;
-
-                                $op1 = $compilationContext->backend->getVariableCode($variableLeft);
-                                $op2 = $right->getCode();
-                                if ('double' == $right->getType()) {
-                                    return new CompiledExpression(
-                                        'double',
-                                        '(zephir_get_numberval(' . $op1 . ') ' . $op . ' ' . $op2 . ')',
-                                        $expression
-                                    );
-                                } else {
-                                    return new CompiledExpression(
-                                        'int',
-                                        '(zephir_get_numberval(' . $op1 . ') ' . $op . ' ' . $op2 . ')',
-                                        $expression
-                                    );
-                                }
-
-
                             /* a(var) + a(x) */
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead(
@@ -655,40 +551,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                                 switch ($variableRight->getType()) {
-                                    /* a(var) + a(int) */
-                                    case 'int':
-                                    case 'uint':
-                                    case 'long':
-                                    case 'ulong':
-                                    case 'double':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        $variableLeft = $compilationContext->backend->getVariableCode($variableLeft);
-
-                                        return new CompiledExpression(
-                                            'double' == $variableRight->getType() ? 'double' : 'int',
-                                            sprintf(
-                                                '(zephir_get_numberval(%s) %s %s)',
-                                                $variableLeft,
-                                                $this->operator,
-                                                $variableRight->getName()
-                                            ),
-                                            $expression
-                                        );
-
-
-                                    /* a(var) + a(bool) */
-                                    case 'bool':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        $variableLeft = $compilationContext->backend->getVariableCode($variableLeft);
-
-                                        return new CompiledExpression(
-                                            'int',
-                                            '(zephir_get_numberval(' . $variableLeft . ') ' . $this->operator . ' ' . $variableRight->getName(
-                                            ) . ')',
-                                            $expression
-                                        );
-
-
                                     /* a(var) + a(var) */
                                     case 'variable':
                                     case 'array':
@@ -830,27 +692,31 @@ class ArithmeticalBaseOperator extends AbstractOperator
     }
 
     /**
-     * The zval-with-integer fast paths below read the zval as a number and
-     * type the result `int`, which truncates a float. A zval known to hold a
-     * float, such as a `/` quotient, is combined through the zval operator
-     * instead, with the integer boxed, so the result is PHP's int or float.
+     * A zval combined with a native number can hold a float, a numeric
+     * string or an operand PHP rejects, so reading it as a C number and
+     * typing the result `int` truncates floats and never throws. The native
+     * side is boxed instead and PHP's own operator computes the result, as
+     * an int or a float, with PHP's TypeError and warnings. The zval's
+     * dynamic types are not trusted to prove it holds an int: they grow as
+     * the method compiles, so a later assignment in a loop body is missed.
      *
      * @see https://github.com/zephir-lang/zephir/issues/2675
+     * @see https://github.com/zephir-lang/zephir/issues/2744
      */
-    private function compileFloatZvalWithInteger(
+    private function compileZvalWithScalar(
         CompiledExpression $left,
         CompiledExpression $right,
         array $expression,
         CompilationContext $compilationContext
     ): ?CompiledExpression {
-        $leftVariable  = $this->floatZval($left, $compilationContext, $expression);
-        $rightVariable = $this->floatZval($right, $compilationContext, $expression);
-        if (null === $leftVariable && null === $rightVariable) {
+        $leftVariable  = $this->zvalOperand($left, $compilationContext, $expression);
+        $rightVariable = $this->zvalOperand($right, $compilationContext, $expression);
+        if ((null === $leftVariable) === (null === $rightVariable)) {
             return null;
         }
 
-        $leftVariable ??= $this->boxedInteger($left, $compilationContext, $expression);
-        $rightVariable ??= $this->boxedInteger($right, $compilationContext, $expression);
+        $leftVariable ??= $this->boxedScalar($left, $compilationContext, $expression);
+        $rightVariable ??= $this->boxedScalar($right, $compilationContext, $expression);
         if (null === $leftVariable || null === $rightVariable) {
             return null;
         }
@@ -874,7 +740,10 @@ class ArithmeticalBaseOperator extends AbstractOperator
         return new CompiledExpression('variable', $expected->getName(), $expression);
     }
 
-    private function floatZval(
+    /**
+     * The variable behind an operand that is a zval at runtime, or null.
+     */
+    private function zvalOperand(
         CompiledExpression $operand,
         CompilationContext $compilationContext,
         array $expression
@@ -889,41 +758,55 @@ class ArithmeticalBaseOperator extends AbstractOperator
             $expression
         );
 
-        if (Types::T_VARIABLE !== $variable->getType() || !$variable->hasAnyDynamicType(Types::T_DOUBLE)) {
-            return null;
-        }
+        $zvalTypes = [Types::T_VARIABLE, Types::T_MIXED, Types::T_ARRAY];
 
-        return $variable;
+        return in_array($variable->getType(), $zvalTypes, true) ? $variable : null;
     }
 
     /**
-     * An integer operand, literal or typed local, copied into a temporary zval.
+     * A native number, literal or typed local, copied into a temporary zval.
+     * A bool stays a bool, so a TypeError names it as PHP does; a char is its
+     * integer byte value.
      */
-    private function boxedInteger(
+    private function boxedScalar(
         CompiledExpression $operand,
         CompilationContext $compilationContext,
         array $expression
     ): ?Variable {
-        $integerTypes = [Types::T_INT, Types::T_UINT, Types::T_LONG, Types::T_ULONG];
+        $type = $operand->getType();
+        $code = Types::T_BOOL === $type ? $operand->getBooleanCode() : $operand->getCode();
 
-        if (in_array($operand->getType(), $integerTypes, true)) {
-            $code = $operand->getCode();
-        } elseif ('variable' === $operand->getType()) {
+        if ('variable' === $type) {
             $variable = $compilationContext->symbolTable->getVariableForRead(
                 $operand->getCode(),
                 $compilationContext,
                 $expression
             );
-            if (!in_array($variable->getType(), $integerTypes, true)) {
-                return null;
-            }
+            $type = $variable->getType();
             $code = $variable->getName();
-        } else {
+        }
+
+        $numberTypes = [
+            Types::T_INT,
+            Types::T_UINT,
+            Types::T_LONG,
+            Types::T_ULONG,
+            Types::T_CHAR,
+            Types::T_UCHAR,
+            Types::T_DOUBLE,
+            Types::T_BOOL,
+        ];
+        if (!in_array($type, $numberTypes, true)) {
             return null;
         }
 
-        $boxed = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
-        $compilationContext->backend->assignLong($boxed, $code, $compilationContext);
+        $backend = $compilationContext->backend;
+        $boxed   = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
+        match ($type) {
+            Types::T_DOUBLE => $backend->assignDouble($boxed, $code, $compilationContext),
+            Types::T_BOOL   => $backend->assignBool($boxed, $code, $compilationContext),
+            default         => $backend->assignLong($boxed, $code, $compilationContext),
+        };
 
         return $boxed;
     }

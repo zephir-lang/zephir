@@ -484,7 +484,8 @@ class Variable
                             $statement,
                             $codePrinter,
                             $variable,
-                            $itemVariable
+                            $itemVariable,
+                            false
                         );
                         break;
 
@@ -614,7 +615,8 @@ class Variable
                         $statement,
                         $codePrinter,
                         $variable,
-                        $itemVariable
+                        $itemVariable,
+                        true
                     );
                 } else {
                     throw new CompilerException('Unknown type: ' . $itemVariable->getType(), $statement);
@@ -1633,12 +1635,19 @@ class Variable
         array $statement,
         Printer $codePrinter,
         string $variable,
-        ZephirVariable | bool $itemVariable
+        ZephirVariable | bool $itemVariable,
+        bool $integerTarget
     ): void {
         $exprVariableCode = $compilationContext->backend->getVariableCode($exprVariable);
         switch ($statement['operator']) {
             case 'assign':
-                $codePrinter->output($variable . ' = zephir_get_numberval(' . $exprVariableCode . ');');
+                /**
+                 * zephir_get_numberval() is a long-or-double ternary, so C
+                 * promotes it to double and an int above 2^53 loses digits.
+                 * @see https://github.com/zephir-lang/zephir/issues/2010
+                 */
+                $reader = $integerTarget ? 'zephir_get_intval' : 'zephir_get_numberval';
+                $codePrinter->output($variable . ' = ' . $reader . '(' . $exprVariableCode . ');');
                 break;
 
             case 'add-assign':

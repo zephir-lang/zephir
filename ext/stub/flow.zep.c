@@ -454,9 +454,11 @@ PHP_METHOD(Stub_Flow, testWhile10)
 	double c = 0;
 	zend_long b = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *a, a_sub;
+	zval *a, a_sub, _0, _1;
 
 	ZVAL_UNDEF(&a_sub);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -479,7 +481,11 @@ PHP_METHOD(Stub_Flow, testWhile10)
 		SEPARATE_ZVAL(a);
 		zephir_decrement(a);
 	}
-	c = (double) ((zephir_get_numberval(a) + b));
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, b);
+	ZEPHIR_INIT_VAR(&_1);
+	zephir_add_function(&_1, a, &_0);
+	c = zephir_get_numberval(&_1);
 	RETURN_MM_DOUBLE(c);
 }
 
@@ -488,10 +494,12 @@ PHP_METHOD(Stub_Flow, testWhile11)
 	double c = 0;
 	zend_long b = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *a, a_sub, *d, d_sub;
+	zval *a, a_sub, *d, d_sub, _0, _1;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&d_sub);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(d)
@@ -505,7 +513,7 @@ PHP_METHOD(Stub_Flow, testWhile11)
 		if (!(zephir_is_true(a))) {
 			break;
 		}
-		b = zephir_get_numberval(d);
+		b = zephir_get_intval(d);
 		while (1) {
 			if (!(b)) {
 				break;
@@ -515,7 +523,11 @@ PHP_METHOD(Stub_Flow, testWhile11)
 		SEPARATE_ZVAL(a);
 		zephir_decrement(a);
 	}
-	c = (double) ((zephir_get_numberval(a) + b));
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, b);
+	ZEPHIR_INIT_VAR(&_1);
+	zephir_add_function(&_1, a, &_0);
+	c = zephir_get_numberval(&_1);
 	RETURN_MM_DOUBLE(c);
 }
 

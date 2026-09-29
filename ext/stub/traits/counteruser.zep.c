@@ -13,9 +13,9 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 #include "kernel/operators.h"
 #include "kernel/concat.h"
-#include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/array.h"
 
@@ -43,20 +43,27 @@ PHP_METHOD(Stub_Traits_CounterUser, label)
 
 PHP_METHOD(Stub_Traits_CounterUser, increment)
 {
-	zval _0, _1;
+	zval _0, _1, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("count", 5, 1);
 	}
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 144, PH_NOISY_CC | PH_READONLY);
-	ZVAL_UNDEF(&_1);
-	ZVAL_LONG(&_1, (zephir_get_numberval(&_0) + 2));
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 144, &_1);
-	RETURN_MEMBER_TYPED(getThis(), "count", IS_LONG);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 2);
+	ZEPHIR_INIT_VAR(&_2);
+	zephir_add_function(&_2, &_0, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 144, &_2);
+	RETURN_MM_MEMBER_TYPED(getThis(), "count", IS_LONG);
 }
 
 PHP_METHOD(Stub_Traits_CounterUser, describe)

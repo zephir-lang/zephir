@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Oo_Scopes_AbstractClassMagic)
@@ -30,7 +30,8 @@ ZEPHIR_INIT_CLASS(Stub_Oo_Scopes_AbstractClassMagic)
 
 PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 {
-	zval name_zv, *value, value_sub, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval name_zv, *value, value_sub, _0, _1, _2;
 	zend_string *name = NULL;
 	zval *this_ptr = getThis();
 
@@ -38,6 +39,7 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("setCount", 8, 1);
@@ -47,13 +49,19 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 		Z_PARAM_STR(name)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	value = ZEND_CALL_ARG(execute_data, 2);
-	ZVAL_STR(&name_zv, name);
+	zephir_memory_observe(&name_zv);
+	ZVAL_STR_COPY(&name_zv, name);
 	zephir_update_property_zval_zval(this_ptr, &name_zv, value);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 93, PH_NOISY_CC | PH_READONLY);
-	ZVAL_UNDEF(&_1);
-	ZVAL_LONG(&_1, (zephir_get_numberval(&_0) + 1));
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 93, &_1);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 1);
+	ZEPHIR_INIT_VAR(&_2);
+	zephir_add_function(&_2, &_0, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 93, &_2);
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __get)

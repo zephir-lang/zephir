@@ -297,12 +297,13 @@ PHP_METHOD(Stub_Generators, consume)
 void zep_Stub_Generators_zephir_gen_step_countTo(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext )
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *zephir_gen, zephir_gen_sub, _0, _1, _2$$3;
+	zval *zephir_gen, zephir_gen_sub, _0, _1, _2, _3$$3;
 	zend_long n, i;
 		ZVAL_UNDEF(&zephir_gen_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_2$$3);
+	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_3$$3);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("sideEffects", 11, 1);
@@ -311,29 +312,35 @@ void zep_Stub_Generators_zephir_gen_step_countTo(int ht, zend_execute_data *exec
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_gen = zephir_gen_ext;
 	/* Generator resume dispatch (issue #1849) */
-	zephir_generator_slots_ensure(zephir_gen, 3);
+	zephir_generator_slots_ensure(zephir_gen, 5);
 	if (Z_TYPE_P(zephir_generator_slot(zephir_gen, 0)) != IS_UNDEF) { n = (zend_long) Z_LVAL_P(zephir_generator_slot(zephir_gen, 0)); }
-	ZEPHIR_GEN_RESTORE_ZVAL(zephir_gen, 1, &_2$$3);
-	if (Z_TYPE_P(zephir_generator_slot(zephir_gen, 2)) != IS_UNDEF) { i = (zend_long) Z_LVAL_P(zephir_generator_slot(zephir_gen, 2)); }
+	ZEPHIR_GEN_RESTORE_ZVAL(zephir_gen, 1, &_1);
+	ZEPHIR_GEN_RESTORE_ZVAL(zephir_gen, 2, &_2);
+	ZEPHIR_GEN_RESTORE_ZVAL(zephir_gen, 3, &_3$$3);
+	if (Z_TYPE_P(zephir_generator_slot(zephir_gen, 4)) != IS_UNDEF) { i = (zend_long) Z_LVAL_P(zephir_generator_slot(zephir_gen, 4)); }
 	switch (zephir_generator_get_state(zephir_gen)) {
 		case 1: goto zephir_yield_resume_1;
 		default: break;
 	}
 	i = 1;
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 42, PH_NOISY_CC | PH_READONLY);
-	ZVAL_UNDEF(&_1);
-	ZVAL_LONG(&_1, (zephir_get_numberval(&_0) + 1));
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 42, &_1);
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 1);
+	ZEPHIR_INIT_NVAR(&_2);
+	zephir_add_function(&_2, &_0, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 42, &_2);
 	while (1) {
 		if (!(i <= n)) {
 			break;
 		}
-		ZEPHIR_INIT_NVAR(&_2$$3);
-		ZVAL_LONG(&_2$$3, i);
-		zephir_generator_yield(zephir_gen, NULL, &_2$$3, 1);
+		ZEPHIR_INIT_NVAR(&_3$$3);
+		ZVAL_LONG(&_3$$3, i);
+		zephir_generator_yield(zephir_gen, NULL, &_3$$3, 1);
 		zephir_generator_slot_set_long(zephir_gen, 0, (zend_long) n);
-		zephir_generator_slot_set(zephir_gen, 1, &_2$$3);
-		zephir_generator_slot_set_long(zephir_gen, 2, (zend_long) i);
+		zephir_generator_slot_set(zephir_gen, 1, &_1);
+		zephir_generator_slot_set(zephir_gen, 2, &_2);
+		zephir_generator_slot_set(zephir_gen, 3, &_3$$3);
+		zephir_generator_slot_set_long(zephir_gen, 4, (zend_long) i);
 		ZEPHIR_MM_RESTORE();
 		return;
 		zephir_yield_resume_1:;

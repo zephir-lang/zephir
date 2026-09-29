@@ -401,7 +401,7 @@ PHP_METHOD(Stub_Issue2675, divTypedLong)
 	zephir_fetch_params(1, 2, 0, &a_param, &b_param);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_div_long_long(&_0, a, b);
-	k = zephir_get_numberval(&_0);
+	k = zephir_get_intval(&_0);
 	RETURN_MM_LONG(k);
 }
 
