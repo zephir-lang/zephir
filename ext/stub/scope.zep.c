@@ -82,15 +82,16 @@ PHP_METHOD(Stub_Scope, test1)
 PHP_METHOD(Stub_Scope, test2)
 {
 	zend_bool _0;
-	zval k, c, _5, _3$$3, _4$$3;
+	zval k, c, _6, _3$$3, _4$$3, _5$$3;
 	zend_long p, _1, _2, p$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&c);
-	ZVAL_UNDEF(&_5);
+	ZVAL_UNDEF(&_6);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
+	ZVAL_UNDEF(&_5$$3);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -114,16 +115,18 @@ PHP_METHOD(Stub_Scope, test2)
 			ZVAL_LONG(&c, _1);
 			p$$3 = 66;
 			ZEPHIR_INIT_NVAR(&_3$$3);
-			ZVAL_LONG(&_3$$3, ((zephir_get_numberval(&c) * p$$3)));
+			ZVAL_LONG(&_3$$3, p$$3);
 			ZEPHIR_INIT_NVAR(&_4$$3);
-			ZEPHIR_CONCAT_VVS(&_4$$3, &k, &_3$$3, "_");
-			ZEPHIR_CPY_WRT(&k, &_4$$3);
+			mul_function(&_4$$3, &c, &_3$$3);
+			ZEPHIR_INIT_NVAR(&_5$$3);
+			ZEPHIR_CONCAT_VVS(&_5$$3, &k, &_4$$3, "_");
+			ZEPHIR_CPY_WRT(&k, &_5$$3);
 		}
 	}
 	zephir_create_array(return_value, 2, 0);
-	ZEPHIR_INIT_VAR(&_5);
-	ZVAL_LONG(&_5, p);
-	zephir_array_fast_append(return_value, &_5);
+	ZEPHIR_INIT_VAR(&_6);
+	ZVAL_LONG(&_6, p);
+	zephir_array_fast_append(return_value, &_6);
 	zephir_array_fast_append(return_value, &k);
 	RETURN_MM();
 }

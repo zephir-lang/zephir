@@ -210,31 +210,26 @@ zend_long zephir_safe_mod_double_zval(double op1, zval *op2);
 		}  \
 	}
 
+/**
+ * The result replaces the whole value: it can change type (int overflow to
+ * float, a numeric string to a number), and a failed operation has thrown
+ * and leaves the operand untouched.
+ */
 #define ZEPHIR_SUB_ASSIGN(z, v)  \
 	{  \
 		zval tmp;  \
-		SEPARATE_ZVAL(z);  \
-		sub_function(&tmp, z, v);  \
-		if (Z_TYPE(tmp) == IS_LONG) {  \
-			Z_LVAL_P(z) = Z_LVAL(tmp);  \
-		} else {  \
-			if (Z_TYPE(tmp) == IS_DOUBLE) {  \
-				Z_DVAL_P(z) = Z_DVAL(tmp);  \
-			}  \
+		if (sub_function(&tmp, z, v) == SUCCESS) {  \
+			zval_ptr_dtor(z);  \
+			ZVAL_COPY_VALUE(z, &tmp);  \
 		}  \
 	}
 
 #define ZEPHIR_MUL_ASSIGN(z, v)  \
 	{  \
 		zval tmp;  \
-		SEPARATE_ZVAL(z);  \
-		mul_function(&tmp, z, v);  \
-		if (Z_TYPE(tmp) == IS_LONG) {  \
-			Z_LVAL_P(z) = Z_LVAL(tmp);  \
-		} else {  \
-			if (Z_TYPE(tmp) == IS_DOUBLE) {  \
-				Z_DVAL_P(z) = Z_DVAL(tmp);  \
-			}  \
+		if (mul_function(&tmp, z, v) == SUCCESS) {  \
+			zval_ptr_dtor(z);  \
+			ZVAL_COPY_VALUE(z, &tmp);  \
 		}  \
 	}
 

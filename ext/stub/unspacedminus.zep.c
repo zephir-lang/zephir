@@ -93,11 +93,12 @@ PHP_METHOD(Stub_UnspacedMinus, spaceBefore)
 PHP_METHOD(Stub_UnspacedMinus, arrayIndex)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *a_param = NULL, _0;
+	zval *a_param = NULL, _0, _1;
 	zval a;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		ZEPHIR_Z_PARAM_ARRAY(a, a_param)
 	ZEND_PARSE_PARAMETERS_END();
@@ -106,7 +107,10 @@ PHP_METHOD(Stub_UnspacedMinus, arrayIndex)
 	zephir_fetch_params(1, 1, 0, &a_param);
 	zephir_get_arrval(&a, a_param);
 	zephir_array_fetch_long(&_0, &a, 0, PH_NOISY | PH_READONLY, "stub/unspacedminus.zep", 29);
-	RETURN_MM_LONG((zephir_get_numberval(&_0) - 1));
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 1);
+	zephir_sub_function(return_value, &_0, &_1);
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_UnspacedMinus, negativeLiteral)

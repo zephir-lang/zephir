@@ -12,6 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/memory.h"
 #include "kernel/operators.h"
 #include "kernel/object.h"
 
@@ -26,12 +27,19 @@ ZEPHIR_INIT_CLASS(stub_8__closure)
 
 PHP_METHOD(stub_8__closure, __invoke)
 {
-	zval abc;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval abc, _0;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&abc);
+	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_read_property(&abc, this_ptr, SL("abc"), PH_NOISY_CC | PH_READONLY);
 
-	RETURN_LONG((zephir_get_numberval(&abc) + 1));
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, 1);
+	zephir_add_function(return_value, &abc, &_0);
+	RETURN_MM();
 }
 
