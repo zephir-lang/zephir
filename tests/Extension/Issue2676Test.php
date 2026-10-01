@@ -19,7 +19,6 @@ use Stub\Issue2676;
 
 use function extension_loaded;
 use function gmp_init;
-use function is_object;
 
 /**
  * PHP's `%` converts both operands to int, yields an int, and throws
@@ -148,10 +147,6 @@ final class Issue2676Test extends TestCase
      */
     public function testLongLocalHoldsTheResult(mixed $a): void
     {
-        if (is_object($a) && !$a instanceof stdClass) {
-            $this->markTestSkipped('zephir_get_intval() reads any object as 1, see #2746.');
-        }
-
         $this->assertMatchesPhp(fn () => $this->test->modTypedLong($a, 4), fn () => (int) ($a % 4));
     }
 

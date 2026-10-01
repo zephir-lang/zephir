@@ -365,52 +365,13 @@ void zephir_convert_to_object(zval *op)
 }
 
 /**
- * Returns the long value of a zval
+ * Returns the long value of a zval, as PHP's (int) cast does: an object runs
+ * its cast_object handler or warns, a float string saturates. See #2746.
  */
 zend_long zephir_get_intval_ex(const zval *op)
 {
-    int type;
-    double double_value = 0;
-    zend_long long_value = 0;
-
-	switch (Z_TYPE_P(op)) {
-		case IS_ARRAY:
-			return zend_hash_num_elements(Z_ARRVAL_P(op)) ? 1 : 0;
-
-		case IS_RESOURCE:
-			return (zend_long)Z_RES_HANDLE_P(op);
-
-		case IS_CALLABLE:
-		case IS_OBJECT:
-			return 1;
-
-		case IS_LONG:
-			return Z_LVAL_P(op);
-
-		case IS_TRUE:
-			return 1;
-
-		case IS_FALSE:
-			return 0;
-
-		case IS_DOUBLE:
-			return zend_dval_to_lval(Z_DVAL_P(op));
-
-		case IS_STRING: {
-			ASSUME(Z_STRVAL_P(op) != NULL);
-
-			type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 1);
-            switch (type) {
-                case IS_LONG:
-                    return long_value;
-
-                case IS_DOUBLE:
-                    return zend_dval_to_lval(double_value);
-            }
-		}
-	}
-
-	return 0;
+	/* PHP 8.0 declares the parameter non-const */
+	return zval_get_long((zval *) op);
 }
 
 zend_long zephir_get_charval_ex(const zval *op)
@@ -446,47 +407,17 @@ zend_long zephir_get_charval_ex(const zval *op)
 }
 
 /**
- * Returns the long value of a zval
+ * Returns the double value of a zval, as PHP's (float) cast does. See #2746.
  */
 double zephir_get_doubleval_ex(const zval *op)
 {
-	int type;
-    double double_value = 0;
-    zend_long long_value = 0;
-
-	switch (Z_TYPE_P(op)) {
-        case IS_ARRAY:
-            return zend_hash_num_elements(Z_ARRVAL_P(op)) ? (double) 1 : 0;
-
-	    case IS_CALLABLE:
-	    case IS_RESOURCE:
-	    case IS_OBJECT:
-	        return (double) 1;
-
-		case IS_LONG:
-			return (double) Z_LVAL_P(op);
-
-		case IS_TRUE:
-			return (double) 1;
-
-		case IS_FALSE:
-			return (double) 0;
-
-		case IS_DOUBLE:
-			return Z_DVAL_P(op);
-
-		case IS_STRING:
-		    type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 1);
-            switch (type) {
-                case IS_LONG:
-                    return (double) long_value;
-
-                case IS_DOUBLE:
-                    return double_value;
-            }
+	/* zval_get_double() has no IS_UNDEF case: an unassigned variable reads as 0 */
+	if (Z_TYPE_P(op) == IS_UNDEF) {
+		return 0;
 	}
 
-	return 0;
+	/* PHP 8.0 declares the parameter non-const */
+	return zval_get_double((zval *) op);
 }
 
 /**

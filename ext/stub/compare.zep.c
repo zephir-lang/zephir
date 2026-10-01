@@ -60,12 +60,10 @@ PHP_METHOD(Stub_Compare, isLessDouble)
 	double a, b;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(a_param)
-		Z_PARAM_ZVAL(b_param)
+		Z_PARAM_DOUBLE(a)
+		Z_PARAM_DOUBLE(b)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
-	a = zephir_get_doubleval(a_param);
-	b = zephir_get_doubleval(b_param);
 	RETURN_BOOL(a < b);
 }
 
@@ -75,10 +73,9 @@ PHP_METHOD(Stub_Compare, isLessThenPi)
 	double a;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(a_param)
+		Z_PARAM_DOUBLE(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
-	a = zephir_get_doubleval(a_param);
 	RETURN_BOOL(a < 3.14);
 }
 
@@ -88,10 +85,9 @@ PHP_METHOD(Stub_Compare, isMoreThenPi)
 	double a;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(a_param)
+		Z_PARAM_DOUBLE(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
-	a = zephir_get_doubleval(a_param);
 	RETURN_BOOL(3.14 < a);
 }
 

@@ -100,12 +100,11 @@ PHP_METHOD(Stub_Quantum, harmos)
 	ZVAL_UNDEF(&_11$$4);
 	ZVAL_UNDEF(&_12$$4);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(x_param)
+		Z_PARAM_DOUBLE(x)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &x_param);
-	x = zephir_get_doubleval(x_param);
 	dx =  (0.02);
 	k0 =  ((3.0 * 3.14159265358979323846));
 	dt =  (zephir_safe_div_double_double((dx * dx), 4.0));

@@ -100,14 +100,13 @@ PHP_METHOD(Stub_Generators, seq)
 	ZVAL_UNDEF(&label);
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_LONG(n)
-		Z_PARAM_ZVAL(step_param)
+		Z_PARAM_DOUBLE(step)
 		Z_PARAM_BOOL(tail)
 		Z_PARAM_ZVAL(label_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 4, 0, &n_param, &step_param, &tail_param, &label_param);
-	step = zephir_get_doubleval(step_param);
 	zephir_get_strval(&label, label_param);
 	zephir_generator_create(return_value, NULL, stub_generators_ce, zep_Stub_Generators_zephir_gen_step_seq, 4);
 	zephir_generator_slot_set_long(return_value, 0, (zend_long) n);
