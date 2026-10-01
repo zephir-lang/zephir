@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-10-01
+
 ### Added
 - Added a warning for unrecognized top-level settings in `config.json` [#2449](https://github.com/zephir-lang/zephir/issues/2449)
 - Added a report for an unrecognized key in the `warnings` or `optimizations` section, and for an unrecognized `-W`, `-w`, `-f` or `-fno-` flag [#2727](https://github.com/zephir-lang/zephir/issues/2727)
