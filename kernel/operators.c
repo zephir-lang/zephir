@@ -705,28 +705,6 @@ static zend_long zephir_throw_modulo_by_zero(void)
 }
 
 /**
- * The operand coercion PHP's `%` performs, in the order it performs it: the
- * float-to-int deprecation of an operand fires before the zero divisor is
- * inspected (convert_op1_op2_long, then the op2_lval == 0 test).
- */
-static zend_long zephir_mod_operand(zval *op)
-{
-	switch (Z_TYPE_P(op)) {
-		case IS_DOUBLE:
-			return ZEPHIR_DVAL_TO_LVAL(Z_DVAL_P(op));
-
-		case IS_ARRAY:
-		case IS_OBJECT:
-		case IS_RESOURCE:
-			/* PHP 8 throws a TypeError here instead. See #2676. */
-			zend_error(E_WARNING, "Unsupported operand types");
-			break;
-	}
-
-	return zephir_get_intval(op);
-}
-
-/**
  * PHP's `/` for two integers, from div_function_base() in
  * Zend/zend_operators.c: an exact quotient is an int, anything else a float.
  * `ZEND_LONG_MIN / -1` overflows a zend_long and raises SIGFPE on x86, so it
@@ -906,43 +884,41 @@ zend_long zephir_safe_mod_double_double(double op1, double op2)
 }
 
 /**
- * Do safe modulo between two zval/long
+ * A zval operand can be anything, so the modulo is PHP's own mod_function():
+ * the TypeError for an array or a non-numeric string, the "non-numeric value"
+ * warning, bool and null coercion and an overloaded object's result all come
+ * from it.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2676
  */
-zend_long zephir_safe_mod_zval_long(zval *op1, zend_long op2)
+void zephir_mod_zval_long(zval *result, zval *op1, zend_long op2)
 {
-	zend_long dividend = zephir_mod_operand(op1);
+	zval divisor;
 
-	return zephir_safe_mod_long_long(dividend, op2);
+	ZVAL_LONG(&divisor, op2);
+	mod_function(result, op1, &divisor);
 }
 
-/**
- * Do safe modulo between two zval/double
- */
-zend_long zephir_safe_mod_zval_double(zval *op1, double op2)
+void zephir_mod_long_zval(zval *result, zend_long op1, zval *op2)
 {
-	zend_long dividend = zephir_mod_operand(op1);
-	zend_long divisor  = ZEPHIR_DVAL_TO_LVAL(op2);
+	zval dividend;
 
-	return zephir_safe_mod_long_long(dividend, divisor);
+	ZVAL_LONG(&dividend, op1);
+	mod_function(result, &dividend, op2);
 }
 
-/**
- * Do safe modulo between two long/zval
- */
-zend_long zephir_safe_mod_long_zval(zend_long op1, zval *op2)
+void zephir_mod_zval_double(zval *result, zval *op1, double op2)
 {
-	zend_long divisor = zephir_mod_operand(op2);
+	zval divisor;
 
-	return zephir_safe_mod_long_long(op1, divisor);
+	ZVAL_DOUBLE(&divisor, op2);
+	mod_function(result, op1, &divisor);
 }
 
-/**
- * Do safe modulo between two double/zval
- */
-zend_long zephir_safe_mod_double_zval(double op1, zval *op2)
+void zephir_mod_double_zval(zval *result, double op1, zval *op2)
 {
-	zend_long dividend = ZEPHIR_DVAL_TO_LVAL(op1);
-	zend_long divisor  = zephir_mod_operand(op2);
+	zval dividend;
 
-	return zephir_safe_mod_long_long(dividend, divisor);
+	ZVAL_DOUBLE(&dividend, op1);
+	mod_function(result, &dividend, op2);
 }

@@ -33,6 +33,14 @@ use function sprintf;
  */
 class ArithmeticalBaseOperator extends AbstractOperator
 {
+    /**
+     * The C kind an operand is read as by the operators that classify their
+     * operands (`/` and `%`).
+     */
+    protected const KIND_LONG   = 'long';
+    protected const KIND_DOUBLE = 'double';
+    protected const KIND_ZVAL   = 'zval';
+
     protected bool $literalOnly = true;
 
     /**
@@ -812,40 +820,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
     }
 
     /**
-     * @param CompiledExpression $right
-     * @param CompiledExpression $left
-     * @param array              $expression
-     *
-     * @return CompiledExpression
-     */
-    protected function processLeftBoolean(
-        CompiledExpression $right,
-        CompiledExpression $left,
-        array $expression
-    ): CompiledExpression {
-        return match ($right->getType()) {
-            Types::T_INT,
-            Types::T_UINT,
-            Types::T_LONG,
-            Types::T_ULONG,
-            Types::T_DOUBLE => new CompiledExpression(
-                'long',
-                '(' . $left->getBooleanCode() . ' - ' . $right->getCode() . ')',
-                $expression
-            ),
-            Types::T_BOOL   => new CompiledExpression(
-                'bool',
-                '(' . $left->getBooleanCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode() . ')',
-                $expression
-            ),
-            default         => throw new CompilerException(
-                "Cannot operate 'bool' with '" . $right->getType() . "'",
-                $expression
-            ),
-        };
-    }
-
-    /**
      * Returns proper dynamic types.
      *
      * @param Variable $left
@@ -875,5 +849,169 @@ class ArithmeticalBaseOperator extends AbstractOperator
         }
 
         return Types::T_DOUBLE;
+    }
+
+    /**
+     * Both operands classified as a C integer, a C double or a zval. Against
+     * a zval a bool stays a bool, so a TypeError names it as PHP does.
+     *
+     * @return array{0: array, 1: array}
+     *
+     * @throws CompilerException
+     */
+    protected function classifiedOperands(
+        CompiledExpression $left,
+        CompiledExpression $right,
+        array $expression,
+        CompilationContext $compilationContext
+    ): array {
+        $leftOperand  = $this->operand($left, $expression, $compilationContext);
+        $rightOperand = $this->operand($right, $expression, $compilationContext);
+        if (self::KIND_ZVAL === $leftOperand['kind'] && isset($rightOperand['bool'])) {
+            $rightOperand = $this->boxedBool($rightOperand['bool'], $compilationContext);
+        }
+        if (self::KIND_ZVAL === $rightOperand['kind'] && isset($leftOperand['bool'])) {
+            $leftOperand = $this->boxedBool($leftOperand['bool'], $compilationContext);
+        }
+
+        return [$leftOperand, $rightOperand];
+    }
+
+    /**
+     * Classifies one compiled operand as a C integer, a C double or a zval,
+     * and returns the C code that reads it as that kind.
+     *
+     * @return array{kind: string, code: string, variable: ?Variable}
+     *
+     * @throws CompilerException
+     */
+    protected function operand(
+        CompiledExpression $operand,
+        array $expression,
+        CompilationContext $compilationContext
+    ): array {
+        switch ($operand->getType()) {
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+                return ['kind' => self::KIND_LONG, 'code' => $operand->getCode(), 'variable' => null];
+
+            case 'bool':
+                return $this->boolOperand($operand->getBooleanCode());
+
+            case 'double':
+                return ['kind' => self::KIND_DOUBLE, 'code' => $operand->getCode(), 'variable' => null];
+
+            case 'variable':
+                $variable = $compilationContext->symbolTable->getVariableForRead(
+                    $operand->getCode(),
+                    $compilationContext,
+                    $expression
+                );
+
+                return $this->variableOperand($variable, $expression, $compilationContext);
+
+            default:
+                throw new CompilerException(
+                    'Cannot operate ' . $operand->getType() . ' with the ' . $this->operator . ' operator',
+                    $expression
+                );
+        }
+    }
+
+    /**
+     * @return array{kind: string, code: string, variable: ?Variable}
+     *
+     * @throws CompilerException
+     */
+    protected function variableOperand(
+        Variable $variable,
+        array $expression,
+        CompilationContext $compilationContext
+    ): array {
+        switch ($variable->getType()) {
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+                return ['kind' => self::KIND_LONG, 'code' => $variable->getName(), 'variable' => null];
+
+            case 'bool':
+                return $this->boolOperand($variable->getName());
+
+            case 'double':
+                return ['kind' => self::KIND_DOUBLE, 'code' => $variable->getName(), 'variable' => null];
+
+            case 'variable':
+            case 'mixed':
+                return [
+                    'kind'     => self::KIND_ZVAL,
+                    'code'     => $compilationContext->backend->getVariableCode($variable),
+                    'variable' => $variable,
+                ];
+
+            default:
+                throw new CompilerException(
+                    'Cannot operate ' . $variable->getType() . ' variables with the ' . $this->operator . ' operator',
+                    $expression
+                );
+        }
+    }
+
+    /**
+     * A bool is the integer 0 or 1; `bool` keeps its C code for boxing.
+     *
+     * @return array{kind: string, code: string, variable: ?Variable, bool: string}
+     */
+    protected function boolOperand(string $code): array
+    {
+        return ['kind' => self::KIND_LONG, 'code' => '(zend_long) ' . $code, 'variable' => null, 'bool' => $code];
+    }
+
+    /**
+     * @return array{kind: string, code: string, variable: ?Variable}
+     */
+    protected function boxedBool(string $code, CompilationContext $compilationContext): array
+    {
+        $boxed = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
+        $compilationContext->backend->assignBool($boxed, $code, $compilationContext);
+
+        return [
+            'kind'     => self::KIND_ZVAL,
+            'code'     => $compilationContext->backend->getVariableCode($boxed),
+            'variable' => $boxed,
+        ];
+    }
+
+    /**
+     * Writes the result of a zval-producing helper into the expected variable.
+     *
+     * @throws CompilerException
+     */
+    protected function zvalResult(
+        string $helper,
+        array $left,
+        array $right,
+        array $expression,
+        CompilationContext $compilationContext,
+        array $dynamicTypes
+    ): CompiledExpression {
+        $expected     = $this->getExpected($compilationContext, $expression);
+        $expectedCode = $compilationContext->backend->getVariableCode($expected);
+
+        $compilationContext->codePrinter->output(
+            $helper . '(' . $expectedCode . ', ' . $left['code'] . ', ' . $right['code'] . ');'
+        );
+
+        foreach ([$left['variable'], $right['variable']] as $operandVariable) {
+            if (null !== $operandVariable) {
+                $this->checkVariableTemporal($operandVariable);
+            }
+        }
+
+        $expected->setDynamicTypes($dynamicTypes);
+
+        return new CompiledExpression('variable', $expected->getName(), $expression);
     }
 }

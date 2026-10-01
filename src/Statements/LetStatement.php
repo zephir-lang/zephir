@@ -96,7 +96,7 @@ class LetStatement extends StatementAbstract
                  * TODO: Replace on supported native bitwise-assignment
                  */
                 $assignment = $this->replaceAssignBitwiseOnDirect($assignment);
-                $assignment = $this->replaceDivAssignOnDirect($assignment, $symbolVariable);
+                $assignment = $this->replaceDivModAssignOnDirect($assignment, $symbolVariable);
 
                 $expr = new Expression($assignment['expr']);
 
@@ -175,20 +175,29 @@ class LetStatement extends StatementAbstract
     }
 
     /**
-     * Rewrites `x /= e` as `x = x / e` for a zval variable and for an object
-     * property, so DivOperator produces the int or float PHP does. A typed
-     * local keeps the native C `/=`, since it cannot change type.
+     * Rewrites `x /= e` and `x %= e` as `x = x / e` and `x = x % e`, so
+     * DivOperator and ModOperator produce the value PHP does, with its
+     * TypeError and its zero divisor guard. A C `/=` or `%=` on a typed local
+     * would raise SIGFPE for a zero divisor, and `%=` on a C double does not
+     * compile.
      *
      * @see https://github.com/zephir-lang/zephir/issues/2675
+     * @see https://github.com/zephir-lang/zephir/issues/2676
      */
-    protected function replaceDivAssignOnDirect(array $assignment, ?Variable $symbolVariable): array
+    protected function replaceDivModAssignOnDirect(array $assignment, ?Variable $symbolVariable): array
     {
-        if (AssignVariableOperator::OPERATOR_DIV !== ($assignment['operator'] ?? null)) {
+        $binaryOperator = match ($assignment['operator'] ?? null) {
+            AssignVariableOperator::OPERATOR_DIV => BinaryOperator::OPERATOR_DIV,
+            AssignVariableOperator::OPERATOR_MOD => BinaryOperator::OPERATOR_MOD,
+            default                              => null,
+        };
+        if (null === $binaryOperator) {
             return $assignment;
         }
 
-        $dividend = match ($assignment['assign-type']) {
-            'variable'        => in_array($symbolVariable?->getType(), ['variable', 'mixed'], true)
+        $numberTargets = ['variable', 'mixed', 'int', 'uint', 'long', 'ulong', 'double'];
+        $dividend      = match ($assignment['assign-type']) {
+            'variable'        => in_array($symbolVariable?->getType(), $numberTargets, true)
                 ? $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']])
                 : null,
             'object-property' => $this->astNode($assignment, [
@@ -204,7 +213,7 @@ class LetStatement extends StatementAbstract
         }
 
         $assignment['expr']     = $this->astNode($assignment, [
-            'type'  => BinaryOperator::OPERATOR_DIV,
+            'type'  => $binaryOperator,
             'left'  => $dividend,
             'right' => $assignment['expr'],
         ]);
@@ -215,7 +224,7 @@ class LetStatement extends StatementAbstract
 
     /**
      * Copies the source position of the statement onto a synthesized node, so
-     * a diagnostic about it points at the original `/=`.
+     * a diagnostic about it points at the original `/=` or `%=`.
      */
     private function astNode(array $assignment, array $node): array
     {

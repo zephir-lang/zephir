@@ -35,7 +35,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, seqi, i = 0;
 	zend_string *seq = NULL;
-	zval *n, n_sub, seq_zv, len, j, k, l, block, str, lines, _0, _1, _2, _3, _5, _11, _7$$3, _8$$3, _9$$3, _10$$3, _12$$6, _13$$7, _14$$7, _15$$7, _16$$7;
+	zval *n, n_sub, seq_zv, len, j, k, l, block, str, lines, _0, _1, _2, _3, _5, _11, _13, _7$$3, _8$$3, _9$$3, _10$$3, _12$$6, _14$$7, _15$$7, _16$$7, _17$$7;
 
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&seq_zv);
@@ -52,15 +52,16 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_11);
+	ZVAL_UNDEF(&_13);
 	ZVAL_UNDEF(&_7$$3);
 	ZVAL_UNDEF(&_8$$3);
 	ZVAL_UNDEF(&_9$$3);
 	ZVAL_UNDEF(&_10$$3);
 	ZVAL_UNDEF(&_12$$6);
-	ZVAL_UNDEF(&_13$$7);
 	ZVAL_UNDEF(&_14$$7);
 	ZVAL_UNDEF(&_15$$7);
 	ZVAL_UNDEF(&_16$$7);
+	ZVAL_UNDEF(&_17$$7);
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_6);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
@@ -135,7 +136,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	ZEPHIR_INIT_NVAR(&j);
 	ZVAL_LONG(&j, 0);
 	ZEPHIR_INIT_NVAR(&k);
-	ZVAL_LONG(&k, zephir_safe_mod_zval_long(&l, i));
+	zephir_mod_zval_long(&k, &l, i);
 	while (1) {
 		if (!(ZEPHIR_LT(&j, &k))) {
 			break;
@@ -146,14 +147,17 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 		SEPARATE_ZVAL(&j);
 		zephir_increment(&j);
 	}
-	if (zephir_safe_mod_zval_long(n, 60) > 0) {
-		zephir_memory_observe(&_13$$7);
-		zephir_array_fetch(&_13$$7, &lines, &k, PH_NOISY, "stub/fasta.zep", 43);
-		ZVAL_LONG(&_14$$7, 0);
-		ZVAL_LONG(&_15$$7, zephir_safe_mod_zval_long(n, 60));
-		ZEPHIR_INIT_VAR(&_16$$7);
-		zephir_substr(&_16$$7, &_13$$7, 0 , zephir_get_intval(&_15$$7), 0);
-		zend_print_zval(&_16$$7, 0);
+	ZEPHIR_INIT_VAR(&_13);
+	zephir_mod_zval_long(&_13, n, 60);
+	if (ZEPHIR_GT_LONG(&_13, 0)) {
+		zephir_memory_observe(&_14$$7);
+		zephir_array_fetch(&_14$$7, &lines, &k, PH_NOISY, "stub/fasta.zep", 43);
+		ZEPHIR_INIT_VAR(&_15$$7);
+		zephir_mod_zval_long(&_15$$7, n, 60);
+		ZVAL_LONG(&_16$$7, 0);
+		ZEPHIR_INIT_VAR(&_17$$7);
+		zephir_substr(&_17$$7, &_14$$7, 0 , zephir_get_intval(&_15$$7), 0);
+		zend_print_zval(&_17$$7, 0);
 	}
 	ZEPHIR_MM_RESTORE();
 }

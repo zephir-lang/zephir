@@ -480,30 +480,44 @@ PHP_METHOD(Stub_Assign, testAssign41)
  */
 PHP_METHOD(Stub_Assign, testAssign42)
 {
-	zval *num_param = NULL;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *num_param = NULL, _0;
 	zend_long num, a = 0;
 
+	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(num)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &num_param);
 	a = 2;
-	num /= a;
-	RETURN_LONG(num);
+	ZEPHIR_INIT_VAR(&_0);
+	zephir_div_long_long(&_0, num, a);
+	num = zephir_get_intval(&_0);
+	RETURN_MM_LONG(num);
 }
 
 PHP_METHOD(Stub_Assign, testAssign43)
 {
-	zval *num_param = NULL;
-	zend_long num, a = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *num_param = NULL, a, _0;
+	zend_long num;
 
+	ZVAL_UNDEF(&a);
+	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(num)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
-	a = 43;
-	a %= num;
-	RETURN_LONG(a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &num_param);
+	ZEPHIR_INIT_VAR(&a);
+	ZVAL_LONG(&a, 43);
+	ZEPHIR_INIT_VAR(&_0);
+	zephir_mod_zval_long(&_0, &a, num);
+	ZEPHIR_CPY_WRT(&a, &_0);
+	RETURN_CCTOR(&a);
 }
 
 PHP_METHOD(Stub_Assign, testAssign44)
@@ -516,7 +530,7 @@ PHP_METHOD(Stub_Assign, testAssign44)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 	a = 2;
-	num %= a;
+	num = zephir_safe_mod_long_long(num, a);
 	RETURN_LONG(num);
 }
 
