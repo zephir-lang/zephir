@@ -13,578 +13,68 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Arithmetical;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
-use Zephir\Types\Types;
+use Zephir\Exception;
 
 /**
- * Generates an arithmetical operation according to the operands
+ * Generates PHP's `%`.
  *
- * PHP's `%` converts both operands to `zend_long` and always yields an `int`,
- * so every `zephir_safe_mod_*` result is typed `int` here. Typing it `double`
- * -- as this did -- routed the result through a C double and lost every value
- * above 2^53 on every platform.
- *
- * The `$bitOperator` branches below are still wrong for a bool operand:
- * they emit a subtraction and type the result `bool`.
+ * PHP's mod_function() converts both operands to `zend_long` and yields an
+ * `int`, so two native operands use a `zephir_safe_mod_*` helper typed `int`:
+ * typing it `double` loses every result above 2^53. Any zval operand is left
+ * to PHP's own mod_function(), which throws the TypeError for an array or a
+ * non-numeric string and lets an overloaded object (GMP) return an object.
+ * A bool operand is the integer 0 or 1, as in PHP.
  *
  * @see https://github.com/zephir-lang/zephir/issues/2666
+ * @see https://github.com/zephir-lang/zephir/issues/2676
  * @see https://github.com/zephir-lang/zephir/issues/2677
  */
 class ModOperator extends ArithmeticalBaseOperator
 {
-    protected string $bitOperator  = '-';
+    /**
+     * mod_function() yields an int, or an object from an overloaded operand.
+     */
+    private const REMAINDER_TYPES = ['long', 'object'];
+
     protected string $operator     = '%';
     protected string $zvalOperator = 'mod_function';
 
     /**
      * Compiles the arithmetical modulus operation.
      *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile($expression, CompilationContext $compilationContext): CompiledExpression|bool
     {
         [$left, $right] = $this->preCompileChecks($expression, $compilationContext);
 
-        switch ($left->getType()) {
-            case Types::T_INT:
-            case Types::T_UINT:
-            case Types::T_LONG:
-            case Types::T_ULONG:
-                switch ($right->getType()) {
-                    case Types::T_INT:
-                    case Types::T_UINT:
-                    case Types::T_LONG:
-                    case Types::T_ULONG:
-                        return new CompiledExpression(
-                            'int',
-                            'zephir_safe_mod_long_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                            $expression
-                        );
+        [$leftOperand, $rightOperand] = $this->classifiedOperands($left, $right, $expression, $compilationContext);
 
-                    case Types::T_DOUBLE:
-                        return new CompiledExpression(
-                            'int',
-                            'zephir_safe_mod_long_double((double) ' . $left->getCode() . ', ' . $right->getCode() . ')',
-                            $expression
-                        );
+        $shape = $leftOperand['kind'] . '_' . $rightOperand['kind'];
 
-                    case Types::T_BOOL:
-                        return new CompiledExpression(
-                            'bool',
-                            '(' . $left->getCode() . ' - ' . $right->getBooleanCode() . ')',
-                            $expression
-                        );
+        return match ($shape) {
+            'long_long'     => $this->intResult('zephir_safe_mod_long_long', $leftOperand, $rightOperand, $expression),
+            'long_double'   => $this->intResult('zephir_safe_mod_long_double', $leftOperand, $rightOperand, $expression),
+            'double_long'   => $this->intResult('zephir_safe_mod_double_long', $leftOperand, $rightOperand, $expression),
+            'double_double' => $this->intResult('zephir_safe_mod_double_double', $leftOperand, $rightOperand, $expression),
+            'zval_long'     => $this->zvalResult('zephir_mod_zval_long', $leftOperand, $rightOperand, $expression, $compilationContext, self::REMAINDER_TYPES),
+            'long_zval'     => $this->zvalResult('zephir_mod_long_zval', $leftOperand, $rightOperand, $expression, $compilationContext, self::REMAINDER_TYPES),
+            'zval_double'   => $this->zvalResult('zephir_mod_zval_double', $leftOperand, $rightOperand, $expression, $compilationContext, self::REMAINDER_TYPES),
+            'double_zval'   => $this->zvalResult('zephir_mod_double_zval', $leftOperand, $rightOperand, $expression, $compilationContext, self::REMAINDER_TYPES),
+            'zval_zval'     => $this->zvalResult($this->zvalOperator, $leftOperand, $rightOperand, $expression, $compilationContext, self::REMAINDER_TYPES),
+        };
+    }
 
-                    case Types::T_VARIABLE:
-                        $variableRight = $compilationContext->symbolTable->getVariableForRead(
-                            $right->getCode(),
-                            $compilationContext,
-                            $expression
-                        );
-                        return match ($variableRight->getType()) {
-                            Types::T_INT,
-                            Types::T_UINT,
-                            Types::T_LONG,
-                            Types::T_ULONG,
-                            Types::T_BOOL     => new CompiledExpression(
-                                'int',
-                                'zephir_safe_mod_long_long('
-                                . $left->getCode() . ', ' . $variableRight->getName() . ')',
-                                $expression
-                            ),
-                            Types::T_DOUBLE   => new CompiledExpression(
-                                'int',
-                                'zephir_safe_mod_long_double('
-                                . $left->getCode() . ', ' . $variableRight->getName() . ')',
-                                $expression
-                            ),
-                            Types::T_VARIABLE => new CompiledExpression(
-                                'int',
-                                'zephir_safe_mod_long_zval('
-                                . $left->getCode()
-                                . ', '
-                                . $this->getIsLocal($variableRight)
-                                . $variableRight->getName() . ')',
-                                $expression
-                            ),
-                            default           => throw new CompilerException(
-                                "Cannot operate variable('int') with variable('"
-                                . $variableRight->getType() . "')",
-                                $expression
-                            ),
-                        };
-
-
-                    default:
-                        throw new CompilerException(
-                            "Cannot operate 'int' with '" . $right->getType() . "'",
-                            $expression
-                        );
-                }
-
-
-            case Types::T_BOOL:
-                return $this->processLeftBoolean($left, $right, $expression);
-
-            case Types::T_DOUBLE:
-                switch ($right->getType()) {
-                    case Types::T_INT:
-                    case Types::T_UINT:
-                    case Types::T_LONG:
-                    case Types::T_ULONG:
-                        return new CompiledExpression(
-                            'int',
-                            'zephir_safe_mod_double_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                            $expression
-                        );
-
-                    case Types::T_DOUBLE:
-                        return new CompiledExpression(
-                            'int',
-                            'zephir_safe_mod_double_double(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                            $expression
-                        );
-
-                    case Types::T_BOOL:
-                        return new CompiledExpression(
-                            'int',
-                            'zephir_safe_mod_double_long(' . $left->getCode() . ', ' . $right->getBooleanCode() . ')',
-                            $expression
-                        );
-
-                    case Types::T_VARIABLE:
-                        $variableRight = $compilationContext->symbolTable->getVariableForRead(
-                            $right->getCode(),
-                            $compilationContext,
-                            $expression
-                        );
-
-                        return match ($variableRight->getType()) {
-                            Types::T_INT,
-                            Types::T_UINT,
-                            Types::T_LONG,
-                            Types::T_ULONG,
-                            Types::T_BOOL     => new CompiledExpression(
-                                'int',
-                                'zephir_safe_mod_double_long('
-                                . $left->getCode() . ', ' . $variableRight->getName() . ')',
-                                $expression
-                            ),
-                            Types::T_DOUBLE   => new CompiledExpression(
-                                'int',
-                                'zephir_safe_mod_double_double('
-                                . $left->getCode() . ', ' . $variableRight->getName() . ')',
-                                $expression
-                            ),
-                            Types::T_VARIABLE => new CompiledExpression(
-                                'int',
-                                'zephir_safe_mod_double_zval('
-                                . $left->getCode()
-                                . ', '
-                                . $this->getIsLocal($variableRight)
-                                . $variableRight->getName() . ')',
-                                $expression
-                            ),
-                            default           => throw new CompilerException(
-                                "Cannot operate variable('double') with variable('"
-                                . $variableRight->getType()
-                                . "')",
-                                $expression
-                            ),
-                        };
-
-
-                    default:
-                        throw new CompilerException(
-                            "Cannot operate 'double' with '" . $right->getType() . "'",
-                            $expression
-                        );
-                }
-
-
-            case Types::T_STRING:
-            case Types::T_ARRAY:
-                throw new CompilerException(
-                    'Operation is not supported between ' . $right->getType(),
-                    $expression
-                );
-
-            case Types::T_VARIABLE:
-                $variableLeft = $compilationContext->symbolTable->getVariableForRead(
-                    $left->resolve(null, $compilationContext),
-                    $compilationContext,
-                    $expression
-                );
-                switch ($variableLeft->getType()) {
-                    case Types::T_INT:
-                    case Types::T_UINT:
-                    case Types::T_LONG:
-                    case Types::T_ULONG:
-                        switch ($right->getType()) {
-                            case Types::T_INT:
-                            case Types::T_UINT:
-                            case Types::T_LONG:
-                            case Types::T_ULONG:
-                                return new CompiledExpression(
-                                    'int',
-                                    'zephir_safe_mod_long_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                                    $expression
-                                );
-
-                            case Types::T_DOUBLE:
-                                return new CompiledExpression(
-                                    'int',
-                                    'zephir_safe_mod_long_double(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                                    $expression
-                                );
-
-                            case Types::T_VARIABLE:
-                                $variableRight = $compilationContext->symbolTable->getVariableForRead(
-                                    $right->getCode(),
-                                    $compilationContext,
-                                    $expression['right']
-                                );
-
-                                return match ($variableRight->getType()) {
-                                    Types::T_INT,
-                                    Types::T_UINT,
-                                    Types::T_LONG,
-                                    Types::T_ULONG,
-                                    Types::T_BOOL     => new CompiledExpression(
-                                        'int',
-                                        'zephir_safe_mod_long_long('
-                                        . $variableLeft->getName() . ', ' . $variableRight->getName() . ')',
-                                        $expression
-                                    ),
-                                    Types::T_DOUBLE   => new CompiledExpression(
-                                        'int',
-                                        'zephir_safe_mod_long_double('
-                                        . $variableLeft->getName() . ', ' . $variableRight->getName() . ')',
-                                        $expression
-                                    ),
-                                    Types::T_VARIABLE => new CompiledExpression(
-                                        'int',
-                                        'zephir_safe_mod_long_zval('
-                                        . $variableLeft->getName()
-                                        . ', '
-                                        . $this->getIsLocal($variableRight)
-                                        . $variableRight->getName() . ')',
-                                        $expression
-                                    ),
-                                    default           => throw new CompilerException(
-                                        "Cannot operate variable('int') with variable('"
-                                        . $variableRight->getType()
-                                        . "')",
-                                        $expression
-                                    ),
-                                };
-
-
-                            default:
-                                throw new CompilerException(
-                                    "Cannot operate variable('int') with '" . $right->getType() . "'",
-                                    $expression
-                                );
-                        }
-
-
-                    case Types::T_BOOL:
-                        switch ($right->getType()) {
-                            case Types::T_INT:
-                            case Types::T_UINT:
-                            case Types::T_LONG:
-                            case Types::T_ULONG:
-                                return new CompiledExpression(
-                                    'bool',
-                                    '(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                                    $expression
-                                );
-
-                            case Types::T_BOOL:
-                                return new CompiledExpression(
-                                    'bool',
-                                    '(' . $left->getCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode(
-                                    ) . ')',
-                                    $expression
-                                );
-
-                            case Types::T_VARIABLE:
-                                $variableRight = $compilationContext->symbolTable->getVariableForRead(
-                                    $right->getCode(),
-                                    $compilationContext,
-                                    $expression['right']
-                                );
-                                switch ($variableRight->getType()) {
-                                    case Types::T_INT:
-                                    case Types::T_UINT:
-                                    case Types::T_LONG:
-                                    case Types::T_ULONG:
-                                        return new CompiledExpression(
-                                            'int',
-                                            'zephir_safe_mod_long_long('
-                                            . $variableLeft->getName()
-                                            . ', '
-                                            . $variableRight->getName()
-                                            . ')',
-                                            $expression
-                                        );
-
-                                    case Types::T_DOUBLE:
-                                        return new CompiledExpression(
-                                            'int',
-                                            'zephir_safe_mod_long_double('
-                                            . $variableLeft->getName()
-                                            . ', '
-                                            . $variableRight->getName()
-                                            . ')',
-                                            $expression
-                                        );
-
-                                    case Types::T_BOOL:
-                                        return new CompiledExpression(
-                                            'int',
-                                            'zephir_safe_mod_long_long('
-                                            . $variableLeft->getName()
-                                            . ' '
-                                            . $this->bitOperator
-                                            . ' '
-                                            . $variableRight->getName()
-                                            . ')',
-                                            $expression
-                                        );
-
-                                    case Types::T_VARIABLE:
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        return new CompiledExpression(
-                                            'int',
-                                            'zephir_safe_mod_long_zval('
-                                            . $variableLeft->getName()
-                                            . ', '
-                                            . $this->getIsLocal($variableRight)
-                                            . $variableRight->getName()
-                                            . ')',
-                                            $expression
-                                        );
-
-                                    default:
-                                        throw new CompilerException(
-                                            "Cannot operate variable('int') with variable('"
-                                            . $variableRight->getType()
-                                            . "')",
-                                            $expression
-                                        );
-                                }
-
-
-                            default:
-                                throw new CompilerException(
-                                    "Cannot operate variable('int') with '" . $right->getType() . "'",
-                                    $expression
-                                );
-                        }
-
-
-                    case Types::T_DOUBLE:
-                        switch ($right->getType()) {
-                            case Types::T_INT:
-                            case Types::T_UINT:
-                            case Types::T_LONG:
-                            case Types::T_ULONG:
-                                return new CompiledExpression(
-                                    'int',
-                                    'zephir_safe_mod_double_long(' . $left->getCode() . ', ' . $right->getCode() . ')',
-                                    $expression
-                                );
-
-                            case Types::T_DOUBLE:
-                                return new CompiledExpression(
-                                    'int',
-                                    'zephir_safe_mod_double_double('
-                                    . $left->getCode() . ', ' . $right->getCode() . ')',
-                                    $expression
-                                );
-
-                            case Types::T_BOOL:
-                                return new CompiledExpression(
-                                    'bool',
-                                    '(' . $left->getCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode(
-                                    ) . ')',
-                                    $expression
-                                );
-
-                            case Types::T_VARIABLE:
-                                $variableRight = $compilationContext->symbolTable->getVariableForRead(
-                                    $right->getCode(),
-                                    $compilationContext,
-                                    $expression['right']
-                                );
-                                switch ($variableRight->getType()) {
-                                    case Types::T_INT:
-                                    case Types::T_UINT:
-                                    case Types::T_LONG:
-                                    case Types::T_ULONG:
-                                        return new CompiledExpression(
-                                            'int',
-                                            'zephir_safe_mod_double_long(' . $variableLeft->getName(
-                                            ) . ', ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
-
-                                    case Types::T_DOUBLE:
-                                        return new CompiledExpression(
-                                            'int',
-                                            'zephir_safe_mod_double_double(' . $variableLeft->getName(
-                                            ) . ', ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
-
-                                    case Types::T_BOOL:
-                                        return new CompiledExpression(
-                                            'bool',
-                                            '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->bitOperator . ' ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
-
-                                    case Types::T_VARIABLE:
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        return new CompiledExpression(
-                                            'int',
-                                            'zephir_safe_mod_double_zval('
-                                            . $variableLeft->getName()
-                                            . ', '
-                                            . $this->getIsLocal($variableRight)
-                                            . $variableRight->getName() . ')',
-                                            $expression
-                                        );
-
-                                    default:
-                                        throw new CompilerException(
-                                            "Cannot operate variable('double') with variable('" . $variableRight->getType(
-                                            ) . "')",
-                                            $expression
-                                        );
-                                }
-
-
-                            default:
-                                throw new CompilerException(
-                                    "Cannot operate variable('int') with '" . $right->getType() . "'",
-                                    $expression
-                                );
-                        }
-
-
-                    case Types::T_STRING:
-                    case Types::T_ARRAY:
-                        throw new CompilerException(
-                            'Cannot operate ' . $variableLeft->getType() . " variables'",
-                            $expression
-                        );
-                    case Types::T_VARIABLE:
-                        $op1 = $compilationContext->backend->getVariableCode($variableLeft);
-                        switch ($right->getType()) {
-                            /* a + 1 */
-                            case Types::T_INT:
-                            case Types::T_UINT:
-                            case Types::T_LONG:
-                            case Types::T_ULONG:
-                                $op2 = $right->getCode();
-
-                                return new CompiledExpression(
-                                    'int',
-                                    'zephir_safe_mod_zval_long(' . $op1 . ', ' . $op2 . ')',
-                                    $expression
-                                );
-
-
-                            case Types::T_DOUBLE:
-                                $op2 = $right->getCode();
-
-                                return new CompiledExpression(
-                                    'int',
-                                    'zephir_safe_mod_zval_double(' . $op1 . ', ' . $op2 . ')',
-                                    $expression
-                                );
-
-
-                            /* a(var) + a(x) */
-                            case Types::T_VARIABLE:
-                                $variableRight = $compilationContext->symbolTable->getVariableForRead(
-                                    $right->resolve(null, $compilationContext),
-                                    $compilationContext,
-                                    $expression
-                                );
-                                switch ($variableRight->getType()) {
-                                    /* a(var) + a(int) */
-                                    case Types::T_INT:
-                                    case Types::T_UINT:
-                                    case Types::T_LONG:
-                                    case Types::T_ULONG:
-                                        return new CompiledExpression(
-                                            'int',
-                                            'zephir_safe_mod_zval_long('
-                                            . $op1 . ', ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
-
-
-                                    /* a(var) + a(bool) */
-                                    case Types::T_BOOL:
-                                        return new CompiledExpression(
-                                            'int',
-                                            'zephir_safe_mod_zval_long('
-                                            . $op1 . ', ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
-
-
-                                    /* a(var) + a(var) */
-                                    case Types::T_VARIABLE:
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        $op2 = $compilationContext->backend->getVariableCode($variableRight);
-
-                                        $expected = $this->getExpected($compilationContext, $expression);
-                                        $symbol   = $compilationContext->backend->getVariableCode($expected);
-                                        $compilationContext->codePrinter->output(
-                                            $this->zvalOperator . '(' . $symbol . ', ' . $op1 . ', ' . $op2 . ');'
-                                        );
-
-                                        $this->checkVariableTemporal($variableLeft);
-                                        $this->checkVariableTemporal($variableRight);
-
-                                        return new CompiledExpression(
-                                            'variable',
-                                            $expected->getName(),
-                                            $expression
-                                        );
-
-                                    default:
-                                        throw new CompilerException(
-                                            "Cannot operate 'variable' with variable ('"
-                                            . $variableRight->getType() . "')",
-                                            $expression
-                                        );
-                                }
-
-
-                            default:
-                                throw new CompilerException(
-                                    "Cannot operate 'variable' with '"
-                                    . $right->getType() . "'",
-                                    $expression
-                                );
-                        }
-
-                    default:
-                        throw CompilerException::unknownType($variableLeft, $expression);
-                }
-
-            default:
-                throw CompilerException::unsupportedType($left, $expression);
-        }
+    private function intResult(string $helper, array $left, array $right, array $expression): CompiledExpression
+    {
+        return new CompiledExpression(
+            'int',
+            $helper . '(' . $left['code'] . ', ' . $right['code'] . ')',
+            $expression
+        );
     }
 }

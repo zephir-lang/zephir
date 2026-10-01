@@ -168,10 +168,15 @@ zend_long zephir_safe_mod_long_long(zend_long op1, zend_long op2);
 zend_long zephir_safe_mod_long_double(zend_long op1, double op2);
 zend_long zephir_safe_mod_double_long(double op1, zend_long op2);
 zend_long zephir_safe_mod_double_double(double op1, double op2);
-zend_long zephir_safe_mod_zval_long(zval *op1, zend_long op2);
-zend_long zephir_safe_mod_zval_double(zval *op1, double op2);
-zend_long zephir_safe_mod_long_zval(zend_long op1, zval *op2);
-zend_long zephir_safe_mod_double_zval(double op1, zval *op2);
+
+/*
+ * `%` with a zval operand goes through mod_function(), so a TypeError or a
+ * DivisionByZeroError is the one PHP throws.
+ */
+void zephir_mod_zval_long(zval *result, zval *op1, zend_long op2);
+void zephir_mod_long_zval(zval *result, zend_long op1, zval *op2);
+void zephir_mod_zval_double(zval *result, zval *op1, double op2);
+void zephir_mod_double_zval(zval *result, double op1, zval *op2);
 
 #define zephir_get_numberval(z) (Z_TYPE_P(z) == IS_LONG ? Z_LVAL_P(z) : zephir_get_doubleval(z))
 #define zephir_get_intval(z) (Z_TYPE_P(z) == IS_LONG ? Z_LVAL_P(z) : zephir_get_intval_ex(z))
