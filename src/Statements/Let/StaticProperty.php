@@ -16,9 +16,7 @@ namespace Zephir\Statements\Let;
 use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception;
 use Zephir\Exception\CompilerException;
-use Zephir\Expression;
 use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable;
 
@@ -44,39 +42,6 @@ class StaticProperty extends StaticPropertySub
         switch ($variableVariable->getType()) {
             case 'string':
                 switch ($statement['operator']) {
-                    case 'concat-assign':
-                        $tempVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify(
-                            'variable',
-                            $compilationContext
-                        );
-                        $expression   = new Expression([
-                            'type'  => 'static-property-access',
-                            'left'  => [
-                                'value' => $statement['variable'],
-                            ],
-                            'right' => [
-                                'value' => $statement['property'],
-                            ],
-                        ]);
-                        $expression->setExpectReturn(true, $tempVariable);
-
-                        try {
-                            $expression->compile($compilationContext);
-                        } catch (Exception $e) {
-                            throw new CompilerException($e->getMessage(), $statement, $e->getCode(), $e);
-                        }
-
-                        $variableVariableCode = $compilationContext->backend->getVariableCode(
-                            $variableVariable
-                        );
-                        $tempVariableCode     = $compilationContext->backend->getVariableCode($tempVariable);
-                        $compilationContext->codePrinter->output(
-                            'SEPARATE_ZVAL(' . $variableVariableCode . ');'
-                        );
-                        $compilationContext->codePrinter->output(
-                            'zephir_concat_function(' . $variableVariableCode . ', ' . $tempVariableCode . ', ' . $variableVariableCode . ');'
-                        );
-                    // no break
                     case 'assign':
                         $compilationContext->backend->updateStaticProperty(
                             $classEntry,

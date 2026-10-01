@@ -23,6 +23,7 @@ use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\AssignVariableOperator;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Statements\Let\AssignmentFactory;
+use Zephir\Variable\Variable;
 
 /**
  * Let statement is used to assign variables
@@ -95,6 +96,7 @@ class LetStatement extends StatementAbstract
                  * TODO: Replace on supported native bitwise-assignment
                  */
                 $assignment = $this->replaceAssignBitwiseOnDirect($assignment);
+                $assignment = $this->replaceDivModAssignOnDirect($assignment, $symbolVariable);
 
                 $expr = new Expression($assignment['expr']);
 
@@ -170,6 +172,69 @@ class LetStatement extends StatementAbstract
         unset($assignment['left']);
 
         return $assignment;
+    }
+
+    /**
+     * Rewrites `x /= e` and `x %= e` as `x = x / e` and `x = x % e`, so
+     * DivOperator and ModOperator produce the value PHP does, with its
+     * TypeError and its zero divisor guard. A C `/=` or `%=` on a typed local
+     * would raise SIGFPE for a zero divisor, and `%=` on a C double does not
+     * compile.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2675
+     * @see https://github.com/zephir-lang/zephir/issues/2676
+     */
+    protected function replaceDivModAssignOnDirect(array $assignment, ?Variable $symbolVariable): array
+    {
+        $binaryOperator = match ($assignment['operator'] ?? null) {
+            AssignVariableOperator::OPERATOR_DIV => BinaryOperator::OPERATOR_DIV,
+            AssignVariableOperator::OPERATOR_MOD => BinaryOperator::OPERATOR_MOD,
+            default                              => null,
+        };
+        if (null === $binaryOperator) {
+            return $assignment;
+        }
+
+        $numberTargets = ['variable', 'mixed', 'int', 'uint', 'long', 'ulong', 'double'];
+        $dividend      = match ($assignment['assign-type']) {
+            'variable'        => in_array($symbolVariable?->getType(), $numberTargets, true)
+                ? $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']])
+                : null,
+            'object-property' => $this->astNode($assignment, [
+                'type'  => 'property-access',
+                'left'  => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']]),
+                'right' => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['property']]),
+            ]),
+            default           => null,
+        };
+
+        if (null === $dividend) {
+            return $assignment;
+        }
+
+        $assignment['expr']     = $this->astNode($assignment, [
+            'type'  => $binaryOperator,
+            'left'  => $dividend,
+            'right' => $assignment['expr'],
+        ]);
+        $assignment['operator'] = AssignVariableOperator::OPERATOR_ASSIGN;
+
+        return $assignment;
+    }
+
+    /**
+     * Copies the source position of the statement onto a synthesized node, so
+     * a diagnostic about it points at the original `/=` or `%=`.
+     */
+    private function astNode(array $assignment, array $node): array
+    {
+        foreach (['file', 'line', 'char'] as $position) {
+            if (isset($assignment[$position])) {
+                $node[$position] = $assignment[$position];
+            }
+        }
+
+        return $node;
     }
 
     /**

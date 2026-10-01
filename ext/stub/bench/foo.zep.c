@@ -628,7 +628,7 @@ PHP_METHOD(Stub_Bench_Foo, scall)
 			}
 			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
-			ZEPHIR_CALL_SELF(NULL, "staticmethod", &_3, 0);
+			ZEPHIR_CALL_SELF(NULL, "staticMethod", &_3, 0);
 			zephir_check_call_status();
 		}
 	}
@@ -667,7 +667,7 @@ PHP_METHOD(Stub_Bench_Foo, scallWithReturnTrue)
 			}
 			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
-			ZEPHIR_CALL_SELF(NULL, "staticmethod1", &_3, 0);
+			ZEPHIR_CALL_SELF(NULL, "staticMethod1", &_3, 0);
 			zephir_check_call_status();
 		}
 	}

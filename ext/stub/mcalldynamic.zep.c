@@ -49,7 +49,7 @@ PHP_METHOD(Stub_McallDynamic, testMagicCall1)
 
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "method1", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_1, this_ptr, "method1", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_1, this_ptr, "METHOD1", NULL, 0);
 	zephir_check_call_status();
 	zephir_add_function(return_value, &_0, &_1);
 	RETURN_MM();
@@ -95,7 +95,7 @@ PHP_METHOD(Stub_McallDynamic, testCallAnonymousFunctionWithContext)
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_closure_ex(&_0, NULL, stub_57__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&_0, NULL, stub_71__closure_ce, SL("__invoke"));
 	ZEPHIR_CALL_CE_STATIC(&result, stub_mcall_caller_ce, "start", NULL, 0, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&result);

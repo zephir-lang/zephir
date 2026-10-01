@@ -32,6 +32,18 @@ final class ExtensionInfoTest extends TestCase
             ['ini-entry.my_setting_1', true],
             ['stub.db.my_setting_1', true],
             ['stub.orm.cache_enable', true],
+            // Every scalar type carries a directive, not just bool and string
+            // (issue #2449). A numeric one displays the raw ini string, a bool
+            // one displays On/Off.
+            ['stub.my_setting_2 => 10 => 10', true],
+            ['stub.my_setting_3 => 15.2 => 15.2', true],
+            ['stub.my_setting_4 => A => A', true],
+            ['stub.my_setting_5 => custom_value => custom_value', true],
+            ['stub.my_setting_6 => 64 => 64', true],
+            ['stub.db.my_setting_2 => 100 => 100', true],
+            ['stub.db.my_setting_3 => 7.5 => 7.5', true],
+            ['stub.orm.cache_level => 3 => 3', true],
+            ['stub.module_setting => On => On', true],
             ['stub.test.my_setting_1', false],
             ['stub.test.test_setting_1', false],
             ['stub.test.', false],

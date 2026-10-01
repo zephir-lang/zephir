@@ -427,7 +427,7 @@ class MethodCall extends Call
                                  * Private methods must be called in their declaration scope
                                  */
                                 if ($method->isPrivate()) {
-                                    if ($method->getClassDefinition() != $classDefinition) {
+                                    if ($method->getClassDefinition() !== $classDefinition) {
                                         throw new CompilerException(
                                             sprintf(
                                                 "Cannot call private method '%s' out of its scope",
@@ -443,8 +443,8 @@ class MethodCall extends Call
                                  */
                                 if (
                                     $method->isProtected() &&
-                                    $method->getClassDefinition() != $classDefinition &&
-                                    $method->getClassDefinition() != $classDefinition->getExtendsClass()
+                                    $method->getClassDefinition() !== $classDefinition &&
+                                    $method->getClassDefinition() !== $classDefinition->getExtendsClassDefinition()
                                 ) {
                                     throw new CompilerException(
                                         sprintf(
@@ -870,10 +870,17 @@ class MethodCall extends Call
                     $variableVariable
                 );
 
+                /**
+                 * The call carries the name as it was written, not the lowered
+                 * name the lookups above used: PHP hands `__call()` the
+                 * spelling from the call site.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2715
+                 */
                 $compilationContext->backend->callMethod(
                     $isExpecting ? $symbolVariable : null,
                     $variableVariable,
-                    $methodName,
+                    $expression['name'],
                     $cachePointer,
                     count($params) ? $params : null,
                     $compilationContext

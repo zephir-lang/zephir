@@ -64,7 +64,7 @@ PHP_METHOD(Stub_Issue2656, setContainer)
 		Z_PARAM_ZVAL(container)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &container);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 65, container);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 66, container);
 }
 
 /**
@@ -245,7 +245,7 @@ PHP_METHOD(Stub_Issue2656, fetchThroughProperty)
 	ZEPHIR_INIT_VAR(&value);
 	ZVAL_NULL(&value);
 	ZEPHIR_OBS_NVAR(&value);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 65, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 66, PH_NOISY_CC | PH_READONLY);
 	if (zephir_array_isset_string_fetch(&value, &_0, SL("cache.key"), 0)) {
 		RETURN_CCTOR(&value);
 	}
@@ -287,21 +287,21 @@ PHP_METHOD(Stub_Issue2656, leakProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchliteral", &_1, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchLiteral", &_1, 0, container);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchliteralmissing", &_2, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchLiteralMissing", &_2, 0, container);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchlong", &_3, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchLong", &_3, 0, container);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchdynamic", &_4, 0, container, key);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "fetchDynamic", &_4, 0, container, key);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "issetliteral", &_5, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "issetLiteral", &_5, 0, container);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "issetlong", &_6, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "issetLong", &_6, 0, container);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "issetdynamic", &_7, 0, container, key);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "issetDynamic", &_7, 0, container, key);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "emptyliteral", &_8, 0, container);
+		ZEPHIR_CALL_METHOD(&sink, this_ptr, "emptyLiteral", &_8, 0, container);
 		zephir_check_call_status();
 		i++;
 	}

@@ -678,4 +678,226 @@ class Closures
             return "plain";
         };
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     *
+     * The shape from the issue. A parameter keeps its native C shape under a
+     * shadow name and the declared name becomes the shared reference, so the
+     * closure carries the parameter's slot the way PHP's `use (&$param)` does.
+     */
+    public function issue2668ByRefParam(var seed) -> <\Closure>
+    {
+        return function () use (&seed) {
+            let seed = seed + 1;
+
+            return seed;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     *
+     * Two closures over one parameter get one reference between them, the way
+     * PHP's second by-reference bind reuses the reference the first one made.
+     */
+    public function issue2668ByRefParamShared(var seed) -> array
+    {
+        var bump, read;
+
+        let bump = function () use (&seed) {
+            let seed = seed + 10;
+
+            return seed;
+        };
+
+        let read = function () use (&seed) {
+            return seed;
+        };
+
+        return [bump, read];
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     *
+     * A by-value capture is a snapshot taken when the closure is created; the
+     * by-reference one keeps seeing the enclosing scope's later writes.
+     */
+    public function issue2668ByRefAndByValue(var seed) -> array
+    {
+        var byRef, byValue;
+
+        let byRef = function () use (&seed) {
+            let seed = seed + 1;
+
+            return seed;
+        };
+
+        let byValue = function () use (seed) {
+            return seed;
+        };
+
+        let seed = 100;
+
+        return [byRef, byValue];
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     *
+     * Zephir has no by-reference parameters, so the argument is the caller's
+     * own copy: a write through the capture stays inside this call.
+     */
+    public function issue2668ByRefParamIsLocal(var seed) -> array
+    {
+        var write;
+
+        let write = function () use (&seed) {
+            let seed = 999;
+        };
+
+        call_user_func(write);
+
+        return [seed];
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     *
+     * A write before the closure is created is the value it starts from.
+     */
+    public function issue2668ByRefParamWrittenFirst(var seed) -> <\Closure>
+    {
+        let seed = 7;
+
+        return function () use (&seed) {
+            return seed;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     *
+     * A typed parameter is unboxed into a C scalar, so its shadow is what the
+     * `ZEND_PARSE_PARAMETERS` block fills and the reference is seeded from it.
+     */
+    public function issue2668ByRefTypedInt(int n) -> <\Closure>
+    {
+        return function () use (&n) {
+            let n = n + 1;
+
+            return n;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     *
+     * A `string` parameter is a native `zend_string *`; the reference is
+     * seeded from the companion zval the prologue always fills.
+     */
+    public function issue2668ByRefTypedString(string s) -> <\Closure>
+    {
+        return function () use (&s) {
+            let s = s . "!";
+
+            return s;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     *
+     * Rewriting the array through the shared slot has to keep working after
+     * the method that owned the parameter returned. It is reassigned rather
+     * than appended to because `let x[] = ...` on a capture is rejected for
+     * every capture, by value or by reference (#2736).
+     */
+    public function issue2668ByRefTypedArray(array items) -> <\Closure>
+    {
+        return function () use (&items) {
+            let items = array_merge(items, [1]);
+
+            return count(items);
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     *
+     * An optional parameter's default is assigned to the shadow by the usual
+     * default-value machinery before the reference is seeded from it.
+     */
+    public function issue2668ByRefOptionalParam(var seed = 3) -> <\Closure>
+    {
+        return function () use (&seed) {
+            let seed = seed * 2;
+
+            return seed;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     *
+     * A variadic is collected into a plain local, so it only needs the same
+     * copy into the reference.
+     */
+    public function issue2668ByRefVariadicParam(var... rest) -> <\Closure>
+    {
+        return function () use (&rest) {
+            let rest = array_merge(rest, ["x"]);
+
+            return count(rest);
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     *
+     * Rewriting a refcounted value through the shared slot has to release the
+     * one it replaces. A literal is the shape that shows it: `ZVAL_STRING()`
+     * allocates a fresh `zend_string` and overwrites without a destructor, so
+     * without the release every rewrite drops one on the floor.
+     */
+    public function issue2668ByRefRewrite(string s) -> string
+    {
+        var hold;
+        int i = 0;
+
+        let hold = function () use (&s) {
+            return s;
+        };
+
+        while i < 20 {
+            let s = "a rewritten value long enough not to be interned by luck";
+            let i = i + 1;
+        }
+
+        return call_user_func(hold);
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2668
+     *
+     * Same shape for an array: `zephir_create_array()` builds a new
+     * `zend_array` over whatever the slot held.
+     */
+    public function issue2668ByRefRewriteArray(array items) -> int
+    {
+        var hold;
+        int i = 0;
+
+        let hold = function () use (&items) {
+            return count(items);
+        };
+
+        while i < 50 {
+            let items = [1, 2, 3, 4, 5, 6, 7, 8];
+            let i = i + 1;
+        }
+
+        return call_user_func(hold);
+    }
 }

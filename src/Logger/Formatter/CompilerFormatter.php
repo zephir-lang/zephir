@@ -70,11 +70,21 @@ final class CompilerFormatter extends LineFormatter
             $type = $vars["context"][0];
             $node = $vars["context"][1];
 
-            if (!$this->config->get($type, "warnings")) {
+            /**
+             * A key nobody registered reads back as null, which is falsy,
+             * which used to mean "off". Six warnings shipped for years that
+             * no setting could switch on, and the only sign was silence. An
+             * unknown key prints and says so instead (#2727).
+             */
+            $isKnown = $this->config->isKnownWarning($type);
+
+            if ($isKnown && !$this->config->get($type, "warnings")) {
                 return "";
             }
 
-            $vars["type"] = "[$type]";
+            $vars["type"] = $isKnown
+                ? "[$type]"
+                : "[$type: unregistered warning key]";
 
             if (!isset($node["file"])) {
                 $vars["file"] = "unknown";

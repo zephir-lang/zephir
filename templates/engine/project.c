@@ -31,6 +31,18 @@ PHP_INI_BEGIN()
 	%PROJECT_INI_ENTRIES%
 PHP_INI_END()
 
+/**
+ * Directives whose globals are put back to their php.ini value at the start
+ * of every request. globals_set() writes the struct member directly, so the
+ * engine cannot restore it the way it restores an ini_set(); without this the
+ * value would survive into the next request. Module-scoped globals are
+ * deliberately absent: they are set up once per process.
+ */
+static const char *const zephir_request_ini_entries[] = {
+	%PROJECT_REQUEST_INI_ENTRIES%
+	NULL
+};
+
 static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
 {
 	REGISTER_INI_ENTRIES();
@@ -96,6 +108,7 @@ static void php_zephir_init_module_globals(zend_%PROJECT_LOWER%_globals *%PROJEC
 	%PROJECT_LOWER%_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(%PROJECT_LOWER%_globals_ptr);
+	zephir_ini_activate_globals(zephir_request_ini_entries);
 	zephir_initialize_memory(%PROJECT_LOWER%_globals_ptr);
 
 	%REQ_INITIALIZERS%

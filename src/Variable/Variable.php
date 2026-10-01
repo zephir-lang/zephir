@@ -497,9 +497,22 @@ class Variable implements TypeAwareInterface
             /*
              * The reference is created once in the method prologue; re-running
              * ZEPHIR_INIT_VAR here would drop it and unshare the storage.
+             *
+             * The value it holds still has to be released before the next one
+             * is written, or `let s = "a"; let s = "b";` frees nothing.
+             * ZEPHIR_INIT_NVAR is exactly that release: the shared slot is
+             * seeded with NULL rather than UNDEF, so it never takes the
+             * observe branch and never registers the reference's inner zval
+             * with the memory frame.
+             *
              * @see https://github.com/zephir-lang/zephir/issues/2652
+             * @see https://github.com/zephir-lang/zephir/issues/2668
              */
+            $compilationContext->headersManager->add('kernel/memory');
             $compilationContext->symbolTable->mustGrownStack(true);
+            $compilationContext->codePrinter->output(
+                'ZEPHIR_INIT_NVAR(' . $compilationContext->backend->getVariableCode($this) . ');'
+            );
 
             return;
         }
@@ -908,6 +921,24 @@ class Variable implements TypeAwareInterface
             $compilationContext->headersManager->add('kernel/memory');
             $compilationContext->symbolTable->mustGrownStack(true);
             $symbol = $compilationContext->backend->getVariableCode($this);
+
+            /*
+             * The shared slot behind a `use (&x)` capture is seeded with NULL
+             * and owned by the reference, so it must be released before the
+             * next value is copied in and must never be handed to the memory
+             * frame - registering it there would free it a second time when
+             * the frame is restored. ZEPHIR_OBS_NVAR is the release half on
+             * its own: the slot is never IS_UNDEF, so it cannot reach the
+             * observe branch.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2652
+             * @see https://github.com/zephir-lang/zephir/issues/2668
+             */
+            if ($this->closureReference) {
+                $compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $symbol . ');');
+
+                return;
+            }
 
             if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                 $this->mustInitNull = true;

@@ -444,16 +444,15 @@ final class Issue2666Test extends TestCase
     }
 
     /**
-     * Known divergence, pinned so that closing it is a deliberate act: PHP's
-     * `/` narrows an exact result to `int`, Zephir's helpers always return a
-     * C double.
+     * PHP's `/` narrows an exact integer result to `int`.
      *
      * @see https://github.com/zephir-lang/zephir/issues/2675
      */
-    public function testExactDivisionStillReturnsFloat(): void
+    public function testExactDivisionMatchesPhp(): void
     {
-        $this->assertSame(2, 4 / 2);
-        $this->assertSame(2.0, $this->test->divLongLong(4, 2));
+        $this->assertMatchesPhp(fn () => $this->test->divLongLong(4, 2), fn () => 4 / 2);
+        $this->assertMatchesPhp(fn () => $this->test->divVarLong(4, 2), fn () => 4 / 2);
+        $this->assertMatchesPhp(fn () => $this->test->divLongVar(4, 2), fn () => 4 / 2);
     }
 
     /**

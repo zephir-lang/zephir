@@ -32,4 +32,29 @@ final class OsTest extends TestCase
             $this->assertFalse($isWindows);
         }
     }
+
+    /**
+     * @return iterable<string, array{0: string, 1: bool}>
+     */
+    public static function pathProvider(): iterable
+    {
+        yield 'unix absolute'           => ['/tmp/out', true];
+        yield 'windows drive backslash' => ['C:\\Users\\RUNNER~1\\out', true];
+        yield 'windows drive slash'     => ['D:/a/zephir/templates/Api/sitemap.php', true];
+        yield 'windows root-relative'   => ['\\temp\\out', true];
+        yield 'stream wrapper'          => ['phar:///zephir.phar/templates/Api/sitemap.php', true];
+        yield 'relative'                => ['doc/0.0.1', false];
+        yield 'dot relative'            => ['./out', false];
+        yield 'drive-relative'          => ['C:out', false];
+        yield 'empty'                   => ['', false];
+    }
+
+    /**
+     * @dataProvider pathProvider
+     * @see https://github.com/zephir-lang/zephir/issues/2431
+     */
+    public function testShouldDetectAbsolutePath(string $path, bool $expected): void
+    {
+        $this->assertSame($expected, Os::isAbsolutePath($path));
+    }
 }

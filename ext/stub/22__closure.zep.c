@@ -38,7 +38,7 @@ PHP_METHOD(stub_22__closure, __invoke)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &val);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2321doubled", NULL, 0, val);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2321Doubled", NULL, 0, val);
 	zephir_check_call_status();
 	RETURN_MM();
 }

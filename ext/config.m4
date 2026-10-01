@@ -9,7 +9,7 @@ if test "$PHP_STUB" = "yes"; then
 	fi
 
 	AC_DEFINE(HAVE_STUB, 1, [Whether you have Stub])
-	stub_sources="stub.c kernel/main.c kernel/memory.c kernel/exception.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c kernel/generator.c stub/invokes/abstractprotected.zep.c
+	stub_sources="stub.c kernel/main.c kernel/memory.c kernel/exception.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c kernel/generator.c kernel/buffer.c stub/invokes/abstractprotected.zep.c
 	stub/testinterface.zep.c
 	stub/issue2635/inner.zep.c
 	stub/oo/extend/exception.zep.c
@@ -62,6 +62,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/bench/foo.zep.c
 	stub/bitwise.zep.c
 	stub/branchprediction.zep.c
+	stub/bufferops.zep.c
 	stub/builtin/arraymethods.zep.c
 	stub/builtin/charmethods.zep.c
 	stub/builtin/intmethods.zep.c
@@ -160,6 +161,8 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2656.zep.c
 	stub/issue2666.zep.c
 	stub/issue2674.zep.c
+	stub/issue2675.zep.c
+	stub/issue2676.zep.c
 	stub/issue2679.zep.c
 	stub/issue2682.zep.c
 	stub/issue2691.zep.c
@@ -167,7 +170,12 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2699.zep.c
 	stub/issue2702.zep.c
 	stub/issue2708.zep.c
+	stub/issue2715.zep.c
 	stub/issue2716.zep.c
+	stub/issue2738.zep.c
+	stub/issue2739.zep.c
+	stub/issue2744.zep.c
+	stub/issue2746.zep.c
 	stub/issue663.zep.c
 	stub/issue760.zep.c
 	stub/issue808.zep.c
@@ -361,7 +369,21 @@ if test "$PHP_STUB" = "yes"; then
 	stub/54__closure.zep.c
 	stub/55__closure.zep.c
 	stub/56__closure.zep.c
-	stub/57__closure.zep.c "
+	stub/57__closure.zep.c
+	stub/58__closure.zep.c
+	stub/59__closure.zep.c
+	stub/60__closure.zep.c
+	stub/61__closure.zep.c
+	stub/62__closure.zep.c
+	stub/63__closure.zep.c
+	stub/64__closure.zep.c
+	stub/65__closure.zep.c
+	stub/66__closure.zep.c
+	stub/67__closure.zep.c
+	stub/68__closure.zep.c
+	stub/69__closure.zep.c
+	stub/70__closure.zep.c
+	stub/71__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
 	for dir in "stub stub/args/single stub/attributes stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/issue2635 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/traits stub/typehinting stub/types"; do
@@ -389,21 +411,19 @@ if test "$PHP_STUB" = "yes"; then
 		[[#include "php_config.h"]]
 	)
 
-	AC_CHECK_DECL(
-		[HAVE_JSON],
+	dnl php-src stopped declaring HAVE_JSON in php_config.h in 8.4, so probing
+	dnl for it left ZEPHIR_USE_PHP_JSON undefined on 8.4 and 8.5 even though
+	dnl ext/json has been built in unconditionally since 8.0 -- which quietly
+	dnl demoted zephir_json_encode() to calling the userland json_encode()
+	dnl function. Probe for the header, which is what the code actually needs.
+	AC_CHECK_HEADERS(
+		[ext/json/php_json.h],
 		[
-			AC_CHECK_HEADERS(
-				[ext/json/php_json.h],
-				[
-					PHP_ADD_EXTENSION_DEP([stub], [json])
-					AC_DEFINE([ZEPHIR_USE_PHP_JSON], [1], [Whether PHP json extension is present at compile time])
-				],
-				,
-				[[#include "main/php.h"]]
-			)
+			PHP_ADD_EXTENSION_DEP([stub], [json])
+			AC_DEFINE([ZEPHIR_USE_PHP_JSON], [1], [Whether PHP json extension is present at compile time])
 		],
 		,
-		[[#include "php_config.h"]]
+		[[#include "main/php.h"]]
 	)
 
 	CPPFLAGS=$old_CPPFLAGS

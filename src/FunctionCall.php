@@ -437,6 +437,15 @@ class FunctionCall extends Call
         $cachePointer  = $functionCache->get($funcName, $compilationContext, $exists);
 
         /**
+         * The lowered name resolves optimizers and the compile time lookups
+         * above; the call itself carries the name as it was written, which is
+         * the spelling PHP prints when the function turns out not to exist.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2715
+         */
+        $callName = $expression['name'];
+
+        /**
          * Add the last call status to the current symbol table
          */
         $this->addCallStatusFlag($compilationContext);
@@ -445,7 +454,7 @@ class FunctionCall extends Call
             if ($this->isExpectingReturn()) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output(
-                        'ZEPHIR_RETURN_CALL_FUNCTION("' . $funcName . '", ' . $cachePointer . ');'
+                        'ZEPHIR_RETURN_CALL_FUNCTION("' . $callName . '", ' . $cachePointer . ');'
                     );
                 } else {
                     if ($this->mustInitSymbolVariable()) {
@@ -453,18 +462,18 @@ class FunctionCall extends Call
                         $symbolVariable->trackVariant($compilationContext);
                     }
                     $codePrinter->output(
-                        'ZEPHIR_CALL_FUNCTION(' . $symbol . ', "' . $funcName . '", ' . $cachePointer . ');'
+                        'ZEPHIR_CALL_FUNCTION(' . $symbol . ', "' . $callName . '", ' . $cachePointer . ');'
                     );
                 }
             } else {
-                $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", ' . $cachePointer . ');');
+                $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $callName . '", ' . $cachePointer . ');');
             }
         } else {
             if ($this->isExpectingReturn()) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output(
                         strtr('ZEPHIR_RETURN_CALL_FUNCTION(":func", :pointer, :params);', [
-                            ':func'    => $funcName,
+                            ':func'    => $callName,
                             ':pointer' => $cachePointer,
                             ':params'  => implode(', ', $params),
                         ])
@@ -478,7 +487,7 @@ class FunctionCall extends Call
                     $codePrinter->output(
                         strtr('ZEPHIR_CALL_FUNCTION(:symbol, ":func", :pointer, :params);', [
                             ':symbol'  => $symbol,
-                            ':func'    => $funcName,
+                            ':func'    => $callName,
                             ':pointer' => $cachePointer,
                             ':params'  => implode(', ', $params),
                         ])
@@ -487,7 +496,7 @@ class FunctionCall extends Call
             } else {
                 $codePrinter->output(
                     strtr('ZEPHIR_CALL_FUNCTION(NULL, ":func", :pointer, :params);', [
-                        ':func'    => $funcName,
+                        ':func'    => $callName,
                         ':pointer' => $cachePointer,
                         ':params'  => implode(', ', $params),
                     ])
@@ -650,7 +659,7 @@ class FunctionCall extends Call
      */
     protected function markReferences(
         $funcName,
-        $parameters,
+        &$parameters,
         CompilationContext $compilationContext,
         &$references,
         $expression
@@ -668,12 +677,41 @@ class FunctionCall extends Call
                 foreach ($funcParameters as $parameter) {
                     if ($numberParameters >= $n) {
                         if ($parameter->isPassedByReference()) {
+                            /**
+                             * The emitted argument, reduced to the name the
+                             * symbol table knows. Kept local: writing it back
+                             * would strip the `&` off the argument the call is
+                             * built from.
+                             */
+                            $argument = $parameters[$n - 1];
                             /* TODO hack, fix this better */
-                            if ('&' === $parameters[$n - 1][0]) {
-                                $parameters[$n - 1] = substr($parameters[$n - 1], 1);
+                            if ('&' === $argument[0]) {
+                                $argument = substr($argument, 1);
                             }
 
-                            if (!preg_match('/^[a-zA-Z0-9$_]+$/', $parameters[$n - 1])) {
+                            /**
+                             * A `use (&x)` capture is already a zend_reference,
+                             * and its arguments are emitted as the slot behind
+                             * it. Pass the reference itself instead: the callee
+                             * then writes into the slot the closure shares.
+                             * Wrapping it again would nest a reference inside
+                             * the shared one, and unwrapping it afterwards
+                             * would tear the sharing down.
+                             *
+                             * @see https://github.com/zephir-lang/zephir/issues/2668
+                             */
+                            if (preg_match('/^Z_REFVAL_P\(&([a-zA-Z0-9_]+)\)$/', $argument, $slot)) {
+                                $captured = $compilationContext->symbolTable->getVariable($slot[1]);
+                                if ($captured) {
+                                    $captured->increaseMutates();
+                                    $captured->setDynamicTypes('undefined');
+                                    $parameters[$n - 1] = '&' . $slot[1];
+                                }
+
+                                continue;
+                            }
+
+                            if (!preg_match('/^[a-zA-Z0-9$_]+$/', $argument)) {
                                 $compilationContext->logger->warning(
                                     'Cannot mark complex expression as reference',
                                     ['invalid-reference', $expression]
@@ -689,7 +727,7 @@ class FunctionCall extends Call
                              *
                              * @see https://github.com/zephir-lang/zephir/issues/2654
                              */
-                            $variable = $compilationContext->symbolTable->getVariable($parameters[$n - 1]);
+                            $variable = $compilationContext->symbolTable->getVariable($argument);
                             if ($variable) {
                                 $variable->increaseMutates();
                                 $variable->setDynamicTypes('undefined');
@@ -718,13 +756,13 @@ class FunctionCall extends Call
                                     );
 
                                     if ($variable->isDoublePointer()) {
-                                        $references[] = $parameters[$n - 1];
+                                        $references[] = $argument;
                                     }
                                 } else {
                                     $compilationContext->codePrinter->output(
                                         'ZEPHIR_MAKE_REF(' . $referenceSymbol . ');'
                                     );
-                                    $references[] = $parameters[$n - 1];
+                                    $references[] = $argument;
                                 }
                             }
                         }

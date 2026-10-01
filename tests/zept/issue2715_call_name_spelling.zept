@@ -1,0 +1,230 @@
+--TEST--
+A call carries the method name as it was written, so `__call()`, `__callStatic()` and the undefined-call errors see the source spelling PHP shows them
+--FILE--
+namespace Stub;
+
+class Issue2715Base
+{
+	public function baseMethod() -> string
+	{
+		return "base";
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2715 extends Issue2715Base
+{
+	public function callMixedCase(var receiver)
+	{
+		return receiver->NoPeCaSe();
+	}
+
+	public function callDynamicStringName(var receiver)
+	{
+		return receiver->{"NoPeCaSe"}();
+	}
+
+	public function callDynamicVariableName(var receiver, var name)
+	{
+		return receiver->{name}();
+	}
+
+	public function callStaticMixedCase(var className)
+	{
+		return {className}::NoPeCaSe();
+	}
+
+	public function callStaticDynamicName(var className)
+	{
+		string name = "NoPeCaSe";
+
+		return {className}::{name}();
+	}
+
+	public function callServiceGetter(var receiver)
+	{
+		return receiver->getMyService();
+	}
+
+	public function callUndefinedMethod(var receiver)
+	{
+		return receiver->NoSuchMethod();
+	}
+
+	public function callUndefinedFunction(var value)
+	{
+		return no_SuCh_FuNcTiOn(value);
+	}
+
+	public function callDeclaredMethod(var receiver)
+	{
+		return receiver->DECLAREDmethod();
+	}
+
+	public static function staticControl() -> string
+	{
+		return "self";
+	}
+
+	public function callSelfMixedCase() -> string
+	{
+		return self::STATICCONTROL();
+	}
+
+	public function callParentMixedCase() -> string
+	{
+		return parent::BASEMETHOD();
+	}
+}
+--USAGE--
+/**
+ * PHP defines the first argument of `__call()` / `__callStatic()` as the method
+ * name as written at the call site. Codegen used to lower-case that name before
+ * it reached the generated C, so a Zephir caller handed userland a name PHP
+ * never would have, and the undefined-call errors printed the lowered spelling.
+ *
+ * Every case prints the Zephir transcript next to the transcript of the same
+ * statement in plain PHP, so a divergence shows up as a diff rather than as a
+ * hand-written expectation.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2715
+ */
+class Magic
+{
+    public function __call($name, $args)
+    {
+        return $name;
+    }
+
+    public static function __callStatic($name, $args)
+    {
+        return $name;
+    }
+}
+
+/**
+ * The shape `Phalcon\Di::__call()` has: the service name is derived from the
+ * spelling of the method, so a lower-cased name looks up a service nobody
+ * registered.
+ */
+class Container
+{
+    private $services = ['myService' => 'the real service'];
+
+    public function __call($method, $args)
+    {
+        if (strpos($method, 'get') === 0) {
+            $name = lcfirst(substr($method, 3));
+
+            return $this->services[$name] ?? 'NO SERVICE NAMED ' . $name;
+        }
+
+        return 'NOT A GETTER';
+    }
+}
+
+class Plain
+{
+    public function declaredMethod()
+    {
+        return 'declared';
+    }
+}
+
+function transcript(callable $call): string
+{
+    try {
+        $result = $call();
+
+        return var_export($result, true);
+    } catch (\Throwable $e) {
+        return sprintf('%s: %s', get_class($e), $e->getMessage());
+    }
+}
+
+$test      = new \Stub\Issue2715();
+$magic     = new Magic();
+$container = new Container();
+$plain     = new Plain();
+$object    = new \stdClass();
+$className = 'Magic';
+$name      = 'NoPeCaSe';
+
+$cases = [
+    'literal name'          => [
+        static fn() => $test->callMixedCase($magic),
+        static fn() => $magic->NoPeCaSe(),
+    ],
+    'literal name in braces' => [
+        static fn() => $test->callDynamicStringName($magic),
+        static fn() => $magic->{"NoPeCaSe"}(),
+    ],
+    'name in a variable'    => [
+        static fn() => $test->callDynamicVariableName($magic, $name),
+        static fn() => $magic->{$name}(),
+    ],
+    'static literal name'   => [
+        static fn() => $test->callStaticMixedCase($className),
+        static fn() => $className::NoPeCaSe(),
+    ],
+    'static name in a variable' => [
+        static fn() => $test->callStaticDynamicName($className),
+        static fn() => $className::$name(),
+    ],
+    'service getter'        => [
+        static fn() => $test->callServiceGetter($container),
+        static fn() => $container->getMyService(),
+    ],
+    'undefined method'      => [
+        static fn() => $test->callUndefinedMethod($object),
+        static fn() => $object->NoSuchMethod(),
+    ],
+    'undefined function'    => [
+        static fn() => $test->callUndefinedFunction('x'),
+        static fn() => no_SuCh_FuNcTiOn('x'),
+    ],
+];
+
+foreach ($cases as $label => [$zephir, $php]) {
+    echo $label, "\n";
+    printf("  zephir %s\n", transcript($zephir));
+    printf("  php    %s\n", transcript($php));
+}
+
+/**
+ * Dispatch stays case-insensitive, as PHP's is: a name spelled differently from
+ * the declaration still reaches the declared method, through the object, through
+ * `self::` and through `parent::`.
+ */
+echo "declared method reached: ", transcript(static fn() => $test->callDeclaredMethod($plain)), "\n";
+echo "self reached: ", transcript(static fn() => $test->callSelfMixedCase()), "\n";
+echo "parent reached: ", transcript(static fn() => $test->callParentMixedCase()), "\n";
+--EXPECT--
+literal name
+  zephir 'NoPeCaSe'
+  php    'NoPeCaSe'
+literal name in braces
+  zephir 'NoPeCaSe'
+  php    'NoPeCaSe'
+name in a variable
+  zephir 'NoPeCaSe'
+  php    'NoPeCaSe'
+static literal name
+  zephir 'NoPeCaSe'
+  php    'NoPeCaSe'
+static name in a variable
+  zephir 'NoPeCaSe'
+  php    'NoPeCaSe'
+service getter
+  zephir 'the real service'
+  php    'the real service'
+undefined method
+  zephir Error: Call to undefined method stdClass::NoSuchMethod()
+  php    Error: Call to undefined method stdClass::NoSuchMethod()
+undefined function
+  zephir Error: Call to undefined function no_SuCh_FuNcTiOn()
+  php    Error: Call to undefined function no_SuCh_FuNcTiOn()
+declared method reached: 'declared'
+self reached: 'self'
+parent reached: 'base'

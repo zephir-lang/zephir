@@ -91,7 +91,7 @@ class StaticPropertyAppend extends ArrayIndex
         );
 
         if ($propertyDefinition->isPrivate()) {
-            if ($classDefinition != $compilationContext->classDefinition) {
+            if ($classDefinition !== $compilationContext->classDefinition) {
                 throw new CompilerException(
                     "Cannot access private static property '"
                     . $classDefinition->getCompleteName()

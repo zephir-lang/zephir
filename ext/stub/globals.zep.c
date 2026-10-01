@@ -199,3 +199,96 @@ PHP_METHOD(Stub_Globals, getDefaultGlobalsOrmCachePrefix)
 	RETURN_STRING(ZEPHIR_GLOBAL(orm).cache_prefix);
 }
 
+PHP_METHOD(Stub_Globals, setUIntValue)
+{
+	zval *value, value_sub;
+
+	ZVAL_UNDEF(&value_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &value);
+	ZEPHIR_GLOBAL(my_setting_6) = zval_get_long(value);
+}
+
+PHP_METHOD(Stub_Globals, setIntValue)
+{
+	zval *value, value_sub;
+
+	ZVAL_UNDEF(&value_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &value);
+	ZEPHIR_GLOBAL(my_setting_2) = zval_get_long(value);
+}
+
+PHP_METHOD(Stub_Globals, setDoubleValue)
+{
+	zval *value, value_sub;
+
+	ZVAL_UNDEF(&value_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &value);
+	ZEPHIR_GLOBAL(my_setting_3) = zval_get_double(value);
+}
+
+/**
+ * @return mixed
+ */
+PHP_METHOD(Stub_Globals, getUIntValue)
+{
+
+	RETURN_LONG(ZEPHIR_GLOBAL(my_setting_6));
+}
+
+/**
+ * @return mixed
+ */
+PHP_METHOD(Stub_Globals, getTestSetting1)
+{
+
+	RETURN_BOOL(ZEPHIR_GLOBAL(test_setting_1));
+}
+
+/**
+ * @return mixed
+ */
+PHP_METHOD(Stub_Globals, getDefaultGlobalsOrmCacheEnable)
+{
+
+	RETURN_BOOL(ZEPHIR_GLOBAL(orm).cache_enable);
+}
+
+/**
+ * @return mixed
+ */
+PHP_METHOD(Stub_Globals, getTestIniVariable)
+{
+
+	RETURN_BOOL(ZEPHIR_GLOBAL(extension).test_ini_variable);
+}
+
+/**
+ * @return mixed
+ */
+PHP_METHOD(Stub_Globals, getModuleSetting)
+{
+
+	RETURN_BOOL(ZEPHIR_GLOBAL(module_setting));
+}
+
+PHP_METHOD(Stub_Globals, setModuleSetting)
+{
+	zval *value, value_sub;
+
+	ZVAL_UNDEF(&value_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &value);
+	ZEPHIR_GLOBAL(module_setting) = zend_is_true(value);
+}
+

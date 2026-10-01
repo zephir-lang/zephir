@@ -18,6 +18,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
+use Zephir\Expression;
+use Zephir\Traits\ConcatSelfTrait;
 use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable;
 
@@ -28,6 +30,7 @@ use function sprintf;
  */
 class StaticPropertySub
 {
+    use ConcatSelfTrait;
     use VariablesTrait;
 
     protected string $methodName = 'subStaticProperty';
@@ -83,6 +86,24 @@ class StaticPropertySub
             $classEntry = $classDefinition->getClassEntry($compilationContext);
         } catch (Exception $e) {
             throw new CompilerException($e->getMessage(), $statement, $e->getCode(), $e);
+        }
+
+        /**
+         * `.=` is a read-modify-write on the property whatever the right-hand
+         * side is: read the current value, append to it, store it back. The
+         * type switch below decides how to *replace* the property, so most
+         * operand types used to overwrite it instead of appending, and a
+         * string literal was rejected outright.
+         *
+         * `AssignmentFactory` routes `concat-assign` to `StaticProperty` only,
+         * so this never fires for the add-assign/sub-assign subclasses.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2664
+         */
+        if ('concat-assign' === $statement['operator']) {
+            $this->assignConcat($classEntry, $property, $resolvedExpr, $compilationContext, $statement);
+
+            return;
         }
 
         switch ($resolvedExpr->getType()) {
@@ -346,6 +367,47 @@ class StaticPropertySub
             default:
                 throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
         }
+    }
+
+    /**
+     * Compiles `Class::foo .= {expr}` as a read-modify-write: read the current
+     * property value into a temp, append the operand onto it, write it back.
+     */
+    private function assignConcat(
+        string $classEntry,
+        string $property,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        array $statement
+    ): void {
+        $tempVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify(
+            'variable',
+            $compilationContext
+        );
+
+        $readExpression = new Expression([
+            'type'  => 'static-property-access',
+            'left'  => ['value' => $statement['variable']],
+            'right' => ['value' => $statement['property']],
+        ]);
+        $readExpression->setExpectReturn(true, $tempVariable);
+
+        try {
+            $readExpression->compile($compilationContext);
+        } catch (Exception $e) {
+            throw new CompilerException($e->getMessage(), $statement, $e->getCode(), $e);
+        }
+
+        $this->concatSelfOntoTarget(
+            $compilationContext->backend->getVariableCode($tempVariable),
+            $resolvedExpr,
+            $compilationContext,
+            $statement
+        );
+
+        $method = $this->methodName;
+        $compilationContext->backend->$method($classEntry, $property, $tempVariable, $compilationContext);
+        $this->checkVariableTemporal($tempVariable);
     }
 
     protected function processDefaultType(

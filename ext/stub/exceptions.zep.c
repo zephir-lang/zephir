@@ -116,7 +116,7 @@ PHP_METHOD(Stub_Exceptions, testException4)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getexception", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getException", NULL, 0);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&_0, "stub/exceptions.zep", 41);
 	ZEPHIR_MM_RESTORE();
@@ -242,7 +242,7 @@ PHP_METHOD(Stub_Exceptions, testExceptionRethrow)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "testexception1", NULL, 0);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "testException1", NULL, 0);
 		zephir_check_call_status_or_jump(try_end_1);
 
 	try_end_1:
@@ -298,9 +298,9 @@ PHP_METHOD(Stub_Exceptions, testMultiException)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &returnValue, &exception);
 	zephir_memory_observe(&iexc);
-	zephir_read_property_cached(&iexc, this_ptr, _zephir_prop_0, 38, PH_NOISY_CC);
+	zephir_read_property_cached(&iexc, this_ptr, _zephir_prop_0, 39, PH_NOISY_CC);
 	zephir_memory_observe(&exc);
-	zephir_read_property_cached(&exc, this_ptr, _zephir_prop_1, 39, PH_NOISY_CC);
+	zephir_read_property_cached(&exc, this_ptr, _zephir_prop_1, 40, PH_NOISY_CC);
 
 	/* try_start_1: */
 
@@ -398,7 +398,7 @@ PHP_METHOD(Stub_Exceptions, issue1325)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(&status, this_ptr, "donoopexception", NULL, 43);
+		ZEPHIR_CALL_METHOD(&status, this_ptr, "doNoopException", NULL, 43);
 		zephir_check_call_status_or_jump(try_end_1);
 
 	try_end_1:

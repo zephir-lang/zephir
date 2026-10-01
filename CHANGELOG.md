@@ -6,6 +6,65 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-10-01
+
+### Added
+- Added a warning for unrecognized top-level settings in `config.json` [#2449](https://github.com/zephir-lang/zephir/issues/2449)
+- Added a report for an unrecognized key in the `warnings` or `optimizations` section, and for an unrecognized `-W`, `-w`, `-f` or `-fno-` flag [#2727](https://github.com/zephir-lang/zephir/issues/2727)
+- Added an opt-in `<Ns>\Buffer` kernel class holding a fixed-size contiguous C array of doubles or integers, readable from C as a raw pointer [#2721](https://github.com/zephir-lang/zephir/issues/2721)
+- Added a kernel fast path so `buffer[i]` in Zephir source reads and writes the element directly instead of dispatching `offsetGet()` or `offsetSet()` [#2721](https://github.com/zephir-lang/zephir/issues/2721)
+- Added support for capturing a method parameter by reference in a closure `use (&x)` clause [#2668](https://github.com/zephir-lang/zephir/issues/2668)
+
+### Fixed
+- Fixed `(int)`, `intval()` and integer locals reading any object as `1` instead of using its own conversion or warning as PHP does [#2746](https://github.com/zephir-lang/zephir/issues/2746)
+- Fixed `(double)`, `doubleval()` and `double` locals reading any object as `1.0` and a resource as `1.0` instead of its handle [#2746](https://github.com/zephir-lang/zephir/issues/2746)
+- Fixed an integer conversion of a float string beyond the int range returning `0` instead of saturating as PHP does [#2746](https://github.com/zephir-lang/zephir/issues/2746)
+- Fixed a `double` parameter converting any argument instead of coercing it or throwing `TypeError` as a PHP `float` parameter does [#2746](https://github.com/zephir-lang/zephir/issues/2746)
+- Fixed `/` always returning a float where PHP returns an int for an exact integer division [#2675](https://github.com/zephir-lang/zephir/issues/2675)
+- Fixed `/=` on a `var` variable or an object property overwriting the value instead of dividing it [#2675](https://github.com/zephir-lang/zephir/issues/2675)
+- Fixed `/` with a bool operand compiling to a subtraction [#2677](https://github.com/zephir-lang/zephir/issues/2677)
+- Fixed `/` with an array, object or non-numeric string operand not throwing `TypeError` as PHP does [#2676](https://github.com/zephir-lang/zephir/issues/2676)
+- Fixed `%` with an array, object or non-numeric string operand not throwing `TypeError` as PHP does [#2676](https://github.com/zephir-lang/zephir/issues/2676)
+- Fixed `%` with a bool operand compiling to a subtraction [#2677](https://github.com/zephir-lang/zephir/issues/2677)
+- Fixed `%` of a `var` with a `double`, or of an integer with `true`, failing to compile [#2676](https://github.com/zephir-lang/zephir/issues/2676)
+- Fixed `%=` on a `var` variable or an object property failing to compile or overwriting the value [#2676](https://github.com/zephir-lang/zephir/issues/2676)
+- Fixed `/=` and `%=` on a typed local crashing on a zero divisor [#2676](https://github.com/zephir-lang/zephir/issues/2676)
+- Fixed `+`, `-` and `*` of a `var` with a native number truncating a float result to int [#2744](https://github.com/zephir-lang/zephir/issues/2744)
+- Fixed `+`, `-` and `*` of a `var` with a native number not overflowing to float or throwing `TypeError` as PHP does [#2744](https://github.com/zephir-lang/zephir/issues/2744)
+- Fixed `-=` and `*=` on a `var` crashing for a string value and keeping a stale type for an int that overflows to float [#2744](https://github.com/zephir-lang/zephir/issues/2744)
+- Fixed assigning a `var` to an integer variable losing precision above 2^53 [#2744](https://github.com/zephir-lang/zephir/issues/2744)
+- Fixed `time()` returning the previous second shortly after a second boundary, because it read a different clock than PHP `time()` [#2739](https://github.com/zephir-lang/zephir/issues/2739)
+- Fixed `Attribute::*` constants in attribute arguments, class constants, property defaults, parameter defaults and method bodies being frozen to the values of the PHP that ran `zephir generate` [#2738](https://github.com/zephir-lang/zephir/issues/2738)
+- Fixed IDE stubs printing a frozen number instead of the source `Attribute::*` expression [#2738](https://github.com/zephir-lang/zephir/issues/2738)
+- Fixed a typed property default that is a single `Attribute::*` constant being rejected [#2738](https://github.com/zephir-lang/zephir/issues/2738)
+- Fixed a value written through a `use (&x)` capture never releasing the one it replaced [#2668](https://github.com/zephir-lang/zephir/issues/2668)
+- Fixed a `use (&x)` capture inside a nested closure being attributed to a same-named parameter of the enclosing method [#2668](https://github.com/zephir-lang/zephir/issues/2668)
+- Fixed a static property read and a by-reference function argument writing over a `use (&x)` capture instead of into its shared slot [#2668](https://github.com/zephir-lang/zephir/issues/2668)
+- Fixed a compiler warning being discarded in silence when its key was not registered [#2727](https://github.com/zephir-lang/zephir/issues/2727)
+- Fixed `non-valid-unset`, `non-valid-require`, `non-valid-require-once` and `extra-parentheses` never printing [#2727](https://github.com/zephir-lang/zephir/issues/2727)
+- Fixed `invalid-array-index` and `non-valid-objectupdate` being raised under an unregistered key [#2727](https://github.com/zephir-lang/zephir/issues/2727)
+- Fixed a `warnings` key omitted from `config.json` losing its default instead of keeping it [#2727](https://github.com/zephir-lang/zephir/issues/2727)
+- Fixed the non-object property increment warning naming the wrong operation [#2727](https://github.com/zephir-lang/zephir/issues/2727)
+- Fixed `int`, `uint`, `long`, `ulong`, `double` and `char` extension globals not registering a php.ini directive [#2449](https://github.com/zephir-lang/zephir/issues/2449)
+- Fixed a string extension global's php.ini directive never reaching the global [#2449](https://github.com/zephir-lang/zephir/issues/2449)
+- Fixed php.ini values for extension globals being discarded at the start of every request [#2449](https://github.com/zephir-lang/zephir/issues/2449)
+- Fixed `globals_set()` on a namespaced extension global leaking into the next request [#2449](https://github.com/zephir-lang/zephir/issues/2449)
+- Fixed an `int` extension global being declared as a C `int` instead of `zend_long` [#2449](https://github.com/zephir-lang/zephir/issues/2449)
+- Fixed `ZEPHIR_USE_PHP_JSON` never being defined on PHP 8.4 and 8.5, where php-src no longer declares `HAVE_JSON`
+- Fixed a called method name being lower-cased at code generation, so `__call()` and `__callStatic()` now receive the name as it was written at the call site, as they do in PHP [#2715](https://github.com/zephir-lang/zephir/issues/2715)
+- Fixed a method name held in a variable being lower-cased again at runtime by the call macros [#2715](https://github.com/zephir-lang/zephir/issues/2715)
+- Fixed a call to an undefined method or function being reported with the lower-cased name instead of the spelling at the call site [#2715](https://github.com/zephir-lang/zephir/issues/2715)
+- Fixed `.=` rejecting a `double` or `bool` operand on a `string` or `var` left-hand side [#2664](https://github.com/zephir-lang/zephir/issues/2664)
+- Fixed `.= null` leaving the left operand unconverted instead of turning it into a string [#2664](https://github.com/zephir-lang/zephir/issues/2664)
+- Fixed `.=` on an object property overwriting it instead of appending for every operand but a string [#2664](https://github.com/zephir-lang/zephir/issues/2664)
+- Fixed `.=` on a static property overwriting it instead of appending for a literal operand [#2664](https://github.com/zephir-lang/zephir/issues/2664)
+- Fixed the `.` operator rejecting a `bool` or `char` operand [#2664](https://github.com/zephir-lang/zephir/issues/2664)
+- Fixed `.=` rejecting an array operand on a local variable, where PHP appends `Array` and raises `Array to string conversion` [#2664](https://github.com/zephir-lang/zephir/issues/2664)
+- Fixed a project command run outside a Zephir project to name the missing `config.json` and the subdirectory holding one, instead of `Extension namespace cannot be loaded` [#2431](https://github.com/zephir-lang/zephir/issues/2431)
+- Fixed `zephir compile` and `zephir stubs` ending in an uncaught fatal error instead of reporting it and exiting with 1 [#2431](https://github.com/zephir-lang/zephir/issues/2431)
+- Fixed `zephir clean` printing a shell `cd` error when there is no `ext/` directory [#2431](https://github.com/zephir-lang/zephir/issues/2431)
+- Fixed `zephir api` doing nothing, and the HTML API generation it runs failing on PHP 8 and on Windows [#2431](https://github.com/zephir-lang/zephir/issues/2431)
+
 ## [1.5.0] - 2026-09-18
 
 ### Added

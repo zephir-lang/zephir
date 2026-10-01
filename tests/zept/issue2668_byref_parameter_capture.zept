@@ -1,0 +1,165 @@
+--TEST--
+A closure can capture a method parameter by reference, not only a local (issue #2668)
+--FILE--
+namespace Stub;
+
+/**
+ * A parameter does not arrive in a shape that can become a `zend_reference`:
+ * an untyped one is a `zval *` borrowed from the caller, a typed one is an
+ * unboxed C scalar. It therefore keeps that shape under a shadow name, and its
+ * own name becomes the reference the closure shares.
+ *
+ * Every expectation below is the output of the same program written in PHP.
+ */
+class Param2668
+{
+	public function make(var seed) -> <\Closure>
+	{
+		return function () use (&seed) {
+			let seed = seed + 1;
+
+			return seed;
+		};
+	}
+
+	/**
+	 * Two closures over one parameter get one reference between them.
+	 */
+	public function shared(var seed) -> array
+	{
+		var bump, read;
+
+		let bump = function () use (&seed) {
+			let seed = seed + 10;
+
+			return seed;
+		};
+
+		let read = function () use (&seed) {
+			return seed;
+		};
+
+		return [bump, read];
+	}
+
+	/**
+	 * A by-value capture is a snapshot taken when the closure is created.
+	 */
+	public function mixedCapture(var seed) -> array
+	{
+		var byRef, byValue;
+
+		let byRef = function () use (&seed) {
+			let seed = seed + 1;
+
+			return seed;
+		};
+
+		let byValue = function () use (seed) {
+			return seed;
+		};
+
+		let seed = 100;
+
+		return [byRef, byValue];
+	}
+
+	/**
+	 * Zephir has no by-reference parameters, so a write through the capture
+	 * never reaches the caller's variable.
+	 */
+	public function stays(var seed) -> int
+	{
+		var write;
+
+		let write = function () use (&seed) {
+			let seed = 999;
+		};
+
+		call_user_func(write);
+
+		return seed;
+	}
+
+	public function typedInt(int n) -> <\Closure>
+	{
+		return function () use (&n) {
+			let n = n + 1;
+
+			return n;
+		};
+	}
+
+	public function typedString(string s) -> <\Closure>
+	{
+		return function () use (&s) {
+			let s = s . "!";
+
+			return s;
+		};
+	}
+
+	public function optional(var seed = 3) -> <\Closure>
+	{
+		return function () use (&seed) {
+			let seed = seed * 2;
+
+			return seed;
+		};
+	}
+
+	public function variadic(var... rest) -> <\Closure>
+	{
+		return function () use (&rest) {
+			let rest = array_merge(rest, ["x"]);
+
+			return count(rest);
+		};
+	}
+}
+--USAGE--
+use Stub\Param2668;
+
+$t = new Param2668();
+
+$c = $t->make(1);
+echo $c(), ",", $c(), "\n";
+
+[$bump, $read] = $t->shared(1);
+echo $bump(), ",", $read(), ",", $bump(), ",", $read(), "\n";
+
+[$byRef, $byValue] = $t->mixedCapture(1);
+echo $byRef(), ",", $byValue(), "\n";
+
+$outer = 5;
+echo $t->stays($outer), ",", $outer, "\n";
+
+$a = $t->make(10); $b = $t->make(20);
+echo $a(), ",", $b(), ",", $a(), "\n";
+
+$i = $t->typedInt(5);
+echo $i(), ",", $i(), "\n";
+
+// The declared type still coerces: the shadow keeps the typed ZPP macro.
+$w = $t->typedInt("5");
+echo $w(), ",", var_export($w(), true), "\n";
+
+$s = $t->typedString("a");
+echo $s(), ",", $s(), "\n";
+
+$d = $t->optional(); $g = $t->optional(5);
+echo $d(), ",", $d(), ",", $g(), ",", $g(), "\n";
+
+$v0 = $t->variadic(); $v2 = $t->variadic("a", "b");
+echo $v0(), ",", $v0(), ",", $v2(), ",", $v2(), "\n";
+--EXPECT--
+2,3
+11,11,21,21
+101,1
+999,5
+11,21,12
+6,7
+6,7
+a!,a!!
+6,12,10,20
+1,2,3,4

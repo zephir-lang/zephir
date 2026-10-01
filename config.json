@@ -58,6 +58,11 @@
     "invalid-reference": true,
     "invalid-typeof-comparison": true,
     "conditional-initialization": true,
+    "deprecated-strict-type": true,
+    "non-valid-unset": true,
+    "non-valid-require": true,
+    "non-valid-require-once": true,
+    "extra-parentheses": true,
     "missing-optimizer": false
   },
   "optimizations": {
@@ -68,9 +73,7 @@
     "static-constant-class-folding": true,
     "call-gatherer-pass": true,
     "check-invalid-reads": false,
-    "private-internal-methods": false,
-    "public-internal-methods": false,
-    "public-internal-functions": true
+    "internal-call-transformation": false
   },
   "globals": {
     "my_setting_1": {
@@ -100,6 +103,19 @@
     "my_setting_5": {
       "type": "string",
       "default": "custom_value"
+    },
+    "my_setting_6": {
+      "type": "uint",
+      "default": 64
+    },
+    "module_setting": {
+      "type": "bool",
+      "default": true,
+      "module": true,
+      "ini-entry": {
+        "name": "stub.module_setting",
+        "scope": "PHP_INI_ALL"
+      }
     },
     "db.my_setting_1": {
       "type": "bool",
@@ -168,5 +184,8 @@
         ]
       ]
     }
-  ]
+  ],
+  "kernel-classes": {
+    "buffer": true
+  }
 }

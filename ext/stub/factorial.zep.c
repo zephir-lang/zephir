@@ -61,13 +61,14 @@ PHP_METHOD(Stub_Factorial, intRecursiveFactorial)
 {
 	zend_bool _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *num_param = NULL, _0, _2, _3;
+	zval *num_param = NULL, _0, _2, _3, _4;
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+	ZVAL_UNDEF(&_4);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(num)
 	ZEND_PARSE_PARAMETERS_END();
@@ -84,10 +85,12 @@ PHP_METHOD(Stub_Factorial, intRecursiveFactorial)
 		ZVAL_LONG(&_0, 1);
 	} else {
 		ZVAL_LONG(&_3, (num - 1));
-		ZEPHIR_CALL_METHOD(&_2, this_ptr, "intrecursivefactorial", NULL, 44, &_3);
+		ZEPHIR_CALL_METHOD(&_2, this_ptr, "intRecursiveFactorial", NULL, 44, &_3);
 		zephir_check_call_status();
+		ZEPHIR_INIT_VAR(&_4);
+		ZVAL_LONG(&_4, num);
 		ZEPHIR_INIT_NVAR(&_0);
-		ZVAL_LONG(&_0, (num * (zend_long) zephir_get_numberval(&_2)));
+		mul_function(&_0, &_4, &_2);
 	}
 	RETURN_CCTOR(&_0);
 }

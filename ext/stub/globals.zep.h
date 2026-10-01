@@ -20,6 +20,15 @@ PHP_METHOD(Stub_Globals, getDefaultGlobals7);
 PHP_METHOD(Stub_Globals, getDefaultGlobals8);
 PHP_METHOD(Stub_Globals, getDefaultGlobalsOrmCacheLevel);
 PHP_METHOD(Stub_Globals, getDefaultGlobalsOrmCachePrefix);
+PHP_METHOD(Stub_Globals, setUIntValue);
+PHP_METHOD(Stub_Globals, setIntValue);
+PHP_METHOD(Stub_Globals, setDoubleValue);
+PHP_METHOD(Stub_Globals, getUIntValue);
+PHP_METHOD(Stub_Globals, getTestSetting1);
+PHP_METHOD(Stub_Globals, getDefaultGlobalsOrmCacheEnable);
+PHP_METHOD(Stub_Globals, getTestIniVariable);
+PHP_METHOD(Stub_Globals, getModuleSetting);
+PHP_METHOD(Stub_Globals, setModuleSetting);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_globals_setboolvalueusingdotnotation, 0, 1, IS_VOID, 0)
 
@@ -86,6 +95,41 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_globals_getdefaultglobalsormcacheprefix, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_globals_setuintvalue, 0, 1, IS_VOID, 0)
+
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_globals_setintvalue, 0, 1, IS_VOID, 0)
+
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_globals_setdoublevalue, 0, 1, IS_VOID, 0)
+
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_globals_getuintvalue, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_globals_gettestsetting1, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_globals_getdefaultglobalsormcacheenable, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_globals_gettestinivariable, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_globals_getmodulesetting, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_globals_setmodulesetting, 0, 1, IS_VOID, 0)
+
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_globals_method_entry) {
 	PHP_ME(Stub_Globals, setBoolValueUsingDotNotation, arginfo_stub_globals_setboolvalueusingdotnotation, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Globals, setIntValueUsingDotNotation, arginfo_stub_globals_setintvalueusingdotnotation, ZEND_ACC_PUBLIC)
@@ -104,5 +148,14 @@ PHP_ME(Stub_Globals, getDefaultGlobals7, arginfo_stub_globals_getdefaultglobals7
 PHP_ME(Stub_Globals, getDefaultGlobals8, arginfo_stub_globals_getdefaultglobals8, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Globals, getDefaultGlobalsOrmCacheLevel, arginfo_stub_globals_getdefaultglobalsormcachelevel, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Globals, getDefaultGlobalsOrmCachePrefix, arginfo_stub_globals_getdefaultglobalsormcacheprefix, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Globals, setUIntValue, arginfo_stub_globals_setuintvalue, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Globals, setIntValue, arginfo_stub_globals_setintvalue, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Globals, setDoubleValue, arginfo_stub_globals_setdoublevalue, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getUIntValue, arginfo_stub_globals_getuintvalue, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getTestSetting1, arginfo_stub_globals_gettestsetting1, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getDefaultGlobalsOrmCacheEnable, arginfo_stub_globals_getdefaultglobalsormcacheenable, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getTestIniVariable, arginfo_stub_globals_gettestinivariable, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getModuleSetting, arginfo_stub_globals_getmodulesetting, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Globals, setModuleSetting, arginfo_stub_globals_setmodulesetting, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

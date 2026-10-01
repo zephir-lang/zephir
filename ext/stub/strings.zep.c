@@ -616,7 +616,7 @@ PHP_METHOD(Stub_Strings, issue2186SegFaultCall)
 		zephir_memory_observe(&val_zv);
 	ZVAL_STR_COPY(&val_zv, val);
 	}
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2186child1", NULL, 0, &val_zv);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2186Child1", NULL, 0, &val_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -643,7 +643,7 @@ PHP_METHOD(Stub_Strings, issue2186Child1)
 		zephir_memory_observe(&val_zv);
 	ZVAL_STR_COPY(&val_zv, val);
 	}
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2186child2", NULL, 0, &val_zv);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2186Child2", NULL, 0, &val_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -732,7 +732,7 @@ PHP_METHOD(Stub_Strings, issue2234StrictParent)
 	zephir_memory_observe(&val_zv);
 	ZVAL_STR_COPY(&val_zv, val);
 	}
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2234strictchild", NULL, 0, &val_zv);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2234StrictChild", NULL, 0, &val_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }

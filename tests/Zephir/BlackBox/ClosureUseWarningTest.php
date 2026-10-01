@@ -247,13 +247,13 @@ ZEP);
     }
 
     /**
-     * A by-reference capture turns the enclosing local into a PHP reference,
-     * which a parameter's C shape cannot become. It has to fail loudly instead
-     * of emitting C that does not compile.
+     * A parameter does not arrive in a shape that can become a reference, so it
+     * keeps its native C shape under a shadow name and the declared name
+     * becomes the shared `zend_reference`. This used to be a compiler error.
      *
-     * @see https://github.com/zephir-lang/zephir/issues/2652
+     * @see https://github.com/zephir-lang/zephir/issues/2668
      */
-    public function testByReferenceCaptureOfAParameterIsReportedAsCompilerError(): void
+    public function testAParameterCanBeCapturedByReference(): void
     {
         $this->writeZep('byrefparam.zep', <<<'ZEP'
 namespace Stub;
@@ -274,10 +274,109 @@ ZEP);
         $result = $this->runZephir('generate --no-ansi', $this->projectDir);
         $output = $result['stdout'] . $result['stderr'];
 
+        $this->assertSame(0, $result['exitCode'], $output);
+        $this->assertStringNotContainsString('Cannot capture', $output);
+    }
+
+    /**
+     * A by-reference capture is a write channel into the slot, and the capture
+     * clone handed to the closure is a fresh writable variable, so allowing one
+     * on a `const` parameter would be a way around the modifier.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testAConstParameterCannotBeCapturedByReference(): void
+    {
+        $this->writeZep('constbyrefparam.zep', <<<'ZEP'
+namespace Stub;
+
+class ConstByRefParam
+{
+    public function make(const var seed) -> <\Closure>
+    {
+        return function () use (&seed) {
+            return seed;
+        };
+    }
+}
+ZEP);
+
+        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
+        $output = $result['stdout'] . $result['stderr'];
+
+        $this->assertNotSame(0, $result['exitCode'], $output);
+        $this->assertStringContainsString("read-only parameter 'seed'", $output);
+        $this->assertStringNotContainsString('Call to a member function', $output);
+    }
+
+    /**
+     * A generator's parameters are restored from the generator object on every
+     * resume, which would replace a reference made for them in the prologue.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testAGeneratorParameterCannotBeCapturedByReference(): void
+    {
+        $this->writeZep('genbyrefparam.zep', <<<'ZEP'
+namespace Stub;
+
+class GenByRefParam
+{
+    public function make(var seed)
+    {
+        yield function () use (&seed) {
+            return seed;
+        };
+    }
+}
+ZEP);
+
+        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
+        $output = $result['stdout'] . $result['stderr'];
+
         $this->assertNotSame(0, $result['exitCode'], $output);
         $this->assertStringContainsString("'seed'", $output);
-        $this->assertStringContainsString('by reference', $output);
-        $this->assertStringNotContainsString('Call to a member function', $output);
+        $this->assertStringContainsString('generator', $output);
+    }
+
+    /**
+     * A closure's body is a scope of its own, so an inner `use (&x)` says
+     * nothing about a same-named parameter of the enclosing method. The capture
+     * scan used to recurse into closure bodies and report one anyway.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2668
+     */
+    public function testACaptureInsideANestedClosureDoesNotReachTheOuterParameter(): void
+    {
+        $this->writeZep('nestedbyref.zep', <<<'ZEP'
+namespace Stub;
+
+class NestedByRef
+{
+    public function make(const int seed) -> int
+    {
+        var outer;
+
+        let outer = function () {
+            var seed;
+
+            let seed = 1;
+
+            return function () use (&seed) {
+                return seed;
+            };
+        };
+
+        return seed;
+    }
+}
+ZEP);
+
+        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
+        $output = $result['stdout'] . $result['stderr'];
+
+        $this->assertSame(0, $result['exitCode'], $output);
+        $this->assertStringNotContainsString('Cannot capture', $output);
     }
 
     public function testUndeclaredCaptureIsReportedAsCompilerError(): void

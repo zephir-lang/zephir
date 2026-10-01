@@ -114,8 +114,22 @@ zend_class_entry *stub_54__closure_ce;
 zend_class_entry *stub_55__closure_ce;
 zend_class_entry *stub_56__closure_ce;
 zend_class_entry *stub_57__closure_ce;
+zend_class_entry *stub_58__closure_ce;
+zend_class_entry *stub_59__closure_ce;
 zend_class_entry *stub_5__closure_ce;
+zend_class_entry *stub_60__closure_ce;
+zend_class_entry *stub_61__closure_ce;
+zend_class_entry *stub_62__closure_ce;
+zend_class_entry *stub_63__closure_ce;
+zend_class_entry *stub_64__closure_ce;
+zend_class_entry *stub_65__closure_ce;
+zend_class_entry *stub_66__closure_ce;
+zend_class_entry *stub_67__closure_ce;
+zend_class_entry *stub_68__closure_ce;
+zend_class_entry *stub_69__closure_ce;
 zend_class_entry *stub_6__closure_ce;
+zend_class_entry *stub_70__closure_ce;
+zend_class_entry *stub_71__closure_ce;
 zend_class_entry *stub_7__closure_ce;
 zend_class_entry *stub_8__closure_ce;
 zend_class_entry *stub_9__closure_ce;
@@ -141,6 +155,7 @@ zend_class_entry *stub_bench_ce;
 zend_class_entry *stub_bench_foo_ce;
 zend_class_entry *stub_bitwise_ce;
 zend_class_entry *stub_branchprediction_ce;
+zend_class_entry *stub_bufferops_ce;
 zend_class_entry *stub_builtin_arraymethods_ce;
 zend_class_entry *stub_builtin_charmethods_ce;
 zend_class_entry *stub_builtin_intmethods_ce;
@@ -235,6 +250,8 @@ zend_class_entry *stub_issue2654_ce;
 zend_class_entry *stub_issue2656_ce;
 zend_class_entry *stub_issue2666_ce;
 zend_class_entry *stub_issue2674_ce;
+zend_class_entry *stub_issue2675_ce;
+zend_class_entry *stub_issue2676_ce;
 zend_class_entry *stub_issue2679_ce;
 zend_class_entry *stub_issue2682_ce;
 zend_class_entry *stub_issue2691_ce;
@@ -242,7 +259,12 @@ zend_class_entry *stub_issue2698_ce;
 zend_class_entry *stub_issue2699_ce;
 zend_class_entry *stub_issue2702_ce;
 zend_class_entry *stub_issue2708_ce;
+zend_class_entry *stub_issue2715_ce;
 zend_class_entry *stub_issue2716_ce;
+zend_class_entry *stub_issue2738_ce;
+zend_class_entry *stub_issue2739_ce;
+zend_class_entry *stub_issue2744_ce;
+zend_class_entry *stub_issue2746_ce;
 zend_class_entry *stub_issue663_ce;
 zend_class_entry *stub_issue760_ce;
 zend_class_entry *stub_issue808_ce;
@@ -381,16 +403,46 @@ ZEND_DECLARE_MODULE_GLOBALS(stub)
 
 PHP_INI_BEGIN()
 	STD_PHP_INI_BOOLEAN("stub.db.my_setting_1", "0", PHP_INI_ALL, OnUpdateBool, db.my_setting_1, zend_stub_globals, stub_globals)
-	
-	
-	
+	STD_PHP_INI_ENTRY("stub.db.my_setting_2", "100", PHP_INI_ALL, OnUpdateLong, db.my_setting_2, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.db.my_setting_3", "7.5", PHP_INI_ALL, OnUpdateReal, db.my_setting_3, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.orm.cache_level", "3", PHP_INI_ALL, OnUpdateLong, orm.cache_level, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("stub.orm.cache_enable", "1", PHP_INI_ALL, OnUpdateBool, orm.cache_enable, zend_stub_globals, stub_globals)
-	STD_PHP_INI_ENTRY("stub.orm.cache_prefix", "prefix-string-", PHP_INI_ALL, NULL, orm.cache_prefix, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.orm.cache_prefix", "prefix-string-", PHP_INI_ALL, OnUpdateString, orm.cache_prefix, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("extension.test_ini_variable", "1", PHP_INI_ALL, OnUpdateBool, extension.test_ini_variable, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("ini-entry.my_setting_1", "1", PHP_INI_ALL, OnUpdateBool, my_setting_1, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("stub.test_setting_1", "1", PHP_INI_ALL, OnUpdateBool, test_setting_1, zend_stub_globals, stub_globals)
-	STD_PHP_INI_ENTRY("stub.my_setting_5", "custom_value", PHP_INI_ALL, NULL, my_setting_5, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.my_setting_2", "10", PHP_INI_ALL, OnUpdateLong, my_setting_2, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.my_setting_3", "15.2", PHP_INI_ALL, OnUpdateReal, my_setting_3, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.my_setting_4", "A", PHP_INI_ALL, zephir_OnUpdateChar, my_setting_4, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.my_setting_5", "custom_value", PHP_INI_ALL, OnUpdateString, my_setting_5, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.my_setting_6", "64", PHP_INI_ALL, OnUpdateLongGEZero, my_setting_6, zend_stub_globals, stub_globals)
+	STD_PHP_INI_BOOLEAN("stub.module_setting", "1", PHP_INI_ALL, OnUpdateBool, module_setting, zend_stub_globals, stub_globals)
 PHP_INI_END()
+
+/**
+ * Directives whose globals are put back to their php.ini value at the start
+ * of every request. globals_set() writes the struct member directly, so the
+ * engine cannot restore it the way it restores an ini_set(); without this the
+ * value would survive into the next request. Module-scoped globals are
+ * deliberately absent: they are set up once per process.
+ */
+static const char *const zephir_request_ini_entries[] = {
+	"stub.db.my_setting_1",
+	"stub.db.my_setting_2",
+	"stub.db.my_setting_3",
+	"stub.orm.cache_level",
+	"stub.orm.cache_enable",
+	"stub.orm.cache_prefix",
+	"extension.test_ini_variable",
+	"ini-entry.my_setting_1",
+	"stub.test_setting_1",
+	"stub.my_setting_2",
+	"stub.my_setting_3",
+	"stub.my_setting_4",
+	"stub.my_setting_5",
+	"stub.my_setting_6",
+	NULL
+};
 
 static PHP_MINIT_FUNCTION(stub)
 {
@@ -456,6 +508,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Bench_Foo);
 	ZEPHIR_INIT(Stub_Bitwise);
 	ZEPHIR_INIT(Stub_BranchPrediction);
+	ZEPHIR_INIT(Stub_BufferOps);
 	ZEPHIR_INIT(Stub_BuiltIn_ArrayMethods);
 	ZEPHIR_INIT(Stub_BuiltIn_CharMethods);
 	ZEPHIR_INIT(Stub_BuiltIn_IntMethods);
@@ -550,6 +603,8 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Issue2656);
 	ZEPHIR_INIT(Stub_Issue2666);
 	ZEPHIR_INIT(Stub_Issue2674);
+	ZEPHIR_INIT(Stub_Issue2675);
+	ZEPHIR_INIT(Stub_Issue2676);
 	ZEPHIR_INIT(Stub_Issue2679);
 	ZEPHIR_INIT(Stub_Issue2682);
 	ZEPHIR_INIT(Stub_Issue2691);
@@ -557,7 +612,12 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Issue2699);
 	ZEPHIR_INIT(Stub_Issue2702);
 	ZEPHIR_INIT(Stub_Issue2708);
+	ZEPHIR_INIT(Stub_Issue2715);
 	ZEPHIR_INIT(Stub_Issue2716);
+	ZEPHIR_INIT(Stub_Issue2738);
+	ZEPHIR_INIT(Stub_Issue2739);
+	ZEPHIR_INIT(Stub_Issue2744);
+	ZEPHIR_INIT(Stub_Issue2746);
 	ZEPHIR_INIT(Stub_Issue663);
 	ZEPHIR_INIT(Stub_Issue760);
 	ZEPHIR_INIT(Stub_Issue808);
@@ -744,8 +804,22 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(stub_55__closure);
 	ZEPHIR_INIT(stub_56__closure);
 	ZEPHIR_INIT(stub_57__closure);
+	ZEPHIR_INIT(stub_58__closure);
+	ZEPHIR_INIT(stub_59__closure);
 	ZEPHIR_INIT(stub_5__closure);
+	ZEPHIR_INIT(stub_60__closure);
+	ZEPHIR_INIT(stub_61__closure);
+	ZEPHIR_INIT(stub_62__closure);
+	ZEPHIR_INIT(stub_63__closure);
+	ZEPHIR_INIT(stub_64__closure);
+	ZEPHIR_INIT(stub_65__closure);
+	ZEPHIR_INIT(stub_66__closure);
+	ZEPHIR_INIT(stub_67__closure);
+	ZEPHIR_INIT(stub_68__closure);
+	ZEPHIR_INIT(stub_69__closure);
 	ZEPHIR_INIT(stub_6__closure);
+	ZEPHIR_INIT(stub_70__closure);
+	ZEPHIR_INIT(stub_71__closure);
 	ZEPHIR_INIT(stub_7__closure);
 	ZEPHIR_INIT(stub_8__closure);
 	ZEPHIR_INIT(stub_9__closure);
@@ -808,18 +882,6 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
 	memset(stub_globals->pcache, '\0', sizeof(void*) * ZEPHIR_MAX_PROPERTY_CACHE_SLOTS * ZEPHIR_PROPERTY_CACHE_SLOT_SIZE);
 
 	
-	stub_globals->db.my_setting_2 = 100;
-	stub_globals->db.my_setting_3 = 7.5;
-	stub_globals->orm.cache_level = 3;
-
-	stub_globals->orm.cache_prefix = ZSTR_VAL(zend_string_init(ZEND_STRL("prefix-string-"), 0));
-
-	stub_globals->my_setting_1 = 1;
-	stub_globals->test_setting_1 = 1;
-	stub_globals->my_setting_2 = 10;
-	stub_globals->my_setting_3 = 15.2;
-	stub_globals->my_setting_4 = 'A';
-	stub_globals->my_setting_5 = ZSTR_VAL(zend_string_init(ZEND_STRL("custom_value"), 0));
 	
 }
 
@@ -841,6 +903,7 @@ static PHP_RINIT_FUNCTION(stub)
 	stub_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(stub_globals_ptr);
+	zephir_ini_activate_globals(zephir_request_ini_entries);
 	zephir_initialize_memory(stub_globals_ptr);
 
 		zephir_init_static_properties_Stub_Issue1629();

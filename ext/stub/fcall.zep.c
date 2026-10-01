@@ -462,7 +462,7 @@ PHP_FUNCTION(g_stub_zephir_global_method_test) {
 		zephir_check_call_status();
 	}
 
-	ZEPHIR_RETURN_CALL_METHOD(&_0, "teststrtokvarbyslash", NULL, 51, str);
+	ZEPHIR_RETURN_CALL_METHOD(&_0, "testStrtokVarBySlash", NULL, 51, str);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -499,7 +499,7 @@ PHP_FUNCTION(f_Stub_zephir_namespaced_method_test) {
 	}
 
 	ZVAL_LONG(&_1, 5);
-	ZEPHIR_RETURN_CALL_METHOD(&_0, "testcall5", NULL, 52, str, &_1);
+	ZEPHIR_RETURN_CALL_METHOD(&_0, "testCall5", NULL, 52, str, &_1);
 	zephir_check_call_status();
 	RETURN_MM();
 }

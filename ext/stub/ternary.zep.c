@@ -113,12 +113,13 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex2)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *a, a_sub, *y, y_sub, _0, _1;
+	zval *a, a_sub, *y, y_sub, _0, _1, _2;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&y_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(y)
@@ -141,7 +142,10 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex2)
 			ZVAL_BOOL(&_0, zephir_array_isset_value(a, y));
 		}
 	}
-	RETURN_MM_LONG((5 + (zend_long) zephir_get_numberval(&_0)));
+	ZEPHIR_INIT_VAR(&_2);
+	ZVAL_LONG(&_2, 5);
+	zephir_add_function(return_value, &_2, &_0);
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Ternary, testTernaryComplex3)

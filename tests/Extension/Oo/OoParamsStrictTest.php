@@ -62,17 +62,13 @@ final class OoParamsStrictTest extends TestCase
         $this->test->setStrictAge('17');
     }
 
-    public function testShouldThrowInvalidArgumentExceptionForDouble(): void
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2746
+     */
+    public function testShouldThrowTypeErrorForDouble(): void
     {
-        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
-            $this->expectException(\InvalidArgumentException::class);
-            $message = "Parameter 'average' must be of the type double";
-        } else {
-            $this->expectException(\Error::class);
-            $message = 'Argument 1 passed to Stub\Oo\OoParams::setStrictAverage() must be of the type float, string given';
-        }
-
-        $this->expectExceptionMessage($message);
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of type float, string given');
 
         $this->test->setStrictAverage('a');
     }
