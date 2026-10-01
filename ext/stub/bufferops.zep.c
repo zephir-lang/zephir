@@ -143,13 +143,12 @@ PHP_METHOD(Stub_BufferOps, scale)
 	ZVAL_UNDEF(&_1$$3);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(buf)
-		Z_PARAM_ZVAL(factor_param)
+		Z_PARAM_DOUBLE(factor)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &buf, &factor_param);
 	ZEPHIR_SEPARATE_PARAM(buf);
-	factor = zephir_get_doubleval(factor_param);
 	i = 0;
 	n = 0;
 	n = zephir_fast_count_int(buf);

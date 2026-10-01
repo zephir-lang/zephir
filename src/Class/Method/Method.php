@@ -877,7 +877,12 @@ class Method
                 return '';
 
             case 'double':
-                return "\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameterCode . ');' . PHP_EOL;
+                if ($this->isInternal()) {
+                    return "\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameterCode . ');' . PHP_EOL;
+                }
+
+                // Value already passed in `Z_PARAM_DOUBLE()`
+                return '';
 
             case 'string':
                 $compilationContext->symbolTable->mustGrownStack(true);
@@ -2385,14 +2390,6 @@ class Method
                 break;
 
             case 'double':
-                if ($hasDefaultNull) {
-                    $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
-                } else {
-                    $param = sprintf('Z_PARAM_ZVAL(%s_param)', $name);
-                }
-
-                break;
-
             case 'float':
                 if ($hasDefaultNull) {
                     $param = sprintf('Z_PARAM_DOUBLE_OR_NULL(%s, is_null_true)', $name);

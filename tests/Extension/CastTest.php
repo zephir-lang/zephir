@@ -14,10 +14,13 @@ declare(strict_types=1);
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Stub\Cast;
 
 final class CastTest extends TestCase
 {
+    use AssertsPhpParity;
+
     private ?Cast $test = null;
 
     protected function setUp(): void
@@ -79,7 +82,7 @@ final class CastTest extends TestCase
         $this->assertSame(0, $this->test->testIntCastFromStringValue());
         $this->assertSame(0, $this->test->testIntCastFromEmptyArray());
         $this->assertSame(1, $this->test->testIntCastFromArray());
-        $this->assertSame(1, $this->test->testIntCastFromStdClass());
+        $this->assertMatchesPhp(fn () => $this->test->testIntCastFromStdClass(), fn () => (int) new stdClass());
         $this->assertSame(65, $this->test->testIntCastFromChar());
 
         /**
@@ -104,7 +107,7 @@ final class CastTest extends TestCase
 
         $this->assertSame(0, $this->test->testIntCastFromVariableEmptyArray());
         $this->assertSame(1, $this->test->testIntCastFromVariableArray());
-        $this->assertSame(1, $this->test->testIntCastFromVariableStdClass());
+        $this->assertMatchesPhp(fn () => $this->test->testIntCastFromVariableStdClass(), fn () => (int) new stdClass());
     }
 
     /**
@@ -131,7 +134,7 @@ final class CastTest extends TestCase
         $this->assertSame(0.0, $this->test->testFloatCastFromNull());
         $this->assertSame(0.0, $this->test->testFloatCastFromEmptyArray());
         $this->assertSame(1.0, $this->test->testFloatCastFromArray());
-        $this->assertSame(1.0, $this->test->testFloatCastFromStdClass());
+        $this->assertMatchesPhp(fn () => $this->test->testFloatCastFromStdClass(), fn () => (float) new stdClass());
 
         $this->assertSame(5.0, $this->test->testFloatCastFromVariableFloat());
         $this->assertSame(1.0, $this->test->testFloatCastFromVariableBooleanTrue());
@@ -139,7 +142,7 @@ final class CastTest extends TestCase
         $this->assertSame(0.0, $this->test->testFloatCastFromVariableNull());
         $this->assertSame(0.0, $this->test->testFloatCastFromVariableEmptyArray());
         $this->assertSame(1.0, $this->test->testFloatCastFromVariableArray());
-        $this->assertSame(1.0, $this->test->testFloatCastFromVariableStdClass());
+        $this->assertMatchesPhp(fn () => $this->test->testFloatCastFromVariableStdClass(), fn () => (float) new stdClass());
     }
 
     /**

@@ -185,12 +185,11 @@ PHP_METHOD(Stub_Concat, testConcat5)
 	ZVAL_UNDEF(&retval);
 	ZVAL_UNDEF(&left);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(number_param)
+		Z_PARAM_DOUBLE(number)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &number_param);
-	number = zephir_get_doubleval(number_param);
 	ZEPHIR_INIT_VAR(&left);
 	ZVAL_STRING(&left, "Concatenated string with number ");
 	ZEPHIR_INIT_VAR(&_0);
@@ -394,12 +393,11 @@ PHP_METHOD(Stub_Concat, testConcatStringWithDoubleVar)
 
 	ZVAL_UNDEF(&retval);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(number_param)
+		Z_PARAM_DOUBLE(number)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &number_param);
-	number = zephir_get_doubleval(number_param);
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_double(&retval, number);
@@ -496,12 +494,11 @@ PHP_METHOD(Stub_Concat, testConcatVarWithDoubleVar)
 
 	ZVAL_UNDEF(&retval);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(number_param)
+		Z_PARAM_DOUBLE(number)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &number_param);
-	number = zephir_get_doubleval(number_param);
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_double(&retval, number);
@@ -842,7 +839,7 @@ PHP_METHOD(Stub_Concat, appendPropertyVariables)
 
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_LONG(number)
-		Z_PARAM_ZVAL(fraction_param)
+		Z_PARAM_DOUBLE(fraction)
 		Z_PARAM_BOOL(flag)
 		Z_PARAM_STR(text)
 	ZEND_PARSE_PARAMETERS_END();
@@ -851,7 +848,6 @@ PHP_METHOD(Stub_Concat, appendPropertyVariables)
 	number_param = ZEND_CALL_ARG(execute_data, 1);
 	fraction_param = ZEND_CALL_ARG(execute_data, 2);
 	flag_param = ZEND_CALL_ARG(execute_data, 3);
-	fraction = zephir_get_doubleval(fraction_param);
 	zephir_memory_observe(&text_zv);
 	ZVAL_STR_COPY(&text_zv, text);
 	c = 'A';
@@ -989,13 +985,12 @@ PHP_METHOD(Stub_Concat, appendStaticVariables)
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(number)
-		Z_PARAM_ZVAL(fraction_param)
+		Z_PARAM_DOUBLE(fraction)
 		Z_PARAM_BOOL(flag)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 3, 0, &number_param, &fraction_param, &flag_param);
-	fraction = zephir_get_doubleval(fraction_param);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
 	zephir_concat_self_long(&_0, number);

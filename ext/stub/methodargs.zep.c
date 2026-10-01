@@ -200,14 +200,13 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAc
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(parameter_param)
+		Z_PARAM_DOUBLE(parameter)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &parameter_param);
 	if (!parameter_param) {
 		parameter = 1.32;
 	} else {
-		parameter = zephir_get_doubleval(parameter_param);
-	}
+		}
 	RETURN_DOUBLE(parameter);
 }
 

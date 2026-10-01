@@ -25,6 +25,17 @@ final class OoParamsTest extends TestCase
         $this->test = new OoParams();
     }
 
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2746
+     */
+    public function testDoubleParamRejectsStringInStrictMode(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of type float, string given');
+
+        $this->test->setAverage('17.5');
+    }
+
     public function testOoParams(): void
     {
         $this->assertInstanceOf('Stub\Oo\OoParams', $this->test->createThisClassWithoutWriteCurrentNamespace());
@@ -34,7 +45,6 @@ final class OoParamsTest extends TestCase
 
         $this->assertSame($this->test->setAverage(17.1), 17.1);
         $this->assertSame($this->test->setAverage(17), 17.0);
-        $this->assertSame($this->test->setAverage('17.5'), 17.5);
 
         $this->assertSame($this->test->setName('peter'), 'peter');
 

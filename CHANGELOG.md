@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Added support for capturing a method parameter by reference in a closure `use (&x)` clause [#2668](https://github.com/zephir-lang/zephir/issues/2668)
 
 ### Fixed
+- Fixed `(int)`, `intval()` and integer locals reading any object as `1` instead of using its own conversion or warning as PHP does [#2746](https://github.com/zephir-lang/zephir/issues/2746)
+- Fixed `(double)`, `doubleval()` and `double` locals reading any object as `1.0` and a resource as `1.0` instead of its handle [#2746](https://github.com/zephir-lang/zephir/issues/2746)
+- Fixed an integer conversion of a float string beyond the int range returning `0` instead of saturating as PHP does [#2746](https://github.com/zephir-lang/zephir/issues/2746)
+- Fixed a `double` parameter converting any argument instead of coercing it or throwing `TypeError` as a PHP `float` parameter does [#2746](https://github.com/zephir-lang/zephir/issues/2746)
 - Fixed `/` always returning a float where PHP returns an int for an exact integer division [#2675](https://github.com/zephir-lang/zephir/issues/2675)
 - Fixed `/=` on a `var` variable or an object property overwriting the value instead of dividing it [#2675](https://github.com/zephir-lang/zephir/issues/2675)
 - Fixed `/` with a bool operand compiling to a subtraction [#2677](https://github.com/zephir-lang/zephir/issues/2677)

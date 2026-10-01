@@ -80,10 +80,9 @@ PHP_METHOD(Stub_Oo_OoParams, setAverage)
 	double average;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(average_param)
+		Z_PARAM_DOUBLE(average)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &average_param);
-	average = zephir_get_doubleval(average_param);
 	RETURN_DOUBLE(average);
 }
 
@@ -152,7 +151,7 @@ PHP_METHOD(Stub_Oo_OoParams, setStrictAverage)
 	double average;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(average_param)
+		Z_PARAM_DOUBLE(average)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &average_param);
 	if (UNEXPECTED(Z_TYPE_P(average_param) != IS_DOUBLE)) {
@@ -246,14 +245,13 @@ PHP_METHOD(Stub_Oo_OoParams, setAverageDefault)
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(average_param)
+		Z_PARAM_DOUBLE(average)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &average_param);
 	if (!average_param) {
 		average = (double) 25;
 	} else {
-		average = zephir_get_doubleval(average_param);
-	}
+		}
 	RETURN_DOUBLE(average);
 }
 
@@ -339,10 +337,9 @@ PHP_METHOD(Stub_Oo_OoParams, setConstAverage)
 	double average;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(average_param)
+		Z_PARAM_DOUBLE(average)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &average_param);
-	average = zephir_get_doubleval(average_param);
 	RETURN_DOUBLE(average);
 }
 
