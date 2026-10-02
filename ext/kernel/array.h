@@ -131,6 +131,16 @@ int zephir_array_key_exists(zval *arr, zval *key);
 void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int types_length, int types_count, va_list ap);
 int zephir_array_update_multi(zval *arr, zval *value, const char *types, int types_length, int types_count, ...);
 
+/**
+ * `container[o1]...[oN] OP= value`, PHP's ZEND_ASSIGN_DIM_OP. `types` uses the
+ * zephir_array_update_multi() encoding, a trailing 'a' being `[]`, and `op` is
+ * one of the engine's binary operator functions, such as add_function().
+ */
+void zephir_array_assign_op(zval *container, zval *value, binary_op_type op, const char *types, int types_length, int types_count, ...);
+
+/** `container[dim] = value` (`[]` for a NULL dim) on a container slot the caller resolved */
+int zephir_array_assign_dim(zval *container, zval *dim, zval *value);
+
 /** Fast Array Merge */
 void zephir_fast_array_merge(zval *return_value, zval *array1, zval *array2);
 

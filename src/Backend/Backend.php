@@ -493,6 +493,37 @@ class Backend
         );
     }
 
+    /**
+     * Emits `container[o1]...[oN] OP= value` as one read-modify-write call.
+     *
+     * `$containerCode` is already C: a local's getVariableCode(), or a
+     * write-context slot pointer for a property. `$operatorFunction` names
+     * the engine's binary operator function, such as `add_function`.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2747
+     */
+    public function assignArrayOperator(
+        string $containerCode,
+        $valueVariable,
+        string $operatorFunction,
+        array $offsetExprs,
+        CompilationContext $compilationContext
+    ): void {
+        [$keys, $offsetItems, $numberParams] = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
+
+        $compilationContext->codePrinter->output(
+            sprintf(
+                'zephir_array_assign_op(%s, %s, %s, SL("%s"), %d%s);',
+                $containerCode,
+                $this->resolveValue($valueVariable, $compilationContext),
+                $operatorFunction,
+                $keys,
+                $numberParams,
+                $offsetItems ? ', ' . implode(', ', $offsetItems) : ''
+            )
+        );
+    }
+
     public function assignArrayProperty(Variable $variable, $property, $key, $value, CompilationContext $context): void
     {
         $resolveValue = $this->resolveValue($value, $context);
@@ -1493,14 +1524,19 @@ class Backend
      * `$property` is a Variable when the name is only known at runtime,
      * `this->{name}`, which PHP fetches through the same handler.
      *
+     * `$readWrite` fetches it for a compound assignment, `ZEND_FETCH_OBJ_RW`,
+     * which has no runtime-named form here.
+     *
      * @see https://github.com/zephir-lang/zephir/issues/2691
+     * @see https://github.com/zephir-lang/zephir/issues/2747
      */
     public function fetchPropertyWrite(
         Variable $slot,
         Variable $variableVariable,
         string|Variable $property,
         Variable $fallback,
-        CompilationContext $context
+        CompilationContext $context,
+        bool $readWrite = false
     ): void {
         if ($property instanceof Variable) {
             $context->codePrinter->output(
@@ -1518,8 +1554,9 @@ class Backend
 
         $context->codePrinter->output(
             sprintf(
-                '%s = zephir_fetch_property_write(%s, %s, %s);',
+                '%s = %s(%s, %s, %s);',
                 $this->getVariableCode($slot),
+                $readWrite ? 'zephir_fetch_property_rw' : 'zephir_fetch_property_write',
                 $this->getVariableCode($variableVariable),
                 $this->internedPropertyName($property, $context),
                 $this->getVariableCode($fallback)
@@ -1537,12 +1574,14 @@ class Backend
         $classDefinition,
         string $property,
         Variable $fallback,
-        CompilationContext $context
+        CompilationContext $context,
+        bool $readWrite = false
     ): void {
         $context->codePrinter->output(
             sprintf(
-                '%s = zephir_fetch_static_property_write_ce(%s, SL("%s"), %s);',
+                '%s = %s(%s, SL("%s"), %s);',
                 $this->getVariableCode($slot),
+                $readWrite ? 'zephir_fetch_static_property_rw_ce' : 'zephir_fetch_static_property_write_ce',
                 $classDefinition->getClassEntry(),
                 $property,
                 $this->getVariableCode($fallback)

@@ -72,12 +72,12 @@ PHP_METHOD(Stub_Attributes_Counter, bump)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 20, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 21, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_add_function(&_2, &_0, &_1);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 20, &_2);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 21, &_2);
 	RETURN_MM_MEMBER_TYPED(getThis(), "hits", IS_LONG);
 }
 

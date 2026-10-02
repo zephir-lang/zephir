@@ -6,6 +6,27 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+- Fixed `let a[k] += v` and every other compound assignment on an array element, including a property or static property element, overwriting the element instead of applying the operator [#2747](https://github.com/zephir-lang/zephir/issues/2747)
+- Fixed a compound assignment on an appended element such as `let a[] -= v` appending `v` instead of applying the operator to `null` [#2747](https://github.com/zephir-lang/zephir/issues/2747)
+- Fixed bitwise compound assignments such as `let a[k] &= v` on an array element failing to compile [#2747](https://github.com/zephir-lang/zephir/issues/2747)
+- Fixed the index of an element assignment such as `let a[k()] = v()` being evaluated after the right-hand side instead of before it as PHP does [#2747](https://github.com/zephir-lang/zephir/issues/2747)
+- Fixed reading a missing array key raising the PHP 5 notice `Undefined index` instead of PHP's `Undefined array key` warning
+- Fixed reading an offset of `null` or a scalar being silent or raising `Cannot use a scalar value as an array` instead of PHP's `Trying to access array offset` warning
+- Fixed reading an array offset ignoring PHP's float and null offset deprecations, resource offset warning and illegal offset `TypeError`
+- Fixed reading an offset of an object without `ArrayAccess` returning `null` instead of using the object's own handler, as for a `SimpleXMLElement` attribute
+- Fixed writing an offset of a scalar warning `Cannot use a scalar value as an array (2)` or turning it into an array instead of throwing as PHP does
+- Fixed a nested write such as `let a[i][j] = v` on a container that is not an array being a fatal error instead of PHP's behavior
+- Fixed writing an offset ignoring PHP's offset conversions, deprecations and `TypeError`, and the deprecation for turning `false` into an array
+- Fixed writing an offset of an object without `ArrayAccess` being ignored instead of using the object's own handler or throwing
+- Fixed writing an array element that is a reference replacing the reference instead of writing through it
+- Fixed writing an offset of a typed property that does not allow arrays turning it into an array instead of throwing `Cannot auto-initialize an array inside property`
+- Fixed writing an offset of a property of a non-object being silently ignored instead of throwing `Attempt to modify property`
+- Fixed `isset`, `empty()` and `fetch` on an illegal array offset warning `Illegal offset type` instead of throwing PHP's `TypeError`, and ignoring PHP's float, null and resource offset diagnostics
+- Fixed `isset`, `empty()` and `fetch` on an object without `ArrayAccess` answering `false` instead of asking the object's own handler, as for a `SimpleXMLElement` attribute
+- Fixed `empty(a[k])` written with parentheses reading the offset noisily instead of using PHP's silent `empty()` handler
+- Fixed writing an offset through an array element that is a reference to a typed property turning it into an array instead of throwing when the type does not allow one
+
 ## [1.6.1] - 2026-10-02
 
 ### Fixed

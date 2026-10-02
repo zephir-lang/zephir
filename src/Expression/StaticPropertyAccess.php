@@ -37,6 +37,7 @@ class StaticPropertyAccess
     protected ?Variable $expectingVariable = null;
     protected bool      $readOnly          = false;
     protected bool      $writeThrough      = false;
+    protected bool      $readWrite         = false;
 
     /**
      * Access a static property.
@@ -144,7 +145,8 @@ class StaticPropertyAccess
                 $classDefinition,
                 $property,
                 $fallback,
-                $compilationContext
+                $compilationContext,
+                $this->readWrite
             );
 
             return new CompiledExpression('variable', $slot->getRealName(), $expression);
@@ -225,10 +227,15 @@ class StaticPropertyAccess
      * Sets whether the caller will write through the property instead of only
      * reading it, which is what a by-reference call argument does.
      *
+     * `readWrite` asks for the slot a compound assignment reads and then
+     * writes, which PHP fetches read-write.
+     *
      * @see https://github.com/zephir-lang/zephir/issues/2691
+     * @see https://github.com/zephir-lang/zephir/issues/2747
      */
-    public function setWriteThrough(bool $writeThrough): void
+    public function setWriteThrough(bool $writeThrough, bool $readWrite = false): void
     {
         $this->writeThrough = $writeThrough;
+        $this->readWrite    = $readWrite;
     }
 }

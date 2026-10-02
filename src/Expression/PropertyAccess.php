@@ -38,6 +38,7 @@ class PropertyAccess
     protected bool      $noisy        = true;
     protected bool      $readOnly     = false;
     protected bool      $writeThrough = false;
+    protected bool      $readWrite    = false;
 
     /**
      * Resolves the access to a property in an object.
@@ -319,12 +320,17 @@ class PropertyAccess
      * Sets whether the caller will write through the property instead of only
      * reading it, which is what a by-reference call argument does.
      *
+     * `readWrite` asks for the slot a compound assignment reads and then
+     * writes, which PHP fetches read-write.
+     *
      * @see \Zephir\Expression\NativeArrayAccess::setWriteThrough()
      * @see https://github.com/zephir-lang/zephir/issues/2691
+     * @see https://github.com/zephir-lang/zephir/issues/2747
      */
-    public function setWriteThrough(bool $writeThrough): void
+    public function setWriteThrough(bool $writeThrough, bool $readWrite = false): void
     {
         $this->writeThrough = $writeThrough;
+        $this->readWrite    = $readWrite;
     }
 
     /**
@@ -346,7 +352,8 @@ class PropertyAccess
             $variableVariable,
             $property,
             $fallback,
-            $compilationContext
+            $compilationContext,
+            $this->readWrite
         );
 
         return new CompiledExpression('variable', $slot->getRealName(), $expression);
