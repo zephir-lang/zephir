@@ -105,6 +105,13 @@ PHP_METHOD(Stub_Bitwise, testbitwiseXor);
 PHP_METHOD(Stub_Bitwise, issue2014ShiftLeft);
 PHP_METHOD(Stub_Bitwise, issue2014HexAnd);
 PHP_METHOD(Stub_Bitwise, issue2014HexArithmetic);
+PHP_METHOD(Stub_Bitwise, intLiteralShiftLeftDynamic);
+PHP_METHOD(Stub_Bitwise, intLiteralXorDynamic);
+PHP_METHOD(Stub_Bitwise, boolLiteralOrDynamic);
+PHP_METHOD(Stub_Bitwise, doubleLiteralAndDynamic);
+PHP_METHOD(Stub_Bitwise, boolVariableOrDynamic);
+PHP_METHOD(Stub_Bitwise, intVariableXorDynamic);
+PHP_METHOD(Stub_Bitwise, dynamicAndIntLiteral);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_intand, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -416,6 +423,34 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_issue2014hexarithmetic, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_intliteralshiftleftdynamic, 0, 0, 1)
+	ZEND_ARG_INFO(0, remainingBits)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_intliteralxordynamic, 0, 0, 1)
+	ZEND_ARG_INFO(0, mask)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_boolliteralordynamic, 0, 0, 1)
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_doubleliteralanddynamic, 0, 0, 1)
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_boolvariableordynamic, 0, 0, 1)
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_intvariablexordynamic, 0, 0, 1)
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_dynamicandintliteral, 0, 0, 1)
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_bitwise_method_entry) {
 PHP_ME(Stub_Bitwise, intAnd, arginfo_stub_bitwise_intand, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Bitwise, int2And, arginfo_stub_bitwise_int2and, ZEND_ACC_PUBLIC)
@@ -519,5 +554,12 @@ PHP_ME(Stub_Bitwise, testbitwiseXor, arginfo_stub_bitwise_testbitwisexor, ZEND_A
 PHP_ME(Stub_Bitwise, issue2014ShiftLeft, arginfo_stub_bitwise_issue2014shiftleft, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Bitwise, issue2014HexAnd, arginfo_stub_bitwise_issue2014hexand, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Bitwise, issue2014HexArithmetic, arginfo_stub_bitwise_issue2014hexarithmetic, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bitwise, intLiteralShiftLeftDynamic, arginfo_stub_bitwise_intliteralshiftleftdynamic, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bitwise, intLiteralXorDynamic, arginfo_stub_bitwise_intliteralxordynamic, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bitwise, boolLiteralOrDynamic, arginfo_stub_bitwise_boolliteralordynamic, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bitwise, doubleLiteralAndDynamic, arginfo_stub_bitwise_doubleliteralanddynamic, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bitwise, boolVariableOrDynamic, arginfo_stub_bitwise_boolvariableordynamic, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bitwise, intVariableXorDynamic, arginfo_stub_bitwise_intvariablexordynamic, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bitwise, dynamicAndIntLiteral, arginfo_stub_bitwise_dynamicandintliteral, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

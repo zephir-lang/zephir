@@ -126,7 +126,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                 return new CompiledExpression(
                                     'int',
                                     '(' . $left->getCode(
-                                    ) . ' ' . $this->operator . ' zephir_get_numberval(' . $symbol . '))',
+                                    ) . ' ' . $this->operator . ' zephir_get_intval(' . $symbol . '))',
                                     $expression
                                 );
 
@@ -202,7 +202,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                 return new CompiledExpression(
                                     'int',
                                     '((int) (' . $left->getBooleanCode(
-                                    ) . ') ' . $this->operator . ' zephir_get_numberval(' . $symbol . '))',
+                                    ) . ') ' . $this->operator . ' zephir_get_intval(' . $symbol . '))',
                                     $expression
                                 );
 
@@ -285,7 +285,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                 return new CompiledExpression(
                                     'int',
                                     '((int) (' . $left->getCode(
-                                    ) . ') ' . $this->operator . ' zephir_get_numberval(' . $symbol . '))',
+                                    ) . ') ' . $this->operator . ' zephir_get_intval(' . $symbol . '))',
                                     $expression
                                 );
 
@@ -379,7 +379,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                         return new CompiledExpression(
                                             'int',
                                             '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' (int) (zephir_get_numberval(' . $symbol . ')))',
+                                            ) . ' ' . $this->operator . ' zephir_get_intval(' . $symbol . '))',
                                             $expression
                                         );
 
@@ -462,7 +462,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                         return new CompiledExpression(
                                             'int',
                                             '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' zephir_get_numberval(' . $symbol . '))',
+                                            ) . ' ' . $this->operator . ' zephir_get_intval(' . $symbol . '))',
                                             $expression
                                         );
 
@@ -553,7 +553,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                         return new CompiledExpression(
                                             'int',
                                             '((int) (' . $variableLeft->getName(
-                                            ) . ') ' . $this->operator . ' (int) (zephir_get_numberval(' . $symbol . ')))',
+                                            ) . ') ' . $this->operator . ' zephir_get_intval(' . $symbol . '))',
                                             $expression
                                         );
 
@@ -592,13 +592,13 @@ class BitwiseBaseOperator extends AbstractOperator
                                 if ('double' == $right->getType()) {
                                     return new CompiledExpression(
                                         'int',
-                                        '((int) (zephir_get_numberval(' . $op1 . ')) ' . $op . ' (int) (' . $op2 . '))',
+                                        '(zephir_get_intval(' . $op1 . ') ' . $op . ' (int) (' . $op2 . '))',
                                         $expression
                                     );
                                 } else {
                                     return new CompiledExpression(
                                         'int',
-                                        '((int) (zephir_get_numberval(' . $op1 . ')) ' . $op . ' ' . $op2 . ')',
+                                        '(zephir_get_intval(' . $op1 . ') ' . $op . ' ' . $op2 . ')',
                                         $expression
                                     );
                                 }
@@ -624,7 +624,7 @@ class BitwiseBaseOperator extends AbstractOperator
 
                                         return new CompiledExpression(
                                             'int',
-                                            '((int) (zephir_get_numberval(' . $symbol . ')) ' . $this->operator . ' ' . $variableRight->getName(
+                                            '(zephir_get_intval(' . $symbol . ') ' . $this->operator . ' ' . $variableRight->getName(
                                             ) . ')',
                                             $expression
                                         );

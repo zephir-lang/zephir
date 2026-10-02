@@ -985,4 +985,47 @@ class Bitwise
         {
                 return 0xff + 1;
         }
+
+        /**
+         * A dynamic right operand under a non-dynamic left operand.
+         * Mirrors Phalcon\Http\Request::isIpAddressInCIDR().
+         */
+        public function intLiteralShiftLeftDynamic(var remainingBits)
+        {
+                return (1 << (8 - remainingBits)) - 1;
+        }
+
+        public function intLiteralXorDynamic(var mask)
+        {
+                return 0xFF ^ mask;
+        }
+
+        public function boolLiteralOrDynamic(var value)
+        {
+                return true | value;
+        }
+
+        public function doubleLiteralAndDynamic(var value)
+        {
+                return 7.9 & value;
+        }
+
+        public function boolVariableOrDynamic(var value)
+        {
+                bool flag = true;
+
+                return flag | value;
+        }
+
+        public function intVariableXorDynamic(var value)
+        {
+                int base = 255;
+
+                return base ^ value;
+        }
+
+        public function dynamicAndIntLiteral(var value)
+        {
+                return value & 0xFFFFFFFFFF;
+        }
 }

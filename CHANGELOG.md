@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+- Fixed a bitwise operator with a dynamic operand under an `int`, `bool` or `double` left operand failing to compile (`invalid operands to binary <<`), and a dynamic operand of a bitwise operator being truncated to 32 bits
+
 ## [1.6.0] - 2026-10-01
 
 ### Added

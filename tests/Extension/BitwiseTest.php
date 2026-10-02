@@ -142,4 +142,23 @@ final class BitwiseTest extends TestCase
         $this->assertSame(0xff & 0x0f, $test->issue2014HexAnd());
         $this->assertSame(0xff + 1, $test->issue2014HexArithmetic());
     }
+
+    /**
+     * A dynamic right operand under an int, bool or double left operand
+     * emitted a C double into an integer operator and failed to compile.
+     */
+    public function testDynamicRightOperandMatchesPhp(): void
+    {
+        $test = new Bitwise();
+
+        $this->assertSame((1 << (8 - 3)) - 1, $test->intLiteralShiftLeftDynamic(3));
+        $this->assertSame((1 << (8 - 3)) - 1, $test->intLiteralShiftLeftDynamic('3'));
+        $this->assertSame(0xFF ^ 31, $test->intLiteralXorDynamic(31));
+        $this->assertSame(0xFF ^ (1 << 40), $test->intLiteralXorDynamic(1 << 40));
+        $this->assertSame(true | 6, $test->boolLiteralOrDynamic(6));
+        $this->assertSame(7 & 13, $test->doubleLiteralAndDynamic(13));
+        $this->assertSame(true | 6, $test->boolVariableOrDynamic(6));
+        $this->assertSame(255 ^ (1 << 40), $test->intVariableXorDynamic(1 << 40));
+        $this->assertSame((1 << 40) & 0xFFFFFFFFFF, $test->dynamicAndIntLiteral(1 << 40));
+    }
 }
