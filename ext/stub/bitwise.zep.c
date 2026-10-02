@@ -219,7 +219,7 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCast2And)
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
 	b = 2;
-	c = (b & (int) (zephir_get_numberval(&a)));
+	c = (b & zephir_get_intval(&a));
 	RETURN_MM_LONG(c);
 }
 
@@ -655,7 +655,7 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCast2Or)
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
 	b = 2;
-	c = (b | (int) (zephir_get_numberval(&a)));
+	c = (b | zephir_get_intval(&a));
 	RETURN_MM_LONG(c);
 }
 
@@ -1026,5 +1026,106 @@ PHP_METHOD(Stub_Bitwise, issue2014HexArithmetic)
 {
 
 	RETURN_LONG(256);
+}
+
+/**
+ * A dynamic right operand under a non-dynamic left operand.
+ * Mirrors Phalcon\Http\Request::isIpAddressInCIDR().
+ */
+PHP_METHOD(Stub_Bitwise, intLiteralShiftLeftDynamic)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *remainingBits, remainingBits_sub, _0, _1;
+
+	ZVAL_UNDEF(&remainingBits_sub);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(remainingBits)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &remainingBits);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, 8);
+	ZEPHIR_INIT_VAR(&_1);
+	zephir_sub_function(&_1, &_0, remainingBits);
+	RETURN_MM_LONG(((1 << zephir_get_intval(&_1)) - 1));
+}
+
+PHP_METHOD(Stub_Bitwise, intLiteralXorDynamic)
+{
+	zval *mask, mask_sub;
+
+	ZVAL_UNDEF(&mask_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(mask)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &mask);
+	RETURN_LONG((0xFF ^ zephir_get_intval(mask)));
+}
+
+PHP_METHOD(Stub_Bitwise, boolLiteralOrDynamic)
+{
+	zval *value, value_sub;
+
+	ZVAL_UNDEF(&value_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &value);
+	RETURN_LONG(((int) (1) | zephir_get_intval(value)));
+}
+
+PHP_METHOD(Stub_Bitwise, doubleLiteralAndDynamic)
+{
+	zval *value, value_sub;
+
+	ZVAL_UNDEF(&value_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &value);
+	RETURN_LONG(((int) (7.9) & zephir_get_intval(value)));
+}
+
+PHP_METHOD(Stub_Bitwise, boolVariableOrDynamic)
+{
+	zend_bool flag;
+	zval *value, value_sub;
+
+	ZVAL_UNDEF(&value_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &value);
+	flag = 1;
+	RETURN_LONG((flag | zephir_get_intval(value)));
+}
+
+PHP_METHOD(Stub_Bitwise, intVariableXorDynamic)
+{
+	zend_long base;
+	zval *value, value_sub;
+
+	ZVAL_UNDEF(&value_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &value);
+	base = 255;
+	RETURN_LONG((base ^ zephir_get_intval(value)));
+}
+
+PHP_METHOD(Stub_Bitwise, dynamicAndIntLiteral)
+{
+	zval *value, value_sub;
+
+	ZVAL_UNDEF(&value_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &value);
+	RETURN_LONG((zephir_get_intval(value) & 0xFFFFFFFFFF));
 }
 
