@@ -702,9 +702,15 @@ int zephir_read_property_cached(
  * caller has registered with the memory frame, and the write reaches no
  * further than it.
  *
+ * `type` is BP_VAR_W for a write context and BP_VAR_RW for a compound
+ * assignment, which reads before it writes: PHP's `ZEND_FETCH_OBJ_RW` warns
+ * for an undefined property and throws for an uninitialized typed one where a
+ * plain write would create or initialize it.
+ *
  * @see https://github.com/zephir-lang/zephir/issues/2691
+ * @see https://github.com/zephir-lang/zephir/issues/2747
  */
-zval *zephir_fetch_property_write(zval *object, zend_string *name, zval *fallback)
+static zval *zephir_fetch_property_slot(zval *object, zend_string *name, zval *fallback, int type)
 {
 	zval tmp;
 	zval *res;
@@ -712,16 +718,27 @@ zval *zephir_fetch_property_write(zval *object, zend_string *name, zval *fallbac
 	ZVAL_NULL(fallback);
 
 	if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
-		php_error_docref(NULL, E_NOTICE, "Trying to get property '%s' of non-object", ZSTR_VAL(name));
+		/* `zend_throw_non_object_error()`, the same for both contexts. */
+#if PHP_VERSION_ID >= 80300
+		zend_throw_error(NULL, "Attempt to modify property \"%s\" on %s", ZSTR_VAL(name), zend_zval_value_name(object));
+#else
+		zend_throw_error(NULL, "Attempt to modify property \"%s\" on %s", ZSTR_VAL(name), zend_zval_type_name(object));
+#endif
 
 		return fallback;
 	}
 
 	if (EXPECTED(Z_OBJ_HT_P(object)->get_property_ptr_ptr != NULL)) {
-		res = Z_OBJ_HT_P(object)->get_property_ptr_ptr(Z_OBJ_P(object), name, BP_VAR_W, NULL);
+		res = Z_OBJ_HT_P(object)->get_property_ptr_ptr(Z_OBJ_P(object), name, type, NULL);
 
 		if (EXPECTED(res != NULL && res != &EG(error_zval))) {
 			return res;
+		}
+
+		/* The getter already threw, an uninitialized typed property in a
+		 * read-write context; read_property() would only report it twice. */
+		if (UNEXPECTED(type == BP_VAR_RW && res == &EG(error_zval))) {
+			return fallback;
 		}
 	}
 
@@ -730,7 +747,7 @@ zval *zephir_fetch_property_write(zval *object, zend_string *name, zval *fallbac
 	}
 
 	ZVAL_UNDEF(&tmp);
-	res = Z_OBJ_HT_P(object)->read_property(Z_OBJ_P(object), name, BP_VAR_W, NULL, &tmp);
+	res = Z_OBJ_HT_P(object)->read_property(Z_OBJ_P(object), name, type, NULL, &tmp);
 
 	/* A getter builds its result in `tmp` and hands over what it owns, while a
 	 * real slot stays the object's and has to be addref'd. */
@@ -741,6 +758,94 @@ zval *zephir_fetch_property_write(zval *object, zend_string *name, zval *fallbac
 	}
 
 	return fallback;
+}
+
+zval *zephir_fetch_property_write(zval *object, zend_string *name, zval *fallback)
+{
+	return zephir_fetch_property_slot(object, name, fallback, BP_VAR_W);
+}
+
+/**
+ * Whether a typed property may become an array, `check_type_array_assignable()`.
+ * Before 8.2 `iterable` was a type bit of its own rather than an alias.
+ */
+static int zephir_property_type_allows_array(const zend_property_info *prop_info)
+{
+	uint32_t allowed = MAY_BE_ARRAY;
+
+#ifdef MAY_BE_ITERABLE
+	allowed |= MAY_BE_ITERABLE;
+#endif
+
+	return !ZEND_TYPE_IS_SET(prop_info->type) || (ZEND_TYPE_FULL_MASK(prop_info->type) & allowed) != 0;
+}
+
+/**
+ * An offset write into a null, false or uninitialized property turns it into
+ * an array, which a typed property only allows when its type does. PHP checks
+ * it when it fetches the property for the write (`zend_handle_fetch_obj_flags()`)
+ * and throws `zend_throw_auto_init_in_prop_error()`'s TypeError otherwise.
+ */
+static int zephir_property_dim_assignable(const zend_property_info *prop_info, zval *slot)
+{
+	zend_string *type;
+
+	if (prop_info == NULL || Z_TYPE_P(slot) > IS_FALSE || zephir_property_type_allows_array(prop_info)) {
+		return SUCCESS;
+	}
+
+	type = zend_type_to_string(prop_info->type);
+	zend_type_error(
+		"Cannot auto-initialize an array inside property %s::$%s of type %s",
+		ZSTR_VAL(prop_info->ce->name), zend_get_unmangled_property_name(prop_info->name), ZSTR_VAL(type)
+	);
+	zend_string_release(type);
+
+	return FAILURE;
+}
+
+/**
+ * The typed property a slot belongs to, or NULL. Only a declared property
+ * lives in `properties_table` and can carry a type; a dynamic one is a slot of
+ * the properties hash, where the engine's own lookup would read past the table.
+ */
+static zend_property_info *zephir_property_info_for_slot(zend_object *obj, zval *slot)
+{
+	if (slot < obj->properties_table || slot >= obj->properties_table + obj->ce->default_properties_count) {
+		return NULL;
+	}
+
+	return zend_get_typed_property_info_for_slot(obj, slot);
+}
+
+/**
+ * The slot of a property an offset is about to be written into, `x->p[k] = v`
+ * (`type` BP_VAR_W) or `x->p[k] OP= v` (BP_VAR_RW). NULL once an error is
+ * pending.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2747
+ */
+static zval *zephir_fetch_property_dim(zval *object, zend_string *name, zval *fallback, int type)
+{
+	zval *slot = zephir_fetch_property_slot(object, name, fallback, type);
+
+	if (UNEXPECTED(EG(exception))) {
+		return NULL;
+	}
+
+	if (slot != fallback
+		&& zephir_property_dim_assignable(zephir_property_info_for_slot(Z_OBJ_P(object), slot), slot) == FAILURE) {
+		return NULL;
+	}
+
+	return slot;
+}
+
+zval *zephir_fetch_property_rw(zval *object, zend_string *name, zval *fallback)
+{
+	zval *slot = zephir_fetch_property_dim(object, name, fallback, BP_VAR_RW);
+
+	return slot != NULL ? slot : fallback;
 }
 
 /**
@@ -774,7 +879,7 @@ zval *zephir_fetch_property_write_zval(zval *object, zval *property, zval *fallb
  *
  * @see https://github.com/zephir-lang/zephir/issues/2691
  */
-zval *zephir_fetch_static_property_write_ce(zend_class_entry *ce, const char *property, uint32_t property_length, zval *fallback)
+static zval *zephir_fetch_static_property_slot(zend_class_entry *ce, const char *property, uint32_t property_length, zval *fallback, int type)
 {
 	zend_string *name;
 	zval *res;
@@ -782,7 +887,7 @@ zval *zephir_fetch_static_property_write_ce(zend_class_entry *ce, const char *pr
 	ZVAL_NULL(fallback);
 
 	name = zend_string_init(property, property_length, 0);
-	res  = zend_std_get_static_property(ce, name, BP_VAR_W);
+	res  = zend_std_get_static_property(ce, name, type);
 	zend_string_release(name);
 
 	if (EXPECTED(res != NULL && res != &EG(error_zval))) {
@@ -790,6 +895,54 @@ zval *zephir_fetch_static_property_write_ce(zend_class_entry *ce, const char *pr
 	}
 
 	return fallback;
+}
+
+/**
+ * The static property slot an offset is about to be written into, with the
+ * typed-property check zephir_fetch_property_dim() makes. NULL once an error
+ * is pending.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2747
+ */
+static zval *zephir_fetch_static_property_dim(zend_class_entry *ce, const char *property, uint32_t property_length, int type)
+{
+	zend_property_info *prop_info = NULL;
+	zend_string *name;
+	zval *res;
+
+	name = zend_string_init(property, property_length, 0);
+	res  = zend_std_get_static_property_with_info(ce, name, type, &prop_info);
+	zend_string_release(name);
+
+	if (res == NULL || res == &EG(error_zval) || EG(exception)) {
+		return NULL;
+	}
+
+	if (prop_info != NULL && !ZEND_TYPE_IS_SET(prop_info->type)) {
+		prop_info = NULL;
+	}
+
+	return zephir_property_dim_assignable(prop_info, res) == SUCCESS ? res : NULL;
+}
+
+zval *zephir_fetch_static_property_write_ce(zend_class_entry *ce, const char *property, uint32_t property_length, zval *fallback)
+{
+	return zephir_fetch_static_property_slot(ce, property, property_length, fallback, BP_VAR_W);
+}
+
+/**
+ * The read-write slot of a static property, `ZEND_FETCH_STATIC_PROP_RW`.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2747
+ */
+zval *zephir_fetch_static_property_rw_ce(zend_class_entry *ce, const char *property, uint32_t property_length, zval *fallback)
+{
+	zval *slot;
+
+	ZVAL_NULL(fallback);
+	slot = zephir_fetch_static_property_dim(ce, property, property_length, BP_VAR_RW);
+
+	return slot != NULL ? slot : fallback;
 }
 
 /**
@@ -1000,297 +1153,64 @@ int zephir_update_property_zval_zval(zval *object, zval *property, zval *value)
 }
 
 /**
- * Updates an array property
+ * `object->property[index] = value`, PHP's FETCH_OBJ_W then ASSIGN_DIM.
+ *
+ * The write goes through the property's own slot, so the container is
+ * separated, auto-initialized or refused exactly as a local one is (see
+ * zephir_array_assign_dim()), a typed property keeps its type, a readonly one
+ * refuses the write and an ArrayAccess object gets offsetSet(). A magic
+ * property has no slot: the write reaches only the copy __get() returned,
+ * with PHP's "Indirect modification" notice.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2747
  */
 int zephir_update_property_array(zval *object, const char *property, uint32_t property_length, const zval *index, zval *value)
 {
-	zval tmp, sep_value;
-	int separated = 0;
+	zend_string *name = zend_string_init(property, property_length, 0);
+	zval fallback, *slot;
+	int status = FAILURE;
 
-	if (Z_TYPE_P(object) != IS_OBJECT) {
-		return SUCCESS;
+	slot = zephir_fetch_property_dim(object, name, &fallback, BP_VAR_W);
+	zend_string_release(name);
+
+	if (slot != NULL) {
+		status = zephir_array_assign_dim(slot, (zval *) index, value);
 	}
 
-	zephir_read_property(&tmp, object, property, property_length, PH_NOISY | PH_READONLY);
+	zval_ptr_dtor(&fallback);
 
-	/**
-	 * If the property holds an object implementing ArrayAccess, delegate the
-	 * offset assignment to its offsetSet() method instead of converting the
-	 * object into a plain array. See #2465.
-	 */
-	if (UNEXPECTED(Z_TYPE(tmp) == IS_OBJECT && zephir_instance_of_ev(&tmp, (const zend_class_entry *)zend_ce_arrayaccess))) {
-		zend_long ZEPHIR_LAST_CALL_STATUS;
-		ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(NULL, &tmp, "offsetset", NULL, 0, (zval *)index, value);
-		return ZEPHIR_LAST_CALL_STATUS != FAILURE ? SUCCESS : FAILURE;
-	}
-
-	/** Separation only when refcount > 1 */
-	if (Z_REFCOUNTED(tmp)) {
-		if (Z_REFCOUNT(tmp) > 1) {
-			if (!Z_ISREF(tmp)) {
-				zval new_zv;
-				ZVAL_DUP(&new_zv, &tmp);
-				ZVAL_COPY_VALUE(&tmp, &new_zv);
-				Z_TRY_DELREF(new_zv);
-				Z_ADDREF(tmp);
-				separated = 1;
-			}
-		}
-	} else {
-		/* ZVAL_DUP() hands back a fresh array at refcount 1: the single
-		 * reference tmp now holds, and the one the zval_ptr_dtor(&tmp)
-		 * below releases. Do not drop it here. The property does not take it
-		 * either, because zephir_update_property_zval() dups the value in.
-		 * See https://github.com/zephir-lang/zephir/issues/2698 */
-		zval new_zv;
-		ZVAL_DUP(&new_zv, &tmp);
-		ZVAL_COPY_VALUE(&tmp, &new_zv);
-		separated = 1;
-	}
-
-	/** Convert the value to array if not is an array */
-	if (Z_TYPE(tmp) != IS_ARRAY) {
-		if (separated) {
-			convert_to_array(&tmp);
-		} else {
-			array_init(&tmp);
-			separated = 1;
-		}
-
-		if (Z_REFCOUNTED(tmp)) {
-			if (Z_REFCOUNT(tmp) > 1) {
-				if (!Z_ISREF(tmp)) {
-					Z_DELREF(tmp);
-				}
-			}
-		}
-	}
-
-	if (Z_TYPE_P(value) == IS_ARRAY) {
-		ZVAL_ARR(&sep_value, zend_array_dup(Z_ARR_P(value)));
-	} else {
-		ZVAL_COPY(&sep_value, value);
-	}
-
-	if (Z_TYPE_P(index) == IS_STRING) {
-		zend_symtable_str_update(Z_ARRVAL(tmp), Z_STRVAL_P(index), Z_STRLEN_P(index), &sep_value);
-	} else if (Z_TYPE_P(index) == IS_LONG) {
-		zend_hash_index_update(Z_ARRVAL(tmp), Z_LVAL_P(index), &sep_value);
-	} else if (Z_TYPE_P(index) == IS_NULL) {
-		zend_hash_next_index_insert(Z_ARRVAL(tmp), &sep_value);
-	}
-
-	if (separated) {
-		zephir_update_property_zval(object, property, property_length, &tmp);
-		zval_ptr_dtor(&tmp);
-	}
-
-	return SUCCESS;
+	return status;
 }
 
 /**
- * Appends a zval value to an array property
+ * `object->property[] = value`. See zephir_update_property_array().
  */
 int zephir_update_property_array_append(zval *object, char *property, unsigned int property_length, zval *value)
 {
-	zval tmp, sep_value;
-	int separated = 0;
-
-	ZVAL_UNDEF(&tmp);
-
-	if (Z_TYPE_P(object) != IS_OBJECT) {
-		return SUCCESS;
-	}
-
-	zephir_read_property(&tmp, object, property, property_length, PH_NOISY | PH_READONLY);
-
-	/** Separation only when refcount > 1 */
-	if (Z_REFCOUNTED(tmp)) {
-		if (Z_REFCOUNT(tmp) > 1) {
-			if (!Z_ISREF(tmp)) {
-				zval new_zv;
-				ZVAL_DUP(&new_zv, &tmp);
-				ZVAL_COPY_VALUE(&tmp, &new_zv);
-				if (Z_REFCOUNT(tmp) > 1) {
-				    Z_TRY_DELREF(new_zv);
-				}
-				separated = 1;
-			}
-		}
-	} else {
-		/* Unlike its siblings this branch is balanced: the Z_TRY_DELREF() below
-		 * is put back by the Z_ADDREF() at the end of the block, so the
-		 * reference ZVAL_DUP() created survives to the zval_ptr_dtor(&tmp).
-		 * Removing either one alone reintroduces #2698. */
-		zval new_zv;
-		ZVAL_DUP(&new_zv, &tmp);
-		ZVAL_COPY_VALUE(&tmp, &new_zv);
-		Z_TRY_DELREF(new_zv);
-		separated = 1;
-
-		/**
-		 * class A {
-		 *     protected foo;
-		 *
-		 *     public function test() {
-		 *         let this->foo[] = 42;
-		 *     }
-		 * }
-		 *
-		 * In this case: Z_REFCOUNT(tmp) == 0
-		 */
-		if (Z_REFCOUNTED(tmp)) {
-			if (EXPECTED(Z_REFCOUNT(tmp) == 0)) {
-				Z_ADDREF(tmp);
-			}
-		}
-	}
-
-	/** Convert the value to array if not is an array */
-	if (Z_TYPE(tmp) != IS_ARRAY) {
-		if (separated) {
-			convert_to_array(&tmp);
-		} else {
-			array_init(&tmp);
-			separated = 1;
-		}
-
-		if (Z_REFCOUNTED(tmp)) {
-			if (Z_REFCOUNT(tmp) > 1) {
-				if (!Z_ISREF(tmp)) {
-					Z_DELREF(tmp);
-				}
-			}
-		}
-	}
-
-	if (Z_TYPE_P(value) == IS_ARRAY) {
-		ZVAL_ARR(&sep_value, zend_array_dup(Z_ARR_P(value)));
-	} else {
-		ZVAL_COPY(&sep_value, value);
-	}
-
-	add_next_index_zval(&tmp, &sep_value);
-
-	if (separated) {
-		zephir_update_property_zval(object, property, property_length, &tmp);
-		zval_ptr_dtor(&tmp);
-	}
-
-	return SUCCESS;
+	return zephir_update_property_array(object, property, property_length, NULL, value);
 }
 
 /**
- * Multiple array-offset update
+ * `object->property[a][b][] = value`. See zephir_update_property_array().
  */
 int zephir_update_property_array_multi(zval *object, const char *property, uint32_t property_length, zval *value, const char *types, int types_length, int types_count, ...)
 {
+	zend_string *name = zend_string_init(property, property_length, 0);
+	zval fallback, *slot;
 	va_list ap;
-	zval tmp_arr;
-	int separated = 0;
 
-	if (Z_TYPE_P(object) == IS_OBJECT) {
-		zephir_read_property(&tmp_arr, object, property, property_length, PH_NOISY | PH_READONLY);
+	slot = zephir_fetch_property_dim(object, name, &fallback, BP_VAR_W);
+	zend_string_release(name);
 
-		/**
-		 * If the property holds an object implementing ArrayAccess, a chained
-		 * write (this->prop[a][b] = value) cannot persist. This mirrors native
-		 * PHP exactly: the first offset is fetched once via offsetGet(), the
-		 * indirect modification of the returned by-value element has no effect,
-		 * and an "Indirect modification of overloaded element" notice is raised.
-		 * The object is left intact rather than converted into an array. #2465
-		 */
-		if (UNEXPECTED(Z_TYPE(tmp_arr) == IS_OBJECT && zephir_instance_of_ev(&tmp_arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
-			zend_long ZEPHIR_LAST_CALL_STATUS;
-			zval offset, fetched;
-			/* Class entries are persistent, so this stays valid even if the
-			 * offsetGet() call below were to drop the last instance reference. */
-			zend_class_entry *ce = Z_OBJCE(tmp_arr);
-			ZVAL_UNDEF(&fetched);
-			ZVAL_UNDEF(&offset);
-
-			va_start(ap, types_count);
-			switch (types[0]) {
-				case 's': {
-					char *str  = va_arg(ap, char*);
-					/* SL() pushes a size_t; see kernel/array.c. */
-					size_t len = va_arg(ap, size_t);
-					ZVAL_STRINGL(&offset, str, len);
-					break;
-				}
-				case 'l':
-					ZVAL_LONG(&offset, va_arg(ap, zend_long));
-					break;
-				case 'z':
-					ZVAL_COPY(&offset, va_arg(ap, zval*));
-					break;
-				default: /* 'a' (append): the fetched offset is null */
-					ZVAL_NULL(&offset);
-					break;
-			}
-			va_end(ap);
-
-			ZEPHIR_CALL_METHOD_WITHOUT_OBSERVE(&fetched, &tmp_arr, "offsetget", NULL, 0, &offset);
-			zval_ptr_dtor(&fetched);
-			zval_ptr_dtor(&offset);
-
-			zend_error(E_NOTICE, "Indirect modification of overloaded element of %s has no effect", ZSTR_VAL(ce->name));
-
-			return SUCCESS;
-		}
-
-		/** Separation only when refcount > 1 */
-		if (Z_REFCOUNTED(tmp_arr)) {
-			if (Z_REFCOUNT(tmp_arr) > 1) {
-				if (!Z_ISREF(tmp_arr)) {
-					zval new_zv;
-					ZVAL_DUP(&new_zv, &tmp_arr);
-					ZVAL_COPY_VALUE(&tmp_arr, &new_zv);
-					Z_TRY_DELREF(new_zv);
-					Z_ADDREF(tmp_arr);
-					separated = 1;
-				}
-			}
-		} else {
-			/* ZVAL_DUP() hands back a fresh array at refcount 1: the single
-			 * reference tmp_arr now holds, and the one the
-			 * zval_ptr_dtor(&tmp_arr) below releases. Do not drop it here.
-			 * See https://github.com/zephir-lang/zephir/issues/2698 */
-			zval new_zv;
-			ZVAL_DUP(&new_zv, &tmp_arr);
-			ZVAL_COPY_VALUE(&tmp_arr, &new_zv);
-			separated = 1;
-		}
-
-		/** Convert the value to array if not is an array */
-		if (Z_TYPE(tmp_arr) != IS_ARRAY) {
-			if (separated) {
-				convert_to_array(&tmp_arr);
-			} else {
-				array_init(&tmp_arr);
-				separated = 1;
-			}
-
-			if (Z_REFCOUNTED(tmp_arr)) {
-				if (Z_REFCOUNT(tmp_arr) > 1) {
-					if (!Z_ISREF(tmp_arr)) {
-						Z_DELREF(tmp_arr);
-					}
-				}
-			}
-		}
-
+	if (slot != NULL) {
 		va_start(ap, types_count);
-		zephir_array_update_multi_ex(&tmp_arr, value, types, types_length, types_count, ap);
+		zephir_array_update_multi_ex(slot, value, types, types_length, types_count, ap);
 		va_end(ap);
-
-		if (separated) {
-			zephir_update_property_zval(object, property, property_length, &tmp_arr);
-			zval_ptr_dtor(&tmp_arr);
-		}
 	}
 
-	return SUCCESS;
+	zval_ptr_dtor(&fallback);
+
+	return EG(exception) ? FAILURE : SUCCESS;
 }
 
 int zephir_unset_property(zval* object, const char* name)
@@ -1500,77 +1420,16 @@ int zephir_update_static_property_array_multi_ce(
 	int types_count,
 	...
 ) {
+	zval *slot = zephir_fetch_static_property_dim(ce, property, property_length, BP_VAR_W);
 	va_list ap;
-	zval tmp_arr;
-	int separated = 0;
 
-	ZVAL_UNDEF(&tmp_arr);
-
-	zephir_read_static_property_ce(&tmp_arr, ce, property, property_length, PH_NOISY | PH_READONLY);
-
-	/** Separation only when refcount > 1 */
-	if (Z_REFCOUNTED(tmp_arr)) {
-		if (Z_REFCOUNT(tmp_arr) > 1) {
-			if (!Z_ISREF(tmp_arr)) {
-				zval new_zv;
-				ZVAL_DUP(&new_zv, &tmp_arr);
-				ZVAL_COPY_VALUE(&tmp_arr, &new_zv);
-				Z_TRY_DELREF(new_zv);
-				Z_ADDREF(tmp_arr);
-				separated = 1;
-			}
-		}
-	} else {
-		/* This Z_TRY_DELREF() stays, unlike the one #2698 removed from the
-		 * instance-property helpers. Those write back with
-		 * zephir_update_property_zval(), which dups and leaves the caller
-		 * owning tmp; this one writes back with zend_update_static_property(),
-		 * which addrefs and then takes the reference
-		 * (zend_assign_to_variable(..., IS_TMP_VAR)). Keeping our reference
-		 * here would leave the array at refcount 2 with nothing to release it. */
-		zval new_zv;
-		ZVAL_DUP(&new_zv, &tmp_arr);
-		ZVAL_COPY_VALUE(&tmp_arr, &new_zv);
-		Z_TRY_DELREF(new_zv);
-		separated = 1;
+	if (slot != NULL) {
+		va_start(ap, types_count);
+		zephir_array_update_multi_ex(slot, value, types, types_length, types_count, ap);
+		va_end(ap);
 	}
 
-	/** Convert the value to array if not is an array */
-	if (Z_TYPE(tmp_arr) != IS_ARRAY) {
-		if (separated) {
-			convert_to_array(&tmp_arr);
-		} else {
-			array_init(&tmp_arr);
-			separated = 1;
-		}
-
-		if (Z_REFCOUNTED(tmp_arr)) {
-			if (Z_REFCOUNT(tmp_arr) > 1) {
-				if (!Z_ISREF(tmp_arr)) {
-					Z_DELREF(tmp_arr);
-				}
-			}
-		}
-	}
-
-	va_start(ap, types_count);
-	SEPARATE_ZVAL_NOREF(&tmp_arr);
-	zephir_array_update_multi_ex(&tmp_arr, value, types, types_length, types_count, ap);
-	va_end(ap);
-
-	if (separated) {
-		zend_update_static_property(ce, property, property_length, &tmp_arr);
-	}
-
-	if (Z_REFCOUNTED(tmp_arr)) {
-		if (Z_REFCOUNT(tmp_arr) > 1) {
-			if (!Z_ISREF(tmp_arr)) {
-				Z_DELREF(tmp_arr);
-			}
-		}
-	}
-
-	return SUCCESS;
+	return EG(exception) ? FAILURE : SUCCESS;
 }
 
 /**

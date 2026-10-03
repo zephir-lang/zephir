@@ -88,6 +88,7 @@ int zephir_string_offset_isset(const zval *str, zend_long offset);
 int zephir_string_offset_isset_zval(const zval *str, zval *dim);
 void zephir_string_offset_write(zval *str, zend_long offset, zval *value);
 void zephir_string_offset_write_zval(zval *str, zval *dim, zval *value);
+void zephir_string_offset_check(zval *str, zval *dim);
 void zephir_string_to_char_array(zval *return_value, zval *str);
 
 #endif /* ZEPHIR_KERNEL_STRING_H */

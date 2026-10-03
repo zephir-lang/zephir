@@ -55,12 +55,12 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
 	zephir_update_property_zval_zval(this_ptr, &name_zv, value);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 93, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 97, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_add_function(&_2, &_0, &_1);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 93, &_2);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 97, &_2);
 	ZEPHIR_MM_RESTORE();
 }
 

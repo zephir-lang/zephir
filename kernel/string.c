@@ -1844,6 +1844,22 @@ void zephir_string_offset_write_zval(zval *str, zval *dim, zval *value)
 }
 
 /**
+ * Raises what PHP's `zend_check_string_offset()` raises for `dim` on a string,
+ * and nothing else. A write that must then fail anyway, such as
+ * `s[i] .= v`, reports the offset first, exactly as PHP does.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2747
+ */
+void zephir_string_offset_check(zval *str, zval *dim)
+{
+	zend_long offset;
+
+	if (EXPECTED(Z_TYPE_P(str) == IS_STRING)) {
+		zephir_string_offset_normalize(&offset, str, dim, PH_NOISY);
+	}
+}
+
+/**
  * Splits a string into an array of its bytes, each a 1-character string.
  *
  * `for c in s` is Zephir syntax with no PHP counterpart: PHP's foreach rejects

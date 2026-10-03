@@ -22,6 +22,7 @@ use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\AssignVariableOperator;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
+use Zephir\Statements\Let\ArrayIndexOperator;
 use Zephir\Statements\Let\AssignmentFactory;
 use Zephir\Variable\Variable;
 
@@ -30,6 +31,41 @@ use Zephir\Variable\Variable;
  */
 class LetStatement extends StatementAbstract
 {
+    /**
+     * Assignments whose target is reached through one or more index
+     * expressions, `a[i] = v`, `this->p[i][] = v`, `self::p[i] = v`.
+     */
+    private const INDEXED_ASSIGN_TYPES = [
+        'array-index',
+        'array-index-append',
+        'object-property-array-index',
+        'object-property-array-index-append',
+        'static-property-array-index',
+        'static-property-array-index-append',
+    ];
+
+    /**
+     * Expressions that emit no code of their own: a literal, a constant or a
+     * plain variable, read where it is used.
+     */
+    private const IN_PLACE_EXPRESSIONS = [
+        'null',
+        'int',
+        'integer',
+        'long',
+        'double',
+        'bool',
+        'string',
+        'istring',
+        'char',
+        'variable',
+        'constant',
+        'static-constant-access',
+        'empty-array',
+    ];
+
+    private const NATIVE_INDEX_TYPES = ['int', 'uint', 'long', 'ulong', 'bool', 'double', 'char', 'uchar'];
+
     /**
      * @throws ReflectionException
      * @throws Exception
@@ -97,6 +133,7 @@ class LetStatement extends StatementAbstract
                  */
                 $assignment = $this->replaceAssignBitwiseOnDirect($assignment);
                 $assignment = $this->replaceDivModAssignOnDirect($assignment, $symbolVariable);
+                $assignment = $this->evaluateIndexesFirst($assignment, $compilationContext);
 
                 $expr = new Expression($assignment['expr']);
 
@@ -223,6 +260,81 @@ class LetStatement extends StatementAbstract
     }
 
     /**
+     * Evaluates the index expressions of `x[i] = e` before `e`, as PHP does.
+     *
+     * PHP compiles every index operand before the right-hand side and delays
+     * only the fetches themselves (`zend_delayed_compile_dim()`,
+     * Zend/zend_compile.c), so in `a[k()] = v()` the key is computed first and
+     * `a[this->n] = this->bump()` uses the counter before the bump. A plain
+     * variable index is the exception: a CV operand is read when the element
+     * is written, after the right-hand side, so it stays where it is, and so
+     * do literals and constants, which nothing can change.
+     *
+     * Each such index is compiled here, ahead of the right-hand side, and its
+     * node is replaced by one naming the value it produced, which the
+     * assignment handler then reads without evaluating anything again. When
+     * the right-hand side itself emits no code the order is not observable,
+     * and the statement is left exactly as it was.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    protected function evaluateIndexesFirst(array $assignment, CompilationContext $compilationContext): array
+    {
+        if (
+            !in_array($assignment['assign-type'], self::INDEXED_ASSIGN_TYPES, true)
+            || in_array($assignment['expr']['type'], self::IN_PLACE_EXPRESSIONS, true)
+        ) {
+            return $assignment;
+        }
+
+        foreach ($assignment['index-expr'] as $position => $indexExpr) {
+            if (in_array($indexExpr['type'], self::IN_PLACE_EXPRESSIONS, true)) {
+                continue;
+            }
+
+            $assignment['index-expr'][$position] = $this->evaluatedIndex($indexExpr, $compilationContext);
+        }
+
+        return $assignment;
+    }
+
+    /**
+     * Compiles one index and returns a node for its value.
+     *
+     * The value is owned, never borrowed: the right-hand side runs userland
+     * code before the index is used, and that code may release whatever a
+     * borrowed read pointed into. A native result is stored in a temp of its
+     * own type, because its C expression would otherwise be evaluated only
+     * where the handler emits it.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function evaluatedIndex(array $indexExpr, CompilationContext $compilationContext): array
+    {
+        $expression = new Expression($indexExpr);
+        $expression->setReadOnly(false);
+        $compiled = $expression->compile($compilationContext);
+        $type     = $compiled->getType();
+
+        if ('variable' === $type) {
+            return $this->astNode($indexExpr, ['type' => 'variable', 'value' => $compiled->getCode()]);
+        }
+
+        if (in_array($type, self::NATIVE_INDEX_TYPES, true)) {
+            $temp = $compilationContext->symbolTable->getTempVariableForWrite($type, $compilationContext);
+            $compilationContext->codePrinter->output(
+                $temp->getName() . ' = ' . ('bool' === $type ? $compiled->getBooleanCode() : $compiled->getCode()) . ';'
+            );
+
+            return $this->astNode($indexExpr, ['type' => 'variable', 'value' => $temp->getName()]);
+        }
+
+        return $this->astNode($indexExpr, ['type' => $type, 'value' => $compiled->getCode()]);
+    }
+
+    /**
      * Copies the source position of the statement onto a synthesized node, so
      * a diagnostic about it points at the original `/=` or `%=`.
      */
@@ -265,6 +377,15 @@ class LetStatement extends StatementAbstract
 
             default:
                 return $assignment;
+        }
+
+        /**
+         * An array element is read and written in place by the kernel.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2747
+         */
+        if (ArrayIndexOperator::handles($assignment)) {
+            return $assignment;
         }
 
         if ($assignment['assign-type'] !== 'variable') {

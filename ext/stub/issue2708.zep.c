@@ -61,20 +61,17 @@ PHP_METHOD(Stub_Issue2708, issetOnConstantLiteral)
 
 PHP_METHOD(Stub_Issue2708, emptyOnConstantLiteral)
 {
-	zval a, _0;
+	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
-	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 1, 0);
 	add_assoc_long_ex(&a, SL("3"), 1);
-	zephir_memory_observe(&_0);
-	zephir_array_fetch_string(&_0, &a, SL("3"), PH_NOISY, "stub/issue2708.zep", 39);
-	RETURN_MM_BOOL(ZEPHIR_IS_EMPTY(&_0));
+	RETURN_MM_BOOL(zephir_isempty_dim_string(&a, SL("3")));
 }
 
 PHP_METHOD(Stub_Issue2708, fetchOnConstantLiteral)

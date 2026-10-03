@@ -65,11 +65,11 @@ PHP_METHOD(Stub_Bench, __construct)
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 42);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 26, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 27, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "hello");
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 27, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 28, &_1);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -367,7 +367,7 @@ PHP_METHOD(Stub_Bench, propertyReadLoop)
 			break;
 		}
 		ZEPHIR_OBS_NVAR(&_0$$3);
-		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 26, PH_NOISY_CC);
+		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 27, PH_NOISY_CC);
 		sum += zephir_get_intval(&_0$$3);
 		i++;
 	}

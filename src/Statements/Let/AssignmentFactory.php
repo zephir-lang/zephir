@@ -74,6 +74,12 @@ final class AssignmentFactory
         // Destructuring carries a `variables` list instead of a single `variable`
         $variable = $assignment['variable'] ?? null;
 
+        // A compound operator on an array element reads before it writes, whatever the container
+        if (ArrayIndexOperator::handles($assignment)) {
+            (new ArrayIndexOperator())->assignOperator($symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+            return;
+        }
+
         // Handle static property assignments (special case with operator logic)
         if (in_array($assignType, self::STATIC_PROPERTY_TYPES, true)) {
             self::processStaticProperty($assignment, $resolvedExpr, $compilationContext);
