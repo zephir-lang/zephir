@@ -109,6 +109,10 @@ PHP_METHOD(Stub_Issue2167, reduceWithArrayCallable)
 	ZEPHIR_CALL_FUNCTION(&_3, "array_reduce", NULL, 66, &_0, &_1, &_2);
 	zephir_check_call_status();
 	zephir_cast_to_string(&_4, &_3);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_4);
 }
 
@@ -147,6 +151,10 @@ PHP_METHOD(Stub_Issue2167, reduceWithClosureWrapper)
 	ZEPHIR_CALL_FUNCTION(&_3, "array_reduce", NULL, 66, &_0, &_1, &_2);
 	zephir_check_call_status();
 	zephir_cast_to_string(&_4, &_3);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_4);
 }
 
@@ -173,6 +181,10 @@ PHP_METHOD(Stub_Issue2167, implodeRow)
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_fast_join_str(&_0, SL(" "), &row);
 	ZEPHIR_CONCAT_VSVS(return_value, &carry_zv, "[ ", &_0, " ]");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

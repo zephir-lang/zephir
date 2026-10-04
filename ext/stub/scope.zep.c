@@ -49,6 +49,10 @@ PHP_METHOD(Stub_Scope, getDyStr)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, g);
 	ZEPHIR_CONCAT_SV(return_value, "internal_", &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -74,8 +78,16 @@ PHP_METHOD(Stub_Scope, test1)
 		ZEPHIR_INIT_VAR(&k$$3);
 		ZVAL_STRING(&k$$3, "test");
 		zephir_concat_self(&ret, &k$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	}
 	ZEPHIR_CONCAT_VV(return_value, &ret, &k);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -118,8 +130,16 @@ PHP_METHOD(Stub_Scope, test2)
 			ZVAL_LONG(&_3$$3, p$$3);
 			ZEPHIR_INIT_NVAR(&_4$$3);
 			mul_function(&_4$$3, &c, &_3$$3);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			ZEPHIR_INIT_NVAR(&_5$$3);
 			ZEPHIR_CONCAT_VVS(&_5$$3, &k, &_4$$3, "_");
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			ZEPHIR_CPY_WRT(&k, &_5$$3);
 		}
 	}
@@ -165,6 +185,10 @@ PHP_METHOD(Stub_Scope, test3)
 			ZEPHIR_CALL_SELF(&str$$3, "getDyStr", &_3, 114, &c);
 			zephir_check_call_status();
 			zephir_concat_self(&k, &str$$3);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CCTOR(&k);

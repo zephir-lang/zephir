@@ -46,6 +46,10 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString1)
 	ZEPHIR_CALL_FUNCTION(&_1, "create_string", NULL, 0, &_0);
 	zephir_check_call_status();
 	zephir_cast_to_string(&_2, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_2);
 }
 
@@ -66,6 +70,10 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString2)
 	ZEPHIR_CALL_FUNCTION(&_1, "create_string", NULL, 0, &_0);
 	zephir_check_call_status();
 	zephir_cast_to_string(&_2, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_2);
 }
 
@@ -86,6 +94,10 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString3)
 	ZEPHIR_CALL_FUNCTION(&_1, "create_string", NULL, 0, &_0);
 	zephir_check_call_status();
 	zephir_cast_to_string(&_2, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_2);
 }
 

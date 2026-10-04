@@ -314,6 +314,10 @@ PHP_METHOD(Stub_Range, loopChars)
 			ZEPHIR_INIT_NVAR(&ch);
 			ZVAL_COPY(&ch, _4);
 			zephir_concat_self(&out, &ch);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		} ZEND_HASH_FOREACH_END();
 	} else {
 		ZEPHIR_CALL_METHOD(NULL, &_3, "rewind", NULL, 0);
@@ -334,6 +338,10 @@ PHP_METHOD(Stub_Range, loopChars)
 			ZEPHIR_CALL_METHOD(&ch, &_3, "current", NULL, 0);
 			zephir_check_call_status();
 				zephir_concat_self(&out, &ch);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 		}
 	}
 	ZEPHIR_INIT_NVAR(&ch);

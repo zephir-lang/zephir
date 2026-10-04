@@ -26,4 +26,5 @@ class IdenticalOperator extends ComparisonBaseOperator
     protected string $zvalNullOperator      = 'ZEPHIR_IS_NULL';
     protected string $zvalOperator          = 'ZEPHIR_IS_IDENTICAL';
     protected string $zvalStringOperator    = 'ZEPHIR_IS_STRING_IDENTICAL';
+    protected bool   $zvalComparisonCanThrow = false;
 }

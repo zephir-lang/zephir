@@ -353,7 +353,11 @@ PHP_METHOD(Stub_Bench_Foo, assignAddProp)
 			ZEPHIR_INIT_NVAR(&_4$$3);
 			ZVAL_LONG(&_4$$3, 2);
 			zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 29, PH_NOISY_CC);
-			ZEPHIR_ADD_ASSIGN(&_3$$3, &_4$$3)
+			ZEPHIR_ADD_ASSIGN(&_3$$3, &_4$$3);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 29, &_3$$3);
 		}
 	}

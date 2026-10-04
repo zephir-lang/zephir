@@ -228,6 +228,10 @@ PHP_METHOD(Stub_Issue2698, writeProbe)
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -277,6 +281,10 @@ PHP_METHOD(Stub_Issue2698, appendProbe)
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -331,6 +339,10 @@ PHP_METHOD(Stub_Issue2698, nestedProbe)
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -380,6 +392,10 @@ PHP_METHOD(Stub_Issue2698, unsetProbe)
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -443,6 +459,10 @@ PHP_METHOD(Stub_Issue2698, unsetSharedProbe)
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -488,6 +508,10 @@ PHP_METHOD(Stub_Issue2698, leakProbeControl)
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

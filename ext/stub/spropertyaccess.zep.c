@@ -164,6 +164,10 @@ PHP_METHOD(Stub_SPropertyAccess, mutateStringVarInsideCycle)
 			zephir_read_static_property_ce(&_3$$3, stub_spropertyaccess_ce, SL("stringVar"), PH_NOISY_CC);
 			ZEPHIR_INIT_NVAR(&_4$$3);
 			ZEPHIR_CONCAT_VV(&_4$$3, &_3$$3, &i);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			zephir_update_static_property_ce(stub_spropertyaccess_ce, ZEND_STRL("stringVar"), &_4$$3);
 		}
 	}
@@ -278,6 +282,10 @@ PHP_METHOD(Stub_SPropertyAccess, mutateArrayVarInsideCycle)
 			zephir_read_static_property_ce(&_3$$3, stub_spropertyaccess_ce, SL("arrayVar"), PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_INIT_NVAR(&_4$$3);
 			zephir_add_function(&_4$$3, &_3$$3, &j);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			zephir_update_static_property_ce(stub_spropertyaccess_ce, ZEND_STRL("arrayVar"), &_4$$3);
 		}
 	}

@@ -65,6 +65,10 @@ PHP_METHOD(Stub_Issue1629, stringTarget)
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_string_offset_read(&_1, &keyspace_zv, nb, PH_NOISY);
 	zephir_get_strval(&ch, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&ch);
 }
 
@@ -470,6 +474,10 @@ PHP_METHOD(Stub_Issue1629, castStringOfOffset)
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_string_offset_read(&_1, &keyspace_zv, nb, PH_NOISY);
 	zephir_cast_to_string(&_2, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&out, &_2);
 	RETURN_CTOR(&out);
 }

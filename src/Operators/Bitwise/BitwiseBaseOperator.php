@@ -72,25 +72,13 @@ class BitwiseBaseOperator extends AbstractOperator
                     case 'ulong':
                     case 'char':
                     case 'uchar':
-                        return new CompiledExpression(
-                            'int',
-                            '(' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getCode() . ')',
-                            $expression
-                        );
+                        return $this->nativeOperation($left->getCode(), $right->getCode(), $expression, $compilationContext);
 
                     case 'double':
-                        return new CompiledExpression(
-                            'int',
-                            '(' . $left->getCode() . ' ' . $this->operator . ' (int) (' . $right->getCode() . '))',
-                            $expression
-                        );
+                        return $this->nativeOperation($left->getCode(), '(int) (' . $right->getCode() . ')', $expression, $compilationContext);
 
                     case 'bool':
-                        return new CompiledExpression(
-                            'int',
-                            '(' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getBooleanCode() . ')',
-                            $expression
-                        );
+                        return $this->nativeOperation($left->getCode(), $right->getBooleanCode(), $expression, $compilationContext);
 
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead(
@@ -104,31 +92,16 @@ class BitwiseBaseOperator extends AbstractOperator
                             case 'long':
                             case 'bool':
                             case 'ulong':
-                                return new CompiledExpression(
-                                    'int',
-                                    '(' . $left->getCode() . ' ' . $this->operator . ' ' . $variableRight->getName(
-                                    ) . ')',
-                                    $expression
-                                );
+                                return $this->nativeOperation($left->getCode(), $variableRight->getName(), $expression, $compilationContext);
 
                             case 'double':
-                                return new CompiledExpression(
-                                    'int',
-                                    '(' . $left->getCode(
-                                    ) . ' ' . $this->operator . ' (int) (' . $variableRight->getName() . '))',
-                                    $expression
-                                );
+                                return $this->nativeOperation($left->getCode(), '(int) (' . $variableRight->getName() . ')', $expression, $compilationContext);
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $symbol = $compilationContext->backend->getVariableCode($variableRight);
 
-                                return new CompiledExpression(
-                                    'int',
-                                    '(' . $left->getCode(
-                                    ) . ' ' . $this->operator . ' zephir_get_intval(' . $symbol . '))',
-                                    $expression
-                                );
+                                return $this->nativeOperation($left->getCode(), 'zephir_get_intval(' . $symbol . ')', $expression, $compilationContext);
 
 
                             default:
@@ -153,20 +126,10 @@ class BitwiseBaseOperator extends AbstractOperator
                     case 'long':
                     case 'ulong':
                     case 'double':
-                        return new CompiledExpression(
-                            'int',
-                            '(' . $left->getBooleanCode() . ' ' . $this->bitOperator . '((' . $right->getCode(
-                            ) . ') ? 1 : 0))',
-                            $expression
-                        );
+                        return $this->nativeOperation($left->getBooleanCode(), '((' . $right->getCode() . ') ? 1 : 0)', $expression, $compilationContext);
 
                     case 'bool':
-                        return new CompiledExpression(
-                            'int',
-                            '(' . $left->getBooleanCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode(
-                            ) . ')',
-                            $expression
-                        );
+                        return $this->nativeOperation($left->getBooleanCode(), $right->getBooleanCode(), $expression, $compilationContext);
 
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead(
@@ -180,31 +143,16 @@ class BitwiseBaseOperator extends AbstractOperator
                             case 'long':
                             case 'bool':
                             case 'ulong':
-                                return new CompiledExpression(
-                                    'int',
-                                    '((int) (' . $left->getBooleanCode(
-                                    ) . ') ' . $this->operator . ' ' . $variableRight->getName() . ')',
-                                    $expression
-                                );
+                                return $this->nativeOperation('(int) (' . $left->getBooleanCode() . ')', $variableRight->getName(), $expression, $compilationContext);
 
                             case 'double':
-                                return new CompiledExpression(
-                                    'int',
-                                    '((int) (' . $left->getBooleanCode(
-                                    ) . ') ' . $this->operator . ' (int) (' . $variableRight->getName() . '))',
-                                    $expression
-                                );
+                                return $this->nativeOperation('(int) (' . $left->getBooleanCode() . ')', '(int) (' . $variableRight->getName() . ')', $expression, $compilationContext);
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $symbol = $compilationContext->backend->getVariableCode($variableRight);
 
-                                return new CompiledExpression(
-                                    'int',
-                                    '((int) (' . $left->getBooleanCode(
-                                    ) . ') ' . $this->operator . ' zephir_get_intval(' . $symbol . '))',
-                                    $expression
-                                );
+                                return $this->nativeOperation('(int) (' . $left->getBooleanCode() . ')', 'zephir_get_intval(' . $symbol . ')', $expression, $compilationContext);
 
 
                             default:
@@ -229,27 +177,13 @@ class BitwiseBaseOperator extends AbstractOperator
                     case 'uint':
                     case 'long':
                     case 'ulong':
-                        return new CompiledExpression(
-                            'int',
-                            '((int) (' . $left->getCode() . ') ' . $this->operator . ' ' . $right->getCode() . ')',
-                            $expression
-                        );
+                        return $this->nativeOperation('(int) (' . $left->getCode() . ')', $right->getCode(), $expression, $compilationContext);
 
                     case 'double':
-                        return new CompiledExpression(
-                            'int',
-                            '((int) (' . $left->getCode() . ') ' . $this->operator . ' (int) (' . $right->getCode(
-                            ) . '))',
-                            $expression
-                        );
+                        return $this->nativeOperation('(int) (' . $left->getCode() . ')', '(int) (' . $right->getCode() . ')', $expression, $compilationContext);
 
                     case 'bool':
-                        return new CompiledExpression(
-                            'int',
-                            '((int) (' . $left->getCode() . ') ' . $this->operator . ' ' . $right->getBooleanCode(
-                            ) . ')',
-                            $expression
-                        );
+                        return $this->nativeOperation('(int) (' . $left->getCode() . ')', $right->getBooleanCode(), $expression, $compilationContext);
 
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead(
@@ -263,31 +197,16 @@ class BitwiseBaseOperator extends AbstractOperator
                             case 'long':
                             case 'bool':
                             case 'ulong':
-                                return new CompiledExpression(
-                                    'int',
-                                    '((int) (' . $left->getCode(
-                                    ) . ') ' . $this->operator . ' ' . $variableRight->getName() . ')',
-                                    $expression
-                                );
+                                return $this->nativeOperation('(int) (' . $left->getCode() . ')', $variableRight->getName(), $expression, $compilationContext);
 
                             case 'double':
-                                return new CompiledExpression(
-                                    'int',
-                                    '((int) (' . $left->getCode(
-                                    ) . ') ' . $this->operator . ' (int) (' . $variableRight->getName() . '))',
-                                    $expression
-                                );
+                                return $this->nativeOperation('(int) (' . $left->getCode() . ')', '(int) (' . $variableRight->getName() . ')', $expression, $compilationContext);
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $symbol = $compilationContext->backend->getVariableCode($variableRight);
 
-                                return new CompiledExpression(
-                                    'int',
-                                    '((int) (' . $left->getCode(
-                                    ) . ') ' . $this->operator . ' zephir_get_intval(' . $symbol . '))',
-                                    $expression
-                                );
+                                return $this->nativeOperation('(int) (' . $left->getCode() . ')', 'zephir_get_intval(' . $symbol . ')', $expression, $compilationContext);
 
 
                             default:
@@ -337,11 +256,7 @@ class BitwiseBaseOperator extends AbstractOperator
                             case 'double':
                             case 'char':
                             case 'uchar':
-                                return new CompiledExpression(
-                                    'int',
-                                    '(' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getCode() . ')',
-                                    $expression
-                                );
+                                return $this->nativeOperation($left->getCode(), $right->getCode(), $expression, $compilationContext);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead(
@@ -357,31 +272,16 @@ class BitwiseBaseOperator extends AbstractOperator
                                     case 'char':
                                     case 'bool':
                                     case 'uchar':
-                                        return new CompiledExpression(
-                                            'int',
-                                            '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
+                                        return $this->nativeOperation($variableLeft->getName(), $variableRight->getName(), $expression, $compilationContext);
 
                                     case 'double':
-                                        return new CompiledExpression(
-                                            'int',
-                                            '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' (int) (' . $variableRight->getName() . '))',
-                                            $expression
-                                        );
+                                        return $this->nativeOperation($variableLeft->getName(), '(int) (' . $variableRight->getName() . ')', $expression, $compilationContext);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $symbol = $compilationContext->backend->getVariableCode($variableRight);
 
-                                        return new CompiledExpression(
-                                            'int',
-                                            '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' zephir_get_intval(' . $symbol . '))',
-                                            $expression
-                                        );
+                                        return $this->nativeOperation($variableLeft->getName(), 'zephir_get_intval(' . $symbol . ')', $expression, $compilationContext);
 
 
                                     default:
@@ -407,19 +307,10 @@ class BitwiseBaseOperator extends AbstractOperator
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                                return new CompiledExpression(
-                                    'int',
-                                    '(' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getCode() . ')',
-                                    $expression
-                                );
+                                return $this->nativeOperation($left->getCode(), $right->getCode(), $expression, $compilationContext);
 
                             case 'bool':
-                                return new CompiledExpression(
-                                    'int',
-                                    '(' . $left->getCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode(
-                                    ) . ')',
-                                    $expression
-                                );
+                                return $this->nativeOperation($left->getCode(), $right->getBooleanCode(), $expression, $compilationContext);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead(
@@ -432,39 +323,19 @@ class BitwiseBaseOperator extends AbstractOperator
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
-                                        return new CompiledExpression(
-                                            'int',
-                                            '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
+                                        return $this->nativeOperation($variableLeft->getName(), $variableRight->getName(), $expression, $compilationContext);
 
                                     case 'double':
-                                        return new CompiledExpression(
-                                            'int',
-                                            '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' (int) (' . $variableRight->getName() . '))',
-                                            $expression
-                                        );
+                                        return $this->nativeOperation($variableLeft->getName(), '(int) (' . $variableRight->getName() . ')', $expression, $compilationContext);
 
                                     case 'bool':
-                                        return new CompiledExpression(
-                                            'int',
-                                            '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->bitOperator . ' ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
+                                        return $this->nativeOperation($variableLeft->getName(), $variableRight->getName(), $expression, $compilationContext);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $symbol = $compilationContext->backend->getVariableCode($variableRight);
 
-                                        return new CompiledExpression(
-                                            'int',
-                                            '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' zephir_get_intval(' . $symbol . '))',
-                                            $expression
-                                        );
+                                        return $this->nativeOperation($variableLeft->getName(), 'zephir_get_intval(' . $symbol . ')', $expression, $compilationContext);
 
 
                                     default:
@@ -490,28 +361,13 @@ class BitwiseBaseOperator extends AbstractOperator
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                                return new CompiledExpression(
-                                    'int',
-                                    '((int) (' . $left->getCode() . ') ' . $this->operator . ' ' . $right->getCode(
-                                    ) . ')',
-                                    $expression
-                                );
+                                return $this->nativeOperation('(int) (' . $left->getCode() . ')', $right->getCode(), $expression, $compilationContext);
 
                             case 'double':
-                                return new CompiledExpression(
-                                    'int',
-                                    '((int) (' . $left->getCode(
-                                    ) . ') ' . $this->operator . ' (int) (' . $right->getCode() . '))',
-                                    $expression
-                                );
+                                return $this->nativeOperation('(int) (' . $left->getCode() . ')', '(int) (' . $right->getCode() . ')', $expression, $compilationContext);
 
                             case 'bool':
-                                return new CompiledExpression(
-                                    'int',
-                                    '((int) (' . $left->getCode(
-                                    ) . ') ' . $this->bitOperator . ' ' . $right->getBooleanCode() . ')',
-                                    $expression
-                                );
+                                return $this->nativeOperation('(int) (' . $left->getCode() . ')', $right->getBooleanCode(), $expression, $compilationContext);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead(
@@ -524,38 +380,18 @@ class BitwiseBaseOperator extends AbstractOperator
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
-                                        return new CompiledExpression(
-                                            'int',
-                                            '((int) (' . $variableLeft->getName(
-                                            ) . ') ' . $this->operator . '  ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
+                                        return $this->nativeOperation('(int) (' . $variableLeft->getName() . ')', $variableRight->getName(), $expression, $compilationContext);
                                     case 'double':
-                                        return new CompiledExpression(
-                                            'int',
-                                            '((int) (' . $variableLeft->getName(
-                                            ) . ') ' . $this->operator . ' (int) (' . $variableRight->getName() . '))',
-                                            $expression
-                                        );
+                                        return $this->nativeOperation('(int) (' . $variableLeft->getName() . ')', '(int) (' . $variableRight->getName() . ')', $expression, $compilationContext);
 
                                     case 'bool':
-                                        return new CompiledExpression(
-                                            'int',
-                                            '((int) (' . $variableLeft->getName(
-                                            ) . ') ' . $this->bitOperator . ' ' . $variableRight->getName() . ')',
-                                            $expression
-                                        );
+                                        return $this->nativeOperation('(int) (' . $variableLeft->getName() . ')', $variableRight->getName(), $expression, $compilationContext);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $symbol = $compilationContext->backend->getVariableCode($variableRight);
 
-                                        return new CompiledExpression(
-                                            'int',
-                                            '((int) (' . $variableLeft->getName(
-                                            ) . ') ' . $this->operator . ' zephir_get_intval(' . $symbol . '))',
-                                            $expression
-                                        );
+                                        return $this->nativeOperation('(int) (' . $variableLeft->getName() . ')', 'zephir_get_intval(' . $symbol . ')', $expression, $compilationContext);
 
 
                                     default:
@@ -586,21 +422,12 @@ class BitwiseBaseOperator extends AbstractOperator
                             case 'ulong':
                             case 'double':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $op  = $this->operator;
                                 $op1 = $compilationContext->backend->getVariableCode($variableLeft);
                                 $op2 = $right->getCode();
                                 if ('double' == $right->getType()) {
-                                    return new CompiledExpression(
-                                        'int',
-                                        '(zephir_get_intval(' . $op1 . ') ' . $op . ' (int) (' . $op2 . '))',
-                                        $expression
-                                    );
+                                    return $this->nativeOperation('zephir_get_intval(' . $op1 . ')', '(int) (' . $op2 . ')', $expression, $compilationContext);
                                 } else {
-                                    return new CompiledExpression(
-                                        'int',
-                                        '(zephir_get_intval(' . $op1 . ') ' . $op . ' ' . $op2 . ')',
-                                        $expression
-                                    );
+                                    return $this->nativeOperation('zephir_get_intval(' . $op1 . ')', $op2, $expression, $compilationContext);
                                 }
 
 
@@ -622,12 +449,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                     case 'bool':
                                         $compilationContext->headersManager->add('kernel/operators');
 
-                                        return new CompiledExpression(
-                                            'int',
-                                            '(zephir_get_intval(' . $symbol . ') ' . $this->operator . ' ' . $variableRight->getName(
-                                            ) . ')',
-                                            $expression
-                                        );
+                                        return $this->nativeOperation('zephir_get_intval(' . $symbol . ')', $variableRight->getName(), $expression, $compilationContext);
 
                                     /* a(var) + a(var) */
                                     case 'variable':
@@ -640,6 +462,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                         $compilationContext->codePrinter->output(
                                             $this->zvalOperator . '(' . $expectedSymbol . ', ' . $op1 . ', ' . $op2 . ');'
                                         );
+                                        $compilationContext->emitExceptionCheck();
 
                                         $this->checkVariableTemporal($variableLeft);
                                         $this->checkVariableTemporal($variableRight);
@@ -671,6 +494,19 @@ class BitwiseBaseOperator extends AbstractOperator
             default:
                 throw CompilerException::unsupportedType($left, $expression);
         }
+    }
+
+    /**
+     * The operator applied to two operands already converted to C integers.
+     * An operand is the C code, or the value of a folded literal.
+     */
+    protected function nativeOperation(
+        int|string $left,
+        int|string $right,
+        array $expression,
+        CompilationContext $compilationContext
+    ): CompiledExpression {
+        return new CompiledExpression('int', '(' . $left . ' ' . $this->operator . ' ' . $right . ')', $expression);
     }
 
     /**
@@ -721,6 +557,14 @@ class BitwiseBaseOperator extends AbstractOperator
          */
         $left  = self::literalToNumber($expression['left']['value']);
         $right = self::literalToNumber($expression['right']['value']);
+
+        /**
+         * A negative shift count throws ArithmeticError, so PHP does not fold
+         * it either; it is left to run, and throw, at runtime.
+         */
+        if (('<<' === $this->operator || '>>' === $this->operator) && $right < 0) {
+            return null;
+        }
 
         return match ($this->operator) {
             '&'     => new CompiledExpression('int', $left & $right, $expression),

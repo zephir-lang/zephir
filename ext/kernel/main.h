@@ -297,6 +297,24 @@ static inline void zephir_throw_return_type_error(uint32_t expected_type, zval *
 }
 
 /**
+ * Throws the TypeError for a value that a typed local cannot hold, worded as
+ * PHP words it for a typed property. PHP never coerces into `array`, so a
+ * local declared `array` rejects every other value, null included.
+ *
+ * See https://github.com/zephir-lang/zephir/issues/2689
+ */
+static inline void zephir_throw_variable_type_error(zval *value, const char *name, const char *type)
+{
+	zend_type_error("Cannot assign %s to variable $%s of type %s",
+#if PHP_VERSION_ID >= 80300
+		zend_zval_value_name(value),
+#else
+		zend_zval_type_name(value),
+#endif
+		name, type);
+}
+
+/**
  * Same as RETURN_MEMBER but verifies that the property's runtime type matches
  * the method's declared return type. Throws TypeError on mismatch.
  * Used when the method body is `return this->prop` and the method declares

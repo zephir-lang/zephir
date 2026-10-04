@@ -126,6 +126,17 @@ class Variable
         } else {
             throw new CompilerException('Unknown type: ' . $type, $statement);
         }
+
+        /**
+         * A compound operator on a zval goes through the engine, which can
+         * throw; PHP stops there. A native target cannot throw.
+         */
+        if (
+            'assign' !== $statement['operator']
+            && ('array' === $type || 'string' === $type || TypeRegistry::isDynamic($type))
+        ) {
+            $compilationContext->emitExceptionCheck($codePrinter);
+        }
     }
 
     /**
@@ -142,8 +153,14 @@ class Variable
         array $statement,
         CompilationContext $compilationContext
     ): void {
-        switch ($resolvedExpr->getType()) {
+        $sourceType = $resolvedExpr->getType();
+        if ('variable' === $sourceType) {
+            $sourceType = $this->getArraySourceType($resolvedExpr, $compilationContext);
+        }
+
+        switch ($sourceType) {
             case 'variable':
+            case 'mixed':
             case 'array':
                 $this->doArrayAssignmentProcess(
                     $statement,
@@ -157,10 +174,50 @@ class Variable
 
             default:
                 throw new CompilerException(
-                    "Cannot '" . $statement['operator'] . "' " . $resolvedExpr->getType() . ' for array type',
+                    "Cannot '" . $statement['operator'] . "' " . $sourceType . ' for array type',
                     $resolvedExpr->getOriginal()
                 );
         }
+    }
+
+    /**
+     * The declared type behind a `variable` result. A closure writes itself
+     * straight into the target, and a typed local (`int`, `string`, ...) can
+     * never hold an array, so both are rejected like a literal; see #2689.
+     */
+    private function getArraySourceType(
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext
+    ): string {
+        $originalType = $resolvedExpr->getOriginal()['type'] ?? null;
+        if ('closure' === $originalType || 'closure-arrow' === $originalType) {
+            return 'closure';
+        }
+
+        $sourceVariable = $compilationContext->symbolTable->getVariable($resolvedExpr->getCode(), $compilationContext);
+
+        return $sourceVariable?->getType() ?? 'variable';
+    }
+
+    /**
+     * PHP never coerces into `array`, so a value that is not one is rejected
+     * with the TypeError of a non-nullable `array` typed property before the
+     * local is written; see #2689.
+     */
+    private function emitArrayTypeGuard(
+        string $value,
+        string $variable,
+        CompilationContext $compilationContext,
+        Printer $codePrinter
+    ): void {
+        $compilationContext->headersManager->add('kernel/main');
+
+        $codePrinter->output('if (UNEXPECTED(Z_TYPE_P(' . $value . ') != IS_ARRAY)) {');
+        $codePrinter->increaseLevel();
+        $codePrinter->output('zephir_throw_variable_type_error(' . $value . ', "' . $variable . '", "array");');
+        $compilationContext->emitExceptionExit($codePrinter);
+        $codePrinter->decreaseLevel();
+        $codePrinter->output('}');
     }
 
     private function doArrayAssignmentProcess(
@@ -181,13 +238,13 @@ class Variable
                     $symbolVariable->setDynamicTypes('array');
                     $symbolVariable->increaseVariantIfNull();
                     $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                    $value  = $compilationContext->backend->resolveValue($resolvedExpr, $compilationContext);
 
-                    $codePrinter->output(
-                        'ZEPHIR_CPY_WRT(' . $symbol . ', ' . $compilationContext->backend->resolveValue(
-                            $resolvedExpr,
-                            $compilationContext
-                        ) . ');'
-                    );
+                    if ('array' === $symbolVariable->getType() && 'variable' === $resolvedExpr->getType()) {
+                        $this->emitArrayTypeGuard($value, $variable, $compilationContext, $codePrinter);
+                    }
+
+                    $codePrinter->output('ZEPHIR_CPY_WRT(' . $symbol . ', ' . $value . ');');
                 }
                 break;
 
@@ -1036,6 +1093,7 @@ class Variable
                                         $symbolVariable
                                     ) . ', ' . $compilationContext->backend->getVariableCode($itemVariable) . ');'
                                 );
+                                $compilationContext->emitExceptionCheck($codePrinter);
                                 break;
 
                             case 'concat-assign':

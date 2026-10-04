@@ -425,6 +425,10 @@ PHP_METHOD(Stub_Assign, testAssign39)
 	ZVAL_STRING(&b, "140");
 	ZEPHIR_INIT_VAR(&c);
 	zephir_add_function(&c, &a, &b);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&c);
 }
 
@@ -447,6 +451,10 @@ PHP_METHOD(Stub_Assign, testAssign40)
 	ZEPHIR_INIT_NVAR(&b);
 	ZVAL_LONG(&b, 7);
 	zephir_sub_function(return_value, &a, &b);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -471,6 +479,10 @@ PHP_METHOD(Stub_Assign, testAssign41)
 	ZVAL_LONG(&a, 42);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_div_zval_long(&_0, &a, num);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&a, &_0);
 	RETURN_CCTOR(&a);
 }
@@ -494,6 +506,10 @@ PHP_METHOD(Stub_Assign, testAssign42)
 	a = 2;
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_div_long_long(&_0, num, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	num = zephir_get_intval(&_0);
 	RETURN_MM_LONG(num);
 }
@@ -516,12 +532,17 @@ PHP_METHOD(Stub_Assign, testAssign43)
 	ZVAL_LONG(&a, 43);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_mod_zval_long(&_0, &a, num);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&a, &_0);
 	RETURN_CCTOR(&a);
 }
 
 PHP_METHOD(Stub_Assign, testAssign44)
 {
+	zend_long _0;
 	zval *num_param = NULL;
 	zend_long num, a = 0;
 
@@ -530,7 +551,11 @@ PHP_METHOD(Stub_Assign, testAssign44)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 	a = 2;
-	num = zephir_safe_mod_long_long(num, a);
+	_0 = zephir_safe_mod_long_long(num, a);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	num = _0;
 	RETURN_LONG(num);
 }
 
@@ -563,6 +588,10 @@ PHP_METHOD(Stub_Assign, testAssign45)
 	ZVAL_LONG(&_0, 2);
 	zephir_array_fast_append(&_1, &_0);
 	zephir_add_function(&a, &a, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -601,6 +630,10 @@ PHP_METHOD(Stub_Assign, testAssign46)
 	ZVAL_LONG(&_0, 5);
 	zephir_array_fast_append(&_1, &_0);
 	zephir_add_function(&a, &a, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&a);
 }
 
@@ -626,6 +659,10 @@ PHP_METHOD(Stub_Assign, testAssign47)
 	add_assoc_long_ex(&b, SL("a"), 99);
 	add_assoc_long_ex(&b, SL("b"), 2);
 	zephir_add_function(&a, &a, &b);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -659,6 +696,10 @@ PHP_METHOD(Stub_Assign, testAssign48)
 	ZVAL_LONG(&_0, 2);
 	zephir_array_fast_append(&b, &_0);
 	ZEPHIR_ADD_ASSIGN(&a, &b);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -810,7 +851,11 @@ PHP_METHOD(Stub_Assign, testPropertyAddAssign1)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 2);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 19, PH_NOISY_CC);
-	ZEPHIR_ADD_ASSIGN(&_0, &_1)
+	ZEPHIR_ADD_ASSIGN(&_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 19, &_0);
 	RETURN_MM_MEMBER(getThis(), "testVar");
 }
@@ -836,7 +881,11 @@ PHP_METHOD(Stub_Assign, testPropertyAddAssign2)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 2);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 19, PH_NOISY_CC);
-	ZEPHIR_ADD_ASSIGN(&_0, &_1)
+	ZEPHIR_ADD_ASSIGN(&_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 19, &_0);
 	RETURN_MM_MEMBER(getThis(), "testVar");
 }
@@ -865,6 +914,10 @@ PHP_METHOD(Stub_Assign, testPropertyAssignValuePlus1)
 	ZVAL_LONG(&_1, 1);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_add_function(&_2, &_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 19, &_2);
 	RETURN_MM_MEMBER(getThis(), "testVar");
 }
@@ -907,7 +960,11 @@ PHP_METHOD(Stub_Assign, testPropertySubAssign1)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 2);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 19, PH_NOISY_CC);
-	ZEPHIR_SUB_ASSIGN(&_0, &_1)
+	ZEPHIR_SUB_ASSIGN(&_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 19, &_0);
 	RETURN_MM_MEMBER(getThis(), "testVar");
 }
@@ -933,7 +990,11 @@ PHP_METHOD(Stub_Assign, testPropertySubAssign2)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 2);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 19, PH_NOISY_CC);
-	ZEPHIR_SUB_ASSIGN(&_0, &_1)
+	ZEPHIR_SUB_ASSIGN(&_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 19, &_0);
 	RETURN_MM_MEMBER(getThis(), "testVar");
 }
@@ -959,7 +1020,11 @@ PHP_METHOD(Stub_Assign, testPropertyMulAssign1)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 2);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 19, PH_NOISY_CC);
-	ZEPHIR_MUL_ASSIGN(&_0, &_1)
+	ZEPHIR_MUL_ASSIGN(&_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 19, &_0);
 	RETURN_MM_MEMBER(getThis(), "testVar");
 }
@@ -985,7 +1050,11 @@ PHP_METHOD(Stub_Assign, testPropertyMulAssign2)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 3);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 19, PH_NOISY_CC);
-	ZEPHIR_MUL_ASSIGN(&_0, &_1)
+	ZEPHIR_MUL_ASSIGN(&_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 19, &_0);
 	RETURN_MM_MEMBER(getThis(), "testVar");
 }
@@ -1012,6 +1081,10 @@ PHP_METHOD(Stub_Assign, testPropertyAssignStringConcat)
 	ZEPHIR_OBS_NVAR(&_1);
 	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 19, PH_NOISY_CC);
 	zephir_concat_self_str(&_1, SL(" string"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 19, &_1);
 	RETURN_MM_MEMBER(getThis(), "testVar");
 }
@@ -2323,10 +2396,11 @@ PHP_METHOD(Stub_Assign, testArrayBoolExpressionAssign)
 
 PHP_METHOD(Stub_Assign, testAssignBitwiseX)
 {
+	zend_long _6$$7, _8$$8;
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a_param = NULL, *b_param = NULL, op, i, result, _1, *_2;
-	zend_long a, b, ZEPHIR_LAST_CALL_STATUS, _3$$4, _4$$5, _5$$6, _6$$7, _7$$8;
+	zend_long a, b, ZEPHIR_LAST_CALL_STATUS, _3$$4, _4$$5, _5$$6, _7$$7, _9$$8;
 
 	ZVAL_UNDEF(&op);
 	ZVAL_UNDEF(&i);
@@ -2388,14 +2462,24 @@ PHP_METHOD(Stub_Assign, testAssignBitwiseX)
 			ZVAL_LONG(&i, _5$$6);
 			goto zephir_switch_0_end;
 		zephir_switch_0_clause_3: ;
-			_6$$7 = (zephir_get_intval(&i) << b);
+			_6$$7 = zephir_safe_shift_left_long(zephir_get_intval(&i), b);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
+			_7$$7 = _6$$7;
 			ZEPHIR_INIT_NVAR(&i);
-			ZVAL_LONG(&i, _6$$7);
+			ZVAL_LONG(&i, _7$$7);
 			goto zephir_switch_0_end;
 		zephir_switch_0_clause_4: ;
-			_7$$8 = (zephir_get_intval(&i) >> b);
+			_8$$8 = zephir_safe_shift_right_long(zephir_get_intval(&i), b);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
+			_9$$8 = _8$$8;
 			ZEPHIR_INIT_NVAR(&i);
-			ZVAL_LONG(&i, _7$$8);
+			ZVAL_LONG(&i, _9$$8);
 			goto zephir_switch_0_end;
 		zephir_switch_0_end: ;
 
@@ -2519,6 +2603,10 @@ PHP_METHOD(Stub_Assign, issue597)
 		ZVAL_LONG(&_1$$4, 5);
 		ZEPHIR_INIT_VAR(&s$$4);
 		mul_function(&s$$4, &_0$$4, &_1$$4);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CPY_WRT(&s$$4, &s$$4);
 		zephir_array_update_string(&_GET, SL("s"), &s$$4, PH_COPY | PH_SEPARATE);
 		RETURN_CCTOR(&s$$4);

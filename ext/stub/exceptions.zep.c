@@ -224,6 +224,10 @@ PHP_METHOD(Stub_Exceptions, testExceptionConcat)
 	ZVAL_STR_COPY(&language_zv, language);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_SVSV(&_0, "Framework ", &framework_zv, " written using ", &language_zv);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_throw_exception_debug(&_0, "stub/exceptions.zep", 73);
 	ZEPHIR_MM_RESTORE();
 	return;
@@ -255,6 +259,9 @@ PHP_METHOD(Stub_Exceptions, testExceptionRethrow)
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&e, &_0);
 			zephir_throw_exception_debug(&e, "stub/exceptions.zep", 83);
+			ZEPHIR_MM_RESTORE();
+			return;
+		} else {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
@@ -375,6 +382,9 @@ PHP_METHOD(Stub_Exceptions, testMultiException)
 							ZEPHIR_MM_RESTORE();
 							return;
 						}
+					} else {
+						ZEPHIR_MM_RESTORE();
+						return;
 					}
 				}
 			}
@@ -412,6 +422,9 @@ PHP_METHOD(Stub_Exceptions, issue1325)
 			ZEPHIR_CPY_WRT(&e, &_0);
 			ZEPHIR_INIT_NVAR(&status);
 			ZVAL_STRING(&status, "woop");
+		} else {
+			ZEPHIR_MM_RESTORE();
+			return;
 		}
 	}
 	RETURN_MM_LONG(1);

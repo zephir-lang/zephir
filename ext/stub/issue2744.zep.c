@@ -50,6 +50,10 @@ PHP_METHOD(Stub_Issue2744, addVarLiteral)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 3);
 	zephir_add_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -69,6 +73,10 @@ PHP_METHOD(Stub_Issue2744, subVarLiteral)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 3);
 	zephir_sub_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -88,6 +96,10 @@ PHP_METHOD(Stub_Issue2744, mulVarLiteral)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 3);
 	mul_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -107,6 +119,10 @@ PHP_METHOD(Stub_Issue2744, addLiteralVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 3);
 	zephir_add_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -126,6 +142,10 @@ PHP_METHOD(Stub_Issue2744, subLiteralVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 3);
 	zephir_sub_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -145,6 +165,10 @@ PHP_METHOD(Stub_Issue2744, mulLiteralVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 3);
 	mul_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -164,6 +188,10 @@ PHP_METHOD(Stub_Issue2744, addVarDoubleLiteral)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, 1.5);
 	zephir_add_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -183,6 +211,10 @@ PHP_METHOD(Stub_Issue2744, subVarDoubleLiteral)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, 1.5);
 	zephir_sub_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -202,6 +234,10 @@ PHP_METHOD(Stub_Issue2744, mulVarDoubleLiteral)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, 1.5);
 	mul_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -221,6 +257,10 @@ PHP_METHOD(Stub_Issue2744, addDoubleLiteralVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, 1.5);
 	zephir_add_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -240,6 +280,10 @@ PHP_METHOD(Stub_Issue2744, subDoubleLiteralVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, 1.5);
 	zephir_sub_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -259,6 +303,10 @@ PHP_METHOD(Stub_Issue2744, mulDoubleLiteralVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, 1.5);
 	mul_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -280,6 +328,10 @@ PHP_METHOD(Stub_Issue2744, addLongVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, b);
 	zephir_add_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -301,6 +353,10 @@ PHP_METHOD(Stub_Issue2744, subLongVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, b);
 	zephir_sub_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -322,6 +378,10 @@ PHP_METHOD(Stub_Issue2744, mulLongVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, b);
 	mul_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -343,6 +403,10 @@ PHP_METHOD(Stub_Issue2744, addVarLong)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, b);
 	zephir_add_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -364,6 +428,10 @@ PHP_METHOD(Stub_Issue2744, subVarLong)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, b);
 	zephir_sub_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -385,6 +453,10 @@ PHP_METHOD(Stub_Issue2744, mulVarLong)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, b);
 	mul_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -406,6 +478,10 @@ PHP_METHOD(Stub_Issue2744, addDoubleVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, d);
 	zephir_add_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -427,6 +503,10 @@ PHP_METHOD(Stub_Issue2744, subDoubleVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, d);
 	zephir_sub_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -448,6 +528,10 @@ PHP_METHOD(Stub_Issue2744, mulDoubleVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, d);
 	mul_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -469,6 +553,10 @@ PHP_METHOD(Stub_Issue2744, addVarDouble)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, d);
 	zephir_add_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -490,6 +578,10 @@ PHP_METHOD(Stub_Issue2744, subVarDouble)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, d);
 	zephir_sub_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -511,6 +603,10 @@ PHP_METHOD(Stub_Issue2744, mulVarDouble)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, d);
 	mul_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -532,6 +628,10 @@ PHP_METHOD(Stub_Issue2744, addBoolVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, b);
 	zephir_add_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -553,6 +653,10 @@ PHP_METHOD(Stub_Issue2744, subBoolVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, b);
 	zephir_sub_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -574,6 +678,10 @@ PHP_METHOD(Stub_Issue2744, mulBoolVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, b);
 	mul_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -595,6 +703,10 @@ PHP_METHOD(Stub_Issue2744, addVarBool)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, b);
 	zephir_add_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -616,6 +728,10 @@ PHP_METHOD(Stub_Issue2744, subVarBool)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, b);
 	zephir_sub_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -637,6 +753,10 @@ PHP_METHOD(Stub_Issue2744, mulVarBool)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, b);
 	mul_function(return_value, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -658,6 +778,10 @@ PHP_METHOD(Stub_Issue2744, addCharVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, c);
 	zephir_add_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -679,6 +803,10 @@ PHP_METHOD(Stub_Issue2744, subCharVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, c);
 	zephir_sub_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -700,6 +828,10 @@ PHP_METHOD(Stub_Issue2744, mulCharVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, c);
 	mul_function(return_value, &_0, a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -721,6 +853,10 @@ PHP_METHOD(Stub_Issue2744, addArrayLiteral)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 3);
 	zephir_add_function(return_value, &a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -742,6 +878,10 @@ PHP_METHOD(Stub_Issue2744, subArrayLiteral)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 3);
 	zephir_sub_function(return_value, &a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -763,6 +903,10 @@ PHP_METHOD(Stub_Issue2744, mulArrayLiteral)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 3);
 	mul_function(return_value, &a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -784,6 +928,10 @@ PHP_METHOD(Stub_Issue2744, assignedToVar)
 	ZVAL_LONG(&_0, 1);
 	ZEPHIR_INIT_VAR(&r);
 	zephir_add_function(&r, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&r);
 }
 
@@ -806,6 +954,10 @@ PHP_METHOD(Stub_Issue2744, assignedToLong)
 	ZVAL_LONG(&_0, 1);
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_add_function(&_1, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	r = zephir_get_intval(&_1);
 	RETURN_MM_LONG(r);
 }
@@ -829,6 +981,10 @@ PHP_METHOD(Stub_Issue2744, assignedToDouble)
 	ZVAL_LONG(&_0, 1);
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_add_function(&_1, a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	r = zephir_get_numberval(&_1);
 	RETURN_MM_DOUBLE(r);
 }
@@ -869,6 +1025,10 @@ PHP_METHOD(Stub_Issue2744, loopCarried)
 			ZVAL_LONG(&_3$$3, 2);
 			ZEPHIR_INIT_NVAR(&_4$$3);
 			mul_function(&_4$$3, &a, &_3$$3);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			zephir_array_append(&results, &_4$$3, PH_SEPARATE, "stub/issue2744.zep", 234);
 			ZEPHIR_INIT_NVAR(&a);
 			ZVAL_DOUBLE(&a, 0.5);
@@ -894,6 +1054,10 @@ PHP_METHOD(Stub_Issue2744, addAssign)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	ZEPHIR_ADD_ASSIGN(a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETVAL_ZVAL(a, 1, 0);
 	RETURN_MM();
 }
@@ -915,6 +1079,10 @@ PHP_METHOD(Stub_Issue2744, subAssign)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	ZEPHIR_SUB_ASSIGN(a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETVAL_ZVAL(a, 1, 0);
 	RETURN_MM();
 }
@@ -936,6 +1104,10 @@ PHP_METHOD(Stub_Issue2744, mulAssign)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 2);
 	ZEPHIR_MUL_ASSIGN(a, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETVAL_ZVAL(a, 1, 0);
 	RETURN_MM();
 }
@@ -955,6 +1127,10 @@ PHP_METHOD(Stub_Issue2744, increment)
 	ZEPHIR_SEPARATE_PARAM(a);
 	SEPARATE_ZVAL(a);
 	zephir_increment(a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETVAL_ZVAL(a, 1, 0);
 	RETURN_MM();
 }
@@ -974,6 +1150,10 @@ PHP_METHOD(Stub_Issue2744, decrement)
 	ZEPHIR_SEPARATE_PARAM(a);
 	SEPARATE_ZVAL(a);
 	zephir_decrement(a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETVAL_ZVAL(a, 1, 0);
 	RETURN_MM();
 }

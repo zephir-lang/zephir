@@ -138,7 +138,7 @@ PHP_METHOD(Stub_Bitwise, intDoubleAnd)
 	zend_long b = 0, c = 0;
 	a = (double) (1);
 	b = 2;
-	c = ((int) (a) &  b);
+	c = ((int) (a) & b);
 	RETURN_LONG(c);
 }
 
@@ -155,7 +155,7 @@ PHP_METHOD(Stub_Bitwise, doubleIntAnd)
 	zend_long b = 0;
 	a = (double) (1);
 	b = 2;
-	c = (double) (((int) (a) &  b));
+	c = (double) (((int) (a) & b));
 	RETURN_DOUBLE(c);
 }
 
@@ -202,6 +202,10 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCastAnd)
 	ZVAL_STRING(&b, "2");
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_bitwise_and_function(&_0, &b, &a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	c = zephir_get_intval(&_0);
 	RETURN_MM_LONG(c);
 }
@@ -240,7 +244,7 @@ PHP_METHOD(Stub_Bitwise, complex2And)
 PHP_METHOD(Stub_Bitwise, complex3And)
 {
 	zend_bool c = 0;
-	c = (((1 &((1.0) ? 1 : 0))) ? 1 : 0);
+	c = (((1 & ((1.0) ? 1 : 0))) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -268,7 +272,7 @@ PHP_METHOD(Stub_Bitwise, complex5And)
 PHP_METHOD(Stub_Bitwise, complex6And)
 {
 	zend_bool c = 0;
-	c = (((1 &((1) ? 1 : 0))) ? 1 : 0);
+	c = (((1 & ((1) ? 1 : 0))) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -351,7 +355,7 @@ PHP_METHOD(Stub_Bitwise, complex15And)
 	zend_long a = 0;
 	a = 1;
 	b =  (2.0);
-	c = ((((int) (b) &  a)) ? 1 : 0);
+	c = ((((int) (b) & a)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -361,7 +365,7 @@ PHP_METHOD(Stub_Bitwise, complex16And)
 	zend_long a = 0;
 	a = 1;
 	b =  (2.0);
-	c = (double) (((int) (b) &  a));
+	c = (double) (((int) (b) & a));
 	RETURN_DOUBLE(c);
 }
 
@@ -431,7 +435,7 @@ PHP_METHOD(Stub_Bitwise, complex22And)
 	a = 1;
 	b = (long) (2.0);
 	d = (double) ((a & b));
-	c = (double) ((b & ((int) (d) & ((int) (d) & ((int) (d) & ((int) (d) & (b & ((int) (d) &  b))))))));
+	c = (double) ((b & ((int) (d) & ((int) (d) & ((int) (d) & ((int) (d) & (b & ((int) (d) & b))))))));
 	RETURN_DOUBLE(c);
 }
 
@@ -574,7 +578,7 @@ PHP_METHOD(Stub_Bitwise, intDoubleOr)
 	zend_long b = 0, c = 0;
 	a = (double) (1);
 	b = 2;
-	c = ((int) (a) |  b);
+	c = ((int) (a) | b);
 	RETURN_LONG(c);
 }
 
@@ -591,7 +595,7 @@ PHP_METHOD(Stub_Bitwise, doubleIntOr)
 	zend_long b = 0;
 	a = (double) (1);
 	b = 2;
-	c = (double) (((int) (a) |  b));
+	c = (double) (((int) (a) | b));
 	RETURN_DOUBLE(c);
 }
 
@@ -638,6 +642,10 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCastOr)
 	ZVAL_STRING(&b, "2");
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_bitwise_or_function(&_0, &b, &a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	c = zephir_get_intval(&_0);
 	RETURN_MM_LONG(c);
 }
@@ -676,7 +684,7 @@ PHP_METHOD(Stub_Bitwise, complex2Or)
 PHP_METHOD(Stub_Bitwise, complex3Or)
 {
 	zend_bool c = 0;
-	c = (((1 |((1.0) ? 1 : 0))) ? 1 : 0);
+	c = (((1 | ((1.0) ? 1 : 0))) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -704,7 +712,7 @@ PHP_METHOD(Stub_Bitwise, complex5Or)
 PHP_METHOD(Stub_Bitwise, complex6Or)
 {
 	zend_bool c = 0;
-	c = (((1 |((1) ? 1 : 0))) ? 1 : 0);
+	c = (((1 | ((1) ? 1 : 0))) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -787,7 +795,7 @@ PHP_METHOD(Stub_Bitwise, complex15Or)
 	zend_long a = 0;
 	a = 1;
 	b =  (2.0);
-	c = ((((int) (b) |  a)) ? 1 : 0);
+	c = ((((int) (b) | a)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -797,7 +805,7 @@ PHP_METHOD(Stub_Bitwise, complex16Or)
 	zend_long a = 0;
 	a = 1;
 	b =  (2.0);
-	c = (double) (((int) (b) |  a));
+	c = (double) (((int) (b) | a));
 	RETURN_DOUBLE(c);
 }
 
@@ -895,10 +903,15 @@ PHP_METHOD(Stub_Bitwise, complex24Or)
 
 PHP_METHOD(Stub_Bitwise, intShiftLeft)
 {
+	zend_long _0;
 	zend_long a = 0, b = 0, c = 0;
 	a = 1;
 	b = 2;
-	c = (a << b);
+	_0 = zephir_safe_shift_left_long(a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = _0;
 	RETURN_LONG(c);
 }
 
@@ -906,7 +919,7 @@ PHP_METHOD(Stub_Bitwise, int2ShiftLeft)
 {
 	zend_long a = 0, c = 0;
 	a = 1;
-	c = (a << 2);
+	c = ((zend_long) ((zend_ulong) (a) << 2));
 	RETURN_LONG(c);
 }
 
@@ -919,10 +932,15 @@ PHP_METHOD(Stub_Bitwise, intShiftLeftSimple)
 
 PHP_METHOD(Stub_Bitwise, intShiftRight)
 {
+	zend_long _0;
 	zend_long a = 0, b = 0, c = 0;
 	a = 1;
 	b = 2;
-	c = (a >> b);
+	_0 = zephir_safe_shift_right_long(a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = _0;
 	RETURN_LONG(c);
 }
 
@@ -1001,6 +1019,10 @@ PHP_METHOD(Stub_Bitwise, testbitwiseXor)
 	ZEPHIR_CALL_METHOD(&j, this_ptr, "getInt", NULL, 0, &_0);
 	zephir_check_call_status();
 	zephir_bitwise_xor_function(return_value, &i, &j);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -1034,6 +1056,7 @@ PHP_METHOD(Stub_Bitwise, issue2014HexArithmetic)
  */
 PHP_METHOD(Stub_Bitwise, intLiteralShiftLeftDynamic)
 {
+	zend_long _2;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *remainingBits, remainingBits_sub, _0, _1;
 
@@ -1050,7 +1073,16 @@ PHP_METHOD(Stub_Bitwise, intLiteralShiftLeftDynamic)
 	ZVAL_LONG(&_0, 8);
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_sub_function(&_1, &_0, remainingBits);
-	RETURN_MM_LONG(((1 << zephir_get_intval(&_1)) - 1));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	_2 = zephir_safe_shift_left_long(1, zephir_get_intval(&_1));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_LONG((_2 - 1));
 }
 
 PHP_METHOD(Stub_Bitwise, intLiteralXorDynamic)

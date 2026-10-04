@@ -198,6 +198,10 @@ PHP_METHOD(Stub_Types_MixedType, castToStringMixedAndReturnMixed)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &val);
 	zephir_cast_to_string(&_0, val);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_0);
 }
 
@@ -217,6 +221,10 @@ PHP_METHOD(Stub_Types_MixedType, castToStringInternallyMixedAndReturnMixed)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &val);
 	zephir_cast_to_string(&_0, val);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(val, &_0);
 	RETVAL_ZVAL(val, 1, 0);
 	RETURN_MM();

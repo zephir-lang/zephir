@@ -41,6 +41,9 @@ PHP_METHOD(stub_16__closure, __invoke)
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 152, PH_NOISY_CC | PH_READONLY);
 	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 153, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CONCAT_VSV(return_value, &_0, ":", &_1);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 

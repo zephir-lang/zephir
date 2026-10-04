@@ -183,6 +183,10 @@ PHP_METHOD(Stub_Destructure, pair)
 	ZVAL_LONG(&_1, 1);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_add_function(&_2, &_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 37, &_2);
 	zephir_create_array(return_value, 2, 0);
 	ZEPHIR_INIT_VAR(&_3);
@@ -398,6 +402,10 @@ PHP_METHOD(Stub_Destructure, typedTargets)
 	zephir_memory_observe(&_3);
 	zephir_array_fetch_long(&_3, &_0, 1, PH_NOISY, "stub/destructure.zep", 112);
 	zephir_get_strval(&s, &_3);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_create_array(return_value, 2, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, i);
@@ -489,6 +497,10 @@ PHP_METHOD(Stub_Destructure, inLoop)
 		zephir_array_fetch_long(&v, &item, 1, PH_NOISY, "stub/destructure.zep", 134);
 		ZEPHIR_INIT_NVAR(&_4$$3);
 		zephir_add_function(&_4$$3, &k, &v);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		zephir_array_append(&out, &_4$$3, PH_SEPARATE, "stub/destructure.zep", 135);
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&item);

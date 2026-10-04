@@ -65,6 +65,10 @@ PHP_METHOD(Stub_Attributes_CounterUser, bump)
 	ZVAL_LONG(&_1, 1);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_add_function(&_2, &_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 22, &_2);
 	RETURN_MM_MEMBER_TYPED(getThis(), "hits", IS_LONG);
 }

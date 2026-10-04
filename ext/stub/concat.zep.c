@@ -56,6 +56,10 @@ PHP_METHOD(Stub_Concat, testConcatBySelfProperty)
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("testProperty"), PH_NOISY_CC);
 	zephir_concat_self(&_0, &title_zv);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("testProperty"), &_0);
 	ZEPHIR_MM_RESTORE();
 }
@@ -74,6 +78,10 @@ PHP_METHOD(Stub_Concat, testConcat1)
 	ZVAL_STRING(&url, "test");
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_SV(&_0, "append", &url);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&url, &_0);
 	RETURN_CCTOR(&url);
 }
@@ -94,12 +102,24 @@ PHP_METHOD(Stub_Concat, testConcat2)
 	ZVAL_STRING(&url, "test");
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_SVS(&_0, "append", &url, "other");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&url, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CONCAT_SS(&_1, "append", "other");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&url, &_1);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_CONCAT_SSV(&_0, "append", "other", &url);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&url, &_0);
 	RETURN_CCTOR(&url);
 }
@@ -122,6 +142,10 @@ PHP_METHOD(Stub_Concat, testConcat3)
 	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "2");
 	zephir_concat_self(&b, &a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&b);
 }
 
@@ -152,22 +176,54 @@ PHP_METHOD(Stub_Concat, testConcat4)
 	ZVAL_STRING(&query, "");
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_div_zval_long(&_0, value, 100);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 25);
 	ZEPHIR_INIT_VAR(&min);
 	mul_function(&min, &_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_0);
 	zephir_div_zval_long(&_0, value, 100);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 50);
 	ZEPHIR_INIT_VAR(&max);
 	mul_function(&max, &_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_2);
 	ZEPHIR_CONCAT_SV(&_2, "SELECT * FROM TEST WHERE value <= ", &max);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_concat_self(&query, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_3);
 	ZEPHIR_CONCAT_SV(&_3, " AND value >= ", &min);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_concat_self(&query, &_3);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&query);
 }
 
@@ -196,6 +252,10 @@ PHP_METHOD(Stub_Concat, testConcat5)
 	ZVAL_DOUBLE(&_0, number);
 	ZEPHIR_INIT_VAR(&retval);
 	ZEPHIR_CONCAT_VV(&retval, &left, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -219,6 +279,10 @@ PHP_METHOD(Stub_Concat, testConcatStringWithIntVar)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_long(&retval, number);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -248,6 +312,10 @@ PHP_METHOD(Stub_Concat, testConcatStringWithLongVar)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_long(&retval, number);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -268,6 +336,10 @@ PHP_METHOD(Stub_Concat, testConcatStringWithUintVar)
 	ZVAL_STRING(&retval, "n=");
 	number = 5;
 	zephir_concat_self_long(&retval, number);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -288,6 +360,10 @@ PHP_METHOD(Stub_Concat, testConcatStringWithUlongVar)
 	ZVAL_STRING(&retval, "n=");
 	number = 5;
 	zephir_concat_self_long(&retval, number);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -311,6 +387,10 @@ PHP_METHOD(Stub_Concat, testConcatStringWithCharVar)
 	ZVAL_STRING(&retval, "n=");
 	c = 'A';
 	zephir_concat_self_char(&retval, c);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -335,6 +415,10 @@ PHP_METHOD(Stub_Concat, testConcatVarWithIntVar)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_long(&retval, number);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&retval);
 }
 
@@ -355,6 +439,10 @@ PHP_METHOD(Stub_Concat, testConcatVarWithCharVar)
 	ZVAL_STRING(&retval, "n=");
 	c = 'A';
 	zephir_concat_self_char(&retval, c);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&retval);
 }
 
@@ -373,6 +461,10 @@ PHP_METHOD(Stub_Concat, testConcatVarWithIntLiteral)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_long(&retval, 5);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&retval);
 }
 
@@ -401,6 +493,10 @@ PHP_METHOD(Stub_Concat, testConcatStringWithDoubleVar)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_double(&retval, number);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -419,6 +515,10 @@ PHP_METHOD(Stub_Concat, testConcatStringWithDoubleLiteral)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_double(&retval, 1.5);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -442,6 +542,10 @@ PHP_METHOD(Stub_Concat, testConcatStringWithBoolVar)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_bool(&retval, flag);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -460,6 +564,10 @@ PHP_METHOD(Stub_Concat, testConcatStringWithTrueLiteral)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_bool(&retval, 1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -480,6 +588,10 @@ PHP_METHOD(Stub_Concat, testConcatStringWithFalseLiteral)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_bool(&retval, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -502,6 +614,10 @@ PHP_METHOD(Stub_Concat, testConcatVarWithDoubleVar)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_double(&retval, number);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&retval);
 }
 
@@ -520,6 +636,10 @@ PHP_METHOD(Stub_Concat, testConcatVarWithDoubleLiteral)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_double(&retval, 1.5);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&retval);
 }
 
@@ -542,6 +662,10 @@ PHP_METHOD(Stub_Concat, testConcatVarWithBoolVar)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_bool(&retval, flag);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&retval);
 }
 
@@ -560,6 +684,10 @@ PHP_METHOD(Stub_Concat, testConcatVarWithTrueLiteral)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_bool(&retval, 1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&retval);
 }
 
@@ -578,6 +706,10 @@ PHP_METHOD(Stub_Concat, testConcatVarWithFalseLiteral)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_bool(&retval, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&retval);
 }
 
@@ -599,6 +731,10 @@ PHP_METHOD(Stub_Concat, testConcatIntVarWithFalseLiteral)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_LONG(&retval, 5);
 	zephir_concat_self_bool(&retval, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&retval);
 }
 
@@ -617,6 +753,10 @@ PHP_METHOD(Stub_Concat, testConcatVarWithNullLiteral)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_LONG(&retval, 5);
 	zephir_concat_self_str(&retval, SL(""));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&retval);
 }
 
@@ -651,6 +791,10 @@ PHP_METHOD(Stub_Concat, testConcatStringWithArrayLiteral)
 	ZVAL_LONG(&_1, 2);
 	zephir_array_fast_append(&_0, &_1);
 	zephir_concat_self(&retval, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -681,6 +825,10 @@ PHP_METHOD(Stub_Concat, testConcatStringWithArrayVar)
 	ZVAL_LONG(&_0, 2);
 	zephir_array_fast_append(&a, &_0);
 	zephir_concat_self(&retval, &a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -710,6 +858,10 @@ PHP_METHOD(Stub_Concat, testConcatVarWithArrayLiteral)
 	ZVAL_LONG(&_1, 2);
 	zephir_array_fast_append(&_0, &_1);
 	zephir_concat_self(&retval, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&retval);
 }
 
@@ -739,6 +891,10 @@ PHP_METHOD(Stub_Concat, testConcatVarWithArrayVar)
 	ZVAL_LONG(&_0, 2);
 	zephir_array_fast_append(&a, &_0);
 	zephir_concat_self(&retval, &a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&retval);
 }
 
@@ -792,26 +948,50 @@ PHP_METHOD(Stub_Concat, appendPropertyLiterals)
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC);
 	zephir_concat_self_str(&_0, SL("s"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC);
 	zephir_concat_self_long(&_0, 5);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC);
 	zephir_concat_self_double(&_0, 1.5);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC);
 	zephir_concat_self_bool(&_0, 1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC);
 	zephir_concat_self_bool(&_0, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC);
 	zephir_concat_self_str(&_0, SL(""));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_0);
 	ZEPHIR_MM_RESTORE();
 }
@@ -854,22 +1034,42 @@ PHP_METHOD(Stub_Concat, appendPropertyVariables)
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC);
 	zephir_concat_self_long(&_0, number);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC);
 	zephir_concat_self_double(&_0, fraction);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC);
 	zephir_concat_self_bool(&_0, flag);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC);
 	zephir_concat_self_char(&_0, c);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC);
 	zephir_concat_self(&_0, &text_zv);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_0);
 	ZEPHIR_MM_RESTORE();
 }
@@ -907,6 +1107,10 @@ PHP_METHOD(Stub_Concat, appendPropertyArray)
 	ZEPHIR_OBS_NVAR(&_2);
 	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 33, PH_NOISY_CC);
 	zephir_concat_self(&_2, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &_2);
 	ZEPHIR_MM_RESTORE();
 }
@@ -951,22 +1155,42 @@ PHP_METHOD(Stub_Concat, appendStaticLiterals)
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
 	zephir_concat_self_str(&_0, SL("s"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
 	zephir_concat_self_long(&_0, 5);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
 	zephir_concat_self_double(&_0, 1.5);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
 	zephir_concat_self_bool(&_0, 1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
 	zephir_concat_self_bool(&_0, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
 	ZEPHIR_MM_RESTORE();
 }
@@ -994,14 +1218,26 @@ PHP_METHOD(Stub_Concat, appendStaticVariables)
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
 	zephir_concat_self_long(&_0, number);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
 	zephir_concat_self_double(&_0, fraction);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
 	zephir_concat_self_bool(&_0, flag);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
 	ZEPHIR_MM_RESTORE();
 }
@@ -1028,6 +1264,10 @@ PHP_METHOD(Stub_Concat, testConcatExprWithBoolVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, flag);
 	ZEPHIR_CONCAT_SV(return_value, "n=", &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -1046,6 +1286,10 @@ PHP_METHOD(Stub_Concat, testConcatExprWithTrueLiteral)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, 1);
 	ZEPHIR_CONCAT_SV(return_value, "n=", &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -1064,6 +1308,10 @@ PHP_METHOD(Stub_Concat, testConcatExprWithFalseLiteral)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, 0);
 	ZEPHIR_CONCAT_SV(return_value, "n=", &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -1084,6 +1332,10 @@ PHP_METHOD(Stub_Concat, testConcatExprWithCharVar)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRINGL(&_0, (char *) &c, 1);
 	ZEPHIR_CONCAT_SV(return_value, "n=", &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -1094,6 +1346,9 @@ PHP_METHOD(Stub_Concat, testConcatExprWithCharLiteral)
 {
 
 	ZEPHIR_CONCAT_SS(return_value, "n=", "A");
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 

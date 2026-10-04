@@ -52,23 +52,55 @@ PHP_METHOD(Stub_SpectralNorm, Ax)
 	zephir_fetch_params(1, 2, 0, &i, &j);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_add_function(&_0, i, j);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_add_function(&_1, i, j);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_LONG(&_2, 1);
 	ZEPHIR_INIT_VAR(&_3);
 	zephir_add_function(&_3, &_1, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_1);
 	mul_function(&_1, &_0, &_3);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_0);
 	zephir_div_zval_long(&_0, &_1, 2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_1);
 	zephir_add_function(&_1, &_0, i);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_2);
 	ZVAL_LONG(&_2, 1);
 	ZEPHIR_INIT_NVAR(&_0);
 	zephir_add_function(&_0, &_1, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_div_long_zval(return_value, 1, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -136,6 +168,10 @@ PHP_METHOD(Stub_SpectralNorm, Au)
 					zephir_check_call_status();
 					ZEPHIR_INIT_NVAR(&_12$$4);
 					mul_function(&_12$$4, &_6$$4, &_10$$4);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					t += zephir_get_numberval(&_12$$4);
 				}
 			}
@@ -212,6 +248,10 @@ PHP_METHOD(Stub_SpectralNorm, Atu)
 					zephir_check_call_status();
 					ZEPHIR_INIT_NVAR(&_12$$4);
 					mul_function(&_12$$4, &_6$$4, &_10$$4);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					t += zephir_get_numberval(&_12$$4);
 				}
 			}
@@ -368,6 +408,10 @@ PHP_METHOD(Stub_SpectralNorm, process)
 			zephir_check_call_status();
 			ZEPHIR_INIT_NVAR(&_19$$5);
 			mul_function(&_19$$5, &_15$$5, &_18$$5);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			vBv += zephir_get_numberval(&_19$$5);
 			ZVAL_LONG(&_16$$5, i);
 			ZEPHIR_CALL_METHOD(&_15$$5, &v, "offsetGet", &_17, 123, &_16$$5);
@@ -377,11 +421,19 @@ PHP_METHOD(Stub_SpectralNorm, process)
 			zephir_check_call_status();
 			ZEPHIR_INIT_NVAR(&_20$$5);
 			mul_function(&_20$$5, &_15$$5, &_18$$5);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			vv += zephir_get_numberval(&_20$$5);
 		}
 	}
 	ZEPHIR_INIT_VAR(&_21);
 	zephir_div_long_long(&_21, vBv, vv);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM_DOUBLE(zephir_sqrt(&_21));
 }
 

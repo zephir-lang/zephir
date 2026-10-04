@@ -66,7 +66,7 @@ jobs:
           # Linux
           - { name: ubuntu-gcc, os: ubuntu-24.04, compiler: gcc }
           # macOS
-          - { name: macos-clang, os: macos-14, compiler: clang }
+          - { name: macos-clang, os: macos-15, compiler: clang }
           # Windows
           - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
           - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }

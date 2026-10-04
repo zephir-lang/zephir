@@ -16,6 +16,7 @@
 #include "kernel/object.h"
 #include "kernel/array.h"
 #include "kernel/operators.h"
+#include "kernel/main.h"
 #include "kernel/string.h"
 #include "kernel/fcall.h"
 
@@ -833,6 +834,10 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess6)
 	zephir_array_fetch_string(&_1, &a, SL("b"), PH_NOISY | PH_READONLY, "stub/nativearray.zep", 300);
 	ZEPHIR_INIT_VAR(&b);
 	zephir_add_function(&b, &_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&b);
 }
 
@@ -1519,6 +1524,11 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate13)
 	add_assoc_long_ex(&b, SL("a"), 1);
 	add_assoc_long_ex(&b, SL("b"), 2);
 	zephir_array_update_string(&b, SL("c"), &d, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(Z_TYPE_P(&b) != IS_ARRAY)) {
+		zephir_throw_variable_type_error(&b, "c", "array");
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&c, &b);
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 2, 0);

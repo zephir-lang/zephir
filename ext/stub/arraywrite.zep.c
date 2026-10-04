@@ -360,6 +360,10 @@ PHP_METHOD(Stub_ArrayWrite, concatDeep)
 	zephir_fetch_params(1, 5, 0, &a, &i, &j, &k, &v);
 	ZEPHIR_SEPARATE_PARAM(a);
 	zephir_array_assign_op(a, v, concat_function, SL("zzz"), 3, i, j, k);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETVAL_ZVAL(a, 1, 0);
 	RETURN_MM();
 }

@@ -61,6 +61,10 @@ PHP_METHOD(Stub_Traits_Counter, increment)
 	ZVAL_LONG(&_1, 2);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_add_function(&_2, &_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 147, &_2);
 	RETURN_MM_MEMBER_TYPED(getThis(), "count", IS_LONG);
 }
@@ -98,6 +102,10 @@ PHP_METHOD(Stub_Traits_Counter, tagged)
 	ZEPHIR_CALL_FUNCTION(&_2, "strval", NULL, 63, &_1);
 	zephir_check_call_status();
 	ZEPHIR_CONCAT_VSV(return_value, &_0, ":", &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

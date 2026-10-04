@@ -1184,8 +1184,11 @@ class Method
         $compilationContext->insideCycle     = 0;
         $compilationContext->switchTargets   = [];
         $compilationContext->switchLabelId   = 0;
+        $compilationContext->doWhileTargets  = [];
+        $compilationContext->doWhileLabelId  = 0;
         $compilationContext->insideTryCatch  = 0;
         $compilationContext->currentTryCatch = 0;
+        $compilationContext->tryCatchLabelId = 0;
 
         /**
          * Reset per-method isset() interned-string cache.

@@ -1,0 +1,87 @@
+--TEST--
+`a ?: b` evaluates `a` exactly once, as in PHP
+--FILE--
+namespace Stub;
+
+class ShortTernaryOnce
+{
+    public static function val(var v)
+    {
+        echo "val ";
+
+        return v;
+    }
+
+    public static function pick(var v)
+    {
+        return self::val(v) ?: "fallback";
+    }
+
+    public static function assignPick(var v)
+    {
+        var r;
+
+        let r = self::val(v) ?: "fallback";
+
+        return r;
+    }
+
+    public static function keepSelf(var b)
+    {
+        var a = "old";
+
+        let a = b ?: a;
+
+        return a;
+    }
+
+    public static function inExpression(var v)
+    {
+        return (self::val(v) ?: 5) + 1;
+    }
+
+    public static function chained(var x, var y)
+    {
+        return self::val(x) ?: self::val(y) ?: "last";
+    }
+}
+--USAGE--
+use Stub\ShortTernaryOnce;
+
+class PhpShortTernaryOnce
+{
+    public static function val($v) { echo 'val '; return $v; }
+    public static function pick($v) { return self::val($v) ?: 'fallback'; }
+    public static function assignPick($v) { $r = self::val($v) ?: 'fallback'; return $r; }
+    public static function keepSelf($b) { $a = 'old'; $a = $b ?: $a; return $a; }
+    public static function inExpression($v) { return (self::val($v) ?: 5) + 1; }
+    public static function chained($x, $y) { return self::val($x) ?: self::val($y) ?: 'last'; }
+}
+
+foreach ([
+    ['pick', ['x']], ['pick', [0]],
+    ['assignPick', ['x']], ['assignPick', ['']],
+    ['keepSelf', ['new']], ['keepSelf', [null]],
+    ['inExpression', [2]], ['inExpression', [0]],
+    ['chained', [0, 'y']], ['chained', [0, 0]], ['chained', ['x', 'y']],
+] as [$method, $args]) {
+    ob_start();
+    $zephirResult = var_export(ShortTernaryOnce::$method(...$args), true);
+    $zephir = ob_get_clean() . $zephirResult;
+    ob_start();
+    $phpResult = var_export(PhpShortTernaryOnce::$method(...$args), true);
+    $php = ob_get_clean() . $phpResult;
+    echo $method, '(', json_encode($args), '): ', $zephir === $php ? 'same' : "DIFF\n  zephir: $zephir\n  php:    $php", "\n";
+}
+--EXPECT--
+pick(["x"]): same
+pick([0]): same
+assignPick(["x"]): same
+assignPick([""]): same
+keepSelf(["new"]): same
+keepSelf([null]): same
+inExpression([2]): same
+inExpression([0]): same
+chained([0,"y"]): same
+chained([0,0]): same
+chained(["x","y"]): same

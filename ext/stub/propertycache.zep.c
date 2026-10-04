@@ -128,7 +128,11 @@ PHP_METHOD(Stub_PropertyCache, incPub)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 5, PH_NOISY_CC);
-	ZEPHIR_ADD_ASSIGN(&_0, &_1)
+	ZEPHIR_ADD_ASSIGN(&_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 5, &_0);
 	RETURN_MM_MEMBER(getThis(), "pub");
 }
@@ -151,6 +155,9 @@ PHP_METHOD(Stub_PropertyCache, sumPubTwice)
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 5, PH_NOISY_CC | PH_READONLY);
 	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 5, PH_NOISY_CC | PH_READONLY);
 	zephir_add_function(return_value, &_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -235,6 +242,10 @@ PHP_METHOD(Stub_PropertyCache, branchedRead)
 	}
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_2, 7, PH_NOISY_CC | PH_READONLY);
 	zephir_add_function(return_value, &out, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -284,6 +295,10 @@ PHP_METHOD(Stub_PropertyCache, readLoop)
 			ZVAL_LONG(&i, _1);
 			zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 5, PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_ADD_ASSIGN(&total, &_3$$3);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CCTOR(&total);
@@ -340,6 +355,10 @@ PHP_METHOD(Stub_PropertyCache, mutateInLoop)
 			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 5, &i);
 			zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 5, PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_ADD_ASSIGN(&total, &_3$$3);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CCTOR(&total);
@@ -393,7 +412,11 @@ PHP_METHOD(Stub_PropertyCache, accumulateInLoop)
 			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _2);
 			zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_0, 5, PH_NOISY_CC);
-			ZEPHIR_ADD_ASSIGN(&_4$$3, &i)
+			ZEPHIR_ADD_ASSIGN(&_4$$3, &i);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 5, &_4$$3);
 		}
 	}

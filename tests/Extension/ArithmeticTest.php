@@ -258,7 +258,19 @@ final class ArithmeticTest extends TestCase
         $this->assertSame($this->class->letStatementVarMinus(-1), 1);
         $this->assertSame($this->class->letStatementVarMinus(true), -true);
         $this->assertSame($this->class->letStatementVarMinus(false), -false);
-        $this->assertSame($this->class->letStatementVarMinus(''), @-(int) '');
+        // `-$x` is `$x * -1`, so a non-numeric string is a TypeError as in PHP.
+        $empty = '';
+        try {
+            $php = -$empty;
+        } catch (\TypeError $e) {
+            $php = $e->getMessage();
+        }
+        try {
+            $zephir = $this->class->letStatementVarMinus($empty);
+        } catch (\TypeError $e) {
+            $zephir = $e->getMessage();
+        }
+        $this->assertSame($php, $zephir);
         $this->assertTrue($this->class->letStatementBoolMinus(-1)); // it is zend_bool not zend_var
         $this->assertTrue($this->class->letStatementBoolMinus(1));
         $this->assertTrue($this->class->letStatementBoolMinus(true));

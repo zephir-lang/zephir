@@ -21,6 +21,8 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
 
+use function sprintf;
+
 class MinusOperator extends AbstractOperator
 {
     /**
@@ -61,12 +63,29 @@ class MinusOperator extends AbstractOperator
                         return new CompiledExpression($variable->getType(), '-' . $variable->getName(), $expression);
 
                     case 'variable':
+                    case 'mixed':
+                        /**
+                         * Written into its own result so the operand is never
+                         * modified; zephir_negate() can throw, as `$x * -1`.
+                         */
                         $compilationContext->headersManager->add('kernel/operators');
-                        $compilationContext->codePrinter->output(
-                            'zephir_negate(' . $compilationContext->backend->getVariableCode($variable) . ');'
+                        $variable = $compilationContext->symbolTable->getVariableForRead(
+                            $left->getCode(),
+                            $compilationContext,
+                            $expression
                         );
+                        $result = $this->getExpected($compilationContext, $expression);
+                        $compilationContext->codePrinter->output(
+                            sprintf(
+                                'zephir_negate(%s, %s);',
+                                $compilationContext->backend->getVariableCode($result),
+                                $compilationContext->backend->getVariableCode($variable)
+                            )
+                        );
+                        $compilationContext->emitExceptionCheck();
+                        $this->checkVariableTemporal($variable);
 
-                        return new CompiledExpression('variable', $variable->getName(), $expression);
+                        return new CompiledExpression('variable', $result->getName(), $expression);
 
                     default:
                         throw new CompilerException(

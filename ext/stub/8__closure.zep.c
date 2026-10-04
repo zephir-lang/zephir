@@ -40,6 +40,10 @@ PHP_METHOD(stub_8__closure, __invoke)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_add_function(return_value, &abc, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

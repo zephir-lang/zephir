@@ -201,6 +201,7 @@ class Backend
             . $value
             . ');'
         );
+        $context->emitExceptionCheck();
     }
 
     public function arrayFetch(
@@ -522,6 +523,7 @@ class Backend
                 $offsetItems ? ', ' . implode(', ', $offsetItems) : ''
             )
         );
+        $compilationContext->emitExceptionCheck();
     }
 
     public function assignArrayProperty(Variable $variable, $property, $key, $value, CompilationContext $context): void
@@ -2651,6 +2653,7 @@ class Backend
         $context->codePrinter->output(
             'zephir_sub_static_property_ce(' . $classEntry . ', ZEND_STRL("' . $property . '"), ' . $value . ');'
         );
+        $context->emitExceptionCheck();
     }
 
     /**
@@ -2935,6 +2938,7 @@ class Backend
         $op2      = $this->getVariableCode($variableRight);
 
         $compilationContext->codePrinter->output($zvalOperator . '(' . $expected . ', ' . $op1 . ', ' . $op2 . ');');
+        $compilationContext->emitExceptionCheck();
     }
 
     /**

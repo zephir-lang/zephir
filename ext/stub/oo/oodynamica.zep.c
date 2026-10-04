@@ -45,6 +45,10 @@ PHP_METHOD(Stub_Oo_OoDynamicA, getNew)
 	zephir_get_called_class(&className);
 	ZEPHIR_INIT_VAR(&fullClassName);
 	ZEPHIR_CONCAT_SV(&fullClassName, "\\", &className);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_fetch_safe_class(&_0, &fullClassName);
 	_1 = zephir_fetch_class_str_ex(Z_STRVAL_P(&_0), Z_STRLEN_P(&_0), ZEND_FETCH_CLASS_AUTO);
 	if(!_1) {

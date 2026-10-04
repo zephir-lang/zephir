@@ -493,6 +493,7 @@ class CastOperator extends AbstractOperator
                 $source
             )
         );
+        $compilationContext->emitExceptionCheck();
         $this->checkVariableTemporal($result);
 
         return new CompiledExpression(Types::T_VARIABLE, $result->getName(), $expression);

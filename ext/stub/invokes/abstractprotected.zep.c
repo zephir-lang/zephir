@@ -47,6 +47,10 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, protectedMethod1)
 	ZVAL_STR_COPY(&text_zv, text);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_VS(&_0, &text_zv, "1");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&ret, &_0);
 	RETURN_CCTOR(&ret);
 }
@@ -70,6 +74,10 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, protectedMethod2)
 	ZVAL_STR_COPY(&text_zv, text);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_VS(&_0, &text_zv, "2");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&ret, &_0);
 	RETURN_CCTOR(&ret);
 }
@@ -176,6 +184,10 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex)
 		ZEPHIR_CALL_USER_FUNC_ARRAY(&_4$$3, &_5$$3, &_6$$3);
 		zephir_check_call_status();
 		zephir_concat_self(&result, &_4$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&item);
 	RETURN_CTOR(&result);
