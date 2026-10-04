@@ -25,6 +25,7 @@ use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
 use function in_array;
+use function is_numeric;
 use function sprintf;
 
 /**
@@ -985,6 +986,37 @@ class ArithmeticalBaseOperator extends AbstractOperator
     }
 
     /**
+     * A native `zephir_safe_div_*`/`zephir_safe_mod_*` result. Those throw
+     * DivisionByZeroError for a zero divisor, so the result goes through a
+     * temporary and the throw stops the method there, as in PHP. It stays
+     * inline when the divisor is a non-zero literal, or when it is returned
+     * straight away and nothing runs after it anyway.
+     */
+    protected function nativeResult(
+        string $type,
+        string $helper,
+        array $left,
+        array $right,
+        array $expression,
+        CompilationContext $compilationContext
+    ): CompiledExpression {
+        $call = $helper . '(' . $left['code'] . ', ' . $right['code'] . ')';
+        $isReturned = $this->expecting && 'return_value' === $this->expectingVariable?->getName();
+        if ($isReturned || (is_numeric($right['code']) && 0.0 !== (float) $right['code'])) {
+            return new CompiledExpression($type, $call, $expression);
+        }
+
+        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+            'int' === $type ? 'long' : 'double',
+            $compilationContext
+        );
+        $compilationContext->codePrinter->output($tempVariable->getName() . ' = ' . $call . ';');
+        $compilationContext->emitExceptionCheck();
+
+        return new CompiledExpression($type, $tempVariable->getName(), $expression);
+    }
+
+    /**
      * Writes the result of a zval-producing helper into the expected variable.
      *
      * @throws CompilerException
@@ -1003,6 +1035,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
         $compilationContext->codePrinter->output(
             $helper . '(' . $expectedCode . ', ' . $left['code'] . ', ' . $right['code'] . ');'
         );
+        $compilationContext->emitExceptionCheck();
 
         foreach ([$left['variable'], $right['variable']] as $operandVariable) {
             if (null !== $operandVariable) {

@@ -145,6 +145,10 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex2)
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_LONG(&_2, 5);
 	zephir_add_function(return_value, &_2, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -247,11 +251,10 @@ PHP_METHOD(Stub_Ternary, testShortTernary)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a);
 	ZEPHIR_INIT_VAR(&_0);
-	if (!(zephir_is_true(a))) {
+	ZEPHIR_CPY_WRT(&_0, a);
+	if (!(zephir_is_true(&_0))) {
 		ZEPHIR_INIT_NVAR(&_0);
 		ZVAL_BOOL(&_0, 0);
-	} else {
-		ZEPHIR_CPY_WRT(&_0, a);
 	}
 	RETURN_CCTOR(&_0);
 }
@@ -272,10 +275,9 @@ PHP_METHOD(Stub_Ternary, testShortTernaryComplex)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &left, &value);
 	ZEPHIR_INIT_VAR(&_0);
-	if (!(zephir_is_true(left))) {
+	ZEPHIR_CPY_WRT(&_0, left);
+	if (!(zephir_is_true(&_0))) {
 		ZEPHIR_CPY_WRT(&_0, value);
-	} else {
-		ZEPHIR_CPY_WRT(&_0, left);
 	}
 	RETURN_CCTOR(&_0);
 }

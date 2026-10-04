@@ -292,6 +292,10 @@ PHP_METHOD(Stub_Oo, createInstancesInLoop)
 		ZVAL_COPY(&className, _2);
 		ZEPHIR_INIT_NVAR(&fqcn);
 		ZEPHIR_CONCAT_SV(&fqcn, "Stub\\Oo\\", &className);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_NVAR(&instance);
 		zephir_fetch_safe_class(&_3$$3, &fqcn);
 		_4$$3 = zephir_fetch_class_str_ex(Z_STRVAL_P(&_3$$3), Z_STRLEN_P(&_3$$3), ZEND_FETCH_CLASS_AUTO);

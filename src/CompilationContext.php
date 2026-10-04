@@ -73,9 +73,16 @@ class CompilationContext
      */
     public ?Method $currentMethod = null;
     /**
-     * Global consecutive for try/catch blocks.
+     * Label id of the innermost `try` enclosing the current position, whose
+     * `try_end_N` a pending exception jumps to. Restored when a `try` ends.
      */
     public int $currentTryCatch = 0;
+    /**
+     * Counter handing out unique `try` label ids within one function.
+     *
+     * Reset on entry to each method by Method::compile().
+     */
+    public int $tryCatchLabelId = 0;
     /**
      * Current cycle/loop block.
      */
@@ -117,6 +124,23 @@ class CompilationContext
      * Reset on entry to each method by Method::compile().
      */
     public int $switchLabelId = 0;
+    /**
+     * Stack of do-while loops being compiled, innermost last.
+     *
+     * A do-while condition is evaluated by code printed at the end of the
+     * body, so a `continue` must jump to a label in front of that code rather
+     * than emit a C `continue`, which goes straight to the test. Entries have
+     * the same shape as `$switchTargets`.
+     *
+     * @var list<array{label: string, cycleDepth: int, used: bool}>
+     */
+    public array $doWhileTargets = [];
+    /**
+     * Counter handing out unique do-while label ids within one function.
+     *
+     * Reset on entry to each method by Method::compile().
+     */
+    public int $doWhileLabelId = 0;
     /**
      * Tells if the compilation is being made inside a try/catch block.
      */
@@ -242,6 +266,105 @@ class CompilationContext
         $this->switchTargets[$last]['used'] = true;
 
         return $this->switchTargets[$last]['label'];
+    }
+
+    /**
+     * C lines that leave the current position with the pending exception:
+     * a jump to the innermost enclosing `try`, or out of the function. The
+     * restore and the return stay on separate lines so that a function
+     * without a memory frame drops the restore; see
+     * Method::removeMemoryStackReferences().
+     *
+     * A property initializer returns `zend_object *` and only evaluates
+     * folded constants, which cannot throw, so it gets no exit.
+     *
+     * @return list<string>
+     */
+    public function exceptionExitLines(): array
+    {
+        if ($this->insideTryCatch) {
+            return ['goto try_end_' . $this->currentTryCatch . ';'];
+        }
+
+        if ($this->currentMethod instanceof Method && $this->currentMethod->isInitializer() && !$this->currentMethod->isStatic()) {
+            return [];
+        }
+
+        return ['ZEPHIR_MM_RESTORE();', 'return;'];
+    }
+
+    /**
+     * Leaves the current position with the pending exception, as a `throw`
+     * does.
+     */
+    public function emitExceptionExit(?Printer $printer = null): void
+    {
+        $printer ??= $this->codePrinter;
+        foreach ($this->exceptionExitLines() as $line) {
+            $printer->output($line);
+        }
+    }
+
+    /**
+     * Stops at an operation that left an exception pending, as PHP does.
+     */
+    public function emitExceptionCheck(?Printer $printer = null): void
+    {
+        $lines = $this->exceptionExitLines();
+        if ([] === $lines) {
+            return;
+        }
+
+        $printer ??= $this->codePrinter;
+        $printer->output('if (UNEXPECTED(EG(exception))) {');
+        $printer->increaseLevel();
+        foreach ($lines as $line) {
+            $printer->output($line);
+        }
+        $printer->decreaseLevel();
+        $printer->output('}');
+    }
+
+    /**
+     * Registers a do-while as the innermost `continue` target. Call it after
+     * entering the loop's cycle.
+     */
+    public function pushDoWhileTarget(string $conditionLabel): void
+    {
+        $this->doWhileTargets[] = [
+            'label'      => $conditionLabel,
+            'cycleDepth' => $this->insideCycle,
+            'used'       => false,
+        ];
+    }
+
+    /**
+     * Drops the innermost do-while target and tells whether its condition
+     * label was ever jumped to - an unreferenced C label would warn.
+     */
+    public function popDoWhileTarget(): bool
+    {
+        $target = array_pop($this->doWhileTargets);
+
+        return (bool) ($target['used'] ?? false);
+    }
+
+    /**
+     * Label that a `continue` written at the current position must jump to,
+     * marking it as referenced. NULL when the innermost loop is not a
+     * do-while, so a C `continue` is right.
+     */
+    public function useDoWhileConditionLabel(): ?string
+    {
+        $last = array_key_last($this->doWhileTargets);
+
+        if (null === $last || $this->doWhileTargets[$last]['cycleDepth'] !== $this->insideCycle) {
+            return null;
+        }
+
+        $this->doWhileTargets[$last]['used'] = true;
+
+        return $this->doWhileTargets[$last]['label'];
     }
 
     /**

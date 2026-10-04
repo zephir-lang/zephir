@@ -84,6 +84,10 @@ PHP_METHOD(Stub_Properties_PropertyArray, appendSome)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &value);
 	zephir_cast_to_string(&_0, value);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_array_append(this_ptr, SL("someArray"), &_0);
 	ZEPHIR_MM_RESTORE();
 }

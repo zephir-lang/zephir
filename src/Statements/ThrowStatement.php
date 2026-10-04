@@ -126,11 +126,8 @@ class ThrowStatement extends StatementAbstract
             'zephir_throw_exception_debug(' . $variableCode . ', "' . $file . '", ' . $line . ');'
         );
 
-        if (!$compilationContext->insideTryCatch) {
-            $codePrinter->output('ZEPHIR_MM_RESTORE();');
-            $codePrinter->output('return;');
-        } else {
-            $codePrinter->output('goto try_end_' . $compilationContext->currentTryCatch . ';');
+        $compilationContext->emitExceptionExit($codePrinter);
+        if ($compilationContext->insideTryCatch) {
             $codePrinter->outputBlankLine();
         }
 

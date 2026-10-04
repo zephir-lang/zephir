@@ -34,6 +34,9 @@ PHP_METHOD(stub_62__closure, __invoke)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &x);
 	mul_function(return_value, x, x);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 

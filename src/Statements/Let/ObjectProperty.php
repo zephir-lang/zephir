@@ -172,8 +172,9 @@ class ObjectProperty
                         $codePrinter->output(
                             $functionName . '(' . $context->backend->getVariableCode(
                                 $tempVariable
-                            ) . ', ' . $context->backend->getVariableCode($resolvedVariable) . ')'
+                            ) . ', ' . $context->backend->getVariableCode($resolvedVariable) . ');'
                         );
+                        $context->emitExceptionCheck($codePrinter);
                         break;
 
                     case 'assign':
@@ -252,8 +253,9 @@ class ObjectProperty
                         $codePrinter->output(
                             $functionName . '(' . $context->backend->getVariableCode(
                                 $tempVariable
-                            ) . ', ' . $context->backend->getVariableCode($resolvedVariable) . ')'
+                            ) . ', ' . $context->backend->getVariableCode($resolvedVariable) . ');'
                         );
+                        $context->emitExceptionCheck($codePrinter);
                         break;
 
                     case 'assign':
@@ -343,11 +345,12 @@ class ObjectProperty
                             $context->backend->assignLong($resolvedVariable, $variableVariable, $context);
                             $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
                             $codePrinter->output(sprintf(
-                                '%s(%s, %s)',
+                                '%s(%s, %s);',
                                 $assignMacro,
                                 $context->backend->getVariableCode($tempVariable),
                                 $context->backend->getVariableCode($resolvedVariable)
                             ));
+                            $context->emitExceptionCheck($codePrinter);
                         } else {
                             $context->backend->assignLong($tempVariable, $variableVariable, $context);
                         }
@@ -363,11 +366,12 @@ class ObjectProperty
                             $context->backend->assignDouble($resolvedVariable, $variableVariable, $context);
                             $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
                             $codePrinter->output(sprintf(
-                                '%s(%s, %s)',
+                                '%s(%s, %s);',
                                 $assignMacro,
                                 $context->backend->getVariableCode($tempVariable),
                                 $context->backend->getVariableCode($resolvedVariable)
                             ));
+                            $context->emitExceptionCheck($codePrinter);
                         } else {
                             $context->backend->assignDouble($tempVariable, $variableVariable, $context);
                         }
@@ -404,11 +408,12 @@ class ObjectProperty
                             $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context);
                             $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
                             $codePrinter->output(sprintf(
-                                '%s(%s, %s)',
+                                '%s(%s, %s);',
                                 $assignMacro,
                                 $context->backend->getVariableCode($tempVariable),
                                 $context->backend->getVariableCode($variableVariable)
                             ));
+                            $context->emitExceptionCheck($codePrinter);
                             $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
                             $tempVariable->setIdle(true);
                         } else {
@@ -447,6 +452,7 @@ class ObjectProperty
             $context,
             $statement
         );
+        $context->emitExceptionCheck($context->codePrinter);
 
         $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
         $tempVariable->setIdle(true);

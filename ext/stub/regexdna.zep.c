@@ -172,6 +172,10 @@ PHP_METHOD(Stub_RegexDNA, process)
 	ZVAL_LONG(&initialLength, zephir_fast_strlen_ev(&contents));
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CONCAT_SVS(&_1, "/", &stuffToRemove, "/mS");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "");
 	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 17, &_1, &_0, &contents);
@@ -195,6 +199,10 @@ PHP_METHOD(Stub_RegexDNA, process)
 		php_printf("%s", " ");
 		ZEPHIR_INIT_NVAR(&_6$$3);
 		ZEPHIR_CONCAT_SVS(&_6$$3, "/", &regex, "/iS");
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_NVAR(&_7$$3);
 		zephir_preg_match(&_7$$3, &_6$$3, &contents, &discard, 1, 0 , 0 );
 		zend_print_zval(&_7$$3, 0);

@@ -136,10 +136,18 @@ PHP_METHOD(Stub_Fannkuch, process)
 			k = zephir_get_intval(&_10$$8);
 			ZEPHIR_INIT_NVAR(&_11$$8);
 			zephir_div_long_long(&_11$$8, ((k + 1)), 2);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			ZEPHIR_INIT_NVAR(&_12$$8);
 			ZVAL_LONG(&_12$$8, 1);
 			ZEPHIR_INIT_NVAR(&_13$$8);
 			zephir_sub_function(&_13$$8, &_11$$8, &_12$$8);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			k2 = zephir_get_intval(&_13$$8);
 			_16$$8 = k2;
 			_15$$8 = 0;
@@ -202,6 +210,10 @@ PHP_METHOD(Stub_Fannkuch, process)
 			ZVAL_LONG(&_21$$13, 1);
 			ZEPHIR_INIT_NVAR(&_22$$13);
 			zephir_sub_function(&_22$$13, &_20$$13, &_21$$13);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			zephir_array_update_long(&count, r, &_22$$13, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 			zephir_array_fetch_long(&_20$$13, &count, r, PH_NOISY | PH_READONLY, "stub/fannkuch.zep", 83);
 			if (ZEPHIR_GT_LONG(&_20$$13, 0)) {

@@ -43,11 +43,23 @@ PHP_METHOD(stub_7__closure, __invoke)
 	ZVAL_LONG(&_0, 100);
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_add_function(&_1, x, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_LONG(&_0, 150);
 	ZEPHIR_INIT_VAR(&_2);
 	mul_function(&_2, x, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_add_function(return_value, &_1, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

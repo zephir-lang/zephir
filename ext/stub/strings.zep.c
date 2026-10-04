@@ -482,6 +482,10 @@ PHP_METHOD(Stub_Strings, strToHex)
 		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 20, &_3$$3);
 		zephir_check_call_status();
 		zephir_concat_self(&ret, &_5$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		i++;
 	}
 	RETURN_CTOR(&ret);
@@ -676,6 +680,10 @@ PHP_METHOD(Stub_Strings, issue2186Child2)
 	if (!(ZEPHIR_IS_EMPTY(&val_zv))) {
 		ZEPHIR_INIT_VAR(&_0$$3);
 		ZEPHIR_CONCAT_VS(&_0$$3, &val_zv, " all ok");
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CPY_WRT(&output, &_0$$3);
 	}
 	RETURN_CCTOR(&output);

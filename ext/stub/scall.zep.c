@@ -58,6 +58,9 @@ PHP_METHOD(Stub_Scall, testMethod4)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
 	zephir_add_function(return_value, a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -73,6 +76,9 @@ PHP_METHOD(Stub_Scall, testMethod5)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
 	zephir_add_function(return_value, a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -88,6 +94,9 @@ PHP_METHOD(Stub_Scall, testMethod6)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
 	zephir_add_function(return_value, a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `<<` and `>>` between two dynamic variables calling kernel functions that were never defined, so the extension failed to load
+- Fixed `<<` and `>>` on integers using C shifts instead of PHP's rules, where a count of 64 or more yields 0 or -1 and a negative count throws `ArithmeticError`, and a negative literal count crashing the compiler
+- Fixed unary minus on a dynamic variable negating the variable itself, hanging on an array or object, and ignoring PHP's warnings, `TypeError` and integer overflow to float
+- Fixed the short ternary `a ?: b` evaluating `a` twice when it is truthy, repeating its side effects
+- Fixed `continue` in a `do`-`while` loop skipping the code that evaluates the condition, so the loop tested a stale or uninitialized value
+- Fixed execution continuing after an operator throws, such as `+`, `/`, `%`, `.`, `++`, bitwise and loose comparisons, instead of stopping as PHP does
+- Fixed a compound assignment on a property or static property writing the value back after the operator threw, and a static property `+=`/`-=` leaking its new value
+- Fixed code after a nested `try` jumping to the inner `catch`, and an exception no `catch` matches being swallowed instead of propagating
+- Fixed assigning a non-array value, including `null`, to an `array` variable storing it instead of throwing PHP's `TypeError` [#2689](https://github.com/zephir-lang/zephir/issues/2689)
+- Fixed assigning a typed non-array variable or a closure to an `array` variable generating invalid C or storing it instead of failing to compile [#2689](https://github.com/zephir-lang/zephir/issues/2689)
 - Fixed `let a[k] += v` and every other compound assignment on an array element, including a property or static property element, overwriting the element instead of applying the operator [#2747](https://github.com/zephir-lang/zephir/issues/2747)
 - Fixed a compound assignment on an appended element such as `let a[] -= v` appending `v` instead of applying the operator to `null` [#2747](https://github.com/zephir-lang/zephir/issues/2747)
 - Fixed bitwise compound assignments such as `let a[k] &= v` on an array element failing to compile [#2747](https://github.com/zephir-lang/zephir/issues/2747)

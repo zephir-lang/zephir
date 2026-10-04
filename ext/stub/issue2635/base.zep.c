@@ -49,6 +49,10 @@ PHP_METHOD(Stub_Issue2635_Base, run)
 	ZEPHIR_CALL_METHOD(&_1, this_ptr, "extra", NULL, 0);
 	zephir_check_call_status();
 	ZEPHIR_CONCAT_VSV(return_value, &_0, "/", &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

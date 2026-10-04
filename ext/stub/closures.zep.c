@@ -645,6 +645,10 @@ PHP_METHOD(Stub_Closures, issue2638StringParamMutatedUse)
 	zephir_get_strval(&name, name_param);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_VS(&_0, &name, "!");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&name, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	object_init_ex(&_1, stub_24__closure_ce);

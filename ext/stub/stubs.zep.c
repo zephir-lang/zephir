@@ -140,6 +140,11 @@ PHP_METHOD(Stub_Stubs, testVariableLength)
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_get_args(&_1);
 	zephir_fast_array_merge(&_0, &data, &_1);
+	if (UNEXPECTED(Z_TYPE_P(&_0) != IS_ARRAY)) {
+		zephir_throw_variable_type_error(&_0, "data", "array");
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&data, &_0);
 	ZEPHIR_MM_RESTORE();
 }

@@ -297,6 +297,10 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 					zephir_read_property_cached(&_23$$12, this_ptr, _zephir_prop_5, 92, PH_NOISY_CC | PH_READONLY);
 					ZEPHIR_INIT_VAR(&_24$$12);
 					ZEPHIR_CONCAT_SVS(&_24$$12, "Installed GD does not support ", &_23$$12, " images");
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_CALL_METHOD(NULL, &_21$$12, "__construct", NULL, 0, &_24$$12);
 					zephir_check_call_status();
 				}
@@ -341,6 +345,10 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 				zephir_read_property_cached(&_33$$14, this_ptr, _zephir_prop_0, 87, PH_NOISY_CC | PH_READONLY);
 				ZEPHIR_INIT_VAR(&_34$$14);
 				ZEPHIR_CONCAT_SV(&_34$$14, "Failed to create image from file ", &_33$$14);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				ZEPHIR_CALL_METHOD(NULL, &_31$$14, "__construct", NULL, 0, &_34$$14);
 				zephir_check_call_status();
 			}
@@ -464,6 +472,10 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 		if (zephir_has_constructor(&_7$$5)) {
 			ZEPHIR_INIT_VAR(&_9$$5);
 			ZEPHIR_CONCAT_SV(&_9$$5, "Requires GD version '2.0.1' or greater, you have ", &version);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			ZEPHIR_CALL_METHOD(NULL, &_7$$5, "__construct", NULL, 0, &_9$$5);
 			zephir_check_call_status();
 		}

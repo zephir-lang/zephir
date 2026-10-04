@@ -404,6 +404,7 @@ class StaticPropertySub
             $compilationContext,
             $statement
         );
+        $compilationContext->emitExceptionCheck();
 
         $method = $this->methodName;
         $compilationContext->backend->$method($classEntry, $property, $tempVariable, $compilationContext);

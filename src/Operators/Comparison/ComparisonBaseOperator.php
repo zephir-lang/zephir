@@ -31,6 +31,12 @@ class ComparisonBaseOperator extends AbstractOperator
     protected bool $commutative = false;
 
     /**
+     * Whether comparing two zvals can throw. A strict comparison never runs
+     * user code; a loose one can call `__toString()`.
+     */
+    protected bool $zvalComparisonCanThrow = true;
+
+    /**
      * Compile the expression.
      *
      * @param array              $expression
@@ -355,11 +361,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $variableRight = $compilationContext->backend->getVariableCode($variableRight);
 
-                                return new CompiledExpression(
-                                    'bool',
-                                    $this->zvalOperator . '(' . $variableLeftCode . ', ' . $variableRight . ')',
-                                    $expression
-                                );
+                                return $this->zvalComparison($variableLeftCode, $variableRight, $expression, $compilationContext);
 
 
                             default:
@@ -643,11 +645,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight);
 
-                                        return new CompiledExpression(
-                                            'bool',
-                                            $this->zvalOperator . '(' . $variableCode . ', ' . $variableRight . ')',
-                                            $expression
-                                        );
+                                        return $this->zvalComparison($variableCode, $variableRight, $expression, $compilationContext);
 
                                     default:
                                         throw new CompilerException(
@@ -693,11 +691,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                     case 'mixed':
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight);
 
-                                        return new CompiledExpression(
-                                            'bool',
-                                            $this->zvalOperator . '(' . $variableCode . ', ' . $variableRight . ')',
-                                            $expression
-                                        );
+                                        return $this->zvalComparison($variableCode, $variableRight, $expression, $compilationContext);
 
                                     default:
                                         throw new CompilerException(
@@ -802,11 +796,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                     case 'array':
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight);
 
-                                        return new CompiledExpression(
-                                            'bool',
-                                            $this->zvalOperator . '(' . $variableCode . ', ' . $variableRight . ')',
-                                            $expression
-                                        );
+                                        return $this->zvalComparison($variableCode, $variableRight, $expression, $compilationContext);
 
                                     default:
                                         throw new CompilerException(
@@ -934,5 +924,28 @@ class ComparisonBaseOperator extends AbstractOperator
         }
 
         return new CompiledExpression('bool', $condition, $expr);
+    }
+
+    /**
+     * A loose comparison of two zvals can run user code, such as a throwing
+     * `__toString()`, so its result goes through a temporary and the throw
+     * stops the method there, as in PHP.
+     */
+    protected function zvalComparison(
+        string $leftCode,
+        string $rightCode,
+        array $expression,
+        CompilationContext $compilationContext
+    ): CompiledExpression {
+        $call = $this->zvalOperator . '(' . $leftCode . ', ' . $rightCode . ')';
+        if (!$this->zvalComparisonCanThrow) {
+            return new CompiledExpression('bool', $call, $expression);
+        }
+
+        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('bool', $compilationContext);
+        $compilationContext->codePrinter->output($tempVariable->getName() . ' = ' . $call . ';');
+        $compilationContext->emitExceptionCheck();
+
+        return new CompiledExpression('bool', $tempVariable->getName(), $expression);
     }
 }

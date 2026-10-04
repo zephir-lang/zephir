@@ -124,6 +124,9 @@ PHP_METHOD(Stub_TryTest, testTry3)
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&_3, &_2);
 			RETURN_MM_STRING("error");
+		} else {
+			ZEPHIR_MM_RESTORE();
+			return;
 		}
 	}
 	RETURN_MM_BOOL(0);
@@ -190,6 +193,9 @@ PHP_METHOD(Stub_TryTest, testTry4)
 				zend_clear_exception();
 				ZEPHIR_CPY_WRT(&_6, &_4);
 				RETURN_MM_STRING("error");
+			} else {
+				ZEPHIR_MM_RESTORE();
+				return;
 			}
 		}
 	}
@@ -255,6 +261,9 @@ PHP_METHOD(Stub_TryTest, testTry5)
 				zend_clear_exception();
 				ZEPHIR_CPY_WRT(&_5, &_4);
 				RETURN_MM_STRING("any error");
+			} else {
+				ZEPHIR_MM_RESTORE();
+				return;
 			}
 		}
 	}
@@ -319,6 +328,9 @@ PHP_METHOD(Stub_TryTest, testTry6)
 				zend_clear_exception();
 				ZEPHIR_CPY_WRT(&e, &_4);
 				RETURN_MM_STRING("error");
+			} else {
+				ZEPHIR_MM_RESTORE();
+				return;
 			}
 		}
 	}
@@ -383,6 +395,9 @@ PHP_METHOD(Stub_TryTest, testTry7)
 				zend_clear_exception();
 				ZEPHIR_CPY_WRT(&e, &_4);
 				RETURN_MM_STRING("any error");
+			} else {
+				ZEPHIR_MM_RESTORE();
+				return;
 			}
 		}
 	}
@@ -456,6 +471,9 @@ PHP_METHOD(Stub_TryTest, testTry9)
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&e, &_0);
 			RETURN_MM_STRING("domain error");
+		} else {
+			ZEPHIR_MM_RESTORE();
+			return;
 		}
 	}
 	RETURN_MM_BOOL(0);
@@ -488,6 +506,9 @@ PHP_METHOD(Stub_TryTest, testTry10)
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&e, &_0);
 			RETURN_MM_STRING("domain error");
+		} else {
+			ZEPHIR_MM_RESTORE();
+			return;
 		}
 	}
 	RETURN_MM_BOOL(0);
@@ -515,6 +536,9 @@ PHP_METHOD(Stub_TryTest, testTry11)
 		if (zephir_is_instance_of(&_0, SL("Exception"))) {
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&ex, &_0);
+		} else {
+			ZEPHIR_MM_RESTORE();
+			return;
 		}
 	}
 	ZEPHIR_MM_RESTORE();

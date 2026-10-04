@@ -77,21 +77,49 @@ PHP_METHOD(Stub_UnreachableLoop, toPropertyString)
 			ZVAL_COPY(&v, _0);
 			if (x) {
 				zephir_concat_self_str(&ret, SL(", "));
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 			}
 			x = 1;
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZEPHIR_CONCAT_VS(&_3$$3, &k, ": ");
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			zephir_concat_self(&ret, &_3$$3);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			if (Z_TYPE_P(&v) == IS_ARRAY) {
 				ZEPHIR_INIT_NVAR(&_4$$5);
 				zephir_fast_join_str(&_4$$5, SL("\", \""), &v);
 				ZEPHIR_INIT_NVAR(&_5$$5);
 				ZEPHIR_CONCAT_SVS(&_5$$5, "[\"", &_4$$5, "\"]");
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				zephir_concat_self(&ret, &_5$$5);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 			} else {
 				ZEPHIR_INIT_NVAR(&_6$$6);
 				ZEPHIR_CONCAT_SVS(&_6$$6, "\"", &v, "\"");
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				zephir_concat_self(&ret, &_6$$6);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 			}
 		} ZEND_HASH_FOREACH_END();
 	} else {
@@ -116,27 +144,59 @@ PHP_METHOD(Stub_UnreachableLoop, toPropertyString)
 			zephir_check_call_status();
 				if (x) {
 					zephir_concat_self_str(&ret, SL(", "));
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 				}
 				x = 1;
 				ZEPHIR_INIT_NVAR(&_9$$7);
 				ZEPHIR_CONCAT_VS(&_9$$7, &k, ": ");
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				zephir_concat_self(&ret, &_9$$7);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				if (Z_TYPE_P(&v) == IS_ARRAY) {
 					ZEPHIR_INIT_NVAR(&_10$$9);
 					zephir_fast_join_str(&_10$$9, SL("\", \""), &v);
 					ZEPHIR_INIT_NVAR(&_11$$9);
 					ZEPHIR_CONCAT_SVS(&_11$$9, "[\"", &_10$$9, "\"]");
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_concat_self(&ret, &_11$$9);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 				} else {
 					ZEPHIR_INIT_NVAR(&_12$$10);
 					ZEPHIR_CONCAT_SVS(&_12$$10, "\"", &v, "\"");
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_concat_self(&ret, &_12$$10);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 				}
 		}
 	}
 	ZEPHIR_INIT_NVAR(&v);
 	ZEPHIR_INIT_NVAR(&k);
 	ZEPHIR_CONCAT_VS(return_value, &ret, "}");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

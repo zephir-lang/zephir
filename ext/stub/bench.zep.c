@@ -482,6 +482,10 @@ PHP_METHOD(Stub_Bench, stringConcatLoop)
 		}
 		ZEPHIR_INIT_NVAR(&_0$$3);
 		ZEPHIR_CONCAT_VV(&_0$$3, &out, &base_zv);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CPY_WRT(&out, &_0$$3);
 		i++;
 	}
@@ -1261,6 +1265,10 @@ PHP_METHOD(Stub_Bench, addAssignUnionLiteral)
 			add_assoc_long_ex(&_4$$3, SL("k1"), 1);
 			add_assoc_long_ex(&_4$$3, SL("k2"), 2);
 			zephir_add_function(&a, &a, &_4$$3);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	ZEPHIR_MM_RESTORE();
@@ -1335,6 +1343,10 @@ PHP_METHOD(Stub_Bench, addAssignUnionVar)
 			ZVAL_LONG(&_4$$3, 5);
 			zephir_array_fast_append(&a, &_4$$3);
 			ZEPHIR_ADD_ASSIGN(&a, &b);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	ZEPHIR_MM_RESTORE();
@@ -1385,6 +1397,10 @@ PHP_METHOD(Stub_Bench, addAssignAccumulate)
 			ZVAL_LONG(&_3$$3, i);
 			zephir_array_update_long(&b, i, &_3$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 			ZEPHIR_ADD_ASSIGN(&a, &b);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CCTOR(&a);

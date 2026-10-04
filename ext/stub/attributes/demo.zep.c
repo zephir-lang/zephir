@@ -123,6 +123,10 @@ PHP_METHOD(Stub_Attributes_Demo, getValue)
 	ZVAL_STR_COPY(&token_zv, token);
 	}
 	ZEPHIR_CONCAT_VV(return_value, &name_zv, &token_zv);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

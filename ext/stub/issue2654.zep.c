@@ -123,8 +123,11 @@ PHP_METHOD(Stub_Issue2654, negateUnassigned)
 	zval x;
 
 	ZVAL_NULL(&x);
-	zephir_negate(&x);
-	RETURN_CCTORW(&x);
+	zephir_negate(return_value, &x);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	return;
 }
 
 PHP_METHOD(Stub_Issue2654, concatUnassigned)
@@ -133,6 +136,9 @@ PHP_METHOD(Stub_Issue2654, concatUnassigned)
 
 	ZVAL_NULL(&x);
 	ZEPHIR_CONCAT_SV(return_value, "tail", &x);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -192,6 +198,10 @@ PHP_METHOD(Stub_Issue2654, optionalParam)
 	}
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_SV(&_0, "prefix", b);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(b, &_0);
 	RETVAL_ZVAL(b, 1, 0);
 	RETURN_MM();
@@ -247,6 +257,10 @@ PHP_METHOD(Stub_Issue2654, leakProbe)
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -285,12 +299,20 @@ PHP_METHOD(Stub_Issue2654, leakProbeControl)
 		ZVAL_LONG(&_1$$3, i);
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		ZEPHIR_CONCAT_SV(&_2$$3, "retained-", &_1$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		zephir_update_property_array_append(this_ptr, SL("retained"), &_2$$3);
 		i++;
 	}
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

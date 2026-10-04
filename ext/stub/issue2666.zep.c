@@ -63,6 +63,10 @@ PHP_METHOD(Stub_Issue2666, longParamToString)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_long(&retval, number);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -83,6 +87,10 @@ PHP_METHOD(Stub_Issue2666, ulongParamToString)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_long(&retval, number);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -103,6 +111,10 @@ PHP_METHOD(Stub_Issue2666, intParamToString)
 	ZEPHIR_INIT_VAR(&retval);
 	ZVAL_STRING(&retval, "n=");
 	zephir_concat_self_long(&retval, number);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&retval);
 }
 
@@ -351,6 +363,9 @@ PHP_METHOD(Stub_Issue2666, divLongLong)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
 	zephir_div_long_long(return_value, a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -404,6 +419,9 @@ PHP_METHOD(Stub_Issue2666, divVarLong)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
 	zephir_div_zval_long(return_value, a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -417,6 +435,9 @@ PHP_METHOD(Stub_Issue2666, divVarDouble)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 	zephir_div_zval_double(return_value, a, 2.5);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -432,6 +453,9 @@ PHP_METHOD(Stub_Issue2666, divLongVar)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b);
 	zephir_div_long_zval(return_value, a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -447,6 +471,9 @@ PHP_METHOD(Stub_Issue2666, divDoubleVar)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b);
 	zephir_div_double_zval(return_value, a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -513,6 +540,9 @@ PHP_METHOD(Stub_Issue2666, modVarLong)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
 	zephir_mod_zval_long(return_value, a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -526,6 +556,9 @@ PHP_METHOD(Stub_Issue2666, modVarDouble)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 	zephir_mod_zval_double(return_value, a, 2.5);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -541,6 +574,9 @@ PHP_METHOD(Stub_Issue2666, modLongVar)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b);
 	zephir_mod_long_zval(return_value, a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -556,6 +592,9 @@ PHP_METHOD(Stub_Issue2666, modDoubleVar)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b);
 	zephir_mod_double_zval(return_value, a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 

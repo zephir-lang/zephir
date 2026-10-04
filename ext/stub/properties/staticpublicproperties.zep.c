@@ -73,9 +73,15 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub)
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_add_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_sub_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub2)
@@ -91,10 +97,18 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub2)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "2string");
 	zephir_add_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "2string");
 	zephir_sub_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -106,9 +120,15 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub3)
 	ZVAL_UNDEF(&_0);
 	ZVAL_DOUBLE(&_0, 1.0);
 	zephir_add_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	ZVAL_UNDEF(&_0);
 	ZVAL_DOUBLE(&_0, 1.0);
 	zephir_sub_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub4)
@@ -121,9 +141,15 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub4)
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, v);
 	zephir_add_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, v);
 	zephir_sub_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub5)
@@ -138,7 +164,15 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub5)
 	ZEPHIR_INIT_VAR(&v);
 	ZVAL_STRING(&v, "1");
 	zephir_add_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &v);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_sub_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &v);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

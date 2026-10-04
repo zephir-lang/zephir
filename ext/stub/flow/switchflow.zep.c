@@ -188,7 +188,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch11)
 
 PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch12)
 {
-	zend_bool _0, _1, _2;
+	zend_bool _0, _1, _2, _3, _4;
 	zval *var1, var1_sub, *var2, var2_sub;
 
 	ZVAL_UNDEF(&var1_sub);
@@ -200,15 +200,23 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch12)
 	zephir_fetch_params_without_memory_grow(2, 0, &var1, &var2);
 	_0 = 1;
 	_1 = ZEPHIR_GT(var1, var2);
-	if (_1) {
-		_1 = ZEPHIR_GT_LONG(var2, 5);
+	if (UNEXPECTED(EG(exception))) {
+		return;
 	}
-	if (_0 == _1) { goto zephir_switch_0_clause_0; }
-	_2 = ZEPHIR_LT(var1, var2);
+	_2 = _1;
 	if (_2) {
-		_2 = ZEPHIR_LT_LONG(var1, 5);
+		_2 = ZEPHIR_GT_LONG(var2, 5);
 	}
-	if (_0 == _2) { goto zephir_switch_0_clause_1; }
+	if (_0 == _2) { goto zephir_switch_0_clause_0; }
+	_3 = ZEPHIR_LT(var1, var2);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	_4 = _3;
+	if (_4) {
+		_4 = ZEPHIR_LT_LONG(var1, 5);
+	}
+	if (_0 == _4) { goto zephir_switch_0_clause_1; }
 	goto zephir_switch_0_clause_2;
 	zephir_switch_0_clause_0: ;
 		RETURN_LONG(1);
@@ -250,6 +258,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13)
 
 PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14)
 {
+	zend_bool _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *result_type = NULL, result_type_sub, ret, _0;
 
@@ -271,7 +280,12 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14)
 	if (ZEPHIR_IS_LONG(result_type, 1)) { goto zephir_switch_0_clause_0; }
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_GET_CONSTANT(&_0, "MYSQL_ASSOC");
-	if (ZEPHIR_IS_EQUAL(result_type, &_0)) { goto zephir_switch_0_clause_1; }
+	_1 = ZEPHIR_IS_EQUAL(result_type, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	if (_1) { goto zephir_switch_0_clause_1; }
 	if (ZEPHIR_IS_LONG(result_type, 1)) { goto zephir_switch_0_clause_2; }
 	goto zephir_switch_0_clause_3;
 	zephir_switch_0_clause_0: ;
@@ -314,10 +328,22 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch15)
 	goto zephir_switch_0_clause_2;
 	zephir_switch_0_clause_0: ;
 		zephir_concat_self_str(&r, "a", sizeof("a") - 1);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	zephir_switch_0_clause_1: ;
 		zephir_concat_self_str(&r, "b", sizeof("b") - 1);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	zephir_switch_0_clause_2: ;
 		zephir_concat_self_str(&r, "d", sizeof("d") - 1);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 
 	RETURN_CTOR(&r);
 }
@@ -347,11 +373,23 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch16)
 	goto zephir_switch_0_clause_1;
 	zephir_switch_0_clause_0: ;
 		zephir_concat_self_str(&r, "one", sizeof("one") - 1);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		goto zephir_switch_0_end;
 	zephir_switch_0_clause_1: ;
 		zephir_concat_self_str(&r, "def", sizeof("def") - 1);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	zephir_switch_0_clause_2: ;
 		zephir_concat_self_str(&r, "two", sizeof("two") - 1);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	zephir_switch_0_end: ;
 
 	RETURN_CTOR(&r);
@@ -401,7 +439,15 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch17)
 			zephir_switch_0_end: ;
 
 			zephir_cast_to_string(&_3$$3, &i);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			zephir_concat_self(&r, &_3$$3);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CTOR(&r);
@@ -441,10 +487,22 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch18)
 			}
 		}
 		zephir_concat_self_str(&r, "w", sizeof("w") - 1);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_VAR(&_1$$3);
 		ZVAL_LONG(&_1$$3, n);
 		zephir_cast_to_string(&_2$$3, &_1$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		zephir_concat_self(&r, &_2$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	zephir_switch_0_end: ;
 
 	RETURN_CTOR(&r);
@@ -476,8 +534,16 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch19)
 	zephir_switch_0_clause_0: ;
 	zephir_switch_0_clause_1: ;
 		zephir_concat_self_str(&r, "x", sizeof("x") - 1);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	zephir_switch_0_clause_2: ;
 		zephir_concat_self_str(&r, "y", sizeof("y") - 1);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 
 	RETURN_CTOR(&r);
 }

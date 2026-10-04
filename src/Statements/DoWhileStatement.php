@@ -30,8 +30,9 @@ class DoWhileStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext): void
     {
-        $exprRaw     = $this->statement['expr'];
-        $codePrinter = $compilationContext->codePrinter;
+        $exprRaw        = $this->statement['expr'];
+        $codePrinter    = $compilationContext->codePrinter;
+        $conditionLabel = 'do_cond_' . ++$compilationContext->doWhileLabelId;
 
         $codePrinter->output('do {');
 
@@ -39,6 +40,7 @@ class DoWhileStatement extends StatementAbstract
          * Variables are initialized in a different way inside cycle
          */
         ++$compilationContext->insideCycle;
+        $compilationContext->pushDoWhileTarget($conditionLabel);
 
         /**
          * Compile statements in the 'while' block
@@ -48,7 +50,18 @@ class DoWhileStatement extends StatementAbstract
             $st->compile($compilationContext);
         }
 
+        $isContinued = $compilationContext->popDoWhileTarget();
+
         $compilationContext->codePrinter->increaseLevel();
+
+        /**
+         * The condition below may print code before the test; a `continue`
+         * lands here so that code runs on every iteration.
+         */
+        if ($isContinued) {
+            $codePrinter->output($conditionLabel . ': ;');
+        }
+
         $condition = (new EvalExpression())->optimize($exprRaw, $compilationContext);
         $compilationContext->codePrinter->decreaseLevel();
 

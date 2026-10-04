@@ -130,6 +130,10 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLength3)
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_SS(&_0, "hello", "hello");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM_LONG(zephir_fast_strlen_ev(&_0));
 }
 
@@ -164,6 +168,10 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLength5)
 	ZVAL_STR_COPY(&a_zv, a);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_SV(&_0, "hello", &a_zv);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM_LONG(zephir_fast_strlen_ev(&_0));
 }
 

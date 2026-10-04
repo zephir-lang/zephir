@@ -93,6 +93,10 @@ PHP_METHOD(Stub_Cast, testStringCastFromNull)
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_NULL(&a);
 	zephir_cast_to_string(&_0, &a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_0);
 }
 
@@ -1862,26 +1866,50 @@ PHP_METHOD(Stub_Cast, issue1841ToString)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 5);
 	zephir_cast_to_string(&_1, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_1);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_DOUBLE(&_2, 5.0);
 	zephir_cast_to_string(&_3, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_3);
 	ZEPHIR_INIT_VAR(&_4);
 	ZVAL_DOUBLE(&_4, 5.5);
 	zephir_cast_to_string(&_5, &_4);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_5);
 	ZEPHIR_INIT_VAR(&_6);
 	ZVAL_BOOL(&_6, 1);
 	zephir_cast_to_string(&_7, &_6);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_7);
 	ZEPHIR_INIT_VAR(&_8);
 	ZVAL_BOOL(&_8, 0);
 	zephir_cast_to_string(&_9, &_8);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_9);
 	ZEPHIR_INIT_VAR(&_10);
 	ZVAL_NULL(&_10);
 	zephir_cast_to_string(&_11, &_10);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_11);
 	ZEPHIR_INIT_VAR(&_12);
 	ZVAL_STRING(&_12, "abc");
@@ -1892,20 +1920,40 @@ PHP_METHOD(Stub_Cast, issue1841ToString)
 	ZEPHIR_INIT_VAR(&_13);
 	ZVAL_LONG(&_13, i);
 	zephir_cast_to_string(&_14, &_13);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_14);
 	ZEPHIR_INIT_VAR(&_15);
 	ZVAL_LONG(&_15, l);
 	zephir_cast_to_string(&_16, &_15);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_16);
 	ZEPHIR_INIT_VAR(&_17);
 	ZVAL_DOUBLE(&_17, d);
 	zephir_cast_to_string(&_18, &_17);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_18);
 	ZEPHIR_INIT_VAR(&_19);
 	ZVAL_BOOL(&_19, b);
 	zephir_cast_to_string(&_20, &_19);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_20);
 	zephir_cast_to_string(&_21, &s);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_21);
 	ZEPHIR_INIT_VAR(&_22);
 	ZVAL_STRINGL(&_22, &c, 1);
@@ -1913,12 +1961,24 @@ PHP_METHOD(Stub_Cast, issue1841ToString)
 	ZEPHIR_INIT_VAR(&_23);
 	ZVAL_LONG(&_23, ((i + 1)));
 	zephir_cast_to_string(&_24, &_23);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_24);
 	zephir_cast_to_string(&_25, dyn);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_25);
 	ZEPHIR_CALL_METHOD(&_26, this_ptr, "issue1841Helper", NULL, 37);
 	zephir_check_call_status();
 	zephir_cast_to_string(&_27, &_26);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_27);
 	RETURN_MM();
 }
@@ -1962,8 +2022,16 @@ PHP_METHOD(Stub_Cast, issue1841ToStringFromArray)
 	ZVAL_LONG(&_0, 2);
 	zephir_array_fast_append(&_1, &_0);
 	zephir_cast_to_string(&_2, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_2);
 	zephir_cast_to_string(&_3, &arr);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_3);
 	RETURN_MM();
 }
@@ -2309,10 +2377,18 @@ PHP_METHOD(Stub_Cast, issue1841DeclarationInitializers)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, ((a + b)));
 	zephir_cast_to_string(&_1, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&s, &_1);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_LONG(&_2, a);
 	zephir_cast_to_string(&_3, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	n = zephir_get_intval(&_3);
 	u = (zend_ulong) ((a + b));
 	w = (unsigned long) ((a + b));

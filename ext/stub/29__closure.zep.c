@@ -47,6 +47,10 @@ PHP_METHOD(stub_29__closure, __invoke)
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "issue2497Helper", NULL, 0);
 	zephir_check_call_status();
 	ZEPHIR_CONCAT_VSV(return_value, &_0, ":", &name);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

@@ -67,6 +67,10 @@ PHP_METHOD(Stub_ArrayIteratorTest, test)
 			ZEPHIR_INIT_NVAR(&v);
 			ZVAL_COPY(&v, _2);
 			ZEPHIR_CONCAT_VV(return_value, &k, &v);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			RETURN_MM();
 		} ZEND_HASH_FOREACH_END();
 	} else {
@@ -90,6 +94,10 @@ PHP_METHOD(Stub_ArrayIteratorTest, test)
 			ZEPHIR_CALL_METHOD(&v, _0, "current", NULL, 0);
 			zephir_check_call_status();
 				ZEPHIR_CONCAT_VV(return_value, &k, &v);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				RETURN_MM();
 		}
 	}
