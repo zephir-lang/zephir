@@ -59,7 +59,9 @@ final class UnaryMinusTest extends TestCase
             "    public function run()\n    {\n        var x;\n        return -x;\n    }"
         );
 
-        $this->assertMatchesRegularExpression('/zval x;\s*ZVAL_NULL\(&x\);\s*zephir_negate\(return_value, &x\);/', $generated);
+        // Other declarations, such as `this_ptr` on Windows before PHP 8.2, may follow `zval x;`.
+        $this->assertMatchesRegularExpression('/^\s*zval x;/m', $generated);
+        $this->assertMatchesRegularExpression('/ZVAL_NULL\(&x\);\s*zephir_negate\(return_value, &x\);/', $generated);
     }
 
     public function testNativeOperandStaysNative(): void
