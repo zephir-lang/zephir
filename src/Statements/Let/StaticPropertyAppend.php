@@ -57,20 +57,10 @@ class StaticPropertyAppend extends ArrayIndex
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ('parent' == $className) {
-                    $classDefinition = $compilationContext->classDefinition;
-                    $extendsClass    = $classDefinition->getExtendsClass();
-                    if (!$extendsClass) {
-                        throw new CompilerException(
-                            'Cannot assign static property "'
-                            . $property
-                            . '" on parent because class '
-                            . $classDefinition->getCompleteName()
-                            . ' does not extend any class',
-                            $statement
-                        );
-                    } else {
-                        $classDefinition = $classDefinition->getExtendsClassDefinition();
-                    }
+                    $classDefinition = $compilationContext->parentClassDefinition(
+                        'assign static property "' . $property . '"',
+                        $statement
+                    );
                 }
             }
         }

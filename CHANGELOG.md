@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `parent::` method calls, constants and static properties crashing the compiler when the parent class cannot be located instead of reporting a compile error [#2714](https://github.com/zephir-lang/zephir/issues/2714)
+- Fixed a class with an array property crashing the compiler when its parent class cannot be located [#2714](https://github.com/zephir-lang/zephir/issues/2714)
+- Fixed `let parent::x = v` and its compound forms always failing to compile with "does not extend any class" [#2714](https://github.com/zephir-lang/zephir/issues/2714)
+- Fixed `new parent()`, `instanceof parent` and `instanceof self` resolving to a class named `parent` or `self` in the current namespace [#2714](https://github.com/zephir-lang/zephir/issues/2714)
 - Fixed `<<` and `>>` between two dynamic variables calling kernel functions that were never defined, so the extension failed to load
 - Fixed `<<` and `>>` on integers using C shifts instead of PHP's rules, where a count of 64 or more yields 0 or -1 and a negative count throws `ArithmeticError`, and a negative literal count crashing the compiler
 - Fixed unary minus on a dynamic variable negating the variable itself, hanging on an array or object, and ignoring PHP's warnings, `TypeError` and integer overflow to float
@@ -36,6 +40,12 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `isset`, `empty()` and `fetch` on an object without `ArrayAccess` answering `false` instead of asking the object's own handler, as for a `SimpleXMLElement` attribute
 - Fixed `empty(a[k])` written with parentheses reading the offset noisily instead of using PHP's silent `empty()` handler
 - Fixed writing an offset through an array element that is a reference to a typed property turning it into an array instead of throwing when the type does not allow one
+
+### Added
+- Added `instanceof static`, which tests against the called class as PHP does [#2714](https://github.com/zephir-lang/zephir/issues/2714)
+
+### Changed
+- Raised the minimum `ext-zephir_parser` to 2.9.0 for the `instanceof static` grammar [#2714](https://github.com/zephir-lang/zephir/issues/2714)
 
 ## [1.6.1] - 2026-10-02
 

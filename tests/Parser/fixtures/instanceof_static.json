@@ -1,0 +1,252 @@
+[
+    {
+        "type": "namespace",
+        "name": "Fixture",
+        "file": "instanceof_static.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "InstanceofStatic",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "check",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "instanceof_static.zep",
+                            "line": 5,
+                            "char": 29
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "instanceof_static.zep",
+                            "line": 5,
+                            "char": 36
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "instanceof",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "instanceof_static.zep",
+                                    "line": 7,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "static",
+                                    "file": "instanceof_static.zep",
+                                    "line": 7,
+                                    "char": 26
+                                },
+                                "file": "instanceof_static.zep",
+                                "line": 7,
+                                "char": 26
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "not",
+                                        "left": {
+                                            "type": "instanceof",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "a",
+                                                "file": "instanceof_static.zep",
+                                                "line": 8,
+                                                "char": 23
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "static",
+                                                "file": "instanceof_static.zep",
+                                                "line": 8,
+                                                "char": 31
+                                            },
+                                            "file": "instanceof_static.zep",
+                                            "line": 8,
+                                            "char": 31
+                                        },
+                                        "file": "instanceof_static.zep",
+                                        "line": 8,
+                                        "char": 31
+                                    },
+                                    "file": "instanceof_static.zep",
+                                    "line": 9,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "instanceof_static.zep",
+                            "line": 11,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "b",
+                                    "expr": {
+                                        "type": "and",
+                                        "left": {
+                                            "type": "instanceof",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "a",
+                                                "file": "instanceof_static.zep",
+                                                "line": 11,
+                                                "char": 22
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "static",
+                                                "file": "instanceof_static.zep",
+                                                "line": 11,
+                                                "char": 32
+                                            },
+                                            "file": "instanceof_static.zep",
+                                            "line": 11,
+                                            "char": 32
+                                        },
+                                        "right": {
+                                            "type": "instanceof",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "b",
+                                                "file": "instanceof_static.zep",
+                                                "line": 11,
+                                                "char": 45
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "self",
+                                                "file": "instanceof_static.zep",
+                                                "line": 11,
+                                                "char": 51
+                                            },
+                                            "file": "instanceof_static.zep",
+                                            "line": 11,
+                                            "char": 51
+                                        },
+                                        "file": "instanceof_static.zep",
+                                        "line": 11,
+                                        "char": 51
+                                    },
+                                    "file": "instanceof_static.zep",
+                                    "line": 11,
+                                    "char": 51
+                                }
+                            ],
+                            "file": "instanceof_static.zep",
+                            "line": 13,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "or",
+                                "left": {
+                                    "type": "instanceof",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "instanceof_static.zep",
+                                        "line": 13,
+                                        "char": 21
+                                    },
+                                    "right": {
+                                        "type": "static-constant-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "static",
+                                            "file": "instanceof_static.zep",
+                                            "line": 13,
+                                            "char": 38
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "class",
+                                            "file": "instanceof_static.zep",
+                                            "line": 13,
+                                            "char": 38
+                                        },
+                                        "file": "instanceof_static.zep",
+                                        "line": 13,
+                                        "char": 38
+                                    },
+                                    "file": "instanceof_static.zep",
+                                    "line": 13,
+                                    "char": 38
+                                },
+                                "right": {
+                                    "type": "instanceof",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "instanceof_static.zep",
+                                        "line": 13,
+                                        "char": 51
+                                    },
+                                    "right": {
+                                        "type": "scall",
+                                        "dynamic-class": 0,
+                                        "class": "static",
+                                        "dynamic": 0,
+                                        "name": "name",
+                                        "file": "instanceof_static.zep",
+                                        "line": 13,
+                                        "char": 67
+                                    },
+                                    "file": "instanceof_static.zep",
+                                    "line": 13,
+                                    "char": 67
+                                },
+                                "file": "instanceof_static.zep",
+                                "line": 13,
+                                "char": 67
+                            },
+                            "file": "instanceof_static.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "file": "instanceof_static.zep",
+                    "line": 5,
+                    "last-line": 15,
+                    "char": 16
+                }
+            ],
+            "file": "instanceof_static.zep",
+            "line": 13,
+            "char": 35
+        },
+        "file": "instanceof_static.zep",
+        "line": 13,
+        "char": 35
+    }
+]

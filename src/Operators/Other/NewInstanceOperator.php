@@ -77,6 +77,8 @@ class NewInstanceOperator extends AbstractOperator
         if ('self' == $expression['class'] || 'static' == $expression['class']) {
             $className = $compilationContext->classDefinition->getCompleteName();
             $isLateStaticBinding = 'static' == $expression['class'];
+        } elseif ('parent' === $expression['class'] && !$expression['dynamic']) {
+            $className = $compilationContext->parentClassName($expression);
         } else {
             $className = $expression['class'];
             $dynamic   = $expression['dynamic'];
@@ -129,21 +131,9 @@ class NewInstanceOperator extends AbstractOperator
                  * is still recorded for type inference because all LSB
                  * classes are subclasses of it — see
                  * https://github.com/zephir-lang/zephir/issues/2324.
-                 *
-                 * zend_get_called_scope() resolves through the call frame's
-                 * $this, which in a capturing closure is the capture carrier,
-                 * not the enclosing object; the rebound `this_ptr` local is —
-                 * see https://github.com/zephir-lang/zephir/issues/2652.
                  */
-                $lateStaticEntry = 'zend_get_called_scope(execute_data)';
-                if (true === $compilationContext->currentMethod?->hasCaptures()) {
-                    $lateStaticEntry = 'Z_OBJCE_P(' . $compilationContext->backend->getVariableCode(
-                        $compilationContext->symbolTable->getVariable('this')
-                    ) . ')';
-                }
-
                 $classEntry = $isLateStaticBinding
-                    ? $lateStaticEntry
+                    ? $compilationContext->lateStaticClassEntry()
                     : $classDefinition->getClassEntry($compilationContext);
 
                 $compilationContext->backend->initObject(
@@ -225,7 +215,8 @@ class NewInstanceOperator extends AbstractOperator
                             throw new CompilerException('Traits cannot be instantiated', $expression);
                         }
 
-                        $classEntry = (new Entry($expression['class'], $compilationContext))->get();
+                        $entryName  = 'parent' === $expression['class'] ? $className : $expression['class'];
+                        $classEntry = (new Entry($entryName, $compilationContext))->get();
                         $symbolVariable->setAssociatedClass($reflectionClass);
                     }
 

@@ -2390,7 +2390,9 @@ final class PhpParser
                     break;
                 }
                 $this->advance();
-                $right = $this->parseExpr($rightAssoc ? $bp - 1 : $bp);
+                $right = $this->isInstanceOfStatic($type)
+                    ? $this->parseInstanceOfStaticOperand()
+                    : $this->parseExpr($rightAssoc ? $bp - 1 : $bp);
                 $left  = $this->expr($name, $left, $right, null);
             }
 
@@ -2398,6 +2400,35 @@ final class PhpParser
         } finally {
             --$this->exprDepth;
         }
+    }
+
+    /**
+     * `a instanceof static` (#2714). STATIC is a reserved keyword, not an
+     * expression, so the grammar has a dedicated `xx_common_expr INSTANCEOF
+     * STATIC` rule; `a instanceof static::m()` still parses as an expression.
+     */
+    private function isInstanceOfStatic(int $operator): bool
+    {
+        return TokenType::T_INSTANCEOF === $operator
+            && $this->check(TokenType::T_STATIC)
+            && TokenType::T_DOUBLECOLON !== $this->laType(1);
+    }
+
+    /**
+     * The rule's reduce action builds a variable named "static", stamped at
+     * the lookahead after the keyword, the shape `instanceof self` has.
+     */
+    private function parseInstanceOfStaticOperand(): array
+    {
+        $this->expect(TokenType::T_STATIC);
+
+        return [
+            'type'  => 'variable',
+            'value' => 'static',
+            'file'  => $this->file,
+            'line'  => $this->line(),
+            'char'  => $this->char(),
+        ];
     }
 
     private function parseClosureArrow(array $left): array

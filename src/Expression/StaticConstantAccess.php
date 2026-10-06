@@ -16,6 +16,7 @@ namespace Zephir\Expression;
 use ReflectionException;
 use Zephir\Class\Constant;
 use Zephir\Class\Definition\AbstractDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -50,6 +51,20 @@ class StaticConstantAccess
 
         if (!in_array($className, ['this', 'self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
+        }
+
+        /**
+         * A parent only known at runtime still has a known name, which is all
+         * `parent::class` needs. See #2714.
+         */
+        $parentName = $compilationContext->classDefinition?->getExtendsClass();
+        if (
+            'class' === $constant
+            && 'parent' === $className
+            && $parentName
+            && !$compilationContext->classDefinition->getExtendsClassDefinition() instanceof Definition
+        ) {
+            return new CompiledExpression('string', Name::addSlashes($parentName), $expression);
         }
 
         $classDefinition = $this->resolveClassDefinition($className, $expression, $compilationContext);
@@ -315,8 +330,7 @@ class StaticConstantAccess
         }
 
         if ('parent' === $className) {
-            return null !== $compilationContext->classDefinition
-                && (bool) $compilationContext->classDefinition->getExtendsClass();
+            return $compilationContext->classDefinition?->getExtendsClassDefinition() instanceof Definition;
         }
 
         return $compiler->isClass($className)
@@ -346,19 +360,10 @@ class StaticConstantAccess
         }
 
         if ('parent' === $className) {
-            $classDefinition = $compilationContext->classDefinition;
-            if (!$classDefinition->getExtendsClass()) {
-                throw new CompilerException(
-                    sprintf(
-                        'Cannot find constant called "%s" on parent because class %s does not extend any class',
-                        $expression['right']['value'],
-                        $classDefinition->getCompleteName()
-                    ),
-                    $expression
-                );
-            }
-
-            return $classDefinition->getExtendsClassDefinition();
+            return $compilationContext->parentClassDefinition(
+                sprintf('find constant called "%s"', $expression['right']['value']),
+                $expression
+            );
         }
 
         if ($compiler->isClass($className) || $compiler->isInterface($className)) {

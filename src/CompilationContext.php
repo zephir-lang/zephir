@@ -195,35 +195,95 @@ class CompilationContext
     public ?StaticTypeInference $typeInference = null;
 
     /**
-     * Lookup a class from a given class name.
+     * Lookup a class from a given class name; `parent` goes through parentClassDefinition().
      */
     public function classLookup(string $className, array $statement = []): AbstractDefinition
     {
-        if (!in_array($className, ['self', 'static', 'parent'])) {
-            $className = $this->getFullName($className);
-            if ($this->compiler->isClass($className)) {
-                return $this->compiler->getClassDefinition($className);
-            }
-
-            throw new CompilerException("Cannot locate class '$className'", $statement);
-        }
-
         if (in_array($className, ['self', 'static'])) {
             return $this->classDefinition;
         }
 
-        $parent = $this->classDefinition->getExtendsClass();
-        if (!$parent instanceof Definition) {
+        $className = $this->getFullName($className);
+        if ($this->compiler->isClass($className)) {
+            return $this->compiler->getClassDefinition($className);
+        }
+
+        throw new CompilerException("Cannot locate class '$className'", $statement);
+    }
+
+    /**
+     * The C expression for the class `static` stands for: the called class
+     * (late static binding), as used by `new static()` and `instanceof static`.
+     *
+     * zend_get_called_scope() resolves through the call frame's $this, which
+     * in a capturing closure is the capture carrier, not the enclosing object;
+     * the rebound `this_ptr` local is. See #2652.
+     */
+    public function lateStaticClassEntry(): string
+    {
+        if (true === $this->currentMethod?->hasCaptures()) {
+            return 'Z_OBJCE_P(' . $this->backend->getVariableCode($this->symbolTable->getVariable('this')) . ')';
+        }
+
+        return 'zend_get_called_scope(execute_data)';
+    }
+
+    /**
+     * The name `parent` stands for in `new parent()` or `instanceof parent`.
+     *
+     * Unlike parentClassDefinition() this does not need the parent's
+     * definition: a parent only known at runtime is looked up by this name
+     * when the code runs, as PHP does.
+     */
+    public function parentClassName(array $node): string
+    {
+        $parent = $this->classDefinition->getExtendsClassDefinition();
+        if ($parent instanceof Definition) {
+            return $parent->getCompleteName();
+        }
+
+        $extendsClass = $this->classDefinition->getExtendsClass();
+        if (!$extendsClass) {
+            // PHP's own compile error, zend_compile.c.
+            throw new CompilerException('Cannot use "parent" when current class scope has no parent', $node);
+        }
+
+        return $extendsClass;
+    }
+
+    /**
+     * The definition `parent::` refers to, for an access described by $action
+     * (e.g. `call method "foo"`).
+     *
+     * A parent the compiler cannot locate is only a `nonexistent-class` warning,
+     * because it may exist at runtime, so it is kept as a DefinitionRuntime with
+     * nothing to check a member against: that is a compile error here.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2714
+     */
+    public function parentClassDefinition(string $action, array $statement): Definition
+    {
+        $extendsClass = $this->classDefinition->getExtendsClass();
+        if (!$extendsClass) {
             throw new CompilerException(
                 sprintf(
-                    'Cannot access parent:: because class %s does not extend any class',
+                    'Cannot %s on parent because class %s does not extend any class',
+                    $action,
                     $this->classDefinition->getCompleteName()
                 ),
                 $statement
             );
         }
 
-        return $this->classDefinition->getExtendsClassDefinition();
+        $parent = $this->classDefinition->getExtendsClassDefinition();
+        if (!$parent instanceof Definition) {
+            throw new CompilerException(
+                sprintf('Cannot %s on parent because class %s does not exist', $action, $extendsClass),
+                $statement
+            );
+        }
+
+        return $parent;
     }
 
     /**

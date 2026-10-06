@@ -71,19 +71,10 @@ class StaticPropertyAccess
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ('parent' === $className) {
-                    $classDefinition = $compilationContext->classDefinition;
-                    if (!$classDefinition->getExtendsClass()) {
-                        throw new CompilerException(
-                            'Cannot access static property "'
-                            . $property
-                            . '" on parent because class '
-                            . $classDefinition->getCompleteName()
-                            . ' does not extend any class',
-                            $expression
-                        );
-                    } else {
-                        $classDefinition = $classDefinition->getExtendsClassDefinition();
-                    }
+                    $classDefinition = $compilationContext->parentClassDefinition(
+                        'access static property "' . $property . '"',
+                        $expression
+                    );
                 }
             }
         }
