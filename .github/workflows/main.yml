@@ -210,6 +210,21 @@ jobs:
         # run separately, in parallel, on Linux only (the step below).
         run: php vendor/bin/phpunit --testsuite BlackBox --exclude-group zept --no-coverage
 
+      - name: Show Black-box compile errors
+        # A failed `zephir compile` only says "Check compile-errors.log", and
+        # the test projects that keep theirs (tests/fixtures/*) are left on the
+        # runner, so print them rather than guess at a build that cannot be
+        # reproduced off the runner.
+        if: failure() && runner.os != 'Windows'
+        shell: bash
+        run: |
+          cc --version || true
+          find tests/fixtures -name compile-errors.log -size +0 | while read -r log; do
+            echo "::group::${log}"
+            tail -n 60 "${log}"
+            echo "::endgroup::"
+          done
+
       - name: Zept Suite (parallel)
         # Linux only: the .zept end-to-end build path is OS-agnostic (per-OS C
         # behaviour is covered by the Extension suite + main build), and the
