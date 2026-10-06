@@ -188,6 +188,24 @@ final class PrecompiledHeaderTest extends TestCase
         $this->assertStringContainsString('-DZEND_COMPILE_DL_EXT=1', $flags);
     }
 
+    /**
+     * The recipes compile with the Makefile's `CC`, which autoconf may extend
+     * with a language standard (`gcc -std=gnu23` on macOS 15). Clang refuses a
+     * PCH built for another standard ("C23 was disabled in PCH file but is
+     * currently enabled"), so the PCH is built by that same `CC`.
+     */
+    public function testHeadersArePreCompiledWithTheMakefileCompiler(): void
+    {
+        file_put_contents($this->projectDir . '/ext/Makefile', "CC = gcc -std=gnu23\nCFLAGS = -O2\n");
+
+        $this->assertSame('gcc -std=gnu23', $this->invokePchCompiler($this->createCompiler()));
+    }
+
+    public function testHeadersArePreCompiledWithGccBeforeTheProjectIsConfigured(): void
+    {
+        $this->assertSame('gcc', $this->invokePchCompiler($this->createCompiler()));
+    }
+
     public function testMakefileVariableIsReadWhenPlain(): void
     {
         $this->assertSame(
@@ -220,6 +238,14 @@ final class PrecompiledHeaderTest extends TestCase
         $method->setAccessible(true);
 
         return $method->invoke($compiler, false, $this->projectDir . '/ext', \Zephir\PhpToolchain::default());
+    }
+
+    private function invokePchCompiler(Compiler $compiler): string
+    {
+        $method = new ReflectionMethod(Compiler::class, 'precompiledHeaderCompiler');
+        $method->setAccessible(true);
+
+        return $method->invoke($compiler, $this->projectDir . '/ext');
     }
 
     /**
