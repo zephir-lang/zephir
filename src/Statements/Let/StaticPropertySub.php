@@ -48,7 +48,9 @@ class StaticPropertySub
         CompilationContext $compilationContext,
         array $statement
     ): void {
-        $classDefinition = $compilationContext->classLookup($className);
+        $classDefinition = 'parent' === $className
+            ? $compilationContext->parentClassDefinition('assign static property "' . $property . '"', $statement)
+            : $compilationContext->classLookup($className, $statement);
         $method          = $this->methodName;
 
         if (!$propertyDefinition = $classDefinition->getProperty($property)) {

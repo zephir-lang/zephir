@@ -135,19 +135,11 @@ class StaticCall extends Call
                 $classDefinition = $compilationContext->classDefinition;
 
                 if ('parent' === $className) {
-                    $extendsClass = $classDefinition->getExtendsClass();
-                    if (!$extendsClass) {
-                        throw new CompilerException(
-                            'Cannot call method "'
-                            . $expression['name']
-                            . '" on parent because class '
-                            . $classDefinition->getCompleteName()
-                            . ' does not extend any class',
-                            $expression
-                        );
-                    }
                     $currentClassDefinition = $classDefinition;
-                    $classDefinition        = $classDefinition->getExtendsClassDefinition();
+                    $classDefinition        = $compilationContext->parentClassDefinition(
+                        'call method "' . $expression['name'] . '"',
+                        $expression
+                    );
                 }
             }
         }
@@ -156,8 +148,6 @@ class StaticCall extends Call
          * Check if the class implements the method
          */
         if (!$dynamicMethod && !$dynamicClass) {
-            // TODO: Consider to check instance of ClassDefinitionRuntime and throw another error, telling that class was not found.
-            // TODO: This will give false if external class does not exists!
             if (!$classDefinition->hasMethod($methodName)) {
                 $possibleMethod = $classDefinition->getPossibleMethodName($methodName);
                 if ($possibleMethod) {

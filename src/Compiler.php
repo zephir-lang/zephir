@@ -2111,14 +2111,15 @@ final class Compiler
             mkdir(dirname($prelude), 0755, true);
         }
 
-        $flags = $this->precompiledHeaderFlags($development, $extPath, $toolchain);
+        $compiler       = $this->precompiledHeaderCompiler($extPath);
+        $compileCommand = $compiler . ' ' . $this->precompiledHeaderFlags($development, $extPath, $toolchain);
 
         /**
          * Already built in this very process, for these very flags — which is
          * what install() hits right after compile(). Nothing in between
          * rewrites a header: generate() invalidates this.
          */
-        if ($flags === $this->precompiledHeaderBuiltFor && (null === $this->precompiledHeader || is_file($gch))) {
+        if ($compileCommand === $this->precompiledHeaderBuiltFor && (null === $this->precompiledHeader || is_file($gch))) {
             return $this->precompiledHeader;
         }
 
@@ -2133,12 +2134,12 @@ final class Compiler
             unlink($gch);
         }
 
-        $this->precompiledHeaderBuiltFor = $flags;
+        $this->precompiledHeaderBuiltFor = $compileCommand;
         $this->precompiledHeader         = null;
 
         $this->logger->info('Pre-compiling headers...');
         exec(
-            sprintf('gcc %s -x c-header %s -o %s 2>&1', $flags, escapeshellarg($prelude), escapeshellarg($gch)),
+            sprintf('%s -x c-header %s -o %s 2>&1', $compileCommand, escapeshellarg($prelude), escapeshellarg($gch)),
             $output,
             $exit
         );
@@ -2149,7 +2150,7 @@ final class Compiler
             return null;
         }
 
-        if (!$this->precompiledHeaderIsUsable($prelude, $flags)) {
+        if (!$this->precompiledHeaderIsUsable($prelude, $compileCommand)) {
             $this->logger->info('Pre-compiled headers were rejected by the compiler, compiling without them');
             unlink($gch);
 
@@ -2840,6 +2841,20 @@ final class Compiler
     }
 
     /**
+     * The compiler the pre-compiled header is built with: the generated
+     * Makefile's `CC`, which its recipes use. configure is run with
+     * `CC="gcc"`, but autoconf may append a language standard to it
+     * (`gcc -std=gnu23` with Apple clang on macOS 15), and clang rejects a PCH
+     * built for another standard outright where GCC would only ignore it.
+     *
+     * Plain `gcc` is the fallback before the project has been configured.
+     */
+    private function precompiledHeaderCompiler(string $extPath): string
+    {
+        return $this->makefileVariable($extPath, 'CC') ?? 'gcc';
+    }
+
+    /**
      * Compiler flags the pre-compiled header is built with.
      *
      * A PCH is only accepted for a translation unit compiled with the same
@@ -2942,7 +2957,7 @@ final class Compiler
      * unless asked with -Winvalid-pch. The probe is a minimal translation unit
      * shaped like a generated one: same header prelude, force-included PCH.
      */
-    private function precompiledHeaderIsUsable(string $prelude, string $flags): bool
+    private function precompiledHeaderIsUsable(string $prelude, string $compileCommand): bool
     {
         $probe = $this->filesystem->path('pch/zephir_pch_probe.c', false);
 
@@ -2953,8 +2968,8 @@ final class Compiler
 
         exec(
             sprintf(
-                'gcc %s -Winvalid-pch -include %s -c %s -o %s 2>&1',
-                $flags,
+                '%s -Winvalid-pch -include %s -c %s -o %s 2>&1',
+                $compileCommand,
                 escapeshellarg($prelude),
                 escapeshellarg($probe),
                 escapeshellarg($probe . '.o')

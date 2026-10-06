@@ -659,7 +659,11 @@ class Property
     private function initializeArray(): void
     {
         $classDefinition       = $this->classDefinition;
+        // A parent only known at runtime has no init method to merge.
         $parentClassDefinition = $classDefinition->getExtendsClassDefinition();
+        if (!$parentClassDefinition instanceof Definition) {
+            $parentClassDefinition = null;
+        }
 
         if (!$this->isStatic()) {
             $constructParentMethod = $parentClassDefinition?->getInitMethod();

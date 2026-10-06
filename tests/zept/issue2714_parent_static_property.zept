@@ -1,0 +1,63 @@
+--TEST--
+`let parent::x` and its compound forms write the parent's static property, including one the child redeclares, as PHP's `parent::$x` does
+--FILE--
+namespace Stub;
+
+class Issue2714Base
+{
+	public static x = 1;
+	public static s = "a";
+	public static y = 10;
+}
+--FILE--
+namespace Stub;
+
+class Issue2714 extends Issue2714Base
+{
+	public static y = 20;
+
+	public static function assign() -> void
+	{
+		let parent::x = 5;
+	}
+
+	public static function addAssign() -> void
+	{
+		let parent::x += 3;
+	}
+
+	public static function subAssign() -> void
+	{
+		let parent::x -= 2;
+	}
+
+	public static function concatAssign() -> void
+	{
+		let parent::s .= "b";
+	}
+
+	public static function assignRedeclared() -> void
+	{
+		let parent::y = 11;
+	}
+}
+--USAGE--
+use Stub\Issue2714;
+use Stub\Issue2714Base;
+
+Issue2714::assign();
+echo var_export(Issue2714Base::$x, true), "\n";
+Issue2714::addAssign();
+echo var_export(Issue2714Base::$x, true), "\n";
+Issue2714::subAssign();
+echo var_export(Issue2714Base::$x, true), "\n";
+Issue2714::concatAssign();
+echo var_export(Issue2714Base::$s, true), "\n";
+Issue2714::assignRedeclared();
+echo var_export(Issue2714Base::$y, true), " ", var_export(Issue2714::$y, true), "\n";
+--EXPECT--
+5
+8
+6
+'ab'
+11 20

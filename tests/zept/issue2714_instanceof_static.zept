@@ -1,0 +1,39 @@
+--TEST--
+`instanceof static` tests against the called class (late static binding), as PHP does
+--FILE--
+namespace Stub;
+
+class Issue2714StaticBase
+{
+	public static function isStatic(var o) -> bool
+	{
+		return o instanceof static;
+	}
+
+	public function check(var o) -> bool
+	{
+		return o instanceof static;
+	}
+
+	public function notStatic(var o) -> bool
+	{
+		return !o instanceof static;
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2714StaticChild extends Issue2714StaticBase
+{
+}
+--USAGE--
+use Stub\Issue2714StaticBase as Base;
+use Stub\Issue2714StaticChild as Child;
+
+echo var_export(Base::isStatic(new Child()), true), " ", var_export(Child::isStatic(new Base()), true), " ", var_export(Child::isStatic(new Child()), true), "\n";
+echo var_export((new Base())->check(new Child()), true), " ", var_export((new Child())->check(new Base()), true), " ", var_export((new Child())->check(new Child()), true), "\n";
+echo var_export((new Child())->notStatic(new Base()), true), " ", var_export((new Base())->check(new stdClass()), true), "\n";
+--EXPECT--
+true false true
+true false true
+true false
