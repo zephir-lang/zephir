@@ -224,7 +224,10 @@ PHP_METHOD(Stub_Strings, testExplode)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &delimiter, &str);
-	zephir_fast_explode(return_value, delimiter, str, ZEND_LONG_MAX);
+	zephir_fast_explode(return_value, delimiter, str, NULL);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -237,7 +240,10 @@ PHP_METHOD(Stub_Strings, testExplodeStr)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
-	zephir_fast_explode_str(return_value, SL(","), str, ZEND_LONG_MAX);
+	zephir_fast_explode_str(return_value, SL(","), str, NULL);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -254,7 +260,10 @@ PHP_METHOD(Stub_Strings, testExplodeLimit)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &limit_param);
 	ZVAL_LONG(&_0, limit);
-	zephir_fast_explode_str(return_value, SL(","), str, zephir_get_intval(&_0) );
+	zephir_fast_explode_str(return_value, SL(","), str, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
