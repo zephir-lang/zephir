@@ -61,7 +61,7 @@ PHP_METHOD(Stub_Arithmetic, boolSum)
 	zend_bool a = 0, b = 0, c = 0;
 	a = ((1) ? 1 : 0);
 	b = ((2) ? 1 : 0);
-	c = (a | b);
+	c = ((((zend_long) a + (zend_long) b)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -69,7 +69,7 @@ PHP_METHOD(Stub_Arithmetic, bool2Sum)
 {
 	zend_bool a = 0, c = 0;
 	a = ((1) ? 1 : 0);
-	c = (a + 2);
+	c = ((((zend_long) a + 2)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -77,7 +77,7 @@ PHP_METHOD(Stub_Arithmetic, bool3Sum)
 {
 	zend_bool a = 0, c = 0;
 	a = 1;
-	c = (a | 0);
+	c = ((((zend_long) a + (zend_long) 0)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -221,7 +221,7 @@ PHP_METHOD(Stub_Arithmetic, intDoubleSum)
 	zend_long b = 0, c = 0;
 	a = (double) (1);
 	b = 2;
-	c = (long) ((a +  (double) b));
+	c = (long) ((a + (double) (b)));
 	RETURN_LONG(c);
 }
 
@@ -238,7 +238,7 @@ PHP_METHOD(Stub_Arithmetic, doubleIntSum)
 	zend_long b = 0;
 	a = (double) (1);
 	b = 2;
-	c =  ((a +  (double) b));
+	c =  ((a + (double) (b)));
 	RETURN_DOUBLE(c);
 }
 
@@ -329,44 +329,37 @@ PHP_METHOD(Stub_Arithmetic, complexSum)
 
 PHP_METHOD(Stub_Arithmetic, complex2Sum)
 {
-	zend_bool c = 0;
-	c = (1 | 1);
-	RETURN_BOOL(c);
+	zend_long c = 0;
+	c = ((zend_long) 1 + (zend_long) 1);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Arithmetic, complex3Sum)
 {
-	zend_bool c = 0;
-	c = (((1 + 1.0)) ? 1 : 0);
-	RETURN_BOOL(c);
+	double c = 0;
+	c =  (((double) ((zend_long) 1) + 1.0));
+	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Arithmetic, complex4Sum)
 {
-	zval c;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-
-	ZVAL_UNDEF(&c);
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&c);
-	ZVAL_DOUBLE(&c, (1.0 + 1));
-	RETURN_CCTOR(&c);
+	double c = 0;
+	c =  ((1.0 + (double) ((zend_long) 1)));
+	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Arithmetic, complex5Sum)
 {
 	zend_long c = 0;
-	c = (1 + 1);
+	c = (1 + (zend_long) 1);
 	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Arithmetic, complex6Sum)
 {
-	zend_bool c = 0;
-	c = (((1 + 1)) ? 1 : 0);
-	RETURN_BOOL(c);
+	zend_long c = 0;
+	c = ((zend_long) 1 + 1);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Arithmetic, complex7Sum)
@@ -375,7 +368,7 @@ PHP_METHOD(Stub_Arithmetic, complex7Sum)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = 2;
-	c = (a + b);
+	c = ((zend_long) a + b);
 	RETURN_LONG(c);
 }
 
@@ -385,7 +378,7 @@ PHP_METHOD(Stub_Arithmetic, complex9Sum)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = 2;
-	c = (b + a);
+	c = (b + (zend_long) a);
 	RETURN_LONG(c);
 }
 
@@ -396,7 +389,7 @@ PHP_METHOD(Stub_Arithmetic, complex10Sum)
 	zend_bool a = 0;
 	a = ((1.0 != 0.0) ? 1 : 0);
 	b = 2;
-	c = (double) ((b + a));
+	c = (double) ((b + (zend_long) a));
 	RETURN_DOUBLE(c);
 }
 
@@ -407,7 +400,7 @@ PHP_METHOD(Stub_Arithmetic, complex11Sum)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
-	c = (double) ((b + a));
+	c = (double) ((b + (zend_long) a));
 	RETURN_DOUBLE(c);
 }
 
@@ -417,7 +410,7 @@ PHP_METHOD(Stub_Arithmetic, complex12Sum)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
-	c = (b + a);
+	c = (b + (zend_long) a);
 	RETURN_LONG(c);
 }
 
@@ -427,7 +420,7 @@ PHP_METHOD(Stub_Arithmetic, complex13Sum)
 	zend_bool a = 0, b = 0;
 	a = ((1) ? 1 : 0);
 	b = ((2.0 != 0.0) ? 1 : 0);
-	c = (b | a);
+	c = ((zend_long) b + (zend_long) a);
 	RETURN_LONG(c);
 }
 
@@ -437,7 +430,7 @@ PHP_METHOD(Stub_Arithmetic, complex14Sum)
 	zend_long a = 0, c = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	c = (b + a);
+	c = ((zend_long) b + a);
 	RETURN_LONG(c);
 }
 
@@ -448,7 +441,7 @@ PHP_METHOD(Stub_Arithmetic, complex15Sum)
 	zend_long a = 0;
 	a = 1;
 	b =  (2.0);
-	c = (((b +  (double) a) != 0.0) ? 1 : 0);
+	c = (((b + (double) (a)) != 0.0) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -458,7 +451,7 @@ PHP_METHOD(Stub_Arithmetic, complex16Sum)
 	zend_long a = 0;
 	a = 1;
 	b =  (2.0);
-	c =  ((b +  (double) a));
+	c =  ((b + (double) (a)));
 	RETURN_DOUBLE(c);
 }
 
@@ -469,7 +462,7 @@ PHP_METHOD(Stub_Arithmetic, complex17Sum)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	c = (double) ((a + b));
+	c = (double) ((a + (zend_long) b));
 	RETURN_DOUBLE(c);
 }
 
@@ -480,8 +473,8 @@ PHP_METHOD(Stub_Arithmetic, complex18Sum)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a + b));
-	c =  ((double) ((a + b) + d));
+	d = (double) ((a + (zend_long) b));
+	c =  (((double) ((a + (zend_long) b)) + d));
 	RETURN_DOUBLE(c);
 }
 
@@ -492,8 +485,8 @@ PHP_METHOD(Stub_Arithmetic, complex19Sum)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a + b));
-	c =  ((((double) a + d) + b));
+	d = (double) ((a + (zend_long) b));
+	c =  ((((double) (a) + d) + (double) ((zend_long) b)));
 	RETURN_DOUBLE(c);
 }
 
@@ -504,8 +497,8 @@ PHP_METHOD(Stub_Arithmetic, complex20Sum)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a + b));
-	c =  ((double) ((double) ((d + d) + d) + d));
+	d = (double) ((a + (zend_long) b));
+	c =  ((((d + d) + d) + d));
 	RETURN_DOUBLE(c);
 }
 
@@ -516,8 +509,8 @@ PHP_METHOD(Stub_Arithmetic, complex21Sum)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a + b));
-	c =  (((double) (((double) ((double) (((b + d) + b) + d) + d) + b) + d) + b));
+	d = (double) ((a + (zend_long) b));
+	c =  (((((((((double) ((zend_long) b) + d) + (double) ((zend_long) b)) + d) + d) + (double) ((zend_long) b)) + d) + (double) ((zend_long) b)));
 	RETURN_DOUBLE(c);
 }
 
@@ -528,7 +521,7 @@ PHP_METHOD(Stub_Arithmetic, complex22Sum)
 	a = 1;
 	b = (long) (2.0);
 	d = (double) ((a + b));
-	c =  (((double) (((double) ((double) ((double) (((double) b + d) + d) + d) + d) + b) + d) + b));
+	c =  (((((((((double) (b) + d) + d) + d) + d) + (double) (b)) + d) + (double) (b)));
 	RETURN_DOUBLE(c);
 }
 
@@ -539,7 +532,7 @@ PHP_METHOD(Stub_Arithmetic, complex23Sum)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a + b));
+	d = (double) ((a + (zend_long) b));
 	RETURN_DOUBLE(d);
 }
 
@@ -550,7 +543,7 @@ PHP_METHOD(Stub_Arithmetic, complex24Sum)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((((1 + a) + 0) + b));
+	d = (double) ((((1 + a) + (zend_long) 0) + (zend_long) b));
 	RETURN_DOUBLE(d);
 }
 
@@ -757,24 +750,28 @@ PHP_METHOD(Stub_Arithmetic, addSum21)
 
 PHP_METHOD(Stub_Arithmetic, addSum22)
 {
-	zend_long b = 0, _0;
-	zval a;
+	zend_long b = 0;
+	zval a, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_DOUBLE(&a, 0.0);
 	b = 1;
-	ZEPHIR_INIT_NVAR(&a);
-	_0 = zephir_get_numberval(&a) + b;
-	ZVAL_LONG(&a, _0);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, b);
+	ZEPHIR_INIT_VAR(&_1);
+	zephir_add_function(&_1, &a, &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
+	ZEPHIR_CPY_WRT(&a, &_1);
 	RETURN_CCTOR(&a);
 }
 
@@ -789,10 +786,11 @@ PHP_METHOD(Stub_Arithmetic, addSum23)
 PHP_METHOD(Stub_Arithmetic, addSum24)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *a, a_sub, _0;
+	zval *a = NULL, a_sub, _0, _1;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -802,11 +800,13 @@ PHP_METHOD(Stub_Arithmetic, addSum24)
 	ZEPHIR_SEPARATE_PARAM(a);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1024);
-	ZEPHIR_ADD_ASSIGN(a, &_0);
+	ZEPHIR_INIT_VAR(&_1);
+	zephir_add_function(&_1, a, &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
+	ZEPHIR_CPY_WRT(a, &_1);
 	RETVAL_ZVAL(a, 1, 0);
 	RETURN_MM();
 }
@@ -849,7 +849,7 @@ PHP_METHOD(Stub_Arithmetic, boolSub)
 	zend_bool a = 0, b = 0, c = 0;
 	a = ((1) ? 1 : 0);
 	b = ((2) ? 1 : 0);
-	c = (a & b);
+	c = ((((zend_long) a - (zend_long) b)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -857,7 +857,7 @@ PHP_METHOD(Stub_Arithmetic, bool2Sub)
 {
 	zend_bool a = 0, c = 0;
 	a = ((1) ? 1 : 0);
-	c = (a - 2);
+	c = ((((zend_long) a - 2)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -865,7 +865,7 @@ PHP_METHOD(Stub_Arithmetic, bool3Sub)
 {
 	zend_bool a = 0, c = 0;
 	a = 1;
-	c = (a & 0);
+	c = ((((zend_long) a - (zend_long) 0)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -873,7 +873,7 @@ PHP_METHOD(Stub_Arithmetic, bool4Sub)
 {
 	zend_bool a = 0, c = 0;
 	a = 1;
-	c = (a & 1);
+	c = ((((zend_long) a - (zend_long) 1)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -938,7 +938,7 @@ PHP_METHOD(Stub_Arithmetic, intDoubleSub)
 	zend_long b = 0, c = 0;
 	a = (double) (1);
 	b = 2;
-	c = (long) ((a -  (double) b));
+	c = (long) ((a - (double) (b)));
 	RETURN_LONG(c);
 }
 
@@ -955,7 +955,7 @@ PHP_METHOD(Stub_Arithmetic, doubleIntSub)
 	zend_long b = 0;
 	a = (double) (1);
 	b = 2;
-	c =  ((a -  (double) b));
+	c =  ((a - (double) (b)));
 	RETURN_DOUBLE(c);
 }
 
@@ -1046,44 +1046,37 @@ PHP_METHOD(Stub_Arithmetic, complexSub)
 
 PHP_METHOD(Stub_Arithmetic, complex2Sub)
 {
-	zend_bool c = 0;
-	c = (1 & 1);
-	RETURN_BOOL(c);
+	zend_long c = 0;
+	c = ((zend_long) 1 - (zend_long) 1);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Arithmetic, complex3Sub)
 {
-	zend_bool c = 0;
-	c = (((1 + 1.0)) ? 1 : 0);
-	RETURN_BOOL(c);
+	double c = 0;
+	c =  (((double) ((zend_long) 1) - 1.0));
+	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Arithmetic, complex4Sub)
 {
-	zval c;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-
-	ZVAL_UNDEF(&c);
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&c);
-	ZVAL_DOUBLE(&c, (1.0 - 1));
-	RETURN_CCTOR(&c);
+	double c = 0;
+	c =  ((1.0 - (double) ((zend_long) 1)));
+	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Arithmetic, complex5Sub)
 {
 	zend_long c = 0;
-	c = (1 - 1);
+	c = (1 - (zend_long) 1);
 	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Arithmetic, complex6Sub)
 {
-	zend_bool c = 0;
-	c = (((1 + 1)) ? 1 : 0);
-	RETURN_BOOL(c);
+	zend_long c = 0;
+	c = ((zend_long) 1 - 1);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Arithmetic, complex7Sub)
@@ -1092,7 +1085,7 @@ PHP_METHOD(Stub_Arithmetic, complex7Sub)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = 2;
-	c = (a - b);
+	c = ((zend_long) a - b);
 	RETURN_LONG(c);
 }
 
@@ -1102,7 +1095,7 @@ PHP_METHOD(Stub_Arithmetic, complex9Sub)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = 2;
-	c = (b - a);
+	c = (b - (zend_long) a);
 	RETURN_LONG(c);
 }
 
@@ -1113,7 +1106,7 @@ PHP_METHOD(Stub_Arithmetic, complex10Sub)
 	zend_bool a = 0;
 	a = ((1.0 != 0.0) ? 1 : 0);
 	b = 2;
-	c = (double) ((b - a));
+	c = (double) ((b - (zend_long) a));
 	RETURN_DOUBLE(c);
 }
 
@@ -1124,7 +1117,7 @@ PHP_METHOD(Stub_Arithmetic, complex11Sub)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
-	c = (double) ((b - a));
+	c = (double) ((b - (zend_long) a));
 	RETURN_DOUBLE(c);
 }
 
@@ -1134,7 +1127,7 @@ PHP_METHOD(Stub_Arithmetic, complex12Sub)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
-	c = (b - a);
+	c = (b - (zend_long) a);
 	RETURN_LONG(c);
 }
 
@@ -1144,7 +1137,7 @@ PHP_METHOD(Stub_Arithmetic, complex13Sub)
 	zend_bool a = 0, b = 0;
 	a = ((1) ? 1 : 0);
 	b = ((2.0 != 0.0) ? 1 : 0);
-	c = (b & a);
+	c = ((zend_long) b - (zend_long) a);
 	RETURN_LONG(c);
 }
 
@@ -1154,7 +1147,7 @@ PHP_METHOD(Stub_Arithmetic, complex14Sub)
 	zend_long a = 0, c = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	c = (b - a);
+	c = ((zend_long) b - a);
 	RETURN_LONG(c);
 }
 
@@ -1165,7 +1158,7 @@ PHP_METHOD(Stub_Arithmetic, complex15Sub)
 	zend_long a = 0;
 	a = 1;
 	b =  (2.0);
-	c = (((b -  (double) a) != 0.0) ? 1 : 0);
+	c = (((b - (double) (a)) != 0.0) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -1175,7 +1168,7 @@ PHP_METHOD(Stub_Arithmetic, complex16Sub)
 	zend_long a = 0;
 	a = 1;
 	b =  (2.0);
-	c =  ((b -  (double) a));
+	c =  ((b - (double) (a)));
 	RETURN_DOUBLE(c);
 }
 
@@ -1186,7 +1179,7 @@ PHP_METHOD(Stub_Arithmetic, complex17Sub)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	c = (double) ((a - b));
+	c = (double) ((a - (zend_long) b));
 	RETURN_DOUBLE(c);
 }
 
@@ -1197,8 +1190,8 @@ PHP_METHOD(Stub_Arithmetic, complex18Sub)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a - b));
-	c =  ((double) ((a - b) - d));
+	d = (double) ((a - (zend_long) b));
+	c =  (((double) ((a - (zend_long) b)) - d));
 	RETURN_DOUBLE(c);
 }
 
@@ -1209,8 +1202,8 @@ PHP_METHOD(Stub_Arithmetic, complex19Sub)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a - b));
-	c =  ((((double) a - d) - b));
+	d = (double) ((a - (zend_long) b));
+	c =  ((((double) (a) - d) - (double) ((zend_long) b)));
 	RETURN_DOUBLE(c);
 }
 
@@ -1221,8 +1214,8 @@ PHP_METHOD(Stub_Arithmetic, complex20Sub)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a - b));
-	c =  ((double) ((double) ((d - d) - d) - d));
+	d = (double) ((a - (zend_long) b));
+	c =  ((((d - d) - d) - d));
 	RETURN_DOUBLE(c);
 }
 
@@ -1233,8 +1226,8 @@ PHP_METHOD(Stub_Arithmetic, complex21Sub)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a - b));
-	c =  (((double) (((double) ((double) (((b - d) - b) - d) - d) - b) - d) - b));
+	d = (double) ((a - (zend_long) b));
+	c =  (((((((((double) ((zend_long) b) - d) - (double) ((zend_long) b)) - d) - d) - (double) ((zend_long) b)) - d) - (double) ((zend_long) b)));
 	RETURN_DOUBLE(c);
 }
 
@@ -1245,7 +1238,7 @@ PHP_METHOD(Stub_Arithmetic, complex22Sub)
 	a = 1;
 	b = (long) (2.0);
 	d = (double) ((a - b));
-	c =  (((double) (((double) ((double) ((double) (((double) b - d) - d) - d) - d) - b) - d) - b));
+	c =  (((((((((double) (b) - d) - d) - d) - d) - (double) (b)) - d) - (double) (b)));
 	RETURN_DOUBLE(c);
 }
 
@@ -1256,7 +1249,7 @@ PHP_METHOD(Stub_Arithmetic, complex23Sub)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a - b));
+	d = (double) ((a - (zend_long) b));
 	RETURN_DOUBLE(d);
 }
 
@@ -1267,7 +1260,7 @@ PHP_METHOD(Stub_Arithmetic, complex24Sub)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((((1 - a) - 0) - b));
+	d = (double) ((((1 - a) - (zend_long) 0) - (zend_long) b));
 	RETURN_DOUBLE(d);
 }
 
@@ -1474,24 +1467,28 @@ PHP_METHOD(Stub_Arithmetic, sub21)
 
 PHP_METHOD(Stub_Arithmetic, sub22)
 {
-	zend_long b = 0, _0;
-	zval a;
+	zend_long b = 0;
+	zval a, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_DOUBLE(&a, 0.0);
 	b = 1;
-	ZEPHIR_INIT_NVAR(&a);
-	_0 = zephir_get_numberval(&a);
-	ZVAL_LONG(&a, _0 - b);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, b);
+	ZEPHIR_INIT_VAR(&_1);
+	zephir_sub_function(&_1, &a, &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
+	ZEPHIR_CPY_WRT(&a, &_1);
 	RETURN_CCTOR(&a);
 }
 
@@ -1506,10 +1503,11 @@ PHP_METHOD(Stub_Arithmetic, sub23)
 PHP_METHOD(Stub_Arithmetic, sub24)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *a, a_sub, _0;
+	zval *a = NULL, a_sub, _0, _1;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -1519,11 +1517,13 @@ PHP_METHOD(Stub_Arithmetic, sub24)
 	ZEPHIR_SEPARATE_PARAM(a);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1024);
-	ZEPHIR_SUB_ASSIGN(a, &_0);
+	ZEPHIR_INIT_VAR(&_1);
+	zephir_sub_function(&_1, a, &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
+	ZEPHIR_CPY_WRT(a, &_1);
 	RETVAL_ZVAL(a, 1, 0);
 	RETURN_MM();
 }
@@ -1539,10 +1539,11 @@ PHP_METHOD(Stub_Arithmetic, mul1)
 PHP_METHOD(Stub_Arithmetic, mul2)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *a, a_sub, _0;
+	zval *a = NULL, a_sub, _0, _1;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -1552,11 +1553,13 @@ PHP_METHOD(Stub_Arithmetic, mul2)
 	ZEPHIR_SEPARATE_PARAM(a);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 5);
-	ZEPHIR_MUL_ASSIGN(a, &_0);
+	ZEPHIR_INIT_VAR(&_1);
+	mul_function(&_1, a, &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
+	ZEPHIR_CPY_WRT(a, &_1);
 	RETVAL_ZVAL(a, 1, 0);
 	RETURN_MM();
 }

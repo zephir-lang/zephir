@@ -1040,10 +1040,11 @@ PHP_METHOD(Stub_Issue2744, loopCarried)
 PHP_METHOD(Stub_Issue2744, addAssign)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *a, a_sub, _0;
+	zval *a = NULL, a_sub, _0, _1;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -1053,11 +1054,13 @@ PHP_METHOD(Stub_Issue2744, addAssign)
 	ZEPHIR_SEPARATE_PARAM(a);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
-	ZEPHIR_ADD_ASSIGN(a, &_0);
+	ZEPHIR_INIT_VAR(&_1);
+	zephir_add_function(&_1, a, &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
+	ZEPHIR_CPY_WRT(a, &_1);
 	RETVAL_ZVAL(a, 1, 0);
 	RETURN_MM();
 }
@@ -1065,10 +1068,11 @@ PHP_METHOD(Stub_Issue2744, addAssign)
 PHP_METHOD(Stub_Issue2744, subAssign)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *a, a_sub, _0;
+	zval *a = NULL, a_sub, _0, _1;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -1078,11 +1082,13 @@ PHP_METHOD(Stub_Issue2744, subAssign)
 	ZEPHIR_SEPARATE_PARAM(a);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
-	ZEPHIR_SUB_ASSIGN(a, &_0);
+	ZEPHIR_INIT_VAR(&_1);
+	zephir_sub_function(&_1, a, &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
+	ZEPHIR_CPY_WRT(a, &_1);
 	RETVAL_ZVAL(a, 1, 0);
 	RETURN_MM();
 }
@@ -1090,10 +1096,11 @@ PHP_METHOD(Stub_Issue2744, subAssign)
 PHP_METHOD(Stub_Issue2744, mulAssign)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *a, a_sub, _0;
+	zval *a = NULL, a_sub, _0, _1;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -1103,11 +1110,13 @@ PHP_METHOD(Stub_Issue2744, mulAssign)
 	ZEPHIR_SEPARATE_PARAM(a);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 2);
-	ZEPHIR_MUL_ASSIGN(a, &_0);
+	ZEPHIR_INIT_VAR(&_1);
+	mul_function(&_1, a, &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
+	ZEPHIR_CPY_WRT(a, &_1);
 	RETVAL_ZVAL(a, 1, 0);
 	RETURN_MM();
 }

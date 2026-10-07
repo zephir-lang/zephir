@@ -53,18 +53,18 @@ final class ArithmeticTest extends TestCase
         $this->assertSame($this->class->intVarImplicitCastSum(), 3);
         $this->assertSame($this->class->intVarImplicitCast2Sum(), 3);
         $this->assertSame($this->class->complexSum(), 3.0);
-        $this->assertTrue($this->class->complex2Sum());
-        $this->assertTrue($this->class->complex3Sum());
+        $this->assertSame(true + true, $this->class->complex2Sum());
+        $this->assertSame(true + 1.0, $this->class->complex3Sum());
 
         $this->assertSame(2.0, $this->class->complex4Sum());
         $this->assertSame(2, $this->class->complex5Sum());
-        $this->assertTrue($this->class->complex6Sum());
+        $this->assertSame(true + 1, $this->class->complex6Sum());
         $this->assertSame(3, $this->class->complex7Sum());
         $this->assertSame(3, $this->class->complex9Sum());
         $this->assertSame($this->class->complex10Sum(), 3.0);
         $this->assertSame($this->class->complex11Sum(), 3.0);
         $this->assertSame($this->class->complex12Sum(), 3);
-        $this->assertSame($this->class->complex13Sum(), 1);
+        $this->assertSame(true + true, $this->class->complex13Sum());
         $this->assertSame($this->class->complex14Sum(), 2);
         $this->assertTrue($this->class->complex15Sum());
         $this->assertSame($this->class->complex17Sum(), 2.0);
@@ -157,7 +157,7 @@ final class ArithmeticTest extends TestCase
         $this->assertSame($this->class->addSum20(), 1);
 
         $this->assertSame($this->class->addSum21(), 1.0);
-        $this->assertSame($this->class->addSum22(), 1);
+        $this->assertSame(0.0 + 1, $this->class->addSum22());
         $this->assertSame($this->class->addSum23(), 1 + (1 << 10));
         $this->assertSame($this->class->addSum24(1), 1 + (1 << 10));
     }
@@ -169,10 +169,10 @@ final class ArithmeticTest extends TestCase
         $this->assertSame($this->class->intLetSub(), -1);
         $this->assertSame($this->class->intSubSimple(), -1);
 
-        $this->assertTrue($this->class->boolSub());
-        $this->assertTrue($this->class->bool2Sub());
-        $this->assertFalse($this->class->bool3Sub()); // true - false
-        $this->assertTrue($this->class->bool4Sub());  // true - true
+        $this->assertSame((bool) (true - true), $this->class->boolSub());
+        $this->assertSame((bool) (true - 2), $this->class->bool2Sub());
+        $this->assertSame((bool) (true - false), $this->class->bool3Sub());
+        $this->assertSame((bool) (true - true), $this->class->bool4Sub());
         $this->assertTrue($this->class->boolSubSimple());
         $this->assertSame($this->class->doubleSub(), -1.0);
         $this->assertSame($this->class->double2Sub(), -1.0);
@@ -189,17 +189,17 @@ final class ArithmeticTest extends TestCase
         $this->assertSame($this->class->intVarImplicitCastSub(), 1);
         $this->assertSame($this->class->intVarImplicitCast2Sub(), 1);
         $this->assertSame($this->class->complexSub(), 1.0);
-        $this->assertTrue($this->class->complex2Sub());
-        $this->assertTrue($this->class->complex3Sub());
+        $this->assertSame(true - true, $this->class->complex2Sub());
+        $this->assertSame(true - 1.0, $this->class->complex3Sub());
         $this->assertSame(0.0, $this->class->complex4Sub());
         $this->assertSame($this->class->complex5Sub(), 0);
-        $this->assertSame($this->class->complex6Sub(), true);
+        $this->assertSame(true - 1, $this->class->complex6Sub());
         $this->assertSame($this->class->complex7Sub(), -1);
         $this->assertSame($this->class->complex9Sub(), 1);
         $this->assertSame($this->class->complex10Sub(), 1.0);
         $this->assertSame($this->class->complex11Sub(), 1.0);
         $this->assertSame($this->class->complex12Sub(), 1);
-        $this->assertSame($this->class->complex13Sub(), 1);
+        $this->assertSame(true - true, $this->class->complex13Sub());
         $this->assertSame($this->class->complex14Sub(), 0);
         $this->assertSame($this->class->complex15Sub(), true);
         $this->assertSame($this->class->complex17Sub(), 0.0);
@@ -233,7 +233,7 @@ final class ArithmeticTest extends TestCase
         $this->assertSame($this->class->sub19(), -1.0);
         $this->assertSame($this->class->sub20(), -1);
         $this->assertSame($this->class->sub21(), -1.0);
-        $this->assertSame($this->class->sub22(), -1);
+        $this->assertSame(0.0 - 1, $this->class->sub22());
         $this->assertSame($this->class->sub23(), 1 - (1 << 10));
         $this->assertSame($this->class->sub24(1), 1 - (1 << 10));
     }

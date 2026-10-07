@@ -41,6 +41,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `isset`, `empty()` and `fetch` on an object without `ArrayAccess` answering `false` instead of asking the object's own handler, as for a `SimpleXMLElement` attribute
 - Fixed `empty(a[k])` written with parentheses reading the offset noisily instead of using PHP's silent `empty()` handler
 - Fixed writing an offset through an array element that is a reference to a typed property turning it into an array instead of throwing when the type does not allow one
+- Fixed `+`, `-`, `*`, `/` and `%` with a string or array local, or a string, null or array literal, failing to compile instead of computing or throwing `TypeError` as PHP does [#2676](https://github.com/zephir-lang/zephir/issues/2676)
+- Fixed `+=`, `-=` and `*=` on a `var` or an object property rejecting a string or bool operand and ignoring `null` [#2676](https://github.com/zephir-lang/zephir/issues/2676)
+- Fixed `+`, `-` and `*` with a bool operand applying the wrong operator or yielding a bool instead of PHP's integer result [#2677](https://github.com/zephir-lang/zephir/issues/2677)
+- Fixed `+`, `-` and `*` of an integer local with a float literal truncating the result to an integer
 
 ### Added
 - Added `instanceof static`, which tests against the called class as PHP does [#2714](https://github.com/zephir-lang/zephir/issues/2714)

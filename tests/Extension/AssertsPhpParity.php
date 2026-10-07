@@ -30,12 +30,12 @@ trait AssertsPhpParity
     /**
      * Runs both sides and asserts the diagnostics and the value agree.
      */
-    private function assertMatchesPhp(callable $extension, callable $php): void
+    private function assertMatchesPhp(callable $extension, callable $php, string $case = ''): void
     {
         $this->assertSame(
             $this->transcript($php),
             $this->transcript($extension),
-            'The extension must behave exactly as PHP does'
+            trim('The extension must behave exactly as PHP does ' . $case)
         );
     }
 

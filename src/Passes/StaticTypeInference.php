@@ -287,6 +287,11 @@ class StaticTypeInference
             case 'bitwise_shiftright':
                 $left  = $this->passExpression($expression['left']);
                 $right = $this->passExpression($expression['right']);
+                if (in_array($expression['type'], ['add', 'sub', 'mul'], true)) {
+                    // PHP's `+ - *` read a bool as the integer 0 or 1 (#2677)
+                    $left  = 'bool' === $left ? 'int' : $left;
+                    $right = 'bool' === $right ? 'int' : $right;
+                }
                 if ('int' == $left && 'int' == $right) {
                     return 'int';
                 }

@@ -132,7 +132,7 @@ class LetStatement extends StatementAbstract
                  * TODO: Replace on supported native bitwise-assignment
                  */
                 $assignment = $this->replaceAssignBitwiseOnDirect($assignment);
-                $assignment = $this->replaceDivModAssignOnDirect($assignment, $symbolVariable);
+                $assignment = $this->replaceArithmeticAssignOnDirect($assignment, $symbolVariable);
                 $assignment = $this->evaluateIndexesFirst($assignment, $compilationContext);
 
                 $expr = new Expression($assignment['expr']);
@@ -218,12 +218,21 @@ class LetStatement extends StatementAbstract
      * would raise SIGFPE for a zero divisor, and `%=` on a C double does not
      * compile.
      *
+     * `+=`, `-=` and `*=` on a `var` or `mixed` local or an object property
+     * are rewritten the same way, so a string, null, array or bool operand
+     * reaches PHP's own operator: the direct forms rejected a string or bool
+     * operand and ignored `null`. Typed number locals keep their native C
+     * forms.
+     *
      * @see https://github.com/zephir-lang/zephir/issues/2675
      * @see https://github.com/zephir-lang/zephir/issues/2676
      */
-    protected function replaceDivModAssignOnDirect(array $assignment, ?Variable $symbolVariable): array
+    protected function replaceArithmeticAssignOnDirect(array $assignment, ?Variable $symbolVariable): array
     {
         $binaryOperator = match ($assignment['operator'] ?? null) {
+            AssignVariableOperator::OPERATOR_ADD => BinaryOperator::OPERATOR_ADD,
+            AssignVariableOperator::OPERATOR_SUB => BinaryOperator::OPERATOR_SUB,
+            AssignVariableOperator::OPERATOR_MUL => BinaryOperator::OPERATOR_MUL,
             AssignVariableOperator::OPERATOR_DIV => BinaryOperator::OPERATOR_DIV,
             AssignVariableOperator::OPERATOR_MOD => BinaryOperator::OPERATOR_MOD,
             default                              => null,
@@ -232,9 +241,12 @@ class LetStatement extends StatementAbstract
             return $assignment;
         }
 
-        $numberTargets = ['variable', 'mixed', 'int', 'uint', 'long', 'ulong', 'double'];
-        $dividend      = match ($assignment['assign-type']) {
-            'variable'        => in_array($symbolVariable?->getType(), $numberTargets, true)
+        $isDivMod = in_array($binaryOperator, [BinaryOperator::OPERATOR_DIV, BinaryOperator::OPERATOR_MOD], true);
+        $targets  = $isDivMod
+            ? ['variable', 'mixed', 'int', 'uint', 'long', 'ulong', 'double']
+            : ['variable', 'mixed'];
+        $dividend = match ($assignment['assign-type']) {
+            'variable'        => in_array($symbolVariable?->getType(), $targets, true)
                 ? $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']])
                 : null,
             'object-property' => $this->astNode($assignment, [

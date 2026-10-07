@@ -13,12 +13,18 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Arithmetical;
 
+use Zephir\Types\Types;
+
 /**
  * Generates an arithmetical operation according to the operands
  */
 class AddOperator extends ArithmeticalBaseOperator
 {
-    protected string $bitOperator  = '|';
+    /**
+     * `+` of two arrays is their union.
+     */
+    protected array $zvalResultTypes = [Types::T_LONG, Types::T_DOUBLE, Types::T_ARRAY, Types::T_OBJECT];
+
     protected string $operator     = '+';
     protected string $zvalOperator = 'zephir_add_function';
 }
