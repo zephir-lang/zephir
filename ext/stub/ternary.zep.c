@@ -42,7 +42,7 @@ PHP_METHOD(Stub_Ternary, testTernary1)
 	ZEPHIR_INIT_VAR(&_0);
 	if (100) {
 		ZEPHIR_INIT_NVAR(&_0);
-		ZVAL_LONG(&_0, (1 + 100));
+		ZVAL_LONG(&_0, ((zend_long) 1 + 100));
 	} else {
 		ZEPHIR_INIT_NVAR(&_0);
 		ZVAL_BOOL(&_0, 0);
@@ -94,7 +94,7 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex1)
 	ZEPHIR_INIT_VAR(&_0);
 	if (100) {
 		ZEPHIR_INIT_NVAR(&_0);
-		ZVAL_LONG(&_0, (1 + 100));
+		ZVAL_LONG(&_0, ((zend_long) 1 + 100));
 	} else {
 		ZEPHIR_CALL_METHOD(&_1, a, "y", NULL, 0);
 		zephir_check_call_status();
@@ -130,7 +130,7 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex2)
 	ZEPHIR_INIT_VAR(&_0);
 	if (100) {
 		ZEPHIR_INIT_NVAR(&_0);
-		ZVAL_LONG(&_0, (1 + 100));
+		ZVAL_LONG(&_0, ((zend_long) 1 + 100));
 	} else {
 		ZEPHIR_CALL_METHOD(&_1, a, "y", NULL, 0);
 		zephir_check_call_status();

@@ -1207,11 +1207,12 @@ PHP_METHOD(Stub_Bench, addAssignUnionLiteral)
 	zend_long _1;
 	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *count_param = NULL, a, _3$$3;
+	zval *count_param = NULL, a, _3$$3, _5$$3;
 	zend_long count, i, _2;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_3$$3);
+	ZVAL_UNDEF(&_5$$3);
 	ZVAL_UNDEF(&_4$$3);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(count)
@@ -1264,11 +1265,13 @@ PHP_METHOD(Stub_Bench, addAssignUnionLiteral)
 			zephir_array_fast_append(&_4$$3, &_3$$3);
 			add_assoc_long_ex(&_4$$3, SL("k1"), 1);
 			add_assoc_long_ex(&_4$$3, SL("k2"), 2);
-			zephir_add_function(&a, &a, &_4$$3);
+			ZEPHIR_INIT_NVAR(&_5$$3);
+			zephir_add_function(&_5$$3, &a, &_4$$3);
 			if (UNEXPECTED(EG(exception))) {
 				ZEPHIR_MM_RESTORE();
 				return;
 			}
+			ZEPHIR_CPY_WRT(&a, &_5$$3);
 		}
 	}
 	ZEPHIR_MM_RESTORE();
@@ -1284,13 +1287,14 @@ PHP_METHOD(Stub_Bench, addAssignUnionVar)
 	zend_long _2;
 	zend_bool _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *count_param = NULL, a, b, _0, _4$$3;
+	zval *count_param = NULL, a, b, _0, _4$$3, _5$$3;
 	zend_long count, i, _3;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_4$$3);
+	ZVAL_UNDEF(&_5$$3);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(count)
 	ZEND_PARSE_PARAMETERS_END();
@@ -1342,11 +1346,13 @@ PHP_METHOD(Stub_Bench, addAssignUnionVar)
 			ZEPHIR_INIT_NVAR(&_4$$3);
 			ZVAL_LONG(&_4$$3, 5);
 			zephir_array_fast_append(&a, &_4$$3);
-			ZEPHIR_ADD_ASSIGN(&a, &b);
+			ZEPHIR_INIT_NVAR(&_5$$3);
+			zephir_add_function(&_5$$3, &a, &b);
 			if (UNEXPECTED(EG(exception))) {
 				ZEPHIR_MM_RESTORE();
 				return;
 			}
+			ZEPHIR_CPY_WRT(&a, &_5$$3);
 		}
 	}
 	ZEPHIR_MM_RESTORE();
@@ -1362,12 +1368,13 @@ PHP_METHOD(Stub_Bench, addAssignAccumulate)
 	zend_long _1;
 	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *count_param = NULL, a, b, _3$$3;
+	zval *count_param = NULL, a, b, _3$$3, _4$$3;
 	zend_long count, i, _2;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_3$$3);
+	ZVAL_UNDEF(&_4$$3);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(count)
 	ZEND_PARSE_PARAMETERS_END();
@@ -1396,11 +1403,13 @@ PHP_METHOD(Stub_Bench, addAssignAccumulate)
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_LONG(&_3$$3, i);
 			zephir_array_update_long(&b, i, &_3$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
-			ZEPHIR_ADD_ASSIGN(&a, &b);
+			ZEPHIR_INIT_NVAR(&_4$$3);
+			zephir_add_function(&_4$$3, &a, &b);
 			if (UNEXPECTED(EG(exception))) {
 				ZEPHIR_MM_RESTORE();
 				return;
 			}
+			ZEPHIR_CPY_WRT(&a, &_4$$3);
 		}
 	}
 	RETURN_CCTOR(&a);

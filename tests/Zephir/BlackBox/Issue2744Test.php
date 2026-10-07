@@ -129,7 +129,7 @@ final class Issue2744Test extends TestCase
     {
         $method = $this->method('doublePlusLong');
 
-        $this->assertStringContainsString('RETURN_DOUBLE((a +  (double) b));', $method);
+        $this->assertStringContainsString('RETURN_DOUBLE((a + (double) (b)));', $method);
         $this->assertStringNotContainsString('zephir_add_function(', $method);
     }
 

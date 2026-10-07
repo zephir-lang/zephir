@@ -181,7 +181,7 @@ PHP_METHOD(Stub_Quantum, harmos)
 		ZEPHIR_INIT_NVAR(&_12$$4);
 		zephir_create_array(&_12$$4, 1, 0);
 		ZEPHIR_INIT_NVAR(&_10$$4);
-		ZVAL_DOUBLE(&_10$$4, (double) ((double) (5.0 * x) * x));
+		ZVAL_DOUBLE(&_10$$4, ((5.0 * x) * x));
 		zephir_array_fast_append(&_12$$4, &_10$$4);
 		zephir_array_update_long(&v, i, &_12$$4, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 		x =  ((x + dx));
@@ -458,8 +458,8 @@ PHP_METHOD(Stub_Quantum, harmos)
 					zephir_array_fetch_long(&_54$$9, &p2, i, PH_NOISY | PH_READONLY, "stub/quantum.zep", 67);
 					ZEPHIR_INIT_NVAR(&_55$$9);
 					ZVAL_STRING(&_55$$9, "%16.8lf %16.8lf %16.8lf \n");
-					ZVAL_DOUBLE(&_56$$9, ((double) i * dx));
-					ZVAL_DOUBLE(&_57$$9, ((double) n * dt));
+					ZVAL_DOUBLE(&_56$$9, ((double) (i) * dx));
+					ZVAL_DOUBLE(&_57$$9, ((double) (n) * dt));
 					ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_58, 102, &fp, &_55$$9, &_56$$9, &_57$$9, &_54$$9);
 					zephir_check_call_status();
 					i = (i + 10);

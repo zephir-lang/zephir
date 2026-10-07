@@ -101,7 +101,7 @@ final class OperatorExceptionCheckTest extends TestCase
         );
 
         $this->assertMatchesRegularExpression(
-            '/ZEPHIR_ADD_ASSIGN\([^;]+\);\s*if \(UNEXPECTED\(EG\(exception\)\)\) \{\s*(?:ZEPHIR_MM_RESTORE\(\);\s*)?return;\s*\}\s*zephir_update_property/',
+            '/zephir_add_function\([^;]+\);\s*if \(UNEXPECTED\(EG\(exception\)\)\) \{\s*(?:ZEPHIR_MM_RESTORE\(\);\s*)?return;\s*\}\s*zephir_update_property/',
             $generated
         );
     }

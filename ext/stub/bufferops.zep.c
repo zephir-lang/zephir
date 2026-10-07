@@ -159,7 +159,7 @@ PHP_METHOD(Stub_BufferOps, scale)
 		ZEPHIR_OBS_NVAR(&_0$$3);
 		zephir_array_fetch_long(&_0$$3, buf, i, PH_NOISY, "stub/bufferops.zep", 55);
 		ZEPHIR_INIT_NVAR(&_1$$3);
-		ZVAL_DOUBLE(&_1$$3, (double) (zephir_get_doubleval(&_0$$3) * factor));
+		ZVAL_DOUBLE(&_1$$3, (zephir_get_doubleval(&_0$$3) * factor));
 		zephir_array_update_long(buf, i, &_1$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 		i++;
 	}
