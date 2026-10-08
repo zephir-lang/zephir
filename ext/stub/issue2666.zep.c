@@ -342,7 +342,10 @@ PHP_METHOD(Stub_Issue2666, explodeWithLongLimit)
 	limit_param = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&source_zv, source);
 	ZVAL_LONG(&_0, limit);
-	zephir_fast_explode_str(return_value, SL(","), &source_zv, zephir_get_intval(&_0) );
+	zephir_fast_explode_str(return_value, SL(","), &source_zv, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 

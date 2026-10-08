@@ -53,48 +53,37 @@ class ExplodeOptimizer extends OptimizerAbstract
         $symbolVariable = $call->getSymbolVariable(true, $context);
         $this->checkNotVariableString($symbolVariable, $expression);
 
-        /**
-         * Process limit.
-         */
-        $limit       = 'ZEND_LONG_MAX';
         $limitOffset = 2;
-        if (3 == count($expression['parameters']) && 'int' == $expression['parameters'][2]['parameter']['type']) {
-            $limit = $expression['parameters'][2]['parameter']['value'] . ' ';
-            unset($expression['parameters'][2]);
-        }
-
         if ('string' == $expression['parameters'][0]['parameter']['type']) {
             $str = Name::addSlashes($expression['parameters'][0]['parameter']['value']);
             unset($expression['parameters'][0]);
-            if (2 == count($expression['parameters'])) {
-                $limitOffset = 1;
-            }
+            $limitOffset = 1;
         }
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        if (isset($resolvedParams[$limitOffset])) {
-            $context->headersManager->add('kernel/operators');
-            $limit = 'zephir_get_intval(' . $resolvedParams[$limitOffset] . ') ';
-        }
+        /*
+         * The kernel parses the limit after the separator and the subject, as
+         * PHP's Z_PARAM_LONG does, so it is passed as a zval; NULL means none.
+         */
+        $limit = $resolvedParams[$limitOffset] ?? 'NULL';
 
         $context->headersManager->add('kernel/string');
         $symbolVariable->setDynamicTypes('array');
         $this->checkInitSymbolVariable($call, $symbolVariable, $context);
-
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if (isset($str)) {
             $context->codePrinter->output(
                 'zephir_fast_explode_str(' . $symbol . ', SL("' . $str . '"), ' . $resolvedParams[0] . ', ' . $limit . ');'
             );
-
-            return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        } else {
+            $context->codePrinter->output(
+                'zephir_fast_explode(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $limit . ');'
+            );
         }
 
-        $context->codePrinter->output(
-            'zephir_fast_explode(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $limit . ');'
-        );
+        $context->emitExceptionCheck();
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

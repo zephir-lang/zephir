@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `explode()` raising a warning and returning an empty string for a non-string separator or subject instead of coercing it or throwing `TypeError` as PHP does [#2684](https://github.com/zephir-lang/zephir/issues/2684)
+- Fixed `explode()` silently converting an invalid limit instead of throwing `TypeError`, and execution continuing after `explode()` threw [#2684](https://github.com/zephir-lang/zephir/issues/2684)
 - Fixed `zephir compile` failing on macOS 15 because pre-compiled headers were built without the C standard autoconf adds to the compiler
 - Fixed `parent::` method calls, constants and static properties crashing the compiler when the parent class cannot be located instead of reporting a compile error [#2714](https://github.com/zephir-lang/zephir/issues/2714)
 - Fixed a class with an array property crashing the compiler when its parent class cannot be located [#2714](https://github.com/zephir-lang/zephir/issues/2714)
