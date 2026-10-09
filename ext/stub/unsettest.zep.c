@@ -51,7 +51,7 @@ PHP_METHOD(Stub_Unsettest, has)
 		Z_PARAM_ZVAL(key)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &key);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 151, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 153, PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_array_isset_value(&_0, key));
 }
 
@@ -81,6 +81,9 @@ PHP_METHOD(Stub_Unsettest, testUnsetValueFromProperty)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &key);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("property"), key);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Unsettest, testUnsetFromArray)
@@ -97,6 +100,10 @@ PHP_METHOD(Stub_Unsettest, testUnsetFromArray)
 	zephir_fetch_params(1, 1, 0, &arrayParameter);
 	ZEPHIR_SEPARATE_PARAM(arrayParameter);
 	zephir_array_unset_long(arrayParameter, 0, PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETVAL_ZVAL(arrayParameter, 1, 0);
 	RETURN_MM();
 }
@@ -117,6 +124,10 @@ PHP_METHOD(Stub_Unsettest, testUnsetFromArrayByIndexVar)
 	zephir_fetch_params(1, 2, 0, &arrayParameter, &index);
 	ZEPHIR_SEPARATE_PARAM(arrayParameter);
 	zephir_array_unset(arrayParameter, index, PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETVAL_ZVAL(arrayParameter, 1, 0);
 	RETURN_MM();
 }
@@ -125,6 +136,9 @@ PHP_METHOD(Stub_Unsettest, testUnsetProperty)
 {
 	zval *this_ptr = getThis();
 	zephir_unset_property(this_ptr, "property");
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_MEMBER(getThis(), "property");
 }
 
@@ -164,6 +178,10 @@ PHP_METHOD(Stub_Unsettest, testStdClassUnset)
 	ZVAL_LONG(&_0, 12345);
 	zephir_update_property_zval_cached(&simpleObject, _zephir_prop_2, 0, &_0);
 	zephir_unset_property(&simpleObject, "property2");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&simpleObject);
 }
 
@@ -187,6 +205,10 @@ PHP_METHOD(Stub_Unsettest, testUnsetTypedArray)
 	zephir_memory_observe(&key_zv);
 	ZVAL_STR_COPY(&key_zv, key);
 	zephir_array_unset(&arr, &key_zv, PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&arr);
 }
 

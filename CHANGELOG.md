@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `unset this->{"name"}[key]` and `unset this->{name}[key]` silently leaving the key in place [#2705](https://github.com/zephir-lang/zephir/issues/2705)
+- Fixed nested `unset a[x][y]` on properties and locals, and `unset self::p[x]`, removing the key from a copy instead of the container [#2705](https://github.com/zephir-lang/zephir/issues/2705)
+- Fixed execution continuing after an `unset` threw [#2705](https://github.com/zephir-lang/zephir/issues/2705)
+- Fixed a property named by a non-string variable reporting "Cannot access empty property" instead of converting the name as PHP does [#2705](https://github.com/zephir-lang/zephir/issues/2705)
 - Fixed `explode()` raising a warning and returning an empty string for a non-string separator or subject instead of coercing it or throwing `TypeError` as PHP does [#2684](https://github.com/zephir-lang/zephir/issues/2684)
 - Fixed `explode()` silently converting an invalid limit instead of throwing `TypeError`, and execution continuing after `explode()` threw [#2684](https://github.com/zephir-lang/zephir/issues/2684)
 - Fixed `zephir compile` failing on macOS 15 because pre-compiled headers were built without the C standard autoconf adds to the compiler

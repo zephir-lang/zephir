@@ -126,6 +126,10 @@ PHP_METHOD(Stub_Issue2708, unsetLiteralOffset)
 	zephir_fetch_params(1, 1, 0, &a_param);
 	zephir_get_arrval(&a, a_param);
 	zephir_array_unset_string(&a, SL("3"), PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&a);
 }
 
@@ -511,6 +515,10 @@ PHP_METHOD(Stub_Issue2708, unsetOnContainer)
 	zephir_fetch_params(1, 1, 0, &container);
 	ZEPHIR_SEPARATE_PARAM(container);
 	zephir_array_unset_string(container, SL("3"), PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

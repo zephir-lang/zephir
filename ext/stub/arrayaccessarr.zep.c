@@ -102,6 +102,9 @@ PHP_METHOD(Stub_ArrayAccessArr, offsetUnset)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &offset);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("test"), offset);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_ArrayAccessArr, offsetGet)

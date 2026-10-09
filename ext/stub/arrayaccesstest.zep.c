@@ -89,6 +89,10 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromArray)
 	ZVAL_STR(&key_zv, key);
 	zephir_get_arrval(&data, data_param);
 	zephir_array_unset(&data, &key_zv, PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&data);
 }
 
@@ -118,6 +122,10 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromProperty)
 	zephir_get_arrval(&dataFromProperty, dataFromProperty_param);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 12, &dataFromProperty);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("assigedFromMethod"), &key_zv);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM_MEMBER_TYPED(getThis(), "assigedFromMethod", IS_ARRAY);
 }
 
@@ -396,6 +404,10 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetKeyFromArrayInternalVariable)
 	add_assoc_stringl_ex(&unsetData, SL("key_b"), SL("paula"));
 	zephir_array_append(&ret, &unsetData, PH_SEPARATE, "stub/arrayaccesstest.zep", 171);
 	zephir_array_unset_string(&unsetData, SL("key_a"), PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_append(&ret, &unsetData, PH_SEPARATE, "stub/arrayaccesstest.zep", 173);
 	RETURN_CTOR(&ret);
 }
@@ -428,6 +440,10 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetStringKeyFromArrayProperty)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "key_a");
 	zephir_unset_property_array(this_ptr, ZEND_STRL("unsetData"), &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 14, PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_2, PH_SEPARATE, "stub/arrayaccesstest.zep", 187);
 	RETURN_CTOR(&ret);
@@ -458,6 +474,10 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetLongKeyFromArrayProperty)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 3);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("unsetData"), &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 14, PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_2, PH_SEPARATE, "stub/arrayaccesstest.zep", 198);
 	RETURN_CTOR(&ret);

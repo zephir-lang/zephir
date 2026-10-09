@@ -853,21 +853,22 @@ zval *zephir_fetch_property_rw(zval *object, zend_string *name, zval *fallback)
  *
  * PHP's `ZEND_FETCH_OBJ_W` takes the same path whether the name came from a
  * literal or from a variable, so this one only has to turn the name into a
- * zend_string and hand over.
+ * zend_string, the way PHP does, and hand over.
  *
  * @see https://github.com/zephir-lang/zephir/issues/2691
+ * @see https://github.com/zephir-lang/zephir/issues/2705
  */
 zval *zephir_fetch_property_write_zval(zval *object, zval *property, zval *fallback)
 {
-	if (UNEXPECTED(Z_TYPE_P(property) != IS_STRING)) {
-		php_error_docref(NULL, E_NOTICE, "Cannot access empty property %d", Z_TYPE_P(property));
+	zend_string *tmp_name;
+	/* Not the try_ variant: a name that does not convert throws, yet PHP
+	 * still goes on with the empty string it got back. */
+	zend_string *name = zval_get_tmp_string(property, &tmp_name);
+	zval *slot = zephir_fetch_property_write(object, name, fallback);
 
-		ZVAL_NULL(fallback);
+	zend_tmp_string_release(tmp_name);
 
-		return fallback;
-	}
-
-	return zephir_fetch_property_write(object, Z_STR_P(property), fallback);
+	return slot;
 }
 
 /**

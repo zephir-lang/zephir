@@ -156,6 +156,10 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetUnset)
 	zephir_get_arrval(&_1, &_0);
 	ZEPHIR_CPY_WRT(&obj, &_1);
 	zephir_array_unset(&obj, offset, PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&_2, &obj);
 	zephir_convert_to_object(&_2);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 10, &_2);
