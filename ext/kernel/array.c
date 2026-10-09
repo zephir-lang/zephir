@@ -1155,6 +1155,191 @@ int ZEPHIR_FASTCALL zephir_array_unset_long(zval *arr, zend_long index, int flag
 }
 
 /**
+ * The element an intermediate offset of an unset names, or NULL when there is
+ * none. Keys convert as zephir_array_unset() converts the last one.
+ */
+static zval *zephir_array_unset_find(HashTable *ht, zval *index)
+{
+	ZVAL_DEREF(index);
+
+	switch (Z_TYPE_P(index)) {
+		case IS_NULL:
+			return zend_hash_str_find(ht, "", 0);
+
+		case IS_DOUBLE:
+			return zend_hash_index_find(ht, zend_dval_to_lval(Z_DVAL_P(index)));
+
+		case IS_TRUE:
+			return zend_hash_index_find(ht, 1);
+
+		case IS_FALSE:
+			return zend_hash_index_find(ht, 0);
+
+		case IS_LONG:
+		case IS_RESOURCE:
+			return zend_hash_index_find(ht, Z_LVAL_P(index));
+
+		case IS_STRING:
+			return zend_symtable_find(ht, Z_STR_P(index));
+
+		default:
+#if PHP_VERSION_ID >= 80300
+			zend_type_error("Cannot access offset of type %s on array", zend_zval_type_name(index));
+#else
+			zend_type_error("Illegal offset type");
+#endif
+			return NULL;
+	}
+}
+
+/**
+ * The string branch of `ZEND_FETCH_DIM_UNSET`: never a container, but the
+ * offset is checked first. The error for a valid offset changed in PHP 8.2
+ * (zend_wrong_string_offset_error()), the one for an invalid offset in 8.3
+ * (zend_illegal_container_offset()).
+ */
+static void zephir_array_unset_fetch_string_error(zval *index)
+{
+	zend_long offset;
+	bool trailing_data = false;
+
+	ZVAL_DEREF(index);
+
+	if (Z_TYPE_P(index) == IS_DOUBLE || Z_TYPE_P(index) <= IS_TRUE) {
+		zend_error(E_WARNING, "String offset cast occurred");
+	} else if (Z_TYPE_P(index) != IS_LONG
+		&& (Z_TYPE_P(index) != IS_STRING
+			|| IS_LONG != is_numeric_string_ex(Z_STRVAL_P(index), Z_STRLEN_P(index), &offset, NULL, true, NULL, &trailing_data))
+	) {
+#if PHP_VERSION_ID >= 80300
+		zend_illegal_container_offset(ZSTR_KNOWN(ZEND_STR_STRING), index, BP_VAR_UNSET);
+#else
+		zend_type_error("Cannot access offset of type %s on string", zend_zval_type_name(index));
+#endif
+		return;
+	}
+
+	if (EG(exception)) {
+		return;
+	}
+
+	/* 8.2 named the error after the fetch, not after the unset after it. */
+#if PHP_VERSION_ID >= 80200
+	zend_throw_error(NULL, "Cannot use string offset as an array");
+#else
+	zend_throw_error(NULL, "Cannot unset string offsets");
+#endif
+}
+
+/**
+ * One `ZEND_FETCH_DIM_UNSET`: the element of `container` an unset goes on
+ * through, or NULL when the unset stops here. Unlike a write fetch it never
+ * creates the element, and unlike a read it separates the array it passes, so
+ * the final unset lands in the container rather than in a copy.
+ *
+ * An ArrayAccess object hands back what offsetGet() built, which `holder`
+ * keeps alive until the whole unset is done.
+ */
+static zval *zephir_array_unset_fetch(zval *container, zval *index, zval *holder)
+{
+	zval rv, *retval;
+	zend_object *obj;
+
+	ZVAL_DEREF(container);
+
+	if (EXPECTED(Z_TYPE_P(container) == IS_ARRAY)) {
+		SEPARATE_ARRAY(container);
+
+		return zephir_array_unset_find(Z_ARRVAL_P(container), index);
+	}
+
+	if (Z_TYPE_P(container) == IS_STRING) {
+		zephir_array_unset_fetch_string_error(index);
+
+		return NULL;
+	}
+
+	if (Z_TYPE_P(container) == IS_OBJECT) {
+		obj = Z_OBJ_P(container);
+
+		ZVAL_UNDEF(&rv);
+		GC_ADDREF(obj);
+		retval = obj->handlers->read_dimension(obj, index, BP_VAR_UNSET, &rv);
+
+		if (UNEXPECTED(retval == &EG(uninitialized_zval))) {
+			zend_error(E_NOTICE, "Indirect modification of overloaded element of %s has no effect", ZSTR_VAL(obj->ce->name));
+			retval = NULL;
+		} else if (EXPECTED(retval != NULL && Z_TYPE_P(retval) != IS_UNDEF)) {
+			if (!Z_ISREF_P(retval) && Z_TYPE_P(retval) != IS_OBJECT) {
+				zend_error(E_NOTICE, "Indirect modification of overloaded element of %s has no effect", ZSTR_VAL(obj->ce->name));
+			}
+
+			zval_ptr_dtor(holder);
+
+			if (retval == &rv) {
+				ZVAL_COPY_VALUE(holder, &rv);
+			} else {
+				ZVAL_COPY(holder, retval);
+			}
+
+			retval = holder;
+		} else {
+			retval = NULL;
+		}
+
+		if (UNEXPECTED(GC_DELREF(obj) == 0)) {
+			zend_objects_store_del(obj);
+		}
+
+		return retval;
+	}
+
+	if (Z_TYPE_P(container) <= IS_FALSE) {
+#if PHP_VERSION_ID >= 80100
+		if (Z_TYPE_P(container) == IS_FALSE) {
+			zend_false_to_array_deprecated();
+		}
+#endif
+		return NULL;
+	}
+
+	zend_throw_error(NULL, "Cannot unset offset in a non-array variable");
+
+	return NULL;
+}
+
+/**
+ * `unset container[k1][k2]...[kn]`: PHP's chain of `ZEND_FETCH_DIM_UNSET`
+ * ending in `ZEND_UNSET_DIM`. `container` is the slot itself, a local or a
+ * property, never a copy of it.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2705
+ */
+void zephir_array_unset_path(zval *container, uint32_t count, zval **keys)
+{
+	zval holder;
+	zval *current = container;
+	uint32_t i;
+
+	/* The container's own fetch threw, and PHP does not go on past it. */
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+
+	ZVAL_UNDEF(&holder);
+
+	for (i = 0; i + 1 < count && current != NULL; i++) {
+		current = zephir_array_unset_fetch(current, keys[i], &holder);
+	}
+
+	if (current != NULL && !EG(exception)) {
+		zephir_array_unset(current, keys[count - 1], PH_SEPARATE);
+	}
+
+	zval_ptr_dtor(&holder);
+}
+
+/**
  * `arr[] = value`. The value is copied in whatever the flags say.
  */
 int zephir_array_append(zval *arr, zval *value, int flags ZEPHIR_DEBUG_PARAMS)

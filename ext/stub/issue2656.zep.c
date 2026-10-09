@@ -404,6 +404,10 @@ PHP_METHOD(Stub_Issue2656, unsetPropertyProbe)
 		ZVAL_LONG(&_1$$3, 1);
 		zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_1$$3);
 		zephir_unset_property(&obj, "probe");
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		i++;
 	}
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);

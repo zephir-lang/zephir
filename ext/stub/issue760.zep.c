@@ -413,6 +413,10 @@ PHP_METHOD(Stub_Issue760, dynUnset)
 	zephir_fetch_params(1, 2, 0, &s, &i);
 	ZEPHIR_SEPARATE_PARAM(s);
 	zephir_array_unset(s, i, PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETVAL_ZVAL(s, 1, 0);
 	RETURN_MM();
 }

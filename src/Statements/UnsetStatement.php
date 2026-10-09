@@ -20,8 +20,13 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Name;
 use Zephir\Types\Types;
+use Zephir\Variable\Variable;
 
+use function array_unshift;
+use function count;
+use function implode;
 use function in_array;
+use function sprintf;
 
 /**
  * unset() statement
@@ -29,10 +34,38 @@ use function in_array;
 class UnsetStatement extends StatementAbstract
 {
     /**
+     * Containers that are a property: an offset unset on one goes through the
+     * property's write slot.
+     */
+    private const PROPERTY_BASES = [
+        'property-access',
+        'property-string-access',
+        'property-dynamic-access',
+        'static-property-access',
+    ];
+
+    /**
+     * Every form of unset can throw: an ArrayAccess offsetUnset(), __unset(),
+     * a readonly property, a container PHP rejects. PHP stops there, so the
+     * statement stops there too rather than running on with the exception
+     * pending.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2705
+     *
      * @throws Exception
      * @throws ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
+    {
+        $this->emitUnset($compilationContext);
+        $compilationContext->emitExceptionCheck();
+    }
+
+    /**
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function emitUnset(CompilationContext $compilationContext): void
     {
         $flags = 'PH_SEPARATE';
 
@@ -62,14 +95,15 @@ class UnsetStatement extends StatementAbstract
                     return;
                 }
 
-                $expr = new Expression($expression['left']);
-                $expr->setReadOnly(true);
-                $exprVar  = $expr->compile($compilationContext);
-                $variable = $compilationContext->symbolTable->getVariableForWrite(
-                    $exprVar->getCode(),
-                    $compilationContext,
-                    $this->statement
-                );
+                [$base, $offsets] = $this->splitOffsets($expression);
+
+                if (count($offsets) > 1 || in_array($base['type'], self::PROPERTY_BASES, true)) {
+                    $this->generateUnsetPath($base, $offsets, $compilationContext);
+
+                    return;
+                }
+
+                $variable = $this->resolveLocalContainer($expression['left'], $compilationContext);
 
                 $expr = new Expression($expression['right']);
                 $expr->setReadOnly(true);
@@ -136,11 +170,32 @@ class UnsetStatement extends StatementAbstract
                 );
         }
 
+        $compilationContext->backend->arrayUnset($variable, $exprIndex, $flags, $compilationContext);
+    }
+
+    /**
+     * The container an `unset` writes into when it is neither a property nor
+     * a static property: a local, which the kernel separates in place.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function resolveLocalContainer(array $containerAst, CompilationContext $compilationContext): Variable
+    {
+        $expr = new Expression($containerAst);
+        $expr->setReadOnly(true);
+        $exprVar  = $expr->compile($compilationContext);
+        $variable = $compilationContext->symbolTable->getVariableForWrite(
+            $exprVar->getCode(),
+            $compilationContext,
+            $this->statement
+        );
+
         if (!in_array($variable->getType(), ['variable', 'array'])) {
             throw CompilerException::cannotUseVariableTypeAs(
                 $variable,
                 'in "unset"',
-                $expression['left']
+                $containerAst
             );
         }
 
@@ -157,11 +212,79 @@ class UnsetStatement extends StatementAbstract
         ) {
             $compilationContext->logger->warning(
                 'Possible attempt to use non array/object in unset operator',
-                ['non-valid-unset', $expression['left']]
+                ['non-valid-unset', $containerAst]
             );
         }
 
-        $compilationContext->backend->arrayUnset($variable, $exprIndex, $flags, $compilationContext);
+        return $variable;
+    }
+
+    /**
+     * `unset base[k1]...[kn]` as the base and its offsets, outermost first.
+     *
+     * @return array{0: array, 1: array<int, array>}
+     */
+    private function splitOffsets(array $expression): array
+    {
+        $offsets = [];
+
+        while ('array-access' === $expression['type']) {
+            array_unshift($offsets, $expression['right']);
+            $expression = $expression['left'];
+        }
+
+        return [$expression, $offsets];
+    }
+
+    /**
+     * Emits an unset that has to reach the container itself rather than a
+     * copy of it: any nested offset, and any offset on a property other than
+     * `this->prop[k]`, which zephir_unset_property_array() already covers.
+     *
+     * A property is taken through its write slot, as PHP's
+     * `ZEND_FETCH_OBJ_UNSET` and `ZEND_FETCH_STATIC_PROP_UNSET` take it, and
+     * zephir_array_unset_path() walks the offsets as `ZEND_FETCH_DIM_UNSET`
+     * does: separating, never creating. The offsets are evaluated first, so
+     * nothing they run can move the slot afterwards.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2705
+     *
+     * @param array<int, array> $offsets
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function generateUnsetPath(array $base, array $offsets, CompilationContext $compilationContext): void
+    {
+        $offsetCodes = [];
+        foreach ($offsets as $offset) {
+            $offsetCodes[] = $this->resolveOffsetAsZval($offset, $compilationContext);
+        }
+
+        if (in_array($base['type'], self::PROPERTY_BASES, true)) {
+            $compilationContext->headersManager->add('kernel/object');
+
+            $expr = new Expression($base);
+            $expr->setReadOnly(true);
+            $expr->setWriteThrough(true);
+            $compiled  = $expr->compile($compilationContext);
+            $container = $compilationContext->symbolTable->getVariableForRead(
+                $compiled->getCode(),
+                $compilationContext,
+                $this->statement
+            );
+        } else {
+            $container = $this->resolveLocalContainer($base, $compilationContext);
+        }
+
+        $compilationContext->codePrinter->output(
+            sprintf(
+                '{ zval *zephir_unset_offsets[] = { %s }; zephir_array_unset_path(%s, %d, zephir_unset_offsets); }',
+                implode(', ', $offsetCodes),
+                $compilationContext->backend->getVariableCode($container),
+                count($offsetCodes)
+            )
+        );
     }
 
     /**

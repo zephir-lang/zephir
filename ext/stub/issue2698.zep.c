@@ -154,6 +154,9 @@ PHP_METHOD(Stub_Issue2698, removeOffset)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&key_zv, key);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("removable"), &key_zv);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2698, getItems)

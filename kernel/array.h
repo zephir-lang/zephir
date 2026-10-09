@@ -87,6 +87,7 @@ int zephir_isempty_dim_string(zval *container, char *offset, uint32_t offset_len
 int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags);
 int ZEPHIR_FASTCALL zephir_array_unset_long(zval *arr, zend_long index, int flags);
 int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint32_t index_length, int flags);
+void zephir_array_unset_path(zval *container, uint32_t count, zval **keys);
 
 /**
  * Fetch items from arrays.
