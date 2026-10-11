@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed property shortcuts ignoring the declared property type, leaving the generated getter and setter untyped [#2761](https://github.com/zephir-lang/zephir/issues/2761)
+- Fixed a class-typed `@var` on a property shortcut producing an untyped getter, or a compile error with a `set` shortcut, instead of a class type [#2761](https://github.com/zephir-lang/zephir/issues/2761)
+- Fixed a typed getter reporting a return-type `TypeError` instead of PHP's uninitialized property `Error` [#2761](https://github.com/zephir-lang/zephir/issues/2761)
+- Fixed union-typed parameters accepting any value instead of checking and coercing it as PHP does [#2761](https://github.com/zephir-lang/zephir/issues/2761)
 - Fixed `unset this->{"name"}[key]` and `unset this->{name}[key]` silently leaving the key in place [#2705](https://github.com/zephir-lang/zephir/issues/2705)
 - Fixed nested `unset a[x][y]` on properties and locals, and `unset self::p[x]`, removing the key from a copy instead of the container [#2705](https://github.com/zephir-lang/zephir/issues/2705)
 - Fixed execution continuing after an `unset` threw [#2705](https://github.com/zephir-lang/zephir/issues/2705)

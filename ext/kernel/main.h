@@ -319,11 +319,14 @@ static inline void zephir_throw_variable_type_error(zval *value, const char *nam
  * the method's declared return type. Throws TypeError on mismatch.
  * Used when the method body is `return this->prop` and the method declares
  * a strict scalar return type like `-> string`.
+ *
+ * A read that already threw (an uninitialized typed property) is returned as
+ * is, so the engine's Error is not replaced by a return-type TypeError.
  */
 #define RETURN_MEMBER_TYPED(object, member_name, expected_type) \
   do { \
     zephir_return_property(return_value, object, SL(member_name)); \
-    if (UNEXPECTED(Z_TYPE_P(return_value) != (expected_type))) { \
+    if (UNEXPECTED(!EG(exception) && Z_TYPE_P(return_value) != (expected_type))) { \
       zephir_throw_return_type_error((expected_type), return_value); \
       return; \
     } \
@@ -334,7 +337,7 @@ static inline void zephir_throw_variable_type_error(zval *value, const char *nam
 #define RETURN_MM_MEMBER_TYPED(object, member_name, expected_type) \
   do { \
     zephir_return_property(return_value, object, SL(member_name)); \
-    if (UNEXPECTED(Z_TYPE_P(return_value) != (expected_type))) { \
+    if (UNEXPECTED(!EG(exception) && Z_TYPE_P(return_value) != (expected_type))) { \
       zephir_throw_return_type_error((expected_type), return_value); \
       ZEPHIR_MM_RESTORE(); \
       return; \
@@ -531,6 +534,11 @@ zend_property_info *zephir_declare_typed_property(zend_class_entry *ce, const ch
  * `<A> | <B> | null`. `type_mask` carries the scalar/null MAY_BE_* bits; the
  * `num_classes` class names (0, 1 or many) form the object part of the union. */
 zend_property_info *zephir_declare_typed_property_union(zend_class_entry *ce, const char *name, size_t name_length, zval *value, int access_type, uint32_t type_mask, const char **class_names, uint32_t num_classes);
+
+/* Checks a union-typed argument against the method's own arg-info and coerces
+ * it in place the way the engine checks a PHP parameter. Throws the argument
+ * TypeError and returns 0 when it does not fit. */
+int zephir_verify_union_arg(zval *arg, uint32_t arg_num);
 
 /* Four of PHP's own attributes get their behaviour from a compile-time
  * validator in Zend/zend_attributes.c, which only runs while the engine

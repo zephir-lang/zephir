@@ -60,7 +60,7 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_constants_getpropertyc8, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_constants_getpropertyc9, 0, 0, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_constants_getpropertyc9, 0, 0, Phalcon\\Cache\\FrontendInterface, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_constants_testreadconstant, 0, 0, 0)
@@ -130,7 +130,7 @@ PHP_ME(Stub_Constants, getPropertyC5, arginfo_stub_constants_getpropertyc5, ZEND
 PHP_ME(Stub_Constants, getPropertyC6, arginfo_stub_constants_getpropertyc6, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Constants, getPropertyC7, arginfo_stub_constants_getpropertyc7, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Constants, getPropertyC8, arginfo_stub_constants_getpropertyc8, ZEND_ACC_PUBLIC)
-PHP_ME(Stub_Constants, getPropertyC9, arginfo_stub_constants_getpropertyc9, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Constants, getPropertyC9, arginfo_stub_constants_getpropertyc9, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Constants, testReadConstant, arginfo_stub_constants_testreadconstant, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Constants, testReadClassConstant1, arginfo_stub_constants_testreadclassconstant1, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Constants, testReadClassConstant2, arginfo_stub_constants_testreadclassconstant2, ZEND_ACC_PUBLIC)
