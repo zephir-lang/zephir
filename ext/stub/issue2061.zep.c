@@ -99,7 +99,7 @@ PHP_METHOD(Stub_Issue2061, getMask)
 PHP_METHOD(Stub_Issue2061, getTotal)
 {
 
-	RETURN_MEMBER(getThis(), "total");
+	RETURN_MEMBER_TYPED(getThis(), "total", IS_LONG);
 }
 
 PHP_METHOD(Stub_Issue2061, getLabel)

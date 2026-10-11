@@ -2209,6 +2209,10 @@ class Method
             }
 
             $tempCodePrinter->output("\t" . 'ZEND_PARSE_PARAMETERS_END();');
+
+            foreach ($this->unionParameterChecks() as $check) {
+                $tempCodePrinter->output("\t" . $check);
+            }
         }
 
         $codePrinter->preOutput($tempCodePrinter->getOutput());
@@ -3931,6 +3935,38 @@ class Method
      *
      * @see https://github.com/zephir-lang/zephir/issues/2668
      */
+    /**
+     * Union-typed parameters are fetched as a plain zval, so nothing checks
+     * them on entry. Each passed one is checked against its arg-info, and
+     * coerced, the way the engine checks a PHP parameter.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2761
+     *
+     * @return string[]
+     */
+    private function unionParameterChecks(): array
+    {
+        $checks = [];
+
+        foreach (array_values($this->parameters->getParameters()) as $position => $parameter) {
+            if (empty($parameter['data-types']) || !empty($parameter['variadic'])) {
+                continue;
+            }
+
+            $name     = $this->shadowName($parameter['name']);
+            $checks[] = sprintf(
+                'if (%s && UNEXPECTED(!zephir_verify_union_arg(%s, %d))) {',
+                $name,
+                $name,
+                $position + 1
+            );
+            $checks[] = "\t" . 'RETURN_THROWS();';
+            $checks[] = '}';
+        }
+
+        return $checks;
+    }
+
     private function shadowParameter(array $parameter): array
     {
         $parameter['name'] = $this->shadowName($parameter['name']);

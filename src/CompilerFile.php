@@ -37,6 +37,7 @@ use function explode;
 use function file_exists;
 use function file_put_contents;
 use function filemtime;
+use function in_array;
 use function is_array;
 use function json_decode;
 use function json_encode;
@@ -61,6 +62,15 @@ final class CompilerFile implements FileInterface
 {
     use CompilerTrait;
     use LoggerAwareTrait;
+
+    /**
+     * `@var` words that look like a class name but are not one.
+     */
+    private const DOCBLOCK_PSEUDO_TYPES = [
+        'array', 'bool', 'boolean', 'callable', 'char', 'double', 'false', 'float', 'int', 'integer',
+        'iterable', 'long', 'mixed', 'never', 'null', 'object', 'parent', 'resource', 'self', 'static',
+        'string', 'this', 'true', 'uchar', 'uint', 'ulong', 'var', 'variable', 'void',
+    ];
 
     private AliasManager $aliasManager;
 
@@ -1198,20 +1208,34 @@ final class CompilerFile implements FileInterface
     }
 
     /**
-     * Create returns type list.
+     * Create returns type list from shortcut type members.
+     *
+     * A member is `['data-type' => <type>]` or `['cast' => <class node>]`, the
+     * shape the parsers emit for a union type; a cast member becomes the same
+     * node a hand-written `-> <Class>` produces.
      */
-    protected function createReturnsType(array $types, bool $annotated = false): ?array
+    protected function createReturnsType(array $members, bool $annotated = false): ?array
     {
-        if (!$types) {
+        if (!$members) {
             return null;
         }
 
         $list = [];
 
-        foreach ($types as $type) {
+        foreach ($members as $member) {
+            if (isset($member['cast'])) {
+                $list[] = [
+                    'type'       => 'return-type-parameter',
+                    'cast'       => $member['cast'],
+                    'collection' => 0,
+                    'mandatory'  => false,
+                ];
+                continue;
+            }
+
             $list[] = [
-                'type'      => $annotated ? 'return-type-annotation' : 'return-type-paramater',
-                'data-type' => 'mixed' === $type ? 'variable' : $type,
+                'type'      => $annotated ? 'return-type-annotation' : 'return-type-parameter',
+                'data-type' => 'mixed' === $member['data-type'] ? 'variable' : $member['data-type'],
                 'mandatory' => false,
             ];
         }
@@ -1252,32 +1276,16 @@ final class CompilerFile implements FileInterface
                 $docBlock = $property['docblock'];
             }
 
-            $returnsType = [];
+            $typeMembers = $this->declaredShortcutTypes($property);
+            $declared    = [] !== $typeMembers;
 
             if ($docBlock) {
                 $docBlockParser = new DocblockParser('/' . $docBlock . '/');
                 $docBlockParsed = $docBlockParser->parse();
 
-                if ($annotations = $docBlockParsed->getAnnotationsByType('var')) {
-                    $returnsType = array_map(
-                        static function (string $type): string {
-                            /**
-                             * A property docblock may include the variable name and
-                             * a description (`@var Type $name some text`); keep only
-                             * the leading type token so the generated accessor types
-                             * stay valid.
-                             *
-                             * @see https://github.com/zephir-lang/zephir/issues/2543
-                             */
-                            $type = trim($type);
-                            if (preg_match('/^\S+/', $type, $matches)) {
-                                $type = $matches[0];
-                            }
-
-                            return 'mixed' === $type ? 'variable' : $type;
-                        },
-                        explode('|', $annotations[0]->getString())
-                    );
+                $annotations = $docBlockParsed->getAnnotationsByType('var');
+                if (!$declared && $annotations) {
+                    $typeMembers = $this->docblockShortcutTypes($annotations[0]->getString(), $property);
                 }
 
                 // Clear annotations
@@ -1310,7 +1318,7 @@ final class CompilerFile implements FileInterface
                                 ],
                             ]),
                             $docBlock,
-                            $this->createReturnsType($returnsType, true),
+                            $this->createReturnsType($typeMembers, !$declared),
                             $shortcut
                         ),
                         $shortcut
@@ -1324,13 +1332,7 @@ final class CompilerFile implements FileInterface
                             ['public'],
                             'set' . Name::camelize($name),
                             new Parameters([
-                                [
-                                    'type'      => 'parameter',
-                                    'name'      => $name,
-                                    'const'     => 0,
-                                    'data-type' => 1 == count($returnsType) ? $returnsType[0] : 'variable',
-                                    'mandatory' => 0,
-                                ],
+                                $this->shortcutSetterParameter($name, $typeMembers, $declared),
                             ]),
                             new StatementsBlock([
                                 [
@@ -1398,7 +1400,7 @@ final class CompilerFile implements FileInterface
                                 ],
                             ]),
                             $docBlock,
-                            $this->createReturnsType(['string']),
+                            $this->createReturnsType([['data-type' => 'string']]),
                             $shortcut
                         ),
                         $shortcut
@@ -1409,5 +1411,109 @@ final class CompilerFile implements FileInterface
                     throw new CompilerException("Unknown shortcut '" . $shortcut['name'] . "'", $shortcut);
             }
         }
+    }
+
+    /**
+     * Type members of a property's own declaration (`string name`,
+     * `?<Class> name`, `int|string name`), or none when it is untyped.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2761
+     */
+    private function declaredShortcutTypes(array $property): array
+    {
+        if (isset($property['data-types'])) {
+            return $property['data-types'];
+        }
+
+        if (isset($property['cast'])) {
+            $members = [['cast' => $property['cast']]];
+        } elseif (isset($property['data-type']) && 'variable' !== $property['data-type']) {
+            $members = [['data-type' => $property['data-type']]];
+        } else {
+            return [];
+        }
+
+        if (!empty($property['nullable'])) {
+            $members[] = ['data-type' => 'null'];
+        }
+
+        return $members;
+    }
+
+    /**
+     * Type members of a `@var` annotation. A class name becomes a cast member
+     * so it produces a class type; any other word passes through unchanged.
+     */
+    private function docblockShortcutTypes(string $annotation, array $property): array
+    {
+        $members = [];
+
+        foreach (explode('|', $annotation) as $type) {
+            /**
+             * A property docblock may include the variable name and
+             * a description (`@var Type $name some text`); keep only
+             * the leading type token so the generated accessor types
+             * stay valid.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2543
+             */
+            $type = trim($type);
+            if (preg_match('/^\S+/', $type, $matches)) {
+                $type = $matches[0];
+            }
+
+            if ($this->isDocblockClassName($type)) {
+                $members[] = [
+                    'cast' => [
+                        'type'  => 'variable',
+                        'value' => $type,
+                        'file'  => $property['file'] ?? null,
+                        'line'  => $property['line'] ?? null,
+                        'char'  => $property['char'] ?? null,
+                    ],
+                ];
+                continue;
+            }
+
+            $members[] = ['data-type' => 'mixed' === $type ? 'variable' : $type];
+        }
+
+        return $members;
+    }
+
+    private function isDocblockClassName(string $type): bool
+    {
+        if (!preg_match('/^\\\\?[A-Za-z_]\w*(\\\\[A-Za-z_]\w*)*$/', $type)) {
+            return false;
+        }
+
+        return !in_array(strtolower($type), self::DOCBLOCK_PSEUDO_TYPES, true);
+    }
+
+    /**
+     * The setter's parameter. A declared type is used in full; a `@var` type
+     * only when it names a single type, as before.
+     */
+    private function shortcutSetterParameter(string $name, array $typeMembers, bool $declared): array
+    {
+        $parameter = [
+            'type'      => 'parameter',
+            'name'      => $name,
+            'const'     => 0,
+            'data-type' => 'variable',
+            'mandatory' => 0,
+        ];
+
+        if (1 === count($typeMembers)) {
+            if (isset($typeMembers[0]['cast'])) {
+                $parameter['cast'] = $typeMembers[0]['cast'];
+            } else {
+                $parameter['data-type'] = $typeMembers[0]['data-type'];
+            }
+        } elseif ($declared && count($typeMembers) > 1) {
+            $parameter['data-types'] = $typeMembers;
+        }
+
+        return $parameter;
     }
 }

@@ -52,6 +52,9 @@ PHP_METHOD(Stub_Types_Unions, kind)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
+	if (value && UNEXPECTED(!zephir_verify_union_arg(value, 1))) {
+		RETURN_THROWS();
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &value);
@@ -70,6 +73,9 @@ PHP_METHOD(Stub_Types_Unions, pick)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
+	if (value && UNEXPECTED(!zephir_verify_union_arg(value, 1))) {
+		RETURN_THROWS();
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &value);
