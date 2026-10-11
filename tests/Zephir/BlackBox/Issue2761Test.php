@@ -89,27 +89,16 @@ final class Issue2761Test extends TestCase
         $this->assertStringContainsString('public function setThing(Collaborator|null $thing)', $stub);
     }
 
-    /**
-     * The released C parser (2.9.0) does not accept a shortcut on a
-     * union-typed property, so the compiler side is exercised through the PHP
-     * parser until CI pins a php-zephir-parser release that does.
-     */
     public function testDeclaredUnionTypeTypesBothAccessors(): void
     {
-        putenv('ZEPHIR_FORCE_PHP_PARSER=1');
+        $stub = $this->stubFor('UnionSyntax', <<<'ZEP'
+            namespace Probe;
 
-        try {
-            $stub = $this->stubFor('UnionSyntax', <<<'ZEP'
-                namespace Probe;
-
-                class UnionSyntax
-                {
-                    protected string|int key = "" { get, set };
-                }
-                ZEP);
-        } finally {
-            putenv('ZEPHIR_FORCE_PHP_PARSER');
-        }
+            class UnionSyntax
+            {
+                protected string|int key = "" { get, set };
+            }
+            ZEP);
 
         $this->assertMatchesRegularExpression('/public function getKey\(\): (string\|int|int\|string)/', $stub);
         $this->assertMatchesRegularExpression('/public function setKey\((string\|int|int\|string) \$key\)/', $stub);
