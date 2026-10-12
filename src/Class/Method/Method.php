@@ -2668,7 +2668,11 @@ class Method
             if (!empty($parameter['variadic'])) {
                 continue;
             }
-            if (!isset($parameter['default'])) {
+            /**
+             * Presence, not value: a reflected parameter stores the raw PHP
+             * default, which is `null` for `?T $x = null` (#2763).
+             */
+            if (!array_key_exists('default', $parameter)) {
                 ++$required;
             }
         }

@@ -270,6 +270,7 @@ final class Definition extends AbstractDefinition
                     'const'     => 0,
                     'data-type' => 'variable',
                     'mandatory' => !$row->isOptional(),
+                    'variadic'  => $row->isVariadic(),
                 ];
 
                 if (!$params['mandatory']) {
