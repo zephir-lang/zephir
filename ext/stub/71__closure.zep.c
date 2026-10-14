@@ -12,31 +12,31 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(stub_71__closure)
 {
 	ZEPHIR_REGISTER_CLASS(stub, 71__closure, stub, 71__closure, stub_71__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
-	zend_declare_property_null(stub_71__closure_ce, SL("i"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(stub_71__closure_ce, SL("x"), ZEND_ACC_PUBLIC);
 	return SUCCESS;
 }
 
 PHP_METHOD(stub_71__closure, __invoke)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval i;
+	zval x;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&i);
+	ZVAL_UNDEF(&x);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_read_property(&i, this_ptr, SL("i"), PH_NOISY_CC | PH_READONLY);
+	zephir_memory_observe(&x);
+	zephir_read_property(&x, this_ptr, SL("x"), PH_NOISY_CC);
 
-	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&i));
-	ZVAL_LONG(Z_REFVAL_P(&i), 5);
-	RETURN_MM_STRING("v");
+	RETVAL_ZVAL(&x, 1, 0);
+	RETURN_MM();
 }
 

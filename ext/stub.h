@@ -391,5 +391,10 @@
 #include "stub/71__closure.zep.h"
 #include "stub/72__closure.zep.h"
 #include "stub/73__closure.zep.h"
+#include "stub/74__closure.zep.h"
+#include "stub/75__closure.zep.h"
+#include "stub/76__closure.zep.h"
+#include "stub/77__closure.zep.h"
+#include "stub/78__closure.zep.h"
 
 #endif

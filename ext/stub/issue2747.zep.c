@@ -1561,10 +1561,10 @@ PHP_METHOD(Stub_Issue2747, orderVariableIndex)
 	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&i));
 	ZVAL_LONG(Z_REFVAL_P(&i), 0);
 	ZEPHIR_INIT_VAR(&_0);
-	object_init_ex(&_0, stub_70__closure_ce);
+	object_init_ex(&_0, stub_73__closure_ce);
 	zephir_update_property_reference(&_0, SL("i"), &i);
 	ZEPHIR_INIT_VAR(&f);
-	zephir_create_closure_bound(&f, &_0, NULL, stub_70__closure_ce, SL("__invoke"));
+	zephir_create_closure_bound(&f, &_0, NULL, stub_73__closure_ce, SL("__invoke"));
 	ZEPHIR_CALL_ZVAL_FUNCTION(&_1, &f, NULL, 0);
 	zephir_check_call_status();
 	zephir_array_update_zval(&b, Z_REFVAL_P(&i), &_1, PH_COPY | PH_SEPARATE);
@@ -1594,10 +1594,10 @@ PHP_METHOD(Stub_Issue2747, orderVariableExpressionIndex)
 	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&i));
 	ZVAL_LONG(Z_REFVAL_P(&i), 0);
 	ZEPHIR_INIT_VAR(&_0);
-	object_init_ex(&_0, stub_71__closure_ce);
+	object_init_ex(&_0, stub_74__closure_ce);
 	zephir_update_property_reference(&_0, SL("i"), &i);
 	ZEPHIR_INIT_VAR(&f);
-	zephir_create_closure_bound(&f, &_0, NULL, stub_71__closure_ce, SL("__invoke"));
+	zephir_create_closure_bound(&f, &_0, NULL, stub_74__closure_ce, SL("__invoke"));
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	ZEPHIR_INIT_VAR(&_2);

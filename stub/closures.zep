@@ -1,6 +1,8 @@
 
 namespace Stub;
 
+use Stub\Constants as AliasedConstants;
+
 class Closures
 {
     protected _argument;
@@ -899,5 +901,23 @@ class Closures
         }
 
         return call_user_func(hold);
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2686
+     */
+    public function issue2686ArrowAliasConstant()
+    {
+        return n => AliasedConstants::C4 + n;
+    }
+
+    public function issue2686ArrowAliasInstanceOf()
+    {
+        return n => n instanceof AliasedConstants;
+    }
+
+    public function issue2686ArrowAliasClassName()
+    {
+        return n => AliasedConstants::class;
     }
 }

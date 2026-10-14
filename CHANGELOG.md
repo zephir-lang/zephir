@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed arrow closures failing to resolve `use ... as` aliases declared in the file [#2686](https://github.com/zephir-lang/zephir/issues/2686)
+- Fixed closures in a sub-namespace resolving unqualified class names against the extension root namespace [#2686](https://github.com/zephir-lang/zephir/issues/2686)
 - Fixed optional parameters with a `null` default on methods of extension classes being counted as required, failing calls that omit them [#2763](https://github.com/zephir-lang/zephir/issues/2763)
 - Fixed calls passing several arguments to a variadic method of an extension class failing to compile [#2763](https://github.com/zephir-lang/zephir/issues/2763)
 - Fixed property shortcuts ignoring the declared property type, leaving the generated getter and setter untyped [#2761](https://github.com/zephir-lang/zephir/issues/2761)
