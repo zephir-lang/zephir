@@ -84,10 +84,13 @@ runs:
       shell: bash
       run: |
         cp ./ext/modules/stub.so "$(php -r 'echo ini_get("extension_dir");')/stub.so"
-        if [ "${{ matrix.ts }}" = "ts" ]; then
-          mkdir -p /opt/homebrew/etc/php/${{ matrix.php }}-zts/conf.d
-          echo "extension=stub.so" > /opt/homebrew/etc/php/${{ matrix.php }}-zts/conf.d/99-stub.ini
-        else
-          mkdir -p /opt/homebrew/etc/php/${{ matrix.php }}-zts/conf.d
-          echo "extension=stub.so" > /opt/homebrew/etc/php/${{ matrix.php }}/conf.d/99-stub.ini
+        # Ask PHP which directory it scans: the Homebrew layout differs between
+        # formulae, and the directory itself may not exist yet.
+        ini_dir="$(php --ini | sed -n 's/^Scan for additional .ini files in: *//p' | tr -d '"')"
+        if [ -z "$ini_dir" ] || [ "$ini_dir" = "(none)" ]; then
+          echo "::error::PHP has no scan directory for additional .ini files"
+          exit 1
         fi
+        mkdir -p "$ini_dir"
+        echo "extension=stub.so" > "$ini_dir/99-stub.ini"
+        php -m | grep -x stub >/dev/null
