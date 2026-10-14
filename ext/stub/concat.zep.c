@@ -35,7 +35,9 @@ PHP_METHOD(Stub_Concat, getTestProperty)
 
 	ZVAL_UNDEF(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("testProperty"), PH_NOISY_CC | PH_READONLY);
-	RETURN_CTORW(&_0);
+	ZVAL_COPY(return_value, &_0);
+	zephir_verify_return_value(return_value);
+	return;
 }
 
 PHP_METHOD(Stub_Concat, testConcatBySelfProperty)
@@ -901,7 +903,7 @@ PHP_METHOD(Stub_Concat, testConcatVarWithArrayVar)
 PHP_METHOD(Stub_Concat, getStore)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "store", IS_STRING);
+	RETURN_MEMBER_VERIFIED(getThis(), "store");
 }
 
 PHP_METHOD(Stub_Concat, resetStore)
@@ -1121,7 +1123,9 @@ PHP_METHOD(Stub_Concat, getAppended)
 
 	ZVAL_UNDEF(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC | PH_READONLY);
-	RETURN_CTORW(&_0);
+	ZVAL_COPY(return_value, &_0);
+	zephir_verify_return_value(return_value);
+	return;
 }
 
 PHP_METHOD(Stub_Concat, resetAppended)

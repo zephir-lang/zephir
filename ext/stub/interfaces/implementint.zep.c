@@ -50,6 +50,6 @@ PHP_METHOD(Stub_Interfaces_ImplementInt, set)
 PHP_METHOD(Stub_Interfaces_ImplementInt, get)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "val", IS_LONG);
+	RETURN_MEMBER_VERIFIED(getThis(), "val");
 }
 

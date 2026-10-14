@@ -78,13 +78,13 @@ PHP_METHOD(Stub_Reflection, setReflectionParameter)
 		Z_PARAM_OBJECT_OF_CLASS(parameter, zephir_get_internal_ce(SL("reflectionparameter")))
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &parameter);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 121, parameter);
-	RETURN_MEMBER(getThis(), "reflectionParameter");
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 136, parameter);
+	RETURN_MEMBER_VERIFIED(getThis(), "reflectionParameter");
 }
 
 PHP_METHOD(Stub_Reflection, getReflectionParameter)
 {
 
-	RETURN_MEMBER(getThis(), "reflectionParameter");
+	RETURN_MEMBER_VERIFIED(getThis(), "reflectionParameter");
 }
 

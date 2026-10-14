@@ -81,12 +81,12 @@ PHP_METHOD(Stub_Issue2699, add)
 PHP_METHOD(Stub_Issue2699, getComponents)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "components", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "components");
 }
 
 PHP_METHOD(Stub_Issue2699, getNested)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "nested", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "nested");
 }
 

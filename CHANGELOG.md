@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed a typed method returning `this->prop` or `self::prop` passing through a value its `bool`, class, nullable or union return type rejects, which aborted debug PHP builds; such a method now throws `TypeError`, so a non-nullable getter returning null must declare `| null` [#2391](https://github.com/zephir-lang/zephir/issues/2391)
+- Fixed property shortcuts on a static property reading and writing an instance property instead of the static one [#2391](https://github.com/zephir-lang/zephir/issues/2391)
+- Fixed PHPDoc `@var` types such as `float`, `?int` or `string[]` failing to compile a property shortcut, and `numeric` or `scalar` becoming class types; unsupported types now leave the accessors untyped [#2391](https://github.com/zephir-lang/zephir/issues/2391)
 - Fixed arrow closures failing to resolve `use ... as` aliases declared in the file [#2686](https://github.com/zephir-lang/zephir/issues/2686)
 - Fixed closures in a sub-namespace resolving unqualified class names against the extension root namespace [#2686](https://github.com/zephir-lang/zephir/issues/2686)
 - Fixed optional parameters with a `null` default on methods of extension classes being counted as required, failing calls that omit them [#2763](https://github.com/zephir-lang/zephir/issues/2763)

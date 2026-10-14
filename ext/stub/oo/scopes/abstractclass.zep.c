@@ -45,12 +45,12 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClass, setProperty)
 PHP_METHOD(Stub_Oo_Scopes_AbstractClass, getPrivateProperty2)
 {
 
-	RETURN_MEMBER(getThis(), "privateProperty2");
+	RETURN_MEMBER_VERIFIED(getThis(), "privateProperty2");
 }
 
 PHP_METHOD(Stub_Oo_Scopes_AbstractClass, getProtectedProperty2)
 {
 
-	RETURN_MEMBER(getThis(), "protectedProperty2");
+	RETURN_MEMBER_VERIFIED(getThis(), "protectedProperty2");
 }
 

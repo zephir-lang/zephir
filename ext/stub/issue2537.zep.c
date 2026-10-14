@@ -59,6 +59,6 @@ PHP_METHOD(Stub_Issue2537, makeNullable)
 PHP_METHOD(Stub_Issue2537, getTag)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "tag", IS_STRING);
+	RETURN_MEMBER_VERIFIED(getThis(), "tag");
 }
 

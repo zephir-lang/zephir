@@ -57,7 +57,7 @@ PHP_METHOD(Stub_Traits_CounterUser, increment)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 157, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 172, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 2);
 	ZEPHIR_INIT_VAR(&_2);
@@ -66,8 +66,8 @@ PHP_METHOD(Stub_Traits_CounterUser, increment)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 157, &_2);
-	RETURN_MM_MEMBER_TYPED(getThis(), "count", IS_LONG);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 172, &_2);
+	RETURN_MM_MEMBER_VERIFIED(getThis(), "count");
 }
 
 PHP_METHOD(Stub_Traits_CounterUser, describe)
@@ -95,7 +95,7 @@ PHP_METHOD(Stub_Traits_CounterUser, tagged)
 
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "label", NULL, 0);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 157, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 172, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_FUNCTION(&_2, "strval", NULL, 63, &_1);
 	zephir_check_call_status();
 	ZEPHIR_CONCAT_VSV(return_value, &_0, ":", &_2);
@@ -109,7 +109,7 @@ PHP_METHOD(Stub_Traits_CounterUser, tagged)
 PHP_METHOD(Stub_Traits_CounterUser, getSteps)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "steps", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "steps");
 }
 
 zend_object *zephir_init_properties_Stub_Traits_CounterUser(zend_class_entry *class_type)

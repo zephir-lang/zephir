@@ -65,6 +65,6 @@ PHP_METHOD(Stub_Interfaces_ImplementInterface, getVoid)
 PHP_METHOD(Stub_Interfaces_ImplementInterface, getObj)
 {
 
-	RETURN_MEMBER(getThis(), "obj");
+	RETURN_MEMBER_VERIFIED(getThis(), "obj");
 }
 

@@ -64,19 +64,19 @@ PHP_METHOD(Stub_Traits_Nameable, setName)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 158, &name_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 173, &name_zv);
 }
 
 PHP_METHOD(Stub_Traits_Nameable, getName)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "name", IS_STRING);
+	RETURN_MEMBER_VERIFIED(getThis(), "name");
 }
 
 PHP_METHOD(Stub_Traits_Nameable, getTags)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "tags", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "tags");
 }
 
 PHP_METHOD(Stub_Traits_Nameable, addTag)
@@ -95,6 +95,6 @@ PHP_METHOD(Stub_Traits_Nameable, addTag)
 PHP_METHOD(Stub_Traits_Nameable, getMeta)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "meta", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "meta");
 }
 

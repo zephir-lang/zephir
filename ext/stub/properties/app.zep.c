@@ -31,7 +31,7 @@ ZEPHIR_INIT_CLASS(Stub_Properties_App)
 PHP_METHOD(Stub_Properties_App, getInstance)
 {
 
-	RETURN_MEMBER(getThis(), "instance");
+	RETURN_MEMBER_VERIFIED(getThis(), "instance");
 }
 
 PHP_METHOD(Stub_Properties_App, __construct)
@@ -51,7 +51,7 @@ PHP_METHOD(Stub_Properties_App, __construct)
 
 	ZEPHIR_CALL_CE_STATIC(&_0, stub_properties_staticprivateproperties_ce, "getInstance", NULL, 0);
 	zephir_check_call_status();
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 107, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 123, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 
