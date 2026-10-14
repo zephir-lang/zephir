@@ -12,6 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/memory.h"
 #include "kernel/object.h"
 
 
@@ -24,7 +25,13 @@ ZEPHIR_INIT_CLASS(stub_64__closure)
 
 PHP_METHOD(stub_64__closure, __invoke)
 {
+	zval *n, n_sub;
 
-	RETURN_LONG(42);
+	ZVAL_UNDEF(&n_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(n)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &n);
+	RETURN_STRING("Stub\\Constants");
 }
 

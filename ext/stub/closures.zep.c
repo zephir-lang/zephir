@@ -485,7 +485,7 @@ PHP_METHOD(Stub_Closures, issue2321doUrlEncode)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &matches_param);
 	zephir_get_arrval(&matches, matches_param);
-	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 259);
+	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 261);
 	ZEPHIR_RETURN_CALL_FUNCTION("rawurlencode", NULL, 41, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -541,7 +541,7 @@ PHP_METHOD(Stub_Closures, issue2321ProtectedUpper)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &matches_param);
 	zephir_get_arrval(&matches, matches_param);
-	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 282);
+	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 284);
 	zephir_fast_strtoupper(return_value, &_0);
 	RETURN_MM();
 }
@@ -889,7 +889,7 @@ PHP_METHOD(Stub_Closures, issue2652Loop)
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 2);
 	zephir_array_fast_append(&_0, &_1);
-	zephir_is_iterable(&_0, 0, "stub/closures.zep", 461);
+	zephir_is_iterable(&_0, 0, "stub/closures.zep", 463);
 	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&_0), _2)
 	{
 		ZEPHIR_INIT_NVAR(&i);
@@ -900,7 +900,7 @@ PHP_METHOD(Stub_Closures, issue2652Loop)
 		ZEPHIR_INIT_NVAR(&_4$$3);
 		ZEPHIR_INIT_NVAR(&_4$$3);
 		zephir_create_closure_bound(&_4$$3, &_3$$3, NULL, stub_32__closure_ce, SL("__invoke"));
-		zephir_array_append(&result, &_4$$3, PH_SEPARATE, "stub/closures.zep", 458);
+		zephir_array_append(&result, &_4$$3, PH_SEPARATE, "stub/closures.zep", 460);
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&i);
 	RETURN_CCTOR(&result);
@@ -1753,5 +1753,29 @@ PHP_METHOD(Stub_Closures, issue2668ByRefRewriteArray)
 	ZEPHIR_CALL_USER_FUNC(return_value, &hold);
 	zephir_check_call_status();
 	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2686
+ */
+PHP_METHOD(Stub_Closures, issue2686ArrowAliasConstant)
+{
+
+	zephir_create_closure_ex(return_value, NULL, stub_62__closure_ce, SL("__invoke"));
+	return;
+}
+
+PHP_METHOD(Stub_Closures, issue2686ArrowAliasInstanceOf)
+{
+
+	zephir_create_closure_ex(return_value, NULL, stub_63__closure_ce, SL("__invoke"));
+	return;
+}
+
+PHP_METHOD(Stub_Closures, issue2686ArrowAliasClassName)
+{
+
+	zephir_create_closure_ex(return_value, NULL, stub_64__closure_ce, SL("__invoke"));
+	return;
 }
 

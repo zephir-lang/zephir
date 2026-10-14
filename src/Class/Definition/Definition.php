@@ -89,6 +89,13 @@ final class Definition extends AbstractDefinition
     protected ?Definition $enclosingClassDefinition = null;
 
     /**
+     * For closure classes: the namespace of the code the closure is written in.
+     * Names in the closure body resolve against it, while the class itself
+     * stays in the extension namespace.
+     */
+    protected ?string $sourceNamespace = null;
+
+    /**
      * When class is from external dependency
      */
     protected bool $external = false;
@@ -1116,6 +1123,22 @@ final class Definition extends AbstractDefinition
     public function getNamespace(): string
     {
         return $this->namespace;
+    }
+
+    /**
+     * Return the namespace that names in the class body resolve against.
+     */
+    public function getSourceNamespace(): string
+    {
+        return $this->sourceNamespace ?? $this->namespace;
+    }
+
+    /**
+     * Sets the namespace that names in a closure class body resolve against.
+     */
+    public function setSourceNamespace(string $sourceNamespace): void
+    {
+        $this->sourceNamespace = $sourceNamespace;
     }
 
     /**

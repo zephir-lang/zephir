@@ -112,11 +112,16 @@ class Closure
     }
 
     /**
-     * Creates a closure.
+     * Creates and registers the anonymous class a closure compiles to.
      *
-     * @throws Exception
+     * The body is compiled later in a context of its own, so it has to carry
+     * the name-resolution scope of the code it is written in: the `use ... as`
+     * aliases (through the context handed to the anonymous file) and the
+     * namespace. The class itself always lives in the extension namespace.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2686
      */
-    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
+    protected function createClosureClass(CompilationContext $compilationContext): Definition
     {
         $classDefinition = new Definition(
             $compilationContext->config->get('namespace'),
@@ -124,11 +129,24 @@ class Closure
         );
 
         $classDefinition->setIsFinal(true);
+        $classDefinition->setSourceNamespace($compilationContext->currentNamespace());
 
         $compilerFile = new CompilerFileAnonymous($classDefinition, $compilationContext->config, $compilationContext);
         $compilerFile->setLogger($compilationContext->logger);
 
         $compilationContext->compiler->addClassDefinition($compilerFile, $classDefinition);
+
+        return $classDefinition;
+    }
+
+    /**
+     * Creates a closure.
+     *
+     * @throws Exception
+     */
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
+    {
+        $classDefinition = $this->createClosureClass($compilationContext);
 
         $parameters = null;
         if (isset($expression['left'])) {

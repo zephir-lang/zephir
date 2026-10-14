@@ -56,7 +56,7 @@ class ThrowStatement extends StatementAbstract
             ) {
                 $className = Name::fetchFQN(
                     $expr['class'],
-                    $compilationContext->classDefinition->getNamespace(),
+                    $compilationContext->currentNamespace(),
                     $compilationContext->aliasManager
                 );
 

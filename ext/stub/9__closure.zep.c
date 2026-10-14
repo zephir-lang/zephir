@@ -39,7 +39,7 @@ PHP_METHOD(stub_9__closure, __invoke)
 	zephir_read_property(&abc, this_ptr, SL("abc"), PH_NOISY_CC);
 
 	zephir_memory_observe(&_0);
-	zephir_array_fetch_string(&_0, &abc, SL("a"), PH_NOISY, "stub/closures.zep", 68);
+	zephir_array_fetch_string(&_0, &abc, SL("a"), PH_NOISY, "stub/closures.zep", 70);
 	RETURN_CCTOR(&_0);
 }
 

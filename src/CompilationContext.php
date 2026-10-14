@@ -428,13 +428,22 @@ class CompilationContext
     }
 
     /**
+     * The namespace that unqualified names in the code being compiled resolve against.
+     */
+    public function currentNamespace(): string
+    {
+        if ($this->currentMethod instanceof FunctionDefinition) {
+            return $this->currentMethod->getNamespace();
+        }
+
+        return $this->classDefinition->getSourceNamespace();
+    }
+
+    /**
      * Transform class/interface name to FQN format.
      */
     public function getFullName(string $className): string
     {
-        $isFunction = $this->currentMethod instanceof FunctionDefinition;
-        $namespace  = $isFunction ? $this->currentMethod->getNamespace() : $this->classDefinition->getNamespace();
-
-        return Name::fetchFQN($className, $namespace, $this->aliasManager);
+        return Name::fetchFQN($className, $this->currentNamespace(), $this->aliasManager);
     }
 }
