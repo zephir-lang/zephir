@@ -162,25 +162,25 @@ PHP_METHOD(Stub_Issue2698, removeOffset)
 PHP_METHOD(Stub_Issue2698, getItems)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "items", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "items");
 }
 
 PHP_METHOD(Stub_Issue2698, getBag)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "bag", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "bag");
 }
 
 PHP_METHOD(Stub_Issue2698, getMatrix)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "matrix", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "matrix");
 }
 
 PHP_METHOD(Stub_Issue2698, getRemovable)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "removable", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "removable");
 }
 
 /**

@@ -128,7 +128,7 @@ PHP_METHOD(Stub_Constants, getPropertyC8)
 PHP_METHOD(Stub_Constants, getPropertyC9)
 {
 
-	RETURN_MEMBER(getThis(), "propertyC9");
+	RETURN_MEMBER_VERIFIED(getThis(), "propertyC9");
 }
 
 PHP_METHOD(Stub_Constants, testReadConstant)

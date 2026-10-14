@@ -263,40 +263,6 @@ extern zend_string* i_self;
   RETURN_MM();
 
 /**
- * Throws a TypeError that matches PHP's userland return-type message format:
- *   "Class\Method(): Return value must be of type <expected>, <actual> returned"
- *
- * Used by RETURN_*_MEMBER_TYPED macros to enforce strict scalar return types
- * on methods that return a runtime value (e.g. `return this->property`) where
- * the static checker in src/Statements/ReturnStatement.php can't prove the
- * type matches. Without this, internal C extensions bypass the engine's
- * return-type verification (which only runs in ZEND_DEBUG builds).
- *
- * See https://github.com/zephir-lang/zephir/issues/1991
- */
-static inline void zephir_throw_return_type_error(uint32_t expected_type, zval *retval)
-{
-	zend_execute_data *ex = EG(current_execute_data);
-	const char *expected = zend_get_type_by_const(expected_type);
-	const char *actual   = zend_zval_type_name(retval);
-
-	if (ex && ex->func && ex->func->common.function_name) {
-		zend_string *fname = ex->func->common.function_name;
-		zend_class_entry *scope = ex->func->common.scope;
-		if (scope) {
-			zend_type_error("%s::%s(): Return value must be of type %s, %s returned",
-				ZSTR_VAL(scope->name), ZSTR_VAL(fname), expected, actual);
-		} else {
-			zend_type_error("%s(): Return value must be of type %s, %s returned",
-				ZSTR_VAL(fname), expected, actual);
-		}
-	} else {
-		zend_type_error("Return value must be of type %s, %s returned",
-			expected, actual);
-	}
-}
-
-/**
  * Throws the TypeError for a value that a typed local cannot hold, worded as
  * PHP words it for a typed property. PHP never coerces into `array`, so a
  * local declared `array` rejects every other value, null included.
@@ -315,33 +281,25 @@ static inline void zephir_throw_variable_type_error(zval *value, const char *nam
 }
 
 /**
- * Same as RETURN_MEMBER but verifies that the property's runtime type matches
- * the method's declared return type. Throws TypeError on mismatch.
- * Used when the method body is `return this->prop` and the method declares
- * a strict scalar return type like `-> string`.
+ * Same as RETURN_MEMBER but checks the value against the method's own return
+ * type (see zephir_verify_return_value) and throws the TypeError PHP throws
+ * for a hand-written method. Used for `return this->prop` in a typed method.
  *
- * A read that already threw (an uninitialized typed property) is returned as
- * is, so the engine's Error is not replaced by a return-type TypeError.
+ * See https://github.com/zephir-lang/zephir/issues/1991
+ * See https://github.com/zephir-lang/zephir/issues/2391
  */
-#define RETURN_MEMBER_TYPED(object, member_name, expected_type) \
+#define RETURN_MEMBER_VERIFIED(object, member_name) \
   do { \
     zephir_return_property(return_value, object, SL(member_name)); \
-    if (UNEXPECTED(!EG(exception) && Z_TYPE_P(return_value) != (expected_type))) { \
-      zephir_throw_return_type_error((expected_type), return_value); \
-      return; \
-    } \
+    zephir_verify_return_value(return_value); \
     return; \
   } while (0)
 
-/** Memory-grow-aware variant of RETURN_MEMBER_TYPED. */
-#define RETURN_MM_MEMBER_TYPED(object, member_name, expected_type) \
+/** Memory-frame variant of RETURN_MEMBER_VERIFIED. */
+#define RETURN_MM_MEMBER_VERIFIED(object, member_name) \
   do { \
     zephir_return_property(return_value, object, SL(member_name)); \
-    if (UNEXPECTED(!EG(exception) && Z_TYPE_P(return_value) != (expected_type))) { \
-      zephir_throw_return_type_error((expected_type), return_value); \
-      ZEPHIR_MM_RESTORE(); \
-      return; \
-    } \
+    zephir_verify_return_value(return_value); \
     RETURN_MM(); \
   } while (0)
 
@@ -539,6 +497,10 @@ zend_property_info *zephir_declare_typed_property_union(zend_class_entry *ce, co
  * it in place the way the engine checks a PHP parameter. Throws the argument
  * TypeError and returns 0 when it does not fit. */
 int zephir_verify_union_arg(zval *arg, uint32_t arg_num);
+
+/* Checks a value about to be returned against the method's own return type.
+ * Throws the return-type TypeError and returns 0 when it does not fit. */
+int zephir_verify_return_value(zval *retval);
 
 /* Four of PHP's own attributes get their behaviour from a compile-time
  * validator in Zend/zend_attributes.c, which only runs while the engine

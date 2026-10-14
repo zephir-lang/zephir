@@ -130,6 +130,6 @@ PHP_METHOD(Stub_Issue2063, addLiteral)
 PHP_METHOD(Stub_Issue2063, get)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "store", IS_STRING);
+	RETURN_MEMBER_VERIFIED(getThis(), "store");
 }
 

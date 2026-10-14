@@ -69,13 +69,13 @@ ZEPHIR_INIT_CLASS(Stub_Issue2702)
 PHP_METHOD(Stub_Issue2702, getData)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "data", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "data");
 }
 
 PHP_METHOD(Stub_Issue2702, getRemovable)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "removable", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "removable");
 }
 
 PHP_METHOD(Stub_Issue2702, removeLiteral)
@@ -374,7 +374,7 @@ PHP_METHOD(Stub_Issue2702, snapshotAroundLiteralUnset)
 
 	ZEPHIR_INIT_VAR(&ret);
 	array_init(&ret);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 73, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 89, PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/issue2702.zep", 144);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "a");
@@ -383,7 +383,7 @@ PHP_METHOD(Stub_Issue2702, snapshotAroundLiteralUnset)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 73, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 89, PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_2, PH_SEPARATE, "stub/issue2702.zep", 146);
 	RETURN_CTOR(&ret);
 }

@@ -269,7 +269,7 @@ PHP_METHOD(Stub_Issue1629, propertyAppendTarget)
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_string_offset_read(&_2, &keyspace_zv, nb, PH_NOISY);
 	zephir_update_property_array_append(this_ptr, SL("parts"), &_2);
-	RETURN_MM_MEMBER_TYPED(getThis(), "parts", IS_ARRAY);
+	RETURN_MM_MEMBER_VERIFIED(getThis(), "parts");
 }
 
 PHP_METHOD(Stub_Issue1629, propertyIndexTarget)
@@ -307,7 +307,7 @@ PHP_METHOD(Stub_Issue1629, propertyIndexTarget)
 	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_STRING(&_3, "k");
 	zephir_update_property_array(this_ptr, SL("parts"), &_3, &_2);
-	RETURN_MM_MEMBER_TYPED(getThis(), "parts", IS_ARRAY);
+	RETURN_MM_MEMBER_VERIFIED(getThis(), "parts");
 }
 
 PHP_METHOD(Stub_Issue1629, staticIndexTarget)
@@ -338,7 +338,9 @@ PHP_METHOD(Stub_Issue1629, staticIndexTarget)
 	zephir_string_offset_read(&_2, &keyspace_zv, nb, PH_NOISY);
 	zephir_update_static_property_array_multi_ce(stub_issue1629_ce, SL("staticParts"), &_2, SL("l"), 1, (zend_long) 0);
 	zephir_read_static_property_ce(&_3, stub_issue1629_ce, SL("staticParts"), PH_NOISY_CC | PH_READONLY);
-	RETURN_CTOR(&_3);
+	ZVAL_COPY(return_value, &_3);
+	zephir_verify_return_value(return_value);
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Issue1629, staticAppendTarget)
@@ -369,7 +371,9 @@ PHP_METHOD(Stub_Issue1629, staticAppendTarget)
 	zephir_string_offset_read(&_2, &keyspace_zv, nb, PH_NOISY);
 	zephir_update_static_property_array_multi_ce(stub_issue1629_ce, SL("staticParts"), &_2, SL("a"), 1);
 	zephir_read_static_property_ce(&_3, stub_issue1629_ce, SL("staticParts"), PH_NOISY_CC | PH_READONLY);
-	RETURN_CTOR(&_3);
+	ZVAL_COPY(return_value, &_3);
+	zephir_verify_return_value(return_value);
+	RETURN_MM();
 }
 
 /**

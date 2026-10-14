@@ -68,19 +68,19 @@ ZEPHIR_INIT_CLASS(Stub_Issue2651)
 PHP_METHOD(Stub_Issue2651, toArray)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "headers", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "headers");
 }
 
 PHP_METHOD(Stub_Issue2651, getPreset)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "preset", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "preset");
 }
 
 PHP_METHOD(Stub_Issue2651, getNested)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "nested", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "nested");
 }
 
 /**

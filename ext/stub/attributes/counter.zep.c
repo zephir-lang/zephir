@@ -82,6 +82,6 @@ PHP_METHOD(Stub_Attributes_Counter, bump)
 		return;
 	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 21, &_2);
-	RETURN_MM_MEMBER_TYPED(getThis(), "hits", IS_LONG);
+	RETURN_MM_MEMBER_VERIFIED(getThis(), "hits");
 }
 

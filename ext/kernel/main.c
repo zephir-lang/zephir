@@ -615,15 +615,35 @@ zend_property_info *zephir_declare_typed_property(zend_class_entry *ce, const ch
 /**
  * Whether the object is an instance of one class named by the type. On PHP
  * 8.0 an internal `A|B` class list stays a single name, so it is split here;
- * 8.1+ splits it into a type list at registration.
+ * 8.1+ splits it into a type list at registration. Arg-info stores `self` and
+ * `parent` as plain names, so they resolve against the method's scope.
  */
-static int zephir_union_arg_is_instance(zend_type type, zend_object *object)
+static zend_class_entry *zephir_union_arg_class(const char *name, size_t length, zend_class_entry *scope)
+{
+	zend_class_entry *ce;
+	zend_string *class_name;
+
+	if (scope && zend_binary_strcasecmp(name, length, "self", sizeof("self") - 1) == 0) {
+		return scope;
+	}
+	if (scope && zend_binary_strcasecmp(name, length, "parent", sizeof("parent") - 1) == 0) {
+		return scope->parent;
+	}
+
+	class_name = zend_string_init(name, length, 0);
+	ce         = zend_lookup_class_ex(class_name, NULL, ZEND_FETCH_CLASS_NO_AUTOLOAD);
+	zend_string_release(class_name);
+
+	return ce;
+}
+
+static int zephir_union_arg_is_instance(zend_type type, zend_object *object, zend_class_entry *scope)
 {
 	zend_type *list_type;
 
 	if (ZEND_TYPE_HAS_LIST(type)) {
 		ZEND_TYPE_LIST_FOREACH(ZEND_TYPE_LIST(type), list_type) {
-			if (zephir_union_arg_is_instance(*list_type, object)) {
+			if (zephir_union_arg_is_instance(*list_type, object, scope)) {
 				return 1;
 			}
 		} ZEND_TYPE_LIST_FOREACH_END();
@@ -642,10 +662,8 @@ static int zephir_union_arg_is_instance(zend_type type, zend_object *object)
 	while (start < end) {
 		const char *separator = memchr(start, '|', end - start);
 		size_t length         = (separator ? separator : end) - start;
-		zend_string *name     = zend_string_init(start, length, 0);
-		zend_class_entry *ce  = zend_lookup_class_ex(name, NULL, ZEND_FETCH_CLASS_NO_AUTOLOAD);
+		zend_class_entry *ce  = zephir_union_arg_class(start, length, scope);
 
-		zend_string_release(name);
 		if (ce && instanceof_function(object->ce, ce)) {
 			return 1;
 		}
@@ -753,7 +771,7 @@ int zephir_verify_union_arg(zval *arg, uint32_t arg_num)
 		return 1;
 	}
 
-	if (Z_TYPE_P(arg) == IS_OBJECT && zephir_union_arg_is_instance(arg_info->type, Z_OBJ_P(arg))) {
+	if (Z_TYPE_P(arg) == IS_OBJECT && zephir_union_arg_is_instance(arg_info->type, Z_OBJ_P(arg), func->common.scope)) {
 		return 1;
 	}
 
@@ -786,6 +804,80 @@ int zephir_verify_union_arg(zval *arg, uint32_t arg_num)
 		zend_zval_value_name(arg)
 #else
 		zend_zval_type_name(arg)
+#endif
+	);
+	zend_string_release(type_str);
+
+	return 0;
+}
+
+/**
+ * Checks a value about to be returned against the running method's own
+ * return type, the check the engine only makes in debug builds (where a
+ * mismatch is an assertion failure). Mirrors `zend_check_type()` in strict
+ * mode: the type mask, the class members, `static`, `callable`, and an int
+ * widening to float. A pending exception is left alone, so the error that
+ * produced the value is the one the caller sees.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2391
+ */
+int zephir_verify_return_value(zval *retval)
+{
+	zend_execute_data *execute_data = EG(current_execute_data);
+	zend_function *func             = execute_data->func;
+	zend_arg_info *ret_info;
+	uint32_t type_mask;
+
+	if (EG(exception) || !(func->common.fn_flags & ZEND_ACC_HAS_RETURN_TYPE)) {
+		return 1;
+	}
+
+	ret_info = func->common.arg_info - 1;
+	if (!ZEND_TYPE_IS_SET(ret_info->type)) {
+		return 1;
+	}
+
+	if (EXPECTED(ZEND_TYPE_CONTAINS_CODE(ret_info->type, Z_TYPE_P(retval)))) {
+		return 1;
+	}
+
+	type_mask = ZEND_TYPE_FULL_MASK(ret_info->type);
+	if (Z_TYPE_P(retval) == IS_OBJECT) {
+		if (zephir_union_arg_is_instance(ret_info->type, Z_OBJ_P(retval), func->common.scope)) {
+			return 1;
+		}
+		if ((type_mask & MAY_BE_STATIC) && instanceof_function(Z_OBJCE_P(retval), zend_get_called_scope(execute_data))) {
+			return 1;
+		}
+	}
+
+#if PHP_VERSION_ID < 80200
+	if ((type_mask & MAY_BE_ITERABLE)
+		&& (Z_TYPE_P(retval) == IS_ARRAY
+			|| (Z_TYPE_P(retval) == IS_OBJECT && instanceof_function(Z_OBJCE_P(retval), zend_ce_traversable)))) {
+		return 1;
+	}
+#endif
+
+	if ((type_mask & MAY_BE_CALLABLE) && zend_is_callable(retval, 0, NULL)) {
+		return 1;
+	}
+
+	if ((type_mask & MAY_BE_DOUBLE) && Z_TYPE_P(retval) == IS_LONG) {
+		ZVAL_DOUBLE(retval, (double) Z_LVAL_P(retval));
+		return 1;
+	}
+
+	zend_string *type_str = zend_type_to_string(ret_info->type);
+	zend_type_error("%s%s%s(): Return value must be of type %s, %s returned",
+		func->common.scope ? ZSTR_VAL(func->common.scope->name) : "",
+		func->common.scope ? "::" : "",
+		ZSTR_VAL(func->common.function_name),
+		ZSTR_VAL(type_str),
+#if PHP_VERSION_ID >= 80300
+		zend_zval_value_name(retval)
+#else
+		zend_zval_type_name(retval)
 #endif
 	);
 	zend_string_release(type_str);

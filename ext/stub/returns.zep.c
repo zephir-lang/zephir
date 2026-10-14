@@ -81,7 +81,7 @@ PHP_METHOD(Stub_Returns, returnWithoutParameter)
 PHP_METHOD(Stub_Returns, returnNullOnString)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "stringDefaultNull", IS_STRING);
+	RETURN_MEMBER_VERIFIED(getThis(), "stringDefaultNull");
 }
 
 /**
@@ -90,7 +90,7 @@ PHP_METHOD(Stub_Returns, returnNullOnString)
 PHP_METHOD(Stub_Returns, returnNullOnInt)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "intDefaultNull", IS_LONG);
+	RETURN_MEMBER_VERIFIED(getThis(), "intDefaultNull");
 }
 
 /**
@@ -99,7 +99,7 @@ PHP_METHOD(Stub_Returns, returnNullOnInt)
 PHP_METHOD(Stub_Returns, returnNullOnArray)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "arrayDefaultNull", IS_ARRAY);
+	RETURN_MEMBER_VERIFIED(getThis(), "arrayDefaultNull");
 }
 
 /**
@@ -108,7 +108,7 @@ PHP_METHOD(Stub_Returns, returnNullOnArray)
 PHP_METHOD(Stub_Returns, returnNullOnDouble)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "doubleDefaultNull", IS_DOUBLE);
+	RETURN_MEMBER_VERIFIED(getThis(), "doubleDefaultNull");
 }
 
 /**
@@ -118,7 +118,7 @@ PHP_METHOD(Stub_Returns, returnNullOnDouble)
 PHP_METHOD(Stub_Returns, returnValidString)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "validString", IS_STRING);
+	RETURN_MEMBER_VERIFIED(getThis(), "validString");
 }
 
 /**
@@ -128,6 +128,6 @@ PHP_METHOD(Stub_Returns, returnValidString)
 PHP_METHOD(Stub_Returns, returnNullOnNullableString)
 {
 
-	RETURN_MEMBER(getThis(), "nullableProperty");
+	RETURN_MEMBER_VERIFIED(getThis(), "nullableProperty");
 }
 

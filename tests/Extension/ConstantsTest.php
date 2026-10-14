@@ -54,7 +54,22 @@ final class ConstantsTest extends TestCase
         $this->assertSame($this->test->getPropertyC4(), 10);
         $this->assertSame($this->test->getPropertyC5(), 10.25);
         $this->assertSame($this->test->getPropertyC6(), 'test');
-        $this->assertSame($this->test->getPropertyC9(), 'some-value');
+    }
+
+    /**
+     * The getter's `@var` names an interface while the property holds a
+     * string, so it fails as the same hand-written PHP method would.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/2391
+     */
+    public function testGetterRejectsAValueItsDocblockTypeRejects(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage(
+            'Stub\\Constants::getPropertyC9(): Return value must be of type Phalcon\\Cache\\FrontendInterface, string returned'
+        );
+
+        $this->test->getPropertyC9();
     }
 
     public function testConstantsRead(): void

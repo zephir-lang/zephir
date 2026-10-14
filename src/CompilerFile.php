@@ -68,8 +68,28 @@ final class CompilerFile implements FileInterface
      */
     private const DOCBLOCK_PSEUDO_TYPES = [
         'array', 'bool', 'boolean', 'callable', 'char', 'double', 'false', 'float', 'int', 'integer',
-        'iterable', 'long', 'mixed', 'never', 'null', 'object', 'parent', 'resource', 'self', 'static',
-        'string', 'this', 'true', 'uchar', 'uint', 'ulong', 'var', 'variable', 'void',
+        'iterable', 'list', 'long', 'mixed', 'never', 'null', 'numeric', 'object', 'parent', 'resource',
+        'scalar', 'self', 'static', 'string', 'this', 'true', 'uchar', 'uint', 'ulong', 'var', 'variable',
+        'void',
+    ];
+
+    /**
+     * `@var` words a shortcut accessor can be typed with, after the
+     * synonyms below are applied. Any other non-class word leaves the
+     * accessors untyped.
+     */
+    private const DOCBLOCK_ACCESSOR_TYPES = [
+        'array', 'bool', 'callable', 'char', 'double', 'false', 'int', 'long', 'mixed', 'null', 'object',
+        'resource', 'string', 'uchar', 'uint', 'ulong', 'var', 'variable',
+    ];
+
+    /**
+     * PHPDoc spellings of a Zephir type.
+     */
+    private const DOCBLOCK_TYPE_SYNONYMS = [
+        'boolean' => 'bool',
+        'float'   => 'double',
+        'integer' => 'int',
     ];
 
     private AliasManager $aliasManager;
@@ -1304,17 +1324,7 @@ final class CompilerFile implements FileInterface
                             new StatementsBlock([
                                 [
                                     'type' => 'return',
-                                    'expr' => [
-                                        'type'  => 'property-access',
-                                        'left'  => [
-                                            'type'  => 'variable',
-                                            'value' => 'this',
-                                        ],
-                                        'right' => [
-                                            'type'  => 'variable',
-                                            'value' => $property['name'],
-                                        ],
-                                    ],
+                                    'expr' => $this->shortcutPropertyRead($property),
                                 ],
                             ]),
                             $docBlock,
@@ -1339,9 +1349,11 @@ final class CompilerFile implements FileInterface
                                     'type'        => 'let',
                                     'assignments' => [
                                         [
-                                            'assign-type' => 'object-property',
+                                            'assign-type' => $this->isStaticProperty($property)
+                                                ? 'static-property'
+                                                : 'object-property',
                                             'operator'    => 'assign',
-                                            'variable'    => 'this',
+                                            'variable'    => $this->isStaticProperty($property) ? 'self' : 'this',
                                             'property'    => $property['name'],
                                             'expr'        => [
                                                 'type'  => 'variable',
@@ -1386,17 +1398,7 @@ final class CompilerFile implements FileInterface
                             new StatementsBlock([
                                 [
                                     'type' => 'return',
-                                    'expr' => [
-                                        'type'  => 'property-access',
-                                        'left'  => [
-                                            'type'  => 'variable',
-                                            'value' => 'this',
-                                        ],
-                                        'right' => [
-                                            'type'  => 'variable',
-                                            'value' => $property['name'],
-                                        ],
-                                    ],
+                                    'expr' => $this->shortcutPropertyRead($property),
                                 ],
                             ]),
                             $docBlock,
@@ -1411,6 +1413,38 @@ final class CompilerFile implements FileInterface
                     throw new CompilerException("Unknown shortcut '" . $shortcut['name'] . "'", $shortcut);
             }
         }
+    }
+
+    /**
+     * The getter's read of the property: `this->prop`, or `self::prop` for a
+     * static property, which `this->prop` would never reach.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2391
+     */
+    private function shortcutPropertyRead(array $property): array
+    {
+        $position = [
+            'file' => $property['file'] ?? null,
+            'line' => $property['line'] ?? null,
+            'char' => $property['char'] ?? null,
+        ];
+
+        return [
+            'type'  => $this->isStaticProperty($property) ? 'static-property-access' : 'property-access',
+            'left'  => [
+                'type'  => 'variable',
+                'value' => $this->isStaticProperty($property) ? 'self' : 'this',
+            ] + $position,
+            'right' => [
+                'type'  => 'variable',
+                'value' => $property['name'],
+            ] + $position,
+        ] + $position;
+    }
+
+    private function isStaticProperty(array $property): bool
+    {
+        return in_array('static', $property['visibility'], true);
     }
 
     /**
@@ -1442,43 +1476,113 @@ final class CompilerFile implements FileInterface
 
     /**
      * Type members of a `@var` annotation. A class name becomes a cast member
-     * so it produces a class type; any other word passes through unchanged.
+     * so it produces a class type, and PHPDoc spellings map onto Zephir types
+     * (`float`, `?int`, `string[]`, `array<int, string>`). A type no accessor
+     * can carry (`numeric`, `self`, `iterable`, a lone `null`) leaves the
+     * accessors untyped rather than failing the build.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2391
      */
     private function docblockShortcutTypes(string $annotation, array $property): array
     {
         $members = [];
 
-        foreach (explode('|', $annotation) as $type) {
-            /**
-             * A property docblock may include the variable name and
-             * a description (`@var Type $name some text`); keep only
-             * the leading type token so the generated accessor types
-             * stay valid.
-             *
-             * @see https://github.com/zephir-lang/zephir/issues/2543
-             */
-            $type = trim($type);
-            if (preg_match('/^\S+/', $type, $matches)) {
-                $type = $matches[0];
+        foreach ($this->docblockUnionMembers($this->docblockTypeExpression($annotation)) as $type) {
+            if (str_starts_with($type, '?')) {
+                $type      = substr($type, 1);
+                $members[] = ['data-type' => 'null'];
             }
 
-            if ($this->isDocblockClassName($type)) {
-                $members[] = [
-                    'cast' => [
-                        'type'  => 'variable',
-                        'value' => $type,
-                        'file'  => $property['file'] ?? null,
-                        'line'  => $property['line'] ?? null,
-                        'char'  => $property['char'] ?? null,
-                    ],
-                ];
+            if (str_ends_with($type, '[]') || preg_match('/^(array|list)</i', $type)) {
+                $type = 'array';
+            }
+
+            $word = strtolower($type);
+            $word = self::DOCBLOCK_TYPE_SYNONYMS[$word] ?? $word;
+
+            if (in_array($word, self::DOCBLOCK_ACCESSOR_TYPES, true)) {
+                $members[] = ['data-type' => 'mixed' === $word ? 'variable' : $word];
                 continue;
             }
 
-            $members[] = ['data-type' => 'mixed' === $type ? 'variable' : $type];
+            if (!$this->isDocblockClassName($type)) {
+                return [];
+            }
+
+            $members[] = [
+                'cast' => [
+                    'type'  => 'variable',
+                    'value' => $type,
+                    'file'  => $property['file'] ?? null,
+                    'line'  => $property['line'] ?? null,
+                    'char'  => $property['char'] ?? null,
+                ],
+            ];
         }
 
-        return $members;
+        // `null` and `false` only exist as part of a wider type.
+        foreach ($members as $member) {
+            if (isset($member['cast']) || !in_array($member['data-type'], ['null', 'false'], true)) {
+                return $members;
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * The type part of a `@var` annotation (`Type $name some text`), which
+     * ends at the first space outside `<...>`, `{...}` or `(...)`.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2543
+     */
+    private function docblockTypeExpression(string $annotation): string
+    {
+        $annotation = trim($annotation);
+        $depth      = 0;
+
+        for ($i = 0, $length = strlen($annotation); $i < $length; $i++) {
+            $char = $annotation[$i];
+            if (str_contains('<{(', $char)) {
+                $depth++;
+            } elseif (str_contains('>})', $char)) {
+                $depth--;
+            } elseif (0 === $depth && ctype_space($char)) {
+                return substr($annotation, 0, $i);
+            }
+        }
+
+        return $annotation;
+    }
+
+    /**
+     * Splits a type expression on the `|` that are not inside `<...>`,
+     * `{...}` or `(...)`.
+     *
+     * @return string[]
+     */
+    private function docblockUnionMembers(string $expression): array
+    {
+        $members = [];
+        $current = '';
+        $depth   = 0;
+
+        for ($i = 0, $length = strlen($expression); $i < $length; $i++) {
+            $char = $expression[$i];
+            if (str_contains('<{(', $char)) {
+                $depth++;
+            } elseif (str_contains('>})', $char)) {
+                $depth--;
+            } elseif (0 === $depth && '|' === $char) {
+                $members[] = trim($current);
+                $current   = '';
+                continue;
+            }
+            $current .= $char;
+        }
+        $members[] = trim($current);
+
+        return array_values(array_filter($members, static fn (string $member): bool => '' !== $member));
     }
 
     private function isDocblockClassName(string $type): bool

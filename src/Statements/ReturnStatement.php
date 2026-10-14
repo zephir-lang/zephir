@@ -15,6 +15,7 @@ namespace Zephir\Statements;
 
 use ReflectionException;
 use Zephir\Class\Definition\GeneratorTransformer;
+use Zephir\Class\Method\Method;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
@@ -122,31 +123,55 @@ final class ReturnStatement extends StatementAbstract
                             $compilationContext->headersManager->add('kernel/object');
 
                             /**
-                             * If the method declares a strict scalar return type, emit a
-                             * runtime type check after reading the property. PHP's engine
-                             * does not verify return types of internal/extension methods in
-                             * release builds, so without this `return this->prop` could leak
-                             * a NULL (or other mismatching type) past a `-> string` hint.
+                             * A typed method checks the property's value against its own
+                             * return type. PHP's engine only verifies the return value of
+                             * an internal method in debug builds, where a mismatch aborts,
+                             * so without this `return this->prop` leaks a value its
+                             * Reflection type rejects.
                              *
                              * @see https://github.com/zephir-lang/zephir/issues/1991
+                             * @see https://github.com/zephir-lang/zephir/issues/2391
                              */
-                            $expectedType = $this->resolveStrictScalarReturnTypeConst($currentMethod);
-                            $thisAccessor = $this->thisAccessor($compilationContext);
-                            if ($expectedType !== null) {
-                                $codePrinter->output(
-                                    'RETURN_MM_MEMBER_TYPED(' . $thisAccessor . ', "' . $property . '", '
-                                    . $expectedType . ');'
-                                );
-                            } else {
-                                $codePrinter->output(
-                                    'RETURN_MM_MEMBER(' . $thisAccessor . ', "' . $property . '");'
-                                );
-                            }
+                            $macro = $this->verifiesReturnType($currentMethod)
+                                ? 'RETURN_MM_MEMBER_VERIFIED'
+                                : 'RETURN_MM_MEMBER';
+                            $codePrinter->output(
+                                $macro . '(' . $this->thisAccessor($compilationContext) . ', "' . $property . '");'
+                            );
 
                             return;
                         }
                     }
                 }
+            }
+
+            /**
+             * `return self::prop` in a typed method gets the same check as
+             * `return this->prop` above.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2391
+             */
+            if (
+                'static-property-access' === $statement['expr']['type'] &&
+                in_array($statement['expr']['left']['value'] ?? null, ['self', 'static'], true) &&
+                $this->verifiesReturnType($currentMethod)
+            ) {
+                $expr = new Expression($statement['expr']);
+                $expr->setReadOnly(true);
+                $resolvedExpr = $expr->compile($compilationContext);
+
+                $variable = $compilationContext->symbolTable->getVariableForRead(
+                    $resolvedExpr->getCode(),
+                    $compilationContext,
+                    $statement['expr']
+                );
+                $codePrinter->output(
+                    'ZVAL_COPY(return_value, ' . $compilationContext->backend->getVariableCode($variable) . ');'
+                );
+                $codePrinter->output('zephir_verify_return_value(return_value);');
+                $codePrinter->output(self::RETURN_RETURN);
+
+                return;
             }
 
             /**
@@ -469,40 +494,12 @@ final class ReturnStatement extends StatementAbstract
     }
 
     /**
-     * Returns the IS_* type constant for a method declared with a single,
-     * strict, non-nullable scalar return type that we can enforce at runtime
-     * via `RETURN_MM_MEMBER_TYPED`. Returns null for any case we don't yet
-     * verify (nullable, union types, mixed, object, bool, void).
-     *
-     * `bool` is intentionally not enforced here because PHP uses two distinct
-     * zval types (IS_TRUE / IS_FALSE) which would require a more elaborate
-     * macro. `object` would need class-hierarchy checks. `mixed` accepts
-     * anything by definition. These are left to a future change.
+     * Whether a returned property must be checked against the method's
+     * return type: any declared type except `mixed`, which accepts anything.
      */
-    private function resolveStrictScalarReturnTypeConst($currentMethod): ?string
+    private function verifiesReturnType(Method $currentMethod): bool
     {
-        if (!$currentMethod->hasReturnTypes()) {
-            return null;
-        }
-
-        if ($currentMethod->isMixed() || $currentMethod->areReturnTypesNullCompatible()) {
-            return null;
-        }
-
-        $returnTypes = $currentMethod->getReturnTypes();
-        if (count($returnTypes) !== 1) {
-            return null;
-        }
-
-        $type = array_key_first($returnTypes);
-
-        return match ($type) {
-            'string', 'istring' => 'IS_STRING',
-            'int', 'uint', 'long', 'ulong', 'char', 'uchar' => 'IS_LONG',
-            'double' => 'IS_DOUBLE',
-            'array' => 'IS_ARRAY',
-            default => null,
-        };
+        return $currentMethod->hasReturnTypes() && !$currentMethod->isMixed();
     }
 
     /**

@@ -49,6 +49,8 @@ PHP_METHOD(Stub_Properties_StaticPrivateProperties, getInstance)
 		zephir_update_static_property_ce(stub_properties_staticprivateproperties_ce, ZEND_STRL("instance"), &localInstance);
 	}
 	zephir_read_static_property_ce(&_0, stub_properties_staticprivateproperties_ce, SL("instance"), PH_NOISY_CC | PH_READONLY);
-	RETURN_CTOR(&_0);
+	ZVAL_COPY(return_value, &_0);
+	zephir_verify_return_value(return_value);
+	RETURN_MM();
 }
 

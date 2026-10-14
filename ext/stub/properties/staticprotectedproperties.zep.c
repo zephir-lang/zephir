@@ -59,23 +59,21 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, setSomeVar)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&someVar_sub);
-	static zend_string *_zephir_prop_0 = NULL;
-	if (UNEXPECTED(!_zephir_prop_0)) {
-		_zephir_prop_0 = zend_string_init("someVar", 7, 1);
-	}
-
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(someVar)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &someVar);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 119, someVar);
+	zephir_update_static_property_ce(stub_properties_staticprotectedproperties_ce, ZEND_STRL("someVar"), someVar);
 	RETURN_THISW();
 }
 
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeVar)
 {
+	zval _0;
 
-	RETURN_MEMBER(getThis(), "someVar");
+	ZVAL_UNDEF(&_0);
+	zephir_read_static_property_ce(&_0, stub_properties_staticprotectedproperties_ce, SL("someVar"), PH_NOISY_CC | PH_READONLY);
+	RETURN_CTORW(&_0);
 }
 
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeNull)

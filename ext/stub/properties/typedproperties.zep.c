@@ -88,18 +88,18 @@ ZEPHIR_INIT_CLASS(Stub_Properties_TypedProperties)
 PHP_METHOD(Stub_Properties_TypedProperties, getVal)
 {
 
-	RETURN_MEMBER(getThis(), "val");
+	RETURN_MEMBER_VERIFIED(getThis(), "val");
 }
 
 PHP_METHOD(Stub_Properties_TypedProperties, getMaybeNum)
 {
 
-	RETURN_MEMBER(getThis(), "maybeNum");
+	RETURN_MEMBER_VERIFIED(getThis(), "maybeNum");
 }
 
 PHP_METHOD(Stub_Properties_TypedProperties, getDefaultFormatter)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "defaultFormatter", IS_STRING);
+	RETURN_MEMBER_VERIFIED(getThis(), "defaultFormatter");
 }
 

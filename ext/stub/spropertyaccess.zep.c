@@ -172,7 +172,9 @@ PHP_METHOD(Stub_SPropertyAccess, mutateStringVarInsideCycle)
 		}
 	}
 	zephir_read_static_property_ce(&_5, stub_spropertyaccess_ce, SL("stringVar"), PH_NOISY_CC | PH_READONLY);
-	RETURN_CTOR(&_5);
+	ZVAL_COPY(return_value, &_5);
+	zephir_verify_return_value(return_value);
+	RETURN_MM();
 }
 
 /**
@@ -207,7 +209,9 @@ PHP_METHOD(Stub_SPropertyAccess, mutateIntVarInsideCycle)
 		}
 	}
 	zephir_read_static_property_ce(&_4, stub_spropertyaccess_ce, SL("intVar"), PH_NOISY_CC | PH_READONLY);
-	RETURN_CTORW(&_4);
+	ZVAL_COPY(return_value, &_4);
+	zephir_verify_return_value(return_value);
+	return;
 }
 
 /**
@@ -243,7 +247,9 @@ PHP_METHOD(Stub_SPropertyAccess, mutateDoubleVarInsideCycle)
 		}
 	}
 	zephir_read_static_property_ce(&_4, stub_spropertyaccess_ce, SL("doubleVar"), PH_NOISY_CC | PH_READONLY);
-	RETURN_CTORW(&_4);
+	ZVAL_COPY(return_value, &_4);
+	zephir_verify_return_value(return_value);
+	return;
 }
 
 PHP_METHOD(Stub_SPropertyAccess, mutateArrayVarInsideCycle)
@@ -290,7 +296,9 @@ PHP_METHOD(Stub_SPropertyAccess, mutateArrayVarInsideCycle)
 		}
 	}
 	zephir_read_static_property_ce(&_5, stub_spropertyaccess_ce, SL("arrayVar"), PH_NOISY_CC | PH_READONLY);
-	RETURN_CTOR(&_5);
+	ZVAL_COPY(return_value, &_5);
+	zephir_verify_return_value(return_value);
+	RETURN_MM();
 }
 
 void zephir_init_static_properties_Stub_SPropertyAccess()

@@ -49,7 +49,7 @@ ZEPHIR_INIT_CLASS(Stub_Stubs)
 PHP_METHOD(Stub_Stubs, testDockBlockAndReturnType)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "propString", IS_STRING);
+	RETURN_MEMBER_VERIFIED(getThis(), "propString");
 }
 
 /**
@@ -60,7 +60,7 @@ PHP_METHOD(Stub_Stubs, testDockBlockAndReturnType)
 PHP_METHOD(Stub_Stubs, testDocBlockAndReturnTypeDeclared)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "propStringProtected", IS_STRING);
+	RETURN_MEMBER_VERIFIED(getThis(), "propStringProtected");
 }
 
 /**

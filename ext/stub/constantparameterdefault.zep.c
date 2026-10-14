@@ -84,12 +84,12 @@ PHP_METHOD(Stub_ConstantParameterDefault, __construct)
 PHP_METHOD(Stub_ConstantParameterDefault, getCipher)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "cipher", IS_STRING);
+	RETURN_MEMBER_VERIFIED(getThis(), "cipher");
 }
 
 PHP_METHOD(Stub_ConstantParameterDefault, getRounds)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "rounds", IS_LONG);
+	RETURN_MEMBER_VERIFIED(getThis(), "rounds");
 }
 

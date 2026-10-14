@@ -126,7 +126,7 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromProperty)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	RETURN_MM_MEMBER_TYPED(getThis(), "assigedFromMethod", IS_ARRAY);
+	RETURN_MM_MEMBER_VERIFIED(getThis(), "assigedFromMethod");
 }
 
 /**
