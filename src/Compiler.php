@@ -22,6 +22,7 @@ use ReflectionClass;
 use ReflectionException;
 use Zephir\Backend\Backend;
 use Zephir\Cache\PropertyCacheSlots;
+use Zephir\Cache\SlotsCache;
 use Zephir\Backend\FcallManagerInterface;
 use Zephir\Backend\StringsManager;
 use Zephir\Class\Definition\AttributeEmitter;
@@ -39,6 +40,7 @@ use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\NotImplementedException;
 use Zephir\Exception\ParseException;
 use Zephir\Exception\RuntimeException;
+use Zephir\Expression\Closure;
 use Zephir\FileSystem\FileSystemInterface;
 use Zephir\FileSystem\HardDisk;
 use Zephir\Parser\Manager;
@@ -255,9 +257,12 @@ final class Compiler
         $this->stringManager = new StringsManager();
         $this->fcallManager  = $this->backend->getFcallManager();
 
-        // Fresh inline-property-cache slot numbering per compilation run
-        // (keeps slot indices stable/deterministic per build).
+        // Fresh numbering per compilation run: property cache slots, call
+        // cache slots and closure class names must not depend on earlier
+        // compilations in the same process (see #2687).
         PropertyCacheSlots::reset();
+        SlotsCache::reset();
+        Closure::reset();
 
         try {
             $this->assertRequiredExtensionsIsPresent();
