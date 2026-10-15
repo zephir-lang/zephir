@@ -39,9 +39,21 @@ class Closure
     /**
      * Unique closure ID.
      */
-    protected static $id = 0;
+    protected static int $id = 0;
 
     protected bool $readOnly = false;
+
+    /**
+     * Restarts closure class numbering for a fresh compilation run, so a
+     * closure's class name depends on the source, not on how many
+     * compilations the process ran before.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2687
+     */
+    public static function reset(): void
+    {
+        self::$id = 0;
+    }
 
     /**
      * Recursively checks if an AST node references `this`.

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed closure class names continuing to count up across compilations in one process, orphaning previously generated files [#2687](https://github.com/zephir-lang/zephir/issues/2687)
+- Fixed function and method call cache slots continuing to count up across compilations in one process [#2687](https://github.com/zephir-lang/zephir/issues/2687)
 - Fixed arrow closures failing to resolve `use ... as` aliases declared in the file [#2686](https://github.com/zephir-lang/zephir/issues/2686)
 - Fixed closures in a sub-namespace resolving unqualified class names against the extension root namespace [#2686](https://github.com/zephir-lang/zephir/issues/2686)
 - Fixed optional parameters with a `null` default on methods of extension classes being counted as required, failing calls that omit them [#2763](https://github.com/zephir-lang/zephir/issues/2763)
