@@ -102,6 +102,59 @@ PHP_METHOD(Stub_Issue2706, keyLiteralNullStaticWrite);
 PHP_METHOD(Stub_Issue2706, appendUnderArrayParam);
 PHP_METHOD(Stub_Issue2706, appendUnderVarParam);
 PHP_METHOD(Stub_Issue2706, appendUnderDeepArrayParam);
+PHP_METHOD(Stub_Issue2706, keyMixedWrite);
+PHP_METHOD(Stub_Issue2706, keyUintWrite);
+PHP_METHOD(Stub_Issue2706, keyUlongWrite);
+PHP_METHOD(Stub_Issue2706, keyMixedWriteNested);
+PHP_METHOD(Stub_Issue2706, keyUintWriteNested);
+PHP_METHOD(Stub_Issue2706, keyUlongWriteNested);
+PHP_METHOD(Stub_Issue2706, keyMixedAddAssign);
+PHP_METHOD(Stub_Issue2706, keyUintAddAssign);
+PHP_METHOD(Stub_Issue2706, keyUlongAddAssign);
+PHP_METHOD(Stub_Issue2706, keyMixedAppendUnder);
+PHP_METHOD(Stub_Issue2706, keyUintAppendUnder);
+PHP_METHOD(Stub_Issue2706, keyUlongAppendUnder);
+PHP_METHOD(Stub_Issue2706, keyMixedRead);
+PHP_METHOD(Stub_Issue2706, keyUintRead);
+PHP_METHOD(Stub_Issue2706, keyUlongRead);
+PHP_METHOD(Stub_Issue2706, keyMixedIsset);
+PHP_METHOD(Stub_Issue2706, keyUintIsset);
+PHP_METHOD(Stub_Issue2706, keyUlongIsset);
+PHP_METHOD(Stub_Issue2706, keyMixedFetch);
+PHP_METHOD(Stub_Issue2706, keyUintFetch);
+PHP_METHOD(Stub_Issue2706, keyUlongFetch);
+PHP_METHOD(Stub_Issue2706, keyMixedEmpty);
+PHP_METHOD(Stub_Issue2706, keyUintEmpty);
+PHP_METHOD(Stub_Issue2706, keyUlongEmpty);
+PHP_METHOD(Stub_Issue2706, keyMixedUnset);
+PHP_METHOD(Stub_Issue2706, keyUintUnset);
+PHP_METHOD(Stub_Issue2706, keyUlongUnset);
+PHP_METHOD(Stub_Issue2706, keyMixedUnsetNested);
+PHP_METHOD(Stub_Issue2706, keyUintUnsetNested);
+PHP_METHOD(Stub_Issue2706, keyUlongUnsetNested);
+PHP_METHOD(Stub_Issue2706, keyMixedLiteral);
+PHP_METHOD(Stub_Issue2706, keyUintLiteral);
+PHP_METHOD(Stub_Issue2706, keyUlongLiteral);
+PHP_METHOD(Stub_Issue2706, keyMixedPropWrite);
+PHP_METHOD(Stub_Issue2706, keyUintPropWrite);
+PHP_METHOD(Stub_Issue2706, keyUlongPropWrite);
+PHP_METHOD(Stub_Issue2706, keyMixedPropRead);
+PHP_METHOD(Stub_Issue2706, keyUintPropRead);
+PHP_METHOD(Stub_Issue2706, keyUlongPropRead);
+PHP_METHOD(Stub_Issue2706, keyMixedPropUnset);
+PHP_METHOD(Stub_Issue2706, keyUintPropUnset);
+PHP_METHOD(Stub_Issue2706, keyUlongPropUnset);
+PHP_METHOD(Stub_Issue2706, keyMixedStaticWrite);
+PHP_METHOD(Stub_Issue2706, keyUintStaticWrite);
+PHP_METHOD(Stub_Issue2706, keyUlongStaticWrite);
+PHP_METHOD(Stub_Issue2706, keyMixedPropIsset);
+PHP_METHOD(Stub_Issue2706, keyUintPropIsset);
+PHP_METHOD(Stub_Issue2706, keyUlongPropIsset);
+PHP_METHOD(Stub_Issue2706, keyDoublePropIsset);
+PHP_METHOD(Stub_Issue2706, keyBoolPropIsset);
+PHP_METHOD(Stub_Issue2706, keyLiteralDoublePropIsset);
+PHP_METHOD(Stub_Issue2706, keyLiteralTruePropIsset);
+PHP_METHOD(Stub_Issue2706, keyLiteralNullPropIsset);
 PHP_METHOD(Stub_Issue2706, keyExistsStops);
 zend_object *zephir_init_properties_Stub_Issue2706(zend_class_entry *class_type);
 
@@ -548,6 +601,259 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2706_appendunderdeepar
 	ZEND_ARG_ARRAY_INFO(0, a, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedwrite, 0, 0, 2)
+	ZEND_ARG_INFO(0, k)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintwrite, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongwrite, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedwritenested, 0, 0, 2)
+	ZEND_ARG_INFO(0, k)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintwritenested, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongwritenested, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedaddassign, 0, 0, 2)
+	ZEND_ARG_INFO(0, k)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintaddassign, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongaddassign, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedappendunder, 0, 0, 2)
+	ZEND_ARG_INFO(0, k)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintappendunder, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongappendunder, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedread, 0, 0, 2)
+	ZEND_ARG_INFO(0, k)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintread, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongread, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedisset, 0, 0, 2)
+	ZEND_ARG_INFO(0, k)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintisset, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongisset, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedfetch, 0, 0, 2)
+	ZEND_ARG_INFO(0, k)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintfetch, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongfetch, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedempty, 0, 0, 2)
+	ZEND_ARG_INFO(0, k)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintempty, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongempty, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedunset, 0, 0, 2)
+	ZEND_ARG_INFO(0, k)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintunset, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongunset, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedunsetnested, 0, 0, 2)
+	ZEND_ARG_INFO(0, k)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintunsetnested, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongunsetnested, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedliteral, 0, 0, 1)
+	ZEND_ARG_INFO(0, k)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintliteral, 0, 0, 1)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongliteral, 0, 0, 1)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedpropwrite, 0, 0, 1)
+	ZEND_ARG_INFO(0, k)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintpropwrite, 0, 0, 1)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongpropwrite, 0, 0, 1)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedpropread, 0, 0, 2)
+	ZEND_ARG_INFO(0, k)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintpropread, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongpropread, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedpropunset, 0, 0, 2)
+	ZEND_ARG_INFO(0, k)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintpropunset, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongpropunset, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedstaticwrite, 0, 0, 1)
+	ZEND_ARG_INFO(0, k)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintstaticwrite, 0, 0, 1)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongstaticwrite, 0, 0, 1)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keymixedpropisset, 0, 0, 2)
+	ZEND_ARG_INFO(0, k)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyuintpropisset, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyulongpropisset, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keydoublepropisset, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, IS_DOUBLE, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyboolpropisset, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, k, _IS_BOOL, 0)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyliteraldoublepropisset, 0, 0, 1)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyliteraltruepropisset, 0, 0, 1)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_keyliteralnullpropisset, 0, 0, 1)
+	ZEND_ARG_ARRAY_INFO(0, a, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2706_keyexistsstops, 0, 2, _IS_BOOL, 0)
 	ZEND_ARG_INFO(0, key)
 	ZEND_ARG_INFO(0, a)
@@ -659,6 +965,59 @@ PHP_ME(Stub_Issue2706, keyLiteralNullStaticWrite, arginfo_stub_issue2706_keylite
 	PHP_ME(Stub_Issue2706, appendUnderArrayParam, arginfo_stub_issue2706_appendunderarrayparam, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Issue2706, appendUnderVarParam, arginfo_stub_issue2706_appendundervarparam, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Issue2706, appendUnderDeepArrayParam, arginfo_stub_issue2706_appendunderdeeparrayparam, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedWrite, arginfo_stub_issue2706_keymixedwrite, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintWrite, arginfo_stub_issue2706_keyuintwrite, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongWrite, arginfo_stub_issue2706_keyulongwrite, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedWriteNested, arginfo_stub_issue2706_keymixedwritenested, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintWriteNested, arginfo_stub_issue2706_keyuintwritenested, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongWriteNested, arginfo_stub_issue2706_keyulongwritenested, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedAddAssign, arginfo_stub_issue2706_keymixedaddassign, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintAddAssign, arginfo_stub_issue2706_keyuintaddassign, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongAddAssign, arginfo_stub_issue2706_keyulongaddassign, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedAppendUnder, arginfo_stub_issue2706_keymixedappendunder, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintAppendUnder, arginfo_stub_issue2706_keyuintappendunder, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongAppendUnder, arginfo_stub_issue2706_keyulongappendunder, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedRead, arginfo_stub_issue2706_keymixedread, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintRead, arginfo_stub_issue2706_keyuintread, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongRead, arginfo_stub_issue2706_keyulongread, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedIsset, arginfo_stub_issue2706_keymixedisset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintIsset, arginfo_stub_issue2706_keyuintisset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongIsset, arginfo_stub_issue2706_keyulongisset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedFetch, arginfo_stub_issue2706_keymixedfetch, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintFetch, arginfo_stub_issue2706_keyuintfetch, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongFetch, arginfo_stub_issue2706_keyulongfetch, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedEmpty, arginfo_stub_issue2706_keymixedempty, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintEmpty, arginfo_stub_issue2706_keyuintempty, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongEmpty, arginfo_stub_issue2706_keyulongempty, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedUnset, arginfo_stub_issue2706_keymixedunset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintUnset, arginfo_stub_issue2706_keyuintunset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongUnset, arginfo_stub_issue2706_keyulongunset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedUnsetNested, arginfo_stub_issue2706_keymixedunsetnested, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintUnsetNested, arginfo_stub_issue2706_keyuintunsetnested, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongUnsetNested, arginfo_stub_issue2706_keyulongunsetnested, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedLiteral, arginfo_stub_issue2706_keymixedliteral, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintLiteral, arginfo_stub_issue2706_keyuintliteral, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongLiteral, arginfo_stub_issue2706_keyulongliteral, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedPropWrite, arginfo_stub_issue2706_keymixedpropwrite, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintPropWrite, arginfo_stub_issue2706_keyuintpropwrite, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongPropWrite, arginfo_stub_issue2706_keyulongpropwrite, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedPropRead, arginfo_stub_issue2706_keymixedpropread, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintPropRead, arginfo_stub_issue2706_keyuintpropread, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongPropRead, arginfo_stub_issue2706_keyulongpropread, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedPropUnset, arginfo_stub_issue2706_keymixedpropunset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintPropUnset, arginfo_stub_issue2706_keyuintpropunset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongPropUnset, arginfo_stub_issue2706_keyulongpropunset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedStaticWrite, arginfo_stub_issue2706_keymixedstaticwrite, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintStaticWrite, arginfo_stub_issue2706_keyuintstaticwrite, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongStaticWrite, arginfo_stub_issue2706_keyulongstaticwrite, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyMixedPropIsset, arginfo_stub_issue2706_keymixedpropisset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUintPropIsset, arginfo_stub_issue2706_keyuintpropisset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyUlongPropIsset, arginfo_stub_issue2706_keyulongpropisset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyDoublePropIsset, arginfo_stub_issue2706_keydoublepropisset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyBoolPropIsset, arginfo_stub_issue2706_keyboolpropisset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyLiteralDoublePropIsset, arginfo_stub_issue2706_keyliteraldoublepropisset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyLiteralTruePropIsset, arginfo_stub_issue2706_keyliteraltruepropisset, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Issue2706, keyLiteralNullPropIsset, arginfo_stub_issue2706_keyliteralnullpropisset, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Issue2706, keyExistsStops, arginfo_stub_issue2706_keyexistsstops, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

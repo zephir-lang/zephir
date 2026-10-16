@@ -28,6 +28,8 @@ use function count;
 use function function_exists;
 use function gmp_nextprime;
 use function gmp_strval;
+use function in_array;
+use function is_int;
 
 /**
  * Resolves expressions that create arrays
@@ -140,7 +142,8 @@ class NativeArray
 
             $exprKey         = new Expression($item['key']);
             $resolvedExprKey = $exprKey->compile($compilationContext);
-            $resolvedExprKey = $compilationContext->backend->boxArrayKey($resolvedExprKey, $compilationContext);
+            $resolvedExprKey = $this->resolveDeclarationKey($resolvedExprKey, $item['key'], $compilationContext)
+                ?? $compilationContext->backend->boxArrayKey($resolvedExprKey, $compilationContext);
 
             switch ($resolvedExprKey->getType()) {
                 case Types::T_STRING:
@@ -332,6 +335,7 @@ class NativeArray
 
                         case Types::T_STRING:
                         case Types::T_VARIABLE:
+                        case Types::T_MIXED:
                             $expr         = new Expression($item['value']);
                             $resolvedExpr = $expr->compile($compilationContext);
                             $this->updateArrayWithValue(
@@ -341,7 +345,7 @@ class NativeArray
                                 $compilationContext
                             );
                             // A dynamic key can be illegal
-                            if (Types::T_VARIABLE === $variableVariable->getType()) {
+                            if (Types::T_STRING !== $variableVariable->getType()) {
                                 $compilationContext->emitExceptionCheck();
                             }
                             break;
@@ -375,6 +379,34 @@ class NativeArray
      *
      * @return GlobalConstant|Variable
      */
+    /**
+     * A property default is built by an initializer, which runs on every
+     * `new` (or once at startup for a static one), while PHP converts a
+     * declaration's keys once. A literal float, bool or null key is therefore
+     * folded here into the key PHP gives it, instead of being converted, and
+     * deprecated, at run time. Returns null for any other key.
+     */
+    private function resolveDeclarationKey(
+        CompiledExpression $resolvedKey,
+        array $keyAst,
+        CompilationContext $compilationContext
+    ): ?CompiledExpression {
+        $method = $compilationContext->currentMethod;
+        if (null === $method || !$method->isInitializer()) {
+            return null;
+        }
+
+        if (!in_array($resolvedKey->getType(), [Types::T_DOUBLE, Types::T_BOOL, Types::T_NULL], true)) {
+            return null;
+        }
+
+        $key = $compilationContext->backend->constantArrayKey($keyAst);
+
+        return is_int($key)
+            ? new CompiledExpression(Types::T_INT, (string) $key, $keyAst)
+            : new CompiledExpression(Types::T_STRING, $key, $keyAst);
+    }
+
     /**
      * Writes any value under a key held in a variable: the value is boxed by
      * getArrayValue(), and zephir_array_update_*() converts the key as PHP

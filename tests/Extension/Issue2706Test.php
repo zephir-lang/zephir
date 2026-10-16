@@ -19,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 use ReturnTypeWillChange;
 use RuntimeException;
 use Stub\Issue2706;
+use Stub\Issue2706Keys;
 use stdClass;
 use TypeError;
 
@@ -324,6 +325,7 @@ final class Issue2706Test extends TestCase
                 $p[$k] = 1;
                 return $p;
             }, false, false],
+            'PropIsset'   => [static fn (array $a, $k) => isset($a[$k]), true, false],
         ];
     }
 
@@ -332,6 +334,9 @@ final class Issue2706Test extends TestCase
         $keys = [
             'Double' => ['1.5' => 1.5, '2.0' => 2.0, '-0.5' => -0.5, 'NAN' => NAN, 'INF' => INF],
             'Bool'   => ['true' => true, 'false' => false],
+            'Mixed'  => ['string' => 'k', 'int' => 1, 'numeric' => '2', 'null' => null, 'float' => 1.5, 'bool' => true],
+            'Uint'   => ['1' => 1, '2' => 2],
+            'Ulong'  => ['1' => 1, '2' => 2],
         ];
         $literals = ['LiteralDouble' => 1.5, 'LiteralTrue' => true, 'LiteralNull' => null];
 
@@ -417,6 +422,52 @@ final class Issue2706Test extends TestCase
     public function testAppendUnderADeepArrayParameter(): void
     {
         $this->assertSame(['x' => [1 => ['v']]], $this->subject->appendUnderDeepArrayParam([]));
+    }
+
+    /**
+     * PHP's own conversion of the keys declared in Stub\Issue2706Keys. The
+     * fractional float keys deprecate when PHP evaluates them; the extension
+     * folds them at compile time, so only the result is compared.
+     */
+    private static function declaredKeys(): array
+    {
+        return @[1.5 => 'a', true => 'b', false => 'c', null => 'd', 2.0 => 'e', '3' => 'f', '03' => 'g', -1.5 => 'h'];
+    }
+
+    public function testClassConstantKeys(): void
+    {
+        $this->assertSame(self::declaredKeys(), Issue2706Keys::KEYS);
+    }
+
+    public function testNestedClassConstantKeys(): void
+    {
+        $this->assertSame(@['x' => [1.5 => 'a', true => 'b', '4' => 'c']], Issue2706Keys::NESTED);
+    }
+
+    public function testPropertyDefaultKeys(): void
+    {
+        $this->assertSame(self::declaredKeys(), (new Issue2706Keys())->keys);
+    }
+
+    public function testStaticPropertyDefaultKeys(): void
+    {
+        $this->assertSame(self::declaredKeys(), Issue2706Keys::getStaticKeys());
+    }
+
+    public function testTypedPropertyDefaultKeys(): void
+    {
+        $this->assertSame(self::declaredKeys(), (new Issue2706Keys())->getTypedKeys());
+    }
+
+    /**
+     * Folded at compile time, the keys raise nothing when an object is built;
+     * the default used to be built on every `new`, deprecating each time.
+     */
+    public function testBuildingAnObjectRaisesNothing(): void
+    {
+        $expected = self::declaredKeys();
+
+        $this->assertMatchesPhp(fn () => (new Issue2706Keys())->keys, static fn () => $expected);
     }
 
     public function testKeyExistsIsNotEvaluatedWhenShortCircuited(): void

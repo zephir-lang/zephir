@@ -142,6 +142,7 @@ PHP_METHOD(Stub_IssetTest, testIssetProperty1)
 
 PHP_METHOD(Stub_IssetTest, testIssetProperty2)
 {
+	zend_bool _0;
 	zval *a, a_sub, *b, b_sub;
 
 	ZVAL_UNDEF(&a_sub);
@@ -151,7 +152,11 @@ PHP_METHOD(Stub_IssetTest, testIssetProperty2)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
-	RETURN_BOOL(zephir_isset_property_value_zval(a, b));
+	_0 = zephir_isset_property_value_zval(a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	RETURN_BOOL(_0);
 }
 
 PHP_METHOD(Stub_IssetTest, testIssetProperty3)

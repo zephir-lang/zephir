@@ -691,6 +691,337 @@ class Issue2706
         return a;
     }
 
+    /**
+     * `mixed`, `uint` and `ulong` keys: a `mixed` local is a zval as a `var`
+     * is, a `uint`/`ulong` local a native integer as an `int` is.
+     */
+    public function keyMixedWrite(mixed k, array a)
+    {
+        let a[k] = 1;
+        return a;
+    }
+
+    public function keyUintWrite(uint k, array a)
+    {
+        let a[k] = 1;
+        return a;
+    }
+
+    public function keyUlongWrite(ulong k, array a)
+    {
+        let a[k] = 1;
+        return a;
+    }
+
+    public function keyMixedWriteNested(mixed k, array a)
+    {
+        let a[k]["x"] = 1;
+        return a;
+    }
+
+    public function keyUintWriteNested(uint k, array a)
+    {
+        let a[k]["x"] = 1;
+        return a;
+    }
+
+    public function keyUlongWriteNested(ulong k, array a)
+    {
+        let a[k]["x"] = 1;
+        return a;
+    }
+
+    public function keyMixedAddAssign(mixed k, array a)
+    {
+        let a[k] += 1;
+        return a;
+    }
+
+    public function keyUintAddAssign(uint k, array a)
+    {
+        let a[k] += 1;
+        return a;
+    }
+
+    public function keyUlongAddAssign(ulong k, array a)
+    {
+        let a[k] += 1;
+        return a;
+    }
+
+    public function keyMixedAppendUnder(mixed k, array a)
+    {
+        let a[k][] = 1;
+        return a;
+    }
+
+    public function keyUintAppendUnder(uint k, array a)
+    {
+        let a[k][] = 1;
+        return a;
+    }
+
+    public function keyUlongAppendUnder(ulong k, array a)
+    {
+        let a[k][] = 1;
+        return a;
+    }
+
+    public function keyMixedRead(mixed k, array a)
+    {
+        return a[k];
+    }
+
+    public function keyUintRead(uint k, array a)
+    {
+        return a[k];
+    }
+
+    public function keyUlongRead(ulong k, array a)
+    {
+        return a[k];
+    }
+
+    public function keyMixedIsset(mixed k, array a)
+    {
+        return isset a[k];
+    }
+
+    public function keyUintIsset(uint k, array a)
+    {
+        return isset a[k];
+    }
+
+    public function keyUlongIsset(ulong k, array a)
+    {
+        return isset a[k];
+    }
+
+    public function keyMixedFetch(mixed k, array a)
+    {
+        var x = null;
+        bool found;
+
+        let found = fetch x, a[k];
+
+        return [found, x];
+    }
+
+    public function keyUintFetch(uint k, array a)
+    {
+        var x = null;
+        bool found;
+
+        let found = fetch x, a[k];
+
+        return [found, x];
+    }
+
+    public function keyUlongFetch(ulong k, array a)
+    {
+        var x = null;
+        bool found;
+
+        let found = fetch x, a[k];
+
+        return [found, x];
+    }
+
+    public function keyMixedEmpty(mixed k, array a)
+    {
+        return empty a[k];
+    }
+
+    public function keyUintEmpty(uint k, array a)
+    {
+        return empty a[k];
+    }
+
+    public function keyUlongEmpty(ulong k, array a)
+    {
+        return empty a[k];
+    }
+
+    public function keyMixedUnset(mixed k, array a)
+    {
+        unset a[k];
+        return a;
+    }
+
+    public function keyUintUnset(uint k, array a)
+    {
+        unset a[k];
+        return a;
+    }
+
+    public function keyUlongUnset(ulong k, array a)
+    {
+        unset a[k];
+        return a;
+    }
+
+    public function keyMixedUnsetNested(mixed k, array a)
+    {
+        unset a[k]["x"];
+        return a;
+    }
+
+    public function keyUintUnsetNested(uint k, array a)
+    {
+        unset a[k]["x"];
+        return a;
+    }
+
+    public function keyUlongUnsetNested(ulong k, array a)
+    {
+        unset a[k]["x"];
+        return a;
+    }
+
+    public function keyMixedLiteral(mixed k)
+    {
+        return [k: "v"];
+    }
+
+    public function keyUintLiteral(uint k)
+    {
+        return [k: "v"];
+    }
+
+    public function keyUlongLiteral(ulong k)
+    {
+        return [k: "v"];
+    }
+
+    public function keyMixedPropWrite(mixed k)
+    {
+        let this->container = [];
+        let this->container[k] = 1;
+        return this->container;
+    }
+
+    public function keyUintPropWrite(uint k)
+    {
+        let this->container = [];
+        let this->container[k] = 1;
+        return this->container;
+    }
+
+    public function keyUlongPropWrite(ulong k)
+    {
+        let this->container = [];
+        let this->container[k] = 1;
+        return this->container;
+    }
+
+    public function keyMixedPropRead(mixed k, array a)
+    {
+        let this->container = a;
+        return this->container[k];
+    }
+
+    public function keyUintPropRead(uint k, array a)
+    {
+        let this->container = a;
+        return this->container[k];
+    }
+
+    public function keyUlongPropRead(ulong k, array a)
+    {
+        let this->container = a;
+        return this->container[k];
+    }
+
+    public function keyMixedPropUnset(mixed k, array a)
+    {
+        let this->container = a;
+        unset this->container[k];
+        return this->container;
+    }
+
+    public function keyUintPropUnset(uint k, array a)
+    {
+        let this->container = a;
+        unset this->container[k];
+        return this->container;
+    }
+
+    public function keyUlongPropUnset(ulong k, array a)
+    {
+        let this->container = a;
+        unset this->container[k];
+        return this->container;
+    }
+
+    public function keyMixedStaticWrite(mixed k)
+    {
+        let self::shared = [];
+        let self::shared[k] = 1;
+        return self::shared;
+    }
+
+    public function keyUintStaticWrite(uint k)
+    {
+        let self::shared = [];
+        let self::shared[k] = 1;
+        return self::shared;
+    }
+
+    public function keyUlongStaticWrite(ulong k)
+    {
+        let self::shared = [];
+        let self::shared[k] = 1;
+        return self::shared;
+    }
+
+    public function keyMixedPropIsset(mixed k, array a)
+    {
+        let this->container = a;
+        return isset this->container[k];
+    }
+
+    public function keyUintPropIsset(uint k, array a)
+    {
+        let this->container = a;
+        return isset this->container[k];
+    }
+
+    public function keyUlongPropIsset(ulong k, array a)
+    {
+        let this->container = a;
+        return isset this->container[k];
+    }
+
+    public function keyDoublePropIsset(double k, array a)
+    {
+        let this->container = a;
+        return isset this->container[k];
+    }
+
+    public function keyBoolPropIsset(bool k, array a)
+    {
+        let this->container = a;
+        return isset this->container[k];
+    }
+
+    public function keyLiteralDoublePropIsset(array a)
+    {
+        let this->container = a;
+        return isset this->container[1.5];
+    }
+
+    public function keyLiteralTruePropIsset(array a)
+    {
+        let this->container = a;
+        return isset this->container[true];
+    }
+
+    public function keyLiteralNullPropIsset(array a)
+    {
+        let this->container = a;
+        return isset this->container[null];
+    }
+
     public function keyExistsStops(var key, var a) -> bool
     {
         var found;

@@ -274,6 +274,7 @@ class ArrayIndex
                     case 'ulong':
                     case 'string':
                     case 'variable':
+                    case 'mixed':
                         $compilationContext->backend->updateArray(
                             $realSymbolVariable,
                             $variableIndex,

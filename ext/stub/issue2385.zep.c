@@ -86,6 +86,7 @@ PHP_METHOD(Stub_Issue2385, checkAssignedValue)
 
 PHP_METHOD(Stub_Issue2385, checkDynamicKeyNull)
 {
+	zend_bool _0;
 	zval key_zv;
 	zend_string *key = NULL;
 	zval *this_ptr = getThis();
@@ -95,7 +96,11 @@ PHP_METHOD(Stub_Issue2385, checkDynamicKeyNull)
 		Z_PARAM_STR(key)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&key_zv, key);
-	RETURN_BOOL(zephir_isset_property_value_zval(this_ptr, &key_zv));
+	_0 = zephir_isset_property_value_zval(this_ptr, &key_zv);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	RETURN_BOOL(_0);
 }
 
 PHP_METHOD(Stub_Issue2385, checkArrayKeyNull)

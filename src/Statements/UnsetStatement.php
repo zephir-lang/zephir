@@ -354,6 +354,7 @@ class UnsetStatement extends StatementAbstract
             case Types::T_INT:
             case Types::T_UINT:
             case Types::T_LONG:
+            case Types::T_ULONG:
                 $temp = $symbolTable->getTempVariableForWrite('variable', $compilationContext);
                 $backend->assignLong($temp, $resolved->getCode(), $compilationContext);
 
@@ -370,6 +371,7 @@ class UnsetStatement extends StatementAbstract
                     case Types::T_INT:
                     case Types::T_UINT:
                     case Types::T_LONG:
+                    case Types::T_ULONG:
                         $temp = $symbolTable->getTempVariableForWrite('variable', $compilationContext);
                         $backend->assignLong($temp, $variable->getName(), $compilationContext);
 

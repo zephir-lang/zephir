@@ -29,11 +29,13 @@ use Zephir\Name;
 use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
 
+use function array_key_first;
 use function array_reverse;
 use function count;
 use function file_get_contents;
 use function implode;
 use function in_array;
+use function is_int;
 use function is_array;
 use function is_object;
 use function rtrim;
@@ -131,7 +133,7 @@ class Backend
                     . '), Z_STRLEN_P('
                     . $this->getVariableCode($var)
                     . ')' :
-                    $this->getVariableCode($var);
+                    $this->nativeIndexCode($var);
             } else {
                 $keyStr = 'string' == $key->getType() ? 'SL("' . $key->getCode() . '")' : $key->getCode();
             }
@@ -260,6 +262,7 @@ class Backend
             case 'int':
             case 'uint':
             case 'long':
+            case 'ulong':
                 $type = 'long';
                 break;
 
@@ -292,7 +295,7 @@ class Backend
                 . ');';
         } else {
             if ($isVariable) {
-                $indexAccess = $this->getVariableCode($index);
+                $indexAccess = $this->nativeIndexCode($index);
             } else {
                 $indexAccess = $index->getCode();
                 if ('string' == $type) {
@@ -355,13 +358,13 @@ class Backend
             );
         }
 
-        if ('int' == $resolvedExpr->getType() || 'long' == $resolvedExpr->getType()) {
+        if (in_array($resolvedExpr->getType(), ['int', 'uint', 'long', 'ulong'], true)) {
             return new CompiledExpression(
                 'bool',
                 'zephir_array_isset_value_long('
                 . $this->getVariableCode($var)
                 . ', '
-                . $this->getVariableCode($resolvedExpr)
+                . $this->nativeIndexCode($resolvedExpr)
                 . ')',
                 $expression
             );
@@ -400,7 +403,7 @@ class Backend
                     ) . '"), ' . $flags . ')',
                     $expression
                 );
-            } elseif (in_array($resolvedExpr->getType(), ['int', 'uint', 'long'])) {
+            } elseif (in_array($resolvedExpr->getType(), ['int', 'uint', 'long', 'ulong'], true)) {
                 return new CompiledExpression(
                     'bool',
                     'zephir_array_isset_long_fetch(' . $code . ', ' . $resolvedExpr->getCode() . ', ' . $flags . ')',
@@ -420,10 +423,10 @@ class Backend
             }
         }
 
-        if (in_array($resolvedExpr->getType(), ['int', 'long'])) {
+        if (in_array($resolvedExpr->getType(), ['int', 'uint', 'long', 'ulong'], true)) {
             return new CompiledExpression(
                 'bool',
-                'zephir_array_isset_long_fetch(' . $code . ', ' . $this->getVariableCode(
+                'zephir_array_isset_long_fetch(' . $code . ', ' . $this->nativeIndexCode(
                     $resolvedExpr
                 ) . ', ' . $flags . ')',
                 $expression
@@ -463,6 +466,7 @@ class Backend
             case 'int':
             case 'uint':
             case 'long':
+            case 'ulong':
                 $context->codePrinter->output(
                     'zephir_array_unset_long(' . $variableCode . ', ' . $exprIndex->getCode() . ', ' . $flags . ');'
                 );
@@ -486,8 +490,10 @@ class Backend
                     case 'int':
                     case 'uint':
                     case 'long':
+                    case 'ulong':
                         $context->codePrinter->output(
-                            'zephir_array_unset_long(' . $variableCode . ', ' . $indexCode . ', ' . $flags . ');'
+                            'zephir_array_unset_long(' . $variableCode . ', '
+                            . $this->nativeIndexCode($variableIndex) . ', ' . $flags . ');'
                         );
                         break;
 
@@ -1426,11 +1432,10 @@ class Backend
             return sprintf('add_next_index_%s(&%s%s);', $func, $var, $tail);
         }
 
-        if ('int' === $key['type'] || 'long' === $key['type']) {
-            return sprintf('add_index_%s(&%s, %d%s);', $func, $var, (int) $key['value'], $tail);
+        $keyValue = $this->constantArrayKey($key);
+        if (is_int($keyValue)) {
+            return sprintf('add_index_%s(&%s, %d%s);', $func, $var, $keyValue, $tail);
         }
-
-        $keyValue = (string) $key['value'];
 
         return sprintf(
             // SL() delegates the key byte count to the C compiler; see #2617.
@@ -1440,6 +1445,28 @@ class Backend
             Name::addSlashes($keyValue),
             $tail
         );
+    }
+
+    /**
+     * The key PHP gives a literal array key: an integer for a number, a bool
+     * or a canonical numeric string, the empty string for null, otherwise the
+     * string itself. The conversion is PHP's own, done by the PHP running the
+     * compiler; a fractional float loses its fraction as PHP's does, without
+     * the deprecation PHP raises when it evaluates the declaration.
+     */
+    public function constantArrayKey(array $key): int|string
+    {
+        return match ($key['type']) {
+            'int', 'long', 'uint', 'ulong' => (int) $key['value'],
+            'double', 'float'              => (int) array_key_first(@[(float) $key['value'] => 0]),
+            'bool'                         => 'true' === $key['value'] ? 1 : 0,
+            'null'                         => '',
+            'char', 'string', 'istring'    => array_key_first([(string) $key['value'] => 0]),
+            default                        => throw new CompilerException(
+                'Unsupported array constant key type: ' . $key['type'],
+                $key
+            ),
+        };
     }
 
     public function declareVariables($method, $typeToVariables)
@@ -2414,6 +2441,23 @@ class Backend
         };
     }
 
+    /**
+     * The C expression for an integer array index held in a variable. A
+     * native integer local is the value itself, but getVariableCode() only
+     * bypasses `int` and `long`, so it would hand a `uint` or `ulong` local
+     * over as a `&name` pointer.
+     */
+    private function nativeIndexCode(Variable $index): string
+    {
+        if (in_array($index->getType(), ['int', 'uint', 'long', 'ulong'], true)) {
+            $index->setUsed(true);
+
+            return $index->getName();
+        }
+
+        return $this->getVariableCode($index);
+    }
+
     public function getVariableCode(Variable $variable): string
     {
         $variable->setUsed(true);
@@ -2874,6 +2918,7 @@ class Backend
             switch ($key->getType()) {
                 case 'string':
                 case 'variable':
+                case 'mixed':
                     $compilationContext->codePrinter->output(
                         'zephir_array_update_zval(' . $this->getVariableCode(
                             $symbolVariable
@@ -2884,6 +2929,7 @@ class Backend
                 case 'int':
                 case 'uint':
                 case 'long':
+                case 'ulong':
                     $compilationContext->codePrinter->output(
                         'zephir_array_update_long(' . $this->getVariableCode($symbolVariable) . ', ' . $key->getName(
                         ) . ', ' . $value . ', ' . $flags . ' ZEPHIR_DEBUG_PARAMS_DUMMY);'
@@ -3133,6 +3179,7 @@ class Backend
                             break;
                         case 'string':
                         case 'variable':
+                        case 'mixed':
                             $keys          .= 'z';
                             $offsetItems[] = $this->getVariableCode($variableIndex);
                             ++$numberParams;

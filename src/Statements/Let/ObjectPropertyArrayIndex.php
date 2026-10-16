@@ -229,6 +229,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             case 'int':
             case 'uint':
             case 'long':
+            case 'ulong':
                 $indexVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                     'variable',
                     $compilationContext,
@@ -264,6 +265,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                     case 'int':
                     case 'uint':
                     case 'long':
+                    case 'ulong':
                         $indexVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                             'variable',
                             $compilationContext,
