@@ -400,6 +400,7 @@ class NativeArray
             return null;
         }
 
+        $compilationContext->backend->warnLossyFloatKey($keyAst, $compilationContext);
         $key = $compilationContext->backend->constantArrayKey($keyAst);
 
         return is_int($key)

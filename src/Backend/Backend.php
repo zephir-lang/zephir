@@ -35,8 +35,9 @@ use function count;
 use function file_get_contents;
 use function implode;
 use function in_array;
-use function is_int;
 use function is_array;
+use function is_finite;
+use function is_int;
 use function is_object;
 use function rtrim;
 use function sprintf;
@@ -1111,6 +1112,7 @@ class Backend
         $counter = 0;
         $lines   = [];
 
+        $this->warnLossyFloatKeys($node, $context);
         $rootVar = $this->buildConstantArray($node, $lines, $counter);
 
         $printer->output('{');
@@ -1142,6 +1144,7 @@ class Backend
         $counter = 0;
         $lines   = [];
 
+        $this->warnLossyFloatKeys($node, $context);
         $rootVar = $this->buildConstantArray($node, $lines, $counter);
 
         $printer->output('{');
@@ -1182,6 +1185,7 @@ class Backend
             $lines[] = 'zval _zc0;';
             $lines[] = 'ZVAL_UNDEF(&_zc0);';
         } elseif (in_array($default['type'], ['array', 'empty-array'], true)) {
+            $this->warnLossyFloatKeys($default, $context);
             $rootVar = $this->buildConstantArray($default, $lines, $counter);
         } else {
             $rootVar = '_zc0';
@@ -1232,6 +1236,7 @@ class Backend
             $lines[] = 'zval _zc0;';
             $lines[] = 'ZVAL_UNDEF(&_zc0);';
         } elseif (in_array($default['type'], ['array', 'empty-array'], true)) {
+            $this->warnLossyFloatKeys($default, $context);
             $rootVar = $this->buildConstantArray($default, $lines, $counter);
         } else {
             $rootVar = '_zc0';
@@ -1445,6 +1450,45 @@ class Backend
             Name::addSlashes($keyValue),
             $tail
         );
+    }
+
+    /**
+     * PHP deprecates a float array key that is not an integer when it
+     * evaluates the declaration holding it. A declaration is folded at compile
+     * time here, so the deprecation is reported at compile time instead.
+     */
+    public function warnLossyFloatKey(array $key, CompilationContext $context): void
+    {
+        if (!in_array($key['type'], ['double', 'float'], true)) {
+            return;
+        }
+
+        $value = (float) $key['value'];
+        if (is_finite($value) && $value == (float) (int) $value) {
+            return;
+        }
+
+        $context->logger->warning(
+            'Implicit conversion from float ' . $key['value'] . ' to int loses precision',
+            ['lossy-float-key', $key]
+        );
+    }
+
+    /**
+     * Reports every lossy float key of an array literal declaration, nested
+     * arrays included.
+     */
+    private function warnLossyFloatKeys(array $node, CompilationContext $context): void
+    {
+        foreach ($node['left'] ?? [] as $item) {
+            if (isset($item['key'])) {
+                $this->warnLossyFloatKey($item['key'], $context);
+            }
+
+            if (in_array($item['value']['type'] ?? null, ['array', 'empty-array'], true)) {
+                $this->warnLossyFloatKeys($item['value'], $context);
+            }
+        }
     }
 
     /**

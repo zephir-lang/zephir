@@ -74,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `+`, `-` and `*` of an integer local with a float literal truncating the result to an integer
 
 ### Added
+- Added the `lossy-float-key` warning, reporting at compile time a fractional float key in a class constant or property default that PHP deprecates when it evaluates the declaration [#2706](https://github.com/zephir-lang/zephir/issues/2706)
 - Added `instanceof static`, which tests against the called class as PHP does [#2714](https://github.com/zephir-lang/zephir/issues/2714)
 
 ### Changed

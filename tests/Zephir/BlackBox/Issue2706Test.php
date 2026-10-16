@@ -64,9 +64,55 @@ final class Issue2706Test extends TestCase
     }
 
     /**
+     * PHP deprecates a fractional float key when it evaluates a declaration.
+     * The extension folds declarations at compile time, so the compiler
+     * reports each lossy key instead; a whole float key and a literal in a
+     * method body, which still deprecates at run time, are not reported.
+     */
+    public function testLossyFloatKeysInDeclarationsAreReported(): void
+    {
+        [$exitCode, $stderr] = $this->generateProject('lossykeys', self::LOSSY_DECLARATIONS);
+
+        $this->assertSame(0, $exitCode, $stderr);
+        foreach (['1.5', '2.5', '3.5', '4.5', '5.5'] as $float) {
+            $this->assertSame(
+                1,
+                substr_count($stderr, 'Implicit conversion from float ' . $float . ' to int loses precision'),
+                $stderr
+            );
+        }
+        $this->assertStringNotContainsString('float 2.0 ', $stderr);
+        $this->assertStringNotContainsString('float 6.5 ', $stderr);
+        $this->assertStringContainsString('[lossy-float-key]', $stderr);
+    }
+
+    public function testTheLossyFloatKeyWarningCanBeDisabled(): void
+    {
+        [$exitCode, $stderr] = $this->generateProject('lossyoff', self::LOSSY_DECLARATIONS, ' -Wlossy-float-key');
+
+        $this->assertSame(0, $exitCode, $stderr);
+        $this->assertStringNotContainsString('loses precision', $stderr);
+    }
+
+    private const LOSSY_DECLARATIONS = <<<'ZEP'
+            const C = [1.5: "a", 2.0: "b", "x": [2.5: "c"]];
+
+            public p = [3.5: "a"];
+
+            public static sp = [4.5: "a"];
+
+            protected array tp = [5.5: "a"];
+
+            public function run() -> array
+            {
+                return [6.5: "a"];
+            }
+        ZEP;
+
+    /**
      * @return array{0: int, 1: string} exit code and stderr
      */
-    private function generateProject(string $name, string $body): array
+    private function generateProject(string $name, string $body, string $flags = ''): array
     {
         $cwd        = $this->outputDir();
         $projectDir = $cwd . '/' . $name;
@@ -77,7 +123,7 @@ final class Issue2706Test extends TestCase
         $source = 'namespace ' . ucfirst($name) . ";\n\nclass Sample\n{\n" . $body . "\n}\n";
         file_put_contents($projectDir . '/' . $name . '/sample.zep', $source);
 
-        $result = $this->runZephir('generate --no-ansi', $projectDir);
+        $result = $this->runZephir('generate --no-ansi' . $flags, $projectDir);
 
         return [$result['exitCode'], $result['stderr']];
     }

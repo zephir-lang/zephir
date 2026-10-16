@@ -199,6 +199,7 @@ class Config implements ArrayAccess, JsonSerializable
             'non-valid-require'                  => true,
             'non-valid-require-once'             => true,
             'extra-parentheses'                  => true,
+            'lossy-float-key'                    => true,
             'missing-optimizer'                  => false,
         ],
         'optimizations' => [
