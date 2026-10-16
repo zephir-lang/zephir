@@ -83,6 +83,10 @@ PHP_METHOD(Stub_Openssl, randomPseudoBytesLoop)
 			ZEPHIR_CALL_FUNCTION(&_4$$3, "openssl_random_pseudo_bytes", &_5, 98, &_3$$3);
 			zephir_check_call_status();
 			zephir_array_append(&arr, &_4$$3, PH_SEPARATE, "stub/openssl.zep", 16);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CCTOR(&arr);

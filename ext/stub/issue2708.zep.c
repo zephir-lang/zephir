@@ -46,6 +46,7 @@ ZEPHIR_INIT_CLASS(Stub_Issue2708)
  */
 PHP_METHOD(Stub_Issue2708, issetOnConstantLiteral)
 {
+	zend_bool _0;
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
@@ -56,11 +57,17 @@ PHP_METHOD(Stub_Issue2708, issetOnConstantLiteral)
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 1, 0);
 	add_assoc_long_ex(&a, SL("3"), 1);
-	RETURN_MM_BOOL(zephir_array_isset_value_string(&a, SL("3")));
+	_0 = zephir_array_isset_value_string(&a, SL("3"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_Issue2708, emptyOnConstantLiteral)
 {
+	zend_bool _0;
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
@@ -71,11 +78,17 @@ PHP_METHOD(Stub_Issue2708, emptyOnConstantLiteral)
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 1, 0);
 	add_assoc_long_ex(&a, SL("3"), 1);
-	RETURN_MM_BOOL(zephir_isempty_dim_string(&a, SL("3")));
+	_0 = zephir_isempty_dim_string(&a, SL("3"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_Issue2708, fetchOnConstantLiteral)
 {
+	zend_bool _0;
 	zval a, value;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
@@ -88,7 +101,12 @@ PHP_METHOD(Stub_Issue2708, fetchOnConstantLiteral)
 	zephir_create_array(&a, 1, 0);
 	add_assoc_stringl_ex(&a, SL("3"), SL("found"));
 	zephir_memory_observe(&value);
-	if (zephir_array_isset_string_fetch(&value, &a, SL("3"), 0)) {
+	_0 = zephir_array_isset_string_fetch(&value, &a, SL("3"), 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	if (_0) {
 		RETURN_CCTOR(&value);
 	}
 	RETURN_MM_NULL();
@@ -108,6 +126,10 @@ PHP_METHOD(Stub_Issue2708, readOnConstantLiteral)
 	zephir_create_array(&a, 1, 0);
 	add_assoc_stringl_ex(&a, SL("3"), SL("found"));
 	zephir_array_fetch_string(&_0, &a, SL("3"), PH_NOISY | PH_READONLY, "stub/issue2708.zep", 61);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_0);
 }
 
@@ -149,7 +171,15 @@ PHP_METHOD(Stub_Issue2708, writeThenReadBack)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "written");
 	zephir_array_update_string(&a, SL("3"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fetch_long(&_1, &a, 3, PH_NOISY | PH_READONLY, "stub/issue2708.zep", 78);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_1);
 }
 
@@ -172,6 +202,10 @@ PHP_METHOD(Stub_Issue2708, writeMultiDimensional)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "deep");
 	zephir_array_update_multi(&a, &_0, SL("ss"), 4, SL("3"), SL("4"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -190,6 +224,10 @@ PHP_METHOD(Stub_Issue2708, writeThree)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_string(&a, SL("3"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -208,6 +246,10 @@ PHP_METHOD(Stub_Issue2708, writeZero)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_string(&a, SL("0"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -226,6 +268,10 @@ PHP_METHOD(Stub_Issue2708, writeNegativeThree)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_string(&a, SL("-3"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -244,6 +290,10 @@ PHP_METHOD(Stub_Issue2708, writeIntMax)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_string(&a, SL("9223372036854775807"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -262,6 +312,10 @@ PHP_METHOD(Stub_Issue2708, writeLeadingZero)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_string(&a, SL("03"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -280,6 +334,10 @@ PHP_METHOD(Stub_Issue2708, writeLeadingPlus)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_string(&a, SL("+3"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -298,6 +356,10 @@ PHP_METHOD(Stub_Issue2708, writeNegativeZero)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_string(&a, SL("-0"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -316,6 +378,10 @@ PHP_METHOD(Stub_Issue2708, writeLeadingSpace)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_string(&a, SL(" 3"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -334,6 +400,10 @@ PHP_METHOD(Stub_Issue2708, writeTrailingSpace)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_string(&a, SL("3 "), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -352,6 +422,10 @@ PHP_METHOD(Stub_Issue2708, writeDecimalPoint)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_string(&a, SL("3.0"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -370,6 +444,10 @@ PHP_METHOD(Stub_Issue2708, writeOverflow)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_string(&a, SL("9223372036854775808"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -393,9 +471,17 @@ PHP_METHOD(Stub_Issue2708, appendAfterNumericStringKey)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "x");
 	zephir_array_update_string(&a, SL("3"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "y");
 	zephir_array_append(&a, &_1, PH_SEPARATE, "stub/issue2708.zep", 215);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -421,6 +507,10 @@ PHP_METHOD(Stub_Issue2708, mergeAfterNumericStringKey)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "x");
 	zephir_array_update_string(&a, SL("3"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_create_array(&_1, 1, 0);
 	ZEPHIR_INIT_VAR(&_2);
@@ -448,6 +538,10 @@ PHP_METHOD(Stub_Issue2708, writeOrdinaryKey)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_string(&a, SL("key_a"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -466,11 +560,16 @@ PHP_METHOD(Stub_Issue2708, readOnContainer)
 	zephir_fetch_params(1, 1, 0, &container);
 	zephir_memory_observe(&_0);
 	zephir_array_fetch_string(&_0, container, SL("3"), PH_NOISY, "stub/issue2708.zep", 249);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 
 PHP_METHOD(Stub_Issue2708, issetOnContainer)
 {
+	zend_bool _0;
 	zval *container, container_sub;
 
 	ZVAL_UNDEF(&container_sub);
@@ -478,7 +577,11 @@ PHP_METHOD(Stub_Issue2708, issetOnContainer)
 		Z_PARAM_ZVAL(container)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &container);
-	RETURN_BOOL(zephir_array_isset_value_string(container, SL("3")));
+	_0 = zephir_array_isset_value_string(container, SL("3"));
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	RETURN_BOOL(_0);
 }
 
 PHP_METHOD(Stub_Issue2708, writeOnContainer)
@@ -498,6 +601,10 @@ PHP_METHOD(Stub_Issue2708, writeOnContainer)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "v");
 	zephir_array_update_string(container, SL("3"), &_0, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

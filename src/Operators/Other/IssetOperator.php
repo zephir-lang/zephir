@@ -93,15 +93,19 @@ class IssetOperator extends AbstractOperator
                 $expr->setReadOnly(true);
                 $expr->setNoisy(false);
                 $resolvedExpr = $expr->compile($compilationContext);
+                $resolvedExpr = $compilationContext->backend->boxArrayKey($resolvedExpr, $compilationContext);
 
                 switch ($resolvedExpr->getType()) {
                     case 'int':
                     case 'long':
                     case 'string':
-                        return $compilationContext->backend->arrayIsset(
-                            $variable,
-                            $resolvedExpr,
-                            $left['right'],
+                        // isset throws for an illegal key or from offsetExists()
+                        $isset = $compilationContext->backend->arrayIsset($variable, $resolvedExpr, $left['right']);
+
+                        return new CompiledExpression(
+                            'bool',
+                            $compilationContext->emitCheckedBool($isset->getCode()),
+                            $left['right']
                         );
 
                     case 'variable':
@@ -112,10 +116,13 @@ class IssetOperator extends AbstractOperator
                             $left['right']
                         );
 
-                        return $compilationContext->backend->arrayIsset(
-                            $variable,
-                            $indexVariable,
-                            $left['right'],
+                        // isset throws for an illegal key or from offsetExists()
+                        $isset = $compilationContext->backend->arrayIsset($variable, $indexVariable, $left['right']);
+
+                        return new CompiledExpression(
+                            'bool',
+                            $compilationContext->emitCheckedBool($isset->getCode()),
+                            $left['right']
                         );
 
 
@@ -171,6 +178,7 @@ class IssetOperator extends AbstractOperator
                 $expr->setReadOnly(true);
                 $expr->setNoisy(false);
                 $resolvedExpr = $expr->compile($compilationContext);
+                $resolvedExpr = $compilationContext->backend->boxArrayKey($resolvedExpr, $compilationContext);
 
                 switch ($resolvedExpr->getType()) {
                     case 'variable':

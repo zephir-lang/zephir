@@ -376,6 +376,10 @@ PHP_METHOD(Stub_Issue2702, snapshotAroundLiteralUnset)
 	array_init(&ret);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 73, PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/issue2702.zep", 144);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "a");
 	zephir_unset_property_array(this_ptr, ZEND_STRL("removable"), &_1);
@@ -385,6 +389,10 @@ PHP_METHOD(Stub_Issue2702, snapshotAroundLiteralUnset)
 	}
 	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 73, PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_2, PH_SEPARATE, "stub/issue2702.zep", 146);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&ret);
 }
 
@@ -541,6 +549,10 @@ PHP_METHOD(Stub_Issue2702, growthProbe)
 		ZEPHIR_CALL_FUNCTION(&_3$$3, "str_repeat", &_4, 30, &_1$$3, &_2$$3);
 		zephir_check_call_status();
 		zephir_update_property_array_append(this_ptr, SL("retained"), &_3$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		i++;
 	}
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);

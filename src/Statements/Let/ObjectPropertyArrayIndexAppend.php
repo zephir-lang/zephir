@@ -86,6 +86,7 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
             $indexExpression = new Expression($indexExpr);
 
             $resolvedIndex = $indexExpression->compile($compilationContext);
+            $resolvedIndex = $compilationContext->backend->boxArrayKey($resolvedIndex, $compilationContext);
             switch ($resolvedIndex->getType()) {
                 case 'string':
                 case 'int':

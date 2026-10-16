@@ -89,6 +89,7 @@ class Backend
                         $statement['file']
                     ) . '", ' . $statement['line'] . ');'
                 );
+                $context->emitExceptionCheck();
 
                 return;
             }
@@ -186,6 +187,10 @@ class Backend
 
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
+            // Only an append can meet a container that is not a fresh array
+            if ('append' === $keyType) {
+                $context->emitExceptionCheck();
+            }
         }
     }
 
@@ -202,6 +207,41 @@ class Backend
             . ');'
         );
         $context->emitExceptionCheck();
+    }
+
+    /**
+     * Boxes a `double`, `bool` or literal `null` array key into a temp zval,
+     * so that the kernel converts it to the key PHP uses, with PHP's
+     * diagnostics for a fractional or non-finite float and, since 8.5, for
+     * null. Any other key is returned as is.
+     */
+    public function boxArrayKey(CompiledExpression $key, CompilationContext $context): CompiledExpression
+    {
+        $type  = $key->getType();
+        $value = 'bool' === $type ? $key->getBooleanCode() : $key->getCode();
+
+        if ('variable' === $type && $context->symbolTable->hasVariable($key->getCode())) {
+            $variable = $context->symbolTable->getVariable($key->getCode());
+            $type     = $variable->getType();
+            $value    = $variable;
+        }
+
+        if ('double' !== $type && 'bool' !== $type && 'null' !== $type) {
+            return $key;
+        }
+
+        if ($value instanceof Variable) {
+            $value = $context->symbolTable->getVariableForRead($value->getName(), $context, $key->getOriginal());
+        }
+
+        $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
+        match ($type) {
+            'double' => $this->assignDouble($tempVariable, $value, $context),
+            'bool'   => $this->assignBool($tempVariable, $value, $context),
+            'null'   => $this->assignNull($tempVariable, $context),
+        };
+
+        return new CompiledExpression('variable', $tempVariable->getName(), $key->getOriginal());
     }
 
     public function arrayFetch(
@@ -278,6 +318,7 @@ class Backend
 
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
+            $context->emitExceptionCheck();
         }
 
         return $output;
@@ -365,8 +406,17 @@ class Backend
                     'zephir_array_isset_long_fetch(' . $code . ', ' . $resolvedExpr->getCode() . ', ' . $flags . ')',
                     $expression
                 );
+            } elseif ('variable' === $resolvedExpr->getType()) {
+                $resolvedExpr = $context->symbolTable->getVariableForRead(
+                    $resolvedExpr->getCode(),
+                    $context,
+                    $expression
+                );
             } else {
-                $resolvedExpr = $context->symbolTable->getVariableForRead($resolvedExpr->getCode(), $context);
+                throw new CompilerException(
+                    'Cannot use index type ' . $resolvedExpr->getType() . ' in fetch',
+                    $expression
+                );
             }
         }
 
@@ -492,6 +542,7 @@ class Backend
                 implode(', ', $offsetItems)
             )
         );
+        $compilationContext->emitExceptionCheck();
     }
 
     /**
@@ -542,6 +593,7 @@ class Backend
                 ) . ', SL("' . $property . '"), ' . $resolveValue . ');'
             );
         }
+        $context->emitExceptionCheck();
     }
 
     public function assignBool(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
@@ -618,6 +670,7 @@ class Backend
                 implode(', ', $offsetItems)
             )
         );
+        $compilationContext->emitExceptionCheck();
     }
 
     public function assignStaticPropertyArrayMulti(
@@ -642,6 +695,7 @@ class Backend
                 $offsetStr
             )
         );
+        $compilationContext->emitExceptionCheck();
     }
 
     /**
@@ -2801,6 +2855,7 @@ class Backend
             $offset['code'],
             $this->resolveValue($value, $compilationContext, true)
         ));
+        $compilationContext->emitExceptionCheck();
     }
 
     public function updateArray(

@@ -404,8 +404,16 @@ PHP_METHOD(Stub_Bench, arrayFetchStringLoop)
 		}
 		ZEPHIR_OBS_NVAR(&_0$$3);
 		zephir_array_fetch_string(&_0$$3, &arr, SL("a"), PH_NOISY, "stub/bench.zep", 94);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_OBS_NVAR(&_1$$3);
 		zephir_array_fetch_string(&_1$$3, &arr, SL("b"), PH_NOISY, "stub/bench.zep", 94);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		sum += (zephir_get_intval(&_0$$3) + zephir_get_intval(&_1$$3));
 		i++;
 	}
@@ -889,6 +897,10 @@ PHP_METHOD(Stub_Bench, arrayRange)
 		ZEPHIR_INIT_NVAR(&_0$$3);
 		ZVAL_LONG(&_0$$3, i);
 		zephir_array_append(&result, &_0$$3, PH_SEPARATE, "stub/bench.zep", 271);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		i = (i + 1);
 	}
 	RETURN_CTOR(&result);
@@ -1171,6 +1183,10 @@ PHP_METHOD(Stub_Bench, buildMatrix)
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			array_init(&_3$$3);
 			zephir_array_update_zval(&output, &i, &_3$$3, PH_COPY | PH_SEPARATE);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			_6$$3 = n;
 			_5$$3 = 0;
 			_4$$3 = 0;
@@ -1189,6 +1205,10 @@ PHP_METHOD(Stub_Bench, buildMatrix)
 					ZEPHIR_INIT_NVAR(&_7$$4);
 					ZVAL_LONG(&_7$$4, 1);
 					zephir_array_update_multi(&output, &_7$$4, SL("zz"), 2, &i, &j);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 				}
 			}
 		}
@@ -1403,6 +1423,10 @@ PHP_METHOD(Stub_Bench, addAssignAccumulate)
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_LONG(&_3$$3, i);
 			zephir_array_update_long(&b, i, &_3$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			ZEPHIR_INIT_NVAR(&_4$$3);
 			zephir_add_function(&_4$$3, &a, &b);
 			if (UNEXPECTED(EG(exception))) {
@@ -1743,6 +1767,10 @@ PHP_METHOD(Stub_Bench, bufferSumLoop)
 		}
 		ZEPHIR_OBS_NVAR(&_0$$3);
 		zephir_array_fetch_long(&_0$$3, buf, i, PH_NOISY, "stub/bench.zep", 557);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		total +=  (zephir_get_doubleval(&_0$$3));
 		i++;
 	}
@@ -1775,6 +1803,10 @@ PHP_METHOD(Stub_Bench, bufferSumOverArray)
 		}
 		ZEPHIR_OBS_NVAR(&_0$$3);
 		zephir_array_fetch_long(&_0$$3, &arr, i, PH_NOISY, "stub/bench.zep", 570);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		total +=  (zephir_get_doubleval(&_0$$3));
 		i++;
 	}
@@ -1806,6 +1838,10 @@ PHP_METHOD(Stub_Bench, bufferWriteLoop)
 		ZEPHIR_INIT_NVAR(&_0$$3);
 		ZVAL_DOUBLE(&_0$$3, 1.5);
 		zephir_array_update_long(buf, i, &_0$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		i++;
 	}
 	ZEPHIR_MM_RESTORE();

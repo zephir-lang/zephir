@@ -1883,12 +1883,28 @@ PHP_METHOD(Stub_Arithmetic, shiftOrPrecedence)
 	zephir_fetch_params(1, 2, 0, &hmac, &offset_param);
 	zephir_memory_observe(&_0);
 	zephir_array_fetch_long(&_0, hmac, (offset + 0), PH_NOISY, "stub/arithmetic.zep", 1511);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&_1);
 	zephir_array_fetch_long(&_1, hmac, (offset + 1), PH_NOISY, "stub/arithmetic.zep", 1511);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&_2);
 	zephir_array_fetch_long(&_2, hmac, (offset + 2), PH_NOISY, "stub/arithmetic.zep", 1511);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&_3);
 	zephir_array_fetch_long(&_3, hmac, (offset + 3), PH_NOISY, "stub/arithmetic.zep", 1511);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	code = (((((zend_long) ((zend_ulong) (((zephir_get_intval(&_0) & 0x7F))) << 24)) | ((zend_long) ((zend_ulong) (((zephir_get_intval(&_1) & 0xFF))) << 16))) | ((zend_long) ((zend_ulong) (((zephir_get_intval(&_2) & 0xFF))) << 8))) | ((zephir_get_intval(&_3) & 0xFF)));
 	RETURN_MM_LONG(code);
 }

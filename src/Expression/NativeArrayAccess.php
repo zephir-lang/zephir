@@ -317,6 +317,7 @@ class NativeArrayAccess
          */
         $expr      = new Expression($arrayAccess['right']);
         $exprIndex = $expr->compile($compilationContext);
+        $exprIndex = $compilationContext->backend->boxArrayKey($exprIndex, $compilationContext);
         $compilationContext->headersManager->add('kernel/array');
 
         if ('variable' === $exprIndex->getType()) {
@@ -447,6 +448,7 @@ class NativeArrayAccess
                 $offset['code'],
                 $flags
             ));
+            $compilationContext->emitExceptionCheck();
 
             return new CompiledExpression('variable', $stringVariable->getName(), $expression);
         }
@@ -459,6 +461,7 @@ class NativeArrayAccess
             $offset['code'],
             $flags
         ));
+        $compilationContext->emitExceptionCheck();
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
     }

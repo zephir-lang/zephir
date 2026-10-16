@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `unset` and `array_key_exists()` looking up a `null` key as a one byte key instead of the empty string [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `unset` and `array_key_exists()` converting float, bool and resource keys and reporting illegal keys differently from PHP [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `array_key_exists()` and `in_array()` returning `false` instead of throwing `TypeError` for a non-array [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed an array literal with a variable key failing to compile, or emitting C that does not compile, for most value types [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `double`, `bool` and literal `null` array keys failing to compile, or emitting invalid C for `empty`, instead of converting as PHP does [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `fetch` with a literal key crashing the compiler instead of reporting a compile error [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `let a[k][] = v` on an `array` parameter failing to compile with "Cannot use non-initialized variable as an object" [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed execution continuing after an array or string offset read, write, `isset`, `fetch`, `empty`, `array_key_exists()` or `in_array()` threw [#2706](https://github.com/zephir-lang/zephir/issues/2706)
 - Fixed closure class names continuing to count up across compilations in one process, orphaning previously generated files [#2687](https://github.com/zephir-lang/zephir/issues/2687)
 - Fixed function and method call cache slots continuing to count up across compilations in one process [#2687](https://github.com/zephir-lang/zephir/issues/2687)
 - Fixed arrow closures failing to resolve `use ... as` aliases declared in the file [#2686](https://github.com/zephir-lang/zephir/issues/2686)

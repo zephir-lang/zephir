@@ -50,6 +50,10 @@ PHP_METHOD(Stub_ArrayRead, read)
 	zephir_fetch_params(1, 2, 0, &a, &k);
 	zephir_memory_observe(&_0);
 	zephir_array_fetch(&_0, a, k, PH_NOISY, "stub/arrayread.zep", 15);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 
@@ -71,6 +75,10 @@ PHP_METHOD(Stub_ArrayRead, readFromArray)
 	zephir_fetch_params(1, 2, 0, &a_param, &k);
 	zephir_get_arrval(&a, a_param);
 	zephir_array_fetch(&_0, &a, k, PH_NOISY | PH_READONLY, "stub/arrayread.zep", 20);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_0);
 }
 
@@ -89,6 +97,10 @@ PHP_METHOD(Stub_ArrayRead, readStringLiteral)
 	zephir_fetch_params(1, 1, 0, &a);
 	zephir_memory_observe(&_0);
 	zephir_array_fetch_string(&_0, a, SL("zz"), PH_NOISY, "stub/arrayread.zep", 25);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 
@@ -107,6 +119,10 @@ PHP_METHOD(Stub_ArrayRead, readIntLiteral)
 	zephir_fetch_params(1, 1, 0, &a);
 	zephir_memory_observe(&_0);
 	zephir_array_fetch_long(&_0, a, 7, PH_NOISY, "stub/arrayread.zep", 30);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 
@@ -127,6 +143,10 @@ PHP_METHOD(Stub_ArrayRead, readLong)
 	zephir_fetch_params(1, 2, 0, &a, &k_param);
 	zephir_memory_observe(&_0);
 	zephir_array_fetch_long(&_0, a, k, PH_NOISY, "stub/arrayread.zep", 35);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 
@@ -150,6 +170,10 @@ PHP_METHOD(Stub_ArrayRead, readString)
 	ZVAL_STR_COPY(&k_zv, k);
 	zephir_memory_observe(&_0);
 	zephir_array_fetch(&_0, a, &k_zv, PH_NOISY, "stub/arrayread.zep", 40);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 
@@ -173,8 +197,16 @@ PHP_METHOD(Stub_ArrayRead, readNested)
 	zephir_fetch_params(1, 3, 0, &a, &i, &j);
 	zephir_memory_observe(&_0);
 	zephir_array_fetch(&_0, a, i, PH_NOISY, "stub/arrayread.zep", 45);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&_1);
 	zephir_array_fetch(&_1, &_0, j, PH_NOISY, "stub/arrayread.zep", 45);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_1);
 }
 
@@ -194,8 +226,16 @@ PHP_METHOD(Stub_ArrayRead, readNestedLiteral)
 	zephir_fetch_params(1, 1, 0, &a);
 	zephir_memory_observe(&_0);
 	zephir_array_fetch_string(&_0, a, SL("zz"), PH_NOISY, "stub/arrayread.zep", 50);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&_1);
 	zephir_array_fetch_string(&_1, &_0, SL("yy"), PH_NOISY, "stub/arrayread.zep", 50);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_1);
 }
 
@@ -216,6 +256,10 @@ PHP_METHOD(Stub_ArrayRead, readIntoLocal)
 	zephir_fetch_params(1, 2, 0, &a, &k);
 	zephir_memory_observe(&value);
 	zephir_array_fetch(&value, a, k, PH_NOISY, "stub/arrayread.zep", 57);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&value);
 }
 

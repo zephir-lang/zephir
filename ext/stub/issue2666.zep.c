@@ -228,6 +228,10 @@ PHP_METHOD(Stub_Issue2666, longArrayKey)
 	ZEPHIR_INIT_VAR(&result);
 	array_init(&result);
 	zephir_array_update_long(&result, key, value, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&result);
 }
 
@@ -250,12 +254,17 @@ PHP_METHOD(Stub_Issue2666, longArrayFetch)
 	zephir_fetch_params(1, 2, 0, &source_param, &key_param);
 	ZEPHIR_OBS_COPY_OR_DUP(&source, source_param);
 	zephir_array_fetch_long(&_0, &source, key, PH_NOISY | PH_READONLY, "stub/issue2666.zep", 103);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_0);
 }
 
 /** `zephir_array_isset_long()`. */
 PHP_METHOD(Stub_Issue2666, longArrayIsset)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long key;
 	zval *source_param = NULL, *key_param = NULL;
@@ -270,7 +279,12 @@ PHP_METHOD(Stub_Issue2666, longArrayIsset)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &source_param, &key_param);
 	ZEPHIR_OBS_COPY_OR_DUP(&source, source_param);
-	RETURN_MM_BOOL(zephir_array_isset_value_long(&source, key));
+	_0 = zephir_array_isset_value_long(&source, key);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 /** `zephir_less_long()` / `zephir_greater_long()`: zval against a native. */
@@ -649,6 +663,10 @@ PHP_METHOD(Stub_Issue2666, multiLiteralKeys)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "v");
 	zephir_array_update_multi(&result, &_0, SL("ll"), 2, (zend_long) 0, (zend_long) 1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&result);
 }
 
@@ -672,6 +690,10 @@ PHP_METHOD(Stub_Issue2666, multiIntKey)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "v");
 	zephir_array_update_multi(&result, &_0, SL("ll"), 2, (zend_long) key, (zend_long) 2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&result);
 }
 
@@ -695,6 +717,10 @@ PHP_METHOD(Stub_Issue2666, multiUintKey)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "v");
 	zephir_array_update_multi(&result, &_0, SL("ll"), 2, (zend_long) key, (zend_long) 2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&result);
 }
 
@@ -718,6 +744,10 @@ PHP_METHOD(Stub_Issue2666, multiLongKey)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "v");
 	zephir_array_update_multi(&result, &_0, SL("ll"), 2, (zend_long) key, (zend_long) 2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&result);
 }
 
@@ -741,6 +771,10 @@ PHP_METHOD(Stub_Issue2666, multiUlongKey)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "v");
 	zephir_array_update_multi(&result, &_0, SL("ll"), 2, (zend_long) key, (zend_long) 2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&result);
 }
 
@@ -761,6 +795,10 @@ PHP_METHOD(Stub_Issue2666, multiDeepKeys)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "v");
 	zephir_array_update_multi(&result, &_0, SL("lllllllll"), 9, (zend_long) 0, (zend_long) 1, (zend_long) 2, (zend_long) 3, (zend_long) 4, (zend_long) 5, (zend_long) 6, (zend_long) 7, (zend_long) 8);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&result);
 }
 
@@ -785,6 +823,10 @@ PHP_METHOD(Stub_Issue2666, multiMixedKeys)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "v");
 	zephir_array_update_multi(&result, &_0, SL("sl"), 3, SL("k"), (zend_long) key);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&result);
 }
 

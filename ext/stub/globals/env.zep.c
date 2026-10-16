@@ -26,6 +26,7 @@ ZEPHIR_INIT_CLASS(Stub_Globals_Env)
 
 PHP_METHOD(Stub_Globals_Env, read)
 {
+	zend_bool _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval name_zv, _ENV, _0;
 	zend_string *name = NULL;
@@ -42,9 +43,18 @@ PHP_METHOD(Stub_Globals_Env, read)
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
 	ZEPHIR_INIT_VAR(&_0);
-	if (zephir_array_isset_value(&_ENV, &name_zv)) {
+	_1 = zephir_array_isset_value(&_ENV, &name_zv);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	if (_1) {
 		ZEPHIR_OBS_NVAR(&_0);
 		zephir_array_fetch(&_0, &_ENV, &name_zv, PH_NOISY, "stub/globals/env.zep", 8);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	} else {
 		ZEPHIR_INIT_NVAR(&_0);
 		ZVAL_BOOL(&_0, 0);

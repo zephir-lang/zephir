@@ -270,6 +270,10 @@ PHP_METHOD(Stub_Variadic, classNames)
 		ZEPHIR_INIT_NVAR(&_3$$3);
 		zephir_get_class(&_3$$3, &obj, 0);
 		zephir_array_append(&names, &_3$$3, PH_SEPARATE, "stub/variadic.zep", 103);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&obj);
 	RETURN_CTOR(&names);

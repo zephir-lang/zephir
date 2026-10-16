@@ -54,12 +54,8 @@ class ArrayKeyExistsOptimizer extends OptimizerAbstract
             $expression
         );
 
-        // Note: the first parameter is key in php array_key_exists
-        return new CompiledExpression(
-            'bool',
-            $this->getCode($resolvedParams),
-            $expression
-        );
+        // array_key_exists() throws for a non-array or an illegal key
+        return new CompiledExpression('bool', $context->emitCheckedBool($this->getCode($resolvedParams)), $expression);
     }
 
     /**
@@ -69,6 +65,7 @@ class ArrayKeyExistsOptimizer extends OptimizerAbstract
      */
     protected function getCode(array $resolvedParams): string
     {
+        // Note: the first parameter is key in php array_key_exists
         return 'zephir_array_key_exists('
             . $resolvedParams[1] . ', '
             . $resolvedParams[0] . ')';

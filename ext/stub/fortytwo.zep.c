@@ -258,6 +258,10 @@ PHP_METHOD(Stub_FortyTwo, proof)
 				i = _5$$3;
 				ZEPHIR_OBS_NVAR(&_7$$4);
 				zephir_array_fetch_long(&_7$$4, &side, i, PH_NOISY, "stub/fortytwo.zep", 26);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				j += zephir_get_numberval(&_7$$4);
 			}
 		}

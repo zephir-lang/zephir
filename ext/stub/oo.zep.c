@@ -313,9 +313,17 @@ PHP_METHOD(Stub_Oo, createInstancesInLoop)
 		ZEPHIR_CALL_METHOD(&_5$$3, &instance, "execute", NULL, 0);
 		zephir_check_call_status();
 		zephir_array_append(&result, &_5$$3, PH_SEPARATE, "stub/oo.zep", 108);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CALL_METHOD(&_6$$3, &instance, "execute2", NULL, 0);
 		zephir_check_call_status();
 		zephir_array_append(&result, &_6$$3, PH_SEPARATE, "stub/oo.zep", 109);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&className);
 	RETURN_CTOR(&result);

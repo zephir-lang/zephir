@@ -122,6 +122,7 @@ class ArrayIndex
             $expression = new Expression($indexExpr);
             $expression->setReadOnly(true);
             $exprIndex = $expression->compile($compilationContext);
+            $exprIndex = $compilationContext->backend->boxArrayKey($exprIndex, $compilationContext);
 
             switch ($exprIndex->getType()) {
                 case 'int':
@@ -215,6 +216,7 @@ class ArrayIndex
     ): void {
         $expression = new Expression($statement['index-expr'][0]);
         $exprIndex  = $expression->compile($compilationContext);
+        $exprIndex = $compilationContext->backend->boxArrayKey($exprIndex, $compilationContext);
 
         switch ($exprIndex->getType()) {
             case 'int':
@@ -256,6 +258,7 @@ class ArrayIndex
                     $compilationContext,
                     $flags
                 );
+                $compilationContext->emitExceptionCheck();
                 break;
 
             case 'variable':
@@ -278,6 +281,7 @@ class ArrayIndex
                             $compilationContext,
                             $flags
                         );
+                        $compilationContext->emitExceptionCheck();
                         break;
                     default:
                         throw new CompilerException(

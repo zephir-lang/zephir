@@ -178,9 +178,17 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex)
 		zephir_array_fast_append(&_5$$3, this_ptr);
 		ZEPHIR_OBS_NVAR(&_6$$3);
 		zephir_array_fetch_long(&_6$$3, &item, 0, PH_NOISY, "stub/invokes/abstractprotected.zep", 46);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		zephir_array_fast_append(&_5$$3, &_6$$3);
 		ZEPHIR_OBS_NVAR(&_6$$3);
 		zephir_array_fetch_long(&_6$$3, &item, 1, PH_NOISY, "stub/invokes/abstractprotected.zep", 46);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CALL_USER_FUNC_ARRAY(&_4$$3, &_5$$3, &_6$$3);
 		zephir_check_call_status();
 		zephir_concat_self(&result, &_4$$3);

@@ -42,6 +42,9 @@ PHP_METHOD(Stub_Globals_Session_Base, set)
 	value = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&index_zv, index);
 	zephir_array_update_zval(&_SESSION, &index_zv, value, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETVAL_ZVAL(&_SESSION, 1, 0);
 	return;
 }

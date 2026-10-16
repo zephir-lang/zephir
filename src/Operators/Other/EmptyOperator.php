@@ -128,6 +128,7 @@ class EmptyOperator extends AbstractOperator
         $offsetExpr->setReadOnly(true);
         $offsetExpr->setNoisy(false);
         $offset = $offsetExpr->compile($compilationContext);
+        $offset = $compilationContext->backend->boxArrayKey($offset, $compilationContext);
 
         switch ($offset->getType()) {
             case 'int':
@@ -170,6 +171,7 @@ class EmptyOperator extends AbstractOperator
                 );
         }
 
-        return new CompiledExpression('bool', $code, $arrayAccess);
+        // empty() throws for an illegal key or from offsetExists()/offsetGet()
+        return new CompiledExpression('bool', $compilationContext->emitCheckedBool($code), $arrayAccess);
     }
 }

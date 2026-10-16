@@ -304,6 +304,10 @@ PHP_METHOD(Stub_Issue2654, leakProbeControl)
 			return;
 		}
 		zephir_update_property_array_append(this_ptr, SL("retained"), &_2$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		i++;
 	}
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);

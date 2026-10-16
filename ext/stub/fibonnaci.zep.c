@@ -94,8 +94,16 @@ PHP_METHOD(Stub_Fibonnaci, fibArray)
 		j = (i - 2);
 		ZEPHIR_OBS_NVAR(&a);
 		zephir_array_fetch_long(&a, &fib, k, PH_NOISY, "stub/fibonnaci.zep", 51);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_OBS_NVAR(&b);
 		zephir_array_fetch_long(&b, &fib, j, PH_NOISY, "stub/fibonnaci.zep", 52);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_NVAR(&c);
 		zephir_add_function(&c, &a, &b);
 		if (UNEXPECTED(EG(exception))) {
@@ -103,6 +111,10 @@ PHP_METHOD(Stub_Fibonnaci, fibArray)
 			return;
 		}
 		zephir_array_update_long(&fib, i, &c, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		i++;
 	}
 	RETURN_CCTOR(&fib);
@@ -137,7 +149,15 @@ PHP_METHOD(Stub_Fibonnaci, fibArray2)
 			break;
 		}
 		zephir_array_fetch_long(&_1$$3, &fib, (i - 1), PH_NOISY | PH_READONLY, "stub/fibonnaci.zep", 67);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		zephir_array_fetch_long(&_2$$3, &fib, (i - 2), PH_NOISY | PH_READONLY, "stub/fibonnaci.zep", 67);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_NVAR(&_3$$3);
 		zephir_add_function(&_3$$3, &_1$$3, &_2$$3);
 		if (UNEXPECTED(EG(exception))) {
@@ -145,6 +165,10 @@ PHP_METHOD(Stub_Fibonnaci, fibArray2)
 			return;
 		}
 		zephir_array_update_long(&fib, i, &_3$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		i++;
 	}
 	RETURN_CCTOR(&fib);

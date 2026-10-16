@@ -50,6 +50,10 @@ PHP_METHOD(Stub_BufferOps, readAt)
 	zephir_fetch_params(1, 2, 0, &buf, &index_param);
 	zephir_memory_observe(&_0);
 	zephir_array_fetch_long(&_0, buf, index, PH_NOISY, "stub/bufferops.zep", 15);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 
@@ -71,11 +75,16 @@ PHP_METHOD(Stub_BufferOps, writeAt)
 	zephir_fetch_params(1, 3, 0, &buf, &index_param, &value);
 	ZEPHIR_SEPARATE_PARAM(buf);
 	zephir_array_update_long(buf, index, value, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_BufferOps, has)
 {
+	zend_bool _0;
 	zend_long index;
 	zval *buf, buf_sub, *index_param = NULL;
 
@@ -85,7 +94,11 @@ PHP_METHOD(Stub_BufferOps, has)
 		Z_PARAM_LONG(index)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &buf, &index_param);
-	RETURN_BOOL(zephir_array_isset_value_long(buf, index));
+	_0 = zephir_array_isset_value_long(buf, index);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	RETURN_BOOL(_0);
 }
 
 PHP_METHOD(Stub_BufferOps, size)
@@ -125,6 +138,10 @@ PHP_METHOD(Stub_BufferOps, sum)
 		}
 		ZEPHIR_OBS_NVAR(&_0$$3);
 		zephir_array_fetch_long(&_0$$3, buf, i, PH_NOISY, "stub/bufferops.zep", 41);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		total +=  (zephir_get_doubleval(&_0$$3));
 		i++;
 	}
@@ -158,9 +175,17 @@ PHP_METHOD(Stub_BufferOps, scale)
 		}
 		ZEPHIR_OBS_NVAR(&_0$$3);
 		zephir_array_fetch_long(&_0$$3, buf, i, PH_NOISY, "stub/bufferops.zep", 55);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_DOUBLE(&_1$$3, (zephir_get_doubleval(&_0$$3) * factor));
 		zephir_array_update_long(buf, i, &_1$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		i++;
 	}
 	ZEPHIR_MM_RESTORE();

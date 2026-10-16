@@ -62,10 +62,22 @@ PHP_METHOD(Stub_Destructure, basic)
 	zephir_array_fast_append(&arr, &_0);
 	zephir_memory_observe(&a);
 	zephir_array_fetch_long(&a, &arr, 0, PH_NOISY, "stub/destructure.zep", 19);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&b);
 	zephir_array_fetch_long(&b, &arr, 1, PH_NOISY, "stub/destructure.zep", 19);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&c);
 	zephir_array_fetch_long(&c, &arr, 2, PH_NOISY, "stub/destructure.zep", 19);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_create_array(return_value, 3, 0);
 	zephir_array_fast_append(return_value, &a);
 	zephir_array_fast_append(return_value, &b);
@@ -98,8 +110,16 @@ PHP_METHOD(Stub_Destructure, skipped)
 	zephir_array_fast_append(&arr, &_0);
 	zephir_memory_observe(&a);
 	zephir_array_fetch_long(&a, &arr, 0, PH_NOISY, "stub/destructure.zep", 29);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&c);
 	zephir_array_fetch_long(&c, &arr, 2, PH_NOISY, "stub/destructure.zep", 29);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_create_array(return_value, 2, 0);
 	zephir_array_fast_append(return_value, &a);
 	zephir_array_fast_append(return_value, &c);
@@ -127,6 +147,10 @@ PHP_METHOD(Stub_Destructure, trailingSkip)
 	zephir_array_fast_append(&arr, &_0);
 	zephir_memory_observe(&a);
 	zephir_array_fetch_long(&a, &arr, 0, PH_NOISY, "stub/destructure.zep", 39);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -153,8 +177,16 @@ PHP_METHOD(Stub_Destructure, literal)
 	zephir_array_fast_append(&_0, &_1);
 	zephir_memory_observe(&a);
 	zephir_array_fetch_long(&a, &_0, 0, PH_NOISY, "stub/destructure.zep", 48);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&b);
 	zephir_array_fetch_long(&b, &_0, 1, PH_NOISY, "stub/destructure.zep", 48);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_create_array(return_value, 2, 0);
 	zephir_array_fast_append(return_value, &a);
 	zephir_array_fast_append(return_value, &b);
@@ -220,8 +252,16 @@ PHP_METHOD(Stub_Destructure, fromCall)
 	zephir_check_call_status();
 	zephir_memory_observe(&a);
 	zephir_array_fetch_long(&a, &_0, 0, PH_NOISY, "stub/destructure.zep", 64);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&b);
 	zephir_array_fetch_long(&b, &_0, 1, PH_NOISY, "stub/destructure.zep", 64);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_create_array(return_value, 3, 0);
 	zephir_array_fast_append(return_value, &a);
 	zephir_array_fast_append(return_value, &b);
@@ -253,8 +293,16 @@ PHP_METHOD(Stub_Destructure, swap)
 	zephir_array_fast_append(&_0, &a);
 	ZEPHIR_OBS_NVAR(&a);
 	zephir_array_fetch_long(&a, &_0, 0, PH_NOISY, "stub/destructure.zep", 74);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_OBS_NVAR(&b);
 	zephir_array_fetch_long(&b, &_0, 1, PH_NOISY, "stub/destructure.zep", 74);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_create_array(return_value, 2, 0);
 	zephir_array_fast_append(return_value, &a);
 	zephir_array_fast_append(return_value, &b);
@@ -286,8 +334,16 @@ PHP_METHOD(Stub_Destructure, fewerTargets)
 	zephir_array_fast_append(&arr, &_0);
 	zephir_memory_observe(&a);
 	zephir_array_fetch_long(&a, &arr, 0, PH_NOISY, "stub/destructure.zep", 84);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&b);
 	zephir_array_fetch_long(&b, &arr, 1, PH_NOISY, "stub/destructure.zep", 84);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_create_array(return_value, 2, 0);
 	zephir_array_fast_append(return_value, &a);
 	zephir_array_fast_append(return_value, &b);
@@ -317,10 +373,22 @@ PHP_METHOD(Stub_Destructure, missingSlot)
 	zephir_array_fast_append(&arr, &_0);
 	zephir_memory_observe(&a);
 	zephir_array_fetch_long(&a, &arr, 0, PH_NOISY, "stub/destructure.zep", 94);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&b);
 	zephir_array_fetch_long(&b, &arr, 1, PH_NOISY, "stub/destructure.zep", 94);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&c);
 	zephir_array_fetch_long(&c, &arr, 2, PH_NOISY, "stub/destructure.zep", 94);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_create_array(return_value, 3, 0);
 	zephir_array_fast_append(return_value, &a);
 	zephir_array_fast_append(return_value, &b);
@@ -364,8 +432,16 @@ PHP_METHOD(Stub_Destructure, nestedValue)
 	zephir_array_fast_append(&_0, &_1);
 	zephir_memory_observe(&a);
 	zephir_array_fetch_long(&a, &_0, 0, PH_NOISY, "stub/destructure.zep", 103);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&b);
 	zephir_array_fetch_long(&b, &_0, 1, PH_NOISY, "stub/destructure.zep", 103);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_create_array(return_value, 2, 0);
 	zephir_array_fast_append(return_value, &a);
 	zephir_array_fast_append(return_value, &b);
@@ -398,9 +474,17 @@ PHP_METHOD(Stub_Destructure, typedTargets)
 	zephir_array_fast_append(&_0, &_1);
 	zephir_memory_observe(&_2);
 	zephir_array_fetch_long(&_2, &_0, 0, PH_NOISY, "stub/destructure.zep", 112);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	i = zephir_get_intval(&_2);
 	zephir_memory_observe(&_3);
 	zephir_array_fetch_long(&_3, &_0, 1, PH_NOISY, "stub/destructure.zep", 112);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_get_strval(&s, &_3);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
@@ -431,8 +515,16 @@ PHP_METHOD(Stub_Destructure, keyedSource)
 	add_index_stringl(&arr, 1, SL("y"));
 	zephir_memory_observe(&a);
 	zephir_array_fetch_long(&a, &arr, 0, PH_NOISY, "stub/destructure.zep", 122);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&b);
 	zephir_array_fetch_long(&b, &arr, 1, PH_NOISY, "stub/destructure.zep", 122);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_create_array(return_value, 2, 0);
 	zephir_array_fast_append(return_value, &a);
 	zephir_array_fast_append(return_value, &b);
@@ -493,8 +585,16 @@ PHP_METHOD(Stub_Destructure, inLoop)
 		ZVAL_COPY(&item, _3);
 		ZEPHIR_OBS_NVAR(&k);
 		zephir_array_fetch_long(&k, &item, 0, PH_NOISY, "stub/destructure.zep", 134);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_OBS_NVAR(&v);
 		zephir_array_fetch_long(&v, &item, 1, PH_NOISY, "stub/destructure.zep", 134);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_NVAR(&_4$$3);
 		zephir_add_function(&_4$$3, &k, &v);
 		if (UNEXPECTED(EG(exception))) {
@@ -502,6 +602,10 @@ PHP_METHOD(Stub_Destructure, inLoop)
 			return;
 		}
 		zephir_array_append(&out, &_4$$3, PH_SEPARATE, "stub/destructure.zep", 135);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&item);
 	RETURN_CCTOR(&out);
@@ -530,8 +634,16 @@ PHP_METHOD(Stub_Destructure, chained)
 	zephir_array_fast_append(&arr, &_0);
 	zephir_memory_observe(&a);
 	zephir_array_fetch_long(&a, &arr, 0, PH_NOISY, "stub/destructure.zep", 146);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&b);
 	zephir_array_fetch_long(&b, &arr, 1, PH_NOISY, "stub/destructure.zep", 146);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	c = 9;
 	zephir_create_array(return_value, 3, 0);
 	zephir_array_fast_append(return_value, &a);
@@ -561,8 +673,16 @@ PHP_METHOD(Stub_Destructure, fromProperty)
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 38, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&a);
 	zephir_array_fetch_long(&a, &_0, 0, PH_NOISY, "stub/destructure.zep", 155);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&b);
 	zephir_array_fetch_long(&b, &_0, 1, PH_NOISY, "stub/destructure.zep", 155);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_create_array(return_value, 2, 0);
 	zephir_array_fast_append(return_value, &a);
 	zephir_array_fast_append(return_value, &b);

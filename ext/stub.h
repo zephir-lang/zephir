@@ -170,6 +170,7 @@
 #include "stub/issue2699.zep.h"
 #include "stub/issue2702.zep.h"
 #include "stub/issue2705.zep.h"
+#include "stub/issue2706.zep.h"
 #include "stub/issue2708.zep.h"
 #include "stub/issue2715.zep.h"
 #include "stub/issue2716.zep.h"

@@ -60,6 +60,10 @@ PHP_METHOD(Stub_Issue1097, testStringOrArrayOfString)
 	} else {
 		zephir_memory_observe(&_0);
 		zephir_array_fetch_long(&_0, myvar, 0, PH_NOISY, "stub/issue1097.zep", 26);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		if (Z_TYPE_P(&_0) == IS_STRING) {
 			RETURN_MM_STRING("array-of-string");
 		}
@@ -111,11 +115,19 @@ PHP_METHOD(Stub_Issue1097, testMultipleElseif)
 	} else {
 		zephir_memory_observe(&_0);
 		zephir_array_fetch_long(&_0, myvar, 0, PH_NOISY, "stub/issue1097.zep", 55);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		if (Z_TYPE_P(&_0) == IS_STRING) {
 			RETURN_MM_STRING("array-of-string");
 		} else {
 			zephir_memory_observe(&_1);
 			zephir_array_fetch_long(&_1, myvar, 0, PH_NOISY, "stub/issue1097.zep", 57);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			if (Z_TYPE_P(&_1) == IS_LONG) {
 				RETURN_MM_STRING("array-of-int");
 			}

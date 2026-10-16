@@ -80,14 +80,14 @@ PHP_METHOD(Stub_Issue2679, conditional)
  */
 PHP_METHOD(Stub_Issue2679, fetchCase)
 {
-	zend_bool found;
+	zend_bool found, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *data_param = NULL, v, _0;
+	zval *data_param = NULL, v, _1;
 	zval data;
 
 	ZVAL_UNDEF(&data);
 	ZVAL_UNDEF(&v);
-	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		ZEPHIR_Z_PARAM_ARRAY(data, data_param)
 	ZEND_PARSE_PARAMETERS_END();
@@ -97,13 +97,18 @@ PHP_METHOD(Stub_Issue2679, fetchCase)
 	zephir_get_arrval(&data, data_param);
 	found = 0;
 	zephir_memory_observe(&v);
-	if (zephir_array_isset_string_fetch(&v, &data, SL("k"), 0)) {
+	_0 = zephir_array_isset_string_fetch(&v, &data, SL("k"), 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	if (_0) {
 		found = 1;
 	}
 	zephir_create_array(return_value, 2, 0);
-	ZEPHIR_INIT_VAR(&_0);
-	ZVAL_BOOL(&_0, found);
-	zephir_array_fast_append(return_value, &_0);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_BOOL(&_1, found);
+	zephir_array_fast_append(return_value, &_1);
 	zephir_array_fast_append(return_value, &v);
 	RETURN_MM();
 }
@@ -114,14 +119,15 @@ PHP_METHOD(Stub_Issue2679, fetchCase)
  */
 PHP_METHOD(Stub_Issue2679, fetchGuarded)
 {
-	zval _0$$3;
+	zval _1$$3;
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *data_param = NULL, v;
 	zval data;
 
 	ZVAL_UNDEF(&data);
 	ZVAL_UNDEF(&v);
-	ZVAL_UNDEF(&_0$$3);
+	ZVAL_UNDEF(&_1$$3);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		ZEPHIR_Z_PARAM_ARRAY(data, data_param)
 	ZEND_PARSE_PARAMETERS_END();
@@ -130,13 +136,18 @@ PHP_METHOD(Stub_Issue2679, fetchGuarded)
 	zephir_fetch_params(1, 1, 0, &data_param);
 	zephir_get_arrval(&data, data_param);
 	zephir_memory_observe(&v);
-	if (zephir_array_isset_string_fetch(&v, &data, SL("k"), 0)) {
-		zephir_cast_to_string(&_0$$3, &v);
+	_0 = zephir_array_isset_string_fetch(&v, &data, SL("k"), 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	if (_0) {
+		zephir_cast_to_string(&_1$$3, &v);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		RETURN_CTOR(&_0$$3);
+		RETURN_CTOR(&_1$$3);
 	}
 	RETURN_MM_STRING("missing");
 }
@@ -146,6 +157,7 @@ PHP_METHOD(Stub_Issue2679, fetchGuarded)
  */
 PHP_METHOD(Stub_Issue2679, fetchStatement)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *data_param = NULL, v;
 	zval data;
@@ -160,7 +172,12 @@ PHP_METHOD(Stub_Issue2679, fetchStatement)
 	zephir_fetch_params(1, 1, 0, &data_param);
 	zephir_get_arrval(&data, data_param);
 	zephir_memory_observe(&v);
-	zephir_array_isset_string_fetch(&v, &data, SL("k"), 0);
+	_0 = zephir_array_isset_string_fetch(&v, &data, SL("k"), 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	_0;
 	RETURN_CCTOR(&v);
 }
 
@@ -785,6 +802,10 @@ PHP_METHOD(Stub_Issue2679, leakProbeControl)
 		ZEPHIR_CALL_METHOD(&_1$$3, this_ptr, "conditionalHeap", &_3, 0, &_2$$3);
 		zephir_check_call_status();
 		zephir_update_property_array_append(this_ptr, SL("retained"), &_1$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		i++;
 	}
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);

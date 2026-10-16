@@ -101,5 +101,8 @@ PHP_METHOD(Stub_Issue2651, addHeader)
 	ZVAL_STR(&key_zv, key);
 	ZVAL_STR(&value_zv, value);
 	zephir_update_property_array(this_ptr, SL("headers"), &key_zv, &value_zv);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 

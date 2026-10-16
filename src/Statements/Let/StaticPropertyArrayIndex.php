@@ -37,6 +37,7 @@ class StaticPropertyArrayIndex extends StaticPropertyAppend
         foreach ($statement['index-expr'] as $indexExpr) {
             $indexExpression = new Expression($indexExpr);
             $resolvedIndex = $indexExpression->compile($compilationContext);
+            $resolvedIndex = $compilationContext->backend->boxArrayKey($resolvedIndex, $compilationContext);
             if (!in_array($resolvedIndex->getType(), $types, true)) {
                 throw new CompilerException(
                     sprintf(

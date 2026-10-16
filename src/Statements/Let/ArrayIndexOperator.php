@@ -222,6 +222,7 @@ final class ArrayIndexOperator extends ArrayIndex
             $expression = new Expression($indexExpr);
             $expression->setReadOnly(true);
             $exprIndex = $expression->compile($compilationContext);
+            $exprIndex = $compilationContext->backend->boxArrayKey($exprIndex, $compilationContext);
 
             if (!in_array($exprIndex->getType(), self::INDEX_TYPES, true)) {
                 throw new CompilerException(

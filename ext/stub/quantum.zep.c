@@ -172,18 +172,30 @@ PHP_METHOD(Stub_Quantum, harmos)
 		ZVAL_DOUBLE(&_10$$4, item_psr);
 		zephir_array_fast_append(&_9$$4, &_10$$4);
 		zephir_array_update_long(&psr, i, &_9$$4, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_NVAR(&_11$$4);
 		zephir_create_array(&_11$$4, 1, 0);
 		ZEPHIR_INIT_NVAR(&_10$$4);
 		ZVAL_DOUBLE(&_10$$4, item_psi);
 		zephir_array_fast_append(&_11$$4, &_10$$4);
 		zephir_array_update_long(&psi, i, &_11$$4, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_NVAR(&_12$$4);
 		zephir_create_array(&_12$$4, 1, 0);
 		ZEPHIR_INIT_NVAR(&_10$$4);
 		ZVAL_DOUBLE(&_10$$4, ((5.0 * x) * x));
 		zephir_array_fast_append(&_12$$4, &_10$$4);
 		zephir_array_update_long(&v, i, &_12$$4, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		x =  ((x + dx));
 		i++;
 	}
@@ -223,15 +235,43 @@ PHP_METHOD(Stub_Quantum, harmos)
 					}
 					i = _17$$5;
 					zephir_array_fetch_long(&_19$$6, &psr, i, PH_NOISY | PH_READONLY, "stub/quantum.zep", 50);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_20$$6);
 					zephir_array_fetch_long(&_20$$6, &_19$$6, 0, PH_NOISY, "stub/quantum.zep", 50);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_21$$6, &paramater, 2, PH_NOISY | PH_READONLY, "stub/quantum.zep", 50);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_22$$6, &psi, (i + 1), PH_NOISY | PH_READONLY, "stub/quantum.zep", 50);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_23$$6);
 					zephir_array_fetch_long(&_23$$6, &_22$$6, 0, PH_NOISY, "stub/quantum.zep", 50);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_24$$6, &psi, (i - 1), PH_NOISY | PH_READONLY, "stub/quantum.zep", 50);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_25$$6);
 					zephir_array_fetch_long(&_25$$6, &_24$$6, 0, PH_NOISY, "stub/quantum.zep", 51);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_26$$6);
 					zephir_add_function(&_26$$6, &_23$$6, &_25$$6);
 					if (UNEXPECTED(EG(exception))) {
@@ -239,9 +279,21 @@ PHP_METHOD(Stub_Quantum, harmos)
 						return;
 					}
 					zephir_array_fetch_long(&_27$$6, &tmp, 0, PH_NOISY | PH_READONLY, "stub/quantum.zep", 51);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_28$$6, &psi, i, PH_NOISY | PH_READONLY, "stub/quantum.zep", 51);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_23$$6);
 					zephir_array_fetch_long(&_23$$6, &_28$$6, 0, PH_NOISY, "stub/quantum.zep", 51);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_29$$6);
 					mul_function(&_29$$6, &_27$$6, &_23$$6);
 					if (UNEXPECTED(EG(exception))) {
@@ -261,7 +313,15 @@ PHP_METHOD(Stub_Quantum, harmos)
 						return;
 					}
 					zephir_array_fetch_long(&_21$$6, &paramater, 0, PH_NOISY | PH_READONLY, "stub/quantum.zep", 51);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_27$$6, &paramater, 0, PH_NOISY | PH_READONLY, "stub/quantum.zep", 51);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_30$$6);
 					mul_function(&_30$$6, &_21$$6, &_27$$6);
 					if (UNEXPECTED(EG(exception))) {
@@ -281,9 +341,21 @@ PHP_METHOD(Stub_Quantum, harmos)
 						return;
 					}
 					zephir_array_fetch_long(&_21$$6, &paramater, 2, PH_NOISY | PH_READONLY, "stub/quantum.zep", 51);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_27$$6, &v, i, PH_NOISY | PH_READONLY, "stub/quantum.zep", 51);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_20$$6);
 					zephir_array_fetch_long(&_20$$6, &_27$$6, 0, PH_NOISY, "stub/quantum.zep", 51);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_29$$6);
 					mul_function(&_29$$6, &_21$$6, &_20$$6);
 					if (UNEXPECTED(EG(exception))) {
@@ -291,8 +363,16 @@ PHP_METHOD(Stub_Quantum, harmos)
 						return;
 					}
 					zephir_array_fetch_long(&_21$$6, &psi, i, PH_NOISY | PH_READONLY, "stub/quantum.zep", 51);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_20$$6);
 					zephir_array_fetch_long(&_20$$6, &_21$$6, 0, PH_NOISY, "stub/quantum.zep", 51);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_31$$6);
 					mul_function(&_31$$6, &_29$$6, &_20$$6);
 					if (UNEXPECTED(EG(exception))) {
@@ -306,12 +386,32 @@ PHP_METHOD(Stub_Quantum, harmos)
 						return;
 					}
 					zephir_array_update_multi(&psr, &_30$$6, SL("ll"), 2, (zend_long) i, (zend_long) 1);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_32$$6, &psr, i, PH_NOISY | PH_READONLY, "stub/quantum.zep", 53);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_20$$6);
 					zephir_array_fetch_long(&_20$$6, &_32$$6, 0, PH_NOISY, "stub/quantum.zep", 53);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_33$$6, &psr, i, PH_NOISY | PH_READONLY, "stub/quantum.zep", 53);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_23$$6);
 					zephir_array_fetch_long(&_23$$6, &_33$$6, 1, PH_NOISY, "stub/quantum.zep", 53);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_26$$6);
 					mul_function(&_26$$6, &_20$$6, &_23$$6);
 					if (UNEXPECTED(EG(exception))) {
@@ -319,11 +419,27 @@ PHP_METHOD(Stub_Quantum, harmos)
 						return;
 					}
 					zephir_array_fetch_long(&_34$$6, &psi, i, PH_NOISY | PH_READONLY, "stub/quantum.zep", 53);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_20$$6);
 					zephir_array_fetch_long(&_20$$6, &_34$$6, 0, PH_NOISY, "stub/quantum.zep", 53);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_35$$6, &psi, i, PH_NOISY | PH_READONLY, "stub/quantum.zep", 53);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_23$$6);
 					zephir_array_fetch_long(&_23$$6, &_35$$6, 0, PH_NOISY, "stub/quantum.zep", 53);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_29$$6);
 					mul_function(&_29$$6, &_20$$6, &_23$$6);
 					if (UNEXPECTED(EG(exception))) {
@@ -337,6 +453,10 @@ PHP_METHOD(Stub_Quantum, harmos)
 						return;
 					}
 					zephir_array_update_long(&p2, i, &_30$$6, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 				}
 			}
 			_38$$5 = (751 - 1);
@@ -356,19 +476,55 @@ PHP_METHOD(Stub_Quantum, harmos)
 					ZEPHIR_INIT_NVAR(&_39$$7);
 					ZVAL_LONG(&_39$$7, 0);
 					zephir_array_update_multi(&psr, &_39$$7, SL("ll"), 2, (zend_long) 0, (zend_long) 1);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_39$$7);
 					ZVAL_LONG(&_39$$7, 0);
 					zephir_array_update_multi(&psr, &_39$$7, SL("ll"), 2, (zend_long) 751, (zend_long) 1);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_40$$7, &psi, j, PH_NOISY | PH_READONLY, "stub/quantum.zep", 58);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_41$$7);
 					zephir_array_fetch_long(&_41$$7, &_40$$7, 0, PH_NOISY, "stub/quantum.zep", 58);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_42$$7, &paramater, 2, PH_NOISY | PH_READONLY, "stub/quantum.zep", 58);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_43$$7, &psr, (j + 1), PH_NOISY | PH_READONLY, "stub/quantum.zep", 58);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_44$$7);
 					zephir_array_fetch_long(&_44$$7, &_43$$7, 1, PH_NOISY, "stub/quantum.zep", 58);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_45$$7, &psr, (j - 1), PH_NOISY | PH_READONLY, "stub/quantum.zep", 58);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_46$$7);
 					zephir_array_fetch_long(&_46$$7, &_45$$7, 1, PH_NOISY, "stub/quantum.zep", 59);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_47$$7);
 					zephir_add_function(&_47$$7, &_44$$7, &_46$$7);
 					if (UNEXPECTED(EG(exception))) {
@@ -376,9 +532,21 @@ PHP_METHOD(Stub_Quantum, harmos)
 						return;
 					}
 					zephir_array_fetch_long(&_48$$7, &tmp, 0, PH_NOISY | PH_READONLY, "stub/quantum.zep", 59);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_49$$7, &psr, j, PH_NOISY | PH_READONLY, "stub/quantum.zep", 59);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_44$$7);
 					zephir_array_fetch_long(&_44$$7, &_49$$7, 1, PH_NOISY, "stub/quantum.zep", 59);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_50$$7);
 					mul_function(&_50$$7, &_48$$7, &_44$$7);
 					if (UNEXPECTED(EG(exception))) {
@@ -398,7 +566,15 @@ PHP_METHOD(Stub_Quantum, harmos)
 						return;
 					}
 					zephir_array_fetch_long(&_42$$7, &paramater, 0, PH_NOISY | PH_READONLY, "stub/quantum.zep", 59);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_48$$7, &paramater, 0, PH_NOISY | PH_READONLY, "stub/quantum.zep", 59);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_51$$7);
 					mul_function(&_51$$7, &_42$$7, &_48$$7);
 					if (UNEXPECTED(EG(exception))) {
@@ -418,9 +594,21 @@ PHP_METHOD(Stub_Quantum, harmos)
 						return;
 					}
 					zephir_array_fetch_long(&_42$$7, &paramater, 2, PH_NOISY | PH_READONLY, "stub/quantum.zep", 59);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_48$$7, &v, j, PH_NOISY | PH_READONLY, "stub/quantum.zep", 59);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_41$$7);
 					zephir_array_fetch_long(&_41$$7, &_48$$7, 0, PH_NOISY, "stub/quantum.zep", 59);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_50$$7);
 					mul_function(&_50$$7, &_42$$7, &_41$$7);
 					if (UNEXPECTED(EG(exception))) {
@@ -428,8 +616,16 @@ PHP_METHOD(Stub_Quantum, harmos)
 						return;
 					}
 					zephir_array_fetch_long(&_42$$7, &psr, j, PH_NOISY | PH_READONLY, "stub/quantum.zep", 59);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_OBS_NVAR(&_41$$7);
 					zephir_array_fetch_long(&_41$$7, &_42$$7, 1, PH_NOISY, "stub/quantum.zep", 59);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_52$$7);
 					mul_function(&_52$$7, &_50$$7, &_41$$7);
 					if (UNEXPECTED(EG(exception))) {
@@ -443,6 +639,10 @@ PHP_METHOD(Stub_Quantum, harmos)
 						return;
 					}
 					zephir_array_update_multi(&psi, &_51$$7, SL("ll"), 2, (zend_long) j, (zend_long) 1);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 				}
 			}
 			_53$$5 = n == 0;
@@ -456,6 +656,10 @@ PHP_METHOD(Stub_Quantum, harmos)
 						break;
 					}
 					zephir_array_fetch_long(&_54$$9, &p2, i, PH_NOISY | PH_READONLY, "stub/quantum.zep", 67);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					ZEPHIR_INIT_NVAR(&_55$$9);
 					ZVAL_STRING(&_55$$9, "%16.8lf %16.8lf %16.8lf \n");
 					ZVAL_DOUBLE(&_56$$9, ((double) (i) * dx));
@@ -475,13 +679,37 @@ PHP_METHOD(Stub_Quantum, harmos)
 					break;
 				}
 				zephir_array_fetch_long(&_60$$10, &psi, j, PH_NOISY | PH_READONLY, "stub/quantum.zep", 76);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				ZEPHIR_OBS_NVAR(&_61$$10);
 				zephir_array_fetch_long(&_61$$10, &_60$$10, 1, PH_NOISY, "stub/quantum.zep", 76);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				zephir_array_update_multi(&psi, &_61$$10, SL("ll"), 2, (zend_long) j, (zend_long) 0);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				zephir_array_fetch_long(&_62$$10, &psr, j, PH_NOISY | PH_READONLY, "stub/quantum.zep", 77);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				ZEPHIR_OBS_NVAR(&_61$$10);
 				zephir_array_fetch_long(&_61$$10, &_62$$10, 1, PH_NOISY, "stub/quantum.zep", 77);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				zephir_array_update_multi(&psr, &_61$$10, SL("ll"), 2, (zend_long) j, (zend_long) 0);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				j++;
 			}
 		}
