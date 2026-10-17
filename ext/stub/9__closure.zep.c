@@ -40,6 +40,10 @@ PHP_METHOD(stub_9__closure, __invoke)
 
 	zephir_memory_observe(&_0);
 	zephir_array_fetch_string(&_0, &abc, SL("a"), PH_NOISY, "stub/closures.zep", 70);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 

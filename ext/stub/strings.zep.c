@@ -486,6 +486,10 @@ PHP_METHOD(Stub_Strings, strToHex)
 		}
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		zephir_string_offset_read(&_2$$3, &value_zv, i, PH_NOISY);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 125, &_2$$3);
 		zephir_check_call_status();
 		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 20, &_3$$3);

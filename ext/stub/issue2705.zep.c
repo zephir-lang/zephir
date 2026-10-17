@@ -622,6 +622,10 @@ PHP_METHOD(Stub_Issue2705, snapshotDefaults)
 	array_init(&ret);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 75, PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/issue2705.zep", 145);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "k");
 	zephir_memory_observe(&_2);
@@ -647,9 +651,21 @@ PHP_METHOD(Stub_Issue2705, snapshotDefaults)
 	ZEPHIR_INIT_VAR(&_8);
 	ZVAL_LONG(&_8, 9);
 	zephir_array_update_multi(&after, &_8, SL("ss"), 4, SL("a"), SL("c"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_read_property_cached(&_9, this_ptr, _zephir_prop_0, 75, PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_9, PH_SEPARATE, "stub/issue2705.zep", 150);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_append(&ret, &after, PH_SEPARATE, "stub/issue2705.zep", 151);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&ret);
 }
 
@@ -675,6 +691,10 @@ PHP_METHOD(Stub_Issue2705, snapshotStaticDefaults)
 	zephir_memory_observe(&_0);
 	zephir_read_static_property_ce(&_0, stub_issue2705_ce, SL("staticDefaults"), PH_NOISY_CC);
 	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/issue2705.zep", 160);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "k");
 	zephir_memory_observe(&_2);
@@ -698,6 +718,10 @@ PHP_METHOD(Stub_Issue2705, snapshotStaticDefaults)
 	zephir_memory_observe(&_8);
 	zephir_read_static_property_ce(&_8, stub_issue2705_ce, SL("staticDefaults"), PH_NOISY_CC);
 	zephir_array_append(&ret, &_8, PH_SEPARATE, "stub/issue2705.zep", 163);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&ret);
 }
 

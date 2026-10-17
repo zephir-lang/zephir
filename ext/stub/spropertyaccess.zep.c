@@ -279,6 +279,10 @@ PHP_METHOD(Stub_SPropertyAccess, mutateArrayVarInsideCycle)
 			ZEPHIR_INIT_NVAR(&j);
 			zephir_create_array(&j, 1, 0);
 			zephir_array_update_zval(&j, &i, &i, PH_COPY);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			zephir_read_static_property_ce(&_3$$3, stub_spropertyaccess_ce, SL("arrayVar"), PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_INIT_NVAR(&_4$$3);
 			zephir_add_function(&_4$$3, &_3$$3, &j);

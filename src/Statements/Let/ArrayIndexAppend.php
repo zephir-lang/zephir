@@ -56,18 +56,24 @@ class ArrayIndexAppend extends ArrayIndex
             );
         }
 
-        if ($symbolVariable->hasAnyDynamicType('unknown')) {
-            throw CompilerException::cannotUseNonInitializedVariableAsObject($statement);
-        }
-
         /**
-         * Trying to use a non-object dynamic variable as object
+         * Only a dynamic variable has a dynamic type to check; an `array`
+         * parameter's is unknown at compile time and is still an array.
          */
-        if ($symbolVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
-            $compilationContext->logger->warning(
-                'Possible attempt to update index on a non-array dynamic variable',
-                ['non-array-update', $statement]
-            );
+        if ('variable' === $symbolVariable->getType()) {
+            if ($symbolVariable->hasAnyDynamicType('unknown')) {
+                throw CompilerException::cannotUseNonInitializedVariableAsObject($statement);
+            }
+
+            /**
+             * Trying to use a non-object dynamic variable as object
+             */
+            if ($symbolVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
+                $compilationContext->logger->warning(
+                    'Possible attempt to update index on a non-array dynamic variable',
+                    ['non-array-update', $statement]
+                );
+            }
         }
 
         $this->assignArrayIndexMultiple($variable, $resolvedExpr, $compilationContext, $statement);
@@ -91,6 +97,7 @@ class ArrayIndexAppend extends ArrayIndex
             $expression = new Expression($indexExpr);
             $expression->setReadOnly(true);
             $exprIndex = $expression->compile($compilationContext);
+            $exprIndex = $compilationContext->backend->boxArrayKey($exprIndex, $compilationContext);
 
             if (!in_array($exprIndex->getType(), $types)) {
                 throw new CompilerException(

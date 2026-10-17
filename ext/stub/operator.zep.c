@@ -60,6 +60,10 @@ PHP_METHOD(Stub_Operator, testIdenticalIfComplex)
 	zephir_array_update_string(&a, SL("1"), input, PH_COPY | PH_SEPARATE);
 	b = 0;
 	zephir_array_fetch_string(&_0, &a, SL("1"), PH_NOISY | PH_READONLY, "stub/operator.zep", 16);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	if (!ZEPHIR_IS_FALSE_IDENTICAL(&_0)) {
 		RETURN_MM_BOOL(1);
 	}

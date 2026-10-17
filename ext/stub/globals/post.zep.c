@@ -30,6 +30,7 @@ ZEPHIR_INIT_CLASS(Stub_Globals_Post)
  */
 PHP_METHOD(Stub_Globals_Post, hasValue)
 {
+	zend_bool _0;
 	zval name_zv, _POST;
 	zend_string *name = NULL;
 
@@ -40,6 +41,10 @@ PHP_METHOD(Stub_Globals_Post, hasValue)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_get_global(&_POST, SL("_POST"));
 	ZVAL_STR(&name_zv, name);
-	RETURN_BOOL(zephir_array_isset_value(&_POST, &name_zv));
+	_0 = zephir_array_isset_value(&_POST, &name_zv);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	RETURN_BOOL(_0);
 }
 

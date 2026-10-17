@@ -650,6 +650,10 @@ PHP_METHOD(Stub_Flow, testWhileNextTest)
 		ZEPHIR_CALL_FUNCTION(&_2$$3, "current", &_3, 56, variable);
 		zephir_check_call_status();
 		zephir_array_append(&returnValue, &_2$$3, PH_SEPARATE, "stub/flow.zep", 420);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	}
 	RETURN_CCTOR(&returnValue);
 }
@@ -677,6 +681,10 @@ PHP_METHOD(Stub_Flow, testWhileDoNextTest)
 		ZEPHIR_CALL_FUNCTION(&_0$$3, "current", &_1, 56, variable);
 		zephir_check_call_status();
 		zephir_array_append(&returnValue, &_0$$3, PH_SEPARATE, "stub/flow.zep", 430);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_MAKE_REF(variable);
 		ZEPHIR_CALL_FUNCTION(&_2, "next", &_3, 55, variable);
 		ZEPHIR_UNREF(variable);
@@ -828,6 +836,10 @@ PHP_METHOD(Stub_Flow, testFor3)
 		ZEPHIR_INIT_NVAR(&v);
 		ZVAL_COPY(&v, _2);
 		zephir_array_append(&c, &v, PH_SEPARATE, "stub/flow.zep", 462);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&v);
 	RETURN_CCTOR(&c);
@@ -1281,6 +1293,10 @@ PHP_METHOD(Stub_Flow, testFor16)
 			ZEPHIR_INIT_NVAR(&b);
 			ZVAL_LONG(&b, _2);
 			zephir_array_update_zval(&c, &a, &b, PH_COPY | PH_SEPARATE);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CCTOR(&c);
@@ -1322,6 +1338,10 @@ PHP_METHOD(Stub_Flow, testFor17)
 			ZEPHIR_INIT_NVAR(&b);
 			ZVAL_LONG(&b, _2);
 			zephir_array_update_zval(&c, &a, &b, PH_COPY | PH_SEPARATE);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CCTOR(&c);
@@ -1362,6 +1382,10 @@ PHP_METHOD(Stub_Flow, testFor18)
 			ZEPHIR_INIT_NVAR(&_4$$3);
 			ZVAL_LONG(&_4$$3, b);
 			zephir_array_update_long(&c, a, &_4$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CCTOR(&c);
@@ -1645,6 +1669,10 @@ PHP_METHOD(Stub_Flow, testFor30)
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_LONG(&_1$$3, v);
 		zephir_array_append(&a, &_1$$3, PH_SEPARATE, "stub/flow.zep", 682);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	}
 	RETURN_CCTOR(&a);
 }
@@ -1673,6 +1701,10 @@ PHP_METHOD(Stub_Flow, testFor31)
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_LONG(&_1$$3, v);
 		zephir_array_update_long(&a, k, &_1$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	}
 	RETURN_CCTOR(&a);
 }
@@ -1761,6 +1793,10 @@ PHP_METHOD(Stub_Flow, testFor33)
 			ZEPHIR_ITERATOR_COPY(&v, _0);
 		}
 		zephir_array_append(&result, &v, PH_SEPARATE, "stub/flow.zep", 710);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	}
 	zend_iterator_dtor(_0);
 	}
@@ -1800,6 +1836,10 @@ PHP_METHOD(Stub_Flow, testFor34)
 				ZEPHIR_ITERATOR_COPY(&v, _0$$3);
 			}
 			zephir_array_append(&result, &v, PH_SEPARATE, "stub/flow.zep", 720);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 		zend_iterator_dtor(_0$$3);
 		}

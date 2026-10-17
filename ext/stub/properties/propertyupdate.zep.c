@@ -38,6 +38,10 @@ PHP_METHOD(Stub_Properties_PropertyUpdate, update1)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "aaa");
 	zephir_update_property_array_append(this_ptr, SL("p1"), &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

@@ -246,10 +246,11 @@ static int zephir_array_read_release(HashTable *ht)
 
 /**
  * Releases what zephir_array_rw_hold() took, under the rule of the context.
+ * `ZEND_UNSET_DIM` gives up only when the table was destroyed, as a read does.
  */
 static int zephir_array_hold_release(HashTable *ht, int type)
 {
-	return type == BP_VAR_R || type == BP_VAR_IS
+	return type == BP_VAR_R || type == BP_VAR_IS || type == BP_VAR_UNSET
 		? zephir_array_read_release(ht)
 		: zephir_array_rw_release(ht);
 }
@@ -277,6 +278,10 @@ static void zephir_array_undefined_key(const zend_string *key)
  * always warns, and an illegal offset throws a TypeError naming its type since
  * 8.3, worded for isset and empty() under BP_VAR_IS.
  *
+ * BP_VAR_UNSET is the last offset of an unset, `ZEND_UNSET_DIM`: null is never
+ * deprecated there, a resource warns only since 8.1, and before 8.3 an illegal
+ * offset has its own message.
+ *
  * A diagnostic runs userland code, which may destroy or replace the table, so
  * it is held across each one and the conversion gives up when it changed.
  *
@@ -300,10 +305,12 @@ try_again:
 
 		case IS_NULL:
 #if PHP_VERSION_ID >= 80500
-			zephir_array_rw_hold(ht);
-			zend_error(E_DEPRECATED, "Using null as an array offset is deprecated, use an empty string instead");
-			if (zephir_array_hold_release(ht, type) == FAILURE) {
-				return IS_UNDEF;
+			if (type != BP_VAR_UNSET) {
+				zephir_array_rw_hold(ht);
+				zend_error(E_DEPRECATED, "Using null as an array offset is deprecated, use an empty string instead");
+				if (zephir_array_hold_release(ht, type) == FAILURE) {
+					return IS_UNDEF;
+				}
 			}
 #endif
 			*key = ZSTR_EMPTY_ALLOC();
@@ -322,6 +329,12 @@ try_again:
 			return IS_LONG;
 
 		case IS_RESOURCE:
+#if PHP_VERSION_ID < 80100
+			if (type == BP_VAR_UNSET) {
+				*hval = Z_RES_HANDLE_P(dim);
+				return IS_LONG;
+			}
+#endif
 			zephir_array_rw_hold(ht);
 			zend_error(E_WARNING, "Resource ID#" ZEND_LONG_FMT " used as offset, casting to integer (" ZEND_LONG_FMT ")",
 				(zend_long) Z_RES_HANDLE_P(dim), (zend_long) Z_RES_HANDLE_P(dim));
@@ -347,7 +360,13 @@ try_again:
 #if PHP_VERSION_ID >= 80300
 			zend_illegal_container_offset(ZSTR_KNOWN(ZEND_STR_ARRAY), dim, type);
 #else
-			zend_type_error(type == BP_VAR_IS ? "Illegal offset type in isset or empty" : "Illegal offset type");
+			if (type == BP_VAR_IS) {
+				zend_type_error("Illegal offset type in isset or empty");
+			} else if (type == BP_VAR_UNSET) {
+				zend_type_error("Illegal offset type in unset");
+			} else {
+				zend_type_error("Illegal offset type");
+			}
 #endif
 			return IS_UNDEF;
 	}
@@ -1042,6 +1061,8 @@ static void zephir_unset_dim_illegal_container(zval *arr)
 int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags)
 {
 	HashTable *ht;
+	zend_ulong hval;
+	zend_string *key;
 
 	/* PHP follows the reference before it looks at the container. */
 	ZVAL_DEREF(arr);
@@ -1068,28 +1089,14 @@ int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags)
 
 	ht = Z_ARRVAL_P(arr);
 
-	switch (Z_TYPE_P(index)) {
-		case IS_NULL:
-			return (zend_hash_str_del(ht, "", 1) == SUCCESS);
-
-		case IS_DOUBLE:
-			return (zend_hash_index_del(ht, (zend_ulong)Z_DVAL_P(index)) == SUCCESS);
-
-		case IS_TRUE:
-			return (zend_hash_index_del(ht, 1) == SUCCESS);
-
-		case IS_FALSE:
-			return (zend_hash_index_del(ht, 0) == SUCCESS);
-
+	switch (zephir_array_offset_key(ht, index, BP_VAR_UNSET, &hval, &key)) {
 		case IS_LONG:
-		case IS_RESOURCE:
-			return (zend_hash_index_del(ht, Z_LVAL_P(index)) == SUCCESS);
+			return (zend_hash_index_del(ht, hval) == SUCCESS);
 
 		case IS_STRING:
-			return (zend_symtable_del(ht, Z_STR_P(index)) == SUCCESS);
+			return (zend_hash_del(ht, key) == SUCCESS);
 
 		default:
-			zend_error(E_WARNING, "Passed index has illegal offset type (check zephir_array_unset())");
 			return 0;
 	}
 }
@@ -1156,38 +1163,21 @@ int ZEPHIR_FASTCALL zephir_array_unset_long(zval *arr, zend_long index, int flag
 
 /**
  * The element an intermediate offset of an unset names, or NULL when there is
- * none. Keys convert as zephir_array_unset() converts the last one.
+ * none. `ZEND_FETCH_DIM_UNSET` converts the offset as a write does.
  */
 static zval *zephir_array_unset_find(HashTable *ht, zval *index)
 {
-	ZVAL_DEREF(index);
+	zend_ulong hval;
+	zend_string *key;
 
-	switch (Z_TYPE_P(index)) {
-		case IS_NULL:
-			return zend_hash_str_find(ht, "", 0);
-
-		case IS_DOUBLE:
-			return zend_hash_index_find(ht, zend_dval_to_lval(Z_DVAL_P(index)));
-
-		case IS_TRUE:
-			return zend_hash_index_find(ht, 1);
-
-		case IS_FALSE:
-			return zend_hash_index_find(ht, 0);
-
+	switch (zephir_array_offset_key(ht, index, BP_VAR_W, &hval, &key)) {
 		case IS_LONG:
-		case IS_RESOURCE:
-			return zend_hash_index_find(ht, Z_LVAL_P(index));
+			return zend_hash_index_find(ht, hval);
 
 		case IS_STRING:
-			return zend_symtable_find(ht, Z_STR_P(index));
+			return zend_hash_find(ht, key);
 
 		default:
-#if PHP_VERSION_ID >= 80300
-			zend_type_error("Cannot access offset of type %s on array", zend_zval_type_name(index));
-#else
-			zend_type_error("Illegal offset type");
-#endif
 			return NULL;
 	}
 }
@@ -1887,36 +1877,67 @@ void zephir_array_keys(zval *return_value, zval *input)
 	ZVAL_UNDEF(&new_val);
 }
 
+/**
+ * array_key_exists(), `PHP_FUNCTION(array_key_exists)` (ext/standard/array.c).
+ *
+ * The messages are spelled out because zend_argument_type_error() would name
+ * the Zephir method being executed rather than array_key_exists().
+ */
 int zephir_array_key_exists(zval *arr, zval *key)
 {
-	HashTable *h;
+	HashTable *ht;
 
-	/* Reachable with any dynamically typed container, and reading Z_ARRVAL of
-	 * a string would reinterpret the zend_string as a HashTable. Every other
-	 * helper here answers 0 for a non-array, so this one does too. */
+	ZVAL_DEREF(arr);
+	ZVAL_DEREF(key);
+
 	if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
+		zend_type_error("array_key_exists(): Argument #2 ($array) must be of type array, %s given",
+#if PHP_VERSION_ID >= 80300
+			zend_zval_value_name(arr)
+#else
+			zend_zval_type_name(arr)
+#endif
+		);
 		return 0;
 	}
 
-	h = Z_ARRVAL_P(arr);
-	if (h) {
-		switch (Z_TYPE_P(key)) {
-			case IS_STRING:
-				return zend_symtable_exists(h, Z_STR_P(key));
+	ht = Z_ARRVAL_P(arr);
 
-			case IS_LONG:
-				return zend_hash_index_exists(h, Z_LVAL_P(key));
+	switch (Z_TYPE_P(key)) {
+		case IS_STRING:
+			return zend_symtable_exists(ht, Z_STR_P(key));
 
-			case IS_NULL:
-				return zend_hash_str_exists(h, "", 1);
+		case IS_LONG:
+			return zend_hash_index_exists(ht, Z_LVAL_P(key));
 
-			default:
-				zend_error(E_WARNING, "The key should be either a string or an integer");
-				return 0;
-		}
+		case IS_NULL:
+#if PHP_VERSION_ID >= 80500
+			zend_error(E_DEPRECATED, "Using null as the key parameter for array_key_exists() is deprecated, use an empty string instead");
+#endif
+			return zend_hash_exists(ht, ZSTR_EMPTY_ALLOC());
+
+		case IS_DOUBLE:
+#if PHP_VERSION_ID >= 80100
+			return zend_hash_index_exists(ht, zend_dval_to_lval_safe(Z_DVAL_P(key)));
+#else
+			return zend_hash_index_exists(ht, zend_dval_to_lval(Z_DVAL_P(key)));
+#endif
+
+		case IS_FALSE:
+			return zend_hash_index_exists(ht, 0);
+
+		case IS_TRUE:
+			return zend_hash_index_exists(ht, 1);
+
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Resource ID#" ZEND_LONG_FMT " used as offset, casting to integer (" ZEND_LONG_FMT ")",
+				(zend_long) Z_RES_HANDLE_P(key), (zend_long) Z_RES_HANDLE_P(key));
+			return zend_hash_index_exists(ht, Z_RES_HANDLE_P(key));
+
+		default:
+			zend_type_error("array_key_exists(): Argument #1 ($key) must be a valid array offset type");
+			return 0;
 	}
-
-	return 0;
 }
 
 /**
@@ -2520,11 +2541,24 @@ int zephir_array_assign_dim(zval *container, zval *dim, zval *value)
 /**
  * Fast in_array function
  */
+/**
+ * in_array() without `strict`, `php_search_array()` (ext/standard/array.c).
+ */
 int zephir_fast_in_array(zval *value, zval *haystack)
 {
 	zval *entry;
 
-	if (Z_TYPE_P(haystack) != IS_ARRAY) {
+	ZVAL_DEREF(value);
+	ZVAL_DEREF(haystack);
+
+	if (UNEXPECTED(Z_TYPE_P(haystack) != IS_ARRAY)) {
+		zend_type_error("in_array(): Argument #2 ($haystack) must be of type array, %s given",
+#if PHP_VERSION_ID >= 80300
+			zend_zval_value_name(haystack)
+#else
+			zend_zval_type_name(haystack)
+#endif
+		);
 		return 0;
 	}
 

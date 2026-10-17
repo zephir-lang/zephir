@@ -107,6 +107,9 @@ PHP_METHOD(Stub_Issue2698, writeOffset)
 	value = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&key_zv, key);
 	zephir_update_property_array(this_ptr, SL("items"), &key_zv, value);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2698, appendValue)
@@ -120,6 +123,9 @@ PHP_METHOD(Stub_Issue2698, appendValue)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
 	zephir_update_property_array_append(this_ptr, SL("bag"), value);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2698, writeNested)
@@ -140,6 +146,9 @@ PHP_METHOD(Stub_Issue2698, writeNested)
 	ZVAL_STR(&outer_zv, outer);
 	ZVAL_STR(&inner_zv, inner);
 	zephir_update_property_array_multi(this_ptr, SL("matrix"), value, SL("zz"), 2, &outer_zv, &inner_zv);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2698, removeOffset)
@@ -506,6 +515,10 @@ PHP_METHOD(Stub_Issue2698, leakProbeControl)
 		ZEPHIR_CALL_FUNCTION(&_3$$3, "str_repeat", &_4, 30, &_1$$3, &_2$$3);
 		zephir_check_call_status();
 		zephir_update_property_array_append(this_ptr, SL("retained"), &_3$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		i++;
 	}
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);

@@ -256,6 +256,10 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 			ZEPHIR_CALL_FUNCTION(&_29$$4, "array_values", &_2, 62, &rowA);
 			zephir_check_call_status();
 			zephir_array_append(&rowA, &_29$$4, PH_SEPARATE, "stub/issue2165/issue.zep", 45);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		} ZEND_HASH_FOREACH_END();
 		ZEPHIR_INIT_NVAR(&rowA);
 		ZEPHIR_INIT_NVAR(&i);

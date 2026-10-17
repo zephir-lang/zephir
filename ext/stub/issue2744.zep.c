@@ -1030,6 +1030,10 @@ PHP_METHOD(Stub_Issue2744, loopCarried)
 				return;
 			}
 			zephir_array_append(&results, &_4$$3, PH_SEPARATE, "stub/issue2744.zep", 234);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			ZEPHIR_INIT_NVAR(&a);
 			ZVAL_DOUBLE(&a, 0.5);
 		}

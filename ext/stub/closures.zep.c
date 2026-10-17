@@ -486,6 +486,10 @@ PHP_METHOD(Stub_Closures, issue2321doUrlEncode)
 	zephir_fetch_params(1, 1, 0, &matches_param);
 	zephir_get_arrval(&matches, matches_param);
 	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 261);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_RETURN_CALL_FUNCTION("rawurlencode", NULL, 41, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -542,6 +546,10 @@ PHP_METHOD(Stub_Closures, issue2321ProtectedUpper)
 	zephir_fetch_params(1, 1, 0, &matches_param);
 	zephir_get_arrval(&matches, matches_param);
 	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 284);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_fast_strtoupper(return_value, &_0);
 	RETURN_MM();
 }
@@ -901,6 +909,10 @@ PHP_METHOD(Stub_Closures, issue2652Loop)
 		ZEPHIR_INIT_NVAR(&_4$$3);
 		zephir_create_closure_bound(&_4$$3, &_3$$3, NULL, stub_32__closure_ce, SL("__invoke"));
 		zephir_array_append(&result, &_4$$3, PH_SEPARATE, "stub/closures.zep", 460);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&i);
 	RETURN_CCTOR(&result);

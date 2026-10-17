@@ -108,6 +108,7 @@ class UnsetStatement extends StatementAbstract
                 $expr = new Expression($expression['right']);
                 $expr->setReadOnly(true);
                 $exprIndex = $expr->compile($compilationContext);
+                $exprIndex = $compilationContext->backend->boxArrayKey($exprIndex, $compilationContext);
                 break;
 
             case 'property-access':
@@ -338,6 +339,7 @@ class UnsetStatement extends StatementAbstract
         $expr = new Expression($offsetAst);
         $expr->setReadOnly(true);
         $resolved = $expr->compile($compilationContext);
+        $resolved = $compilationContext->backend->boxArrayKey($resolved, $compilationContext);
 
         $backend     = $compilationContext->backend;
         $symbolTable = $compilationContext->symbolTable;
@@ -352,6 +354,7 @@ class UnsetStatement extends StatementAbstract
             case Types::T_INT:
             case Types::T_UINT:
             case Types::T_LONG:
+            case Types::T_ULONG:
                 $temp = $symbolTable->getTempVariableForWrite('variable', $compilationContext);
                 $backend->assignLong($temp, $resolved->getCode(), $compilationContext);
 
@@ -368,6 +371,7 @@ class UnsetStatement extends StatementAbstract
                     case Types::T_INT:
                     case Types::T_UINT:
                     case Types::T_LONG:
+                    case Types::T_ULONG:
                         $temp = $symbolTable->getTempVariableForWrite('variable', $compilationContext);
                         $backend->assignLong($temp, $variable->getName(), $compilationContext);
 

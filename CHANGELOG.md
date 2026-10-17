@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `unset` and `array_key_exists()` looking up a `null` key as a one byte key instead of the empty string [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `unset` and `array_key_exists()` converting float, bool and resource keys and reporting illegal keys differently from PHP [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `array_key_exists()` and `in_array()` returning `false` instead of throwing `TypeError` for a non-array [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed an array literal with a variable key failing to compile, or emitting C that does not compile, for most value types [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `double`, `bool` and literal `null` array keys failing to compile, or emitting invalid C for `empty`, instead of converting as PHP does [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `fetch` with a literal key crashing the compiler instead of reporting a compile error [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `let a[k][] = v` on an `array` parameter failing to compile with "Cannot use non-initialized variable as an object" [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `mixed` array keys, and `uint` and `ulong` keys in `isset`, `fetch`, `unset` and reads, failing to compile or passing the key's address to the kernel [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `isset this->p[k]` rejecting integer keys [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed float, bool and null keys in class constant and property default arrays failing to compile, becoming string keys, or deprecating on every `new` and at startup instead of being converted as PHP does [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed execution continuing after an array or string offset read, write, `isset`, `fetch`, `empty`, property `isset`, `array_key_exists()` or `in_array()` threw [#2706](https://github.com/zephir-lang/zephir/issues/2706)
 - Fixed closure class names continuing to count up across compilations in one process, orphaning previously generated files [#2687](https://github.com/zephir-lang/zephir/issues/2687)
 - Fixed function and method call cache slots continuing to count up across compilations in one process [#2687](https://github.com/zephir-lang/zephir/issues/2687)
 - Fixed arrow closures failing to resolve `use ... as` aliases declared in the file [#2686](https://github.com/zephir-lang/zephir/issues/2686)
@@ -63,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `+`, `-` and `*` of an integer local with a float literal truncating the result to an integer
 
 ### Added
+- Added the `lossy-float-key` warning, reporting at compile time a fractional float key in a class constant or property default that PHP deprecates when it evaluates the declaration [#2706](https://github.com/zephir-lang/zephir/issues/2706)
 - Added `instanceof static`, which tests against the called class as PHP does [#2714](https://github.com/zephir-lang/zephir/issues/2714)
 
 ### Changed

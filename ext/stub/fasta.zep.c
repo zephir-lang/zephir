@@ -137,6 +137,10 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 		ZEPHIR_INIT_NVAR(&_10$$3);
 		zephir_substr(&_10$$3, &str, zephir_get_intval(&_8$$3), 60 , 0);
 		zephir_array_update_zval(&lines, &j, &_10$$3, PH_COPY | PH_SEPARATE);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	}
 	ZEPHIR_INIT_NVAR(&j);
 	ZVAL_LONG(&j, 0);
@@ -194,6 +198,10 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 		}
 		ZEPHIR_OBS_NVAR(&_14$$6);
 		zephir_array_fetch(&_14$$6, &lines, &j, PH_NOISY, "stub/fasta.zep", 38);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		zend_print_zval(&_14$$6, 0);
 		SEPARATE_ZVAL(&j);
 		zephir_increment(&j);
@@ -211,6 +219,10 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	if (ZEPHIR_GT_LONG(&_15, 0)) {
 		zephir_memory_observe(&_16$$7);
 		zephir_array_fetch(&_16$$7, &lines, &k, PH_NOISY, "stub/fasta.zep", 43);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_VAR(&_17$$7);
 		zephir_mod_zval_long(&_17$$7, n, 60);
 		if (UNEXPECTED(EG(exception))) {

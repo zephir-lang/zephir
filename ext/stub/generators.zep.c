@@ -267,6 +267,10 @@ PHP_METHOD(Stub_Generators, consume)
 			ZEPHIR_INIT_NVAR(&v);
 			ZVAL_COPY(&v, _2);
 			zephir_array_append(&result, &v, PH_SEPARATE, "stub/generators.zep", 137);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		} ZEND_HASH_FOREACH_END();
 	} else {
 		ZEPHIR_CALL_METHOD(NULL, _0, "rewind", NULL, 0);
@@ -287,6 +291,10 @@ PHP_METHOD(Stub_Generators, consume)
 			ZEPHIR_CALL_METHOD(&v, _0, "current", NULL, 0);
 			zephir_check_call_status();
 				zephir_array_append(&result, &v, PH_SEPARATE, "stub/generators.zep", 137);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 		}
 	}
 	ZEPHIR_INIT_NVAR(&v);

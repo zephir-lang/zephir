@@ -28,6 +28,8 @@ use function count;
 use function function_exists;
 use function gmp_nextprime;
 use function gmp_strval;
+use function in_array;
+use function is_int;
 
 /**
  * Resolves expressions that create arrays
@@ -140,6 +142,8 @@ class NativeArray
 
             $exprKey         = new Expression($item['key']);
             $resolvedExprKey = $exprKey->compile($compilationContext);
+            $resolvedExprKey = $this->resolveDeclarationKey($resolvedExprKey, $item['key'], $compilationContext)
+                ?? $compilationContext->backend->boxArrayKey($resolvedExprKey, $compilationContext);
 
             switch ($resolvedExprKey->getType()) {
                 case Types::T_STRING:
@@ -308,9 +312,7 @@ class NativeArray
                                 case Types::T_UINT:
                                 case Types::T_LONG:
                                 case Types::T_ULONG:
-                                case Types::T_BOOL:
                                 case Types::T_DOUBLE:
-                                case Types::T_NULL:
                                 case Types::T_STRING:
                                     $compilationContext->backend->addArrayEntry(
                                         $symbolVariable,
@@ -320,128 +322,31 @@ class NativeArray
                                     );
                                     break;
 
-                                case Types::T_VARIABLE:
-                                // A char is boxed by getArrayValue(); see #1629.
-                                case Types::T_CHAR:
-                                case Types::T_UCHAR:
-                                    $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                    $compilationContext->backend->updateArray(
-                                        $symbolVariable,
-                                        $resolvedExprKey,
-                                        $valueVariable,
-                                        $compilationContext,
-                                        'PH_COPY'
-                                    );
-                                    $this->checkVariableTemporal($valueVariable);
-                                    break;
-
                                 default:
-                                    throw new CompilerException(
-                                        'Invalid value type: ' . $item['value']['type'],
-                                        $item['value']
+                                    $this->updateArrayWithValue(
+                                        $symbolVariable,
+                                        $variableVariable,
+                                        $resolvedExpr,
+                                        $compilationContext
                                     );
+                                    break;
                             }
                             break;
 
                         case Types::T_STRING:
-                            $expr         = new Expression($item['value']);
-                            $resolvedExpr = $expr->compile($compilationContext);
-                            switch ($resolvedExpr->getType()) {
-                                case Types::T_INT:
-                                case Types::T_UINT:
-                                case Types::T_LONG:
-                                case Types::T_ULONG:
-                                    $codePrinter->output(
-                                        'add_assoc_long_ex(' . $symbolVariable->getName(
-                                        ) . ', Z_STRVAL_P(' . $resolvedExprKey->getCode(
-                                        ) . '), Z_STRLEN_P(' . $item['key']['value'] . '), ' . $resolvedExpr->getCode(
-                                        ) . ');'
-                                    );
-                                    break;
-
-                                case Types::T_DOUBLE:
-                                    $codePrinter->output(
-                                        'add_assoc_double_ex(' . $symbolVariable->getName(
-                                        ) . ', Z_STRVAL_P(' . $resolvedExprKey->getCode(
-                                        ) . '), Z_STRLEN_P(' . $item['key']['value'] . '), ' . $resolvedExpr->getCode(
-                                        ) . ');'
-                                    );
-                                    break;
-
-                                case Types::T_BOOL:
-                                    $codePrinter->output(
-                                        'add_assoc_bool_ex(' . $symbolVariable->getName(
-                                        ) . ', Z_STRVAL_P(' . $resolvedExprKey->getCode(
-                                        ) . '), Z_STRLEN_P(' . $item['key']['value'] . '), ' . $resolvedExpr->getBooleanCode(
-                                        ) . ');'
-                                    );
-                                    break;
-
-                                case Types::T_STRING:
-                                    $compilationContext->backend->addArrayEntry(
-                                        $symbolVariable,
-                                        $resolvedExprKey,
-                                        $resolvedExpr,
-                                        $compilationContext
-                                    );
-                                    break;
-
-                                case Types::T_NULL:
-                                    $codePrinter->output(
-                                        'add_assoc_null_ex(' . $symbolVariable->getName(
-                                        ) . ', Z_STRVAL_P(' . $resolvedExprKey->getCode(
-                                        ) . '), Z_STRLEN_P(' . $item['key']['value'] . ') + 1);'
-                                    );
-                                    break;
-
-                                case Types::T_VARIABLE:
-                                // A char is boxed by getArrayValue(); see #1629.
-                                case Types::T_CHAR:
-                                case Types::T_UCHAR:
-                                    $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                    $compilationContext->backend->updateArray(
-                                        $symbolVariable,
-                                        $resolvedExprKey,
-                                        $valueVariable,
-                                        $compilationContext
-                                    );
-                                    $this->checkVariableTemporal($valueVariable);
-                                    break;
-
-                                default:
-                                    throw new CompilerException(
-                                        'Invalid value type: ' . $resolvedExpr->getType(),
-                                        $item['value']
-                                    );
-                            }
-                            break;
-
                         case Types::T_VARIABLE:
+                        case Types::T_MIXED:
                             $expr         = new Expression($item['value']);
                             $resolvedExpr = $expr->compile($compilationContext);
-                            switch ($resolvedExpr->getType()) {
-                                case Types::T_NULL:
-                                case Types::T_VARIABLE:
-                                case Types::T_BOOL:
-                                // A char is boxed by getArrayValue(); see #1629.
-                                case Types::T_CHAR:
-                                case Types::T_UCHAR:
-                                    $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                    $compilationContext->backend->updateArray(
-                                        $symbolVariable,
-                                        $variableVariable,
-                                        $valueVariable,
-                                        $compilationContext
-                                    );
-
-                                    $this->checkVariableTemporal($valueVariable);
-                                    break;
-
-                                default:
-                                    throw new CompilerException(
-                                        'Invalid value type: ' . $item['value']['type'],
-                                        $item['value']
-                                    );
+                            $this->updateArrayWithValue(
+                                $symbolVariable,
+                                $variableVariable,
+                                $resolvedExpr,
+                                $compilationContext
+                            );
+                            // A dynamic key can be illegal
+                            if (Types::T_STRING !== $variableVariable->getType()) {
+                                $compilationContext->emitExceptionCheck();
                             }
                             break;
 
@@ -474,6 +379,57 @@ class NativeArray
      *
      * @return GlobalConstant|Variable
      */
+    /**
+     * A property default is built by an initializer, which runs on every
+     * `new` (or once at startup for a static one), while PHP converts a
+     * declaration's keys once. A literal float, bool or null key is therefore
+     * folded here into the key PHP gives it, instead of being converted, and
+     * deprecated, at run time. Returns null for any other key.
+     */
+    private function resolveDeclarationKey(
+        CompiledExpression $resolvedKey,
+        array $keyAst,
+        CompilationContext $compilationContext
+    ): ?CompiledExpression {
+        $method = $compilationContext->currentMethod;
+        if (null === $method || !$method->isInitializer()) {
+            return null;
+        }
+
+        if (!in_array($resolvedKey->getType(), [Types::T_DOUBLE, Types::T_BOOL, Types::T_NULL], true)) {
+            return null;
+        }
+
+        $compilationContext->backend->warnLossyFloatKey($keyAst, $compilationContext);
+        $key = $compilationContext->backend->constantArrayKey($keyAst);
+
+        return is_int($key)
+            ? new CompiledExpression(Types::T_INT, (string) $key, $keyAst)
+            : new CompiledExpression(Types::T_STRING, $key, $keyAst);
+    }
+
+    /**
+     * Writes any value under a key held in a variable: the value is boxed by
+     * getArrayValue(), and zephir_array_update_*() converts the key as PHP
+     * does, a numeric string included.
+     */
+    private function updateArrayWithValue(
+        Variable $symbolVariable,
+        Variable $keyVariable,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext
+    ): void {
+        $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
+        $compilationContext->backend->updateArray(
+            $symbolVariable,
+            $keyVariable,
+            $valueVariable,
+            $compilationContext,
+            'PH_COPY'
+        );
+        $this->checkVariableTemporal($valueVariable);
+    }
+
     public function getArrayValue(
         CompiledExpression $exprCompiled,
         CompilationContext $compilationContext

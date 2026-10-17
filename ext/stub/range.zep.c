@@ -110,6 +110,10 @@ PHP_METHOD(Stub_Range, loopInclusive)
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_LONG(&_3$$3, i);
 			zephir_array_append(&result, &_3$$3, PH_SEPARATE, "stub/range.zep", 29);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CTOR(&result);
@@ -148,6 +152,10 @@ PHP_METHOD(Stub_Range, loopExclusive)
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_LONG(&_3$$3, i);
 			zephir_array_append(&result, &_3$$3, PH_SEPARATE, "stub/range.zep", 39);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CTOR(&result);
@@ -186,6 +194,10 @@ PHP_METHOD(Stub_Range, loopReverse)
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_LONG(&_3$$3, i);
 			zephir_array_append(&result, &_3$$3, PH_SEPARATE, "stub/range.zep", 49);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CTOR(&result);
@@ -228,6 +240,10 @@ PHP_METHOD(Stub_Range, loopVarBounds)
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_LONG(&_3$$3, i);
 			zephir_array_append(&result, &_3$$3, PH_SEPARATE, "stub/range.zep", 59);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CTOR(&result);
@@ -270,6 +286,10 @@ PHP_METHOD(Stub_Range, loopRangeFn)
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_LONG(&_3$$3, i);
 			zephir_array_append(&result, &_3$$3, PH_SEPARATE, "stub/range.zep", 73);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	RETURN_CTOR(&result);

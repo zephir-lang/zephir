@@ -33,6 +33,7 @@ ZEPHIR_INIT_CLASS(Stub_ArrayIsset)
 
 PHP_METHOD(Stub_ArrayIsset, issetVar)
 {
+	zend_bool _0;
 	zval *a, a_sub, *k, k_sub;
 
 	ZVAL_UNDEF(&a_sub);
@@ -42,11 +43,16 @@ PHP_METHOD(Stub_ArrayIsset, issetVar)
 		Z_PARAM_ZVAL(k)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &k);
-	RETURN_BOOL(zephir_array_isset_value(a, k));
+	_0 = zephir_array_isset_value(a, k);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	RETURN_BOOL(_0);
 }
 
 PHP_METHOD(Stub_ArrayIsset, emptyVar)
 {
+	zend_bool _0;
 	zval *a, a_sub, *k, k_sub;
 
 	ZVAL_UNDEF(&a_sub);
@@ -56,11 +62,16 @@ PHP_METHOD(Stub_ArrayIsset, emptyVar)
 		Z_PARAM_ZVAL(k)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &k);
-	RETURN_BOOL(zephir_isempty_dim(a, k));
+	_0 = zephir_isempty_dim(a, k);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	RETURN_BOOL(_0);
 }
 
 PHP_METHOD(Stub_ArrayIsset, fetchVar)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, *k, k_sub, value;
 
@@ -75,11 +86,17 @@ PHP_METHOD(Stub_ArrayIsset, fetchVar)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &k);
 	zephir_memory_observe(&value);
-	RETURN_MM_BOOL(zephir_array_isset_fetch(&value, a, k, 0));
+	_0 = zephir_array_isset_fetch(&value, a, k, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_ArrayIsset, issetStringLiteral)
 {
+	zend_bool _0;
 	zval *a, a_sub;
 
 	ZVAL_UNDEF(&a_sub);
@@ -87,11 +104,16 @@ PHP_METHOD(Stub_ArrayIsset, issetStringLiteral)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	RETURN_BOOL(zephir_array_isset_value_string(a, SL("zz")));
+	_0 = zephir_array_isset_value_string(a, SL("zz"));
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	RETURN_BOOL(_0);
 }
 
 PHP_METHOD(Stub_ArrayIsset, issetIntLiteral)
 {
+	zend_bool _0;
 	zval *a, a_sub;
 
 	ZVAL_UNDEF(&a_sub);
@@ -99,11 +121,16 @@ PHP_METHOD(Stub_ArrayIsset, issetIntLiteral)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	RETURN_BOOL(zephir_array_isset_value_long(a, 1));
+	_0 = zephir_array_isset_value_long(a, 1);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	RETURN_BOOL(_0);
 }
 
 PHP_METHOD(Stub_ArrayIsset, issetNested)
 {
+	zend_bool _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, *i, i_sub, *j, j_sub, _0;
 
@@ -121,6 +148,15 @@ PHP_METHOD(Stub_ArrayIsset, issetNested)
 	zephir_fetch_params(1, 3, 0, &a, &i, &j);
 	zephir_memory_observe(&_0);
 	zephir_array_fetch(&_0, a, i, 0, "stub/arrayisset.zep", 40);
-	RETURN_MM_BOOL(zephir_array_isset_value(&_0, j));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	_1 = zephir_array_isset_value(&_0, j);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_1);
 }
 

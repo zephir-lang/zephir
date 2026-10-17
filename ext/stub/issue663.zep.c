@@ -55,7 +55,7 @@ PHP_METHOD(Stub_Issue663, is_array_assoc)
 
 PHP_METHOD(Stub_Issue663, is_array_assoc_internal)
 {
-	zend_bool _0;
+	zend_bool _0, _3$$3;
 	zend_long count = 0, i = 0, _1, _2;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *arr_param = NULL;
@@ -84,7 +84,12 @@ PHP_METHOD(Stub_Issue663, is_array_assoc_internal)
 				_0 = 1;
 			}
 			i = _1;
-			if (!(zephir_array_isset_value_long(&arr, i))) {
+			_3$$3 = zephir_array_isset_value_long(&arr, i);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
+			if (!(_3$$3)) {
 				RETURN_MM_BOOL(1);
 			}
 		}

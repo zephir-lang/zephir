@@ -64,7 +64,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, __construct)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	zephir_array_fast_append(&_0, &_1);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 109, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 111, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -89,6 +89,10 @@ PHP_METHOD(Stub_Properties_PropertyArray, appendSome)
 		return;
 	}
 	zephir_update_property_array_append(this_ptr, SL("someArray"), &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -107,7 +111,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, setOtherArray)
 		Z_PARAM_ZVAL(arr)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &arr);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 110, arr);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 112, arr);
 }
 
 PHP_METHOD(Stub_Properties_PropertyArray, getOtherArray)
@@ -155,6 +159,10 @@ PHP_METHOD(Stub_Properties_PropertyArray, testIssues1831)
 		zephir_check_call_status();
 		if (!ZEPHIR_IS_FALSE_IDENTICAL(&_4$$3)) {
 			zephir_array_append(&headers, &info, PH_SEPARATE, "stub/properties/propertyarray.zep", 51);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			continue;
 		} else {
 			ZEPHIR_OBS_NVAR(&_6$$5);

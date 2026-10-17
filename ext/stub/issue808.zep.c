@@ -39,6 +39,7 @@ ZEPHIR_INIT_CLASS(Stub_Issue808)
  */
 PHP_METHOD(Stub_Issue808, testDynamicUnset)
 {
+	zend_bool _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *propertyName, propertyName_sub, obj, _0;
 
@@ -61,7 +62,12 @@ PHP_METHOD(Stub_Issue808, testDynamicUnset)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	RETURN_MM_BOOL(zephir_isset_property_value_zval(&obj, propertyName));
+	_1 = zephir_isset_property_value_zval(&obj, propertyName);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_1);
 }
 
 /**

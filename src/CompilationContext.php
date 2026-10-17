@@ -386,6 +386,19 @@ class CompilationContext
     }
 
     /**
+     * Evaluates a C boolean expression that may throw into a temp, stops if it
+     * did, and returns the temp to use in its place.
+     */
+    public function emitCheckedBool(string $code): string
+    {
+        $tempVariable = $this->symbolTable->getTempVariableForWrite('bool', $this);
+        $this->codePrinter->output($tempVariable->getName() . ' = ' . $code . ';');
+        $this->emitExceptionCheck();
+
+        return $tempVariable->getName();
+    }
+
+    /**
      * Registers a do-while as the innermost `continue` target. Call it after
      * entering the loop's cycle.
      */

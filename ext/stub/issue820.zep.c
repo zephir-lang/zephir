@@ -52,6 +52,10 @@ PHP_METHOD(Stub_Issue820, testIterator)
 			ZEPHIR_ITERATOR_COPY(&v, _0);
 		}
 		zephir_array_update_zval(&arr, &k, &v, PH_COPY | PH_SEPARATE);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	}
 	zend_iterator_dtor(_0);
 	}
