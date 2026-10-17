@@ -1,0 +1,287 @@
+--TEST--
+Dynamic symbol export: compound operators, name conversion, `$this` and the caller's own variables behave as PHP's `${$name} op= $value`
+--FILE--
+namespace Stub;
+
+class DynamicSymbolOps
+{
+	public function compound(string name, bool preset, var initial, string op, var operand) -> var
+	{
+		var vars;
+
+		create_symbol_table();
+
+		if preset {
+			let {name} = initial;
+		}
+
+		switch op {
+			case "+":
+				let {name} += operand;
+				break;
+			case "-":
+				let {name} -= operand;
+				break;
+			case "*":
+				let {name} *= operand;
+				break;
+			case "/":
+				let {name} /= operand;
+				break;
+			case "%":
+				let {name} %= operand;
+				break;
+			case ".":
+				let {name} .= operand;
+				break;
+			case "&":
+				let {name} &= operand;
+				break;
+			case "|":
+				let {name} |= operand;
+				break;
+			case "^":
+				let {name} ^= operand;
+				break;
+			case "<<":
+				let {name} <<= operand;
+				break;
+			case ">>":
+				let {name} >>= operand;
+				break;
+		}
+
+		let vars = get_defined_vars();
+
+		return vars[name];
+	}
+
+	public function compoundLiteral(bool preset, var initial, var operand) -> array
+	{
+		var vars;
+
+		create_symbol_table();
+
+		if preset {
+			let {"sum"} = initial;
+			let {"text"} = initial;
+			let {"bits"} = initial;
+		}
+
+		let {"sum"} += operand;
+		let {"text"} .= operand;
+		let {"bits"} <<= operand;
+
+		let vars = get_defined_vars();
+
+		return [vars["sum"], vars["text"], vars["bits"]];
+	}
+
+	public function throwingOperator() -> void
+	{
+		create_symbol_table();
+
+		let {"list"} = [1];
+		let {"list"} += "q";
+
+		echo "not reached\n";
+	}
+
+	public function exportName(var name, var value) -> array
+	{
+		create_symbol_table();
+
+		let {name} = value;
+
+		return get_defined_vars();
+	}
+
+	public function exportToCaller(var name, var value) -> void
+	{
+		let {name} = value;
+	}
+
+	public function addToCaller(var name, var value) -> void
+	{
+		let {name} += value;
+	}
+}
+--USAGE--
+set_error_handler(function (int $errno, string $message): bool {
+    echo "warning: ", $message, "\n";
+
+    return true;
+});
+
+function php_compound(string $name, bool $preset, $initial, string $op, $operand)
+{
+    if ($preset) {
+        ${$name} = $initial;
+    }
+
+    switch ($op) {
+        case '+':  ${$name} += $operand; break;
+        case '-':  ${$name} -= $operand; break;
+        case '*':  ${$name} *= $operand; break;
+        case '/':  ${$name} /= $operand; break;
+        case '%':  ${$name} %= $operand; break;
+        case '.':  ${$name} .= $operand; break;
+        case '&':  ${$name} &= $operand; break;
+        case '|':  ${$name} |= $operand; break;
+        case '^':  ${$name} ^= $operand; break;
+        case '<<': ${$name} <<= $operand; break;
+        case '>>': ${$name} >>= $operand; break;
+    }
+
+    return ${$name};
+}
+
+function capture(callable $callable): string
+{
+    ob_start();
+    try {
+        echo var_export($callable(), true), "\n";
+    } catch (Throwable $e) {
+        echo get_class($e), ": ", $e->getMessage(), "\n";
+    }
+
+    return ob_get_clean();
+}
+
+$test = new \Stub\DynamicSymbolOps();
+
+$cases = [
+    ['+', true, 5, 3],
+    ['-', true, 5, 3],
+    ['*', true, 5, 3],
+    ['/', true, 6, 4],
+    ['%', true, 7, 4],
+    ['.', true, 'ab', 'c'],
+    ['&', true, 6, 3],
+    ['|', true, 6, 3],
+    ['^', true, 6, 3],
+    ['<<', true, 1, 3],
+    ['>>', true, 16, 2],
+    ['+', false, null, 3],
+    ['.', false, null, 'c'],
+    ['<<', false, null, 2],
+    ['+', true, [1], [5, 6]],
+    ['+', true, [1], 'q'],
+    ['/', true, 1, 0],
+];
+
+foreach ($cases as [$op, $preset, $initial, $operand]) {
+    $zephir = capture(fn () => $test->compound('v', $preset, $initial, $op, $operand));
+    $php    = capture(fn () => php_compound('v', $preset, $initial, $op, $operand));
+
+    echo $op, '= ', $preset ? 'set' : 'unset', ': ', $zephir === $php ? 'same' : "DIFF\n" . $zephir . $php, "\n";
+    echo $zephir;
+}
+
+echo "literal names\n";
+echo capture(fn () => $test->compoundLiteral(true, 2, 3));
+echo capture(fn () => $test->compoundLiteral(false, null, 3));
+
+echo "throwing operator\n";
+echo capture(fn () => $test->throwingOperator());
+
+echo "name conversion\n";
+foreach ([1, null, true, 2.5, [1], new stdClass(), 'this'] as $name) {
+    echo capture(fn () => array_keys($test->exportName($name, 'v')));
+}
+
+echo "caller variables\n";
+function php_caller(\Stub\DynamicSymbolOps $test): void
+{
+    $plain  = 1;
+    $target = 10;
+    $alias  = &$target;
+
+    $test->exportToCaller('plain', 2);
+    $test->addToCaller('alias', 5);
+    $test->exportToCaller('fresh', 'f');
+
+    var_dump($plain, $target, $alias, $fresh);
+}
+php_caller($test);
+--EXPECT--
++= set: same
+8
+-= set: same
+2
+*= set: same
+15
+/= set: same
+1.5
+%= set: same
+3
+.= set: same
+'abc'
+&= set: same
+2
+|= set: same
+7
+^= set: same
+5
+<<= set: same
+8
+>>= set: same
+4
++= unset: same
+warning: Undefined variable $v
+3
+.= unset: same
+warning: Undefined variable $v
+'c'
+<<= unset: same
+warning: Undefined variable $v
+0
++= set: same
+array (
+  0 => 1,
+  1 => 6,
+)
++= set: same
+TypeError: Unsupported operand types: array + string
+/= set: same
+DivisionByZeroError: Division by zero
+literal names
+array (
+  0 => 5,
+  1 => '23',
+  2 => 16,
+)
+warning: Undefined variable $sum
+warning: Undefined variable $text
+warning: Undefined variable $bits
+array (
+  0 => 3,
+  1 => '3',
+  2 => 0,
+)
+throwing operator
+TypeError: Unsupported operand types: array + string
+name conversion
+array (
+  0 => '1',
+)
+array (
+  0 => '',
+)
+array (
+  0 => '1',
+)
+array (
+  0 => '2.5',
+)
+warning: Array to string conversion
+array (
+  0 => 'Array',
+)
+Error: Object of class stdClass could not be converted to string
+Error: Cannot re-assign $this
+caller variables
+int(2)
+int(15)
+int(15)
+string(1) "f"

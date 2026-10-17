@@ -47,7 +47,7 @@ final class ArrayIndexOperator extends ArrayIndex
     /**
      * The engine function each compound operator applies.
      */
-    private const OPERATOR_FUNCTIONS = [
+    public const OPERATOR_FUNCTIONS = [
         'add-assign'                => 'add_function',
         'sub-assign'                => 'sub_function',
         'mul-assign'                => 'mul_function',

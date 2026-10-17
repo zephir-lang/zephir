@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
-use Zephir\Code\Printer;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Statements\LetStatement;
@@ -21,6 +20,13 @@ use Zephir\Variable\Variable as ZephirVariable;
 
 /**
  * Exports a symbol to the current PHP symbol table using a variable as parameter
+ *
+ * `let {name} = value` and `let {name} op= value` behave as PHP's
+ * `${$name} = $value` and `${$name} op= $value`: the kernel converts the name,
+ * reads the old value for a compound operator and writes through the caller's
+ * own variables. A failure leaves an exception pending, which stops the method.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2710
  */
 class ExportSymbol
 {
@@ -39,6 +45,12 @@ class ExportSymbol
         );
         $variable->setMustInitNull(true);
 
+        /**
+         * A compiled array literal is already a variable holding the array;
+         * re-read as an `array` node it would be compiled again from its C name.
+         */
+        $exprType = 'array' === $resolvedExpr->getType() ? 'variable' : $resolvedExpr->getType();
+
         $letStatement = new LetStatement([
             'type'        => 'let',
             'assignments' => [
@@ -47,7 +59,7 @@ class ExportSymbol
                     'variable'    => $variable->getName(),
                     'operator'    => 'assign',
                     'expr'        => [
-                        'type'  => $resolvedExpr->getType(),
+                        'type'  => $exprType,
                         'value' => $resolvedExpr->getCode(),
                         'file'  => $statement['file'],
                         'line'  => $statement['line'],
@@ -61,27 +73,28 @@ class ExportSymbol
         ]);
         $letStatement->compile($compilationContext);
 
-        $this->getOutput(
-            $compilationContext,
-            $symbolVariable,
-            $variable,
-            $compilationContext->codePrinter,
-            $statement,
+        $value    = $compilationContext->backend->getVariableCode($variable);
+        $operator = $statement['operator'] ?? 'assign';
+        $function = ArrayIndexOperator::OPERATOR_FUNCTIONS[$operator] ?? null;
+
+        $compilationContext->codePrinter->output(
+            null === $function
+                ? $this->setSymbolCall($compilationContext, $symbolVariable, $statement) . ', ' . $value . ');'
+                : $this->setSymbolCall($compilationContext, $symbolVariable, $statement, '_op')
+                    . ', ' . $value . ', ' . $function . ');'
         );
+        $compilationContext->emitExceptionCheck();
     }
 
-    protected function getOutput(
-        ?CompilationContext $compilationContext,
+    /**
+     * The kernel call up to its value argument, `zephir_set_symbol<suffix>(name`.
+     */
+    protected function setSymbolCall(
+        CompilationContext $compilationContext,
         ?ZephirVariable $symbolVariable,
-        ZephirVariable $variable,
-        ?Printer $codePrinter,
-        ?array $statement = [],
-    ): void {
-        $symbol   = $compilationContext->backend->getVariableCode($symbolVariable);
-        $variable = $compilationContext->backend->getVariableCode($variable);
-
-        $codePrinter->output('if (zephir_set_symbol(' . $symbol . ', ' . $variable . ') == FAILURE) {');
-        $codePrinter->output("\t" . 'return;');
-        $codePrinter->output('}');
+        array $statement,
+        string $suffix = '',
+    ): string {
+        return 'zephir_set_symbol' . $suffix . '(' . $compilationContext->backend->getVariableCode($symbolVariable);
     }
 }

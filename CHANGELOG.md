@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed compound assignment operators on dynamic variables `let {x} op= v` being compiled as a plain assignment or rejected [#2710](https://github.com/zephir-lang/zephir/issues/2710)
+- Fixed dynamic variables ignoring non-string names, accepting `this`, exporting an array literal as `null` and not writing through the caller's variables and references as PHP does [#2710](https://github.com/zephir-lang/zephir/issues/2710)
 - Fixed `unset` and `array_key_exists()` looking up a `null` key as a one byte key instead of the empty string [#2706](https://github.com/zephir-lang/zephir/issues/2706)
 - Fixed `unset` and `array_key_exists()` converting float, bool and resource keys and reporting illegal keys differently from PHP [#2706](https://github.com/zephir-lang/zephir/issues/2706)
 - Fixed `array_key_exists()` and `in_array()` returning `false` instead of throwing `TypeError` for a non-array [#2706](https://github.com/zephir-lang/zephir/issues/2706)

@@ -400,6 +400,15 @@ class LetStatement extends StatementAbstract
             return $assignment;
         }
 
+        /**
+         * So is a dynamic variable, `let {name} <<= 2`.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2710
+         */
+        if (in_array($assignment['assign-type'], ['dynamic-variable', 'dynamic-variable-string'], true)) {
+            return $assignment;
+        }
+
         if ($assignment['assign-type'] !== 'variable') {
             throw new CompilerException(
                 "Operator '" . $assignment['operator'] . "' is not supported assign-type: " . $assignment['assign-type']

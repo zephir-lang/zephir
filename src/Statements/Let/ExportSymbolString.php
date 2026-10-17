@@ -13,30 +13,41 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
-use Zephir\Code\Printer;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable as ZephirVariable;
 
 /**
- * Exports a symbol to the current PHP symbol table using a variable as parameter
+ * Exports a symbol to the current PHP symbol table using a string literal as name
  */
 class ExportSymbolString extends ExportSymbol
 {
     /**
      * Compiles {"var"} = {expr}.
+     *
+     * A literal `this` is rejected at compile time, as `${'this'} = $value` is
+     * in PHP.
      */
-    protected function getOutput(
-        ?CompilationContext $compilationContext,
-        ?ZephirVariable $symbolVariable,
-        ZephirVariable $variable,
-        ?Printer $codePrinter,
-        ?array $statement = [],
+    public function assign(
+        ?ZephirVariable $symbolVariable = null,
+        ?CompiledExpression $resolvedExpr = null,
+        ?CompilationContext $compilationContext = null,
+        array $statement = [],
     ): void {
-        $symbol = $compilationContext->backend->getVariableCode($variable);
-        $codePrinter->output(
-            'if (zephir_set_symbol_str(SL("' . $statement['variable'] . '"), ' . $symbol . ') == FAILURE) {'
-        );
-        $codePrinter->output('  return;');
-        $codePrinter->output('}');
+        if ('this' === $statement['variable']) {
+            throw new CompilerException('Cannot re-assign $this', $statement);
+        }
+
+        parent::assign($symbolVariable, $resolvedExpr, $compilationContext, $statement);
+    }
+
+    protected function setSymbolCall(
+        CompilationContext $compilationContext,
+        ?ZephirVariable $symbolVariable,
+        array $statement,
+        string $suffix = '',
+    ): string {
+        return 'zephir_set_symbol_str' . $suffix . '(SL("' . $statement['variable'] . '")';
     }
 }

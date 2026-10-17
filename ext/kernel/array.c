@@ -375,7 +375,6 @@ try_again:
 /* The write engine, defined with zephir_array_assign_op() further down. */
 static int zephir_array_dim_assign(zval *container, zval *dim, zval *value, int separate);
 static int zephir_array_assign_walk(zval *container, zval *value, const char *types, int types_length, va_list ap);
-static void zephir_array_assign_value(zval *slot, zval *value);
 
 void ZEPHIR_FASTCALL zephir_create_array(zval *return_value, uint32_t size, int initialize)
 {
@@ -2173,7 +2172,7 @@ static zval *zephir_array_fetch_dim_w(zval *container, zval *dim, zval *holder, 
  * result is computed aside and checked before it replaces the value, as in
  * `zend_binary_assign_op_typed_ref()`. Zephir code is never `strict_types`.
  */
-static void zephir_array_apply_op(zval *var_ptr, zval *value, binary_op_type op)
+void zephir_array_apply_op(zval *var_ptr, zval *value, binary_op_type op)
 {
 	if (UNEXPECTED(Z_ISREF_P(var_ptr))) {
 		zend_reference *ref = Z_REF_P(var_ptr);
@@ -2365,7 +2364,7 @@ void zephir_array_assign_op(zval *container, zval *value, binary_op_type op, con
  * against that type first. The old value is released only once the slot
  * holds the new one, because its destructor may run userland code.
  */
-static void zephir_array_assign_value(zval *slot, zval *value)
+void zephir_array_assign_value(zval *slot, zval *value)
 {
 	zval garbage;
 

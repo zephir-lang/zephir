@@ -163,7 +163,9 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 				ZEPHIR_INIT_NVAR(&value);
 				ZVAL_COPY(&value, _3$$3);
 				ZEPHIR_CPY_WRT(&_6$$4, &value);
-				if (zephir_set_symbol(&key, &_6$$4) == FAILURE) {
+				zephir_set_symbol(&key, &_6$$4);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
 					return;
 				}
 			} ZEND_HASH_FOREACH_END();
@@ -188,7 +190,9 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 				ZEPHIR_CALL_METHOD(&value, _1$$3, "current", NULL, 0);
 				zephir_check_call_status();
 					ZEPHIR_CPY_WRT(&_9$$5, &value);
-					if (zephir_set_symbol(&key, &_9$$5) == FAILURE) {
+					zephir_set_symbol(&key, &_9$$5);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
 						return;
 					}
 			}
