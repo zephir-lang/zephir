@@ -139,6 +139,12 @@ int zephir_array_update_multi(zval *arr, zval *value, const char *types, int typ
  */
 void zephir_array_assign_op(zval *container, zval *value, binary_op_type op, const char *types, int types_length, int types_count, ...);
 
+/** Stores `value` in a variable slot, as zend_assign_to_variable() does */
+void zephir_array_assign_value(zval *slot, zval *value);
+
+/** Applies a binary operator to a variable slot in place, as ZEND_ASSIGN_OP does */
+void zephir_array_apply_op(zval *var_ptr, zval *value, binary_op_type op);
+
 /** `container[dim] = value` (`[]` for a NULL dim) on a container slot the caller resolved */
 int zephir_array_assign_dim(zval *container, zval *dim, zval *value);
 
