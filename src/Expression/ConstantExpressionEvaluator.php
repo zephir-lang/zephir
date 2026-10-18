@@ -535,10 +535,14 @@ final class ConstantExpressionEvaluator
                 );
 
             case 'static-constant-access':
-                return $this->compiledValue(
-                    (new StaticConstantAccess())->compile($node, $compilationContext),
-                    $node
-                );
+                /**
+                 * A constant expression needs the literal even with
+                 * `static-constant-class-folding` off. See #2711.
+                 */
+                $access = new StaticConstantAccess();
+                $access->setAlwaysFold(true);
+
+                return $this->compiledValue($access->compile($node, $compilationContext), $node);
         }
 
         throw new CompilerException(

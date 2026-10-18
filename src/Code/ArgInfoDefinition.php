@@ -474,8 +474,8 @@ class ArgInfoDefinition
      * so this keeps the arg_info consistent with the runtime default.
      *
      * Non-constant (or unresolvable/non-scalar) defaults are returned unchanged.
-     * Resolution is skipped when constant folding is disabled, mirroring the
-     * runtime behaviour where the constant is then read dynamically.
+     * The default is folded even with `static-constant-class-folding` off, as
+     * the method body folds it then too [#2711].
      */
     private function foldConstantDefault(array $default): array
     {
@@ -493,11 +493,10 @@ class ArgInfoDefinition
             return ['type' => 'int', 'value' => Entry::escape($native['qualified']), 'native' => true];
         }
 
-        if (!$this->compilationContext->config->get('static-constant-class-folding', 'optimizations')) {
-            return $default;
-        }
+        $access = new StaticConstantAccess();
+        $access->setAlwaysFold(true);
 
-        $compiled    = (new StaticConstantAccess())->compile($default, $this->compilationContext);
+        $compiled    = $access->compile($default, $this->compilationContext);
         $scalarTypes = ['string', 'char', 'int', 'uint', 'long', 'ulong', 'double', 'float', 'bool'];
 
         if (!in_array($compiled->getType(), $scalarTypes, true)) {

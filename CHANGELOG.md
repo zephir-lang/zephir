@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `static::CONSTANT` reading the declaring class constant instead of the called class one [#2711](https://github.com/zephir-lang/zephir/issues/2711)
+- Fixed class constant, property and parameter defaults reading a class constant failing to compile, or reflecting `null`, with `static-constant-class-folding` off [#2711](https://github.com/zephir-lang/zephir/issues/2711)
+- Fixed a typed variable failing to compile when assigned a class constant with `static-constant-class-folding` off [#2711](https://github.com/zephir-lang/zephir/issues/2711)
+- Fixed a PHP internal class constant such as `\PDO::ATTR_PERSISTENT` emitting an undeclared class entry with `static-constant-class-folding` off [#2711](https://github.com/zephir-lang/zephir/issues/2711)
 - Fixed compound assignment operators on dynamic variables `let {x} op= v` being compiled as a plain assignment or rejected [#2710](https://github.com/zephir-lang/zephir/issues/2710)
 - Fixed dynamic variables ignoring non-string names, accepting `this`, exporting an array literal as `null` and not writing through the caller's variables and references as PHP does [#2710](https://github.com/zephir-lang/zephir/issues/2710)
 - Fixed `unset` and `array_key_exists()` looking up a `null` key as a one byte key instead of the empty string [#2706](https://github.com/zephir-lang/zephir/issues/2706)
