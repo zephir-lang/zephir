@@ -1,0 +1,53 @@
+--TEST--
+Issue #2711: static::CONSTANT follows the called class with static-constant-class-folding off
+--CONFIG--
+{"optimizations": {"static-constant-class-folding": false}}
+--FILE--
+namespace Stub;
+
+class Reader
+{
+    const OWN = "own";
+
+    public function lateStatic()
+    {
+        return static::OWN;
+    }
+
+    public function intoLocal()
+    {
+        var value;
+
+        let value = static::OWN;
+
+        return value;
+    }
+
+    public function declaring()
+    {
+        return self::OWN;
+    }
+
+    public static function staticLateStatic()
+    {
+        return static::OWN;
+    }
+}
+--USAGE--
+class Child extends \Stub\Reader
+{
+    const OWN = "child";
+}
+
+$r = new \Stub\Reader();
+$c = new Child();
+
+echo $r->lateStatic(), " ", $c->lateStatic(), "\n";
+echo $r->intoLocal(), " ", $c->intoLocal(), "\n";
+echo $r->declaring(), " ", $c->declaring(), "\n";
+echo \Stub\Reader::staticLateStatic(), " ", Child::staticLateStatic(), "\n";
+--EXPECT--
+own child
+own child
+own own
+own child

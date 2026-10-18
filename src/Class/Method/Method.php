@@ -23,13 +23,14 @@ use Zephir\Class\Definition\GeneratorTransformer;
 use Zephir\Class\Entry as ClassEntry;
 use Zephir\Code\Printer;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\Detectors\WriteDetector;
 use Zephir\Detectors\YieldDetector;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
-use Zephir\Expression;
+use Zephir\Expression\StaticConstantAccess;
 use Zephir\Name;
 use Zephir\Passes\CallGathererPass;
 use Zephir\Passes\DefiniteAssignmentPass;
@@ -409,9 +410,7 @@ class Method
                             $compilationContext,
                             $parameter['default']
                         );
-                        $expression     = new Expression($parameter['default']);
-                        $expression->setExpectReturn(true, $symbolVariable);
-                        $compiledExpression = $expression->compile($compilationContext);
+                        $compiledExpression = $this->foldDefaultConstant($parameter['default'], $symbolVariable, $compilationContext);
 
                         if ('int' != $compiledExpression->getType()) {
                             throw new CompilerException(
@@ -498,9 +497,7 @@ class Method
                             $compilationContext,
                             $parameter['default']
                         );
-                        $expression     = new Expression($parameter['default']);
-                        $expression->setExpectReturn(true, $symbolVariable);
-                        $compiledExpression = $expression->compile($compilationContext);
+                        $compiledExpression = $this->foldDefaultConstant($parameter['default'], $symbolVariable, $compilationContext);
 
                         if ('bool' !== $compiledExpression->getType()) {
                             throw new CompilerException(
@@ -664,9 +661,7 @@ class Method
                          *
                          * TODO: Rewrite all to codePrinter
                          */
-                        $expression = new Expression($parameter['default']);
-                        $expression->setExpectReturn(true, $symbolVariable);
-                        $compiledExpression = $expression->compile($compilationContext);
+                        $compiledExpression = $this->foldDefaultConstant($parameter['default'], $symbolVariable, $compilationContext);
 
                         $parameter['default']['type']  = $compiledExpression->getType();
                         $parameter['default']['value'] = $compiledExpression->getCode();
@@ -4309,6 +4304,26 @@ class Method
     }
 
     /**
+     * A parameter default is a constant expression in PHP, so a class constant
+     * in it is folded whatever `static-constant-class-folding` says: the C
+     * emitted here needs the literal. See #2711.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function foldDefaultConstant(
+        array $default,
+        Variable $symbolVariable,
+        CompilationContext $compilationContext
+    ): CompiledExpression {
+        $access = new StaticConstantAccess();
+        $access->setExpectReturn(true, $symbolVariable);
+        $access->setAlwaysFold(true);
+
+        return $access->compile($default, $compilationContext);
+    }
+
+    /**
      * @param CompilationContext $compilationContext
      * @param array              $parameter
      * @param Printer            $oldCodePrinter
@@ -4335,9 +4350,7 @@ class Method
             $compilationContext,
             $parameter['default']
         );
-        $expression     = new Expression($parameter['default']);
-        $expression->setExpectReturn(true, $symbolVariable);
-        $compiledExpression = $expression->compile($compilationContext);
+        $compiledExpression = $this->foldDefaultConstant($parameter['default'], $symbolVariable, $compilationContext);
 
         if ($type !== $compiledExpression->getType()) {
             throw new CompilerException(

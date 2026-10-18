@@ -17,6 +17,7 @@ use ReflectionException;
 use Zephir\Class\Constant;
 use Zephir\Class\Definition\AbstractDefinition;
 use Zephir\Class\Definition\Definition;
+use Zephir\Class\Entry as ClassEntry;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -37,6 +38,7 @@ class StaticConstantAccess
     protected bool      $expecting         = true;
     protected ?Variable $expectingVariable = null;
     protected bool      $readOnly          = false;
+    protected bool      $alwaysFold        = false;
 
     /**
      * Access a static constant class.
@@ -130,60 +132,18 @@ class StaticConstantAccess
         }
 
         /**
-         * We can optimize the reading of constants by avoiding query their value every time
+         * We can optimize the reading of constants by avoiding query their value every time.
+         *
+         * `static::` names the called class, which only exists at run time, so
+         * it is never folded: folding gave a subclass's override the parent's
+         * value. A declaration default (class constant, property, parameter)
+         * is always folded, since it is emitted where no run time read can go.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2711
          */
-        if (!$compilationContext->config->get('static-constant-class-folding', 'optimizations')) {
-            /**
-             * Resolves the symbol that expects the value
-             */
-            if ($this->expecting) {
-                if ($this->expectingVariable) {
-                    $symbolVariable = $this->expectingVariable;
-                    $symbolVariable->initVariant($compilationContext);
-                } else {
-                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
-                        'variable',
-                        $compilationContext,
-                        $expression
-                    );
-                }
-            } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
-                    'variable',
-                    $compilationContext,
-                    $expression
-                );
-            }
-
-            /**
-             * Variable that receives property accesses must be polymorphic
-             */
-            if (!$symbolVariable->isVariable()) {
-                throw new CompilerException(
-                    'Cannot use variable: ' . $symbolVariable->getType() . ' to assign class constants',
-                    $expression
-                );
-            }
-
-            $symbolVariable->setDynamicTypes('undefined');
-            $compilationContext->headersManager->add('kernel/object');
-            /**
-             * The destination is a `zval *` parameter, so it goes through
-             * getVariableCode() like every other emitter here. A bare name
-             * hands over the zval itself and the generated C does not compile.
-             *
-             * @see https://github.com/zephir-lang/zephir/issues/2711
-             */
-            $compilationContext->codePrinter->output(
-                sprintf(
-                    'zephir_get_class_constant(%s, %s, SL("%s"));',
-                    $compilationContext->backend->getVariableCode($symbolVariable),
-                    $classDefinition->getClassEntry($compilationContext),
-                    $constant
-                )
-            );
-
-            return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        $folding = $compilationContext->config->get('static-constant-class-folding', 'optimizations');
+        if (!$this->alwaysFold && ('static' === $className || !$folding)) {
+            return $this->compileRuntimeRead($className, $classDefinition, $constant, $expression, $compilationContext);
         }
 
         $constantDefinition = $classDefinition->getConstant($constant);
@@ -375,6 +335,79 @@ class StaticConstantAccess
         }
 
         throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
+    }
+
+    /**
+     * Folds the constant even when `static-constant-class-folding` is off.
+     *
+     * For a declaration default (class constant, property, parameter), which
+     * has to be a literal: PHP evaluates it as a constant expression, so the
+     * folded value is the one PHP gives.
+     */
+    public function setAlwaysFold(bool $alwaysFold): void
+    {
+        $this->alwaysFold = $alwaysFold;
+    }
+
+    /**
+     * Reads the constant when the code runs, for `static::` and when folding
+     * is off.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function compileRuntimeRead(
+        string $className,
+        AbstractDefinition $classDefinition,
+        string $constant,
+        array $expression,
+        CompilationContext $compilationContext
+    ): CompiledExpression {
+        /**
+         * The value is a zval, so a typed destination (`string s`) receives it
+         * through a temporary and the assignment converts it.
+         */
+        if ($this->expecting && $this->expectingVariable?->isVariable()) {
+            $symbolVariable = $this->expectingVariable;
+            $symbolVariable->initVariant($compilationContext);
+        } else {
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext,
+                $expression
+            );
+        }
+
+        /**
+         * A PHP class (`\PDO`, or a Zephir class's internal parent) has no
+         * Zephir `*_ce` symbol, so it is looked up the way `new` and
+         * `instanceof` look it up.
+         */
+        $classEntry = match (true) {
+            'static' === $className => $compilationContext->lateStaticClassEntry(),
+            $classDefinition instanceof Definition && !$classDefinition->isBundled()
+                => $classDefinition->getClassEntry($compilationContext),
+            default => (new ClassEntry('\\' . ltrim($classDefinition->getCompleteName(), '\\'), $compilationContext))->get(),
+        };
+
+        $symbolVariable->setDynamicTypes('undefined');
+        $compilationContext->headersManager->add('kernel/object');
+        /**
+         * The destination is a `zval *` parameter, so it goes through
+         * getVariableCode() like every other emitter here. A bare name
+         * hands over the zval itself and the generated C does not compile.
+         */
+        $compilationContext->codePrinter->output(
+            sprintf(
+                'zephir_get_class_constant(%s, %s, SL("%s"));',
+                $compilationContext->backend->getVariableCode($symbolVariable),
+                $classEntry,
+                $constant
+            )
+        );
+        $compilationContext->emitExceptionCheck();
+
+        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 
     /**
