@@ -166,17 +166,29 @@ zend_class_entry *zephir_fetch_class_str_ex(const char *class_name, size_t lengt
 }
 
 /**
- * Fetches a zend class entry from a zval value
+ * Fetches the class of `{className}::method()` from a zval, as PHP's
+ * ZEND_FETCH_CLASS does for `$className::method()`: an object stands for its
+ * class, a string is looked up (autoloading, no `self`/`static`/`parent`
+ * keywords), and an unknown class throws a catchable Error. Anything else
+ * throws as well. Returns NULL whenever it threw.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2723
  */
 zend_class_entry *zephir_fetch_class(zval *class_name)
 {
 	zval *z = Z_ISREF_P(class_name) ? Z_REFVAL_P(class_name) : class_name;
-	if (Z_TYPE_P(z) == IS_STRING) {
-		return zend_fetch_class(Z_STR_P(z), ZEND_FETCH_CLASS_DEFAULT);
+
+	if (Z_TYPE_P(z) == IS_OBJECT) {
+		return Z_OBJCE_P(z);
 	}
 
-	php_error_docref(NULL, E_WARNING, "class name must be a string");
-	return zend_standard_class_def;
+	if (Z_TYPE_P(z) == IS_STRING) {
+		return zend_fetch_class(Z_STR_P(z), ZEND_FETCH_CLASS_DEFAULT | ZEND_FETCH_CLASS_EXCEPTION);
+	}
+
+	zend_throw_error(NULL, "Class name must be a valid object or a string");
+
+	return NULL;
 }
 
 /**

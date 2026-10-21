@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `{class}::{method}()` failing to compile in C when the method name is a parameter [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `self::{method}()`, `parent::{method}()` and `Class::{method}()` compiling to nothing [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `Class::{"method"}()`, `self::{"method"}()` and `static::{"method"}()` compiling to nothing, and `{class}::{"method"}()` reading a variable named after the string [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `static::{method}()` and `CONSTANT::{method}()` compiling to nothing [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `{class}::method()` and `{class}::{method}()` used as statements crashing the compiler [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed a dynamic method name that is not a string calling a method named `""` instead of throwing `Error` as PHP does [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `let name = obj->{name}()` and `let name = {class}::{name}()` reading the method name after clearing it [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `{class}::method()` dispatching on `stdClass` with a warning for an object or a non-string class instead of using the object's class or throwing `Error` [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `{class}::method()` with an unknown class raising an uncatchable fatal error after evaluating the arguments [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed a dynamic static call to a non-static method running without `$this` instead of forwarding `$this` or throwing `Error` as PHP does [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed the `__call()` and `__callStatic()` fallback of `self::{method}()` resolving `self` against the calling script and deprecating on PHP 8.2+ [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `parent::{method}()` naming the wrong class for an undefined method called on a grandchild [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `mixed` variables being rejected as dynamic class and method names [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `let param = parent::method()` failing to compile in C [#2723](https://github.com/zephir-lang/zephir/issues/2723)
 - Fixed `static::CONSTANT` reading the declaring class constant instead of the called class one [#2711](https://github.com/zephir-lang/zephir/issues/2711)
 - Fixed class constant, property and parameter defaults reading a class constant failing to compile, or reflecting `null`, with `static-constant-class-folding` off [#2711](https://github.com/zephir-lang/zephir/issues/2711)
 - Fixed a typed variable failing to compile when assigned a class constant with `static-constant-class-folding` off [#2711](https://github.com/zephir-lang/zephir/issues/2711)

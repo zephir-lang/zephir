@@ -141,6 +141,7 @@ class Closure
         );
 
         $classDefinition->setIsFinal(true);
+        $classDefinition->setIsClosure(true);
         $classDefinition->setSourceNamespace($compilationContext->currentNamespace());
 
         $compilerFile = new CompilerFileAnonymous($classDefinition, $compilationContext->config, $compilationContext);

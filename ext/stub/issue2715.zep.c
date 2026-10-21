@@ -107,6 +107,10 @@ PHP_METHOD(Stub_Issue2715, callStaticMixedCase)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &className);
 	_0 = zephir_fetch_class(className);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_RETURN_CALL_CE_STATIC(_0, "NoPeCaSe", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -131,7 +135,11 @@ PHP_METHOD(Stub_Issue2715, callStaticDynamicName)
 	ZEPHIR_INIT_VAR(&name);
 	ZVAL_STRING(&name, "NoPeCaSe");
 	_0 = zephir_fetch_class(className);
-	ZEPHIR_RETURN_CALL_CE_STATIC_ZVAL(_0, name, NULL, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_RETURN_CALL_CE_STATIC_ZVAL(_0, &name, NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
