@@ -18,8 +18,15 @@ use Zephir\Types\Types;
 
 use function addcslashes;
 use function array_key_exists;
+use function count;
+use function explode;
+use function in_array;
 use function is_float;
+use function preg_match;
 use function sprintf;
+use function str_starts_with;
+use function strrpos;
+use function substr;
 use function var_export;
 
 /**
@@ -79,11 +86,25 @@ final class ExtensionGlobal
         Types::T_DOUBLE  => 'double',
         Types::T_CHAR    => 'char',
         Types::T_UCHAR   => 'unsigned char',
-        // A plain C string pointer, which is what OnUpdateString writes. The
-        // pointer is borrowed from the ini entry and must never be freed.
+        // A plain C string pointer, which is what OnUpdateString writes. It
+        // points either into the ini entry, which must never be freed, or at
+        // the copy globals_set() owns (see ownedMember()).
         Types::T_STRING  => 'char *',
         Types::T_HASH    => 'HashTable *',
     ];
+
+    /**
+     * Prefix of the member holding the copy globals_set() writes into a
+     * `string` global; see ownedMember().
+     */
+    private const OWNED_PREFIX = 'zephir_owned_';
+
+    /**
+     * Members the kernel declares in every extension's module globals, see
+     * templates/engine/php_project.h. A global or a struct of the same name
+     * would declare the member twice.
+     */
+    private const KERNEL_MEMBERS = ['initialized', 'fcache', 'scache', 'pcache', 'cache_enabled', 'recursive_lock'];
 
     /**
      * @param string $member     C member path, `my_setting` or `db.my_setting`
@@ -103,6 +124,44 @@ final class ExtensionGlobal
             throw new InvalidArgumentException(
                 sprintf('Extension global "%s" has no default value', $member)
             );
+        }
+    }
+
+    /**
+     * Rejects a `globals` key that cannot become a C member.
+     *
+     * A key is `member` or `struct.member`, and each part is emitted verbatim
+     * as a C identifier. Anything past the second dot used to be dropped, so
+     * `a.b.c` and `a.b.d` silently became the same member.
+     *
+     * @throws InvalidArgumentException
+     */
+    public static function assertValidName(string $name): void
+    {
+        $parts = explode('.', $name);
+
+        if (count($parts) > 2) {
+            throw self::invalidName($name, 'only "member" or "struct.member" is supported');
+        }
+
+        foreach ($parts as $part) {
+            if (1 !== preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $part)) {
+                throw self::invalidName(
+                    $name,
+                    sprintf(
+                        '"%s" must be a C identifier (letters, digits and underscores, not starting with a digit)',
+                        $part
+                    )
+                );
+            }
+
+            if (str_starts_with($part, self::OWNED_PREFIX)) {
+                throw self::invalidName($name, sprintf('the "%s" prefix is reserved', self::OWNED_PREFIX));
+            }
+        }
+
+        if (in_array($parts[0], self::KERNEL_MEMBERS, true)) {
+            throw self::invalidName($name, sprintf('"%s" is a member the Zephir kernel declares', $parts[0]));
         }
     }
 
@@ -227,6 +286,61 @@ final class ExtensionGlobal
             $this->member,
             $this->definition['default'],
         );
+    }
+
+    /**
+     * Path of the member that owns what globals_set() wrote, or null when the
+     * global needs none.
+     *
+     * Only a `string` global needs one. Its `char *` member is pointed into the
+     * ini entry by OnUpdateString, and that value belongs to the engine, so
+     * the member alone cannot tell whether it may be freed. The copy lives
+     * next to the member, in the same struct (#2725).
+     */
+    public function ownedMember(): ?string
+    {
+        if (Types::T_STRING !== $this->definition['type']) {
+            return null;
+        }
+
+        $separator = strrpos($this->member, '.');
+        if (false === $separator) {
+            return self::OWNED_PREFIX . $this->member;
+        }
+
+        return substr($this->member, 0, $separator + 1) . self::OWNED_PREFIX . substr($this->member, $separator + 1);
+    }
+
+    /**
+     * The GINIT assignment that starts the owned copy empty, or '' when there
+     * is none. Thread globals are malloc()ed, not zeroed, under ZTS.
+     */
+    public function ownedInit(string $namespace): string
+    {
+        $owned = $this->ownedMember();
+        if (null === $owned) {
+            return '';
+        }
+
+        return sprintf('%s_globals->%s = NULL;', $namespace, $owned);
+    }
+
+    /**
+     * The GSHUTDOWN call that frees the owned copy, or '' when there is none.
+     */
+    public function ownedRelease(string $namespace): string
+    {
+        $owned = $this->ownedMember();
+        if (null === $owned) {
+            return '';
+        }
+
+        return sprintf('zephir_globals_release_string(&%s_globals->%s);', $namespace, $owned);
+    }
+
+    private static function invalidName(string $name, string $reason): InvalidArgumentException
+    {
+        return new InvalidArgumentException(sprintf('Extension global "%s" is not a valid name: %s', $name, $reason));
     }
 
     /**

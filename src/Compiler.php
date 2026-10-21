@@ -44,9 +44,12 @@ use Zephir\Expression\Closure;
 use Zephir\FileSystem\FileSystemInterface;
 use Zephir\FileSystem\HardDisk;
 use Zephir\Parser\Manager;
+use Zephir\Types\Types;
 
 use function array_diff_key;
 use function array_filter;
+use function array_intersect_key;
+use function array_keys;
 use function array_map;
 use function array_merge;
 use function array_unique;
@@ -847,7 +850,7 @@ final class Compiler
         /**
          * Round 3. Process extension globals
          */
-        [$globalCode, $globalStruct, $globalsDefault, $initEntries, $requestIniGlobals] =
+        [$globalCode, $globalStruct, $globalsDefault, $initEntries, $requestIniGlobals, $globalsRelease] =
             $this->processExtensionGlobals($project);
         if ('zend' == $project) {
             $safeProject = 'zend_';
@@ -944,7 +947,11 @@ final class Compiler
                 array_merge((array)$globalsDefault[0], [$glbInitializers])
             ),
             '%INIT_MODULE_GLOBALS%'  => $globalsDefault[1],
-            '%DESTROY_GLOBALS%'      => $glbDestructors,
+            '%DESTROY_GLOBALS%'      => implode(
+                PHP_EOL . "\t",
+                // After the user's own destructors, which may still read a global.
+                array_merge(array_filter([$glbDestructors]), $globalsRelease)
+            ),
             '%EXTENSION_INFO%'       => $phpInfo,
             '%EXTRA_INCLUDES%'       => implode(
                 PHP_EOL,
@@ -2249,24 +2256,49 @@ final class Compiler
      *
      * Returns, in order: the globals struct members, the typedefs of the
      * compound ones, the [request, module] default assignments, the
-     * PHP_INI_BEGIN() entries, and the names of the request-scoped directives
-     * that have to be re-applied at the start of every request.
+     * PHP_INI_BEGIN() entries, the names of the request-scoped directives
+     * that have to be re-applied at the start of every request, and the
+     * GSHUTDOWN calls that free what globals_set() copied.
      *
      * @throws Exception
      */
     public function processExtensionGlobals(string $namespace): array
+    {
+        try {
+            return $this->buildExtensionGlobals($namespace);
+        } catch (InvalidArgumentException $e) {
+            /**
+             * A bad `globals` entry is the user's config.json, not an internal
+             * error, which is how the CLI reports an InvalidArgumentException.
+             */
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * @see processExtensionGlobals()
+     *
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    private function buildExtensionGlobals(string $namespace): array
     {
         $globalCode        = '';
         $globalStruct      = '';
         $globalsDefault    = [[], []];
         $initEntries       = [];
         $requestIniGlobals = [];
+        $globalsRelease    = [];
 
         $globals = $this->config->get('globals');
         if (is_array($globals)) {
             $structures = [];
             $variables  = [];
             foreach ($globals as $name => $global) {
+                /* A numeric JSON key arrives as an int. */
+                $name = (string) $name;
+                ExtensionGlobal::assertValidName($name);
+
                 $parts = explode('.', $name);
                 if (isset($parts[1])) {
                     $structures[$parts[0]][$parts[1]] = $global;
@@ -2276,26 +2308,37 @@ final class Compiler
             }
 
             /**
+             * A struct is itself a member of the module globals, next to the
+             * plain globals, so the two cannot share a name.
+             */
+            foreach (array_keys(array_intersect_key($variables, $structures)) as $clash) {
+                throw new Exception(sprintf(
+                    'Extension global "%1$s" clashes with the "%1$s.*" globals: both would be the member "%1$s"',
+                    $clash
+                ));
+            }
+
+            /**
              * Process compound structures
              */
             foreach ($structures as $structureName => $internalStructure) {
-                if (preg_match('/^[0-9a-zA-Z_]$/', $structureName)) {
-                    throw new Exception("Struct name: '" . $structureName . "' contains invalid characters");
-                }
-
                 $structBuilder = new Struct('_zephir_struct_' . $structureName, $structureName);
                 foreach ($internalStructure as $field => $global) {
-                    if (preg_match('/^[0-9a-zA-Z_]$/', $field)) {
-                        throw new Exception("Struct field name: '" . $field . "' contains invalid characters");
+                    $extensionGlobal = new ExtensionGlobal($structureName . '.' . $field, $global);
+                    $structBuilder->addProperty($field, $global['type']);
+
+                    $owned = $extensionGlobal->ownedMember();
+                    if (null !== $owned) {
+                        $structBuilder->addProperty(explode('.', $owned)[1], Types::T_STRING);
                     }
 
-                    $structBuilder->addProperty($field, $global['type']);
                     $this->collectExtensionGlobal(
-                        new ExtensionGlobal($structureName . '.' . $field, $global),
+                        $extensionGlobal,
                         $namespace,
                         $globalsDefault,
                         $initEntries,
                         $requestIniGlobals,
+                        $globalsRelease,
                     );
                 }
 
@@ -2311,10 +2354,6 @@ final class Compiler
              * Process single variables
              */
             foreach ($variables as $name => $global) {
-                if (preg_match('/^[0-9a-zA-Z_]$/', $name)) {
-                    throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
-                }
-
                 $extensionGlobal = new ExtensionGlobal($name, $global);
                 $this->collectExtensionGlobal(
                     $extensionGlobal,
@@ -2322,25 +2361,33 @@ final class Compiler
                     $globalsDefault,
                     $initEntries,
                     $requestIniGlobals,
+                    $globalsRelease,
                 );
 
                 $globalCode .= "\t" . $extensionGlobal->cType() . ' ' . $name . ';' . PHP_EOL;
+
+                $owned = $extensionGlobal->ownedMember();
+                if (null !== $owned) {
+                    $globalCode .= "\t" . ExtensionGlobal::cTypeOf(Types::T_STRING) . ' ' . $owned . ';' . PHP_EOL;
+                }
             }
         }
 
         $globalsDefault[0] = implode(PHP_EOL . "\t", $globalsDefault[0]);
         $globalsDefault[1] = implode(PHP_EOL . "\t", $globalsDefault[1]);
 
-        return [$globalCode, $globalStruct, $globalsDefault, $initEntries, $requestIniGlobals];
+        return [$globalCode, $globalStruct, $globalsDefault, $initEntries, $requestIniGlobals, $globalsRelease];
     }
 
     /**
-     * Records one global's default, its php.ini directive, and whether that
-     * directive has to be re-applied each request.
+     * Records one global's default, its php.ini directive, whether that
+     * directive has to be re-applied each request, and the lifetime of the
+     * copy globals_set() keeps for a `string` global.
      *
      * @param array $globalsDefault    [request, module] assignment lists
      * @param array $initEntries       PHP_INI_BEGIN() lines
      * @param array $requestIniGlobals directive names reset on every request
+     * @param array $globalsRelease    GSHUTDOWN lines freeing owned copies
      *
      * @throws Exception
      */
@@ -2350,10 +2397,22 @@ final class Compiler
         array &$globalsDefault,
         array &$initEntries,
         array &$requestIniGlobals,
+        array &$globalsRelease,
     ): void {
         $default = $global->cDefault($namespace);
         if ('' !== $default) {
             $globalsDefault[(int) $global->isModule()][] = $default;
+        }
+
+        /**
+         * The owned copy is started empty once per thread, whatever the
+         * global's own scope: it is persistent memory, freed only when it is
+         * replaced or when the globals are destroyed.
+         */
+        $ownedInit = $global->ownedInit($namespace);
+        if ('' !== $ownedInit) {
+            $globalsDefault[1][] = $ownedInit;
+            $globalsRelease[]    = $global->ownedRelease($namespace);
         }
 
         if (!$global->isIniCapable()) {

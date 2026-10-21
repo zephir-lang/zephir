@@ -18,8 +18,11 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Types\Types;
 
 use function count;
+use function explode;
+use function str_contains;
 
 /**
  * `globals_get()` internal function.
@@ -60,14 +63,41 @@ class GlobalsGetOptimizer extends OptimizerAbstract
             );
         }
 
-        $type = $context->compiler->getExtensionGlobal($globalName)['type'];
+        $type     = $context->compiler->getExtensionGlobal($globalName)['type'];
+        $accessor = $this->resolveInternalAccessor($globalName);
 
+        if (Types::T_STRING !== $type) {
+            return new CompiledExpression($type, $accessor, $expression);
+        }
+
+        /**
+         * Everywhere else in the compiler a `string` compiled expression holds
+         * literal text, so the member's name was emitted as the value: a
+         * `let`, a concatenation or an array element got "ZEPHIR_GLOBAL(x)".
+         * Copy the member into a zval instead (#2725).
+         */
+        $call->processExpectedReturn($context);
+
+        $symbolVariable = $call->getSymbolVariable(true, $context);
+        $this->checkNotVariableString($symbolVariable, $expression);
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
+        $symbolVariable->setDynamicTypes('string');
+
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        $context->codePrinter->output('ZVAL_STRING(' . $symbol . ', ' . $accessor . ');');
+
+        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    private function resolveInternalAccessor(string $globalName): string
+    {
         if (str_contains($globalName, '.')) {
             $parts = explode('.', $globalName);
 
-            return new CompiledExpression($type, 'ZEPHIR_GLOBAL(' . $parts[0] . ').' . $parts[1], $expression);
+            return 'ZEPHIR_GLOBAL(' . $parts[0] . ').' . $parts[1];
         }
 
-        return new CompiledExpression($type, 'ZEPHIR_GLOBAL(' . $globalName . ')', $expression);
+        return 'ZEPHIR_GLOBAL(' . $globalName . ')';
     }
 }

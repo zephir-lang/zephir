@@ -662,6 +662,34 @@ ZEND_INI_MH(zephir_OnUpdateChar);
 void zephir_ini_activate_globals(const char *const *names);
 
 /**
+ * globals_set() for an extension global declared as `string`.
+ *
+ * The member is a `char *` that OnUpdateString points into its ini entry, and
+ * that value belongs to the engine. So the converted value is copied into
+ * `*owned`, which is the extension's own, and the member is pointed at the
+ * copy. The previous copy is freed here, the last one by
+ * zephir_globals_release_string().
+ *
+ * The copy is persistent because a `module` global keeps it across requests,
+ * and a request global must never point at request memory once ZendMM has
+ * reclaimed it. A plain buffer rather than a zend_string: refcounting a
+ * persistent string during a request trips zend.rc_debug.
+ *
+ * The value is converted as `(string)` does in PHP. When that throws (an
+ * object without __toString(), or a warning an error handler turned into an
+ * exception) nothing is written, and the caller checks EG(exception).
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2725
+ */
+void zephir_globals_set_string(char **member, char **owned, zval *value);
+
+/**
+ * Frees the copy zephir_globals_set_string() keeps for a `string` global.
+ * Called for every such global when the module globals are destroyed.
+ */
+void zephir_globals_release_string(char **owned);
+
+/**
  * Z_PARAM_ARRAY(dest) expands to a call to zend_parse_arg_array(_arg, &dest, ...).
  * The inline function has taken `zval **dest` since at least PHP 7.0, so the
  * variable passed to the macro must be a `zval *` for `&dest` to have the

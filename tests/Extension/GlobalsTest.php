@@ -102,6 +102,33 @@ final class GlobalsTest extends TestCase
         $this->assertSame('Long Text without any sense...', $this->test->getDefaultGlobalsOrmCachePrefix());
     }
 
+    /**
+     * globals_set() kept only the char * of the zend_string it converted the
+     * value to, so every call leaked that string. Each value here is built at
+     * runtime, so none of them is interned and a leak cannot hide.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2725
+     */
+    public function testSetStringValueShouldNotLeak(): void
+    {
+        $this->test->setStringValue(str_repeat('x', 64) . 0);
+        $this->test->setDefaultGlobalsOrmCachePrefix(str_repeat('y', 64) . 0);
+
+        $before = memory_get_usage();
+        for ($i = 1; $i <= 1000; $i++) {
+            $this->test->setStringValue(str_repeat('x', 64) . $i);
+            $this->test->setDefaultGlobalsOrmCachePrefix(str_repeat('y', 64) . $i);
+        }
+        $after = memory_get_usage();
+
+        $this->assertSame(0, $after - $before);
+        $this->assertSame(str_repeat('x', 64) . 1000, $this->test->getDefaultGlobals8());
+        $this->assertSame(str_repeat('y', 64) . 1000, $this->test->getDefaultGlobalsOrmCachePrefix());
+
+        $this->test->setStringValue('custom_value');
+        $this->test->setDefaultGlobalsOrmCachePrefix('prefix-string-');
+    }
+
     public function testSetBoolValueUsingInt(): void
     {
         $this->test->setBoolValue(0);
