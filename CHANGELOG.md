@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `globals_set()` on a `string` global leaking the value on every call [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed a `module` `string` global set by `globals_set()` reading freed memory in the next request [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed `globals_set()` writing an empty string and continuing when the value cannot be converted to `string` [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed `globals_set()` on a numeric or `char` global writing the value and continuing when the conversion threw [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed `globals_get()` on a `string` global yielding the text `ZEPHIR_GLOBAL(...)` instead of its value anywhere but a direct `return` [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed a one character extension global name being rejected while names that are not C identifiers, such as `my-setting` or `1abc`, broke the C build [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed an extension global nested more than one level deep, or clashing with a struct or a kernel member, being silently merged or breaking the C build instead of being reported [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed an invalid `globals` entry in `config.json` being reported as an internal error [#2725](https://github.com/zephir-lang/zephir/issues/2725)
 - Fixed `{class}::{method}()` failing to compile in C when the method name is a parameter [#2723](https://github.com/zephir-lang/zephir/issues/2723)
 - Fixed `self::{method}()`, `parent::{method}()` and `Class::{method}()` compiling to nothing [#2723](https://github.com/zephir-lang/zephir/issues/2723)
 - Fixed `Class::{"method"}()`, `self::{"method"}()` and `static::{"method"}()` compiling to nothing, and `{class}::{"method"}()` reading a variable named after the string [#2723](https://github.com/zephir-lang/zephir/issues/2723)

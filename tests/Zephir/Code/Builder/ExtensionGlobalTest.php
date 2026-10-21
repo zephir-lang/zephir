@@ -186,6 +186,123 @@ final class ExtensionGlobalTest extends TestCase
         $this->assertTrue($module->isModule());
     }
 
+    /**
+     * OnUpdateString points a string member into its ini entry, which must
+     * never be freed, so globals_set() keeps the copy it writes in a member of
+     * its own (#2725).
+     */
+    public function testShouldNameTheOwnedCopyOfAString(): void
+    {
+        $global = new ExtensionGlobal('setting', ['type' => 'string', 'default' => 'value']);
+
+        $this->assertSame('zephir_owned_setting', $global->ownedMember());
+    }
+
+    public function testShouldNameTheOwnedCopyOfAStringInAStruct(): void
+    {
+        $global = new ExtensionGlobal('db.setting', ['type' => 'string', 'default' => 'value']);
+
+        $this->assertSame('db.zephir_owned_setting', $global->ownedMember());
+    }
+
+    public function testShouldStartTheOwnedCopyEmpty(): void
+    {
+        $global = new ExtensionGlobal('db.setting', ['type' => 'string', 'default' => 'value']);
+
+        $this->assertSame('stub_globals->db.zephir_owned_setting = NULL;', $global->ownedInit('stub'));
+    }
+
+    public function testShouldFreeTheOwnedCopy(): void
+    {
+        $global = new ExtensionGlobal('db.setting', ['type' => 'string', 'default' => 'value']);
+
+        $this->assertSame(
+            'zephir_globals_release_string(&stub_globals->db.zephir_owned_setting);',
+            $global->ownedRelease('stub'),
+        );
+    }
+
+    public function notOwnedProvider(): array
+    {
+        return [
+            'bool'   => ['bool'],
+            'int'    => ['int'],
+            'double' => ['double'],
+            'char'   => ['char'],
+            'hash'   => ['hash'],
+        ];
+    }
+
+    /**
+     * @dataProvider notOwnedProvider
+     */
+    public function testShouldOwnNothingForAnyOtherType(string $type): void
+    {
+        $global = new ExtensionGlobal('setting', ['type' => $type, 'default' => 0]);
+
+        $this->assertSame(
+            [null, '', ''],
+            [$global->ownedMember(), $global->ownedInit('stub'), $global->ownedRelease('stub')],
+        );
+    }
+
+    public function validNameProvider(): array
+    {
+        return [
+            // One character used to be rejected: the check matched the
+            // character class against the whole name, inverted.
+            'one character'           => ['x'],
+            'one character in struct' => ['a.b'],
+            'plain'                   => ['my_setting'],
+            'leading underscore'      => ['_private'],
+            'digits after the first'  => ['cache2'],
+            'struct member'           => ['orm.cache_level'],
+        ];
+    }
+
+    /**
+     * @dataProvider validNameProvider
+     */
+    public function testShouldAcceptAName(string $name): void
+    {
+        ExtensionGlobal::assertValidName($name);
+
+        $this->addToAssertionCount(1);
+    }
+
+    public function invalidNameProvider(): array
+    {
+        $identifier = 'must be a C identifier (letters, digits and underscores, not starting with a digit)';
+
+        return [
+            'dash'                => ['my-setting', '"my-setting" ' . $identifier],
+            'leading digit'       => ['1abc', '"1abc" ' . $identifier],
+            'dash in a member'    => ['db.my-setting', '"my-setting" ' . $identifier],
+            'leading digit field' => ['db.1x', '"1x" ' . $identifier],
+            'empty'               => ['', '"" ' . $identifier],
+            'empty member'        => ['db.', '"" ' . $identifier],
+            'empty struct'        => ['.db', '"" ' . $identifier],
+            // Everything past the second dot used to be dropped, so these two
+            // were the same member.
+            'two levels'          => ['a.b.c', 'only "member" or "struct.member" is supported'],
+            'owned prefix'        => ['zephir_owned_str', 'the "zephir_owned_" prefix is reserved'],
+            'owned prefix field'  => ['db.zephir_owned_str', 'the "zephir_owned_" prefix is reserved'],
+            'kernel member'       => ['initialized', '"initialized" is a member the Zephir kernel declares'],
+            'kernel member struct' => ['scache.x', '"scache" is a member the Zephir kernel declares'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidNameProvider
+     */
+    public function testShouldRejectAName(string $name, string $reason): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf('Extension global "%s" is not a valid name: %s', $name, $reason));
+
+        ExtensionGlobal::assertValidName($name);
+    }
+
     public function testShouldRequireADefault(): void
     {
         $this->expectException(InvalidArgumentException::class);

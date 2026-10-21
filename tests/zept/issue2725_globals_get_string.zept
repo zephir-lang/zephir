@@ -1,0 +1,188 @@
+--TEST--
+Issue #2725: globals_get() on a string global yields its value in every expression, not the name of the C member
+--CONFIG--
+{"globals": {
+    "a_string":    {"type": "string", "default": "plain"},
+    "db.a_string": {"type": "string", "default": "dotted"},
+    "an_int":      {"type": "int",    "default": 7},
+    "a_bool":      {"type": "bool",   "default": true},
+    "a_double":    {"type": "double", "default": 1.5},
+    "a_char":      {"type": "char",   "default": "A"}
+}}
+--FILE--
+namespace Stub;
+
+class Reads
+{
+	public static function direct()
+	{
+		return globals_get("a_string");
+	}
+
+	public static function local()
+	{
+		var v;
+
+		let v = globals_get("a_string");
+
+		return v;
+	}
+
+	public static function typedLocal()
+	{
+		string v;
+
+		let v = globals_get("a_string");
+
+		return v;
+	}
+
+	public static function dotted()
+	{
+		var v;
+
+		let v = globals_get("db.a_string");
+
+		return v;
+	}
+
+	public static function concat()
+	{
+		return "<" . globals_get("a_string") . ">";
+	}
+
+	public static function argument()
+	{
+		return strlen(globals_get("a_string"));
+	}
+
+	public static function compare()
+	{
+		return globals_get("a_string") == "plain";
+	}
+
+	public static function inArray()
+	{
+		return [globals_get("a_string"), globals_get("an_int"), globals_get("a_bool"), globals_get("a_double"), globals_get("a_char")];
+	}
+
+	public static function keyed()
+	{
+		return ["k": globals_get("db.a_string")];
+	}
+
+	public static function appended()
+	{
+		var a = [];
+
+		let a[] = globals_get("a_string");
+
+		return a;
+	}
+
+	public static function printed() -> void
+	{
+		echo globals_get("a_string");
+	}
+
+	public static function inLoop()
+	{
+		var v, i, all = [];
+
+		for i in range(1, 3) {
+			let v = globals_get("a_string");
+			let all[] = v . i;
+		}
+
+		return all;
+	}
+
+	public static function set(value) -> void
+	{
+		globals_set("a_string", value);
+	}
+}
+--USAGE--
+function show(string $label, $value): void
+{
+    echo str_pad($label, 11), var_export($value, true), "\n";
+}
+
+foreach (['default', 'ini_set', 'globals_set'] as $phase) {
+    if ('ini_set' === $phase) {
+        ini_set('stub.a_string', 'from-ini');
+    }
+    if ('globals_set' === $phase) {
+        \Stub\Reads::set('from-set');
+    }
+
+    echo "-- $phase\n";
+    show('direct', \Stub\Reads::direct());
+    show('local', \Stub\Reads::local());
+    show('typed', \Stub\Reads::typedLocal());
+    show('concat', \Stub\Reads::concat());
+    show('argument', \Stub\Reads::argument());
+    show('compare', \Stub\Reads::compare());
+    show('appended', \Stub\Reads::appended());
+    ob_start();
+    \Stub\Reads::printed();
+    show('printed', ob_get_clean());
+}
+
+echo "-- other shapes\n";
+show('dotted', \Stub\Reads::dotted());
+show('keyed', \Stub\Reads::keyed());
+// The scalar types were never affected; a char reads back as its code.
+show('in array', \Stub\Reads::inArray());
+show('in loop', \Stub\Reads::inLoop());
+--EXPECT--
+-- default
+direct     'plain'
+local      'plain'
+typed      'plain'
+concat     '<plain>'
+argument   5
+compare    true
+appended   array (
+  0 => 'plain',
+)
+printed    'plain'
+-- ini_set
+direct     'from-ini'
+local      'from-ini'
+typed      'from-ini'
+concat     '<from-ini>'
+argument   8
+compare    false
+appended   array (
+  0 => 'from-ini',
+)
+printed    'from-ini'
+-- globals_set
+direct     'from-set'
+local      'from-set'
+typed      'from-set'
+concat     '<from-set>'
+argument   8
+compare    false
+appended   array (
+  0 => 'from-set',
+)
+printed    'from-set'
+-- other shapes
+dotted     'dotted'
+keyed      array (
+  'k' => 'dotted',
+)
+in array   array (
+  0 => 'from-set',
+  1 => 7,
+  2 => true,
+  3 => 1.5,
+  4 => 65,
+)
+in loop    array (
+  0 => 'from-set1',
+  1 => 'from-set2',
+  2 => 'from-set3',
+)

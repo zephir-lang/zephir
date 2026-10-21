@@ -14,15 +14,19 @@ declare(strict_types=1);
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
+use Zephir\Code\Builder\ExtensionGlobal;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
+use Zephir\Exception\InvalidArgumentException;
 use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Types\Types;
 
 use function count;
+use function explode;
 use function is_string;
+use function strtr;
 
 /**
  * `globals_set()` internal function.
@@ -83,18 +87,10 @@ class GlobalsSetOptimizer extends OptimizerAbstract
                 );
             }
 
-            $internalAccessor = $this->resolveInternalAccessor($globalName);
-            $internalValue    = $this->resolveInternalValue(
-                $globalDefinition,
-                $expression,
-                $globalName,
-                $resolvedParams[0]
-            );
-
-            $context->codePrinter->output("{$internalAccessor} = {$internalValue};");
+            $this->write($context, $expression, $globalName, $globalDefinition, $resolvedParams[0]);
 
             return new CompiledExpression('null', null, $expression);
-        } catch (Exception $e) {
+        } catch (Exception | InvalidArgumentException $e) {
             throw new CompilerException($e->getMessage(), $expression);
         }
     }
@@ -111,39 +107,91 @@ class GlobalsSetOptimizer extends OptimizerAbstract
     }
 
     /**
+     * Emits the write of `$value` (a `zval *`) to the global.
+     *
+     * Every conversion but the boolean one can throw: `(string)` on an object
+     * without __toString(), and any of them through an error handler that
+     * turns the "could not be converted" warning into an exception. PHP's cast
+     * produces no value then, so the global is left alone and execution stops.
+     *
      * TODO:  Add 'hash' support
      *
-     * @param array  $definition
-     * @param array  $expression
-     * @param string $name
-     * @param string $value
-     *
-     * @return string
+     * @throws CompilerException
+     * @throws InvalidArgumentException
      */
-    private function resolveInternalValue(array $definition, array $expression, string $name, string $value): string
-    {
-        $type = $definition['type'];
+    private function write(
+        CompilationContext $context,
+        array $expression,
+        string $name,
+        array $definition,
+        string $value
+    ): void {
+        $type     = $definition['type'];
+        $accessor = $this->resolveInternalAccessor($name);
 
-        return match ($type) {
-            Types::T_BOOLEAN,
-            Types::T_BOOL   => strtr('zend_is_true(:v)', [':v' => $value]),
-            Types::T_INT,
-            Types::T_UINT,
-            Types::T_INTEGER,
-            Types::T_LONG,
-            Types::T_ULONG  => strtr('zval_get_long(:v)', [':v' => $value]),
-            Types::T_STRING => strtr('ZSTR_VAL(zval_get_string(:v))', [':v' => $value]),
-            Types::T_CHAR,
-            Types::T_UCHAR  => strtr(
-                '(Z_TYPE_P(:v) == IS_STRING ? (Z_STRLEN_P(:v) ? Z_STRVAL_P(:v)[0] : (char)0) : (char) zval_get_long(:v))',
-                [':v' => $value]
-            ),
-            Types::T_DOUBLE,
-            Types::T_FLOAT  => strtr('zval_get_double(:v)', [':v' => $value]),
-            default         => throw new CompilerException(
-                "Unknown type '$type' to setting global variable '$name'.",
-                $expression
-            ),
-        };
+        switch ($type) {
+            case Types::T_BOOLEAN:
+            case Types::T_BOOL:
+                $context->codePrinter->output($accessor . ' = zend_is_true(' . $value . ');');
+                break;
+
+            case Types::T_INT:
+            case Types::T_UINT:
+            case Types::T_INTEGER:
+            case Types::T_LONG:
+            case Types::T_ULONG:
+                $this->writeConverted($context, $accessor, 'long', 'zval_get_long(' . $value . ')');
+                break;
+
+            case Types::T_STRING:
+                /**
+                 * The member may point into the ini entry, which the engine
+                 * owns, so the kernel writes a copy the extension owns instead.
+                 */
+                $owned = (new ExtensionGlobal($name, $definition))->ownedMember();
+                $context->codePrinter->output(
+                    'zephir_globals_set_string(&' . $accessor . ', &'
+                    . $this->resolveInternalAccessor($owned) . ', ' . $value . ');'
+                );
+                $context->emitExceptionCheck();
+                break;
+
+            case Types::T_CHAR:
+            case Types::T_UCHAR:
+                $this->writeConverted(
+                    $context,
+                    $accessor,
+                    'char',
+                    strtr(
+                        '(Z_TYPE_P(:v) == IS_STRING ? (Z_STRLEN_P(:v) ? Z_STRVAL_P(:v)[0] : (char)0) : (char) zval_get_long(:v))',
+                        [':v' => $value]
+                    )
+                );
+                break;
+
+            case Types::T_DOUBLE:
+            case Types::T_FLOAT:
+                $this->writeConverted($context, $accessor, 'double', 'zval_get_double(' . $value . ')');
+                break;
+
+            default:
+                throw new CompilerException(
+                    "Unknown type '$type' to setting global variable '$name'.",
+                    $expression
+                );
+        }
+    }
+
+    /**
+     * Converts into a temp first, so a conversion that threw never reaches the
+     * global.
+     */
+    private function writeConverted(CompilationContext $context, string $accessor, string $tempType, string $code): void
+    {
+        $temp = $context->symbolTable->getTempVariableForWrite($tempType, $context);
+
+        $context->codePrinter->output($temp->getName() . ' = ' . $code . ';');
+        $context->emitExceptionCheck();
+        $context->codePrinter->output($accessor . ' = ' . $temp->getName() . ';');
     }
 }

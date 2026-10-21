@@ -1412,3 +1412,32 @@ void zephir_ini_activate_globals(const char *const *names)
 		}
 	}
 }
+
+void zephir_globals_set_string(char **member, char **owned, zval *value)
+{
+	zend_string *str = zval_get_string(value);
+	char *copy;
+
+	if (UNEXPECTED(EG(exception))) {
+		zend_string_release(str);
+		return;
+	}
+
+	/* pemalloc() fails with a fatal error rather than returning NULL, which
+	 * zend_strndup() would, and the member must never be NULL. */
+	copy = pemalloc(ZSTR_LEN(str) + 1, 1);
+	memcpy(copy, ZSTR_VAL(str), ZSTR_LEN(str) + 1);
+	zend_string_release(str);
+
+	zephir_globals_release_string(owned);
+	*owned  = copy;
+	*member = copy;
+}
+
+void zephir_globals_release_string(char **owned)
+{
+	if (*owned) {
+		pefree(*owned, 1);
+		*owned = NULL;
+	}
+}

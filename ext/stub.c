@@ -934,7 +934,8 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
  */
 static void php_zephir_init_module_globals(zend_stub_globals *stub_globals)
 {
-	
+	stub_globals->orm.zephir_owned_cache_prefix = NULL;
+	stub_globals->zephir_owned_my_setting_5 = NULL;
 }
 
 void zephir_init_static_properties_Stub_Issue1629();
@@ -1014,7 +1015,8 @@ static PHP_GINIT_FUNCTION(stub)
 
 static PHP_GSHUTDOWN_FUNCTION(stub)
 {
-	
+	zephir_globals_release_string(&stub_globals->orm.zephir_owned_cache_prefix);
+	zephir_globals_release_string(&stub_globals->zephir_owned_my_setting_5);
 }
 
 PHP_FUNCTION(f_Stub_Attributes_tagged);
