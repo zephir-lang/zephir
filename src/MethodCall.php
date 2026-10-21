@@ -181,7 +181,7 @@ class MethodCall extends Call
                 );
             }
 
-            if ($variableMethod->isNotVariableAndString()) {
+            if ($variableMethod->isNotVariableAndMixedAndString()) {
                 throw CompilerException::cannotUseVariableTypeAs(
                     $variableMethod,
                     'as a dynamic method name',
@@ -919,6 +919,7 @@ class MethodCall extends Call
                 switch ($variableMethod->getType()) {
                     case 'string':
                     case 'variable':
+                    case 'mixed':
                         break;
                     default:
                         throw CompilerException::cannotUseVariableTypeAs(

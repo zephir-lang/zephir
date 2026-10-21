@@ -1,0 +1,154 @@
+--TEST--
+Issue #2723: static::{name}() and CONSTANT::{name}() call the method a variable names, as PHP's static::$name() does
+--FILE--
+namespace Stub;
+
+class Target
+{
+    public static function who() -> string
+    {
+        return "target " . get_called_class();
+    }
+
+    public static function withArgument(var argument) -> string
+    {
+        return "target argument " . argument;
+    }
+}
+--FILE--
+namespace Stub;
+
+use Stub\Target as TARGET;
+
+class Caller
+{
+    public static function who() -> string
+    {
+        return "caller " . get_called_class();
+    }
+
+    public function instanceWho() -> string
+    {
+        return "instance of " . get_class(this);
+    }
+
+    public function viaStatic(var name)
+    {
+        return static::{name}();
+    }
+
+    public static function viaStaticFromStatic(var name)
+    {
+        return static::{name}();
+    }
+
+    public function viaStaticStatement(var name)
+    {
+        static::{name}();
+
+        return "after";
+    }
+
+    public function viaConstant(var name)
+    {
+        return TARGET::{name}();
+    }
+
+    public function viaConstantWithArgument(var name)
+    {
+        var result;
+
+        let result = TARGET::{name}("x");
+
+        return result;
+    }
+}
+--USAGE--
+/**
+ * `static::{name}()` and `CONSTANT::{name}()` were parse errors for the C
+ * parser and are compiled here through the pure-PHP one. Each case prints the
+ * Zephir transcript next to the same statement in plain PHP.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2723
+ */
+class PTarget
+{
+    public static function who() { return "target " . get_called_class(); }
+    public static function withArgument($argument) { return "target argument " . $argument; }
+}
+
+class PCaller
+{
+    public static function who() { return "caller " . get_called_class(); }
+    public function instanceWho() { return "instance of " . get_class($this); }
+    public function viaStatic($name) { return static::$name(); }
+    public static function viaStaticFromStatic($name) { return static::$name(); }
+    public function viaStaticStatement($name) { static::$name(); return "after"; }
+    public function viaConstant($name) { return PTarget::$name(); }
+    public function viaConstantWithArgument($name) { return PTarget::$name("x"); }
+}
+
+class Child extends \Stub\Caller
+{
+    public static function who(): string { return "child " . get_called_class(); }
+}
+
+class PChild extends PCaller
+{
+    public static function who(): string { return "child " . get_called_class(); }
+}
+
+function transcript(callable $call): string
+{
+    try {
+        return var_export($call(), true);
+    } catch (\Throwable $e) {
+        return get_class($e) . ': ' . $e->getMessage();
+    }
+}
+
+$cases = [
+    'static'                  => [fn() => (new \Stub\Caller())->viaStatic('who'), fn() => (new PCaller())->viaStatic('who')],
+    'static, subclass'        => [fn() => (new Child())->viaStatic('who'), fn() => (new PChild())->viaStatic('who')],
+    'static, instance target' => [fn() => (new Child())->viaStatic('instanceWho'), fn() => (new PChild())->viaStatic('instanceWho')],
+    'static from static'      => [fn() => Child::viaStaticFromStatic('who'), fn() => PChild::viaStaticFromStatic('who')],
+    'static, null name'       => [fn() => (new \Stub\Caller())->viaStatic(null), fn() => (new PCaller())->viaStatic(null)],
+    'static, undefined'       => [fn() => (new Child())->viaStatic('nope'), fn() => (new PChild())->viaStatic('nope')],
+    'static statement'        => [fn() => (new \Stub\Caller())->viaStaticStatement('who'), fn() => (new PCaller())->viaStaticStatement('who')],
+    'constant'                => [fn() => (new \Stub\Caller())->viaConstant('who'), fn() => (new PCaller())->viaConstant('who')],
+    'constant, argument'      => [fn() => (new \Stub\Caller())->viaConstantWithArgument('withArgument'), fn() => (new PCaller())->viaConstantWithArgument('withArgument')],
+];
+
+foreach ($cases as $label => [$zephir, $php]) {
+    echo $label, "\n";
+    printf("  zephir %s\n", transcript($zephir));
+    printf("  php    %s\n", transcript($php));
+}
+--EXPECT--
+static
+  zephir 'caller Stub\\Caller'
+  php    'caller PCaller'
+static, subclass
+  zephir 'child Child'
+  php    'child PChild'
+static, instance target
+  zephir 'instance of Child'
+  php    'instance of PChild'
+static from static
+  zephir 'child Child'
+  php    'child PChild'
+static, null name
+  zephir Error: Method name must be a string
+  php    Error: Method name must be a string
+static, undefined
+  zephir Error: Call to undefined method Child::nope()
+  php    Error: Call to undefined method PChild::nope()
+static statement
+  zephir 'after'
+  php    'after'
+constant
+  zephir 'target Stub\\Target'
+  php    'target PTarget'
+constant, argument
+  zephir 'target argument x'
+  php    'target argument x'

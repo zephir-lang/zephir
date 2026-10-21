@@ -457,7 +457,11 @@ PHP_METHOD(Stub_Scall, interpolatedStaticReturn)
 	ZEPHIR_INIT_VAR(&methodName);
 	ZVAL_STRING(&methodName, "testMethodStatic");
 	_0 = zephir_fetch_class(&className);
-	ZEPHIR_RETURN_CALL_CE_STATIC_ZVAL(_0, methodName, NULL, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_RETURN_CALL_CE_STATIC_ZVAL(_0, &methodName, NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -481,7 +485,11 @@ PHP_METHOD(Stub_Scall, interpolatedStaticEcho)
 	ZEPHIR_INIT_VAR(&methodName);
 	ZVAL_STRING(&methodName, "testMethodStatic");
 	_1 = zephir_fetch_class(&className);
-	ZEPHIR_CALL_CE_STATIC_ZVAL(&_0, _1, methodName, NULL, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_CALL_CE_STATIC_ZVAL(&_0, _1, &methodName, NULL, 0);
 	zephir_check_call_status();
 	zend_print_zval(&_0, 0);
 	ZEPHIR_MM_RESTORE();

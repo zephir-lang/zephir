@@ -175,6 +175,17 @@ static int zephir_make_fcall_key(zend_string* s, zephir_call_type type, zend_cla
 	return SUCCESS;
 }
 
+/**
+ * Builds the callable zend_call_function() falls back to when no handler was
+ * resolved up front: a magic `__call()` / `__callStatic()` dispatch.
+ *
+ * `self`, `parent` and `static` are written as the class they stand for
+ * whenever the call knows it. As keywords the engine resolves them against
+ * the nearest userland frame, which an extension method never is, so they
+ * named the caller's class instead, and PHP 8.2+ deprecates them in callables.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2723
+ */
 static void resolve_callable(zval* retval, zephir_call_type type, zend_class_entry *ce, zval *object, zval *function)
 {
 	if (type == zephir_fcall_function || IS_ARRAY == Z_TYPE_P(function) || IS_OBJECT == Z_TYPE_P(function)) {
@@ -188,20 +199,21 @@ static void resolve_callable(zval* retval, zephir_call_type type, zend_class_ent
 		zval q;
 		switch (type) {
 			case zephir_fcall_parent:
-				zend_string_addref(i_parent);
-				ZVAL_STR(&q, i_parent);
+				if (ce && ce->parent) {
+					ZVAL_STR_COPY(&q, ce->parent->name);
+				} else {
+					ZVAL_STR_COPY(&q, i_parent);
+				}
 				ZEND_HASH_FILL_ADD(&q);
 				break;
 
 			case zephir_fcall_self:
-				zend_string_addref(i_self);
-				ZVAL_STR(&q, i_self);
+				ZVAL_STR_COPY(&q, ce ? ce->name : i_self);
 				ZEND_HASH_FILL_ADD(&q);
 				break;
 
 			case zephir_fcall_static:
-				zend_string_addref(i_static);
-				ZVAL_STR(&q, i_static);
+				ZVAL_STR_COPY(&q, ce ? ce->name : i_static);
 				ZEND_HASH_FILL_ADD(&q);
 				break;
 
@@ -267,7 +279,11 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 		case zephir_fcall_parent:
 			if (ce && Z_TYPE_P(func) == IS_STRING) {
 				fcic->function_handler = cached_handler ? cached_handler : zend_hash_find_ptr_lc(&ce->parent->function_table, Z_STR_P(func));
+				/* The declaring class's parent, not the parent of whatever class
+				 * the object is: an undefined method and the __call() check both
+				 * have to name the class PHP names (#2723). */
 				fcic->calling_scope = ce->parent;
+				break;
 			} else if (EXPECTED(calling_scope && calling_scope->parent)) {
 				if (Z_TYPE_P(func) == IS_STRING) {
 					fcic->function_handler = cached_handler ? cached_handler : zend_hash_find_ptr_lc(&calling_scope->parent->function_table, Z_STR_P(func));
@@ -463,7 +479,9 @@ int zephir_call_user_function(
 		ZVAL_UNDEF(&fci.function_name);
 	} else if ((cache_entry && !*cache_entry) || zephir_globals_ptr->cache_enabled) {
 		/* The caller is interested in caching OR we have the call cache enabled */
-		resolve_callable(&callable, type, (object_pp && type != zephir_fcall_ce ? Z_OBJCE_P(object_pp) : obj_ce), object_pp, function_name);
+		/* A method call resolves on the object; every static form on the class
+		 * the call names, which `self`, `parent` and `static` need (#2723). */
+		resolve_callable(&callable, type, (object_pp && type == zephir_fcall_method ? Z_OBJCE_P(object_pp) : obj_ce), object_pp, function_name);
 
 		char *is_callable_error = NULL;
 		zend_execute_data *frame = EG(current_execute_data);
@@ -753,6 +771,87 @@ int zephir_call_class_method_aparams(
 	}
 
 	return status;
+}
+
+/**
+ * Calls a method whose name is held in a zval: `obj->{name}()` and every
+ * `X::{name}()` form.
+ *
+ * Mirrors the checks PHP's INIT_METHOD_CALL and INIT_STATIC_METHOD_CALL run
+ * before the call, in their order:
+ *
+ * - a static call whose class could not be fetched stops there; the fetch has
+ *   thrown already;
+ * - the name must be a string once a reference is unwrapped, and nothing else
+ *   is converted: "Method name must be a string";
+ * - a static call reaching a non-static method runs it with the current `$this`
+ *   when that is an instance of the class the method was looked up in, and
+ *   throws otherwise, rather than run the body without an object.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2723
+ */
+int zephir_call_class_method_zval(
+	zval *return_value,
+	zend_class_entry *ce,
+	zephir_call_type type,
+	zval *object,
+	zval *method,
+	zephir_fcall_cache_entry **cache_entry,
+	int cache_slot,
+	uint32_t param_count,
+	zval **params
+) {
+	zval *name = method;
+
+	if (type != zephir_fcall_method && !ce) {
+		if (!EG(exception)) {
+			zend_throw_error(NULL, "Class name must be a valid object or a string");
+		}
+
+		return FAILURE;
+	}
+
+	ZVAL_DEREF(name);
+
+	if (Z_TYPE_P(name) != IS_STRING) {
+		zend_throw_error(NULL, "Method name must be a string");
+
+		return FAILURE;
+	}
+
+	if (type != zephir_fcall_method) {
+		zend_class_entry *scope = type == zephir_fcall_parent ? ce->parent : ce;
+		zend_function *function;
+
+		if (object && (Z_TYPE_P(object) != IS_OBJECT || !scope || !instanceof_function(Z_OBJCE_P(object), scope))) {
+			object = NULL;
+		}
+
+		function = scope ? zend_hash_find_ptr_lc(&scope->function_table, Z_STR_P(name)) : NULL;
+		if (function && !(function->common.fn_flags & ZEND_ACC_STATIC) && !object) {
+			zend_throw_error(
+				NULL,
+				"Non-static method %s::%s() cannot be called statically",
+				ZSTR_VAL(function->common.scope->name),
+				ZSTR_VAL(function->common.function_name)
+			);
+
+			return FAILURE;
+		}
+	}
+
+	return zephir_call_class_method_aparams(
+		return_value,
+		ce,
+		type,
+		object,
+		Z_STRVAL_P(name),
+		(uint32_t) Z_STRLEN_P(name),
+		cache_entry,
+		cache_slot,
+		param_count,
+		params
+	);
 }
 
 /**

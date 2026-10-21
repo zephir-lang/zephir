@@ -156,37 +156,29 @@ extern zend_internal_function zephir_internal_call_frame_func;
  * lookup that dispatches the call folds the case itself (see populate_fcic()
  * in kernel/fcall.c). They used to lower-case it into a copy on every call.
  *
+ * The variable arrives as the `zval *` the backend hands out for any variable
+ * kind: a local, a parameter, the companion zval of a native string. It is
+ * copied before the result is cleared, because in `let name = obj->{name}()`
+ * the variable naming the method is the very one the call writes to.
+ * zephir_call_class_method_zval() then requires a string, as PHP does.
+ *
  * @see https://github.com/zephir-lang/zephir/issues/2715
+ * @see https://github.com/zephir-lang/zephir/issues/2723
  */
 #define ZEPHIR_RETURN_CALL_METHOD_ZVAL(object, method, cache, cache_slot, ...) \
 	do { \
-		const char *method_name; \
-		uint32_t method_len; \
 		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
-		if (Z_TYPE_P(method) == IS_STRING) { \
-			method_len = Z_STRLEN_P(method); \
-			method_name = Z_STRVAL_P(method); \
-		} else { \
-			method_len = 0; \
-			method_name = ""; \
-		} \
-		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method(return_value, Z_TYPE_P(object) == IS_OBJECT ? Z_OBJCE_P(object) : NULL, zephir_fcall_method, object, method_name, method_len, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method_zval(return_value, Z_TYPE_P(object) == IS_OBJECT ? Z_OBJCE_P(object) : NULL, zephir_fcall_method, object, method, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
 	} while (0)
 
 #define ZEPHIR_CALL_METHOD_ZVAL(return_value_ptr, object, method, cache, cache_slot, ...) \
 	do { \
-		const char *method_name; \
-		uint32_t method_len; \
 		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
-		if (Z_TYPE_P(method) == IS_STRING) { \
-			method_len = Z_STRLEN_P(method); \
-			method_name = Z_STRVAL_P(method); \
-		} else { \
-			method_len = 0; \
-			method_name = ""; \
-		} \
+		zval method_name_; \
+		ZVAL_COPY(&method_name_, method); \
 		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
-		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_aparams(return_value_ptr, Z_TYPE_P(object) == IS_OBJECT ? Z_OBJCE_P(object) : NULL, zephir_fcall_method, object, method_name, method_len, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_zval(return_value_ptr, Z_TYPE_P(object) == IS_OBJECT ? Z_OBJCE_P(object) : NULL, zephir_fcall_method, object, &method_name_, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+		zval_ptr_dtor(&method_name_); \
 	} while (0)
 
 #define ZEPHIR_CALL_PARENT(return_value_ptr, class_entry, this_ptr, method, cache, cache_slot, ...) \
@@ -247,35 +239,78 @@ extern zend_internal_function zephir_internal_call_frame_func;
 		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method(return_value, class_entry, zephir_fcall_ce, NULL, method, strlen(method), cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
 	} while (0)
 
+/**
+ * Static calls whose method name is a variable: `{cls}::{name}()`,
+ * `Cls::{name}()`, `self::{name}()`, `parent::{name}()` and
+ * `static::{name}()`. Each passes the class PHP looks the method up in, and the
+ * current `$this`, which a non-static method runs with when it is an instance
+ * of that class. `self::` is the declaring class, as `class_entry` spells it,
+ * and `static::` the called one.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2723
+ */
 #define ZEPHIR_CALL_CE_STATIC_ZVAL(return_value_ptr, class_entry, method, cache, cache_slot, ...) \
 	do { \
-		const char *method_name; \
-		uint32_t method_len; \
 		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
-		if (Z_TYPE(method) == IS_STRING) { \
-			method_len = Z_STRLEN(method); \
-			method_name = Z_STRVAL(method); \
-		} else { \
-			method_len = 0; \
-			method_name = ""; \
-		} \
+		zval method_name_; \
+		ZVAL_COPY(&method_name_, method); \
 		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
-		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_aparams(return_value_ptr, class_entry, zephir_fcall_ce, NULL, method_name, method_len, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_zval(return_value_ptr, class_entry, zephir_fcall_ce, getThis(), &method_name_, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+		zval_ptr_dtor(&method_name_); \
 	} while (0)
 
 #define ZEPHIR_RETURN_CALL_CE_STATIC_ZVAL(class_entry, method, cache, cache_slot, ...) \
 	do { \
-		const char *method_name; \
-		uint32_t method_len; \
-		zval *params_[] = { ZEPHIR_FETCH_VA_ARGS __VA_ARGS__ }; \
-		if (Z_TYPE(method) == IS_STRING) { \
-			method_len = Z_STRLEN(method); \
-			method_name = Z_STRVAL(method); \
-		} else { \
-			method_len = 0; \
-			method_name = ""; \
-		} \
-		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method(return_value, class_entry, zephir_fcall_ce, NULL, method_name, method_len, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method_zval(return_value, class_entry, zephir_fcall_ce, getThis(), method, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+#define ZEPHIR_CALL_SELF_ZVAL(return_value_ptr, class_entry, method, cache, cache_slot, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		zval method_name_; \
+		ZVAL_COPY(&method_name_, method); \
+		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_zval(return_value_ptr, class_entry, zephir_fcall_self, getThis(), &method_name_, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+		zval_ptr_dtor(&method_name_); \
+	} while (0)
+
+#define ZEPHIR_RETURN_CALL_SELF_ZVAL(class_entry, method, cache, cache_slot, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method_zval(return_value, class_entry, zephir_fcall_self, getThis(), method, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+#define ZEPHIR_CALL_PARENT_ZVAL(return_value_ptr, class_entry, this_ptr, method, cache, cache_slot, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		zval method_name_; \
+		ZVAL_COPY(&method_name_, method); \
+		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_zval(return_value_ptr, class_entry, zephir_fcall_parent, this_ptr, &method_name_, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+		zval_ptr_dtor(&method_name_); \
+	} while (0)
+
+#define ZEPHIR_RETURN_CALL_PARENT_ZVAL(class_entry, this_ptr, method, cache, cache_slot, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method_zval(return_value, class_entry, zephir_fcall_parent, this_ptr, method, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+#define ZEPHIR_CALL_STATIC_ZVAL(return_value_ptr, method, cache, cache_slot, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		zval method_name_; \
+		ZVAL_COPY(&method_name_, method); \
+		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_zval(return_value_ptr, zend_get_called_scope(EG(current_execute_data)), zephir_fcall_static, getThis(), &method_name_, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+		zval_ptr_dtor(&method_name_); \
+	} while (0)
+
+#define ZEPHIR_RETURN_CALL_STATIC_ZVAL(method, cache, cache_slot, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method_zval(return_value, zend_get_called_scope(EG(current_execute_data)), zephir_fcall_static, getThis(), method, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
 	} while (0)
 
 /** Use these functions to call functions in the PHP userland using an arbitrary zval as callable */
@@ -305,6 +340,17 @@ int zephir_call_class_method_aparams(
 	zval *object,
 	const char *method_name,
 	uint32_t method_len,
+	zephir_fcall_cache_entry **cache_entry,
+	int cache_slot,
+	uint32_t param_count,
+	zval **params) ZEPHIR_ATTR_WARN_UNUSED_RESULT;
+
+int zephir_call_class_method_zval(
+	zval *return_value_ptr,
+	zend_class_entry *ce,
+	zephir_call_type type,
+	zval *object,
+	zval *method,
 	zephir_fcall_cache_entry **cache_entry,
 	int cache_slot,
 	uint32_t param_count,
@@ -407,6 +453,48 @@ ZEPHIR_ATTR_WARN_UNUSED_RESULT static inline int zephir_return_call_class_method
 	}
 
 	status = zephir_call_class_method_aparams(rvp, ce, type, object, method_name, method_len, cache_entry, cache_slot, param_count, params);
+
+	if (status == FAILURE) {
+		if (return_value) {
+			if (EG(exception)) {
+				ZVAL_NULL(return_value);
+			}
+		} else {
+			zval_ptr_dtor(&rv);
+		}
+
+		return FAILURE;
+	}
+
+	if (!return_value) {
+		zval_ptr_dtor(&rv);
+	}
+
+	return SUCCESS;
+}
+
+ZEPHIR_ATTR_WARN_UNUSED_RESULT static inline int zephir_return_call_class_method_zval(
+	zval *return_value,
+	zend_class_entry *ce,
+	zephir_call_type type,
+	zval *object,
+	zval *method,
+	zephir_fcall_cache_entry **cache_entry,
+	int cache_slot,
+	uint32_t param_count,
+	zval **params
+) {
+	zval rv, *rvp = return_value ? return_value : &rv;
+	int status;
+
+	ZVAL_UNDEF(&rv);
+
+	if (return_value) {
+		zval_ptr_dtor(return_value);
+		ZVAL_UNDEF(return_value);
+	}
+
+	status = zephir_call_class_method_zval(rvp, ce, type, object, method, cache_entry, cache_slot, param_count, params);
 
 	if (status == FAILURE) {
 		if (return_value) {

@@ -47,6 +47,7 @@ PHP_METHOD(Stub_ScallDynamic, testMethod3)
 
 PHP_METHOD(Stub_ScallDynamic, selfDynamicCall1)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *methodName, methodName_sub;
 
@@ -54,7 +55,11 @@ PHP_METHOD(Stub_ScallDynamic, selfDynamicCall1)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(methodName)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &methodName);
-	return;
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &methodName);
+	ZEPHIR_RETURN_CALL_SELF_ZVAL(stub_scalldynamic_ce, methodName, NULL, 0);
+	zephir_check_call_status();
+	RETURN_MM();
 }
 
