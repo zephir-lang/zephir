@@ -125,6 +125,10 @@ final class ExtensionGlobal
                 sprintf('Extension global "%s" has no default value', $member)
             );
         }
+
+        if (Types::T_HASH === $definition['type']) {
+            $this->assertValidHash();
+        }
     }
 
     /**
@@ -163,6 +167,29 @@ final class ExtensionGlobal
         if (in_array($parts[0], self::KERNEL_MEMBERS, true)) {
             throw self::invalidName($name, sprintf('"%s" is a member the Zephir kernel declares', $parts[0]));
         }
+    }
+
+    /**
+     * The C expression naming a member, `ZEPHIR_GLOBAL(a)` or
+     * `ZEPHIR_GLOBAL(a).b`.
+     */
+    public static function accessorOf(string $member): string
+    {
+        $parts = explode('.', $member);
+
+        if (isset($parts[1])) {
+            return sprintf('ZEPHIR_GLOBAL(%s).%s', $parts[0], $parts[1]);
+        }
+
+        return sprintf('ZEPHIR_GLOBAL(%s)', $parts[0]);
+    }
+
+    /**
+     * The C expression naming this global's member.
+     */
+    public function accessor(): string
+    {
+        return self::accessorOf($this->member);
     }
 
     /**
@@ -279,13 +306,28 @@ final class ExtensionGlobal
         /* Validates the type, and names the global when it is unknown. */
         $this->cType();
 
+        /* A hash default is null in some spelling, see assertValidHash(). */
+        $default = Types::T_HASH === $this->definition['type'] ? 'NULL' : $this->definition['default'];
+
         /* The caller indents; see %INIT_GLOBALS% in templates/engine/project.c. */
-        return sprintf(
-            '%s_globals->%s = %s;',
-            $namespace,
-            $this->member,
-            $this->definition['default'],
-        );
+        return sprintf('%s_globals->%s = %s;', $namespace, $this->member, $default);
+    }
+
+    /**
+     * The RSHUTDOWN call that releases the table a request `hash` global holds,
+     * or '' when there is none.
+     *
+     * RINIT puts the member back to NULL, which would only drop the table. A
+     * `module` hash is never written from Zephir, so it holds whatever C put
+     * there, for as long as C wants (#2726).
+     */
+    public function requestRelease(): string
+    {
+        if (Types::T_HASH !== $this->definition['type'] || $this->isModule()) {
+            return '';
+        }
+
+        return sprintf('zephir_globals_release_hash(&%s);', $this->accessor());
     }
 
     /**
@@ -336,6 +378,32 @@ final class ExtensionGlobal
         }
 
         return sprintf('zephir_globals_release_string(&%s_globals->%s);', $namespace, $owned);
+    }
+
+    /**
+     * A hash member is a `HashTable *` and its default is emitted as C, so
+     * anything but NULL broke the C build: `[]` became `x = Array;` and a JSON
+     * null `x = ;`. And an INI value is always a string, so a hash has no
+     * directive, which an `ini-entry` block used to be silently ignored for.
+     *
+     * @throws InvalidArgumentException
+     */
+    private function assertValidHash(): void
+    {
+        $default = $this->definition['default'];
+
+        if (null !== $default && 'NULL' !== $default) {
+            throw new InvalidArgumentException(
+                sprintf('Extension global "%s" is a hash, so its default must be null', $this->member)
+            );
+        }
+
+        if (array_key_exists('ini-entry', $this->definition)) {
+            throw new InvalidArgumentException(sprintf(
+                'Extension global "%s" is a hash, which cannot have an ini-entry: an INI value is always a string',
+                $this->member
+            ));
+        }
     }
 
     private static function invalidName(string $name, string $reason): InvalidArgumentException

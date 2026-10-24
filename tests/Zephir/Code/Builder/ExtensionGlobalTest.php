@@ -39,16 +39,16 @@ final class ExtensionGlobalTest extends TestCase
             'char'    => ['char', 'char'],
             'uchar'   => ['uchar', 'unsigned char'],
             'string'  => ['string', 'char *'],
-            'hash'    => ['hash', 'HashTable *'],
+            'hash'    => ['hash', 'HashTable *', 'NULL'],
         ];
     }
 
     /**
      * @dataProvider cTypeProvider
      */
-    public function testShouldResolveCType(string $type, string $expected): void
+    public function testShouldResolveCType(string $type, string $expected, mixed $default = 0): void
     {
-        $global = new ExtensionGlobal('setting', ['type' => $type, 'default' => 0]);
+        $global = new ExtensionGlobal('setting', ['type' => $type, 'default' => $default]);
 
         $this->assertSame($expected, $global->cType());
     }
@@ -170,11 +170,119 @@ final class ExtensionGlobalTest extends TestCase
         $this->assertSame('', $global->cDefault('stub'));
     }
 
-    public function testShouldEmitACompiledDefaultForAHash(): void
+    public function hashDefaultProvider(): array
+    {
+        return [
+            // The only spelling that compiled before #2726, and what cphalcon declares.
+            'C NULL'    => ['NULL'],
+            // Used to emit `x = ;`.
+            'JSON null' => [null],
+        ];
+    }
+
+    /**
+     * @dataProvider hashDefaultProvider
+     */
+    public function testShouldEmitANullDefaultForAHash(?string $default): void
+    {
+        $global = new ExtensionGlobal('orm.ast_cache', ['type' => 'hash', 'default' => $default]);
+
+        $this->assertSame('stub_globals->orm.ast_cache = NULL;', $global->cDefault('stub'));
+    }
+
+    public function invalidHashDefaultProvider(): array
+    {
+        return [
+            // Used to emit `x = Array;`, after an "Array to string conversion" warning.
+            'empty array'     => [[]],
+            'array'           => [['a' => 1]],
+            'string'          => ['foo'],
+            'lower-case null' => ['null'],
+            'zero'            => [0],
+            'false'           => [false],
+        ];
+    }
+
+    /**
+     * A hash member is a `HashTable *` and its default is emitted as C, so
+     * anything but NULL broke the C build.
+     *
+     * @dataProvider invalidHashDefaultProvider
+     */
+    public function testShouldRejectAHashDefaultOtherThanNull(mixed $default): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Extension global "cache" is a hash, so its default must be null');
+
+        new ExtensionGlobal('cache', ['type' => 'hash', 'default' => $default]);
+    }
+
+    /**
+     * It used to be ignored without a word, so the directive never existed.
+     */
+    public function testShouldRejectAnIniEntryOnAHash(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Extension global "cache" is a hash, which cannot have an ini-entry: an INI value is always a string'
+        );
+
+        new ExtensionGlobal('cache', ['type' => 'hash', 'default' => 'NULL', 'ini-entry' => ['name' => 'stub.cache']]);
+    }
+
+    public function testShouldAccessAPlainGlobal(): void
+    {
+        $global = new ExtensionGlobal('cache', ['type' => 'hash', 'default' => 'NULL']);
+
+        $this->assertSame('ZEPHIR_GLOBAL(cache)', $global->accessor());
+    }
+
+    public function testShouldAccessAGlobalInAStruct(): void
     {
         $global = new ExtensionGlobal('orm.ast_cache', ['type' => 'hash', 'default' => 'NULL']);
 
-        $this->assertSame('stub_globals->orm.ast_cache = NULL;', $global->cDefault('stub'));
+        $this->assertSame('ZEPHIR_GLOBAL(orm).ast_cache', $global->accessor());
+    }
+
+    /**
+     * RINIT puts a hash back to NULL, which drops the table without freeing it
+     * (#2726).
+     */
+    public function testShouldReleaseARequestHashAtRequestEnd(): void
+    {
+        $plain  = new ExtensionGlobal('cache', ['type' => 'hash', 'default' => 'NULL']);
+        $dotted = new ExtensionGlobal('orm.ast_cache', ['type' => 'hash', 'default' => 'NULL']);
+
+        $this->assertSame('zephir_globals_release_hash(&ZEPHIR_GLOBAL(cache));', $plain->requestRelease());
+        $this->assertSame('zephir_globals_release_hash(&ZEPHIR_GLOBAL(orm).ast_cache);', $dotted->requestRelease());
+    }
+
+    public function testShouldNotReleaseAModuleHashAtRequestEnd(): void
+    {
+        $global = new ExtensionGlobal('cache', ['type' => 'hash', 'default' => 'NULL', 'module' => true]);
+
+        $this->assertSame('', $global->requestRelease());
+    }
+
+    public function notReleasedProvider(): array
+    {
+        return [
+            'bool'   => ['bool'],
+            'int'    => ['int'],
+            'double' => ['double'],
+            'char'   => ['char'],
+            'string' => ['string'],
+        ];
+    }
+
+    /**
+     * @dataProvider notReleasedProvider
+     */
+    public function testShouldReleaseNothingAtRequestEndForAnyOtherType(string $type): void
+    {
+        $global = new ExtensionGlobal('setting', ['type' => $type, 'default' => 0]);
+
+        $this->assertSame('', $global->requestRelease());
     }
 
     public function testShouldReportModuleScope(): void
@@ -229,16 +337,16 @@ final class ExtensionGlobalTest extends TestCase
             'int'    => ['int'],
             'double' => ['double'],
             'char'   => ['char'],
-            'hash'   => ['hash'],
+            'hash'   => ['hash', 'NULL'],
         ];
     }
 
     /**
      * @dataProvider notOwnedProvider
      */
-    public function testShouldOwnNothingForAnyOtherType(string $type): void
+    public function testShouldOwnNothingForAnyOtherType(string $type, mixed $default = 0): void
     {
-        $global = new ExtensionGlobal('setting', ['type' => $type, 'default' => 0]);
+        $global = new ExtensionGlobal('setting', ['type' => $type, 'default' => $default]);
 
         $this->assertSame(
             [null, '', ''],

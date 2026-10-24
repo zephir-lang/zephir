@@ -1441,3 +1441,63 @@ void zephir_globals_release_string(char **owned)
 		*owned = NULL;
 	}
 }
+
+void zephir_globals_set_hash(HashTable **member, zval *value)
+{
+	HashTable *previous = *member;
+	zval array;
+
+	ZVAL_DEREF(value);
+
+	if (Z_TYPE_P(value) == IS_NULL) {
+		*member = NULL;
+	} else {
+		ZVAL_COPY(&array, value);
+		convert_to_array(&array);
+
+		if (UNEXPECTED(EG(exception))) {
+			zval_ptr_dtor(&array);
+			return;
+		}
+
+		/* Never refcounted, so ZVAL_COPY() took no reference to it. */
+		if (GC_FLAGS(Z_ARR(array)) & IS_ARRAY_IMMUTABLE) {
+			ZVAL_ARR(&array, zend_array_dup(Z_ARR(array)));
+		}
+
+		*member = Z_ARR(array);
+	}
+
+	if (previous) {
+		zend_array_release(previous);
+	}
+}
+
+void zephir_globals_get_hash(zval *result, HashTable *member)
+{
+	if (!member) {
+		ZVAL_NULL(result);
+		return;
+	}
+
+	/* One C put there itself: a zval holding it must not count references. */
+	if (GC_FLAGS(member) & IS_ARRAY_IMMUTABLE) {
+		ZVAL_ARR(result, member);
+		Z_TYPE_FLAGS_P(result) = 0;
+		return;
+	}
+
+	GC_ADDREF(member);
+	ZVAL_ARR(result, member);
+}
+
+void zephir_globals_release_hash(HashTable **member)
+{
+	HashTable *previous = *member;
+
+	*member = NULL;
+
+	if (previous) {
+		zend_array_release(previous);
+	}
+}

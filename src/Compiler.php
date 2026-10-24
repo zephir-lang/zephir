@@ -850,8 +850,15 @@ final class Compiler
         /**
          * Round 3. Process extension globals
          */
-        [$globalCode, $globalStruct, $globalsDefault, $initEntries, $requestIniGlobals, $globalsRelease] =
-            $this->processExtensionGlobals($project);
+        [
+            $globalCode,
+            $globalStruct,
+            $globalsDefault,
+            $initEntries,
+            $requestIniGlobals,
+            $globalsRelease,
+            $requestGlobalsRelease,
+        ] = $this->processExtensionGlobals($project);
         if ('zend' == $project) {
             $safeProject = 'zend_';
         } else {
@@ -966,7 +973,11 @@ final class Compiler
                 PHP_EOL . "\t",
                 array_merge($this->internalInitializers, [$reqInitializers])
             ),
-            '%REQ_DESTRUCTORS%'      => $reqDestructors,
+            '%REQ_DESTRUCTORS%'      => implode(
+                PHP_EOL . "\t",
+                // After the user's own destructors, which may still read a global.
+                array_merge(array_filter([$reqDestructors]), $requestGlobalsRelease)
+            ),
             '%POSTREQ_DESTRUCTORS%'  => empty($prqDestructors) ? '' : implode(
                 PHP_EOL,
                 [
@@ -2257,8 +2268,9 @@ final class Compiler
      * Returns, in order: the globals struct members, the typedefs of the
      * compound ones, the [request, module] default assignments, the
      * PHP_INI_BEGIN() entries, the names of the request-scoped directives
-     * that have to be re-applied at the start of every request, and the
-     * GSHUTDOWN calls that free what globals_set() copied.
+     * that have to be re-applied at the start of every request, the
+     * GSHUTDOWN calls that free what globals_set() copied, and the RSHUTDOWN
+     * calls that release the tables request `hash` globals hold.
      *
      * @throws Exception
      */
@@ -2289,6 +2301,7 @@ final class Compiler
         $initEntries       = [];
         $requestIniGlobals = [];
         $globalsRelease    = [];
+        $requestRelease    = [];
 
         $globals = $this->config->get('globals');
         if (is_array($globals)) {
@@ -2339,6 +2352,7 @@ final class Compiler
                         $initEntries,
                         $requestIniGlobals,
                         $globalsRelease,
+                        $requestRelease,
                     );
                 }
 
@@ -2362,6 +2376,7 @@ final class Compiler
                     $initEntries,
                     $requestIniGlobals,
                     $globalsRelease,
+                    $requestRelease,
                 );
 
                 $globalCode .= "\t" . $extensionGlobal->cType() . ' ' . $name . ';' . PHP_EOL;
@@ -2376,18 +2391,28 @@ final class Compiler
         $globalsDefault[0] = implode(PHP_EOL . "\t", $globalsDefault[0]);
         $globalsDefault[1] = implode(PHP_EOL . "\t", $globalsDefault[1]);
 
-        return [$globalCode, $globalStruct, $globalsDefault, $initEntries, $requestIniGlobals, $globalsRelease];
+        return [
+            $globalCode,
+            $globalStruct,
+            $globalsDefault,
+            $initEntries,
+            $requestIniGlobals,
+            $globalsRelease,
+            $requestRelease,
+        ];
     }
 
     /**
      * Records one global's default, its php.ini directive, whether that
-     * directive has to be re-applied each request, and the lifetime of the
-     * copy globals_set() keeps for a `string` global.
+     * directive has to be re-applied each request, the lifetime of the copy
+     * globals_set() keeps for a `string` global, and the release of the table
+     * a request `hash` global holds.
      *
      * @param array $globalsDefault    [request, module] assignment lists
      * @param array $initEntries       PHP_INI_BEGIN() lines
      * @param array $requestIniGlobals directive names reset on every request
      * @param array $globalsRelease    GSHUTDOWN lines freeing owned copies
+     * @param array $requestRelease    RSHUTDOWN lines releasing hash tables
      *
      * @throws Exception
      */
@@ -2398,10 +2423,16 @@ final class Compiler
         array &$initEntries,
         array &$requestIniGlobals,
         array &$globalsRelease,
+        array &$requestRelease,
     ): void {
         $default = $global->cDefault($namespace);
         if ('' !== $default) {
             $globalsDefault[(int) $global->isModule()][] = $default;
+        }
+
+        $release = $global->requestRelease();
+        if ('' !== $release) {
+            $requestRelease[] = $release;
         }
 
         /**

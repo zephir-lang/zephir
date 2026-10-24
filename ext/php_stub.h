@@ -34,6 +34,7 @@ typedef struct _zephir_struct_orm {
 	zend_bool cache_enable;
 	char * cache_prefix;
 	char * zephir_owned_cache_prefix;
+	HashTable * ast_cache;
 } zephir_struct_orm;
 
 typedef struct _zephir_struct_extension { 
@@ -72,6 +73,7 @@ ZEND_BEGIN_MODULE_GLOBALS(stub)
 	char * my_setting_5;
 	char * zephir_owned_my_setting_5;
 	zend_ulong my_setting_6;
+	HashTable * my_setting_7;
 	zend_bool module_setting;
 
 ZEND_END_MODULE_GLOBALS(stub)

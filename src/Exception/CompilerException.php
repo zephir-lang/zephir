@@ -187,6 +187,31 @@ class CompilerException extends RuntimeException
     }
 
     /**
+     * A `module` hash global cannot be read or written from Zephir: it lives
+     * across requests and a PHP array is request memory.
+     *
+     * @param string                   $name     the global's name
+     * @param array|null               $extra    extra info [optional]
+     * @param int                      $code     the Exception code [optional]
+     * @param Throwable|null $previous the previous throwable used for the exception chaining [optional]
+     *
+     * @return self
+     */
+    public static function moduleHashGlobal(
+        string $name,
+        ?array $extra = null,
+        int $code = 0,
+        ?Throwable $previous = null,
+    ): self {
+        return new self(
+            "Global '" . $name . "' is a module hash: it lives across requests, so it can only be accessed from C",
+            $extra,
+            $code,
+            $previous
+        );
+    }
+
+    /**
      * Returned Values can only be assigned to variant variables
      *
      * @param array|null               $extra    extra info [optional]

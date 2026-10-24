@@ -925,7 +925,8 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
 	/* Inline property cache (per-request reset defeats stale-ce/ABA reuse) */
 	memset(stub_globals->pcache, '\0', sizeof(void*) * ZEPHIR_MAX_PROPERTY_CACHE_SLOTS * ZEPHIR_PROPERTY_CACHE_SLOT_SIZE);
 
-	
+	stub_globals->orm.ast_cache = NULL;
+	stub_globals->my_setting_7 = NULL;
 	
 }
 
@@ -969,7 +970,8 @@ static PHP_RINIT_FUNCTION(stub)
 
 static PHP_RSHUTDOWN_FUNCTION(stub)
 {
-	
+	zephir_globals_release_hash(&ZEPHIR_GLOBAL(orm).ast_cache);
+	zephir_globals_release_hash(&ZEPHIR_GLOBAL(my_setting_7));
 	zephir_deinitialize_memory();
 	return SUCCESS;
 }

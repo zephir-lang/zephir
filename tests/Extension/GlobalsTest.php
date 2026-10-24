@@ -145,6 +145,57 @@ final class GlobalsTest extends TestCase
         $this->assertFalse($this->test->getDefaultGlobals4());
     }
 
+    /**
+     * @see https://github.com/zephir-lang/zephir/issues/2726
+     */
+    public function testHashValueShouldDefaultToNull(): void
+    {
+        $this->assertNull($this->test->getHashValue());
+        $this->assertNull($this->test->getDefaultGlobalsOrmAstCache());
+    }
+
+    public function testSetHashValue(): void
+    {
+        $this->test->setHashValue(['a' => 1, 'b' => [2]]);
+        $this->assertSame(['a' => 1, 'b' => [2]], $this->test->getHashValue());
+
+        $this->test->setDefaultGlobalsOrmAstCache(['phql' => 'ast']);
+        $this->assertSame(['phql' => 'ast'], $this->test->getDefaultGlobalsOrmAstCache());
+
+        $this->test->setHashValue(null);
+        $this->test->setDefaultGlobalsOrmAstCache(null);
+        $this->assertNull($this->test->getHashValue());
+        $this->assertNull($this->test->getDefaultGlobalsOrmAstCache());
+    }
+
+    public function testSetHashValueCastsLikePhp(): void
+    {
+        $this->test->setHashValue('scalar');
+        $this->assertSame((array) 'scalar', $this->test->getHashValue());
+
+        $this->test->setHashValue((object) ['x' => 1]);
+        $this->assertSame(['x' => 1], $this->test->getHashValue());
+
+        $this->test->setHashValue(null);
+    }
+
+    public function testSetHashValueShouldNotLeak(): void
+    {
+        $this->test->setHashValue([str_repeat('x', 64) . 0]);
+
+        $before = memory_get_usage();
+        for ($i = 1; $i <= 1000; $i++) {
+            $this->test->setHashValue([str_repeat('x', 64) . $i]);
+            $this->test->getHashValue();
+        }
+        $after = memory_get_usage();
+
+        $this->assertSame(0, $after - $before);
+        $this->assertSame([str_repeat('x', 64) . 1000], $this->test->getHashValue());
+
+        $this->test->setHashValue(null);
+    }
+
     public function testShouldSetGlobalExtensionOrmCacheLevel(): void
     {
         $this->test->setDefaultGlobalsOrmCacheLevel(3);

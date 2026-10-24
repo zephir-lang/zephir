@@ -24,7 +24,6 @@ use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Types\Types;
 
 use function count;
-use function explode;
 use function is_string;
 use function strtr;
 
@@ -95,17 +94,6 @@ class GlobalsSetOptimizer extends OptimizerAbstract
         }
     }
 
-    private function resolveInternalAccessor(string $globalName): string
-    {
-        $parts = explode('.', $globalName);
-
-        if (isset($parts[1])) {
-            return strtr('ZEPHIR_GLOBAL(:v).:parts', [':v' => $parts[0], ':parts' => $parts[1]]);
-        }
-
-        return strtr('ZEPHIR_GLOBAL(:v)', [':v' => $parts[0]]);
-    }
-
     /**
      * Emits the write of `$value` (a `zval *`) to the global.
      *
@@ -113,8 +101,6 @@ class GlobalsSetOptimizer extends OptimizerAbstract
      * without __toString(), and any of them through an error handler that
      * turns the "could not be converted" warning into an exception. PHP's cast
      * produces no value then, so the global is left alone and execution stops.
-     *
-     * TODO:  Add 'hash' support
      *
      * @throws CompilerException
      * @throws InvalidArgumentException
@@ -127,7 +113,8 @@ class GlobalsSetOptimizer extends OptimizerAbstract
         string $value
     ): void {
         $type     = $definition['type'];
-        $accessor = $this->resolveInternalAccessor($name);
+        $global   = new ExtensionGlobal($name, $definition);
+        $accessor = $global->accessor();
 
         switch ($type) {
             case Types::T_BOOLEAN:
@@ -148,11 +135,23 @@ class GlobalsSetOptimizer extends OptimizerAbstract
                  * The member may point into the ini entry, which the engine
                  * owns, so the kernel writes a copy the extension owns instead.
                  */
-                $owned = (new ExtensionGlobal($name, $definition))->ownedMember();
                 $context->codePrinter->output(
                     'zephir_globals_set_string(&' . $accessor . ', &'
-                    . $this->resolveInternalAccessor($owned) . ', ' . $value . ');'
+                    . ExtensionGlobal::accessorOf($global->ownedMember()) . ', ' . $value . ');'
                 );
+                $context->emitExceptionCheck();
+                break;
+
+            case Types::T_HASH:
+                /**
+                 * The kernel converts as `(array)` does and releases the old
+                 * table, and either can throw (#2726).
+                 */
+                if ($global->isModule()) {
+                    throw CompilerException::moduleHashGlobal($name, $expression);
+                }
+
+                $context->codePrinter->output('zephir_globals_set_hash(&' . $accessor . ', ' . $value . ');');
                 $context->emitExceptionCheck();
                 break;
 
