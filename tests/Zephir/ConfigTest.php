@@ -207,6 +207,42 @@ final class ConfigTest extends TestCase
         $this->assertSame([], $config->getUnknownSectionKeys());
     }
 
+    /**
+     * The generic `--<name>` branch used to `continue` past the switch that
+     * handles `--quiet` and `--verbose`, so only `-q` and `-v` worked.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2728
+     */
+    public function testShouldApplyTheLongQuietFlag(): void
+    {
+        $config = $this->configFromArgv(['zephir', 'generate', '--quiet']);
+
+        $this->assertTrue($config->get('silent'));
+    }
+
+    /**
+     * The repo's own config.json sets `verbose`, so `-V` goes first: a
+     * `--verbose` that is ignored then reads back false, not true.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2728
+     */
+    public function testShouldApplyTheLongVerboseFlag(): void
+    {
+        $config = $this->configFromArgv(['zephir', 'generate', '-V', '--verbose']);
+
+        $this->assertTrue($config->get('verbose'));
+    }
+
+    /**
+     * @see https://github.com/zephir-lang/zephir/issues/2728
+     */
+    public function testShouldLetTheLastVerbosityFlagWin(): void
+    {
+        $config = $this->configFromArgv(['zephir', 'generate', '--verbose', '-V']);
+
+        $this->assertFalse($config->get('verbose'));
+    }
+
     private function configFromArgv(array $argv): Config
     {
         $argvBackup = $_SERVER['argv'];

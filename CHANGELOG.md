@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `--quiet` and `--verbose` being ignored while `-q` and `-v` worked [#2728](https://github.com/zephir-lang/zephir/issues/2728)
+- Fixed `-q`, `-v`, `-V`, `--quiet` or `--verbose` before the command printing the help screen instead of running it [#2728](https://github.com/zephir-lang/zephir/issues/2728)
+- Fixed the `verbose` setting and `-v` having no effect instead of printing the stack trace of a failed `generate` or `build` [#2728](https://github.com/zephir-lang/zephir/issues/2728)
+- Fixed `--version`, `--dumpversion` and `-dumpversion` printing the help screen instead of the version [#2728](https://github.com/zephir-lang/zephir/issues/2728)
 - Fixed `globals_get()` and `globals_set()` rejecting `hash` extension globals [#2726](https://github.com/zephir-lang/zephir/issues/2726)
 - Fixed a `hash` global with a default other than `NULL` breaking the C build instead of being reported [#2726](https://github.com/zephir-lang/zephir/issues/2726)
 - Fixed an `ini-entry` on a `hash` global being silently ignored [#2726](https://github.com/zephir-lang/zephir/issues/2726)
