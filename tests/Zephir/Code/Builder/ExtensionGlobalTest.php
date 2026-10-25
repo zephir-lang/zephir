@@ -214,7 +214,8 @@ final class ExtensionGlobalTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Extension global "cache" is a hash, so its default must be null');
 
-        new ExtensionGlobal('cache', ['type' => 'hash', 'default' => $default]);
+        /* The constructor rejects it, so cDefault() is never reached. */
+        (new ExtensionGlobal('cache', ['type' => 'hash', 'default' => $default]))->cDefault('stub');
     }
 
     /**
@@ -227,7 +228,12 @@ final class ExtensionGlobalTest extends TestCase
             'Extension global "cache" is a hash, which cannot have an ini-entry: an INI value is always a string'
         );
 
-        new ExtensionGlobal('cache', ['type' => 'hash', 'default' => 'NULL', 'ini-entry' => ['name' => 'stub.cache']]);
+        /* The constructor rejects it, so iniEntry() is never reached. */
+        (new ExtensionGlobal('cache', [
+            'type'      => 'hash',
+            'default'   => 'NULL',
+            'ini-entry' => ['name' => 'stub.cache'],
+        ]))->iniEntry('stub');
     }
 
     public function testShouldAccessAPlainGlobal(): void

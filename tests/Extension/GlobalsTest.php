@@ -179,21 +179,30 @@ final class GlobalsTest extends TestCase
         $this->test->setHashValue(null);
     }
 
+    /**
+     * Both samples are taken with the global back at null. Comparing the
+     * first array with the last one instead assumed the two cost the same,
+     * which PHP 8.2.35, 8.3.36 and 8.5.12 no longer guarantee: the same loop
+     * in plain PHP measures -16 there.
+     */
     public function testSetHashValueShouldNotLeak(): void
     {
         $this->test->setHashValue([str_repeat('x', 64) . 0]);
+        $this->test->getHashValue();
+        $this->test->setHashValue(null);
 
         $before = memory_get_usage();
         for ($i = 1; $i <= 1000; $i++) {
             $this->test->setHashValue([str_repeat('x', 64) . $i]);
             $this->test->getHashValue();
         }
+        /* Compared into a bool, so the last array is freed with the global. */
+        $lastWasKept = [str_repeat('x', 64) . 1000] === $this->test->getHashValue();
+        $this->test->setHashValue(null);
         $after = memory_get_usage();
 
         $this->assertSame(0, $after - $before);
-        $this->assertSame([str_repeat('x', 64) . 1000], $this->test->getHashValue());
-
-        $this->test->setHashValue(null);
+        $this->assertTrue($lastWasKept);
     }
 
     public function testShouldSetGlobalExtensionOrmCacheLevel(): void
