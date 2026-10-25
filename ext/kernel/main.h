@@ -690,6 +690,39 @@ void zephir_globals_set_string(char **member, char **owned, zval *value);
 void zephir_globals_release_string(char **owned);
 
 /**
+ * globals_set() for an extension global declared as `hash`.
+ *
+ * The member is NULL or holds one reference to a request array, which may be
+ * shared with PHP variables: C code writing to the table must separate it
+ * first when GC_REFCOUNT() > 1, release it with zend_array_release(), and put
+ * NULL back when it frees it itself.
+ *
+ * null puts the member back to NULL, its only valid default. Any other value
+ * is converted as `(array)` does in PHP. An immutable table (`[]`, an opcache
+ * literal) is copied, so C never receives one it cannot write to.
+ *
+ * The new table is stored before the old one is released, as PHP assigns
+ * before freeing the old value, so a destructor that runs then reads the new
+ * one. The caller checks EG(exception): the conversion and that destructor
+ * can both throw.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2726
+ */
+void zephir_globals_set_hash(HashTable **member, zval *value);
+
+/**
+ * globals_get() for an extension global declared as `hash`: null while the
+ * member is NULL, otherwise the table itself, shared copy-on-write.
+ */
+void zephir_globals_get_hash(zval *result, HashTable *member);
+
+/**
+ * Releases the table a `hash` global holds and puts it back to NULL. Called
+ * for every request `hash` global at the end of the request.
+ */
+void zephir_globals_release_hash(HashTable **member);
+
+/**
  * Z_PARAM_ARRAY(dest) expands to a call to zend_parse_arg_array(_arg, &dest, ...).
  * The inline function has taken `zval **dest` since at least PHP 7.0, so the
  * variable passed to the macro must be a `zval *` for `&dest` to have the

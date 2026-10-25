@@ -14,15 +14,15 @@ declare(strict_types=1);
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
+use Zephir\Code\Builder\ExtensionGlobal;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
+use Zephir\Exception\InvalidArgumentException;
 use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Types\Types;
 
 use function count;
-use function explode;
-use function str_contains;
 
 /**
  * `globals_get()` internal function.
@@ -63,8 +63,13 @@ class GlobalsGetOptimizer extends OptimizerAbstract
             );
         }
 
-        $type     = $context->compiler->getExtensionGlobal($globalName)['type'];
-        $accessor = $this->resolveInternalAccessor($globalName);
+        $definition = $context->compiler->getExtensionGlobal($globalName);
+        $type       = $definition['type'];
+        $accessor   = ExtensionGlobal::accessorOf($globalName);
+
+        if (Types::T_HASH === $type) {
+            return $this->readHash($globalName, $definition, $accessor, $expression, $call, $context);
+        }
 
         if (Types::T_STRING !== $type) {
             return new CompiledExpression($type, $accessor, $expression);
@@ -90,14 +95,44 @@ class GlobalsGetOptimizer extends OptimizerAbstract
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 
-    private function resolveInternalAccessor(string $globalName): string
-    {
-        if (str_contains($globalName, '.')) {
-            $parts = explode('.', $globalName);
-
-            return 'ZEPHIR_GLOBAL(' . $parts[0] . ').' . $parts[1];
+    /**
+     * A `hash` compiled expression could not be boxed by anything, so a hash
+     * global was readable from C only. It is read into a zval instead: null
+     * while the member is NULL, otherwise the table, shared copy-on-write.
+     * Being nullable, it can only be received by a variant (#2726).
+     *
+     * @throws CompilerException
+     */
+    private function readHash(
+        string $globalName,
+        array $definition,
+        string $accessor,
+        array $expression,
+        Call $call,
+        CompilationContext $context
+    ): CompiledExpression {
+        try {
+            $global = new ExtensionGlobal($globalName, $definition);
+        } catch (InvalidArgumentException $e) {
+            /* The classes are compiled first, so this is where a bad definition shows up. */
+            throw new CompilerException($e->getMessage(), $expression, $e->getCode(), $e);
         }
 
-        return 'ZEPHIR_GLOBAL(' . $globalName . ')';
+        if ($global->isModule()) {
+            throw CompilerException::moduleHashGlobal($globalName, $expression);
+        }
+
+        $call->processExpectedReturn($context);
+
+        $symbolVariable = $call->getSymbolVariable(true, $context);
+        $this->checkNotVariable($symbolVariable, $expression);
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
+        $symbolVariable->setDynamicTypes(['array', 'null']);
+
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        $context->codePrinter->output('zephir_globals_get_hash(' . $symbol . ', ' . $accessor . ');');
+
+        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

@@ -330,3 +330,53 @@ PHP_METHOD(Stub_Globals, setModuleSetting)
 	ZEPHIR_GLOBAL(module_setting) = zend_is_true(value);
 }
 
+PHP_METHOD(Stub_Globals, setHashValue)
+{
+	zval *value, value_sub;
+
+	ZVAL_UNDEF(&value_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &value);
+	zephir_globals_set_hash(&ZEPHIR_GLOBAL(my_setting_7), value);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+}
+
+/**
+ * @return array|null
+ */
+PHP_METHOD(Stub_Globals, getHashValue)
+{
+
+	zephir_globals_get_hash(return_value, ZEPHIR_GLOBAL(my_setting_7));
+	return;
+}
+
+PHP_METHOD(Stub_Globals, setDefaultGlobalsOrmAstCache)
+{
+	zval *value, value_sub;
+
+	ZVAL_UNDEF(&value_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &value);
+	zephir_globals_set_hash(&ZEPHIR_GLOBAL(orm).ast_cache, value);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+}
+
+/**
+ * @return array|null
+ */
+PHP_METHOD(Stub_Globals, getDefaultGlobalsOrmAstCache)
+{
+
+	zephir_globals_get_hash(return_value, ZEPHIR_GLOBAL(orm).ast_cache);
+	return;
+}
+

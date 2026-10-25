@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `globals_get()` and `globals_set()` rejecting `hash` extension globals [#2726](https://github.com/zephir-lang/zephir/issues/2726)
+- Fixed a `hash` global with a default other than `NULL` breaking the C build instead of being reported [#2726](https://github.com/zephir-lang/zephir/issues/2726)
+- Fixed an `ini-entry` on a `hash` global being silently ignored [#2726](https://github.com/zephir-lang/zephir/issues/2726)
 - Fixed `globals_set()` on a `string` global leaking the value on every call [#2725](https://github.com/zephir-lang/zephir/issues/2725)
 - Fixed a `module` `string` global set by `globals_set()` reading freed memory in the next request [#2725](https://github.com/zephir-lang/zephir/issues/2725)
 - Fixed `globals_set()` writing an empty string and continuing when the value cannot be converted to `string` [#2725](https://github.com/zephir-lang/zephir/issues/2725)
@@ -107,6 +110,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Changed
 - Raised the minimum `ext-zephir_parser` to 2.9.0 for the `instanceof static` grammar [#2714](https://github.com/zephir-lang/zephir/issues/2714)
+- Released the table a request `hash` global holds at the end of the request, so C code freeing it must reset it to `NULL` [#2726](https://github.com/zephir-lang/zephir/issues/2726)
 
 ## [1.6.1] - 2026-10-02
 
