@@ -115,6 +115,22 @@ class Config implements ArrayAccess, JsonSerializable
     private const VALIDATED_SECTIONS = ['warnings', 'optimizations'];
 
     /**
+     * Command-line flags that set a top-level setting: flag => [setting, value].
+     *
+     * Matched before the generic `--<name>` pattern, which used to swallow
+     * `--quiet` and `--verbose`. Taken out of argv like every other flag
+     * handled here, otherwise the CLI parser reads the command that follows
+     * as the flag's value (#2728).
+     */
+    private const OUTPUT_FLAGS = [
+        '-q'        => ['silent', true],
+        '--quiet'   => ['silent', true],
+        '-v'        => ['verbose', true],
+        '--verbose' => ['verbose', true],
+        '-V'        => ['verbose', false],
+    ];
+
+    /**
      * Is config changed?
      */
     protected bool $changed = false;
@@ -277,6 +293,13 @@ class Config implements ArrayAccess, JsonSerializable
             for ($i = 1; $i < $_SERVER['argc']; ++$i) {
                 $parameter = $argv[$i];
 
+                if (isset(self::OUTPUT_FLAGS[$parameter])) {
+                    [$setting, $value] = self::OUTPUT_FLAGS[$parameter];
+                    $config->set($setting, $value);
+                    unset($argv[$i]);
+                    continue;
+                }
+
                 if (preg_match('/^-fno-([a-z0-9\-]+)$/', $parameter, $matches)) {
                     $config->setFlag('optimizations', $matches[1], false);
                     unset($argv[$i]);
@@ -317,24 +340,6 @@ class Config implements ArrayAccess, JsonSerializable
                         $config->set($matches[1], $matches[2], 'extra');
                         unset($argv[$i]);
                     }
-
-                    continue;
-                }
-
-                switch ($parameter) {
-                    case '-q':
-                    case '--quiet':
-                        $config->set('silent', true);
-                        break;
-                    case '-v':
-                    case '--verbose':
-                        $config->set('verbose', true);
-                        break;
-                    case '-V':
-                        $config->set('verbose', false);
-                        break;
-                    default:
-                        break;
                 }
             }
 
