@@ -63,7 +63,17 @@ HEAD;
                 $retParam         = 'return_value_ptr';
                 $initStatements[] = 'ZEPHIR_INIT_NVAR((return_value_ptr)); \\';
             }
-            $objParam  = $scope ? 'scope_ce, ' : 'object, ';
+
+            /**
+             * The method body runs in the scope of the class that declares it,
+             * which is not the object's class when the method is inherited:
+             * PHP checks every private and protected member the body reaches
+             * against that class. The called scope stays the object's class
+             * (the class the call names, for a static call).
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2734
+             */
+            $objParam  = $scope ? 'scope_ce, called_ce, ' : 'object, scope_ce, ';
             $macroName = $name . '(' . ($retParam ? $retParam . ', ' : '') . $objParam . 'method' . $paramsStr . ')';
             $codePrinter->output('#define ' . $macroName . ' \\');
             if (!$retParam) {
@@ -84,11 +94,11 @@ HEAD;
             if (!$scope) {
                 $codePrinter->output('ZEPHIR_SET_THIS(object); \\');
                 $codePrinter->output(
-                    'ZEPHIR_SET_SCOPE((Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL), (Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL)); \\'
+                    'ZEPHIR_SET_SCOPE(scope_ce, (Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL)); \\'
                 );
             } else {
                 $codePrinter->output('ZEPHIR_SET_THIS_EXPLICIT_NULL(); \\');
-                $codePrinter->output('ZEPHIR_SET_SCOPE(scope_ce, scope_ce); \\');
+                $codePrinter->output('ZEPHIR_SET_SCOPE(scope_ce, called_ce); \\');
             }
 
             /* Create new zval's for parameters */
@@ -109,7 +119,7 @@ HEAD;
                 sprintf(
                     'method(0, execute_data, %s, %s%s%s); \\',
                     $retParam,
-                    $scope ? 'NULL, ' : $objParam,
+                    $scope ? 'NULL, ' : 'object, ',
                     $retValueUsed,
                     $i ? ', &' . implode(', &', $zvals) : ''
                 )

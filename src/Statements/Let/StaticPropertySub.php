@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
+use Zephir\Class\Visibility;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -68,17 +69,19 @@ class StaticPropertySub
             $statement
         );
 
-        if ($propertyDefinition->isPrivate()) {
-            if ($classDefinition->getCompleteName() != $compilationContext->classDefinition->getCompleteName()) {
-                throw new CompilerException(
-                    sprintf(
-                        "Cannot access private static property '%s::%s out of its declaring context",
-                        $classDefinition->getCompleteName(),
-                        $property
-                    ),
-                    $statement
-                );
-            }
+        /**
+         * @see https://github.com/zephir-lang/zephir/issues/2734
+         */
+        if (!Visibility::canAccessProperty($propertyDefinition, $compilationContext)) {
+            throw new CompilerException(
+                sprintf(
+                    "Cannot access %s static property '%s::%s' out of its declaring context",
+                    $propertyDefinition->isPrivate() ? 'private' : 'protected',
+                    $classDefinition->getCompleteName(),
+                    $property
+                ),
+                $statement
+            );
         }
 
         $codePrinter = $compilationContext->codePrinter;

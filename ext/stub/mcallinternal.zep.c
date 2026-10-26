@@ -106,7 +106,7 @@ PHP_METHOD(Stub_McallInternal, d)
 				_0 = 1;
 			}
 			i = _1;
-			ZEPHIR_CALL_INTERNAL_METHOD_P0(&_3$$3, this_ptr, zep_Stub_McallInternal_a);
+			ZEPHIR_CALL_INTERNAL_METHOD_P0(&_3$$3, this_ptr, stub_mcallinternal_ce, zep_Stub_McallInternal_a);
 			zephir_check_call_status();
 			a += zephir_get_intval(&_3$$3);
 		}
@@ -182,7 +182,7 @@ PHP_METHOD(Stub_McallInternal, g)
 			i = _1;
 			ZVAL_LONG(&_4$$3, i);
 			ZVAL_LONG(&_5$$3, i);
-			ZEPHIR_CALL_INTERNAL_METHOD_P2(&_3$$3, this_ptr, zep_Stub_McallInternal_c, &_4$$3, &_5$$3);
+			ZEPHIR_CALL_INTERNAL_METHOD_P2(&_3$$3, this_ptr, stub_mcallinternal_ce, zep_Stub_McallInternal_c, &_4$$3, &_5$$3);
 			zephir_check_call_status();
 			a += zephir_get_intval(&_3$$3);
 		}
@@ -237,7 +237,7 @@ PHP_METHOD(Stub_McallInternal, callFibonacci)
 			i = _1;
 			ZVAL_LONG(&_4$$3, i);
 			ZVAL_LONG(&_5$$3, (i + 1));
-			ZEPHIR_CALL_INTERNAL_METHOD_P2(&_3$$3, this_ptr, zep_Stub_McallInternal_other, &_4$$3, &_5$$3);
+			ZEPHIR_CALL_INTERNAL_METHOD_P2(&_3$$3, this_ptr, stub_mcallinternal_ce, zep_Stub_McallInternal_other, &_4$$3, &_5$$3);
 			zephir_check_call_status();
 			p +=  (zephir_get_doubleval(&_3$$3));
 		}
@@ -259,7 +259,7 @@ PHP_METHOD(Stub_McallInternal, issue1956)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(this_ptr, zep_Stub_McallInternal_test1956);
+	ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(this_ptr, stub_mcallinternal_ce, zep_Stub_McallInternal_test1956);
 	zephir_check_call_status();
 	RETURN_MM();
 }

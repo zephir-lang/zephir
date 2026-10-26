@@ -1,0 +1,72 @@
+--TEST--
+Issue #2734: an internal method runs in the scope of its class, and internal-call-transformation keeps PHP's choice of a shadowed private method
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class IBase
+{
+    private function priv() -> string
+    {
+        return "IBase::priv";
+    }
+
+    internal function step() -> string
+    {
+        return this->priv();
+    }
+
+    public function run() -> string
+    {
+        return this->step();
+    }
+}
+--FILE--
+namespace Stub;
+
+class IChild extends IBase
+{
+}
+--FILE--
+namespace Stub;
+
+class TBase
+{
+    private function m() -> string
+    {
+        return "TBase::m";
+    }
+
+    public function callOn(<TChild> b) -> string
+    {
+        return b->m();
+    }
+}
+--FILE--
+namespace Stub;
+
+class TChild extends TBase
+{
+    final public function m() -> string
+    {
+        return "TChild::m";
+    }
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+t("internal on child", fn() => (new \Stub\IChild())->run());
+t("final shadow of private", fn() => (new \Stub\TBase())->callOn(new \Stub\TChild()));
+--EXPECT--
+internal on child: IBase::priv
+final shadow of private: TBase::m

@@ -15,6 +15,7 @@ namespace Zephir\Expression;
 
 use ReflectionException;
 use Zephir\Class\Property;
+use Zephir\Class\Visibility;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -24,6 +25,7 @@ use Zephir\Traits\WriteContextSlotTrait;
 use Zephir\Variable\Variable;
 
 use function in_array;
+use function sprintf;
 
 /**
  * Resolves class static properties
@@ -94,30 +96,20 @@ class StaticPropertyAccess
             $expression
         );
 
-        if ($propertyDefinition->isPrivate()) {
-            if ($classDefinition !== $compilationContext->classDefinition) {
-                throw new CompilerException(
-                    "Cannot access private static property '"
-                    . $classDefinition->getCompleteName()
-                    . '::'
-                    . $property
-                    . "' out of its declaring context",
-                    $expression
-                );
-            }
-        }
-
-        if (
-            $propertyDefinition->isProtected() &&
-            $classDefinition !== $compilationContext->classDefinition &&
-            $classDefinition !== $compilationContext->classDefinition->getExtendsClassDefinition()
-        ) {
+        /**
+         * Checked against the class the code is written in, at any depth of
+         * inheritance, as PHP checks it.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2734
+         */
+        if (!Visibility::canAccessProperty($propertyDefinition, $compilationContext)) {
             throw new CompilerException(
-                "Cannot access protected static property '"
-                . $classDefinition->getCompleteName()
-                . '::'
-                . $property
-                . "' out of its declaring context",
+                sprintf(
+                    "Cannot access %s static property '%s::%s' out of its declaring context",
+                    $propertyDefinition->isPrivate() ? 'private' : 'protected',
+                    $classDefinition->getCompleteName(),
+                    $property
+                ),
                 $expression
             );
         }

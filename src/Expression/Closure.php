@@ -144,6 +144,19 @@ class Closure
         $classDefinition->setIsClosure(true);
         $classDefinition->setSourceNamespace($compilationContext->currentNamespace());
 
+        /**
+         * The body runs in the scope of the class it is written in, whether or
+         * not it uses `this`: PHP checks every private and protected member it
+         * reaches against that class. A closure in a function has no class.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2734
+         */
+        if (null !== $compilationContext->classDefinition) {
+            $classDefinition->setEnclosingClassDefinition(
+                self::enclosingUserClass($compilationContext->classDefinition)
+            );
+        }
+
         $compilerFile = new CompilerFileAnonymous($classDefinition, $compilationContext->config, $compilationContext);
         $compilerFile->setLogger($compilationContext->logger);
 
@@ -221,15 +234,10 @@ class Closure
 
         /**
          * Detect if the closure body references `this`.
-         * If so, we need to bind the enclosing object to the closure and set
-         * the enclosing class definition for compile-time resolution.
+         * If so, we need to bind the enclosing object to the closure.
          */
         $bindThis = self::astReferencesThis($block);
         if ($bindThis) {
-            $classDefinition->setEnclosingClassDefinition(
-                self::enclosingUserClass($compilationContext->classDefinition)
-            );
-
             // Ensure this_ptr is declared and not stripped in the enclosing method
             if ($compilationContext->symbolTable->hasVariable('this')) {
                 $compilationContext->symbolTable->getVariable('this')->setUsed(true);

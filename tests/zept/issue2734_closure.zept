@@ -1,0 +1,98 @@
+--TEST--
+Issue #2734: a closure calls methods with the visibility of the class it is written in, whatever the class of $this
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class CParent
+{
+    private function secret() -> string
+    {
+        return "CParent::secret";
+    }
+
+    protected function prot() -> string
+    {
+        return "CParent::prot";
+    }
+
+    public function makeThisClosure()
+    {
+        return function () {
+            return this->secret();
+        };
+    }
+
+    public function makeOtherClosure()
+    {
+        return function (var o) {
+            return o->prot();
+        };
+    }
+
+    public function makeOtherPrivate()
+    {
+        return function (var o) {
+            return o->secret();
+        };
+    }
+
+    public static function makeStatic()
+    {
+        return function (var o) {
+            return o->prot();
+        };
+    }
+
+    public function makeNested()
+    {
+        return function () {
+            return function (var o) {
+                return o->secret();
+            };
+        };
+    }
+}
+--FILE--
+namespace Stub;
+
+class CChild extends CParent
+{
+}
+--FILE--
+namespace Stub;
+
+class COther
+{
+    public function makeClosure()
+    {
+        return function (var o) {
+            return o->prot();
+        };
+    }
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+
+t("this closure on child", fn() => ((new \Stub\CChild())->makeThisClosure())());
+t("closure without this", fn() => ((new \Stub\CParent())->makeOtherClosure())(new \Stub\CChild()));
+t("closure private other instance", fn() => ((new \Stub\CChild())->makeOtherPrivate())(new \Stub\CChild()));
+t("static closure", fn() => (\Stub\CParent::makeStatic())(new \Stub\CChild()));
+t("nested closure", fn() => (((new \Stub\CChild())->makeNested())())(new \Stub\CParent()));
+t("unrelated closure", fn() => ((new \Stub\COther())->makeClosure())(new \Stub\CParent()));
+--EXPECT--
+this closure on child: CParent::secret
+closure without this: CParent::prot
+closure private other instance: CParent::secret
+static closure: CParent::prot
+nested closure: CParent::secret
+unrelated closure: Error: Call to protected method Stub\CParent::prot() from scope Stub\COther

@@ -41,6 +41,8 @@ PHP_METHOD(Stub_Issue2324, makeStatic)
 
 	ZEPHIR_INIT_VAR(&obj);
 	object_init_ex(&obj, zend_get_called_scope(execute_data));
+	ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(&obj);
+	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(NULL, &obj, "__construct", NULL, 1);
 	zephir_check_call_status();
 	zephir_get_class(return_value, &obj, 0);
@@ -77,6 +79,8 @@ PHP_METHOD(Stub_Issue2324, makeStaticInstance)
 
 	ZEPHIR_INIT_VAR(&obj);
 	object_init_ex(&obj, zend_get_called_scope(execute_data));
+	ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(&obj);
+	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(NULL, &obj, "__construct", NULL, 1);
 	zephir_check_call_status();
 	zephir_get_class(return_value, &obj, 0);
