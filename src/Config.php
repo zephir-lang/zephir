@@ -19,7 +19,7 @@ use ReturnTypeWillChange;
 
 use function array_key_exists;
 use function array_keys;
-use function array_merge;
+use function array_replace_recursive;
 use function array_values;
 use function count;
 use function current;
@@ -92,21 +92,6 @@ class Config implements ArrayAccess, JsonSerializable
     ];
 
     /**
-     * Sections whose file contents are merged into the defaults rather than
-     * replacing them.
-     *
-     * A `warnings` block that omits a key used to delete it, so the key read
-     * back as null, which is falsy, which the formatter took for "off". That
-     * is how `deprecated-strict-type` went dead for every build run from this
-     * repo's own root (#2727).
-     *
-     * `optimizations` is deliberately absent: cphalcon's config.json omits
-     * `call-gatherer-pass`, so merging would switch it on and change the
-     * generated C. That one needs its own change and its own validation.
-     */
-    private const MERGED_SECTIONS = ['warnings'];
-
-    /**
      * Sections whose keys are checked against the ones Zephir reads.
      *
      * A misspelling here is inert, exactly like a misspelled top-level
@@ -138,10 +123,10 @@ class Config implements ArrayAccess, JsonSerializable
     /**
      * The built-in configuration, captured before config.json is read.
      *
-     * `populate()` overwrites whole sections of `$container`, so the container
-     * cannot answer "is this a setting Zephir knows about?" once a project
-     * file has been loaded. This snapshot can, and it is the single registry
-     * of warning keys (#2727).
+     * A project file may add keys of its own to a section, so the container
+     * cannot answer "is this a setting Zephir knows about?" once that file
+     * has been loaded. This snapshot can, and it is the single registry of
+     * warning keys (#2727).
      */
     private array $defaults;
 
@@ -542,8 +527,19 @@ class Config implements ArrayAccess, JsonSerializable
                         $this->collectUnknownSectionKeys((string) $key, $configSection);
                     }
 
-                    if (is_array($configSection) && in_array((string) $key, self::MERGED_SECTIONS, true)) {
-                        $this->container[$key] = array_merge($this->defaults[$key], $configSection);
+                    /**
+                     * A section overrides the defaults key by key. Replacing
+                     * it deleted every key it left out, which then read back
+                     * as null: cphalcon lists 5 of the 8 optimizations, so
+                     * `call-gatherer-pass` was off there, and a `stubs` block
+                     * without `path` broke `zephir stubs` (#2727, #2731).
+                     *
+                     * Recursive, so `api.theme.options` survives a `theme`
+                     * that only names itself. A list default would merge by
+                     * index; the only one, `requires.extensions`, is empty.
+                     */
+                    if (is_array($configSection) && is_array($this->defaults[$key] ?? null)) {
+                        $this->container[$key] = array_replace_recursive($this->defaults[$key], $configSection);
                         continue;
                     }
 

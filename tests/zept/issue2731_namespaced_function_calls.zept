@@ -1,0 +1,100 @@
+--TEST--
+Issue #2731: a function call resolves against the current namespace as PHP does, written plain, fully qualified or relative
+--FILE--
+namespace Stub\Sub;
+
+function inner(int a) -> string
+{
+    return "sub:" . a;
+}
+
+class Helper
+{
+}
+--FILE--
+namespace Stub;
+
+function tagged(int a) -> string
+{
+    return "stub:" . a;
+}
+
+/**
+ * Shadows the PHP function, and its optimizer, inside this namespace.
+ */
+function strtolower(string s) -> string
+{
+    return "shadowed:" . s;
+}
+
+function outer(int a) -> string
+{
+    return tagged(a);
+}
+
+class Caller
+{
+    public function unqualified() -> string
+    {
+        return tagged(1);
+    }
+
+    public function qualified() -> string
+    {
+        return \Stub\tagged(2);
+    }
+
+    public function relative() -> string
+    {
+        return Sub\inner(3);
+    }
+
+    public function fromFunction() -> string
+    {
+        return outer(4);
+    }
+
+    public function fromClosure() -> string
+    {
+        var f;
+
+        let f = function () {
+            return tagged(5);
+        };
+
+        return call_user_func(f);
+    }
+
+    public function shadowed() -> string
+    {
+        return strtolower("ABC");
+    }
+
+    public function globalFallback() -> string
+    {
+        return ucfirst("x");
+    }
+
+    public function qualifiedGlobal() -> string
+    {
+        return \trim("  t  ") . \nl2br("n");
+    }
+}
+--USAGE--
+$c = new \Stub\Caller();
+foreach (["unqualified", "qualified", "relative", "fromFunction", "fromClosure", "shadowed", "globalFallback", "qualifiedGlobal"] as $m) {
+    try {
+        echo $m, "=", $c->$m(), "\n";
+    } catch (\Throwable $e) {
+        echo $m, " threw ", get_class($e), ": ", json_encode($e->getMessage()), "\n";
+    }
+}
+--EXPECT--
+unqualified=stub:1
+qualified=stub:2
+relative=sub:3
+fromFunction=stub:4
+fromClosure=stub:5
+shadowed=shadowed:ABC
+globalFallback=X
+qualifiedGlobal=tn

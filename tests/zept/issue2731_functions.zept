@@ -1,0 +1,39 @@
+--TEST--
+Issue #2731: functions compile with call-gatherer-pass off, attributes included, and an empty one loads without a warning
+--CONFIG--
+{"optimizations": {"call-gatherer-pass": false}}
+--INI--
+display_errors=stdout
+display_startup_errors=1
+--FILE--
+namespace Stub;
+
+#[Marker("on-a-function", 4 + 3)]
+function tagged(int a) -> int
+{
+    return a;
+}
+
+function nothing()
+{
+}
+
+class Caller
+{
+    public function twice(string s) -> string
+    {
+        return str_rot13(s) . str_rot13(s);
+    }
+}
+--USAGE--
+foreach ((new ReflectionFunction("Stub\\tagged"))->getAttributes() as $attribute) {
+    echo $attribute->getName(), json_encode($attribute->getArguments()), "\n";
+}
+var_dump(\Stub\tagged(5));
+var_dump(\Stub\nothing());
+var_dump((new \Stub\Caller())->twice("abc"));
+--EXPECT--
+Stub\Marker["on-a-function",7]
+int(5)
+NULL
+string(6) "nopnop"
