@@ -1,0 +1,45 @@
+--TEST--
+Issue #2734: an inaccessible static method does not fall back to __call() on PHP 8.0
+--SKIPIF--
+<?php if (PHP_VERSION_ID >= 80100) { echo "skip PHP 8.1+ falls back to __call()"; }
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class SCallParent
+{
+    private static function spriv() -> string
+    {
+        return "SCallParent::spriv";
+    }
+
+    public function __call(string name, array args) -> string
+    {
+        return "SCallParent::__call(" . name . ")";
+    }
+}
+--FILE--
+namespace Stub;
+
+class SCallChild extends SCallParent
+{
+    public function run(string cls) -> string
+    {
+        return {cls}::spriv();
+    }
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+
+t("__call for inaccessible static", fn() => (new \Stub\SCallChild())->run(\Stub\SCallParent::class));
+--EXPECT--
+__call for inaccessible static: Error: Call to private method Stub\SCallParent::spriv() from scope Stub\SCallChild

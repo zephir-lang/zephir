@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed a protected method or static property inherited from a grandparent being rejected at compile time [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed a protected or private method called on a typed variable from an unrelated class compiling [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed protected and private methods being callable from any class at runtime instead of throwing `Error` [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed an inaccessible method not falling back to `__call()` or `__callStatic()`, and a subclass method running instead of the caller's private method of the same name [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed closures running in the scope of the class of `this` instead of the class they are written in [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed an `internal` method running in the scope of the object's class instead of its own class [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed `self::method()` running the method of the object's class instead of the one where the call is written [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed `static::method()` reusing the private method resolved for another called class [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed `new` of a class outside the extension or with `static`, and `clone`, ignoring the visibility of `__construct()` and `__clone()` [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed an array callable crashing when called a second time, and an inaccessible one reported as an undefined function [#2734](https://github.com/zephir-lang/zephir/issues/2734)
 - Fixed a key omitted from the `optimizations` section of `config.json` being turned off instead of keeping its default [#2731](https://github.com/zephir-lang/zephir/issues/2731)
 - Fixed a key omitted from the `stubs`, `extra` or `api` section of `config.json` breaking `zephir stubs`, `zephir api` and `--indent` instead of keeping its default [#2731](https://github.com/zephir-lang/zephir/issues/2731)
 - Fixed `call-gatherer-pass` turned off crashing the compiler on a function and dropping function attributes [#2731](https://github.com/zephir-lang/zephir/issues/2731)

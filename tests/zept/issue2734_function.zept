@@ -1,0 +1,57 @@
+--TEST--
+Issue #2734: a function calls methods from the global scope, whatever class called the function
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+function callProt(var o)
+{
+    return o->prot();
+}
+
+function makeCaller()
+{
+    return function (var o) {
+        return o->prot();
+    };
+}
+
+function makeCapturingCaller(string suffix)
+{
+    return function (var o) use (suffix) {
+        return o->prot() . suffix;
+    };
+}
+
+class FBase
+{
+    protected function prot() -> string
+    {
+        return "FBase::prot";
+    }
+
+    public function viaFunction(var o)
+    {
+        return \Stub\callProt(o);
+    }
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+t("function from global", fn() => \Stub\callProt(new \Stub\FBase()));
+t("closure from function", fn() => (\Stub\makeCaller())(new \Stub\FBase()));
+t("capturing closure from function", fn() => (\Stub\makeCapturingCaller("!"))(new \Stub\FBase()));
+t("function from class", fn() => (new \Stub\FBase())->viaFunction(new \Stub\FBase()));
+--EXPECT--
+function from global: Error: Call to protected method Stub\FBase::prot() from global scope
+closure from function: Error: Call to protected method Stub\FBase::prot() from global scope
+capturing closure from function: Error: Call to protected method Stub\FBase::prot() from global scope
+function from class: Error: Call to protected method Stub\FBase::prot() from global scope

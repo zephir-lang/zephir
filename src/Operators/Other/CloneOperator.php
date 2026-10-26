@@ -77,10 +77,17 @@ class CloneOperator extends AbstractOperator
         $symbol       = $compilationContext->backend->getVariableCode($symbolVariable);
         $clonedSymbol = $compilationContext->backend->getVariableCode($clonedVariable);
 
+        /**
+         * A refused `clone` throws, and a `try` around it has to catch that.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2734
+         */
         $compilationContext->codePrinter->output(
             'if (zephir_clone(' . $symbol . ', ' . $clonedSymbol . ') == FAILURE) {'
         );
-        $compilationContext->codePrinter->output("\t" . 'RETURN_MM();');
+        $compilationContext->codePrinter->increaseLevel();
+        $compilationContext->emitExceptionExit();
+        $compilationContext->codePrinter->decreaseLevel();
         $compilationContext->codePrinter->output('}');
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);

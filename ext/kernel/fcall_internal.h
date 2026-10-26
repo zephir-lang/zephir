@@ -6,22 +6,22 @@
 #ifndef ZEPHIR_KERNEL_FCALL_INTERNAL_H
 #define ZEPHIR_KERNEL_FCALL_INTERNAL_H
 
-#define ZEPHIR_CALL_INTERNAL_METHOD_P0(return_value_ptr, object, method) \
+#define ZEPHIR_CALL_INTERNAL_METHOD_P0(return_value_ptr, object, scope_ce, method) \
 	do { \
 		ZEPHIR_BACKUP_SCOPE(); \
 		ZEPHIR_SET_THIS(object); \
-		ZEPHIR_SET_SCOPE((Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL), (Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL)); \
+		ZEPHIR_SET_SCOPE(scope_ce, (Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL)); \
 		ZEPHIR_INIT_NVAR((return_value_ptr)); \
 		method(0, execute_data, return_value_ptr, object, 1); \
 		ZEPHIR_LAST_CALL_STATUS = EG(exception) ? FAILURE : SUCCESS; \
 		ZEPHIR_RESTORE_SCOPE(); \
 	} while (0)
 
-#define ZEPHIR_CALL_INTERNAL_METHOD_P2(return_value_ptr, object, method, p0, p1) \
+#define ZEPHIR_CALL_INTERNAL_METHOD_P2(return_value_ptr, object, scope_ce, method, p0, p1) \
 	do { \
 		ZEPHIR_BACKUP_SCOPE(); \
 		ZEPHIR_SET_THIS(object); \
-		ZEPHIR_SET_SCOPE((Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL), (Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL)); \
+		ZEPHIR_SET_SCOPE(scope_ce, (Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL)); \
 		zval _p0, _p1; \
 		ZEPHIR_INIT_NVAR((return_value_ptr)); \
 		ZVAL_COPY(&_p0, p0); \
@@ -33,11 +33,11 @@
 		ZEPHIR_RESTORE_SCOPE(); \
 	} while (0)
 
-#define ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(object, method) \
+#define ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(object, scope_ce, method) \
 	do { \
 		ZEPHIR_BACKUP_SCOPE(); \
 		ZEPHIR_SET_THIS(object); \
-		ZEPHIR_SET_SCOPE((Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL), (Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL)); \
+		ZEPHIR_SET_SCOPE(scope_ce, (Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL)); \
 		method(0, execute_data, return_value, object, 0); \
 		ZEPHIR_LAST_CALL_STATUS = EG(exception) ? FAILURE : SUCCESS; \
 		ZEPHIR_RESTORE_SCOPE(); \

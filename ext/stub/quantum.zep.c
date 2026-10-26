@@ -664,13 +664,13 @@ PHP_METHOD(Stub_Quantum, harmos)
 					ZVAL_STRING(&_55$$9, "%16.8lf %16.8lf %16.8lf \n");
 					ZVAL_DOUBLE(&_56$$9, ((double) (i) * dx));
 					ZVAL_DOUBLE(&_57$$9, ((double) (n) * dt));
-					ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_58, 102, &fp, &_55$$9, &_56$$9, &_57$$9, &_54$$9);
+					ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_58, 101, &fp, &_55$$9, &_56$$9, &_57$$9, &_54$$9);
 					zephir_check_call_status();
 					i = (i + 10);
 				}
 				ZEPHIR_INIT_NVAR(&_59$$8);
 				ZVAL_STRING(&_59$$8, "\n");
-				ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_58, 102, &fp, &_59$$8);
+				ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_58, 101, &fp, &_59$$8);
 				zephir_check_call_status();
 			}
 			j = 1;

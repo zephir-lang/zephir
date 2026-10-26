@@ -399,6 +399,8 @@ int zephir_clone(zval *destination, zval *obj)
 				php_error_docref(NULL, E_ERROR, "Trying to clone an uncloneable object");
 			}
 			status = FAILURE;
+		} else if (zephir_check_clone_access(obj) == FAILURE) {
+			status = FAILURE;
 		} else {
 			if (!EG(exception)) {
 				ZVAL_OBJ(destination, clone_call(Z_OBJ_P(obj)));
@@ -2101,6 +2103,7 @@ static int zephir_create_closure_impl(zval *return_value, zval *bound_this, zval
 {
 	zend_function *function_ptr;
 	zend_class_entry *scope_ce;
+	zend_class_entry *called_ce;
 
 	if ((function_ptr = zend_hash_str_find_ptr(&ce->function_table, method_name, method_length)) == NULL) {
 		ZVAL_NULL(return_value);
@@ -2108,10 +2111,16 @@ static int zephir_create_closure_impl(zval *return_value, zval *bound_this, zval
 	}
 
 	/**
-	 * When an enclosing object is provided, use its class as the scope so the
-	 * closure can access protected/private members of that object.
+	 * The scope is the class the closure is written in, as PHP takes it from
+	 * the declaring function, and not the class of the enclosing object, which
+	 * may be a subclass: the body reaches exactly the private and protected
+	 * members that code could. The called scope stays the enclosing object's
+	 * class, for `static`. A closure written in a function has no class.
+	 *
+	 * @see https://github.com/zephir-lang/zephir/issues/2734
 	 */
-	scope_ce = (scope_this && Z_TYPE_P(scope_this) == IS_OBJECT) ? Z_OBJCE_P(scope_this) : ce;
+	scope_ce  = zephir_get_calling_scope();
+	called_ce = (scope_this && Z_TYPE_P(scope_this) == IS_OBJECT) ? Z_OBJCE_P(scope_this) : ce;
 
 	/**
 	 * The engine wraps an internal function's handler with
@@ -2123,7 +2132,7 @@ static int zephir_create_closure_impl(zval *return_value, zval *bound_this, zval
 	 * invocation leaked one reference and the closure - with everything it
 	 * held - was never freed.
 	 */
-	zend_create_closure(return_value, function_ptr, scope_ce, scope_ce, bound_this);
+	zend_create_closure(return_value, function_ptr, scope_ce, called_ce, bound_this);
 
 #if PHP_VERSION_ID < 80600
 	/* Marks the closure as ours, so a rebind can find its carrier. */

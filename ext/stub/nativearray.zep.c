@@ -2106,7 +2106,7 @@ PHP_METHOD(Stub_NativeArray, issue709)
 			ZVAL_LONG(&_3$$3, 2);
 			zephir_array_fast_append(&arr, &_3$$3);
 			ZEPHIR_OBS_NVAR(&_4$$3);
-			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 88, &arr);
+			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 87, &arr);
 			zephir_check_call_status();
 			zephir_array_fetch(&_4$$3, &arr, &_5$$3, PH_NOISY, "stub/nativearray.zep", 626);
 			if (UNEXPECTED(EG(exception))) {

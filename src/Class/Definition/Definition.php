@@ -1745,7 +1745,7 @@ final class Definition extends AbstractDefinition
      * that setter rejects the `false` Compiler::getClassDefinition() returns
      * for an unknown name.
      */
-    private function resolveExtendsDefinition(): ?self
+    public function resolveExtendsDefinition(): ?self
     {
         if (!$this->extendsClass) {
             return null;

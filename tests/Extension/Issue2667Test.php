@@ -17,6 +17,7 @@ use Closure;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Stub\Closures;
+use Stub\Oo\ConcreteStatic;
 
 /**
  * Target of a rebind. Userland on purpose: every Zephir class is a
@@ -200,17 +201,32 @@ final class Issue2667Test extends TestCase
     }
 
     /**
-     * Known limitation, and PHP's own rule rather than Zephir's: a closure
-     * cannot be rebound to the scope of an internal class, and every Zephir
-     * class is one. The default-scope form, which is what the issue reports,
-     * works.
+     * A closure carries the scope of the class it is written in, as in PHP,
+     * so naming that same scope again rebinds it.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2734
      */
-    public function testRebindingScopeToAZephirClassIsRefused(): void
+    public function testRebindingScopeToTheDeclaringClassWorks(): void
+    {
+        $test    = new Closures();
+        $closure = $test->issue2667Scalar(7)->bindTo($test, Closures::class);
+
+        $this->assertInstanceOf(Closure::class, $closure);
+        $this->assertSame(7, $closure());
+    }
+
+    /**
+     * Known limitation, and PHP's own rule rather than Zephir's: a closure
+     * cannot be rebound to the scope of another internal class, and every
+     * Zephir class is one. The default-scope form, which is what the issue
+     * reports, works.
+     */
+    public function testRebindingScopeToAnotherZephirClassIsRefused(): void
     {
         $test    = new Closures();
         $closure = $test->issue2667Scalar(7);
 
-        $this->assertNull(@$closure->bindTo($test, Closures::class));
+        $this->assertNull(@$closure->bindTo($test, ConcreteStatic::class));
     }
 
     /**

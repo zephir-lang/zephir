@@ -1,0 +1,101 @@
+--TEST--
+Issue #2734: new and clone check the visibility of __construct() and __clone() (PHP < 8.5 wording)
+--SKIPIF--
+<?php if (PHP_VERSION_ID >= 80500) { echo "skip PHP 8.5 names __clone() a method"; }
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class NC
+{
+    public function makeUser()
+    {
+        return new \UserCtor();
+    }
+
+    public function makeUserMagic()
+    {
+        return new \UserCtorMagic();
+    }
+
+    public function cloneIt(var o)
+    {
+        return clone o;
+    }
+
+    public function cloneCaught(var o)
+    {
+        var e;
+
+        try {
+            return clone o;
+        } catch \Error, e {
+            return "caught " . e->getMessage();
+        }
+    }
+}
+--FILE--
+namespace Stub;
+
+class NCProt
+{
+    protected function __clone()
+    {
+    }
+}
+--FILE--
+namespace Stub;
+
+class NCFactory
+{
+    public function __construct()
+    {
+    }
+
+    public static function make()
+    {
+        return new static();
+    }
+}
+--FILE--
+namespace Stub;
+
+class NCChild extends NCProt
+{
+    public function cloneIt(var o)
+    {
+        return get_class(clone o);
+    }
+}
+--USAGE--
+class UserCtor { protected function __construct() {} }
+class UserCtorMagic { private function __construct() {} public function __call($n, $a) { return "__call"; } }
+class UserClone { private function __clone() {} }
+class NarrowCtor extends \Stub\NCFactory { protected function __construct() {} }
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", is_object($result) ? get_class($result) : $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+t("new protected ctor", fn() => (new \Stub\NC())->makeUser());
+t("new private ctor with __call", fn() => (new \Stub\NC())->makeUserMagic());
+t("clone protected", fn() => (new \Stub\NC())->cloneIt(new \Stub\NCProt()));
+t("clone private userland", fn() => (new \Stub\NC())->cloneIt(new \UserClone()));
+t("clone caught", fn() => (new \Stub\NC())->cloneCaught(new \Stub\NCProt()));
+t("new static with a narrowed ctor", fn() => \NarrowCtor::make());
+t("new static with a public ctor", fn() => \Stub\NCFactory::make());
+t("clone protected from child", fn() => (new \Stub\NCChild())->cloneIt(new \Stub\NCProt()));
+--EXPECT--
+new protected ctor: Error: Call to protected UserCtor::__construct() from scope Stub\NC
+new private ctor with __call: Error: Call to private UserCtorMagic::__construct() from scope Stub\NC
+clone protected: Error: Call to protected Stub\NCProt::__clone() from scope Stub\NC
+clone private userland: Error: Call to private UserClone::__clone() from scope Stub\NC
+clone caught: caught Call to protected Stub\NCProt::__clone() from scope Stub\NC
+new static with a narrowed ctor: NarrowCtor
+new static with a public ctor: Stub\NCFactory
+clone protected from child: Stub\NCProt

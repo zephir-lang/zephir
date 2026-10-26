@@ -1,0 +1,177 @@
+--TEST--
+Issue #2734: a method call on another object checks visibility against the calling class, falls back to __call() and runs the caller's shadowed private method, as PHP does
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class Base
+{
+    protected function prot() -> string
+    {
+        return "Base::prot";
+    }
+
+    private function priv() -> string
+    {
+        return "Base::priv";
+    }
+
+    private function shadow() -> string
+    {
+        return "Base::shadow";
+    }
+
+    public function who() -> string
+    {
+        return get_class(this);
+    }
+
+    public function callProt(var o) -> string
+    {
+        return o->prot();
+    }
+
+    public function callPriv(var o) -> string
+    {
+        return o->priv();
+    }
+
+    public function callShadow(var o) -> string
+    {
+        return o->shadow();
+    }
+}
+--FILE--
+namespace Stub;
+
+class Mid extends Base
+{
+}
+--FILE--
+namespace Stub;
+
+class Leaf extends Mid
+{
+    public function callProt(var o) -> string
+    {
+        return o->prot();
+    }
+}
+--FILE--
+namespace Stub;
+
+class Sibling extends Base
+{
+    protected function prot() -> string
+    {
+        return "Sibling::prot";
+    }
+}
+--FILE--
+namespace Stub;
+
+class Shadowing extends Base
+{
+    public function shadow() -> string
+    {
+        return "Shadowing::shadow";
+    }
+}
+--FILE--
+namespace Stub;
+
+class Unrelated
+{
+    public function callProt(var o) -> string
+    {
+        return o->prot();
+    }
+
+    public function callPriv(var o) -> string
+    {
+        return o->priv();
+    }
+
+    public function callShadow(var o) -> string
+    {
+        return o->shadow();
+    }
+
+    public function callDynamic(var o, string name) -> string
+    {
+        return o->{name}();
+    }
+
+    public function callTwice(var f) -> string
+    {
+        return {f}() . "," . {f}();
+    }
+}
+--FILE--
+namespace Stub;
+
+class Magic
+{
+    protected function prot() -> string
+    {
+        return "Magic::prot";
+    }
+
+    public function __call(string name, array args) -> string
+    {
+        return "Magic::__call(" . name . ")";
+    }
+}
+--USAGE--
+class UserProt
+{
+    protected function prot(): string { return "UserProt::prot"; }
+}
+
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+
+$u = new \Stub\Unrelated();
+t("unrelated prot", fn() => $u->callProt(new \Stub\Base()));
+t("unrelated prot inherited", fn() => $u->callProt(new \Stub\Leaf()));
+t("unrelated priv", fn() => $u->callPriv(new \Stub\Base()));
+t("unrelated dynamic", fn() => $u->callDynamic(new \Stub\Base(), "PROT"));
+t("unrelated userland", fn() => $u->callProt(new \UserProt()));
+t("unrelated __call", fn() => $u->callProt(new \Stub\Magic()));
+t("unrelated shadow public", fn() => $u->callShadow(new \Stub\Shadowing()));
+t("unrelated shadow private", fn() => $u->callShadow(new \Stub\Base()));
+t("unrelated callable", fn() => $u->callTwice([new \Stub\Leaf(), "who"]));
+t("unrelated callable prot", fn() => $u->callTwice([new \Stub\Base(), "prot"]));
+t("grandchild on grandchild", fn() => (new \Stub\Leaf())->callProt(new \Stub\Leaf()));
+t("grandchild on root", fn() => (new \Stub\Leaf())->callProt(new \Stub\Base()));
+t("grandchild on sibling", fn() => (new \Stub\Leaf())->callProt(new \Stub\Sibling()));
+t("root on grandchild", fn() => (new \Stub\Base())->callProt(new \Stub\Leaf()));
+t("root on sibling", fn() => (new \Stub\Base())->callProt(new \Stub\Sibling()));
+t("root priv on grandchild", fn() => (new \Stub\Base())->callPriv(new \Stub\Leaf()));
+t("root shadow on child", fn() => (new \Stub\Base())->callShadow(new \Stub\Shadowing()));
+--EXPECT--
+unrelated prot: Error: Call to protected method Stub\Base::prot() from scope Stub\Unrelated
+unrelated prot inherited: Error: Call to protected method Stub\Base::prot() from scope Stub\Unrelated
+unrelated priv: Error: Call to private method Stub\Base::priv() from scope Stub\Unrelated
+unrelated dynamic: Error: Call to protected method Stub\Base::PROT() from scope Stub\Unrelated
+unrelated userland: Error: Call to protected method UserProt::prot() from scope Stub\Unrelated
+unrelated __call: Magic::__call(prot)
+unrelated shadow public: Shadowing::shadow
+unrelated shadow private: Error: Call to private method Stub\Base::shadow() from scope Stub\Unrelated
+unrelated callable: Stub\Leaf,Stub\Leaf
+unrelated callable prot: Error: Call to protected method Stub\Base::prot() from scope Stub\Unrelated
+grandchild on grandchild: Base::prot
+grandchild on root: Base::prot
+grandchild on sibling: Sibling::prot
+root on grandchild: Base::prot
+root on sibling: Sibling::prot
+root priv on grandchild: Base::priv
+root shadow on child: Base::shadow

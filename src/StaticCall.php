@@ -16,6 +16,7 @@ namespace Zephir;
 use ReflectionException;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
+use Zephir\Class\Visibility;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Traits\VariablesTrait;
@@ -189,9 +190,24 @@ class StaticCall extends Call
             } else {
                 $method = $classDefinition->getMethod($methodName);
 
-                if ($method->isPrivate() && $method->getClassDefinition() !== $compilationContext->classDefinition) {
+                /**
+                 * PHP checks the method against the class the call is written
+                 * in, and an inaccessible one goes to `__callStatic()` or, with
+                 * an object of the class at hand, to `__call()`.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2734
+                 */
+                if (
+                    !Visibility::canCallMethod($method, $compilationContext)
+                    && !$classDefinition->hasMethod('__callStatic')
+                    && !$classDefinition->hasMethod('__call')
+                ) {
                     throw new CompilerException(
-                        "Cannot call private method '" . $expression['name'] . "' out of its scope",
+                        sprintf(
+                            "Cannot call %s method '%s' out of its scope",
+                            $method->isPrivate() ? 'private' : 'protected',
+                            $expression['name']
+                        ),
                         $expression
                     );
                 }
@@ -412,9 +428,15 @@ class StaticCall extends Call
 
         /**
          * Check if the  method call can have an inline cache.
+         *
+         * `static::` resolves against the called class, which may declare a
+         * private method of the same name: a cache shared by every called
+         * class would hand it the method found here instead (#2734).
          */
         $methodCache  = $compilationContext->cacheManager->getStaticMethodCache();
-        $cachePointer = $methodCache->get($compilationContext, $method ?? null);
+        $cachePointer = 'STATIC' === $context && isset($method) && $method->isPrivate()
+            ? 'NULL, 0'
+            : $methodCache->get($compilationContext, $method ?? null);
 
         $params = [];
         if (isset($expression['parameters']) && count($expression['parameters'])) {
@@ -447,6 +469,7 @@ class StaticCall extends Call
             }
         } else {
             $ce = $method->getClassDefinition()->getClassEntry($compilationContext);
+            $ce = $ce . ', ' . $ce;
             if ($isExpecting) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 1, $paramCount);
@@ -510,7 +533,15 @@ class StaticCall extends Call
             $symbolVariable->trackVariant($compilationContext);
         }
 
-        $method = $method->getOptimizedMethod();
+        /**
+         * A direct call to the transformed twin skips the engine, so it is
+         * only taken where the engine would run this very method.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2734
+         */
+        if (Visibility::canCallMethod($method, $compilationContext)) {
+            $method = $method->getOptimizedMethod();
+        }
 
         /**
          * Check if the  method call can have an inline cache.
@@ -531,7 +562,8 @@ class StaticCall extends Call
         $paramsStr  = $paramCount ? ', ' . implode(', ', $params) : '';
 
         if ($method->isInternal()) {
-            $ce = $classDefinition->getClassEntry($compilationContext);
+            $ce = $method->getClassDefinition()->getClassEntry($compilationContext)
+                . ', ' . $classDefinition->getClassEntry($compilationContext);
             if ($isExpecting) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 1, $paramCount);
