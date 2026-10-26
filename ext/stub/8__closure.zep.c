@@ -35,7 +35,8 @@ PHP_METHOD(stub_8__closure, __invoke)
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_read_property(&abc, this_ptr, SL("abc"), PH_NOISY_CC | PH_READONLY);
+	zephir_memory_observe(&abc);
+	zephir_read_property(&abc, this_ptr, SL("abc"), PH_NOISY_CC);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);

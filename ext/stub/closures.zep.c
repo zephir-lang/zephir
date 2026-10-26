@@ -1551,10 +1551,8 @@ PHP_METHOD(Stub_Closures, issue2668ByRefTypedString)
 /**
  * @issue https://github.com/zephir-lang/zephir/issues/2668
  *
- * Rewriting the array through the shared slot has to keep working after
- * the method that owned the parameter returned. It is reassigned rather
- * than appended to because `let x[] = ...` on a capture is rejected for
- * every capture, by value or by reference (#2736).
+ * Appending through the shared slot has to keep working after the method
+ * that owned the parameter returned.
  */
 PHP_METHOD(Stub_Closures, issue2668ByRefTypedArray)
 {

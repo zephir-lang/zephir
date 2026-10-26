@@ -30,6 +30,7 @@ use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
+use Zephir\Expression\Closure;
 use Zephir\Expression\StaticConstantAccess;
 use Zephir\Name;
 use Zephir\Passes\CallGathererPass;
@@ -218,6 +219,15 @@ class Method
      * the ones the memory frame has to release again.
      */
     private array    $capturesToRelease = [];
+    /**
+     * By-value captures of a native scalar type, keyed by name. Reading one
+     * takes no reference, but the body can overwrite it with a string or an
+     * array, so whenever the closure has a memory frame anyway the frame
+     * releases them as well.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2736
+     */
+    private array    $scalarCaptures = [];
     /**
      * Static Type Inference Pass.
      */
@@ -1071,6 +1081,7 @@ class Method
         $symbolTable->setClosureReferences($byRefCaptures);
 
         $this->capturesToRelease = [];
+        $this->scalarCaptures    = [];
         foreach ($this->staticVariables as $var) {
             /**
              * A refcountable capture is read off the carrier with a ZVAL_COPY,
@@ -1093,9 +1104,21 @@ class Method
                 $this->capturesToRelease[$var->getName()] = true;
             }
 
+            if (!$var->isClosureReference() && in_array($var->getType(), Closure::SCALAR_CAPTURE_TYPES, true)) {
+                $this->scalarCaptures[$var->getName()] = true;
+            }
+
+            /**
+             * The clone carries what the local-context pass decided about the
+             * enclosing method's local, which says nothing about how the
+             * closure body uses it: a capture can be mutated in place.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2736
+             */
             $localVar = clone $var;
             $localVar->setIsExternal(true);
-            $localVar->setLocalOnly(true);
+            $localVar->setIsClosureCapture(true);
+            $localVar->setLocalOnly(false);
             $localVar->setDynamicTypes($localVar->getType());
             $localVar->setType('variable');
             $localVar->setIsDoublePointer(false);
@@ -1130,8 +1153,7 @@ class Method
                     $compilationContext->branchManager->getCurrentBranch()
                 );
                 $paramVar->setIsInitialized(true, $compilationContext);
-                /* external => declared even when unused; do NOT combine with
-                 * setLocalOnly() — external+localOnly means "local static". */
+                /* external => declared even when unused */
                 $paramVar->setIsExternal(true);
 
                 if (isset($parameter['cast'])) {
@@ -1501,14 +1523,6 @@ class Method
                 $reference->setIsInitialized(true, $compilationContext);
                 $reference->setOriginal($declaredParameter);
                 $reference->increaseUses();
-
-                /**
-                 * It is a local of this method, never a capture read off a
-                 * carrier: isClosureCapture() is `external && localOnly`, and a
-                 * true reading there would route it into the closure
-                 * prologue's carrier reads.
-                 */
-                $reference->setLocalOnly(false);
 
                 if (isset($declaredParameter['cast'])) {
                     $reference->setDynamicTypes('object');
@@ -1966,7 +1980,8 @@ class Method
             if ($variable->isClosureCapture()) {
                 $capture     = $symbolTable->getVariable($name);
                 $captureName = $capture->getName();
-                $mustRelease = isset($this->capturesToRelease[$captureName]);
+                $mustRelease = isset($this->capturesToRelease[$captureName])
+                    || (isset($this->scalarCaptures[$captureName]) && $symbolTable->getMustGrownStack());
 
                 $codePrinter->preOutput(
                     sprintf(

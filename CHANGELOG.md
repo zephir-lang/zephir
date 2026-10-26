@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `let x[] = value`, `let x[key] = value` and `let x->prop++` on a closure capture being rejected as "local only" [#2736](https://github.com/zephir-lang/zephir/issues/2736)
+- Fixed `let x->prop++` and `let x->prop--` on a local variable breaking the C build [#2736](https://github.com/zephir-lang/zephir/issues/2736)
+- Fixed a closure capture losing its value when the body assigns it a ternary or a runtime constant [#2736](https://github.com/zephir-lang/zephir/issues/2736)
+- Fixed `.=` on a variable captured by reference replacing the reference instead of appending to the shared value [#2736](https://github.com/zephir-lang/zephir/issues/2736)
+- Fixed a closure leaking memory when the body assigns a string or an array to a captured `int`, `double` or `bool` [#2736](https://github.com/zephir-lang/zephir/issues/2736)
 - Fixed a protected method or static property inherited from a grandparent being rejected at compile time [#2734](https://github.com/zephir-lang/zephir/issues/2734)
 - Fixed a protected or private method called on a typed variable from an unrelated class compiling [#2734](https://github.com/zephir-lang/zephir/issues/2734)
 - Fixed protected and private methods being callable from any class at runtime instead of throwing `Error` [#2734](https://github.com/zephir-lang/zephir/issues/2734)
