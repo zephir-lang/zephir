@@ -28,7 +28,9 @@ use function is_array;
 use function is_object;
 use function preg_match;
 use function sprintf;
+use function str_contains;
 use function str_replace;
+use function strrpos;
 use function strtolower;
 use function substr;
 use function version_compare;
@@ -169,24 +171,23 @@ class FunctionCall extends Call
 
     /**
      * Checks if the function is defined in Zephir code being compiled.
+     *
+     * A qualified name (`Stub\tagged`) is looked up in its own namespace, an
+     * unqualified one in the global namespace and in the caller's.
      */
     public function isUserlandZephirFunction(string $functionName, CompilationContext $context): bool
     {
-        $internalName = ['f__' . $functionName];
-        if (isset($context->classDefinition)) {
-            $lowerNamespace = strtolower($context->classDefinition->getNamespace());
-            $prefix         = 'f_' . str_replace('\\', '_', $lowerNamespace);
-
-            $internalName[] = $prefix . '_' . $functionName;
+        $separator = strrpos($functionName, '\\');
+        if (false !== $separator) {
+            return $this->isDefinedFunction(
+                substr($functionName, 0, $separator),
+                substr($functionName, $separator + 1),
+                $context
+            );
         }
 
-        foreach ($internalName as $name) {
-            if (isset($context->compiler->functionDefinitions[$name])) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->isDefinedFunction('', $functionName, $context)
+            || $this->isDefinedFunction($this->callerNamespace($context), $functionName, $context);
     }
 
     /**
@@ -332,18 +333,24 @@ class FunctionCall extends Call
      */
     protected function _callNormal(array $expression, CompilationContext $compilationContext)
     {
-        $funcName = strtolower($expression['name']);
+        $resolvedName = $this->resolveFunctionName($expression['name'], $compilationContext);
+        $funcName     = strtolower($resolvedName);
 
         if ('array' == $funcName) {
             throw new CompilerException("Cannot use 'array' as a function call", $expression);
         }
 
         /**
-         * Try to optimize function calls using existing optimizers.
+         * Try to optimize function calls using existing optimizers. They all
+         * stand in for global functions, so a call that resolved to a
+         * namespaced function, such as one shadowing `strtolower()`, is left
+         * alone.
          */
-        $compiledExpr = $this->optimize($funcName, $expression, $this, $compilationContext);
-        if (is_object($compiledExpr)) {
-            return $compiledExpr;
+        if (!str_contains($funcName, '\\')) {
+            $compiledExpr = $this->optimize($funcName, $expression, $this, $compilationContext);
+            if (is_object($compiledExpr)) {
+                return $compiledExpr;
+            }
         }
 
         $exists = $this->functionExists($funcName, $compilationContext);
@@ -440,10 +447,12 @@ class FunctionCall extends Call
          * The lowered name resolves optimizers and the compile time lookups
          * above; the call itself carries the name as it was written, which is
          * the spelling PHP prints when the function turns out not to exist.
+         * Its namespace separators are escaped for the C string literal, where
+         * `\t` in `Stub\tagged` used to read as a tab (#2731).
          *
          * @see https://github.com/zephir-lang/zephir/issues/2715
          */
-        $callName = $expression['name'];
+        $callName = str_replace('\\', '\\\\', $resolvedName);
 
         /**
          * Add the last call status to the current symbol table
@@ -842,6 +851,59 @@ class FunctionCall extends Call
             sprintf($message, $funcName),
             ['missing-optimizer', $expression]
         );
+    }
+
+    /**
+     * The function a call names, resolved the way PHP resolves it.
+     *
+     * `\A\b` names `A\b`, and `A\b` is relative to the use aliases or the
+     * current namespace. An unqualified name is the current namespace's
+     * function when this extension defines one, and the global function
+     * otherwise. Every form used to be called by its bare spelling, which
+     * reached the global function table and failed (#2731).
+     *
+     * PHP picks that last fallback at run time, so a namespaced function
+     * defined outside the extension is not seen here.
+     */
+    private function resolveFunctionName(string $name, CompilationContext $context): string
+    {
+        $namespace = $this->callerNamespace($context);
+
+        if (str_contains($name, '\\')) {
+            return Name::fetchFQN($name, $namespace, $context->aliasManager);
+        }
+
+        if ('' !== $namespace && $this->isDefinedFunction($namespace, $name, $context)) {
+            return $namespace . '\\' . $name;
+        }
+
+        return $name;
+    }
+
+    /**
+     * The namespace an unqualified call resolves against. A global function
+     * is declared before the namespace statement, so its body is in none.
+     */
+    private function callerNamespace(CompilationContext $context): string
+    {
+        $current = $context->currentMethod;
+
+        if ($current instanceof FunctionDefinition) {
+            return $current->isGlobal() ? '' : $current->getNamespace();
+        }
+
+        return isset($context->classDefinition) ? $context->currentNamespace() : '';
+    }
+
+    /**
+     * Whether this extension defines `<namespace>\<name>`, keyed the way
+     * Compiler::addFunction() registers it.
+     */
+    private function isDefinedFunction(string $namespace, string $name, CompilationContext $context): bool
+    {
+        $key = strtolower('f_' . str_replace('\\', '_', $namespace) . '_' . $name);
+
+        return isset($context->compiler->functionDefinitions[$key]);
     }
 
     /**

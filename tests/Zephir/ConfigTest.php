@@ -136,17 +136,96 @@ final class ConfigTest extends TestCase
     }
 
     /**
-     * `optimizations` keeps replacing, because a project that omits a key
-     * there is relying on it being off and turning it back on would change
-     * the generated C.
+     * An `optimizations` block that omitted a key deleted it, and the pass
+     * read back as null, so it was off. cphalcon lists 5 of the 8 keys, which
+     * turned `call-gatherer-pass` off there.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2731
      */
-    public function testShouldStillReplaceTheOptimizationsSection(): void
+    public function testShouldKeepDefaultsForOptimizationsOmittedFromConfigJson(): void
     {
         chdir(\constant('ZEPHIRPATH') . '/tests/fixtures/partialwarnings');
         $config = new Config();
 
+        /* What the file says wins */
         $this->assertFalse($config->get('local-context-pass', 'optimizations'));
-        $this->assertNull($config->get('constant-folding', 'optimizations'));
+
+        /* What it does not mention keeps its default */
+        $this->assertTrue($config->get('constant-folding', 'optimizations'));
+        $this->assertTrue($config->get('call-gatherer-pass', 'optimizations'));
+        $this->assertFalse($config->get('check-invalid-reads', 'optimizations'));
+
+        /* A key Zephir does not read is kept, only reported */
+        $this->assertTrue($config->get('local-contxt-pass', 'optimizations'));
+    }
+
+    /**
+     * Every section with built-in defaults had the same defect: `stubs`
+     * without `path` or `extra` without `indent` broke `zephir stubs`, and
+     * `api` without `theme` broke `zephir api`.
+     *
+     * @dataProvider partialSectionProvider
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2731
+     */
+    public function testShouldKeepDefaultsForSectionKeysOmittedFromConfigJson(
+        string $section,
+        string $key,
+        $expected
+    ): void {
+        chdir(\constant('ZEPHIRPATH') . '/tests/fixtures/partialsections');
+        $config = new Config();
+
+        $this->assertSame($expected, $config->get($key, $section));
+    }
+
+    public function partialSectionProvider(): array
+    {
+        return [
+            'stubs path, omitted' => ['stubs', 'path', 'ide/%version%/%namespace%/'],
+            'stubs run-after, omitted' => ['stubs', 'stubs-run-after-generate', false],
+            'stubs banner, from the file' => ['stubs', 'banner', '/* partial */'],
+            'extra indent, omitted' => ['extra', 'indent', 'spaces'],
+            'extra export-classes, from the file' => ['extra', 'export-classes', true],
+            'api path, omitted' => ['api', 'path', 'doc/%version%'],
+            'call-gatherer-pass, omitted' => ['optimizations', 'call-gatherer-pass', true],
+            'check-invalid-reads, omitted' => ['optimizations', 'check-invalid-reads', false],
+            'internal-call-transformation, omitted' => ['optimizations', 'internal-call-transformation', false],
+            'static-type-inference, from the file' => ['optimizations', 'static-type-inference', true],
+        ];
+    }
+
+    /**
+     * `api.theme.options` sits two levels down, so a theme that only names
+     * itself still needs the default options under it.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2731
+     */
+    public function testShouldKeepDefaultsNestedInsideAnOmittedThemeKey(): void
+    {
+        chdir(\constant('ZEPHIRPATH') . '/tests/fixtures/partialsections');
+        $config = new Config();
+
+        $theme = $config->get('theme', 'api');
+
+        $this->assertSame('zephir', $theme['name']);
+        $this->assertSame('https://example.org', $theme['options']['github']);
+        $this->assertSame('#3E6496', $theme['options']['main_color']);
+    }
+
+    /**
+     * `--indent` is only taken when `extra.indent` reads non-null, so an
+     * `extra` block that omitted it made the flag a silent no-op.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2731
+     */
+    public function testShouldApplyTheIndentFlagWhenExtraOmitsIt(): void
+    {
+        chdir(\constant('ZEPHIRPATH') . '/tests/fixtures/partialsections');
+
+        $config = $this->configFromArgv(['zephir', 'stubs', '--indent=tabs']);
+
+        $this->assertSame('tabs', $config->get('indent', 'extra'));
     }
 
     public function testShouldReportUnrecognizedKeysInsideASection(): void

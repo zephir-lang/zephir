@@ -1520,17 +1520,7 @@ final class Compiler
                 continue;
             }
 
-            /**
-             * The pass only runs for a function with a body, and there is no
-             * other route to a compilation context here. A bodyless function
-             * already fails in generateFunctionInformation() below, so
-             * skipping keeps this from being a second, earlier crash.
-             */
-            if (!$func->hasCallGathererPass()) {
-                continue;
-            }
-
-            $context               = $func->getCallGathererPass()->getCompilationContext();
+            $context               = $func->getPreCompilationContext();
             $previousPrinter       = $context->codePrinter;
             $context->codePrinter  = new Printer();
 
@@ -1580,7 +1570,7 @@ final class Compiler
                 $func->getArgInfoName(),
                 $func,
                 $headerPrinter,
-                $func->getCallGathererPass()->getCompilationContext()
+                $func->getPreCompilationContext()
             );
 
             $funcName    = $func->getInternalName();
@@ -1593,25 +1583,22 @@ final class Compiler
 
             $argInfo->render();
 
-            /** Generate FE's */
-            $paramData = 'NULL';
-
-            $richFormat = $func->isReturnTypesHintDetermined() && $func->areReturnTypesCompatible();
-
-            if ($richFormat || $func->hasParameters()) {
-                $paramData = $argInfoName;
-            }
-
+            /**
+             * Generate FE's. render() always declares the arginfo, and PHP 8
+             * raises "Missing arginfo" on every startup for an entry without
+             * one, which a function with neither parameters nor a return
+             * type used to get (#2731).
+             */
             if ($func->isGlobal()) {
                 $entryPrinter->output(
-                    'ZEND_NAMED_FE(' . $func->getName() . ', ZEND_FN(' . $funcName . '), ' . $paramData . ')'
+                    'ZEND_NAMED_FE(' . $func->getName() . ', ZEND_FN(' . $funcName . '), ' . $argInfoName . ')'
                 );
             } else {
                 $entryPrinter->output(
                     'ZEND_NS_NAMED_FE("' . str_replace('\\', '\\\\', $func->getNamespace()) . '", ' .
                     $func->getName() .
                     ', ZEND_FN(' . $funcName . '), ' .
-                    $paramData . ')'
+                    $argInfoName . ')'
                 );
             }
         }

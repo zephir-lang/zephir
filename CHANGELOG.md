@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed a key omitted from the `optimizations` section of `config.json` being turned off instead of keeping its default [#2731](https://github.com/zephir-lang/zephir/issues/2731)
+- Fixed a key omitted from the `stubs`, `extra` or `api` section of `config.json` breaking `zephir stubs`, `zephir api` and `--indent` instead of keeping its default [#2731](https://github.com/zephir-lang/zephir/issues/2731)
+- Fixed `call-gatherer-pass` turned off crashing the compiler on a function and dropping function attributes [#2731](https://github.com/zephir-lang/zephir/issues/2731)
+- Fixed a function with an empty body crashing the compiler [#2731](https://github.com/zephir-lang/zephir/issues/2731)
+- Fixed a function without parameters or return type raising a `Missing arginfo` warning when the extension loads [#2731](https://github.com/zephir-lang/zephir/issues/2731)
+- Fixed a method call on another object reusing the inline cache of `this->method()` calls and running the method of the wrong class [#2731](https://github.com/zephir-lang/zephir/issues/2731)
+- Fixed calling a namespaced Zephir function by its short, relative or fully qualified name failing with `Call to undefined function` or calling a PHP function of the same name [#2731](https://github.com/zephir-lang/zephir/issues/2731)
 - Fixed `--quiet` and `--verbose` being ignored while `-q` and `-v` worked [#2728](https://github.com/zephir-lang/zephir/issues/2728)
 - Fixed `-q`, `-v`, `-V`, `--quiet` or `--verbose` before the command printing the help screen instead of running it [#2728](https://github.com/zephir-lang/zephir/issues/2728)
 - Fixed the `verbose` setting and `-v` having no effect instead of printing the stack trace of a failed `generate` or `build` [#2728](https://github.com/zephir-lang/zephir/issues/2728)

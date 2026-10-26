@@ -1,0 +1,25 @@
+{
+  "namespace": "stub",
+  "name": "Partial Sections",
+  "stubs": {
+    "banner": "/* partial */"
+  },
+  "extra": {
+    "export-classes": true
+  },
+  "api": {
+    "theme": {
+      "name": "zephir",
+      "options": {
+        "github": "https://example.org"
+      }
+    }
+  },
+  "optimizations": {
+    "static-type-inference": true,
+    "static-type-inference-second-pass": true,
+    "local-context-pass": true,
+    "constant-folding": true,
+    "static-constant-class-folding": true
+  }
+}

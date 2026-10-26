@@ -86,14 +86,14 @@ PHP_METHOD(Stub_Router, __construct)
 {
 	zval _1$$3, _4$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zephir_fcall_cache_entry *_3 = NULL;
+	zephir_fcall_cache_entry *_3 = NULL, *_6 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *defaultRoutes_param = NULL, routes, _6, _0$$3, _2$$3, _5$$3;
+	zval *defaultRoutes_param = NULL, routes, _7, _0$$3, _2$$3, _5$$3;
 	zend_bool defaultRoutes;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&routes);
-	ZVAL_UNDEF(&_6);
+	ZVAL_UNDEF(&_7);
 	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_5$$3);
@@ -145,7 +145,7 @@ PHP_METHOD(Stub_Router, __construct)
 		add_assoc_long_ex(&_4$$3, SL("params"), 3);
 		ZEPHIR_INIT_VAR(&_5$$3);
 		ZVAL_STRING(&_5$$3, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#");
-		ZEPHIR_CALL_METHOD(NULL, &_2$$3, "__construct", &_3, 110, &_5$$3, &_4$$3);
+		ZEPHIR_CALL_METHOD(NULL, &_2$$3, "__construct", &_6, 110, &_5$$3, &_4$$3);
 		zephir_check_call_status();
 		zephir_array_append(&routes, &_2$$3, PH_SEPARATE, "stub/router.zep", 95);
 		if (UNEXPECTED(EG(exception))) {
@@ -153,9 +153,9 @@ PHP_METHOD(Stub_Router, __construct)
 			return;
 		}
 	}
-	ZEPHIR_INIT_VAR(&_6);
-	array_init(&_6);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 125, &_6);
+	ZEPHIR_INIT_VAR(&_7);
+	array_init(&_7);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 125, &_7);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 126, &routes);
 	ZEPHIR_MM_RESTORE();
 }

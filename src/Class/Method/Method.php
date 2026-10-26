@@ -100,6 +100,12 @@ class Method
     protected ?CallGathererPass $callGathererPass = null;
 
     /**
+     * The context preCompile() ran in, kept for the code generated outside
+     * the method body (arginfo, attributes).
+     */
+    protected ?CompilationContext $preCompilationContext = null;
+
+    /**
      * Whether the method is abstract or not.
      */
     protected bool $isAbstract = false;
@@ -2516,6 +2522,18 @@ class Method
     }
 
     /**
+     * The context preCompile() ran in, or null before it has run.
+     *
+     * Functions used to reach it through the call gatherer pass, which only
+     * exists for a non-empty body with that optimization on, so turning it
+     * off or writing `function f() {}` crashed the compiler (#2731).
+     */
+    public function getPreCompilationContext(): ?CompilationContext
+    {
+        return $this->preCompilationContext;
+    }
+
+    /**
      * Returns the class definition where the method was declared.
      */
     public function getClassDefinition(): ?Definition
@@ -3685,6 +3703,8 @@ class Method
         $typeInference      = null;
         $callGathererPass   = null;
         $nativeArray        = null;
+
+        $this->preCompilationContext = $compilationContext;
 
         if (is_object($this->statements)) {
             $compilationContext->currentMethod = $this;
