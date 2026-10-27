@@ -1867,13 +1867,15 @@ PHP_METHOD(Stub_Arithmetic, shiftOrPrecedence)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long offset, code = 0;
-	zval *hmac, hmac_sub, *offset_param = NULL, _0, _1, _2, _3;
+	zval *hmac, hmac_sub, *offset_param = NULL, _0, _1, _2, _3, _4, _5;
 
 	ZVAL_UNDEF(&hmac_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+	ZVAL_UNDEF(&_4);
+	ZVAL_UNDEF(&_5);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(hmac)
 		Z_PARAM_LONG(offset)
@@ -1887,25 +1889,99 @@ PHP_METHOD(Stub_Arithmetic, shiftOrPrecedence)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_memory_observe(&_1);
-	zephir_array_fetch_long(&_1, hmac, (offset + 1), PH_NOISY, "stub/arithmetic.zep", 1511);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 0x7F);
+	ZEPHIR_INIT_VAR(&_2);
+	zephir_bitwise_and_function(&_2, &_0, &_1);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_memory_observe(&_2);
-	zephir_array_fetch_long(&_2, hmac, (offset + 2), PH_NOISY, "stub/arithmetic.zep", 1511);
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 24);
+	ZEPHIR_INIT_VAR(&_3);
+	zephir_shift_left_function(&_3, &_2, &_1);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_memory_observe(&_3);
-	zephir_array_fetch_long(&_3, hmac, (offset + 3), PH_NOISY, "stub/arithmetic.zep", 1511);
+	ZEPHIR_OBS_NVAR(&_0);
+	zephir_array_fetch_long(&_0, hmac, (offset + 1), PH_NOISY, "stub/arithmetic.zep", 1511);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	code = (((((zend_long) ((zend_ulong) (((zephir_get_intval(&_0) & 0x7F))) << 24)) | ((zend_long) ((zend_ulong) (((zephir_get_intval(&_1) & 0xFF))) << 16))) | ((zend_long) ((zend_ulong) (((zephir_get_intval(&_2) & 0xFF))) << 8))) | ((zephir_get_intval(&_3) & 0xFF)));
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 0xFF);
+	ZEPHIR_INIT_NVAR(&_2);
+	zephir_bitwise_and_function(&_2, &_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 16);
+	ZEPHIR_INIT_VAR(&_4);
+	zephir_shift_left_function(&_4, &_2, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_INIT_NVAR(&_1);
+	zephir_bitwise_or_function(&_1, &_3, &_4);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_OBS_NVAR(&_0);
+	zephir_array_fetch_long(&_0, hmac, (offset + 2), PH_NOISY, "stub/arithmetic.zep", 1511);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_INIT_NVAR(&_3);
+	ZVAL_LONG(&_3, 0xFF);
+	ZEPHIR_INIT_NVAR(&_2);
+	zephir_bitwise_and_function(&_2, &_0, &_3);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_INIT_NVAR(&_3);
+	ZVAL_LONG(&_3, 8);
+	ZEPHIR_INIT_NVAR(&_4);
+	zephir_shift_left_function(&_4, &_2, &_3);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_INIT_NVAR(&_3);
+	zephir_bitwise_or_function(&_3, &_1, &_4);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_OBS_NVAR(&_0);
+	zephir_array_fetch_long(&_0, hmac, (offset + 3), PH_NOISY, "stub/arithmetic.zep", 1511);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 0xFF);
+	ZEPHIR_INIT_NVAR(&_2);
+	zephir_bitwise_and_function(&_2, &_0, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_INIT_VAR(&_5);
+	zephir_bitwise_or_function(&_5, &_3, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	code = zephir_get_intval(&_5);
 	RETURN_MM_LONG(code);
 }
 

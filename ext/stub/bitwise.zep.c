@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/operators.h"
 #include "kernel/fcall.h"
@@ -57,7 +58,7 @@ PHP_METHOD(Stub_Bitwise, boolAnd)
 	zend_bool a = 0, b = 0, c = 0;
 	a = ((1) ? 1 : 0);
 	b = ((2) ? 1 : 0);
-	c = (((a & b)) ? 1 : 0);
+	c = ((((zend_long) a & (zend_long) b)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -65,7 +66,7 @@ PHP_METHOD(Stub_Bitwise, bool2And)
 {
 	zend_bool a = 0, c = 0;
 	a = ((1) ? 1 : 0);
-	c = (((a & 2)) ? 1 : 0);
+	c = ((((zend_long) a & 2)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -73,7 +74,7 @@ PHP_METHOD(Stub_Bitwise, bool3And)
 {
 	zend_bool a = 0, c = 0;
 	a = 1;
-	c = (((a & 0)) ? 1 : 0);
+	c = ((((zend_long) a & (zend_long) 0)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -86,19 +87,37 @@ PHP_METHOD(Stub_Bitwise, boolAndSimple)
 
 PHP_METHOD(Stub_Bitwise, doubleAnd)
 {
+	zend_long _0, _1;
 	double a = 0, b = 0, c = 0;
 	a = (double) (1);
 	b = (double) (2);
-	c = (double) (((int) (a) & (int) (b)));
+	_0 = ZEPHIR_DVAL_TO_LVAL(a);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	_1 = ZEPHIR_DVAL_TO_LVAL(b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = (double) ((_0 & _1));
 	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Bitwise, double2And)
 {
+	zend_long _0, _1;
 	double a = 0, b = 0, c = 0;
 	a =  (1.0);
 	b =  (2.0);
-	c = (double) (((int) (a) & (int) (b)));
+	_0 = ZEPHIR_DVAL_TO_LVAL(a);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	_1 = ZEPHIR_DVAL_TO_LVAL(b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = (double) ((_0 & _1));
 	RETURN_DOUBLE(c);
 }
 
@@ -134,11 +153,16 @@ PHP_METHOD(Stub_Bitwise, varAndSimple)
 
 PHP_METHOD(Stub_Bitwise, intDoubleAnd)
 {
+	zend_long _0;
 	double a = 0;
 	zend_long b = 0, c = 0;
 	a = (double) (1);
 	b = 2;
-	c = ((int) (a) & b);
+	_0 = ZEPHIR_DVAL_TO_LVAL(a);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = (_0 & b);
 	RETURN_LONG(c);
 }
 
@@ -151,11 +175,16 @@ PHP_METHOD(Stub_Bitwise, intDoubleAndSimple)
 
 PHP_METHOD(Stub_Bitwise, doubleIntAnd)
 {
+	zend_long _0;
 	double a = 0, c = 0;
 	zend_long b = 0;
 	a = (double) (1);
 	b = 2;
-	c = (double) (((int) (a) & b));
+	_0 = ZEPHIR_DVAL_TO_LVAL(a);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = (double) ((_0 & b));
 	RETURN_DOUBLE(c);
 }
 
@@ -213,67 +242,70 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCastAnd)
 PHP_METHOD(Stub_Bitwise, intVarImplicitCast2And)
 {
 	zend_long b = 0, c = 0;
-	zval a;
+	zval a, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
 	b = 2;
-	c = (b & zephir_get_intval(&a));
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, b);
+	ZEPHIR_INIT_VAR(&_1);
+	zephir_bitwise_and_function(&_1, &_0, &a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	c = zephir_get_intval(&_1);
 	RETURN_MM_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complexAnd)
 {
-	double c = 0;
-	c = (double) (0);
-	RETURN_DOUBLE(c);
+	zend_long c = 0;
+	c = 0;
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex2And)
 {
-	zend_bool c = 0;
-	c = (((1 & 1)) ? 1 : 0);
-	RETURN_BOOL(c);
+	zend_long c = 0;
+	c = ((zend_long) 1 & (zend_long) 1);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex3And)
 {
-	zend_bool c = 0;
-	c = (((1 & ((1.0) ? 1 : 0))) ? 1 : 0);
-	RETURN_BOOL(c);
+	zend_long c = 0;
+	c = ((zend_long) 1 & 1);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex4And)
 {
-	zval c;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-
-	ZVAL_UNDEF(&c);
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&c);
-	ZVAL_LONG(&c, ((int) (1.0) & 1));
-	RETURN_CCTOR(&c);
+	zend_long c = 0;
+	c = (1 & (zend_long) 1);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex5And)
 {
 	zend_long c = 0;
-	c = (1 & 1);
+	c = (1 & (zend_long) 1);
 	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex6And)
 {
-	zend_bool c = 0;
-	c = (((1 & ((1) ? 1 : 0))) ? 1 : 0);
-	RETURN_BOOL(c);
+	zend_long c = 0;
+	c = ((zend_long) 1 & 1);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex7And)
@@ -282,7 +314,7 @@ PHP_METHOD(Stub_Bitwise, complex7And)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = 2;
-	c = (a & b);
+	c = ((zend_long) a & b);
 	RETURN_LONG(c);
 }
 
@@ -292,30 +324,28 @@ PHP_METHOD(Stub_Bitwise, complex9And)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = 2;
-	c = (b & a);
+	c = (b & (zend_long) a);
 	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex10And)
 {
-	double c = 0;
-	zend_long b = 0;
+	zend_long b = 0, c = 0;
 	zend_bool a = 0;
 	a = ((1.0 != 0.0) ? 1 : 0);
 	b = 2;
-	c = (double) ((b & a));
-	RETURN_DOUBLE(c);
+	c = (b & (zend_long) a);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex11And)
 {
-	double c = 0;
-	zend_long b = 0;
+	zend_long b = 0, c = 0;
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
-	c = (double) ((b & a));
-	RETURN_DOUBLE(c);
+	c = (b & (zend_long) a);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex12And)
@@ -324,7 +354,7 @@ PHP_METHOD(Stub_Bitwise, complex12And)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
-	c = (b & a);
+	c = (b & (zend_long) a);
 	RETURN_LONG(c);
 }
 
@@ -334,7 +364,7 @@ PHP_METHOD(Stub_Bitwise, complex13And)
 	zend_bool a = 0, b = 0;
 	a = ((1) ? 1 : 0);
 	b = ((2.0 != 0.0) ? 1 : 0);
-	c = (b & a);
+	c = ((zend_long) b & (zend_long) a);
 	RETURN_LONG(c);
 }
 
@@ -344,28 +374,38 @@ PHP_METHOD(Stub_Bitwise, complex14And)
 	zend_long a = 0, c = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	c = (b & a);
+	c = ((zend_long) b & a);
 	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex15And)
 {
+	zend_long _0;
 	zend_bool c = 0;
 	double b = 0;
 	zend_long a = 0;
 	a = 1;
 	b =  (2.0);
-	c = ((((int) (b) & a)) ? 1 : 0);
+	_0 = ZEPHIR_DVAL_TO_LVAL(b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = (((_0 & a)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex16And)
 {
+	zend_long _0;
 	double b = 0, c = 0;
 	zend_long a = 0;
 	a = 1;
 	b =  (2.0);
-	c = (double) (((int) (b) & a));
+	_0 = ZEPHIR_DVAL_TO_LVAL(b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = (double) ((_0 & a));
 	RETURN_DOUBLE(c);
 }
 
@@ -376,66 +416,66 @@ PHP_METHOD(Stub_Bitwise, complex17And)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	c = (double) ((a & b));
+	c = (double) ((a & (zend_long) b));
 	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex18And)
 {
+	double c = 0;
 	zend_bool b = 0;
-	double d = 0, c = 0;
-	zend_long a = 0;
+	zend_long a = 0, d = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a & b));
-	c = (double) ((a & (b & (int) (d))));
+	d = (a & (zend_long) b);
+	c = (double) ((a & ((zend_long) b & d)));
 	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex19And)
 {
+	double c = 0;
 	zend_bool b = 0;
-	double d = 0, c = 0;
-	zend_long a = 0;
+	zend_long a = 0, d = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a & b));
-	c = (double) ((a & ((int) (d) & b)));
+	d = (a & (zend_long) b);
+	c = (double) ((a & (d & (zend_long) b)));
 	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex20And)
 {
+	double c = 0;
 	zend_bool b = 0;
-	double d = 0, c = 0;
-	zend_long a = 0;
+	zend_long a = 0, d = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a & b));
-	c = (double) (((int) (d) & ((int) (d) & ((int) (d) & (int) (d)))));
+	d = (a & (zend_long) b);
+	c = (double) ((d & (d & (d & d))));
 	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex21And)
 {
+	double c = 0;
 	zend_bool b = 0;
-	double d = 0, c = 0;
-	zend_long a = 0;
+	zend_long a = 0, d = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a & b));
-	c = (double) ((b & ((int) (d) & (b & ((int) (d) & ((int) (d) & (b & ((int) (d) & b))))))));
+	d = (a & (zend_long) b);
+	c = (double) (((zend_long) b & (d & ((zend_long) b & (d & (d & ((zend_long) b & (d & (zend_long) b))))))));
 	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex22And)
 {
-	double d = 0, c = 0;
-	zend_long a = 0, b = 0;
+	double c = 0;
+	zend_long a = 0, d = 0, b = 0;
 	a = 1;
 	b = (long) (2.0);
-	d = (double) ((a & b));
-	c = (double) ((b & ((int) (d) & ((int) (d) & ((int) (d) & ((int) (d) & (b & ((int) (d) & b))))))));
+	d = (a & b);
+	c = (double) ((b & (d & (d & (d & (d & (b & (d & b))))))));
 	RETURN_DOUBLE(c);
 }
 
@@ -446,7 +486,7 @@ PHP_METHOD(Stub_Bitwise, complex23And)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a & b));
+	d = (double) ((a & (zend_long) b));
 	RETURN_DOUBLE(d);
 }
 
@@ -456,7 +496,7 @@ PHP_METHOD(Stub_Bitwise, complex24And)
 	zend_long a = 0, d = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (1 & (a & ((int) (0) & b)));
+	d = ((a & ((zend_long) b & (zend_long) 0)) & 1);
 	RETURN_LONG(d);
 }
 
@@ -489,7 +529,7 @@ PHP_METHOD(Stub_Bitwise, boolOr)
 	zend_bool a = 0, b = 0, c = 0;
 	a = ((1) ? 1 : 0);
 	b = ((2) ? 1 : 0);
-	c = (((a | b)) ? 1 : 0);
+	c = ((((zend_long) a | (zend_long) b)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -497,7 +537,7 @@ PHP_METHOD(Stub_Bitwise, bool2Or)
 {
 	zend_bool a = 0, c = 0;
 	a = ((1) ? 1 : 0);
-	c = (((a | 2)) ? 1 : 0);
+	c = ((((zend_long) a | 2)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -505,7 +545,7 @@ PHP_METHOD(Stub_Bitwise, bool3Or)
 {
 	zend_bool a = 0, c = 0;
 	a = 1;
-	c = (((a | 0)) ? 1 : 0);
+	c = ((((zend_long) a | (zend_long) 0)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -513,7 +553,7 @@ PHP_METHOD(Stub_Bitwise, bool4Or)
 {
 	zend_bool a = 0, c = 0;
 	a = 1;
-	c = (((a | 1)) ? 1 : 0);
+	c = ((((zend_long) a | (zend_long) 1)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
@@ -526,19 +566,37 @@ PHP_METHOD(Stub_Bitwise, boolOrSimple)
 
 PHP_METHOD(Stub_Bitwise, doubleOr)
 {
+	zend_long _0, _1;
 	double a = 0, b = 0, c = 0;
 	a = (double) (1);
 	b = (double) (2);
-	c = (double) (((int) (a) | (int) (b)));
+	_0 = ZEPHIR_DVAL_TO_LVAL(a);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	_1 = ZEPHIR_DVAL_TO_LVAL(b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = (double) ((_0 | _1));
 	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Bitwise, double2Or)
 {
+	zend_long _0, _1;
 	double a = 0, b = 0, c = 0;
 	a =  (1.0);
 	b =  (2.0);
-	c = (double) (((int) (a) | (int) (b)));
+	_0 = ZEPHIR_DVAL_TO_LVAL(a);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	_1 = ZEPHIR_DVAL_TO_LVAL(b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = (double) ((_0 | _1));
 	RETURN_DOUBLE(c);
 }
 
@@ -574,11 +632,16 @@ PHP_METHOD(Stub_Bitwise, varOrSimple)
 
 PHP_METHOD(Stub_Bitwise, intDoubleOr)
 {
+	zend_long _0;
 	double a = 0;
 	zend_long b = 0, c = 0;
 	a = (double) (1);
 	b = 2;
-	c = ((int) (a) | b);
+	_0 = ZEPHIR_DVAL_TO_LVAL(a);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = (_0 | b);
 	RETURN_LONG(c);
 }
 
@@ -591,11 +654,16 @@ PHP_METHOD(Stub_Bitwise, intDoubleOrSimple)
 
 PHP_METHOD(Stub_Bitwise, doubleIntOr)
 {
+	zend_long _0;
 	double a = 0, c = 0;
 	zend_long b = 0;
 	a = (double) (1);
 	b = 2;
-	c = (double) (((int) (a) | b));
+	_0 = ZEPHIR_DVAL_TO_LVAL(a);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = (double) ((_0 | b));
 	RETURN_DOUBLE(c);
 }
 
@@ -653,67 +721,70 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCastOr)
 PHP_METHOD(Stub_Bitwise, intVarImplicitCast2Or)
 {
 	zend_long b = 0, c = 0;
-	zval a;
+	zval a, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
 	b = 2;
-	c = (b | zephir_get_intval(&a));
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, b);
+	ZEPHIR_INIT_VAR(&_1);
+	zephir_bitwise_or_function(&_1, &_0, &a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	c = zephir_get_intval(&_1);
 	RETURN_MM_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complexOr)
 {
-	double c = 0;
-	c = (double) (3);
-	RETURN_DOUBLE(c);
+	zend_long c = 0;
+	c = 3;
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex2Or)
 {
-	zend_bool c = 0;
-	c = (((1 | 1)) ? 1 : 0);
-	RETURN_BOOL(c);
+	zend_long c = 0;
+	c = ((zend_long) 1 | (zend_long) 1);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex3Or)
 {
-	zend_bool c = 0;
-	c = (((1 | ((1.0) ? 1 : 0))) ? 1 : 0);
-	RETURN_BOOL(c);
+	zend_long c = 0;
+	c = ((zend_long) 1 | 1);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex4Or)
 {
-	zval c;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-
-	ZVAL_UNDEF(&c);
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&c);
-	ZVAL_LONG(&c, ((int) (1.0) | 1));
-	RETURN_CCTOR(&c);
+	zend_long c = 0;
+	c = (1 | (zend_long) 1);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex5Or)
 {
 	zend_long c = 0;
-	c = (1 | 1);
+	c = (1 | (zend_long) 1);
 	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex6Or)
 {
-	zend_bool c = 0;
-	c = (((1 | ((1) ? 1 : 0))) ? 1 : 0);
-	RETURN_BOOL(c);
+	zend_long c = 0;
+	c = ((zend_long) 1 | 1);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex7Or)
@@ -722,7 +793,7 @@ PHP_METHOD(Stub_Bitwise, complex7Or)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = 2;
-	c = (a | b);
+	c = ((zend_long) a | b);
 	RETURN_LONG(c);
 }
 
@@ -732,30 +803,28 @@ PHP_METHOD(Stub_Bitwise, complex9Or)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = 2;
-	c = (b | a);
+	c = (b | (zend_long) a);
 	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex10Or)
 {
-	double c = 0;
-	zend_long b = 0;
+	zend_long b = 0, c = 0;
 	zend_bool a = 0;
 	a = ((1.0 != 0.0) ? 1 : 0);
 	b = 2;
-	c = (double) ((b | a));
-	RETURN_DOUBLE(c);
+	c = (b | (zend_long) a);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex11Or)
 {
-	double c = 0;
-	zend_long b = 0;
+	zend_long b = 0, c = 0;
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
-	c = (double) ((b | a));
-	RETURN_DOUBLE(c);
+	c = (b | (zend_long) a);
+	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex12Or)
@@ -764,7 +833,7 @@ PHP_METHOD(Stub_Bitwise, complex12Or)
 	zend_bool a = 0;
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
-	c = (b | a);
+	c = (b | (zend_long) a);
 	RETURN_LONG(c);
 }
 
@@ -774,7 +843,7 @@ PHP_METHOD(Stub_Bitwise, complex13Or)
 	zend_bool a = 0, b = 0;
 	a = ((1) ? 1 : 0);
 	b = ((2.0 != 0.0) ? 1 : 0);
-	c = (b | a);
+	c = ((zend_long) b | (zend_long) a);
 	RETURN_LONG(c);
 }
 
@@ -784,28 +853,38 @@ PHP_METHOD(Stub_Bitwise, complex14Or)
 	zend_long a = 0, c = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	c = (b | a);
+	c = ((zend_long) b | a);
 	RETURN_LONG(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex15Or)
 {
+	zend_long _0;
 	zend_bool c = 0;
 	double b = 0;
 	zend_long a = 0;
 	a = 1;
 	b =  (2.0);
-	c = ((((int) (b) | a)) ? 1 : 0);
+	_0 = ZEPHIR_DVAL_TO_LVAL(b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = (((_0 | a)) ? 1 : 0);
 	RETURN_BOOL(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex16Or)
 {
+	zend_long _0;
 	double b = 0, c = 0;
 	zend_long a = 0;
 	a = 1;
 	b =  (2.0);
-	c = (double) (((int) (b) | a));
+	_0 = ZEPHIR_DVAL_TO_LVAL(b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	c = (double) ((_0 | a));
 	RETURN_DOUBLE(c);
 }
 
@@ -816,66 +895,66 @@ PHP_METHOD(Stub_Bitwise, complex17Or)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	c = (double) ((a | b));
+	c = (double) ((a | (zend_long) b));
 	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex18Or)
 {
+	double c = 0;
 	zend_bool b = 0;
-	double d = 0, c = 0;
-	zend_long a = 0;
+	zend_long a = 0, d = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a | b));
-	c = (double) (((a | b) | (int) (d)));
+	d = (a | (zend_long) b);
+	c = (double) ((d | (a | (zend_long) b)));
 	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex19Or)
 {
+	double c = 0;
 	zend_bool b = 0;
-	double d = 0, c = 0;
-	zend_long a = 0;
+	zend_long a = 0, d = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a | b));
-	c = (double) (((a | (int) (d)) | b));
+	d = (a | (zend_long) b);
+	c = (double) (((zend_long) b | (a | d)));
 	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex20Or)
 {
+	double c = 0;
 	zend_bool b = 0;
-	double d = 0, c = 0;
-	zend_long a = 0;
+	zend_long a = 0, d = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a | b));
-	c = (double) (((((int) (d) | (int) (d)) | (int) (d)) | (int) (d)));
+	d = (a | (zend_long) b);
+	c = (double) ((d | (d | (d | d))));
 	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex21Or)
 {
+	double c = 0;
 	zend_bool b = 0;
-	double d = 0, c = 0;
-	zend_long a = 0;
+	zend_long a = 0, d = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a | b));
-	c = (double) ((((((((b | (int) (d)) | b) | (int) (d)) | (int) (d)) | b) | (int) (d)) | b));
+	d = (a | (zend_long) b);
+	c = (double) (((zend_long) b | (d | ((zend_long) b | (d | (d | ((zend_long) b | ((zend_long) b | d))))))));
 	RETURN_DOUBLE(c);
 }
 
 PHP_METHOD(Stub_Bitwise, complex22Or)
 {
-	double d = 0, c = 0;
-	zend_long a = 0, b = 0;
+	double c = 0;
+	zend_long a = 0, d = 0, b = 0;
 	a = 1;
 	b = (long) (2.0);
-	d = (double) ((a | b));
-	c = (double) ((((((((b | (int) (d)) | (int) (d)) | (int) (d)) | (int) (d)) | b) | (int) (d)) | b));
+	d = (a | b);
+	c = (double) ((b | (d | (b | (d | (d | (d | (b | d))))))));
 	RETURN_DOUBLE(c);
 }
 
@@ -886,19 +965,18 @@ PHP_METHOD(Stub_Bitwise, complex23Or)
 	zend_long a = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((a | b));
+	d = (double) ((a | (zend_long) b));
 	RETURN_DOUBLE(d);
 }
 
 PHP_METHOD(Stub_Bitwise, complex24Or)
 {
 	zend_bool b = 0;
-	double d = 0;
-	zend_long a = 0;
+	zend_long a = 0, d = 0;
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
-	d = (double) ((((1 | a) | 0) | b));
-	RETURN_DOUBLE(d);
+	d = ((zend_long) b | ((a | 1) | (zend_long) 0));
+	RETURN_LONG(d);
 }
 
 PHP_METHOD(Stub_Bitwise, intShiftLeft)
@@ -968,7 +1046,7 @@ PHP_METHOD(Stub_Bitwise, testBitwiseNot)
 		Z_PARAM_LONG(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
-	RETURN_LONG(~a);
+	RETURN_LONG(~(a));
 }
 
 PHP_METHOD(Stub_Bitwise, testBitwiseAndNot)
@@ -981,7 +1059,7 @@ PHP_METHOD(Stub_Bitwise, testBitwiseAndNot)
 		Z_PARAM_LONG(b)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
-	RETURN_LONG((a & ~b));
+	RETURN_LONG((a & ~(b)));
 }
 
 PHP_METHOD(Stub_Bitwise, getInt)
@@ -1056,13 +1134,13 @@ PHP_METHOD(Stub_Bitwise, issue2014HexArithmetic)
  */
 PHP_METHOD(Stub_Bitwise, intLiteralShiftLeftDynamic)
 {
-	zend_long _2;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *remainingBits, remainingBits_sub, _0, _1;
+	zval *remainingBits, remainingBits_sub, _0, _1, _2;
 
 	ZVAL_UNDEF(&remainingBits_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(remainingBits)
 	ZEND_PARSE_PARAMETERS_END();
@@ -1077,87 +1155,163 @@ PHP_METHOD(Stub_Bitwise, intLiteralShiftLeftDynamic)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	_2 = zephir_safe_shift_left_long(1, zephir_get_intval(&_1));
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_LONG(&_0, 1);
+	ZEPHIR_INIT_VAR(&_2);
+	zephir_shift_left_function(&_2, &_0, &_1);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	RETURN_MM_LONG((_2 - 1));
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_LONG(&_0, 1);
+	zephir_sub_function(return_value, &_2, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Bitwise, intLiteralXorDynamic)
 {
-	zval *mask, mask_sub;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *mask, mask_sub, _0;
 
 	ZVAL_UNDEF(&mask_sub);
+	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(mask)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &mask);
-	RETURN_LONG((0xFF ^ zephir_get_intval(mask)));
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &mask);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, 0xFF);
+	zephir_bitwise_xor_function(return_value, mask, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Bitwise, boolLiteralOrDynamic)
 {
-	zval *value, value_sub;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *value, value_sub, _0;
 
 	ZVAL_UNDEF(&value_sub);
+	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &value);
-	RETURN_LONG(((int) (1) | zephir_get_intval(value)));
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &value);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_BOOL(&_0, 1);
+	zephir_bitwise_or_function(return_value, value, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Bitwise, doubleLiteralAndDynamic)
 {
-	zval *value, value_sub;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *value, value_sub, _0;
 
 	ZVAL_UNDEF(&value_sub);
+	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &value);
-	RETURN_LONG(((int) (7.9) & zephir_get_intval(value)));
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &value);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_DOUBLE(&_0, 7.9);
+	zephir_bitwise_and_function(return_value, value, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Bitwise, boolVariableOrDynamic)
 {
 	zend_bool flag;
-	zval *value, value_sub;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *value, value_sub, _0;
 
 	ZVAL_UNDEF(&value_sub);
+	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &value);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &value);
 	flag = 1;
-	RETURN_LONG((flag | zephir_get_intval(value)));
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_BOOL(&_0, flag);
+	zephir_bitwise_or_function(return_value, &_0, value);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Bitwise, intVariableXorDynamic)
 {
 	zend_long base;
-	zval *value, value_sub;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *value, value_sub, _0;
 
 	ZVAL_UNDEF(&value_sub);
+	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &value);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &value);
 	base = 255;
-	RETURN_LONG((base ^ zephir_get_intval(value)));
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, base);
+	zephir_bitwise_xor_function(return_value, &_0, value);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Bitwise, dynamicAndIntLiteral)
 {
-	zval *value, value_sub;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *value, value_sub, _0;
 
 	ZVAL_UNDEF(&value_sub);
+	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &value);
-	RETURN_LONG((zephir_get_intval(value) & 0xFFFFFFFFFF));
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &value);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, 0xFFFFFFFFFF);
+	zephir_bitwise_and_function(return_value, value, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM();
 }
 

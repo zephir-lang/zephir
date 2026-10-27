@@ -1,0 +1,99 @@
+--TEST--
+Bitwise operators with a GMP operand use its overloaded operator as in PHP (#2753)
+--SKIPIF--
+<?php if (!extension_loaded('gmp')) { echo "skip gmp is not loaded"; }
+--INI--
+extension=gmp
+--FILE--
+namespace Stub;
+
+class BitwiseGmp
+{
+    public static function shiftLeft(var g, long n)
+    {
+        return g << n;
+    }
+
+    public static function shiftRight(long a, var g)
+    {
+        return a >> g;
+    }
+
+    public static function orLong(long a, var g)
+    {
+        return a | g;
+    }
+
+    public static function andDouble(double d, var g)
+    {
+        return d & g;
+    }
+
+    public static function xorBool(bool b, var g)
+    {
+        return b ^ g;
+    }
+
+    public static function not(var g)
+    {
+        return ~g;
+    }
+
+    public static function compound(long a, var g)
+    {
+        var r;
+
+        let r = a;
+        let r <<= g;
+
+        return r;
+    }
+}
+--USAGE--
+use Stub\BitwiseGmp;
+
+class PhpBitwiseGmp
+{
+    public static function shiftLeft($g, int $n) { return $g << $n; }
+    public static function shiftRight(int $a, $g) { return $a >> $g; }
+    public static function orLong(int $a, $g) { return $a | $g; }
+    public static function andDouble(float $d, $g) { return $d & $g; }
+    public static function xorBool(bool $b, $g) { return $b ^ $g; }
+    public static function not($g) { return ~$g; }
+    public static function compound(int $a, $g) { $r = $a; $r <<= $g; return $r; }
+}
+
+function describe(callable $call): string
+{
+    try {
+        $result = $call();
+    } catch (\Throwable $e) {
+        return get_class($e) . ': ' . $e->getMessage();
+    }
+
+    return is_object($result) ? get_class($result) . ' ' . gmp_strval($result) : var_export($result, true);
+}
+
+$cases = [
+    ['shiftLeft', [gmp_init(5), 3]],
+    ['shiftRight', [80, gmp_init(2)]],
+    ['orLong', [4, gmp_init(3)]],
+    ['andDouble', [6.0, gmp_init(3)]],
+    ['xorBool', [true, gmp_init(3)]],
+    ['not', [gmp_init(5)]],
+    ['compound', [5, gmp_init(2)]],
+];
+
+foreach ($cases as [$method, $args]) {
+    $zephir = describe(fn () => BitwiseGmp::$method(...$args));
+    $php    = describe(fn () => PhpBitwiseGmp::$method(...$args));
+    echo $method, ': ', $zephir === $php ? 'same' : "DIFF zephir=$zephir php=$php", "\n";
+}
+--EXPECT--
+shiftLeft: same
+shiftRight: same
+orLong: same
+andDouble: same
+xorBool: same
+not: same
+compound: same

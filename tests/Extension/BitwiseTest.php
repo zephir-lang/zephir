@@ -44,16 +44,17 @@ final class BitwiseTest extends TestCase
         $this->assertSame($test->intVarAnd(), 0);
         $this->assertSame($test->intVarImplicitCastAnd(), 0);
         $this->assertSame($test->intVarImplicitCast2And(), 0);
-        $this->assertSame($test->complexAnd(), 0.0);
-        $this->assertTrue($test->complex2And());
-        $this->assertTrue($test->complex3And());
+        // A `var` holding a bitwise result is PHP's int, never a bool or a float (#2753)
+        $this->assertSame(2 & 1.0, $test->complexAnd());
+        $this->assertSame(true & true, $test->complex2And());
+        $this->assertSame(true & 1.0, $test->complex3And());
         $this->assertSame($test->complex4And(), 1);
         $this->assertSame($test->complex5And(), 1);
-        $this->assertTrue($test->complex6And());
+        $this->assertSame(true & 1, $test->complex6And());
         $this->assertSame($test->complex7And(), 0);
         $this->assertSame($test->complex9And(), 0);
-        $this->assertSame($test->complex10And(), 0.0);
-        $this->assertSame($test->complex11And(), 0.0);
+        $this->assertSame(2 & true, $test->complex10And());
+        $this->assertSame(2 & true, $test->complex11And());
         $this->assertSame($test->complex12And(), 0);
         $this->assertSame($test->complex13And(), 1);
         $this->assertSame($test->complex14And(), 1);
@@ -89,16 +90,16 @@ final class BitwiseTest extends TestCase
         $this->assertSame($test->intVarOr(), 3);
         $this->assertSame($test->intVarImplicitCastOr(), 3);
         $this->assertSame($test->intVarImplicitCast2Or(), 3);
-        $this->assertSame($test->complexOr(), 3.0);
-        $this->assertTrue($test->complex2Or());
-        $this->assertTrue($test->complex3Or());
+        $this->assertSame(2 | 1.0, $test->complexOr());
+        $this->assertSame(true | true, $test->complex2Or());
+        $this->assertSame(true | 1.0, $test->complex3Or());
         $this->assertSame($test->complex4Or(), 1);
         $this->assertSame($test->complex5Or(), 1);
-        $this->assertTrue($test->complex6Or());
+        $this->assertSame(true | 1, $test->complex6Or());
         $this->assertSame($test->complex7Or(), 3);
         $this->assertSame($test->complex9Or(), 3);
-        $this->assertSame($test->complex10Or(), 3.0);
-        $this->assertSame($test->complex11Or(), 3.0);
+        $this->assertSame(2 | true, $test->complex10Or());
+        $this->assertSame(2 | true, $test->complex11Or());
         $this->assertSame($test->complex12Or(), 3);
         $this->assertSame($test->complex13Or(), 1);
         $this->assertSame($test->complex14Or(), 1);
@@ -110,7 +111,7 @@ final class BitwiseTest extends TestCase
         $this->assertSame($test->complex21Or(), 1.0);
         $this->assertSame($test->complex22Or(), 3.0);
         $this->assertSame($test->complex23Or(), 1.0);
-        $this->assertSame($test->complex24Or(), 1.0);
+        $this->assertSame(1 | 1 | false | true, $test->complex24Or());
 
         // shiftleft
         $this->assertSame($test->intShiftLeft(), 4);

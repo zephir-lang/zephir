@@ -1,0 +1,1876 @@
+--TEST--
+Bitwise operators behave as in PHP for every operand kind, including a shifted integer literal (#2753)
+--INI--
+display_errors=stdout
+display_startup_errors=1
+--FILE--
+namespace Stub;
+
+class BitwiseParity
+{
+    protected p = 5;
+
+    protected static s = 5;
+
+    public static function andLongVar(long a, var b)
+    {
+        var r;
+
+        let r = a & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andVarLong(var a, long b)
+    {
+        var r;
+
+        let r = a & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andDoubleLong(double a, long b)
+    {
+        var r;
+
+        let r = a & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andLongDouble(long a, double b)
+    {
+        var r;
+
+        let r = a & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andDoubleDouble(double a, double b)
+    {
+        var r;
+
+        let r = a & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andBoolLong(long n, long b)
+    {
+        var r;
+
+        let r = (n > 0) & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andBoolLit(long n)
+    {
+        var r;
+
+        let r = (n > 0) & 6;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andLongBool(long a, long n)
+    {
+        var r;
+
+        let r = a & (n > 0);
+        echo "after";
+
+        return r;
+    }
+
+    public static function andVarBool(var a, bool b)
+    {
+        var r;
+
+        let r = a & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andBoolVar(bool a, var b)
+    {
+        var r;
+
+        let r = a & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andDoubleVar(double a, var b)
+    {
+        var r;
+
+        let r = a & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andVarVar(var a, var b)
+    {
+        var r;
+
+        let r = a & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andStrLit(var b)
+    {
+        var r;
+
+        let r = "5" & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andNullLit(var b)
+    {
+        var r;
+
+        let r = null & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andMixedLong(mixed a, long b)
+    {
+        var r;
+
+        let r = a & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andStringLong(string a, long b)
+    {
+        var r;
+
+        let r = a & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andLongTrue(long a)
+    {
+        var r;
+
+        let r = a & true;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andLongTwo(long a)
+    {
+        var r;
+
+        let r = a & 2.0;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andLongTwoHalf(long a)
+    {
+        var r;
+
+        let r = a & 2.5;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andHalfDouble(double b)
+    {
+        var r;
+
+        let r = 2.5 & b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andFoldHalf()
+    {
+        var r;
+
+        let r = 1.5 & 1;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andInferBool()
+    {
+        var c;
+
+        let c = true & true;
+
+        return c;
+    }
+
+    public static function andInferBoolExpr(long n)
+    {
+        var c;
+
+        let c = (n > 0) & (n > 1);
+
+        return c;
+    }
+
+    public static function andInferDouble()
+    {
+        var c;
+
+        let c = 2.0 & 3.0;
+
+        return c;
+    }
+
+    public static function andCompoundLong(long a, var b)
+    {
+        long r;
+
+        let r = a;
+        let r &= b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function andCompoundHalf(long a)
+    {
+        long r;
+
+        let r = a;
+        let r &= 2.5;
+        echo "after";
+
+        return r;
+    }
+
+    public function andProp(var v)
+    {
+        let this->p = 5;
+        let this->p &= v;
+        echo "after";
+
+        return this->p;
+    }
+
+    public function andPropKeep(var v)
+    {
+        var e;
+
+        let this->p = 5;
+        try {
+            let this->p &= v;
+        } catch \Throwable, e {
+            echo get_class(e);
+        }
+
+        return this->p;
+    }
+
+    public static function andStatic(var v)
+    {
+        let self::s = 5;
+        let self::s &= v;
+        echo "after";
+
+        return self::s;
+    }
+
+    public static function orLongVar(long a, var b)
+    {
+        var r;
+
+        let r = a | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orVarLong(var a, long b)
+    {
+        var r;
+
+        let r = a | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orDoubleLong(double a, long b)
+    {
+        var r;
+
+        let r = a | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orLongDouble(long a, double b)
+    {
+        var r;
+
+        let r = a | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orDoubleDouble(double a, double b)
+    {
+        var r;
+
+        let r = a | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orBoolLong(long n, long b)
+    {
+        var r;
+
+        let r = (n > 0) | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orBoolLit(long n)
+    {
+        var r;
+
+        let r = (n > 0) | 6;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orLongBool(long a, long n)
+    {
+        var r;
+
+        let r = a | (n > 0);
+        echo "after";
+
+        return r;
+    }
+
+    public static function orVarBool(var a, bool b)
+    {
+        var r;
+
+        let r = a | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orBoolVar(bool a, var b)
+    {
+        var r;
+
+        let r = a | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orDoubleVar(double a, var b)
+    {
+        var r;
+
+        let r = a | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orVarVar(var a, var b)
+    {
+        var r;
+
+        let r = a | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orStrLit(var b)
+    {
+        var r;
+
+        let r = "5" | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orNullLit(var b)
+    {
+        var r;
+
+        let r = null | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orMixedLong(mixed a, long b)
+    {
+        var r;
+
+        let r = a | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orStringLong(string a, long b)
+    {
+        var r;
+
+        let r = a | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orLongTrue(long a)
+    {
+        var r;
+
+        let r = a | true;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orLongTwo(long a)
+    {
+        var r;
+
+        let r = a | 2.0;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orLongTwoHalf(long a)
+    {
+        var r;
+
+        let r = a | 2.5;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orHalfDouble(double b)
+    {
+        var r;
+
+        let r = 2.5 | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orFoldHalf()
+    {
+        var r;
+
+        let r = 1.5 | 1;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orInferBool()
+    {
+        var c;
+
+        let c = true | true;
+
+        return c;
+    }
+
+    public static function orInferBoolExpr(long n)
+    {
+        var c;
+
+        let c = (n > 0) | (n > 1);
+
+        return c;
+    }
+
+    public static function orInferDouble()
+    {
+        var c;
+
+        let c = 2.0 | 3.0;
+
+        return c;
+    }
+
+    public static function orCompoundLong(long a, var b)
+    {
+        long r;
+
+        let r = a;
+        let r |= b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function orCompoundHalf(long a)
+    {
+        long r;
+
+        let r = a;
+        let r |= 2.5;
+        echo "after";
+
+        return r;
+    }
+
+    public function orProp(var v)
+    {
+        let this->p = 5;
+        let this->p |= v;
+        echo "after";
+
+        return this->p;
+    }
+
+    public function orPropKeep(var v)
+    {
+        var e;
+
+        let this->p = 5;
+        try {
+            let this->p |= v;
+        } catch \Throwable, e {
+            echo get_class(e);
+        }
+
+        return this->p;
+    }
+
+    public static function orStatic(var v)
+    {
+        let self::s = 5;
+        let self::s |= v;
+        echo "after";
+
+        return self::s;
+    }
+
+    public static function xorLongVar(long a, var b)
+    {
+        var r;
+
+        let r = a ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorVarLong(var a, long b)
+    {
+        var r;
+
+        let r = a ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorDoubleLong(double a, long b)
+    {
+        var r;
+
+        let r = a ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorLongDouble(long a, double b)
+    {
+        var r;
+
+        let r = a ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorDoubleDouble(double a, double b)
+    {
+        var r;
+
+        let r = a ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorBoolLong(long n, long b)
+    {
+        var r;
+
+        let r = (n > 0) ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorBoolLit(long n)
+    {
+        var r;
+
+        let r = (n > 0) ^ 6;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorLongBool(long a, long n)
+    {
+        var r;
+
+        let r = a ^ (n > 0);
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorVarBool(var a, bool b)
+    {
+        var r;
+
+        let r = a ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorBoolVar(bool a, var b)
+    {
+        var r;
+
+        let r = a ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorDoubleVar(double a, var b)
+    {
+        var r;
+
+        let r = a ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorVarVar(var a, var b)
+    {
+        var r;
+
+        let r = a ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorStrLit(var b)
+    {
+        var r;
+
+        let r = "5" ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorNullLit(var b)
+    {
+        var r;
+
+        let r = null ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorMixedLong(mixed a, long b)
+    {
+        var r;
+
+        let r = a ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorStringLong(string a, long b)
+    {
+        var r;
+
+        let r = a ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorLongTrue(long a)
+    {
+        var r;
+
+        let r = a ^ true;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorLongTwo(long a)
+    {
+        var r;
+
+        let r = a ^ 2.0;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorLongTwoHalf(long a)
+    {
+        var r;
+
+        let r = a ^ 2.5;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorHalfDouble(double b)
+    {
+        var r;
+
+        let r = 2.5 ^ b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorFoldHalf()
+    {
+        var r;
+
+        let r = 1.5 ^ 1;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorInferBool()
+    {
+        var c;
+
+        let c = true ^ true;
+
+        return c;
+    }
+
+    public static function xorInferBoolExpr(long n)
+    {
+        var c;
+
+        let c = (n > 0) ^ (n > 1);
+
+        return c;
+    }
+
+    public static function xorInferDouble()
+    {
+        var c;
+
+        let c = 2.0 ^ 3.0;
+
+        return c;
+    }
+
+    public static function xorCompoundLong(long a, var b)
+    {
+        long r;
+
+        let r = a;
+        let r ^= b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function xorCompoundHalf(long a)
+    {
+        long r;
+
+        let r = a;
+        let r ^= 2.5;
+        echo "after";
+
+        return r;
+    }
+
+    public function xorProp(var v)
+    {
+        let this->p = 5;
+        let this->p ^= v;
+        echo "after";
+
+        return this->p;
+    }
+
+    public function xorPropKeep(var v)
+    {
+        var e;
+
+        let this->p = 5;
+        try {
+            let this->p ^= v;
+        } catch \Throwable, e {
+            echo get_class(e);
+        }
+
+        return this->p;
+    }
+
+    public static function xorStatic(var v)
+    {
+        let self::s = 5;
+        let self::s ^= v;
+        echo "after";
+
+        return self::s;
+    }
+
+    public static function shlLongVar(long a, var b)
+    {
+        var r;
+
+        let r = a << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlVarLong(var a, long b)
+    {
+        var r;
+
+        let r = a << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlDoubleLong(double a, long b)
+    {
+        var r;
+
+        let r = a << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlLongDouble(long a, double b)
+    {
+        var r;
+
+        let r = a << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlDoubleDouble(double a, double b)
+    {
+        var r;
+
+        let r = a << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlBoolLong(long n, long b)
+    {
+        var r;
+
+        let r = (n > 0) << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlBoolLit(long n)
+    {
+        var r;
+
+        let r = (n > 0) << 6;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlLongBool(long a, long n)
+    {
+        var r;
+
+        let r = a << (n > 0);
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlVarBool(var a, bool b)
+    {
+        var r;
+
+        let r = a << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlBoolVar(bool a, var b)
+    {
+        var r;
+
+        let r = a << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlDoubleVar(double a, var b)
+    {
+        var r;
+
+        let r = a << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlVarVar(var a, var b)
+    {
+        var r;
+
+        let r = a << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlStrLit(var b)
+    {
+        var r;
+
+        let r = "5" << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlNullLit(var b)
+    {
+        var r;
+
+        let r = null << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlMixedLong(mixed a, long b)
+    {
+        var r;
+
+        let r = a << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlStringLong(string a, long b)
+    {
+        var r;
+
+        let r = a << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlLongTrue(long a)
+    {
+        var r;
+
+        let r = a << true;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlLongTwo(long a)
+    {
+        var r;
+
+        let r = a << 2.0;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlLongTwoHalf(long a)
+    {
+        var r;
+
+        let r = a << 2.5;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlHalfDouble(double b)
+    {
+        var r;
+
+        let r = 2.5 << b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlFoldHalf()
+    {
+        var r;
+
+        let r = 1.5 << 1;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlInferBool()
+    {
+        var c;
+
+        let c = true << true;
+
+        return c;
+    }
+
+    public static function shlInferBoolExpr(long n)
+    {
+        var c;
+
+        let c = (n > 0) << (n > 1);
+
+        return c;
+    }
+
+    public static function shlInferDouble()
+    {
+        var c;
+
+        let c = 2.0 << 3.0;
+
+        return c;
+    }
+
+    public static function shlCompoundLong(long a, var b)
+    {
+        long r;
+
+        let r = a;
+        let r <<= b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shlCompoundHalf(long a)
+    {
+        long r;
+
+        let r = a;
+        let r <<= 2.5;
+        echo "after";
+
+        return r;
+    }
+
+    public function shlProp(var v)
+    {
+        let this->p = 5;
+        let this->p <<= v;
+        echo "after";
+
+        return this->p;
+    }
+
+    public function shlPropKeep(var v)
+    {
+        var e;
+
+        let this->p = 5;
+        try {
+            let this->p <<= v;
+        } catch \Throwable, e {
+            echo get_class(e);
+        }
+
+        return this->p;
+    }
+
+    public static function shlStatic(var v)
+    {
+        let self::s = 5;
+        let self::s <<= v;
+        echo "after";
+
+        return self::s;
+    }
+
+    public static function shrLongVar(long a, var b)
+    {
+        var r;
+
+        let r = a >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrVarLong(var a, long b)
+    {
+        var r;
+
+        let r = a >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrDoubleLong(double a, long b)
+    {
+        var r;
+
+        let r = a >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrLongDouble(long a, double b)
+    {
+        var r;
+
+        let r = a >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrDoubleDouble(double a, double b)
+    {
+        var r;
+
+        let r = a >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrBoolLong(long n, long b)
+    {
+        var r;
+
+        let r = (n > 0) >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrBoolLit(long n)
+    {
+        var r;
+
+        let r = (n > 0) >> 6;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrLongBool(long a, long n)
+    {
+        var r;
+
+        let r = a >> (n > 0);
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrVarBool(var a, bool b)
+    {
+        var r;
+
+        let r = a >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrBoolVar(bool a, var b)
+    {
+        var r;
+
+        let r = a >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrDoubleVar(double a, var b)
+    {
+        var r;
+
+        let r = a >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrVarVar(var a, var b)
+    {
+        var r;
+
+        let r = a >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrStrLit(var b)
+    {
+        var r;
+
+        let r = "5" >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrNullLit(var b)
+    {
+        var r;
+
+        let r = null >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrMixedLong(mixed a, long b)
+    {
+        var r;
+
+        let r = a >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrStringLong(string a, long b)
+    {
+        var r;
+
+        let r = a >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrLongTrue(long a)
+    {
+        var r;
+
+        let r = a >> true;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrLongTwo(long a)
+    {
+        var r;
+
+        let r = a >> 2.0;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrLongTwoHalf(long a)
+    {
+        var r;
+
+        let r = a >> 2.5;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrHalfDouble(double b)
+    {
+        var r;
+
+        let r = 2.5 >> b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrFoldHalf()
+    {
+        var r;
+
+        let r = 1.5 >> 1;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrInferBool()
+    {
+        var c;
+
+        let c = true >> true;
+
+        return c;
+    }
+
+    public static function shrInferBoolExpr(long n)
+    {
+        var c;
+
+        let c = (n > 0) >> (n > 1);
+
+        return c;
+    }
+
+    public static function shrInferDouble()
+    {
+        var c;
+
+        let c = 2.0 >> 3.0;
+
+        return c;
+    }
+
+    public static function shrCompoundLong(long a, var b)
+    {
+        long r;
+
+        let r = a;
+        let r >>= b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function shrCompoundHalf(long a)
+    {
+        long r;
+
+        let r = a;
+        let r >>= 2.5;
+        echo "after";
+
+        return r;
+    }
+
+    public function shrProp(var v)
+    {
+        let this->p = 5;
+        let this->p >>= v;
+        echo "after";
+
+        return this->p;
+    }
+
+    public function shrPropKeep(var v)
+    {
+        var e;
+
+        let this->p = 5;
+        try {
+            let this->p >>= v;
+        } catch \Throwable, e {
+            echo get_class(e);
+        }
+
+        return this->p;
+    }
+
+    public static function shrStatic(var v)
+    {
+        let self::s = 5;
+        let self::s >>= v;
+        echo "after";
+
+        return self::s;
+    }
+
+    public static function notLong(long a)
+    {
+        var r;
+
+        let r = ~a;
+        echo "after";
+
+        return r;
+    }
+
+    public static function notDouble(double a)
+    {
+        var r;
+
+        let r = ~a;
+        echo "after";
+
+        return r;
+    }
+
+    public static function notBool(bool a)
+    {
+        var r;
+
+        let r = ~a;
+        echo "after";
+
+        return r;
+    }
+
+    public static function notVar(var a)
+    {
+        var r;
+
+        let r = ~a;
+        echo "after";
+
+        return r;
+    }
+
+    public static function notMixed(mixed a)
+    {
+        var r;
+
+        let r = ~a;
+        echo "after";
+
+        return r;
+    }
+
+    public static function notString(string a)
+    {
+        var r;
+
+        let r = ~a;
+        echo "after";
+
+        return r;
+    }
+
+    public static function notVarLocal(var a)
+    {
+        var x, r;
+
+        let x = a;
+        let r = ~x;
+        echo "after";
+
+        return r;
+    }
+
+    public static function notInfer(long i)
+    {
+        var x;
+
+        let x = ~i;
+
+        return x;
+    }
+
+    public static function shlInt(int n)
+    {
+        return 1 << n;
+    }
+
+    public static function shlVarCount(var n)
+    {
+        return 1 << n;
+    }
+
+    public static function foldMin()
+    {
+        return 1 << 63;
+    }
+}
+--USAGE--
+use Stub\BitwiseParity;
+
+class PhpBitwiseParity
+{
+    protected $p = 5;
+    protected static $s = 5;
+
+    public static function andLongVar(int $a, $b) { $r = $a & $b; echo 'after'; return $r; }
+    public static function andVarLong($a, int $b) { $r = $a & $b; echo 'after'; return $r; }
+    public static function andDoubleLong(float $a, int $b) { $r = $a & $b; echo 'after'; return $r; }
+    public static function andLongDouble(int $a, float $b) { $r = $a & $b; echo 'after'; return $r; }
+    public static function andDoubleDouble(float $a, float $b) { $r = $a & $b; echo 'after'; return $r; }
+    public static function andBoolLong(int $n, int $b) { $r = ($n > 0) & $b; echo 'after'; return $r; }
+    public static function andBoolLit(int $n) { $r = ($n > 0) & 6; echo 'after'; return $r; }
+    public static function andLongBool(int $a, int $n) { $r = $a & ($n > 0); echo 'after'; return $r; }
+    public static function andVarBool($a, bool $b) { $r = $a & $b; echo 'after'; return $r; }
+    public static function andBoolVar(bool $a, $b) { $r = $a & $b; echo 'after'; return $r; }
+    public static function andDoubleVar(float $a, $b) { $r = $a & $b; echo 'after'; return $r; }
+    public static function andVarVar($a, $b) { $r = $a & $b; echo 'after'; return $r; }
+    public static function andStrLit($b) { $r = '5' & $b; echo 'after'; return $r; }
+    public static function andNullLit($b) { $r = null & $b; echo 'after'; return $r; }
+    public static function andMixedLong(mixed $a, int $b) { $r = $a & $b; echo 'after'; return $r; }
+    public static function andStringLong(string $a, int $b) { $r = $a & $b; echo 'after'; return $r; }
+    public static function andLongTrue(int $a) { $r = $a & true; echo 'after'; return $r; }
+    public static function andLongTwo(int $a) { $r = $a & 2.0; echo 'after'; return $r; }
+    public static function andLongTwoHalf(int $a) { $r = $a & 2.5; echo 'after'; return $r; }
+    public static function andHalfDouble(float $b) { $r = 2.5 & $b; echo 'after'; return $r; }
+    public static function andFoldHalf() { $r = 1.5 & 1; echo 'after'; return $r; }
+    public static function andInferBool() { $c = true & true; return $c; }
+    public static function andInferBoolExpr(int $n) { $c = ($n > 0) & ($n > 1); return $c; }
+    public static function andInferDouble() { $c = 2.0 & 3.0; return $c; }
+    public static function andCompoundLong(int $a, $b) { $r = $a; $r &= $b; echo 'after'; return $r; }
+    public static function andCompoundHalf(int $a) { $r = $a; $r &= 2.5; echo 'after'; return $r; }
+    public function andProp($v) { $this->p = 5; $this->p &= $v; echo 'after'; return $this->p; }
+    public function andPropKeep($v) { $this->p = 5; try { $this->p &= $v; } catch (\Throwable $e) { echo get_class($e); } return $this->p; }
+    public static function andStatic($v) { self::$s = 5; self::$s &= $v; echo 'after'; return self::$s; }
+    public static function orLongVar(int $a, $b) { $r = $a | $b; echo 'after'; return $r; }
+    public static function orVarLong($a, int $b) { $r = $a | $b; echo 'after'; return $r; }
+    public static function orDoubleLong(float $a, int $b) { $r = $a | $b; echo 'after'; return $r; }
+    public static function orLongDouble(int $a, float $b) { $r = $a | $b; echo 'after'; return $r; }
+    public static function orDoubleDouble(float $a, float $b) { $r = $a | $b; echo 'after'; return $r; }
+    public static function orBoolLong(int $n, int $b) { $r = ($n > 0) | $b; echo 'after'; return $r; }
+    public static function orBoolLit(int $n) { $r = ($n > 0) | 6; echo 'after'; return $r; }
+    public static function orLongBool(int $a, int $n) { $r = $a | ($n > 0); echo 'after'; return $r; }
+    public static function orVarBool($a, bool $b) { $r = $a | $b; echo 'after'; return $r; }
+    public static function orBoolVar(bool $a, $b) { $r = $a | $b; echo 'after'; return $r; }
+    public static function orDoubleVar(float $a, $b) { $r = $a | $b; echo 'after'; return $r; }
+    public static function orVarVar($a, $b) { $r = $a | $b; echo 'after'; return $r; }
+    public static function orStrLit($b) { $r = '5' | $b; echo 'after'; return $r; }
+    public static function orNullLit($b) { $r = null | $b; echo 'after'; return $r; }
+    public static function orMixedLong(mixed $a, int $b) { $r = $a | $b; echo 'after'; return $r; }
+    public static function orStringLong(string $a, int $b) { $r = $a | $b; echo 'after'; return $r; }
+    public static function orLongTrue(int $a) { $r = $a | true; echo 'after'; return $r; }
+    public static function orLongTwo(int $a) { $r = $a | 2.0; echo 'after'; return $r; }
+    public static function orLongTwoHalf(int $a) { $r = $a | 2.5; echo 'after'; return $r; }
+    public static function orHalfDouble(float $b) { $r = 2.5 | $b; echo 'after'; return $r; }
+    public static function orFoldHalf() { $r = 1.5 | 1; echo 'after'; return $r; }
+    public static function orInferBool() { $c = true | true; return $c; }
+    public static function orInferBoolExpr(int $n) { $c = ($n > 0) | ($n > 1); return $c; }
+    public static function orInferDouble() { $c = 2.0 | 3.0; return $c; }
+    public static function orCompoundLong(int $a, $b) { $r = $a; $r |= $b; echo 'after'; return $r; }
+    public static function orCompoundHalf(int $a) { $r = $a; $r |= 2.5; echo 'after'; return $r; }
+    public function orProp($v) { $this->p = 5; $this->p |= $v; echo 'after'; return $this->p; }
+    public function orPropKeep($v) { $this->p = 5; try { $this->p |= $v; } catch (\Throwable $e) { echo get_class($e); } return $this->p; }
+    public static function orStatic($v) { self::$s = 5; self::$s |= $v; echo 'after'; return self::$s; }
+    public static function xorLongVar(int $a, $b) { $r = $a ^ $b; echo 'after'; return $r; }
+    public static function xorVarLong($a, int $b) { $r = $a ^ $b; echo 'after'; return $r; }
+    public static function xorDoubleLong(float $a, int $b) { $r = $a ^ $b; echo 'after'; return $r; }
+    public static function xorLongDouble(int $a, float $b) { $r = $a ^ $b; echo 'after'; return $r; }
+    public static function xorDoubleDouble(float $a, float $b) { $r = $a ^ $b; echo 'after'; return $r; }
+    public static function xorBoolLong(int $n, int $b) { $r = ($n > 0) ^ $b; echo 'after'; return $r; }
+    public static function xorBoolLit(int $n) { $r = ($n > 0) ^ 6; echo 'after'; return $r; }
+    public static function xorLongBool(int $a, int $n) { $r = $a ^ ($n > 0); echo 'after'; return $r; }
+    public static function xorVarBool($a, bool $b) { $r = $a ^ $b; echo 'after'; return $r; }
+    public static function xorBoolVar(bool $a, $b) { $r = $a ^ $b; echo 'after'; return $r; }
+    public static function xorDoubleVar(float $a, $b) { $r = $a ^ $b; echo 'after'; return $r; }
+    public static function xorVarVar($a, $b) { $r = $a ^ $b; echo 'after'; return $r; }
+    public static function xorStrLit($b) { $r = '5' ^ $b; echo 'after'; return $r; }
+    public static function xorNullLit($b) { $r = null ^ $b; echo 'after'; return $r; }
+    public static function xorMixedLong(mixed $a, int $b) { $r = $a ^ $b; echo 'after'; return $r; }
+    public static function xorStringLong(string $a, int $b) { $r = $a ^ $b; echo 'after'; return $r; }
+    public static function xorLongTrue(int $a) { $r = $a ^ true; echo 'after'; return $r; }
+    public static function xorLongTwo(int $a) { $r = $a ^ 2.0; echo 'after'; return $r; }
+    public static function xorLongTwoHalf(int $a) { $r = $a ^ 2.5; echo 'after'; return $r; }
+    public static function xorHalfDouble(float $b) { $r = 2.5 ^ $b; echo 'after'; return $r; }
+    public static function xorFoldHalf() { $r = 1.5 ^ 1; echo 'after'; return $r; }
+    public static function xorInferBool() { $c = true ^ true; return $c; }
+    public static function xorInferBoolExpr(int $n) { $c = ($n > 0) ^ ($n > 1); return $c; }
+    public static function xorInferDouble() { $c = 2.0 ^ 3.0; return $c; }
+    public static function xorCompoundLong(int $a, $b) { $r = $a; $r ^= $b; echo 'after'; return $r; }
+    public static function xorCompoundHalf(int $a) { $r = $a; $r ^= 2.5; echo 'after'; return $r; }
+    public function xorProp($v) { $this->p = 5; $this->p ^= $v; echo 'after'; return $this->p; }
+    public function xorPropKeep($v) { $this->p = 5; try { $this->p ^= $v; } catch (\Throwable $e) { echo get_class($e); } return $this->p; }
+    public static function xorStatic($v) { self::$s = 5; self::$s ^= $v; echo 'after'; return self::$s; }
+    public static function shlLongVar(int $a, $b) { $r = $a << $b; echo 'after'; return $r; }
+    public static function shlVarLong($a, int $b) { $r = $a << $b; echo 'after'; return $r; }
+    public static function shlDoubleLong(float $a, int $b) { $r = $a << $b; echo 'after'; return $r; }
+    public static function shlLongDouble(int $a, float $b) { $r = $a << $b; echo 'after'; return $r; }
+    public static function shlDoubleDouble(float $a, float $b) { $r = $a << $b; echo 'after'; return $r; }
+    public static function shlBoolLong(int $n, int $b) { $r = ($n > 0) << $b; echo 'after'; return $r; }
+    public static function shlBoolLit(int $n) { $r = ($n > 0) << 6; echo 'after'; return $r; }
+    public static function shlLongBool(int $a, int $n) { $r = $a << ($n > 0); echo 'after'; return $r; }
+    public static function shlVarBool($a, bool $b) { $r = $a << $b; echo 'after'; return $r; }
+    public static function shlBoolVar(bool $a, $b) { $r = $a << $b; echo 'after'; return $r; }
+    public static function shlDoubleVar(float $a, $b) { $r = $a << $b; echo 'after'; return $r; }
+    public static function shlVarVar($a, $b) { $r = $a << $b; echo 'after'; return $r; }
+    public static function shlStrLit($b) { $r = '5' << $b; echo 'after'; return $r; }
+    public static function shlNullLit($b) { $r = null << $b; echo 'after'; return $r; }
+    public static function shlMixedLong(mixed $a, int $b) { $r = $a << $b; echo 'after'; return $r; }
+    public static function shlStringLong(string $a, int $b) { $r = $a << $b; echo 'after'; return $r; }
+    public static function shlLongTrue(int $a) { $r = $a << true; echo 'after'; return $r; }
+    public static function shlLongTwo(int $a) { $r = $a << 2.0; echo 'after'; return $r; }
+    public static function shlLongTwoHalf(int $a) { $r = $a << 2.5; echo 'after'; return $r; }
+    public static function shlHalfDouble(float $b) { $r = 2.5 << $b; echo 'after'; return $r; }
+    public static function shlFoldHalf() { $r = 1.5 << 1; echo 'after'; return $r; }
+    public static function shlInferBool() { $c = true << true; return $c; }
+    public static function shlInferBoolExpr(int $n) { $c = ($n > 0) << ($n > 1); return $c; }
+    public static function shlInferDouble() { $c = 2.0 << 3.0; return $c; }
+    public static function shlCompoundLong(int $a, $b) { $r = $a; $r <<= $b; echo 'after'; return $r; }
+    public static function shlCompoundHalf(int $a) { $r = $a; $r <<= 2.5; echo 'after'; return $r; }
+    public function shlProp($v) { $this->p = 5; $this->p <<= $v; echo 'after'; return $this->p; }
+    public function shlPropKeep($v) { $this->p = 5; try { $this->p <<= $v; } catch (\Throwable $e) { echo get_class($e); } return $this->p; }
+    public static function shlStatic($v) { self::$s = 5; self::$s <<= $v; echo 'after'; return self::$s; }
+    public static function shrLongVar(int $a, $b) { $r = $a >> $b; echo 'after'; return $r; }
+    public static function shrVarLong($a, int $b) { $r = $a >> $b; echo 'after'; return $r; }
+    public static function shrDoubleLong(float $a, int $b) { $r = $a >> $b; echo 'after'; return $r; }
+    public static function shrLongDouble(int $a, float $b) { $r = $a >> $b; echo 'after'; return $r; }
+    public static function shrDoubleDouble(float $a, float $b) { $r = $a >> $b; echo 'after'; return $r; }
+    public static function shrBoolLong(int $n, int $b) { $r = ($n > 0) >> $b; echo 'after'; return $r; }
+    public static function shrBoolLit(int $n) { $r = ($n > 0) >> 6; echo 'after'; return $r; }
+    public static function shrLongBool(int $a, int $n) { $r = $a >> ($n > 0); echo 'after'; return $r; }
+    public static function shrVarBool($a, bool $b) { $r = $a >> $b; echo 'after'; return $r; }
+    public static function shrBoolVar(bool $a, $b) { $r = $a >> $b; echo 'after'; return $r; }
+    public static function shrDoubleVar(float $a, $b) { $r = $a >> $b; echo 'after'; return $r; }
+    public static function shrVarVar($a, $b) { $r = $a >> $b; echo 'after'; return $r; }
+    public static function shrStrLit($b) { $r = '5' >> $b; echo 'after'; return $r; }
+    public static function shrNullLit($b) { $r = null >> $b; echo 'after'; return $r; }
+    public static function shrMixedLong(mixed $a, int $b) { $r = $a >> $b; echo 'after'; return $r; }
+    public static function shrStringLong(string $a, int $b) { $r = $a >> $b; echo 'after'; return $r; }
+    public static function shrLongTrue(int $a) { $r = $a >> true; echo 'after'; return $r; }
+    public static function shrLongTwo(int $a) { $r = $a >> 2.0; echo 'after'; return $r; }
+    public static function shrLongTwoHalf(int $a) { $r = $a >> 2.5; echo 'after'; return $r; }
+    public static function shrHalfDouble(float $b) { $r = 2.5 >> $b; echo 'after'; return $r; }
+    public static function shrFoldHalf() { $r = 1.5 >> 1; echo 'after'; return $r; }
+    public static function shrInferBool() { $c = true >> true; return $c; }
+    public static function shrInferBoolExpr(int $n) { $c = ($n > 0) >> ($n > 1); return $c; }
+    public static function shrInferDouble() { $c = 2.0 >> 3.0; return $c; }
+    public static function shrCompoundLong(int $a, $b) { $r = $a; $r >>= $b; echo 'after'; return $r; }
+    public static function shrCompoundHalf(int $a) { $r = $a; $r >>= 2.5; echo 'after'; return $r; }
+    public function shrProp($v) { $this->p = 5; $this->p >>= $v; echo 'after'; return $this->p; }
+    public function shrPropKeep($v) { $this->p = 5; try { $this->p >>= $v; } catch (\Throwable $e) { echo get_class($e); } return $this->p; }
+    public static function shrStatic($v) { self::$s = 5; self::$s >>= $v; echo 'after'; return self::$s; }
+    public static function notLong(int $a) { $r = ~$a; echo 'after'; return $r; }
+    public static function notDouble(float $a) { $r = ~$a; echo 'after'; return $r; }
+    public static function notBool(bool $a) { $r = ~$a; echo 'after'; return $r; }
+    public static function notVar($a) { $r = ~$a; echo 'after'; return $r; }
+    public static function notMixed(mixed $a) { $r = ~$a; echo 'after'; return $r; }
+    public static function notString(string $a) { $r = ~$a; echo 'after'; return $r; }
+    public static function notVarLocal($a) { $x = $a; $r = ~$x; echo 'after'; return $r; }
+    public static function notInfer(int $i) { $x = ~$i; return $x; }
+    public static function shlInt(int $n) { return 1 << $n; }
+    public static function shlVarCount($n) { return 1 << $n; }
+    public static function foldMin() { return 1 << 63; }
+}
+
+function outcome(callable $call): string
+{
+    $diagnostics = [];
+    set_error_handler(function ($no, $message) use (&$diagnostics) {
+        $diagnostics[] = $message;
+
+        return true;
+    });
+    ob_start();
+    try {
+        $result = 'ok ' . var_export($call(), true);
+    } catch (\Throwable $e) {
+        $result = get_class($e) . ': ' . $e->getMessage();
+    } finally {
+        restore_error_handler();
+    }
+
+    return $result . ' | echoed=' . ob_get_clean() . ' | diag=' . implode(';', $diagnostics);
+}
+
+/**
+ * A diagnostic turned into an exception must stop the operation, as in PHP.
+ */
+function outcomeThrowing(callable $call): string
+{
+    set_error_handler(function ($no, $message) {
+        throw new \ErrorException($message, 0, $no);
+    });
+    ob_start();
+    try {
+        $result = 'ok ' . var_export($call(), true);
+    } catch (\Throwable $e) {
+        $result = get_class($e) . ': ' . $e->getMessage();
+    } finally {
+        restore_error_handler();
+    }
+
+    return $result . ' | echoed=' . ob_get_clean();
+}
+
+function invoke(string $class, string $method, array $args)
+{
+    if ((new \ReflectionMethod($class, $method))->isStatic()) {
+        return $class::$method(...$args);
+    }
+
+    return (new $class())->$method(...$args);
+}
+
+$longs   = [5, -8];
+$counts  = [0, 1, 3, 40, 63, 64, -1];
+$vars    = [1, 3, 40, 64, -1, '5', '5abc', 'abc', '1.5', '', [1], null, true, false, 2.5, 1e20, new \stdClass()];
+$doubles = [2.0, 2.5, -2.5, 5e9, 1e20, INF, NAN];
+$props   = [3, 'abc', 2.5, [1], '5', null];
+
+$pairs = function (array $left, array $right): array {
+    $pairs = [];
+    foreach ($left as $a) {
+        foreach ($right as $b) {
+            $pairs[] = [$a, $b];
+        }
+    }
+
+    return $pairs;
+};
+$singles = fn (array $values): array => array_map(fn ($value) => [$value], $values);
+
+$plan = [];
+foreach (['and', 'or', 'xor', 'shl', 'shr'] as $op) {
+    $plan[$op . 'LongVar']      = $pairs($longs, $vars);
+    $plan[$op . 'VarLong']      = $pairs($vars, [1, 3]);
+    $plan[$op . 'DoubleLong']   = $pairs($doubles, [1, 3]);
+    $plan[$op . 'LongDouble']   = $pairs($longs, [2.0, -2.0, 2.5, 5e9, 1e20, NAN]);
+    $plan[$op . 'DoubleDouble'] = [[2.0, 3.0], [2.5, 1.0], [5e9, 1.0], [1e20, 2.0]];
+    $plan[$op . 'BoolLong']     = $pairs([0, 1], [3, 4, 40]);
+    $plan[$op . 'BoolLit']      = $singles([0, 1]);
+    $plan[$op . 'LongBool']     = $pairs($longs, [0, 1]);
+    $plan[$op . 'VarBool']      = $pairs($vars, [true, false]);
+    $plan[$op . 'BoolVar']      = $pairs([true, false], $vars);
+    $plan[$op . 'DoubleVar']    = $pairs([2.0, 2.5], $vars);
+    $plan[$op . 'VarVar']       = [['ab', '  '], ['12', '3'], [5, 'abc'], ['5', 2.5], [[1], 1], [5, 40]];
+    $plan[$op . 'StrLit']       = $singles($vars);
+    $plan[$op . 'NullLit']      = $singles($vars);
+    $plan[$op . 'MixedLong']    = $pairs($vars, [1]);
+    $plan[$op . 'StringLong']   = $pairs(['5', '5abc', 'abc', '', '1.5', '12'], [1, 3]);
+    $plan[$op . 'LongTrue']     = $singles($longs);
+    $plan[$op . 'LongTwo']      = $singles($longs);
+    $plan[$op . 'LongTwoHalf']  = $singles($longs);
+    $plan[$op . 'HalfDouble']   = $singles([1.5, 2.0]);
+    $plan[$op . 'FoldHalf']     = [[]];
+    $plan[$op . 'InferBool']    = [[]];
+    $plan[$op . 'InferBoolExpr'] = $singles([0, 1, 2]);
+    $plan[$op . 'InferDouble']  = [[]];
+    $plan[$op . 'CompoundLong'] = $pairs([5], $vars);
+    $plan[$op . 'CompoundHalf'] = [[5]];
+    $plan[$op . 'Prop']         = $singles($props);
+    $plan[$op . 'PropKeep']     = $singles($props);
+    $plan[$op . 'Static']       = $singles($props);
+}
+$plan['notLong']     = $singles([5, -8, 0, PHP_INT_MAX, PHP_INT_MIN]);
+$plan['notDouble']   = $singles($doubles);
+$plan['notBool']     = $singles([true, false]);
+$plan['notVar']      = $singles($vars);
+$plan['notMixed']    = $singles($vars);
+$plan['notString']   = $singles(['ab', '', '5']);
+$plan['notVarLocal'] = $singles($vars);
+$plan['notInfer']    = $singles([5, -1]);
+$plan['shlInt']      = $singles($counts);
+$plan['shlVarCount'] = $singles(array_merge($counts, $vars));
+$plan['foldMin']     = [[]];
+
+$throwing = ['notDouble' => [[2.5], [1e20]]];
+foreach (['and', 'or', 'xor', 'shl', 'shr'] as $op) {
+    $throwing[$op . 'DoubleLong']   = [[2.5, 1]];
+    $throwing[$op . 'LongDouble']   = [[5, 2.5]];
+    $throwing[$op . 'DoubleVar']    = [[2.5, 1]];
+    $throwing[$op . 'VarLong']      = [['5abc', 1], [2.5, 1]];
+    $throwing[$op . 'LongTwoHalf']  = [[5]];
+    $throwing[$op . 'FoldHalf']     = [[]];
+    $throwing[$op . 'CompoundHalf'] = [[5]];
+    $throwing[$op . 'Prop']         = [[2.5]];
+    $throwing[$op . 'PropKeep']     = [[2.5]];
+    $throwing[$op . 'Static']       = [[2.5]];
+}
+
+$cases = 0;
+$diffs = 0;
+foreach ([[$plan, 'outcome'], [$throwing, 'outcomeThrowing']] as [$table, $runner]) {
+    foreach ($table as $method => $argsList) {
+        if (!method_exists(BitwiseParity::class, $method)) {
+            continue;
+        }
+        foreach ($argsList as $args) {
+            $cases++;
+            $zephir = $runner(fn () => invoke(BitwiseParity::class, $method, $args));
+            $php    = $runner(fn () => invoke(PhpBitwiseParity::class, $method, $args));
+            if ($zephir !== $php) {
+                $diffs++;
+                echo $runner, ' ', $method, '(', json_encode($args, JSON_PARTIAL_OUTPUT_ON_ERROR), "): DIFF\n  zephir: $zephir\n  php:    $php\n";
+            }
+        }
+    }
+}
+echo $cases, " cases, $diffs diffs\n";
+--EXPECT--
+1814 cases, 0 diffs

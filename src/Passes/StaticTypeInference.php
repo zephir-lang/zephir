@@ -24,6 +24,14 @@ use function is_string;
  */
 class StaticTypeInference
 {
+    private const BITWISE_ASSIGN_OPERATORS = [
+        'bitwise-and-assign',
+        'bitwise-or-assign',
+        'bitwise-xor-assign',
+        'bitwise-shiftleft-assign',
+        'bitwise-shiftright-assign',
+    ];
+
     protected array $infered   = [];
     protected array $variables = [];
 
@@ -280,18 +288,11 @@ class StaticTypeInference
             case 'sub':
             case 'add':
             case 'mul':
-            case 'bitwise_and':
-            case 'bitwise_or':
-            case 'bitwise_xor':
-            case 'bitwise_shiftleft':
-            case 'bitwise_shiftright':
                 $left  = $this->passExpression($expression['left']);
                 $right = $this->passExpression($expression['right']);
-                if (in_array($expression['type'], ['add', 'sub', 'mul'], true)) {
-                    // PHP's `+ - *` read a bool as the integer 0 or 1 (#2677)
-                    $left  = 'bool' === $left ? 'int' : $left;
-                    $right = 'bool' === $right ? 'int' : $right;
-                }
+                // PHP's `+ - *` read a bool as the integer 0 or 1 (#2677)
+                $left  = 'bool' === $left ? 'int' : $left;
+                $right = 'bool' === $right ? 'int' : $right;
                 if ('int' == $left && 'int' == $right) {
                     return 'int';
                 }
@@ -313,15 +314,6 @@ class StaticTypeInference
                 if ('int' == $left && 'double' == $right) {
                     return 'double';
                 }
-                if ('int' == $left && 'bool' == $right) {
-                    return 'int';
-                }
-                if ('bool' == $left && 'int' == $right) {
-                    return 'bool';
-                }
-                if ('bool' == $left && 'double' == $right) {
-                    return 'bool';
-                }
                 if ($left == $right) {
                     return $left;
                 }
@@ -329,12 +321,19 @@ class StaticTypeInference
                 return 'numeric';
 
             /**
-             * PHP's `%` is an int for numeric operands; any other operand
-             * reaches mod_function(), which can throw or return an object.
+             * PHP's `%` and bitwise operators are an int for numeric or bool
+             * operands; any other operand reaches PHP's own operator, which
+             * can throw or return a string or an object.
              *
              * @see https://github.com/zephir-lang/zephir/issues/2676
+             * @see https://github.com/zephir-lang/zephir/issues/2753
              */
             case 'mod':
+            case 'bitwise_and':
+            case 'bitwise_or':
+            case 'bitwise_xor':
+            case 'bitwise_shiftleft':
+            case 'bitwise_shiftright':
                 $left    = $this->passExpression($expression['left']);
                 $right   = $this->passExpression($expression['right']);
                 $numeric = ['int', 'uint', 'long', 'ulong', 'bool', 'double'];
@@ -376,8 +375,19 @@ class StaticTypeInference
 
                 return 'variable';
 
-            case 'not':
+            /**
+             * `~` is an int for a number; anything else reaches
+             * bitwise_not_function(), which can throw or return a string or
+             * an object.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2753
+             */
             case 'bitwise_not':
+                $left = $this->passExpression($expression['left']);
+
+                return in_array($left, ['int', 'uint', 'long', 'ulong', 'double'], true) ? 'int' : 'variable';
+
+            case 'not':
             case 'isset':
             case 'empty':
             case 'instanceof':
@@ -471,6 +481,18 @@ class StaticTypeInference
                      */
                     if (in_array($assignment['operator'] ?? null, ['div-assign', 'mod-assign'], true)) {
                         $type = 'variable';
+                    }
+                    /**
+                     * `x |= n` and the other bitwise assignments leave an int
+                     * in `x` for a number or a bool `n`, and whatever PHP's
+                     * operator returns for anything else.
+                     *
+                     * @see https://github.com/zephir-lang/zephir/issues/2753
+                     */
+                    if (in_array($assignment['operator'] ?? null, self::BITWISE_ASSIGN_OPERATORS, true)) {
+                        $type = in_array($type, ['int', 'uint', 'long', 'ulong', 'bool', 'double'], true)
+                            ? 'int'
+                            : 'variable';
                     }
                     if (is_string($type)) {
                         $this->markVariable($assignment['variable'], $type);

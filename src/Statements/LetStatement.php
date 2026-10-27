@@ -19,7 +19,6 @@ use Zephir\Detectors\ReadDetector;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\AssignVariableOperator;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Statements\Let\ArrayIndexOperator;
@@ -409,19 +408,35 @@ class LetStatement extends StatementAbstract
             return $assignment;
         }
 
-        if ($assignment['assign-type'] !== 'variable') {
-            throw new CompilerException(
+        /**
+         * A property is read, combined and written back, as PHP does for
+         * `$this->p |= v` and `self::$p |= v`.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2753
+         */
+        $target = match ($assignment['assign-type']) {
+            'variable'        => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']]),
+            'object-property' => $this->astNode($assignment, [
+                'type'  => 'property-access',
+                'left'  => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']]),
+                'right' => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['property']]),
+            ]),
+            'static-property' => $this->astNode($assignment, [
+                'type'  => 'static-property-access',
+                'left'  => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']]),
+                'right' => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['property']]),
+            ]),
+            default           => throw new CompilerException(
                 "Operator '" . $assignment['operator'] . "' is not supported assign-type: " . $assignment['assign-type']
-            );
-        }
+            ),
+        };
 
-        $builderExpr        = BuilderFactory::getInstance();
-        $leftExpression     = $builderExpr->variable($assignment['variable']);
-        $assignment['expr'] = $builderExpr->operators()
-                                          ->binary($operator, $leftExpression, $builderExpr->raw($assignment['expr']))
-                                          ->build()
-        ;
-
+        $assignment['expr']     = $this->astNode($assignment, [
+            'type'                => $operator,
+            'left'                => $target,
+            'right'               => $assignment['expr'],
+            'compound-assignment' => true,
+        ]);
         $assignment['operator'] = AssignVariableOperator::OPERATOR_ASSIGN;
 
         return $assignment;
