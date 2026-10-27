@@ -33,6 +33,12 @@ use function is_array;
  */
 class Closure
 {
+    /**
+     * Native C scalar types. A capture of one of them is boxed into a zval
+     * that holds no reference: a long, a double or a bool.
+     */
+    public const SCALAR_CAPTURE_TYPES = ['int', 'uint', 'long', 'ulong', 'char', 'uchar', 'double', 'bool'];
+
     protected bool $expecting = true;
 
     protected ?Variable $expectingVariable = null;
@@ -393,7 +399,7 @@ class Closure
     {
         $type = $var->getType();
 
-        if (!in_array($type, ['int', 'uint', 'long', 'ulong', 'char', 'uchar', 'double', 'bool'], true)) {
+        if (!in_array($type, self::SCALAR_CAPTURE_TYPES, true)) {
             return $var;
         }
 

@@ -114,6 +114,17 @@ class Variable implements TypeAwareInterface
      */
     protected bool $closureReference = false;
     /**
+     * Whether this is a closure `use (...)` capture inside the closure body.
+     *
+     * A flag of its own: captures used to be recognised as `external` plus
+     * `localOnly`, which made every in-place mutation reject them as local
+     * only, and let any writer that clears `localOnly` turn one back into a
+     * plain local that is never read off the carrier.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2736
+     */
+    protected bool $closureCapture = false;
+    /**
      * Whether this temp already holds a PHP reference, because the kernel made
      * one when it fetched a subscript in write context. Wrapping it again with
      * ZEPHIR_MAKE_REF() would give a reference to a reference, and the matching
@@ -662,7 +673,12 @@ class Variable implements TypeAwareInterface
      */
     public function isClosureCapture(): bool
     {
-        return $this->isExternal && $this->localOnly;
+        return $this->closureCapture;
+    }
+
+    public function setIsClosureCapture(bool $closureCapture): void
+    {
+        $this->closureCapture = $closureCapture;
     }
 
     /**
