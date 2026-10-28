@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `1 << n` shifting the literal as a 32-bit C `int` [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed bitwise operators truncating a `double` operand to 32 bits and skipping PHP's float to int deprecation [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed a `bool` left operand of a bitwise operator turning a literal right operand into 0 or 1 [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed bitwise operators reading a `var` operand like an `(int)` cast instead of throwing `TypeError`, warning or using GMP's operator as PHP does [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed a `var` local assigned a bitwise or `~` result becoming `bool` or `double` instead of an integer [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed `~` on a `bool` not throwing `TypeError`, and `~` on a `double`, a `string` or a local `var` failing to compile [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed bitwise operators with a `double`, `bool`, string or `null` literal, or a `mixed` or `string` variable, failing to compile or emitting invalid C [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed a bitwise operation on a fractional float literal being folded at compile time instead of deprecating at runtime [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed a bitwise result folded to `PHP_INT_MIN` emitting a C literal that compilers warn about [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed `|=`, `&=`, `^=`, `<<=` and `>>=` on an object or static property failing to compile [#2753](https://github.com/zephir-lang/zephir/issues/2753)
 - Fixed `let x[] = value`, `let x[key] = value` and `let x->prop++` on a closure capture being rejected as "local only" [#2736](https://github.com/zephir-lang/zephir/issues/2736)
 - Fixed `let x->prop++` and `let x->prop--` on a local variable breaking the C build [#2736](https://github.com/zephir-lang/zephir/issues/2736)
 - Fixed a closure capture losing its value when the body assigns it a ternary or a runtime constant [#2736](https://github.com/zephir-lang/zephir/issues/2736)

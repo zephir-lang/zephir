@@ -3172,16 +3172,25 @@ PHP_METHOD(Stub_Assign, testArrayBoolExpressionAssign)
 
 PHP_METHOD(Stub_Assign, testAssignBitwiseX)
 {
-	zend_long _6$$7, _8$$8;
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *a_param = NULL, *b_param = NULL, op, i, result, _1, *_2;
-	zend_long a, b, ZEPHIR_LAST_CALL_STATUS, _3$$4, _4$$5, _5$$6, _7$$7, _9$$8;
+	zval *a_param = NULL, *b_param = NULL, op, i, result, _1, *_2, _3$$4, _4$$4, _5$$5, _6$$5, _7$$6, _8$$6, _9$$7, _10$$7, _11$$8, _12$$8;
+	zend_long a, b, ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&op);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_3$$4);
+	ZVAL_UNDEF(&_4$$4);
+	ZVAL_UNDEF(&_5$$5);
+	ZVAL_UNDEF(&_6$$5);
+	ZVAL_UNDEF(&_7$$6);
+	ZVAL_UNDEF(&_8$$6);
+	ZVAL_UNDEF(&_9$$7);
+	ZVAL_UNDEF(&_10$$7);
+	ZVAL_UNDEF(&_11$$8);
+	ZVAL_UNDEF(&_12$$8);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(a)
@@ -3223,39 +3232,59 @@ PHP_METHOD(Stub_Assign, testAssignBitwiseX)
 		if (ZEPHIR_IS_STRING(&op, "shiftright")) { goto zephir_switch_0_clause_4; }
 		goto zephir_switch_0_end;
 		zephir_switch_0_clause_0: ;
-			_3$$4 = (zephir_get_intval(&i) | b);
-			ZEPHIR_INIT_NVAR(&i);
-			ZVAL_LONG(&i, _3$$4);
+			ZEPHIR_INIT_NVAR(&_3$$4);
+			ZVAL_LONG(&_3$$4, b);
+			ZEPHIR_INIT_NVAR(&_4$$4);
+			zephir_bitwise_or_function(&_4$$4, &i, &_3$$4);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
+			ZEPHIR_CPY_WRT(&i, &_4$$4);
 			goto zephir_switch_0_end;
 		zephir_switch_0_clause_1: ;
-			_4$$5 = (zephir_get_intval(&i) & b);
-			ZEPHIR_INIT_NVAR(&i);
-			ZVAL_LONG(&i, _4$$5);
+			ZEPHIR_INIT_NVAR(&_5$$5);
+			ZVAL_LONG(&_5$$5, b);
+			ZEPHIR_INIT_NVAR(&_6$$5);
+			zephir_bitwise_and_function(&_6$$5, &i, &_5$$5);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
+			ZEPHIR_CPY_WRT(&i, &_6$$5);
 			goto zephir_switch_0_end;
 		zephir_switch_0_clause_2: ;
-			_5$$6 = (zephir_get_intval(&i) ^ b);
-			ZEPHIR_INIT_NVAR(&i);
-			ZVAL_LONG(&i, _5$$6);
+			ZEPHIR_INIT_NVAR(&_7$$6);
+			ZVAL_LONG(&_7$$6, b);
+			ZEPHIR_INIT_NVAR(&_8$$6);
+			zephir_bitwise_xor_function(&_8$$6, &i, &_7$$6);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
+			ZEPHIR_CPY_WRT(&i, &_8$$6);
 			goto zephir_switch_0_end;
 		zephir_switch_0_clause_3: ;
-			_6$$7 = zephir_safe_shift_left_long(zephir_get_intval(&i), b);
+			ZEPHIR_INIT_NVAR(&_9$$7);
+			ZVAL_LONG(&_9$$7, b);
+			ZEPHIR_INIT_NVAR(&_10$$7);
+			zephir_shift_left_function(&_10$$7, &i, &_9$$7);
 			if (UNEXPECTED(EG(exception))) {
 				ZEPHIR_MM_RESTORE();
 				return;
 			}
-			_7$$7 = _6$$7;
-			ZEPHIR_INIT_NVAR(&i);
-			ZVAL_LONG(&i, _7$$7);
+			ZEPHIR_CPY_WRT(&i, &_10$$7);
 			goto zephir_switch_0_end;
 		zephir_switch_0_clause_4: ;
-			_8$$8 = zephir_safe_shift_right_long(zephir_get_intval(&i), b);
+			ZEPHIR_INIT_NVAR(&_11$$8);
+			ZVAL_LONG(&_11$$8, b);
+			ZEPHIR_INIT_NVAR(&_12$$8);
+			zephir_shift_right_function(&_12$$8, &i, &_11$$8);
 			if (UNEXPECTED(EG(exception))) {
 				ZEPHIR_MM_RESTORE();
 				return;
 			}
-			_9$$8 = _8$$8;
-			ZEPHIR_INIT_NVAR(&i);
-			ZVAL_LONG(&i, _9$$8);
+			ZEPHIR_CPY_WRT(&i, &_12$$8);
 			goto zephir_switch_0_end;
 		zephir_switch_0_end: ;
 

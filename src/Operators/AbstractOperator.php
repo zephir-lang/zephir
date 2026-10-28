@@ -15,15 +15,29 @@ namespace Zephir\Operators;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
+use Zephir\Name;
 use Zephir\Traits\VariablesTrait;
 use Zephir\Types\TypeRegistry;
+use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
+use function is_finite;
+use function is_int;
+use function is_numeric;
 use function is_object;
 
 abstract class AbstractOperator
 {
     use VariablesTrait;
+
+    /**
+     * The C kind an operand is read as by the operators that classify their
+     * operands (`/`, `%`, the arithmetic and the bitwise operators).
+     */
+    protected const KIND_LONG   = 'long';
+    protected const KIND_DOUBLE = 'double';
+    protected const KIND_ZVAL   = 'zval';
 
     protected bool      $expecting         = true;
     protected ?Variable $expectingVariable = null;
@@ -281,5 +295,276 @@ abstract class AbstractOperator
         }
 
         return $value + 0;
+    }
+
+    /**
+     * Whether PHP reads the number as an integer without losing anything, as
+     * zend_is_long_compatible() does: a float must be finite, in range and
+     * have no fractional part.
+     */
+    protected static function isLongCompatible(int|float $value): bool
+    {
+        if (is_int($value)) {
+            return true;
+        }
+
+        return is_finite($value)
+            && $value >= (float) PHP_INT_MIN
+            && $value < (float) PHP_INT_MAX
+            && (float) (int) $value === $value;
+    }
+
+    /**
+     * Both operands classified as a C integer, a C double or a zval. Against
+     * a zval a bool stays a bool, so a TypeError names it as PHP does.
+     *
+     * @return array{0: array, 1: array}
+     *
+     * @throws CompilerException
+     */
+    protected function classifiedOperands(
+        CompiledExpression $left,
+        CompiledExpression $right,
+        array $expression,
+        CompilationContext $compilationContext
+    ): array {
+        $leftOperand  = $this->operand($left, $expression, $compilationContext);
+        $rightOperand = $this->operand($right, $expression, $compilationContext);
+        if (self::KIND_ZVAL === $leftOperand['kind'] && isset($rightOperand['bool'])) {
+            $rightOperand = $this->boxedBool($rightOperand['bool'], $compilationContext);
+        }
+        if (self::KIND_ZVAL === $rightOperand['kind'] && isset($leftOperand['bool'])) {
+            $leftOperand = $this->boxedBool($leftOperand['bool'], $compilationContext);
+        }
+
+        return [$leftOperand, $rightOperand];
+    }
+
+    /**
+     * Classifies one compiled operand as a C integer, a C double or a zval,
+     * and returns the C code that reads it as that kind. A string or null
+     * literal is boxed, since PHP coerces it or throws for it at runtime.
+     *
+     * @return array{kind: string, code: string, variable: ?Variable}
+     *
+     * @throws CompilerException
+     */
+    protected function operand(
+        CompiledExpression $operand,
+        array $expression,
+        CompilationContext $compilationContext
+    ): array {
+        switch ($operand->getType()) {
+            case Types::T_INT:
+            case Types::T_UINT:
+            case Types::T_LONG:
+            case Types::T_ULONG:
+                return ['kind' => self::KIND_LONG, 'code' => $operand->getCode(), 'variable' => null];
+
+            case Types::T_CHAR:
+            case Types::T_UCHAR:
+                return ['kind' => self::KIND_LONG, 'code' => $operand->getCharCode(), 'variable' => null];
+
+            case Types::T_BOOL:
+                return $this->boolOperand($operand->getBooleanCode());
+
+            case Types::T_DOUBLE:
+                return ['kind' => self::KIND_DOUBLE, 'code' => $operand->getCode(), 'variable' => null];
+
+            case Types::T_STRING:
+                $boxed = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                $compilationContext->backend->assignString(
+                    $boxed,
+                    Name::addSlashes($operand->getCode()),
+                    $compilationContext
+                );
+
+                return $this->zvalOperand($boxed, $compilationContext);
+
+            case Types::T_NULL:
+                $boxed = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
+                $compilationContext->backend->assignNull($boxed, $compilationContext);
+
+                return $this->zvalOperand($boxed, $compilationContext);
+
+            case Types::T_ARRAY:
+            case Types::T_VARIABLE:
+                $variable = $compilationContext->symbolTable->getVariableForRead(
+                    $operand->getCode(),
+                    $compilationContext,
+                    $expression
+                );
+
+                return $this->variableOperand($variable, $expression, $compilationContext);
+
+            default:
+                throw new CompilerException(
+                    'Cannot operate ' . $operand->getType() . ' with the ' . $this->operator . ' operator',
+                    $expression
+                );
+        }
+    }
+
+    /**
+     * A typed string or array local is already a zval; a char is its byte.
+     *
+     * @return array{kind: string, code: string, variable: ?Variable}
+     *
+     * @throws CompilerException
+     */
+    protected function variableOperand(
+        Variable $variable,
+        array $expression,
+        CompilationContext $compilationContext
+    ): array {
+        switch ($variable->getType()) {
+            case Types::T_INT:
+            case Types::T_UINT:
+            case Types::T_LONG:
+            case Types::T_ULONG:
+            case Types::T_CHAR:
+            case Types::T_UCHAR:
+                return ['kind' => self::KIND_LONG, 'code' => $variable->getName(), 'variable' => null];
+
+            case Types::T_BOOL:
+                return $this->boolOperand($variable->getName());
+
+            case Types::T_DOUBLE:
+                return ['kind' => self::KIND_DOUBLE, 'code' => $variable->getName(), 'variable' => null];
+
+            case Types::T_VARIABLE:
+            case Types::T_MIXED:
+            case Types::T_STRING:
+            case Types::T_ARRAY:
+                return $this->zvalOperand($variable, $compilationContext);
+
+            default:
+                throw new CompilerException(
+                    'Cannot operate ' . $variable->getType() . ' variables with the ' . $this->operator . ' operator',
+                    $expression
+                );
+        }
+    }
+
+    /**
+     * @return array{kind: string, code: string, variable: Variable}
+     */
+    protected function zvalOperand(Variable $variable, CompilationContext $compilationContext): array
+    {
+        return [
+            'kind'     => self::KIND_ZVAL,
+            'code'     => $compilationContext->backend->getVariableCode($variable),
+            'variable' => $variable,
+        ];
+    }
+
+    /**
+     * A bool is the integer 0 or 1; `bool` keeps its C code for boxing.
+     *
+     * @return array{kind: string, code: string, variable: ?Variable, bool: string}
+     */
+    protected function boolOperand(string $code): array
+    {
+        return ['kind' => self::KIND_LONG, 'code' => '(zend_long) ' . $code, 'variable' => null, 'bool' => $code];
+    }
+
+    protected function boxedBool(string $code, CompilationContext $compilationContext): array
+    {
+        $boxed = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
+        $compilationContext->backend->assignBool($boxed, $code, $compilationContext);
+
+        return $this->zvalOperand($boxed, $compilationContext);
+    }
+
+    /**
+     * A native operand copied into a temporary zval for PHP's own operator.
+     *
+     * @return array{kind: string, code: string, variable: Variable}
+     */
+    protected function boxedOperand(array $operand, CompilationContext $compilationContext): array
+    {
+        if (self::KIND_ZVAL === $operand['kind']) {
+            return $operand;
+        }
+
+        if (isset($operand['bool'])) {
+            return $this->boxedBool($operand['bool'], $compilationContext);
+        }
+
+        $boxed = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
+        if (self::KIND_DOUBLE === $operand['kind']) {
+            $compilationContext->backend->assignDouble($boxed, $operand['code'], $compilationContext);
+        } else {
+            $compilationContext->backend->assignLong($boxed, $operand['code'], $compilationContext);
+        }
+
+        return $this->zvalOperand($boxed, $compilationContext);
+    }
+
+    /**
+     * Reads a native operand as a C `zend_long`, the way PHP's bitwise
+     * operators read theirs (zendi_try_get_long() in Zend/zend_operators.c).
+     *
+     * A double goes through ZEPHIR_DVAL_TO_LVAL, which raises the float to int
+     * deprecation of PHP 8.1 and the out of range warning of PHP 8.5 exactly
+     * as the engine does. An error handler may turn either into an exception,
+     * so the conversion is checked before the operation runs. A double literal
+     * PHP reads as an integer without loss is written as that integer.
+     *
+     * @param array{kind: string, code: int|float|string} $operand a long or a double operand
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2753
+     */
+    protected function integerOperandCode(array $operand, CompilationContext $compilationContext): string
+    {
+        $code = (string) $operand['code'];
+        if (self::KIND_DOUBLE !== $operand['kind']) {
+            return $code;
+        }
+
+        if (is_numeric($code) && self::isLongCompatible((float) $code)) {
+            return (string) (int) (float) $code;
+        }
+
+        $compilationContext->headersManager->add('kernel/main');
+        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('long', $compilationContext);
+        $compilationContext->codePrinter->output(
+            $tempVariable->getName() . ' = ZEPHIR_DVAL_TO_LVAL(' . $code . ');'
+        );
+        $compilationContext->emitExceptionCheck();
+
+        return $tempVariable->getName();
+    }
+
+    /**
+     * Writes the result of a zval-producing helper into the expected variable.
+     *
+     * @throws CompilerException
+     */
+    protected function zvalResult(
+        string $helper,
+        array $left,
+        array $right,
+        array $expression,
+        CompilationContext $compilationContext,
+        array $dynamicTypes
+    ): CompiledExpression {
+        $expected     = $this->getExpected($compilationContext, $expression);
+        $expectedCode = $compilationContext->backend->getVariableCode($expected);
+
+        $compilationContext->codePrinter->output(
+            $helper . '(' . $expectedCode . ', ' . $left['code'] . ', ' . $right['code'] . ');'
+        );
+        $compilationContext->emitExceptionCheck();
+
+        foreach ([$left['variable'], $right['variable']] as $operandVariable) {
+            if (null !== $operandVariable) {
+                $this->checkVariableTemporal($operandVariable);
+            }
+        }
+
+        $expected->setDynamicTypes($dynamicTypes);
+
+        return new CompiledExpression('variable', $expected->getName(), $expression);
     }
 }

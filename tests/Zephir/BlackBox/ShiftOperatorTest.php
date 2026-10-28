@@ -74,6 +74,7 @@ final class ShiftOperatorTest extends TestCase
 
     /**
      * A folded literal reaches the outer operator as an int, not as C code.
+     * PHP runs `&` with the literal as the second operand (#2753).
      */
     public function testFoldedOperandInsideAnotherOperation(): void
     {
@@ -82,7 +83,7 @@ final class ShiftOperatorTest extends TestCase
             "    public function run(long a) -> long\n    {\n        return (1 << 2) & a | (a << (8 - 3));\n    }"
         );
 
-        $this->assertStringContainsString('4 & a', $generated);
+        $this->assertStringContainsString('(a & 4)', $generated);
     }
 
     public function testNegativeLiteralCountIsNotFolded(): void

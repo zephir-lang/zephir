@@ -20,9 +20,29 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
+use Zephir\Types\Types;
 
+/**
+ * Generates PHP's `~`.
+ *
+ * An integer stays a C expression and a double is converted the way the
+ * engine converts it, with its deprecation. Anything else goes to PHP's
+ * bitwise_not_function(): it inverts a string byte by byte, lets an
+ * overloaded object such as GMP answer and throws the TypeError for a bool,
+ * null or an array.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2753
+ */
 class BitwiseNotOperator extends AbstractOperator
 {
+    /**
+     * bitwise_not_function() yields an int, a string from a string, or an
+     * object from an overloaded operand.
+     */
+    private const RESULT_TYPES = [Types::T_LONG, Types::T_STRING, Types::T_OBJECT];
+
+    protected string $operator = '~';
+
     /**
      * @param                    $expression
      * @param CompilationContext $compilationContext
@@ -40,43 +60,37 @@ class BitwiseNotOperator extends AbstractOperator
         $leftExpr->setReadOnly($this->readOnly);
         $left = $leftExpr->compile($compilationContext);
 
-        switch ($left->getType()) {
-            case 'bool':
-            case 'int':
-            case 'uint':
-            case 'long':
-            case 'ulong':
-                return new CompiledExpression('int', '~(' . $left->getCode() . ')', $expression);
-
-            case 'variable':
-                $variable = $compilationContext->symbolTable->getVariableForRead(
-                    $left->getCode(),
-                    $compilationContext,
-                    $expression['left']
-                );
-                switch ($variable->getType()) {
-                    case 'bool':
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                        return new CompiledExpression('int', '~' . $variable->getName(), $expression);
-
-                    case 'variable':
-                    case 'mixed':
-                        $compilationContext->headersManager->add('kernel/operators');
-
-                        return new CompiledExpression(
-                            'int',
-                            '~zephir_get_intval(' . $variable->getName() . ')',
-                            $expression
-                        );
-
-                    default:
-                        throw new CompilerException('Unknown type: ' . $variable->getType(), $expression);
-                }
-
-            default:
-                throw new CompilerException('Unknown type: ' . $left->getType(), $expression);
+        $operand = $this->operand($left, $expression, $compilationContext);
+        if (self::KIND_ZVAL === $operand['kind'] || isset($operand['bool'])) {
+            return $this->zvalNot($this->boxedOperand($operand, $compilationContext), $expression, $compilationContext);
         }
+
+        return new CompiledExpression(
+            'int',
+            '~(' . $this->integerOperandCode($operand, $compilationContext) . ')',
+            $expression
+        );
+    }
+
+    /**
+     * @throws CompilerException
+     */
+    private function zvalNot(array $operand, array $expression, CompilationContext $compilationContext): CompiledExpression
+    {
+        $expected     = $this->getExpected($compilationContext, $expression);
+        $expectedCode = $compilationContext->backend->getVariableCode($expected);
+
+        $compilationContext->codePrinter->output(
+            'bitwise_not_function(' . $expectedCode . ', ' . $operand['code'] . ');'
+        );
+        $compilationContext->emitExceptionCheck();
+
+        if (null !== $operand['variable']) {
+            $this->checkVariableTemporal($operand['variable']);
+        }
+
+        $expected->setDynamicTypes(self::RESULT_TYPES);
+
+        return new CompiledExpression('variable', $expected->getName(), $expression);
     }
 }

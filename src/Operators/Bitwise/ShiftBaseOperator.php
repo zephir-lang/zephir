@@ -15,6 +15,7 @@ namespace Zephir\Operators\Bitwise;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Types\Types;
 
 use function is_numeric;
 
@@ -30,6 +31,14 @@ abstract class ShiftBaseOperator extends BitwiseBaseOperator
      * Kernel helper applying the shift with PHP's rules.
      */
     protected string $safeHelper;
+
+    protected bool $commutative = false;
+
+    /**
+     * A shift of zvals yields an int, or an object from an overloaded operand
+     * such as GMP; unlike `&`, `|` and `^` it never works on strings.
+     */
+    protected array $zvalResultTypes = [Types::T_LONG, Types::T_OBJECT];
 
     protected function nativeOperation(
         int|string $left,
