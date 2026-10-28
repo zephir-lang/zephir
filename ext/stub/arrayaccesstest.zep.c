@@ -301,7 +301,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1094Test3)
 	} else {
 		zephir_get_arrval(&items, items_param);
 	}
-	isItemsNULL = Z_TYPE_P(&items) == IS_NULL;
+	isItemsNULL = (Z_TYPE_P(&items) == IS_NULL);
 	RETURN_MM_BOOL(isItemsNULL);
 }
 

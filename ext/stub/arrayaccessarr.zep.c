@@ -62,7 +62,7 @@ PHP_METHOD(Stub_ArrayAccessArr, offsetSet)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &offset, &value);
-	if (Z_TYPE_P(offset) == IS_NULL) {
+	if ((Z_TYPE_P(offset) == IS_NULL)) {
 		zephir_update_property_array_append(this_ptr, SL("test"), value);
 		if (UNEXPECTED(EG(exception))) {
 			return;

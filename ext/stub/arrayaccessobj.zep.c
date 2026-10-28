@@ -94,7 +94,7 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetSet)
 	zephir_fetch_params(1, 2, 0, &offset, &value);
 	zephir_memory_observe(&obj);
 	zephir_read_property_cached(&obj, this_ptr, _zephir_prop_0, 10, PH_NOISY_CC);
-	if (!(Z_TYPE_P(offset) == IS_NULL)) {
+	if (!((Z_TYPE_P(offset) == IS_NULL))) {
 		zephir_update_property_zval_zval(&obj, offset, value);
 	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 10, &obj);

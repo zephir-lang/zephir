@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed a `bool` compared with `==`, `!=`, `===` or `!==` to `is_array()`, `is_null()`, `is_object()`, `is_string()`, `is_int()` or `is_resource()`, such as `true !== is_array(v)`, giving the wrong result because the condition was emitted without parentheses [#2810](https://github.com/zephir-lang/zephir/issues/2810)
 - Fixed `+=`, `-=`, `*=`, `/=`, `%=` and `.=` on a dynamic property such as `this->{name}` overwriting it, and `|=`, `&=`, `^=`, `<<=` and `>>=` on it failing to compile [#2753](https://github.com/zephir-lang/zephir/issues/2753)
 - Fixed `*=`, `/=` and `%=` on a static property overwriting it instead of applying the operator [#2753](https://github.com/zephir-lang/zephir/issues/2753)
 - Fixed a compound assignment on a property reading the property before the right-hand side, losing a change the right-hand side makes to it [#2753](https://github.com/zephir-lang/zephir/issues/2753)

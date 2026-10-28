@@ -185,7 +185,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 				{
 					ZEPHIR_INIT_NVAR(&valueA);
 					ZVAL_COPY(&valueA, _15$$4);
-					_16$$6 = !(Z_TYPE_P(&valueA) == IS_LONG);
+					_16$$6 = !((Z_TYPE_P(&valueA) == IS_LONG));
 					if (_16$$6) {
 						ZEPHIR_CALL_FUNCTION(&_17$$6, "is_float", &_18, 65, &valueA);
 						zephir_check_call_status();
@@ -227,7 +227,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 					}
 					ZEPHIR_CALL_METHOD(&valueA, _13$$4, "current", NULL, 0);
 					zephir_check_call_status();
-						_25$$8 = !(Z_TYPE_P(&valueA) == IS_LONG);
+						_25$$8 = !((Z_TYPE_P(&valueA) == IS_LONG));
 						if (_25$$8) {
 							ZEPHIR_CALL_FUNCTION(&_26$$8, "is_float", &_18, 65, &valueA);
 							zephir_check_call_status();
@@ -360,7 +360,7 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 3, 0, &value, &m_param, &n_param);
-	_0 = !(Z_TYPE_P(value) == IS_LONG);
+	_0 = !((Z_TYPE_P(value) == IS_LONG));
 	if (_0) {
 		ZEPHIR_CALL_FUNCTION(&_1, "is_float", NULL, 65, value);
 		zephir_check_call_status();

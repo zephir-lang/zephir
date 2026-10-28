@@ -55,7 +55,7 @@ PHP_METHOD(Stub_Issue1097, testStringOrArrayOfString)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &myvar);
-	if (Z_TYPE_P(myvar) == IS_STRING) {
+	if ((Z_TYPE_P(myvar) == IS_STRING)) {
 		RETURN_MM_STRING("string");
 	} else {
 		zephir_memory_observe(&_0);
@@ -64,7 +64,7 @@ PHP_METHOD(Stub_Issue1097, testStringOrArrayOfString)
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		if (Z_TYPE_P(&_0) == IS_STRING) {
+		if ((Z_TYPE_P(&_0) == IS_STRING)) {
 			RETURN_MM_STRING("array-of-string");
 		}
 	}
@@ -83,9 +83,9 @@ PHP_METHOD(Stub_Issue1097, testWithElse)
 		Z_PARAM_ZVAL(myvar)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &myvar);
-	if (Z_TYPE_P(myvar) == IS_STRING) {
+	if ((Z_TYPE_P(myvar) == IS_STRING)) {
 		RETURN_STRING("string");
-	} else if (Z_TYPE_P(myvar) == IS_ARRAY) {
+	} else if ((Z_TYPE_P(myvar) == IS_ARRAY)) {
 		RETURN_STRING("array");
 	} else {
 		RETURN_STRING("other");
@@ -110,7 +110,7 @@ PHP_METHOD(Stub_Issue1097, testMultipleElseif)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &myvar);
-	if (Z_TYPE_P(myvar) == IS_STRING) {
+	if ((Z_TYPE_P(myvar) == IS_STRING)) {
 		RETURN_MM_STRING("string");
 	} else {
 		zephir_memory_observe(&_0);
@@ -119,7 +119,7 @@ PHP_METHOD(Stub_Issue1097, testMultipleElseif)
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		if (Z_TYPE_P(&_0) == IS_STRING) {
+		if ((Z_TYPE_P(&_0) == IS_STRING)) {
 			RETURN_MM_STRING("array-of-string");
 		} else {
 			zephir_memory_observe(&_1);
@@ -128,7 +128,7 @@ PHP_METHOD(Stub_Issue1097, testMultipleElseif)
 				ZEPHIR_MM_RESTORE();
 				return;
 			}
-			if (Z_TYPE_P(&_1) == IS_LONG) {
+			if ((Z_TYPE_P(&_1) == IS_LONG)) {
 				RETURN_MM_STRING("array-of-int");
 			}
 		}
