@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed `+=`, `-=`, `*=`, `/=`, `%=` and `.=` on a dynamic property such as `this->{name}` overwriting it, and `|=`, `&=`, `^=`, `<<=` and `>>=` on it failing to compile [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed `*=`, `/=` and `%=` on a static property overwriting it instead of applying the operator [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed a compound assignment on a property reading the property before the right-hand side, losing a change the right-hand side makes to it [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed `.=` on an object property crashing the compiler in a method that made a call before it [#2753](https://github.com/zephir-lang/zephir/issues/2753)
 - Fixed `1 << n` shifting the literal as a 32-bit C `int` [#2753](https://github.com/zephir-lang/zephir/issues/2753)
 - Fixed bitwise operators truncating a `double` operand to 32 bits and skipping PHP's float to int deprecation [#2753](https://github.com/zephir-lang/zephir/issues/2753)
 - Fixed a `bool` left operand of a bitwise operator turning a literal right operand into 0 or 1 [#2753](https://github.com/zephir-lang/zephir/issues/2753)
