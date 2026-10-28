@@ -1,0 +1,1589 @@
+--TEST--
+Compound assignments on object, static and dynamic properties behave as in PHP, including when the right-hand side changes the property (#2753)
+--INI--
+display_errors=stdout
+display_startup_errors=1
+--FILE--
+namespace Stub;
+
+class PropertyCompound
+{
+    public p = 5;
+
+    public static s = 5;
+
+    public function bump(var v)
+    {
+        let this->p = 100,
+            self::s = 100;
+
+        return v;
+    }
+
+    public function addPropValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p += v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function addPropCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p += this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function addStaticValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s += v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function addStaticCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s += this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function addDynVarValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} += v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function addDynVarCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} += this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function addDynStringValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} += v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function addDynStringCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} += this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function subPropValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p -= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function subPropCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p -= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function subStaticValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s -= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function subStaticCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s -= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function subDynVarValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} -= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function subDynVarCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} -= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function subDynStringValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} -= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function subDynStringCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} -= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function mulPropValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p *= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function mulPropCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p *= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function mulStaticValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s *= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function mulStaticCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s *= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function mulDynVarValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} *= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function mulDynVarCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} *= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function mulDynStringValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} *= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function mulDynStringCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} *= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function divPropValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p /= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function divPropCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p /= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function divStaticValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s /= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function divStaticCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s /= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function divDynVarValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} /= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function divDynVarCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} /= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function divDynStringValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} /= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function divDynStringCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} /= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function modPropValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p %= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function modPropCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p %= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function modStaticValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s %= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function modStaticCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s %= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function modDynVarValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} %= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function modDynVarCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} %= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function modDynStringValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} %= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function modDynStringCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} %= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function concatPropValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p .= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function concatPropCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p .= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function concatStaticValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s .= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function concatStaticCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s .= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function concatDynVarValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} .= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function concatDynVarCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} .= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function concatDynStringValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} .= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function concatDynStringCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} .= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function orPropValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p |= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function orPropCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p |= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function orStaticValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s |= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function orStaticCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s |= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function orDynVarValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} |= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function orDynVarCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} |= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function orDynStringValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} |= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function orDynStringCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} |= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function andPropValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p &= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function andPropCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p &= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function andStaticValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s &= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function andStaticCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s &= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function andDynVarValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} &= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function andDynVarCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} &= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function andDynStringValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} &= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function andDynStringCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} &= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function xorPropValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p ^= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function xorPropCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p ^= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function xorStaticValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s ^= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function xorStaticCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s ^= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function xorDynVarValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} ^= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function xorDynVarCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} ^= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function xorDynStringValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} ^= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function xorDynStringCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} ^= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shlPropValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p <<= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shlPropCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p <<= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shlStaticValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s <<= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shlStaticCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s <<= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shlDynVarValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} <<= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shlDynVarCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} <<= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shlDynStringValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} <<= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shlDynStringCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} <<= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shrPropValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p >>= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shrPropCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->p >>= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shrStaticValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s >>= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shrStaticCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let self::s >>= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shrDynVarValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} >>= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shrDynVarCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{n} >>= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shrDynStringValue(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} >>= v;
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+
+    public function shrDynStringCall(var n, var v)
+    {
+        var e, caught = null;
+
+        let this->p = 5,
+            self::s = 5;
+        try {
+            let this->{"p"} >>= this->bump(v);
+            echo "after";
+        } catch \Throwable, e {
+            let caught = get_class(e) . ": " . e->getMessage();
+        }
+
+        return [caught, this->p, self::s, get_object_vars(this)];
+    }
+}
+--USAGE--
+use Stub\PropertyCompound;
+
+class PhpPropertyCompound
+{
+    public $p = 5;
+    public static $s = 5;
+
+    public function bump($v) { $this->p = 100; self::$s = 100; return $v; }
+    public function addPropValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p += $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function addPropCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p += $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function addStaticValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s += $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function addStaticCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s += $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function addDynVarValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} += $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function addDynVarCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} += $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function addDynStringValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} += $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function addDynStringCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} += $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function subPropValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p -= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function subPropCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p -= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function subStaticValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s -= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function subStaticCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s -= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function subDynVarValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} -= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function subDynVarCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} -= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function subDynStringValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} -= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function subDynStringCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} -= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function mulPropValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p *= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function mulPropCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p *= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function mulStaticValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s *= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function mulStaticCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s *= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function mulDynVarValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} *= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function mulDynVarCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} *= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function mulDynStringValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} *= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function mulDynStringCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} *= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function divPropValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p /= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function divPropCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p /= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function divStaticValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s /= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function divStaticCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s /= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function divDynVarValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} /= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function divDynVarCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} /= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function divDynStringValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} /= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function divDynStringCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} /= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function modPropValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p %= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function modPropCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p %= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function modStaticValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s %= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function modStaticCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s %= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function modDynVarValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} %= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function modDynVarCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} %= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function modDynStringValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} %= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function modDynStringCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} %= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function concatPropValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p .= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function concatPropCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p .= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function concatStaticValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s .= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function concatStaticCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s .= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function concatDynVarValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} .= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function concatDynVarCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} .= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function concatDynStringValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} .= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function concatDynStringCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} .= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function orPropValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p |= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function orPropCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p |= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function orStaticValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s |= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function orStaticCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s |= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function orDynVarValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} |= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function orDynVarCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} |= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function orDynStringValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} |= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function orDynStringCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} |= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function andPropValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p &= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function andPropCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p &= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function andStaticValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s &= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function andStaticCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s &= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function andDynVarValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} &= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function andDynVarCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} &= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function andDynStringValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} &= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function andDynStringCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} &= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function xorPropValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p ^= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function xorPropCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p ^= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function xorStaticValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s ^= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function xorStaticCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s ^= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function xorDynVarValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} ^= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function xorDynVarCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} ^= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function xorDynStringValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} ^= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function xorDynStringCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} ^= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shlPropValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p <<= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shlPropCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p <<= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shlStaticValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s <<= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shlStaticCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s <<= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shlDynVarValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} <<= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shlDynVarCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} <<= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shlDynStringValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} <<= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shlDynStringCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} <<= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shrPropValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p >>= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shrPropCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->p >>= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shrStaticValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s >>= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shrStaticCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { self::$s >>= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shrDynVarValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} >>= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shrDynVarCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{$n} >>= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shrDynStringValue($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} >>= $v; echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+    public function shrDynStringCall($n, $v) { $caught = null; $this->p = 5; self::$s = 5; try { $this->{"p"} >>= $this->bump($v); echo 'after'; } catch (\Throwable $e) { $caught = get_class($e) . ': ' . $e->getMessage(); } return [$caught, $this->p, self::$s, get_object_vars($this)]; }
+}
+
+function outcome(callable $call): string
+{
+    $diagnostics = [];
+    set_error_handler(function ($no, $message) use (&$diagnostics) {
+        $diagnostics[] = $message;
+
+        return true;
+    });
+    ob_start();
+    try {
+        $result = 'ok ' . var_export($call(), true);
+    } catch (\Throwable $e) {
+        $result = get_class($e) . ': ' . $e->getMessage();
+    } finally {
+        restore_error_handler();
+    }
+
+    return $result . ' | echoed=' . ob_get_clean() . ' | diag=' . implode(';', $diagnostics);
+}
+
+/**
+ * A property name PHP converts once per operation.
+ */
+class Name
+{
+    public function __toString(): string
+    {
+        echo 'toString;';
+
+        return 'p';
+    }
+}
+
+$values = [3, 'abc', 0, 2.5, 'x', null];
+// Names of an existing property, one of them converted once. A name that
+// creates a property differs: PHP's ASSIGN_OBJ_OP creates it and warns
+// "Undefined property" before the operator, where Zephir reads it silently.
+$names  = ['p', new Name()];
+
+$cases = 0;
+$diffs = 0;
+foreach (get_class_methods(PhpPropertyCompound::class) as $method) {
+    if ('bump' === $method) {
+        continue;
+    }
+    foreach (str_contains($method, 'DynVar') ? $names : ['p'] as $name) {
+        foreach ($values as $value) {
+            $cases++;
+            $zephir = outcome(fn () => (new PropertyCompound())->$method($name, $value));
+            $php    = outcome(fn () => (new PhpPropertyCompound())->$method($name, $value));
+            if ($zephir !== $php) {
+                $diffs++;
+                echo $method, '(', json_encode([$name, $value], JSON_PARTIAL_OUTPUT_ON_ERROR), "): DIFF\n  zephir: $zephir\n  php:    $php\n";
+            }
+        }
+    }
+}
+echo $cases, " cases, $diffs diffs\n";
+--EXPECT--
+660 cases, 0 diffs
