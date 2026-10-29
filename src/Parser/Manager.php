@@ -20,12 +20,14 @@ class Manager
 {
     /**
      * Oldest `ext-zephir_parser` whose grammar covers the syntax this Zephir
-     * accepts. 2.9.0 added `instanceof static` (zephir#2714); 2.8.0 had added
-     * PHP attributes (zephir#2466); 2.7.0 expressions in constant initializers
-     * and property defaults (zephir#2061); 2.1.0 trait AST nodes (zephir#504).
+     * accepts. 2.10.0 added `static::CONSTANT` (zephir#2711), `static::{method}()`
+     * and `CONSTANT::{method}()` (zephir#2723); 2.9.0 `instanceof static`
+     * (zephir#2714); 2.8.0 PHP attributes (zephir#2466); 2.7.0 expressions in
+     * constant initializers and property defaults (zephir#2061); 2.1.0 trait
+     * AST nodes (zephir#504).
      * Raise this in the same change that adds a grammar feature.
      */
-    public const MINIMUM_PARSER_VERSION = '2.9.0';
+    public const MINIMUM_PARSER_VERSION = '2.10.0';
     public const PARSER_HOME_PAGE       = 'https://github.com/zephir-lang/php-zephir-parser';
 
     public function __construct(protected Parser $parser)
