@@ -584,7 +584,8 @@ echo var_export($test->testMultipleArrayUpdate6(), true), "\n";
 echo var_export($test->testMultipleArrayUpdate7(), true), "\n";
 echo var_export($test->testMultipleArrayUpdate8(), true), "\n";
 echo var_export($test->testMultipleArrayUpdate9(), true), "\n";
-echo var_export($test->testMultipleArrayUpdate10(), true), "\n";
+// a["a"][1] holds true: PHP refuses to write an offset into a scalar
+try { $test->testMultipleArrayUpdate10(); } catch (\Error $e) { echo get_class($e), ': ', $e->getMessage(), "\n"; }
 echo var_export($test->testMultipleArrayUpdate11(), true), "\n";
 echo var_export($test->testMultipleArrayUpdate12(), true), "\n";
 
@@ -856,16 +857,7 @@ array (
     1 => false,
   ),
 )
-array (
-  'a' => 
-  array (
-    0 => NULL,
-    1 => 
-    array (
-      'c' => false,
-    ),
-  ),
-)
+Error: Cannot use a scalar value as an array
 array (
   'y' => 
   array (

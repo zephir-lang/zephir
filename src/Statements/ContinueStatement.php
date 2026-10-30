@@ -37,6 +37,17 @@ class ContinueStatement extends StatementAbstract
             return;
         }
 
+        /**
+         * A do-while evaluates its condition with code printed after the body,
+         * which a C `continue` would skip.
+         */
+        $conditionLabel = $compilationContext->useDoWhileConditionLabel();
+        if (null !== $conditionLabel) {
+            $compilationContext->codePrinter->output('goto ' . $conditionLabel . ';');
+
+            return;
+        }
+
         if ($compilationContext->insideCycle) {
             $compilationContext->codePrinter->output('continue;');
 

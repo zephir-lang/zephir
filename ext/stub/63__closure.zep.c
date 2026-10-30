@@ -12,9 +12,8 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/fcall.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(stub_63__closure)
@@ -26,21 +25,13 @@ ZEPHIR_INIT_CLASS(stub_63__closure)
 
 PHP_METHOD(stub_63__closure, __invoke)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *carry, carry_sub, *row, row_sub;
+	zval *n, n_sub;
 
-	ZVAL_UNDEF(&carry_sub);
-	ZVAL_UNDEF(&row_sub);
-	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(carry)
-		Z_PARAM_ZVAL(row)
+	ZVAL_UNDEF(&n_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(n)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &carry, &row);
-	ZEPHIR_RETURN_CALL_CE_STATIC(stub_issue2167_ce, "implodeRow", NULL, 0, carry, row);
-	zephir_check_call_status();
-	RETURN_MM();
+	zephir_fetch_params_without_memory_grow(1, 0, &n);
+	RETURN_BOOL(zephir_instance_of_ev(n, stub_constants_ce));
 }
 

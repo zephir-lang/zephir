@@ -1,0 +1,336 @@
+--TEST--
+An operator that throws stops the method as in PHP: nothing after it runs and a compound assignment writes nothing back
+--FILE--
+namespace Stub;
+
+class OpExc
+{
+    protected static sp = [1];
+
+    protected p = [1];
+
+    public static function add(var a, var b)
+    {
+        var r;
+
+        let r = a + b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function arrayAddAssign(var v)
+    {
+        array a = [1];
+
+        let a += v;
+        echo "after";
+
+        return a;
+    }
+
+    public static function varAddAssign(var a, var v)
+    {
+        let a += v;
+        echo "after";
+
+        return a;
+    }
+
+    public static function varSubAssign(var a, var v)
+    {
+        let a -= v;
+        echo "after";
+
+        return a;
+    }
+
+    public static function divNative(long a, long b)
+    {
+        double r;
+
+        let r = a / b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function modNative(long a, long b)
+    {
+        long r;
+
+        let r = a % b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function divVar(var a, var b)
+    {
+        var r;
+
+        let r = a / b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function modVar(var a, var b)
+    {
+        var r;
+
+        let r = a % b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function divAssign(var a, var b)
+    {
+        let a /= b;
+        echo "after";
+
+        return a;
+    }
+
+    public static function bitOr(var a, var b)
+    {
+        var r;
+
+        let r = a | b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function concat(var a)
+    {
+        var r;
+
+        let r = "x" . a;
+        echo "after";
+
+        return r;
+    }
+
+    public static function concatAssign(var a)
+    {
+        var r = "x";
+
+        let r .= a;
+        echo "after";
+
+        return r;
+    }
+
+    public static function equalsIf(var a, var b)
+    {
+        if a == b {
+            echo "then";
+        }
+        echo "after";
+
+        return true;
+    }
+
+    public static function lessAssign(var a, var b)
+    {
+        var r;
+
+        let r = a < b;
+        echo "after";
+
+        return r;
+    }
+
+    public static function castString(var a)
+    {
+        var r;
+
+        let r = (string) a;
+        echo "after";
+
+        return r;
+    }
+
+    public static function incr(var a)
+    {
+        let a++;
+        echo "after";
+
+        return a;
+    }
+
+    public function propAddAssign(var v)
+    {
+        let this->p += v;
+        echo "after";
+
+        return this->p;
+    }
+
+    public function getP()
+    {
+        return this->p;
+    }
+
+    public static function staticAddAssign(var v)
+    {
+        let self::sp += v;
+        echo "after";
+
+        return self::sp;
+    }
+
+    public static function getSp()
+    {
+        return self::sp;
+    }
+
+    public static function elementAddAssign(var v)
+    {
+        var a = ["k": [1]];
+
+        let a["k"] += v;
+        echo "after";
+
+        return a;
+    }
+
+    public static function insideTry(var a, var b)
+    {
+        var e, r;
+
+        try {
+            let r = a + b;
+            echo "after";
+        } catch \TypeError, e {
+            echo "caught";
+        }
+        echo "end";
+
+        return true;
+    }
+}
+--USAGE--
+use Stub\OpExc;
+
+class PhpOpExc
+{
+    protected static $sp = [1];
+    protected $p = [1];
+
+    public static function add($a, $b) { $r = $a + $b; echo 'after'; return $r; }
+    public static function arrayAddAssign($v) { $a = [1]; $a += $v; echo 'after'; return $a; }
+    public static function varAddAssign($a, $v) { $a += $v; echo 'after'; return $a; }
+    public static function varSubAssign($a, $v) { $a -= $v; echo 'after'; return $a; }
+    public static function divNative(int $a, int $b) { $r = (float) ($a / $b); echo 'after'; return $r; }
+    public static function modNative(int $a, int $b) { $r = $a % $b; echo 'after'; return $r; }
+    public static function divVar($a, $b) { $r = $a / $b; echo 'after'; return $r; }
+    public static function modVar($a, $b) { $r = $a % $b; echo 'after'; return $r; }
+    public static function divAssign($a, $b) { $a /= $b; echo 'after'; return $a; }
+    public static function bitOr($a, $b) { $r = $a | $b; echo 'after'; return $r; }
+    public static function concat($a) { $r = 'x' . $a; echo 'after'; return $r; }
+    public static function concatAssign($a) { $r = 'x'; $r .= $a; echo 'after'; return $r; }
+    public static function equalsIf($a, $b) { if ($a == $b) { echo 'then'; } echo 'after'; return true; }
+    public static function lessAssign($a, $b) { $r = $a < $b; echo 'after'; return $r; }
+    public static function castString($a) { $r = (string) $a; echo 'after'; return $r; }
+    public static function incr($a) { $a++; echo 'after'; return $a; }
+    public function propAddAssign($v) { $this->p += $v; echo 'after'; return $this->p; }
+    public function getP() { return $this->p; }
+    public static function staticAddAssign($v) { self::$sp += $v; echo 'after'; return self::$sp; }
+    public static function getSp() { return self::$sp; }
+    public static function elementAddAssign($v) { $a = ['k' => [1]]; $a['k'] += $v; echo 'after'; return $a; }
+    public static function insideTry($a, $b)
+    {
+        try {
+            $r = $a + $b;
+            echo 'after';
+        } catch (\TypeError $e) {
+            echo 'caught';
+        }
+        echo 'end';
+
+        return true;
+    }
+}
+
+class ThrowingToString
+{
+    public function __toString(): string
+    {
+        throw new \RuntimeException('toString');
+    }
+}
+
+function outcome(callable $call): string
+{
+    ob_start();
+    try {
+        $result = 'ok ' . var_export($call(), true);
+    } catch (\Throwable $e) {
+        $result = get_class($e) . ': ' . $e->getMessage();
+    }
+
+    return $result . ' | echoed=' . ob_get_clean();
+}
+
+function check(string $label, string $method, array $args, ?callable $state = null): void
+{
+    $zephir = @outcome(fn () => OpExc::$method(...$args));
+    $php    = @outcome(fn () => PhpOpExc::$method(...$args));
+    if ($state) {
+        $zephir .= ' | ' . $state(OpExc::class);
+        $php    .= ' | ' . $state(PhpOpExc::class);
+    }
+    echo $label, ': ', $zephir === $php ? 'same' : "DIFF\n  zephir: $zephir\n  php:    $php", "\n";
+}
+
+check('array + int', 'add', [[1], 2]);
+check('array += int', 'arrayAddAssign', [2]);
+check('var += array', 'varAddAssign', [1, [2]]);
+check('var -= array', 'varSubAssign', [1, [2]]);
+check('long / 0', 'divNative', [1, 0]);
+check('long % 0', 'modNative', [1, 0]);
+check('var / 0', 'divVar', [1, 0]);
+check('var % 0', 'modVar', [1, 0]);
+check('var /= 0', 'divAssign', [1, 0]);
+check('array | int', 'bitOr', [[1], 2]);
+check('concat object', 'concat', [new \stdClass()]);
+check('.= object', 'concatAssign', [new \stdClass()]);
+check('== throwing __toString', 'equalsIf', [new ThrowingToString(), 'x']);
+check('< throwing __toString', 'lessAssign', [new ThrowingToString(), 'x']);
+check('(string) object', 'castString', [new \stdClass()]);
+check('++ array', 'incr', [[1]]);
+check('static += int', 'staticAddAssign', [2], fn ($c) => var_export($c::getSp(), true));
+check('element += int', 'elementAddAssign', [2]);
+check('try + int', 'insideTry', [[1], 2]);
+check('no throw', 'add', [1, 2]);
+
+$z = new OpExc();
+$p = new PhpOpExc();
+$zephir = @outcome(fn () => $z->propAddAssign(2)) . ' | ' . var_export($z->getP(), true);
+$php    = @outcome(fn () => $p->propAddAssign(2)) . ' | ' . var_export($p->getP(), true);
+echo 'property += int: ', $zephir === $php ? 'same' : "DIFF\n  zephir: $zephir\n  php:    $php", "\n";
+--EXPECT--
+array + int: same
+array += int: same
+var += array: same
+var -= array: same
+long / 0: same
+long % 0: same
+var / 0: same
+var % 0: same
+var /= 0: same
+array | int: same
+concat object: same
+.= object: same
+== throwing __toString: same
+< throwing __toString: same
+(string) object: same
+++ array: same
+static += int: same
+element += int: same
+try + int: same
+no throw: same
+property += int: same

@@ -42,7 +42,7 @@ PHP_METHOD(Stub_Ternary, testTernary1)
 	ZEPHIR_INIT_VAR(&_0);
 	if (100) {
 		ZEPHIR_INIT_NVAR(&_0);
-		ZVAL_LONG(&_0, (1 + 100));
+		ZVAL_LONG(&_0, ((zend_long) 1 + 100));
 	} else {
 		ZEPHIR_INIT_NVAR(&_0);
 		ZVAL_BOOL(&_0, 0);
@@ -76,6 +76,7 @@ PHP_METHOD(Stub_Ternary, testTernary2)
 
 PHP_METHOD(Stub_Ternary, testTernaryComplex1)
 {
+	zend_bool _2;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a, a_sub, *y, y_sub, _0, _1;
@@ -94,7 +95,7 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex1)
 	ZEPHIR_INIT_VAR(&_0);
 	if (100) {
 		ZEPHIR_INIT_NVAR(&_0);
-		ZVAL_LONG(&_0, (1 + 100));
+		ZVAL_LONG(&_0, ((zend_long) 1 + 100));
 	} else {
 		ZEPHIR_CALL_METHOD(&_1, a, "y", NULL, 0);
 		zephir_check_call_status();
@@ -102,8 +103,13 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex1)
 			ZEPHIR_CALL_METHOD(&_0, a, "x", NULL, 0);
 			zephir_check_call_status();
 		} else {
+			_2 = zephir_array_isset_value(a, y);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			ZEPHIR_INIT_NVAR(&_0);
-			ZVAL_BOOL(&_0, zephir_array_isset_value(a, y));
+			ZVAL_BOOL(&_0, _2);
 		}
 	}
 	RETURN_CCTOR(&_0);
@@ -111,15 +117,16 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex1)
 
 PHP_METHOD(Stub_Ternary, testTernaryComplex2)
 {
+	zend_bool _2;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *a, a_sub, *y, y_sub, _0, _1, _2;
+	zval *a, a_sub, *y, y_sub, _0, _1, _3;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&y_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_3);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(y)
@@ -130,7 +137,7 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex2)
 	ZEPHIR_INIT_VAR(&_0);
 	if (100) {
 		ZEPHIR_INIT_NVAR(&_0);
-		ZVAL_LONG(&_0, (1 + 100));
+		ZVAL_LONG(&_0, ((zend_long) 1 + 100));
 	} else {
 		ZEPHIR_CALL_METHOD(&_1, a, "y", NULL, 0);
 		zephir_check_call_status();
@@ -138,13 +145,22 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex2)
 			ZEPHIR_CALL_METHOD(&_0, a, "x", NULL, 0);
 			zephir_check_call_status();
 		} else {
+			_2 = zephir_array_isset_value(a, y);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			ZEPHIR_INIT_NVAR(&_0);
-			ZVAL_BOOL(&_0, zephir_array_isset_value(a, y));
+			ZVAL_BOOL(&_0, _2);
 		}
 	}
-	ZEPHIR_INIT_VAR(&_2);
-	ZVAL_LONG(&_2, 5);
-	zephir_add_function(return_value, &_2, &_0);
+	ZEPHIR_INIT_VAR(&_3);
+	ZVAL_LONG(&_3, 5);
+	zephir_add_function(return_value, &_3, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -178,6 +194,7 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex3)
  */
 PHP_METHOD(Stub_Ternary, testTernaryWithPromotedTemporaryVariable)
 {
+	zend_bool _2;
 	zval var2, var3, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
@@ -197,15 +214,28 @@ PHP_METHOD(Stub_Ternary, testTernaryWithPromotedTemporaryVariable)
 	ZVAL_STRING(&_0, "_c_");
 	zephir_array_fast_append(&var2, &_0);
 	ZEPHIR_INIT_VAR(&_1);
-	if (zephir_array_isset_value_long(&var2, 1)) {
+	_2 = zephir_array_isset_value_long(&var2, 1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	if (_2) {
 		ZEPHIR_OBS_NVAR(&_1);
 		zephir_array_fetch_long(&_1, &var2, 1, PH_NOISY, "stub/ternary.zep", 44);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	} else {
 		ZEPHIR_INIT_NVAR(&_1);
 		ZVAL_STRING(&_1, "");
 	}
 	ZEPHIR_INIT_VAR(&var3);
-	zephir_fast_explode_str(&var3, SL("_"), &_1, ZEND_LONG_MAX);
+	zephir_fast_explode_str(&var3, SL("_"), &_1, NULL);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&var3);
 }
 
@@ -247,11 +277,10 @@ PHP_METHOD(Stub_Ternary, testShortTernary)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a);
 	ZEPHIR_INIT_VAR(&_0);
-	if (!(zephir_is_true(a))) {
+	ZEPHIR_CPY_WRT(&_0, a);
+	if (!(zephir_is_true(&_0))) {
 		ZEPHIR_INIT_NVAR(&_0);
 		ZVAL_BOOL(&_0, 0);
-	} else {
-		ZEPHIR_CPY_WRT(&_0, a);
 	}
 	RETURN_CCTOR(&_0);
 }
@@ -272,10 +301,9 @@ PHP_METHOD(Stub_Ternary, testShortTernaryComplex)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &left, &value);
 	ZEPHIR_INIT_VAR(&_0);
-	if (!(zephir_is_true(left))) {
+	ZEPHIR_CPY_WRT(&_0, left);
+	if (!(zephir_is_true(&_0))) {
 		ZEPHIR_CPY_WRT(&_0, value);
-	} else {
-		ZEPHIR_CPY_WRT(&_0, left);
 	}
 	RETURN_CCTOR(&_0);
 }

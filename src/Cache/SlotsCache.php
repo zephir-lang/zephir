@@ -31,6 +31,19 @@ class SlotsCache
     private static int $slot = 1;
 
     /**
+     * Resets the slots for a fresh compilation run. Called from the Compiler
+     * constructor so slot indices depend only on the project being compiled.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2687
+     */
+    public static function reset(): void
+    {
+        self::$cacheFunctionSlots = [];
+        self::$cacheMethodSlots   = [];
+        self::$slot               = 1;
+    }
+
+    /**
      * Returns or creates a cache slot for a function.
      */
     public static function getExistingFunctionSlot(string $functionName): int

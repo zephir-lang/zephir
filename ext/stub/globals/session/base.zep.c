@@ -42,6 +42,9 @@ PHP_METHOD(Stub_Globals_Session_Base, set)
 	value = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&index_zv, index);
 	zephir_array_update_zval(&_SESSION, &index_zv, value, PH_COPY | PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETVAL_ZVAL(&_SESSION, 1, 0);
 	return;
 }
@@ -59,6 +62,9 @@ PHP_METHOD(Stub_Globals_Session_Base, remove)
 	zephir_get_global(&_SESSION, SL("_SESSION"));
 	ZVAL_STR(&index_zv, index);
 	zephir_array_unset(&_SESSION, &index_zv, PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Globals_Session_Base, __set)
@@ -142,6 +148,10 @@ PHP_METHOD(Stub_Globals_Session_Base, removeSessionData)
 		ZEPHIR_INIT_NVAR(&_2);
 		ZVAL_COPY(&_2, _3);
 		zephir_array_unset(&_SESSION, &key, PH_SEPARATE);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&_2);
 	ZEPHIR_INIT_NVAR(&key);

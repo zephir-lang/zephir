@@ -29,6 +29,10 @@ PHP_METHOD(Stub_Globals, getDefaultGlobalsOrmCacheEnable);
 PHP_METHOD(Stub_Globals, getTestIniVariable);
 PHP_METHOD(Stub_Globals, getModuleSetting);
 PHP_METHOD(Stub_Globals, setModuleSetting);
+PHP_METHOD(Stub_Globals, setHashValue);
+PHP_METHOD(Stub_Globals, getHashValue);
+PHP_METHOD(Stub_Globals, setDefaultGlobalsOrmAstCache);
+PHP_METHOD(Stub_Globals, getDefaultGlobalsOrmAstCache);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_globals_setboolvalueusingdotnotation, 0, 1, IS_VOID, 0)
 
@@ -130,6 +134,22 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_globals_setmodulesetting, 0
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_globals_sethashvalue, 0, 1, IS_VOID, 0)
+
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_globals_gethashvalue, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_globals_setdefaultglobalsormastcache, 0, 1, IS_VOID, 0)
+
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_globals_getdefaultglobalsormastcache, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_globals_method_entry) {
 	PHP_ME(Stub_Globals, setBoolValueUsingDotNotation, arginfo_stub_globals_setboolvalueusingdotnotation, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Globals, setIntValueUsingDotNotation, arginfo_stub_globals_setintvalueusingdotnotation, ZEND_ACC_PUBLIC)
@@ -157,5 +177,9 @@ PHP_ME(Stub_Globals, getDefaultGlobalsOrmCacheEnable, arginfo_stub_globals_getde
 PHP_ME(Stub_Globals, getTestIniVariable, arginfo_stub_globals_gettestinivariable, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Globals, getModuleSetting, arginfo_stub_globals_getmodulesetting, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Globals, setModuleSetting, arginfo_stub_globals_setmodulesetting, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Globals, setHashValue, arginfo_stub_globals_sethashvalue, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getHashValue, arginfo_stub_globals_gethashvalue, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Globals, setDefaultGlobalsOrmAstCache, arginfo_stub_globals_setdefaultglobalsormastcache, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getDefaultGlobalsOrmAstCache, arginfo_stub_globals_getdefaultglobalsormastcache, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

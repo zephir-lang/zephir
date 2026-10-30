@@ -39,16 +39,16 @@ final class ExtensionGlobalTest extends TestCase
             'char'    => ['char', 'char'],
             'uchar'   => ['uchar', 'unsigned char'],
             'string'  => ['string', 'char *'],
-            'hash'    => ['hash', 'HashTable *'],
+            'hash'    => ['hash', 'HashTable *', 'NULL'],
         ];
     }
 
     /**
      * @dataProvider cTypeProvider
      */
-    public function testShouldResolveCType(string $type, string $expected): void
+    public function testShouldResolveCType(string $type, string $expected, mixed $default = 0): void
     {
-        $global = new ExtensionGlobal('setting', ['type' => $type, 'default' => 0]);
+        $global = new ExtensionGlobal('setting', ['type' => $type, 'default' => $default]);
 
         $this->assertSame($expected, $global->cType());
     }
@@ -170,11 +170,125 @@ final class ExtensionGlobalTest extends TestCase
         $this->assertSame('', $global->cDefault('stub'));
     }
 
-    public function testShouldEmitACompiledDefaultForAHash(): void
+    public function hashDefaultProvider(): array
+    {
+        return [
+            // The only spelling that compiled before #2726, and what cphalcon declares.
+            'C NULL'    => ['NULL'],
+            // Used to emit `x = ;`.
+            'JSON null' => [null],
+        ];
+    }
+
+    /**
+     * @dataProvider hashDefaultProvider
+     */
+    public function testShouldEmitANullDefaultForAHash(?string $default): void
+    {
+        $global = new ExtensionGlobal('orm.ast_cache', ['type' => 'hash', 'default' => $default]);
+
+        $this->assertSame('stub_globals->orm.ast_cache = NULL;', $global->cDefault('stub'));
+    }
+
+    public function invalidHashDefaultProvider(): array
+    {
+        return [
+            // Used to emit `x = Array;`, after an "Array to string conversion" warning.
+            'empty array'     => [[]],
+            'array'           => [['a' => 1]],
+            'string'          => ['foo'],
+            'lower-case null' => ['null'],
+            'zero'            => [0],
+            'false'           => [false],
+        ];
+    }
+
+    /**
+     * A hash member is a `HashTable *` and its default is emitted as C, so
+     * anything but NULL broke the C build.
+     *
+     * @dataProvider invalidHashDefaultProvider
+     */
+    public function testShouldRejectAHashDefaultOtherThanNull(mixed $default): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Extension global "cache" is a hash, so its default must be null');
+
+        /* The constructor rejects it, so cDefault() is never reached. */
+        (new ExtensionGlobal('cache', ['type' => 'hash', 'default' => $default]))->cDefault('stub');
+    }
+
+    /**
+     * It used to be ignored without a word, so the directive never existed.
+     */
+    public function testShouldRejectAnIniEntryOnAHash(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Extension global "cache" is a hash, which cannot have an ini-entry: an INI value is always a string'
+        );
+
+        /* The constructor rejects it, so iniEntry() is never reached. */
+        (new ExtensionGlobal('cache', [
+            'type'      => 'hash',
+            'default'   => 'NULL',
+            'ini-entry' => ['name' => 'stub.cache'],
+        ]))->iniEntry('stub');
+    }
+
+    public function testShouldAccessAPlainGlobal(): void
+    {
+        $global = new ExtensionGlobal('cache', ['type' => 'hash', 'default' => 'NULL']);
+
+        $this->assertSame('ZEPHIR_GLOBAL(cache)', $global->accessor());
+    }
+
+    public function testShouldAccessAGlobalInAStruct(): void
     {
         $global = new ExtensionGlobal('orm.ast_cache', ['type' => 'hash', 'default' => 'NULL']);
 
-        $this->assertSame('stub_globals->orm.ast_cache = NULL;', $global->cDefault('stub'));
+        $this->assertSame('ZEPHIR_GLOBAL(orm).ast_cache', $global->accessor());
+    }
+
+    /**
+     * RINIT puts a hash back to NULL, which drops the table without freeing it
+     * (#2726).
+     */
+    public function testShouldReleaseARequestHashAtRequestEnd(): void
+    {
+        $plain  = new ExtensionGlobal('cache', ['type' => 'hash', 'default' => 'NULL']);
+        $dotted = new ExtensionGlobal('orm.ast_cache', ['type' => 'hash', 'default' => 'NULL']);
+
+        $this->assertSame('zephir_globals_release_hash(&ZEPHIR_GLOBAL(cache));', $plain->requestRelease());
+        $this->assertSame('zephir_globals_release_hash(&ZEPHIR_GLOBAL(orm).ast_cache);', $dotted->requestRelease());
+    }
+
+    public function testShouldNotReleaseAModuleHashAtRequestEnd(): void
+    {
+        $global = new ExtensionGlobal('cache', ['type' => 'hash', 'default' => 'NULL', 'module' => true]);
+
+        $this->assertSame('', $global->requestRelease());
+    }
+
+    public function notReleasedProvider(): array
+    {
+        return [
+            'bool'   => ['bool'],
+            'int'    => ['int'],
+            'double' => ['double'],
+            'char'   => ['char'],
+            'string' => ['string'],
+        ];
+    }
+
+    /**
+     * @dataProvider notReleasedProvider
+     */
+    public function testShouldReleaseNothingAtRequestEndForAnyOtherType(string $type): void
+    {
+        $global = new ExtensionGlobal('setting', ['type' => $type, 'default' => 0]);
+
+        $this->assertSame('', $global->requestRelease());
     }
 
     public function testShouldReportModuleScope(): void
@@ -184,6 +298,123 @@ final class ExtensionGlobalTest extends TestCase
 
         $this->assertFalse($request->isModule());
         $this->assertTrue($module->isModule());
+    }
+
+    /**
+     * OnUpdateString points a string member into its ini entry, which must
+     * never be freed, so globals_set() keeps the copy it writes in a member of
+     * its own (#2725).
+     */
+    public function testShouldNameTheOwnedCopyOfAString(): void
+    {
+        $global = new ExtensionGlobal('setting', ['type' => 'string', 'default' => 'value']);
+
+        $this->assertSame('zephir_owned_setting', $global->ownedMember());
+    }
+
+    public function testShouldNameTheOwnedCopyOfAStringInAStruct(): void
+    {
+        $global = new ExtensionGlobal('db.setting', ['type' => 'string', 'default' => 'value']);
+
+        $this->assertSame('db.zephir_owned_setting', $global->ownedMember());
+    }
+
+    public function testShouldStartTheOwnedCopyEmpty(): void
+    {
+        $global = new ExtensionGlobal('db.setting', ['type' => 'string', 'default' => 'value']);
+
+        $this->assertSame('stub_globals->db.zephir_owned_setting = NULL;', $global->ownedInit('stub'));
+    }
+
+    public function testShouldFreeTheOwnedCopy(): void
+    {
+        $global = new ExtensionGlobal('db.setting', ['type' => 'string', 'default' => 'value']);
+
+        $this->assertSame(
+            'zephir_globals_release_string(&stub_globals->db.zephir_owned_setting);',
+            $global->ownedRelease('stub'),
+        );
+    }
+
+    public function notOwnedProvider(): array
+    {
+        return [
+            'bool'   => ['bool'],
+            'int'    => ['int'],
+            'double' => ['double'],
+            'char'   => ['char'],
+            'hash'   => ['hash', 'NULL'],
+        ];
+    }
+
+    /**
+     * @dataProvider notOwnedProvider
+     */
+    public function testShouldOwnNothingForAnyOtherType(string $type, mixed $default = 0): void
+    {
+        $global = new ExtensionGlobal('setting', ['type' => $type, 'default' => $default]);
+
+        $this->assertSame(
+            [null, '', ''],
+            [$global->ownedMember(), $global->ownedInit('stub'), $global->ownedRelease('stub')],
+        );
+    }
+
+    public function validNameProvider(): array
+    {
+        return [
+            // One character used to be rejected: the check matched the
+            // character class against the whole name, inverted.
+            'one character'           => ['x'],
+            'one character in struct' => ['a.b'],
+            'plain'                   => ['my_setting'],
+            'leading underscore'      => ['_private'],
+            'digits after the first'  => ['cache2'],
+            'struct member'           => ['orm.cache_level'],
+        ];
+    }
+
+    /**
+     * @dataProvider validNameProvider
+     */
+    public function testShouldAcceptAName(string $name): void
+    {
+        ExtensionGlobal::assertValidName($name);
+
+        $this->addToAssertionCount(1);
+    }
+
+    public function invalidNameProvider(): array
+    {
+        $identifier = 'must be a C identifier (letters, digits and underscores, not starting with a digit)';
+
+        return [
+            'dash'                => ['my-setting', '"my-setting" ' . $identifier],
+            'leading digit'       => ['1abc', '"1abc" ' . $identifier],
+            'dash in a member'    => ['db.my-setting', '"my-setting" ' . $identifier],
+            'leading digit field' => ['db.1x', '"1x" ' . $identifier],
+            'empty'               => ['', '"" ' . $identifier],
+            'empty member'        => ['db.', '"" ' . $identifier],
+            'empty struct'        => ['.db', '"" ' . $identifier],
+            // Everything past the second dot used to be dropped, so these two
+            // were the same member.
+            'two levels'          => ['a.b.c', 'only "member" or "struct.member" is supported'],
+            'owned prefix'        => ['zephir_owned_str', 'the "zephir_owned_" prefix is reserved'],
+            'owned prefix field'  => ['db.zephir_owned_str', 'the "zephir_owned_" prefix is reserved'],
+            'kernel member'       => ['initialized', '"initialized" is a member the Zephir kernel declares'],
+            'kernel member struct' => ['scache.x', '"scache" is a member the Zephir kernel declares'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidNameProvider
+     */
+    public function testShouldRejectAName(string $name, string $reason): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf('Extension global "%s" is not a valid name: %s', $name, $reason));
+
+        ExtensionGlobal::assertValidName($name);
     }
 
     public function testShouldRequireADefault(): void

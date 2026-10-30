@@ -102,6 +102,33 @@ final class GlobalsTest extends TestCase
         $this->assertSame('Long Text without any sense...', $this->test->getDefaultGlobalsOrmCachePrefix());
     }
 
+    /**
+     * globals_set() kept only the char * of the zend_string it converted the
+     * value to, so every call leaked that string. Each value here is built at
+     * runtime, so none of them is interned and a leak cannot hide.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2725
+     */
+    public function testSetStringValueShouldNotLeak(): void
+    {
+        $this->test->setStringValue(str_repeat('x', 64) . 0);
+        $this->test->setDefaultGlobalsOrmCachePrefix(str_repeat('y', 64) . 0);
+
+        $before = memory_get_usage();
+        for ($i = 1; $i <= 1000; $i++) {
+            $this->test->setStringValue(str_repeat('x', 64) . $i);
+            $this->test->setDefaultGlobalsOrmCachePrefix(str_repeat('y', 64) . $i);
+        }
+        $after = memory_get_usage();
+
+        $this->assertSame(0, $after - $before);
+        $this->assertSame(str_repeat('x', 64) . 1000, $this->test->getDefaultGlobals8());
+        $this->assertSame(str_repeat('y', 64) . 1000, $this->test->getDefaultGlobalsOrmCachePrefix());
+
+        $this->test->setStringValue('custom_value');
+        $this->test->setDefaultGlobalsOrmCachePrefix('prefix-string-');
+    }
+
     public function testSetBoolValueUsingInt(): void
     {
         $this->test->setBoolValue(0);
@@ -116,6 +143,66 @@ final class GlobalsTest extends TestCase
 
         $this->test->setBoolValue(false);
         $this->assertFalse($this->test->getDefaultGlobals4());
+    }
+
+    /**
+     * @see https://github.com/zephir-lang/zephir/issues/2726
+     */
+    public function testHashValueShouldDefaultToNull(): void
+    {
+        $this->assertNull($this->test->getHashValue());
+        $this->assertNull($this->test->getDefaultGlobalsOrmAstCache());
+    }
+
+    public function testSetHashValue(): void
+    {
+        $this->test->setHashValue(['a' => 1, 'b' => [2]]);
+        $this->assertSame(['a' => 1, 'b' => [2]], $this->test->getHashValue());
+
+        $this->test->setDefaultGlobalsOrmAstCache(['phql' => 'ast']);
+        $this->assertSame(['phql' => 'ast'], $this->test->getDefaultGlobalsOrmAstCache());
+
+        $this->test->setHashValue(null);
+        $this->test->setDefaultGlobalsOrmAstCache(null);
+        $this->assertNull($this->test->getHashValue());
+        $this->assertNull($this->test->getDefaultGlobalsOrmAstCache());
+    }
+
+    public function testSetHashValueCastsLikePhp(): void
+    {
+        $this->test->setHashValue('scalar');
+        $this->assertSame((array) 'scalar', $this->test->getHashValue());
+
+        $this->test->setHashValue((object) ['x' => 1]);
+        $this->assertSame(['x' => 1], $this->test->getHashValue());
+
+        $this->test->setHashValue(null);
+    }
+
+    /**
+     * Both samples are taken with the global back at null. Comparing the
+     * first array with the last one instead assumed the two cost the same,
+     * which PHP 8.2.35, 8.3.36 and 8.5.12 no longer guarantee: the same loop
+     * in plain PHP measures -16 there.
+     */
+    public function testSetHashValueShouldNotLeak(): void
+    {
+        $this->test->setHashValue([str_repeat('x', 64) . 0]);
+        $this->test->getHashValue();
+        $this->test->setHashValue(null);
+
+        $before = memory_get_usage();
+        for ($i = 1; $i <= 1000; $i++) {
+            $this->test->setHashValue([str_repeat('x', 64) . $i]);
+            $this->test->getHashValue();
+        }
+        /* Compared into a bool, so the last array is freed with the global. */
+        $lastWasKept = [str_repeat('x', 64) . 1000] === $this->test->getHashValue();
+        $this->test->setHashValue(null);
+        $after = memory_get_usage();
+
+        $this->assertSame(0, $after - $before);
+        $this->assertTrue($lastWasKept);
     }
 
     public function testShouldSetGlobalExtensionOrmCacheLevel(): void

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Extension;
 
+use Error;
 use PHPUnit\Framework\TestCase;
 use Stub\NativeArray;
 
@@ -90,9 +91,20 @@ final class NativeArrayTest extends TestCase
         $this->assertSame(['a' => [1 => ['c' => true]], 0 => ['b' => [2 => false]]], $this->test->testMultipleArrayUpdate7());
         $this->assertSame(['a' => [0 => null, 1 => true, 2 => false]], $this->test->testMultipleArrayUpdate8());
         $this->assertSame(['a' => [0 => null, 1 => false]], $this->test->testMultipleArrayUpdate9());
-        $this->assertSame(['a' => [0 => null, 1 => ['c' => false]]], $this->test->testMultipleArrayUpdate10());
         $this->assertSame(['y' => ['x' => null]], $this->test->testMultipleArrayUpdate11());
         $this->assertSame(['y' => ['x' => ['z' => null]]], $this->test->testMultipleArrayUpdate12());
+    }
+
+    /**
+     * `a["a"][1]` holds `true` here, and PHP refuses to write an offset into a
+     * scalar. Zephir used to replace it with an array instead.
+     */
+    public function testMultipleArrayUpdateIntoScalarThrows(): void
+    {
+        $this->expectException(Error::class);
+        $this->expectExceptionMessage('Cannot use a scalar value as an array');
+
+        $this->test->testMultipleArrayUpdate10();
     }
 
     public function testArrayKeys(): void

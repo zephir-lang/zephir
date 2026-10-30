@@ -124,6 +124,9 @@ PHP_METHOD(Stub_TryTest, testTry3)
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&_3, &_2);
 			RETURN_MM_STRING("error");
+		} else {
+			ZEPHIR_MM_RESTORE();
+			return;
 		}
 	}
 	RETURN_MM_BOOL(0);
@@ -190,6 +193,9 @@ PHP_METHOD(Stub_TryTest, testTry4)
 				zend_clear_exception();
 				ZEPHIR_CPY_WRT(&_6, &_4);
 				RETURN_MM_STRING("error");
+			} else {
+				ZEPHIR_MM_RESTORE();
+				return;
 			}
 		}
 	}
@@ -255,6 +261,9 @@ PHP_METHOD(Stub_TryTest, testTry5)
 				zend_clear_exception();
 				ZEPHIR_CPY_WRT(&_5, &_4);
 				RETURN_MM_STRING("any error");
+			} else {
+				ZEPHIR_MM_RESTORE();
+				return;
 			}
 		}
 	}
@@ -319,6 +328,9 @@ PHP_METHOD(Stub_TryTest, testTry6)
 				zend_clear_exception();
 				ZEPHIR_CPY_WRT(&e, &_4);
 				RETURN_MM_STRING("error");
+			} else {
+				ZEPHIR_MM_RESTORE();
+				return;
 			}
 		}
 	}
@@ -383,6 +395,9 @@ PHP_METHOD(Stub_TryTest, testTry7)
 				zend_clear_exception();
 				ZEPHIR_CPY_WRT(&e, &_4);
 				RETURN_MM_STRING("any error");
+			} else {
+				ZEPHIR_MM_RESTORE();
+				return;
 			}
 		}
 	}
@@ -442,7 +457,7 @@ PHP_METHOD(Stub_TryTest, testTry9)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "someMethod1", NULL, 127);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "someMethod1", NULL, 126);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched");
 
@@ -456,6 +471,9 @@ PHP_METHOD(Stub_TryTest, testTry9)
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&e, &_0);
 			RETURN_MM_STRING("domain error");
+		} else {
+			ZEPHIR_MM_RESTORE();
+			return;
 		}
 	}
 	RETURN_MM_BOOL(0);
@@ -474,7 +492,7 @@ PHP_METHOD(Stub_TryTest, testTry10)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "someMethod2", NULL, 128);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "someMethod2", NULL, 127);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched");
 
@@ -488,6 +506,9 @@ PHP_METHOD(Stub_TryTest, testTry10)
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&e, &_0);
 			RETURN_MM_STRING("domain error");
+		} else {
+			ZEPHIR_MM_RESTORE();
+			return;
 		}
 	}
 	RETURN_MM_BOOL(0);
@@ -515,6 +536,9 @@ PHP_METHOD(Stub_TryTest, testTry11)
 		if (zephir_is_instance_of(&_0, SL("Exception"))) {
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&ex, &_0);
+		} else {
+			ZEPHIR_MM_RESTORE();
+			return;
 		}
 	}
 	ZEPHIR_MM_RESTORE();

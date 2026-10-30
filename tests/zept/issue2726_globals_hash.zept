@@ -1,0 +1,296 @@
+--TEST--
+Issue #2726: a hash global reads back as null or a shared array, and globals_set() converts a value the way PHP's (array) cast does
+--CONFIG--
+{"globals": {
+    "cache":         {"type": "hash", "default": "NULL"},
+    "orm.ast_cache": {"type": "hash", "default": "NULL"}
+}}
+--FILE--
+namespace Stub;
+
+class HashGlobal
+{
+	public static function get()
+	{
+		return globals_get("cache");
+	}
+
+	public static function set(value) -> void
+	{
+		globals_set("cache", value);
+		echo "continued\n";
+	}
+
+	public static function getDotted()
+	{
+		var v;
+
+		let v = globals_get("orm.ast_cache");
+
+		return v;
+	}
+
+	public static function setDotted(value) -> void
+	{
+		globals_set("orm.ast_cache", value);
+	}
+
+	public static function setLiteral() -> void
+	{
+		globals_set("cache", ["k": "literal"]);
+	}
+
+	public static function clear() -> void
+	{
+		globals_set("cache", null);
+	}
+
+	public static function size() -> int
+	{
+		return count(globals_get("cache"));
+	}
+
+	public static function keysOf()
+	{
+		var k, v, all = [];
+
+		for k, v in globals_get("cache") {
+			let all[] = k;
+		}
+
+		return all;
+	}
+
+	public static function contains(key) -> bool
+	{
+		var g;
+
+		let g = globals_get("cache");
+
+		return isset g[key];
+	}
+
+	public static function inArray()
+	{
+		return [globals_get("cache"), globals_get("orm.ast_cache")];
+	}
+
+	public static function asArgument() -> string
+	{
+		return json_encode(globals_get("cache"));
+	}
+
+	public static function selfAssign() -> void
+	{
+		globals_set("cache", globals_get("cache"));
+	}
+
+	public static function appendToCopy(value)
+	{
+		var g;
+
+		let g = globals_get("cache");
+		let g[] = value;
+
+		return g;
+	}
+
+	public static function churn(int n) -> void
+	{
+		int i;
+		var g;
+
+		for i in range(1, n) {
+			globals_set("cache", [i, "s" . i]);
+			let g = globals_get("cache");
+		}
+	}
+}
+--USAGE--
+function show(string $label, $value): void
+{
+    echo str_pad($label, 20), str_replace("\n", ' ', var_export($value, true)), "\n";
+}
+
+/* Objects are named by class: var_export() of a Closure differs across PHP versions. */
+function classes(array $a): array
+{
+    return array_map(fn($x) => is_object($x) ? get_class($x) : $x, $a);
+}
+
+class Props { public $pub = 1; protected $prot = 2; private $priv = 3; }
+
+echo "-- the issue\n";
+show('default', \Stub\HashGlobal::get());
+\Stub\HashGlobal::set(['a' => 1]);
+show('after set', \Stub\HashGlobal::get());
+show('dotted untouched', \Stub\HashGlobal::getDotted());
+\Stub\HashGlobal::clear();
+show('after clear', \Stub\HashGlobal::get());
+\Stub\HashGlobal::setLiteral();
+show('literal', \Stub\HashGlobal::get());
+\Stub\HashGlobal::set(null);
+show('set null', \Stub\HashGlobal::get());
+
+/*
+ * Every value but null goes through PHP's own (array) cast. Each case leaves a
+ * value that differs from the one before it, so a set that wrote nothing
+ * cannot pass.
+ */
+echo "-- (array) parity\n";
+$cases = [
+    'false'        => false,
+    'true'         => true,
+    'int'          => 42,
+    'float'        => 1.5,
+    'string'       => 'abc',
+    'empty string' => '',
+    'array'        => ['a' => 1, 2],
+    'empty array'  => [],
+    'stdClass'     => (object) ['x' => 1, 'y' => [2]],
+    'props'        => new Props(),
+    'closure'      => function () {},
+    'ArrayObject'  => new ArrayObject(['k' => 'v']),
+    'nested'       => [[1, [2]], 'z' => null],
+];
+foreach ($cases as $label => $value) {
+    ob_start();
+    \Stub\HashGlobal::set($value);
+    ob_end_clean();
+    $got = \Stub\HashGlobal::get();
+    echo str_pad($label, 20), $got === (array) $value ? 'same' : 'DIFFERENT', ' ',
+        str_replace("\n", ' ', var_export(classes($got), true)), "\n";
+}
+
+echo "-- copy on write\n";
+$source = ['a' => 1];
+\Stub\HashGlobal::set($source);
+$source['a'] = 2;
+show('source changed', \Stub\HashGlobal::get());
+$read = \Stub\HashGlobal::get();
+$read['a'] = 3;
+show('result changed', \Stub\HashGlobal::get());
+show('append to copy', \Stub\HashGlobal::appendToCopy('x'));
+show('after append', \Stub\HashGlobal::get());
+\Stub\HashGlobal::set([]);
+$empty = \Stub\HashGlobal::get();
+$empty[] = 'into empty';
+show('empty stays empty', \Stub\HashGlobal::get());
+\Stub\HashGlobal::set(['self' => 1]);
+\Stub\HashGlobal::selfAssign();
+show('self assign', \Stub\HashGlobal::get());
+
+echo "-- expressions\n";
+\Stub\HashGlobal::set(['k1' => 'v1', 'k2' => 'v2']);
+show('count', \Stub\HashGlobal::size());
+show('foreach keys', \Stub\HashGlobal::keysOf());
+show('isset k1', \Stub\HashGlobal::contains('k1'));
+show('isset k3', \Stub\HashGlobal::contains('k3'));
+show('as argument', \Stub\HashGlobal::asArgument());
+\Stub\HashGlobal::setDotted(['d' => true]);
+show('in array', \Stub\HashGlobal::inArray());
+\Stub\HashGlobal::clear();
+show('isset on null', \Stub\HashGlobal::contains('k1'));
+
+/*
+ * Releasing the old table can run a destructor. PHP stores the new value first
+ * and then releases the old one, and an exception thrown there stops the
+ * assignment's caller: the Zephir side has to do the same.
+ */
+echo "-- destructor on replace\n";
+class Boom
+{
+    public function __construct(private string $label) {}
+    public function __destruct()
+    {
+        echo $this->label, ' destructor sees ', str_replace("\n", ' ', var_export($this->observe(), true)), "\n";
+        throw new RuntimeException($this->label);
+    }
+    public function observe()
+    {
+        return 'zephir' === $this->label ? \Stub\HashGlobal::get() : $GLOBALS['holder']->p;
+    }
+}
+class Holder
+{
+    public $p;
+    public function set($value): void
+    {
+        $this->p = $value;
+        echo "continued\n";
+    }
+}
+$holder = new Holder();
+$holder->p = [new Boom('php')];
+try {
+    $holder->set(['next']);
+} catch (RuntimeException $e) {
+    echo 'caught ', $e->getMessage(), "\n";
+}
+ob_start();
+\Stub\HashGlobal::set([new Boom('zephir')]);
+ob_end_clean();
+try {
+    \Stub\HashGlobal::set(['next']);
+} catch (RuntimeException $e) {
+    echo 'caught ', $e->getMessage(), "\n";
+}
+
+echo "-- no leak\n";
+\Stub\HashGlobal::churn(1);
+$before = memory_get_usage();
+\Stub\HashGlobal::churn(1000);
+$after = memory_get_usage();
+show('leaked bytes', $after - $before);
+show('last value', \Stub\HashGlobal::get());
+--EXPECT--
+-- the issue
+default             NULL
+continued
+after set           array (   'a' => 1, )
+dotted untouched    NULL
+after clear         NULL
+literal             array (   'k' => 'literal', )
+continued
+set null            NULL
+-- (array) parity
+false               same array (   0 => false, )
+true                same array (   0 => true, )
+int                 same array (   0 => 42, )
+float               same array (   0 => 1.5, )
+string              same array (   0 => 'abc', )
+empty string        same array (   0 => '', )
+array               same array (   'a' => 1,   0 => 2, )
+empty array         same array ( )
+stdClass            same array (   'x' => 1,   'y' =>    array (     0 => 2,   ), )
+props               same array (   'pub' => 1,   '' . "\0" . '*' . "\0" . 'prot' => 2,   '' . "\0" . 'Props' . "\0" . 'priv' => 3, )
+closure             same array (   0 => 'Closure', )
+ArrayObject         same array (   'k' => 'v', )
+nested              same array (   0 =>    array (     0 => 1,     1 =>      array (       0 => 2,     ),   ),   'z' => NULL, )
+-- copy on write
+continued
+source changed      array (   'a' => 1, )
+result changed      array (   'a' => 1, )
+append to copy      array (   'a' => 1,   0 => 'x', )
+after append        array (   'a' => 1, )
+continued
+empty stays empty   array ( )
+continued
+self assign         array (   'self' => 1, )
+-- expressions
+continued
+count               2
+foreach keys        array (   0 => 'k1',   1 => 'k2', )
+isset k1            true
+isset k3            false
+as argument         '{"k1":"v1","k2":"v2"}'
+in array            array (   0 =>    array (     'k1' => 'v1',     'k2' => 'v2',   ),   1 =>    array (     'd' => true,   ), )
+isset on null       false
+-- destructor on replace
+php destructor sees array (   0 => 'next', )
+caught php
+zephir destructor sees array (   0 => 'next', )
+caught zephir
+-- no leak
+leaked bytes        0
+last value          array (   0 => 1000,   1 => 's1000', )

@@ -94,7 +94,7 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetSet)
 	zephir_fetch_params(1, 2, 0, &offset, &value);
 	zephir_memory_observe(&obj);
 	zephir_read_property_cached(&obj, this_ptr, _zephir_prop_0, 10, PH_NOISY_CC);
-	if (!(Z_TYPE_P(offset) == IS_NULL)) {
+	if (!((Z_TYPE_P(offset) == IS_NULL))) {
 		zephir_update_property_zval_zval(&obj, offset, value);
 	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 10, &obj);
@@ -103,6 +103,7 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetSet)
 
 PHP_METHOD(Stub_ArrayAccessObj, offsetExists)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval offset_sub, obj;
 	zval *offset;
@@ -123,7 +124,12 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetExists)
 	zephir_fetch_params(1, 1, 0, &offset);
 	zephir_memory_observe(&obj);
 	zephir_read_property_cached(&obj, this_ptr, _zephir_prop_0, 10, PH_NOISY_CC);
-	RETURN_MM_BOOL(zephir_isset_property_value_zval(&obj, offset));
+	_0 = zephir_isset_property_value_zval(&obj, offset);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_ArrayAccessObj, offsetUnset)
@@ -156,6 +162,10 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetUnset)
 	zephir_get_arrval(&_1, &_0);
 	ZEPHIR_CPY_WRT(&obj, &_1);
 	zephir_array_unset(&obj, offset, PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&_2, &obj);
 	zephir_convert_to_object(&_2);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 10, &_2);
@@ -164,15 +174,16 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetUnset)
 
 PHP_METHOD(Stub_ArrayAccessObj, offsetGet)
 {
+	zend_bool _2;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval offset_sub, _0, _1, _2;
+	zval offset_sub, _0, _1, _3;
 	zval *offset;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_3);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("test", 4, 1);
@@ -186,11 +197,16 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetGet)
 	zephir_fetch_params(1, 1, 0, &offset);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 10, PH_NOISY_CC | PH_READONLY);
-	if (zephir_isset_property_value_zval(&_1, offset)) {
-		zephir_memory_observe(&_2);
-		zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 10, PH_NOISY_CC);
+	_2 = zephir_isset_property_value_zval(&_1, offset);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	if (_2) {
+		zephir_memory_observe(&_3);
+		zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 10, PH_NOISY_CC);
 		ZEPHIR_OBS_NVAR(&_0);
-		zephir_read_property_zval(&_0, &_2, offset, PH_NOISY_CC);
+		zephir_read_property_zval(&_0, &_3, offset, PH_NOISY_CC);
 	} else {
 		ZEPHIR_INIT_NVAR(&_0);
 		ZVAL_NULL(&_0);

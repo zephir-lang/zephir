@@ -1,6 +1,8 @@
 
 namespace Stub;
 
+use Stub\Constants as AliasedConstants;
+
 class Closures
 {
     protected _argument;
@@ -809,15 +811,13 @@ class Closures
     /**
      * @issue https://github.com/zephir-lang/zephir/issues/2668
      *
-     * Rewriting the array through the shared slot has to keep working after
-     * the method that owned the parameter returned. It is reassigned rather
-     * than appended to because `let x[] = ...` on a capture is rejected for
-     * every capture, by value or by reference (#2736).
+     * Appending through the shared slot has to keep working after the method
+     * that owned the parameter returned.
      */
     public function issue2668ByRefTypedArray(array items) -> <\Closure>
     {
         return function () use (&items) {
-            let items = array_merge(items, [1]);
+            let items[] = 1;
 
             return count(items);
         };
@@ -899,5 +899,23 @@ class Closures
         }
 
         return call_user_func(hold);
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2686
+     */
+    public function issue2686ArrowAliasConstant()
+    {
+        return n => AliasedConstants::C4 + n;
+    }
+
+    public function issue2686ArrowAliasInstanceOf()
+    {
+        return n => n instanceof AliasedConstants;
+    }
+
+    public function issue2686ArrowAliasClassName()
+    {
+        return n => AliasedConstants::class;
     }
 }

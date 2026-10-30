@@ -1,0 +1,325 @@
+--TEST--
+A closure can mutate its captures in place, by value and by reference (issue #2736)
+--FILE--
+namespace Stub;
+
+/**
+ * Every expectation below is the output of the same program written in PHP,
+ * identical on PHP 8.0 to 8.5. A by-value capture is re-seeded on every call,
+ * so its mutations never accumulate; a `use (&x)` one writes into the slot it
+ * shares with the enclosing method and with every other closure over it.
+ */
+class Capture2736
+{
+	public function appendByValue() -> <\Closure>
+	{
+		var items;
+
+		let items = [];
+
+		return function () use (items) {
+			let items[] = 1;
+
+			return count(items);
+		};
+	}
+
+	public function appendByRef() -> <\Closure>
+	{
+		var items;
+
+		let items = [];
+
+		return function () use (&items) {
+			let items[] = 1;
+
+			return count(items);
+		};
+	}
+
+	public function indexByValue() -> <\Closure>
+	{
+		var m;
+
+		let m = ["k": 0];
+
+		return function () use (m) {
+			let m["k"] += 1;
+			let m["n"][] = 2;
+			let m["s"] = "x";
+
+			return json_encode(m);
+		};
+	}
+
+	public function indexByRef() -> <\Closure>
+	{
+		var m;
+
+		let m = ["k": 0];
+
+		return function () use (&m) {
+			let m["k"] += 1;
+			let m["n"][] = 2;
+			let m["s"] = "x";
+
+			return json_encode(m);
+		};
+	}
+
+	/**
+	 * A by-value append separates from the shared array instead of writing
+	 * through it.
+	 */
+	public function privateAndShared() -> array
+	{
+		var items, byValue, byRef, reader;
+
+		let items = [];
+
+		let byValue = function () use (items) {
+			let items[] = "v";
+
+			return items;
+		};
+
+		let byRef = function () use (&items) {
+			let items[] = "r";
+
+			return items;
+		};
+
+		let reader = function () use (&items) {
+			return items;
+		};
+
+		return [byValue, byRef, reader];
+	}
+
+	/**
+	 * An object is captured by handle, so even a by-value capture shares it.
+	 */
+	public function propertyByValue() -> <\Closure>
+	{
+		var o;
+
+		let o = new \stdClass();
+		let o->c = 0;
+
+		return function () use (o) {
+			let o->c++;
+			let o->c++;
+			let o->c--;
+
+			return o->c;
+		};
+	}
+
+	public function propertyByRef() -> <\Closure>
+	{
+		var o;
+
+		let o = new \stdClass();
+		let o->c = 0;
+
+		return function () use (&o) {
+			let o->c++;
+			let o->c++;
+			let o->c--;
+
+			return o->c;
+		};
+	}
+
+	public function propertyOnLocal()
+	{
+		var o;
+
+		let o = new \stdClass();
+		let o->c = 5;
+		let o->c++;
+		let o->c--;
+		let o->c++;
+
+		return o->c;
+	}
+
+	/**
+	 * Assigning a ternary to the capture used to stop it from being read off
+	 * the carrier, so `before` saw nothing.
+	 */
+	public function ternary(var x) -> <\Closure>
+	{
+		return function (bool flip) use (x) {
+			var before;
+
+			let before = x;
+			let x = flip ? "a" : "b";
+
+			return [before, x];
+		};
+	}
+
+	/**
+	 * The same for a constant only known at runtime.
+	 */
+	public function runtimeConstant(var x) -> <\Closure>
+	{
+		return function () use (x) {
+			var before;
+
+			let before = x;
+			let x = ISSUE_2736_CONST;
+
+			return [before, x];
+		};
+	}
+
+	public function unsetByValue() -> <\Closure>
+	{
+		var m;
+
+		let m = ["k": 0, "j": 1];
+
+		return function () use (m) {
+			unset(m["k"]);
+			let m[] = 1;
+
+			return count(m);
+		};
+	}
+
+	public function unsetByRef() -> <\Closure>
+	{
+		var m;
+
+		let m = ["k": 0, "j": 1];
+
+		return function () use (&m) {
+			unset(m["k"]);
+			let m[] = 1;
+
+			return count(m);
+		};
+	}
+
+	public function concatByValue(string s) -> <\Closure>
+	{
+		return function () use (s) {
+			let s .= "!";
+
+			return s;
+		};
+	}
+
+	public function concatByRef(string s) -> <\Closure>
+	{
+		return function () use (&s) {
+			let s .= "!";
+
+			return s;
+		};
+	}
+
+	/**
+	 * `.=` in the enclosing method appends to the slot the closure shares.
+	 */
+	public function concatOuterByRef() -> string
+	{
+		var s, f;
+		int n = 7;
+
+		let s = "a";
+		let f = function () use (&s) {
+			return s;
+		};
+		let s .= "!";
+		let s .= 5;
+		let s .= true;
+		let s .= null;
+		let s .= n;
+
+		return {f}();
+	}
+
+	/**
+	 * A native integer capture that the body turns into a string.
+	 */
+	public function scalarOverwrite(int n) -> <\Closure>
+	{
+		return function () use (n) {
+			let n = "v" . n;
+
+			return strlen(n);
+		};
+	}
+}
+--USAGE--
+use Stub\Capture2736;
+
+/**
+ * Bytes left allocated after 1000 calls, once the closure has warmed up. A
+ * by-value capture starts from the same state on every call, so anything but
+ * 0 is a leak.
+ */
+function leak(callable $c, ...$args) {
+    for ($i = 0; $i < 3; $i++) { $c(...$args); }
+    $before = memory_get_usage();
+    for ($i = 0; $i < 1000; $i++) { $c(...$args); }
+    return memory_get_usage() - $before;
+}
+
+$t = new Capture2736();
+
+$a = $t->appendByValue(); echo $a(), ",", $a(), "\n";
+$a = $t->appendByRef(); echo $a(), ",", $a(), "\n";
+
+$m = $t->indexByValue(); echo $m(), ",", $m(), "\n";
+$m = $t->indexByRef(); echo $m(), ",", $m(), "\n";
+
+[$byValue, $byRef, $reader] = $t->privateAndShared();
+echo json_encode($byValue()), json_encode($byValue()), json_encode($byRef()), json_encode($byRef()), json_encode($reader()), "\n";
+
+$o = $t->propertyByValue(); echo $o(), ",", $o(), "\n";
+$o = $t->propertyByRef(); echo $o(), ",", $o(), "\n";
+echo $t->propertyOnLocal(), "\n";
+
+$x = $t->ternary("seed"); echo json_encode($x(true)), json_encode($x(false)), "\n";
+define("ISSUE_2736_CONST", "c");
+$x = $t->runtimeConstant("seed"); echo json_encode($x()), json_encode($x()), "\n";
+
+$u = $t->unsetByValue(); echo $u(), ",", $u(), "\n";
+$u = $t->unsetByRef(); echo $u(), ",", $u(), "\n";
+$s = $t->concatByValue("a"); echo $s(), ",", $s(), "\n";
+$s = $t->concatByRef("a"); echo $s(), ",", $s(), "\n";
+echo $t->concatOuterByRef(), "\n";
+
+$n = $t->scalarOverwrite(5); echo $n(), ",", $n(), "\n";
+
+echo "leak:",
+    leak($t->appendByValue()), ",",
+    leak($t->indexByValue()), ",",
+    leak($t->propertyByValue()), ",",
+    leak($t->ternary("seed"), true), ",",
+    leak($t->runtimeConstant(str_repeat("s", 64))), ",",
+    leak($t->unsetByValue()), ",",
+    leak($t->concatByValue("a")), ",",
+    leak($t->scalarOverwrite(5)), "\n";
+--EXPECT--
+1,1
+1,2
+{"k":1,"n":[2],"s":"x"},{"k":1,"n":[2],"s":"x"}
+{"k":1,"n":[2],"s":"x"},{"k":2,"n":[2,2],"s":"x"}
+["v"]["v"]["r"]["r","r"]["r","r"]
+1,2
+1,2
+6
+["seed","a"]["seed","b"]
+["seed","c"]["seed","c"]
+2,2
+2,3
+a!,a!
+a!,a!!
+a!517
+2,2
+leak:0,0,0,0,0,0,0,0

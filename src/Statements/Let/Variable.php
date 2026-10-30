@@ -126,6 +126,17 @@ class Variable
         } else {
             throw new CompilerException('Unknown type: ' . $type, $statement);
         }
+
+        /**
+         * A compound operator on a zval goes through the engine, which can
+         * throw; PHP stops there. A native target cannot throw.
+         */
+        if (
+            'assign' !== $statement['operator']
+            && ('array' === $type || 'string' === $type || TypeRegistry::isDynamic($type))
+        ) {
+            $compilationContext->emitExceptionCheck($codePrinter);
+        }
     }
 
     /**
@@ -142,8 +153,14 @@ class Variable
         array $statement,
         CompilationContext $compilationContext
     ): void {
-        switch ($resolvedExpr->getType()) {
+        $sourceType = $resolvedExpr->getType();
+        if ('variable' === $sourceType) {
+            $sourceType = $this->getArraySourceType($resolvedExpr, $compilationContext);
+        }
+
+        switch ($sourceType) {
             case 'variable':
+            case 'mixed':
             case 'array':
                 $this->doArrayAssignmentProcess(
                     $statement,
@@ -157,10 +174,50 @@ class Variable
 
             default:
                 throw new CompilerException(
-                    "Cannot '" . $statement['operator'] . "' " . $resolvedExpr->getType() . ' for array type',
+                    "Cannot '" . $statement['operator'] . "' " . $sourceType . ' for array type',
                     $resolvedExpr->getOriginal()
                 );
         }
+    }
+
+    /**
+     * The declared type behind a `variable` result. A closure writes itself
+     * straight into the target, and a typed local (`int`, `string`, ...) can
+     * never hold an array, so both are rejected like a literal; see #2689.
+     */
+    private function getArraySourceType(
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext
+    ): string {
+        $originalType = $resolvedExpr->getOriginal()['type'] ?? null;
+        if ('closure' === $originalType || 'closure-arrow' === $originalType) {
+            return 'closure';
+        }
+
+        $sourceVariable = $compilationContext->symbolTable->getVariable($resolvedExpr->getCode(), $compilationContext);
+
+        return $sourceVariable?->getType() ?? 'variable';
+    }
+
+    /**
+     * PHP never coerces into `array`, so a value that is not one is rejected
+     * with the TypeError of a non-nullable `array` typed property before the
+     * local is written; see #2689.
+     */
+    private function emitArrayTypeGuard(
+        string $value,
+        string $variable,
+        CompilationContext $compilationContext,
+        Printer $codePrinter
+    ): void {
+        $compilationContext->headersManager->add('kernel/main');
+
+        $codePrinter->output('if (UNEXPECTED(Z_TYPE_P(' . $value . ') != IS_ARRAY)) {');
+        $codePrinter->increaseLevel();
+        $codePrinter->output('zephir_throw_variable_type_error(' . $value . ', "' . $variable . '", "array");');
+        $compilationContext->emitExceptionExit($codePrinter);
+        $codePrinter->decreaseLevel();
+        $codePrinter->output('}');
     }
 
     private function doArrayAssignmentProcess(
@@ -181,13 +238,13 @@ class Variable
                     $symbolVariable->setDynamicTypes('array');
                     $symbolVariable->increaseVariantIfNull();
                     $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                    $value  = $compilationContext->backend->resolveValue($resolvedExpr, $compilationContext);
 
-                    $codePrinter->output(
-                        'ZEPHIR_CPY_WRT(' . $symbol . ', ' . $compilationContext->backend->resolveValue(
-                            $resolvedExpr,
-                            $compilationContext
-                        ) . ');'
-                    );
+                    if ('array' === $symbolVariable->getType() && 'variable' === $resolvedExpr->getType()) {
+                        $this->emitArrayTypeGuard($value, $variable, $compilationContext, $codePrinter);
+                    }
+
+                    $codePrinter->output('ZEPHIR_CPY_WRT(' . $symbol . ', ' . $value . ');');
                 }
                 break;
 
@@ -1036,6 +1093,7 @@ class Variable
                                         $symbolVariable
                                     ) . ', ' . $compilationContext->backend->getVariableCode($itemVariable) . ');'
                                 );
+                                $compilationContext->emitExceptionCheck($codePrinter);
                                 break;
 
                             case 'concat-assign':
@@ -1065,6 +1123,12 @@ class Variable
     /**
      * Performs variable assignment.
      *
+     * The target is always addressed through getVariableCode(): a `use (&x)`
+     * variable is a PHP reference, and `.=` has to append to the value it
+     * shares rather than overwrite the reference itself.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2736
+     *
      * @throws CompilerException
      * @throws IllegalOperationException
      */
@@ -1087,7 +1151,10 @@ class Variable
                      */
                     $compilationContext->headersManager->add('kernel/operators');
                     $symbolVariable->setDynamicTypes('string');
-                    $codePrinter->output('zephir_concat_self_str(&' . $variable . ', SL(""));');
+                    $codePrinter->output(
+                        'zephir_concat_self_str(' . $compilationContext->backend->getVariableCode($symbolVariable)
+                        . ', SL(""));'
+                    );
                     break;
                 }
 
@@ -1185,7 +1252,8 @@ class Variable
                          */
                         $compilationContext->headersManager->add('kernel/operators');
                         $codePrinter->output(
-                            'zephir_concat_self_long(&' . $variable . ', ' . $resolvedExpr->getCode() . ');'
+                            'zephir_concat_self_long(' . $compilationContext->backend->getVariableCode($symbolVariable)
+                            . ', ' . $resolvedExpr->getCode() . ');'
                         );
                         break;
 
@@ -1238,7 +1306,8 @@ class Variable
                          */
                         $compilationContext->headersManager->add('kernel/operators');
                         $codePrinter->output(
-                            'zephir_concat_self_double(&' . $variable . ', ' . $resolvedExpr->getCode() . ');'
+                            'zephir_concat_self_double(' . $compilationContext->backend->getVariableCode($symbolVariable)
+                            . ', ' . $resolvedExpr->getCode() . ');'
                         );
                         break;
 
@@ -1304,7 +1373,8 @@ class Variable
                          */
                         $compilationContext->headersManager->add('kernel/operators');
                         $codePrinter->output(
-                            'zephir_concat_self_bool(&' . $variable . ', ' . $resolvedExpr->getBooleanCode() . ');'
+                            'zephir_concat_self_bool(' . $compilationContext->backend->getVariableCode($symbolVariable)
+                            . ', ' . $resolvedExpr->getBooleanCode() . ');'
                         );
                         break;
 
@@ -1363,7 +1433,8 @@ class Variable
                     case 'concat-assign':
                         $compilationContext->headersManager->add('kernel/operators');
                         $codePrinter->output(
-                            'zephir_concat_self_str(&' . $variable . ', SL("' . $resolvedExpr->getCode() . '"));'
+                            'zephir_concat_self_str(' . $compilationContext->backend->getVariableCode($symbolVariable)
+                            . ', SL("' . $resolvedExpr->getCode() . '"));'
                         );
                         break;
 
@@ -1375,7 +1446,7 @@ class Variable
             case 'array':
                 if ('concat-assign' === $statement['operator']) {
                     $this->concatSelfOntoTarget(
-                        '&' . $variable,
+                        $compilationContext->backend->getVariableCode($symbolVariable),
                         $resolvedExpr,
                         $compilationContext,
                         $statement
@@ -1471,7 +1542,8 @@ class Variable
                                     ? 'zephir_concat_self_char'
                                     : 'zephir_concat_self_long';
                                 $codePrinter->output(
-                                    $helper . '(&' . $variable . ', ' . $itemVariable->getName() . ');'
+                                    $helper . '(' . $compilationContext->backend->getVariableCode($symbolVariable)
+                                    . ', ' . $itemVariable->getName() . ');'
                                 );
                                 break;
                             default:
@@ -1484,7 +1556,8 @@ class Variable
                             case 'concat-assign':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $codePrinter->output(
-                                    'zephir_concat_self_double(&' . $variable . ', ' . $itemVariable->getName() . ');'
+                                    'zephir_concat_self_double(' . $compilationContext->backend->getVariableCode($symbolVariable)
+                                    . ', ' . $itemVariable->getName() . ');'
                                 );
                                 break;
 
@@ -1507,7 +1580,8 @@ class Variable
                             case 'concat-assign':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $codePrinter->output(
-                                    'zephir_concat_self_bool(&' . $variable . ', ' . $itemVariable->getName() . ');'
+                                    'zephir_concat_self_bool(' . $compilationContext->backend->getVariableCode($symbolVariable)
+                                    . ', ' . $itemVariable->getName() . ');'
                                 );
                                 break;
 
@@ -1528,7 +1602,7 @@ class Variable
                     case 'array':
                         if ('concat-assign' === $statement['operator']) {
                             $this->concatSelfOntoTarget(
-                                '&' . $variable,
+                                $compilationContext->backend->getVariableCode($symbolVariable),
                                 $resolvedExpr,
                                 $compilationContext,
                                 $statement

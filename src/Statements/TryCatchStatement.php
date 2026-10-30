@@ -31,8 +31,16 @@ class TryCatchStatement extends StatementAbstract
     {
         $codePrinter = $compilationContext->codePrinter;
 
+        /**
+         * The label id comes from a per-function counter, while the label a
+         * pending exception jumps to follows nesting: once this `try` ends,
+         * code still inside an enclosing `try` must jump to that one's end.
+         */
+        $enclosingTryCatch = $compilationContext->currentTryCatch;
+        $currentTryCatch   = ++$compilationContext->tryCatchLabelId;
+
         ++$compilationContext->insideTryCatch;
-        $currentTryCatch = ++$compilationContext->currentTryCatch;
+        $compilationContext->currentTryCatch = $currentTryCatch;
 
         $codePrinter->outputBlankLine();
         $codePrinter->output('/* try_start_' . $currentTryCatch . ': */');
@@ -52,6 +60,7 @@ class TryCatchStatement extends StatementAbstract
         $codePrinter->outputBlankLine();
 
         --$compilationContext->insideTryCatch;
+        $compilationContext->currentTryCatch = $enclosingTryCatch;
 
         if (isset($this->statement['catches'])) {
             /**
@@ -133,6 +142,17 @@ class TryCatchStatement extends StatementAbstract
             for ($i = 1; $i < count($ifs); ++$i) {
                 $lastIf->setElseStatements($exprBuilder->statements()->block([$ifs[$i]]));
                 $lastIf = $ifs[$i];
+            }
+
+            /**
+             * An exception no catch matches keeps propagating, as in PHP.
+             */
+            $exitStatements = [];
+            foreach ($compilationContext->exceptionExitLines() as $line) {
+                $exitStatements[] = $exprBuilder->statements()->rawC($line);
+            }
+            if ([] !== $exitStatements) {
+                $lastIf->setElseStatements($exprBuilder->statements()->block($exitStatements));
             }
 
             $ifStatement = new IfStatement($primaryIf->build());

@@ -63,6 +63,7 @@
     "non-valid-require": true,
     "non-valid-require-once": true,
     "extra-parentheses": true,
+    "lossy-float-key": true,
     "missing-optimizer": false
   },
   "optimizations": {
@@ -108,6 +109,10 @@
       "type": "uint",
       "default": 64
     },
+    "my_setting_7": {
+      "type": "hash",
+      "default": "NULL"
+    },
     "module_setting": {
       "type": "bool",
       "default": true,
@@ -140,6 +145,10 @@
     "orm.cache_prefix": {
       "type": "string",
       "default": "prefix-string-"
+    },
+    "orm.ast_cache": {
+      "type": "hash",
+      "default": "NULL"
     },
     "extension.test_ini_variable": {
       "type": "bool",

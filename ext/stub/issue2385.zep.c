@@ -46,11 +46,11 @@ PHP_METHOD(Stub_Issue2385, __construct)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 59, &__$null);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 60, &__$null);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "set");
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 60, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 61, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -86,6 +86,7 @@ PHP_METHOD(Stub_Issue2385, checkAssignedValue)
 
 PHP_METHOD(Stub_Issue2385, checkDynamicKeyNull)
 {
+	zend_bool _0;
 	zval key_zv;
 	zend_string *key = NULL;
 	zval *this_ptr = getThis();
@@ -95,11 +96,16 @@ PHP_METHOD(Stub_Issue2385, checkDynamicKeyNull)
 		Z_PARAM_STR(key)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&key_zv, key);
-	RETURN_BOOL(zephir_isset_property_value_zval(this_ptr, &key_zv));
+	_0 = zephir_isset_property_value_zval(this_ptr, &key_zv);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	RETURN_BOOL(_0);
 }
 
 PHP_METHOD(Stub_Issue2385, checkArrayKeyNull)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, arr;
 
@@ -111,11 +117,17 @@ PHP_METHOD(Stub_Issue2385, checkArrayKeyNull)
 	ZEPHIR_INIT_VAR(&arr);
 	zephir_create_array(&arr, 1, 0);
 	zephir_array_update_string(&arr, SL("a"), &__$null, PH_COPY | PH_SEPARATE);
-	RETURN_MM_BOOL(zephir_array_isset_value_string(&arr, SL("a")));
+	_0 = zephir_array_isset_value_string(&arr, SL("a"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_Issue2385, checkArrayKeyValue)
 {
+	zend_bool _0;
 	zval arr;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
@@ -126,11 +138,17 @@ PHP_METHOD(Stub_Issue2385, checkArrayKeyValue)
 	ZEPHIR_INIT_VAR(&arr);
 	zephir_create_array(&arr, 1, 0);
 	add_assoc_stringl_ex(&arr, SL("a"), SL("v"));
-	RETURN_MM_BOOL(zephir_array_isset_value_string(&arr, SL("a")));
+	_0 = zephir_array_isset_value_string(&arr, SL("a"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_Issue2385, checkArrayKeyMissing)
 {
+	zend_bool _0;
 	zval arr;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
@@ -141,11 +159,17 @@ PHP_METHOD(Stub_Issue2385, checkArrayKeyMissing)
 	ZEPHIR_INIT_VAR(&arr);
 	zephir_create_array(&arr, 1, 0);
 	add_assoc_stringl_ex(&arr, SL("b"), SL("v"));
-	RETURN_MM_BOOL(zephir_array_isset_value_string(&arr, SL("a")));
+	_0 = zephir_array_isset_value_string(&arr, SL("a"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_Issue2385, checkArrayLongKeyNull)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, arr;
 
@@ -157,11 +181,17 @@ PHP_METHOD(Stub_Issue2385, checkArrayLongKeyNull)
 	ZEPHIR_INIT_VAR(&arr);
 	zephir_create_array(&arr, 1, 0);
 	zephir_array_update_long(&arr, 0, &__$null, PH_COPY ZEPHIR_DEBUG_PARAMS_DUMMY);
-	RETURN_MM_BOOL(zephir_array_isset_value_long(&arr, 0));
+	_0 = zephir_array_isset_value_long(&arr, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_Issue2385, checkArrayLongKeyValue)
 {
+	zend_bool _0;
 	zval arr;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
@@ -172,11 +202,17 @@ PHP_METHOD(Stub_Issue2385, checkArrayLongKeyValue)
 	ZEPHIR_INIT_VAR(&arr);
 	zephir_create_array(&arr, 1, 0);
 	add_index_stringl(&arr, 0, SL("v"));
-	RETURN_MM_BOOL(zephir_array_isset_value_long(&arr, 0));
+	_0 = zephir_array_isset_value_long(&arr, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_Issue2385, checkArrayVarKeyNull)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *key, key_sub, __$null, arr;
 
@@ -192,11 +228,17 @@ PHP_METHOD(Stub_Issue2385, checkArrayVarKeyNull)
 	ZEPHIR_INIT_VAR(&arr);
 	zephir_create_array(&arr, 1, 0);
 	zephir_array_update_string(&arr, SL("a"), &__$null, PH_COPY | PH_SEPARATE);
-	RETURN_MM_BOOL(zephir_array_isset_value(&arr, key));
+	_0 = zephir_array_isset_value(&arr, key);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_Issue2385, checkArrayVarKeyValue)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *key, key_sub, arr;
 
@@ -211,6 +253,11 @@ PHP_METHOD(Stub_Issue2385, checkArrayVarKeyValue)
 	ZEPHIR_INIT_VAR(&arr);
 	zephir_create_array(&arr, 1, 0);
 	add_assoc_stringl_ex(&arr, SL("a"), SL("v"));
-	RETURN_MM_BOOL(zephir_array_isset_value(&arr, key));
+	_0 = zephir_array_isset_value(&arr, key);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 

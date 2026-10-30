@@ -1,0 +1,128 @@
+--TEST--
+Issue #2689: assigning a non-array to an `array` local throws the TypeError a PHP `array` typed property throws
+--FILE--
+namespace Stub;
+
+class Issue2689
+{
+    public static function assign(var v)
+    {
+        array a;
+
+        let a = v;
+
+        return a;
+    }
+
+    public static function fromNullable(array p = null)
+    {
+        array a;
+
+        let a = p;
+
+        return a;
+    }
+
+    public static function insideTry(var v)
+    {
+        var e, caught = "none";
+        array a = ["kept"];
+
+        try {
+            let a = v;
+        } catch \TypeError, e {
+            let caught = e->getMessage();
+        }
+
+        return [a, caught];
+    }
+}
+--USAGE--
+use Stub\Issue2689;
+
+class P
+{
+    public array $p;
+}
+
+// PHP's own type token for a value rejected by a non-nullable `array`.
+function phpType($value): string
+{
+    try {
+        $holder    = new P();
+        $holder->p = $value;
+    } catch (\TypeError $e) {
+        preg_match('/^Cannot assign (.+) to property P::\$p of type array$/', $e->getMessage(), $m);
+
+        return $m[1];
+    }
+
+    return 'accepted';
+}
+
+function check(string $label, callable $call, $value): void
+{
+    try {
+        $call();
+        echo $label, ": no-throw\n";
+    } catch (\TypeError $e) {
+        $expected = 'Cannot assign ' . phpType($value) . ' to variable $a of type array';
+        echo $label, ': ', $e->getMessage() === $expected ? 'same' : 'DIFF ' . $e->getMessage() . ' vs ' . $expected, "\n";
+    }
+}
+
+$cases = [
+    'object'  => new \stdClass(),
+    'string'  => 'abc',
+    'int'     => 1,
+    'float'   => 1.5,
+    'true'    => true,
+    'false'   => false,
+    'null'    => null,
+    'closure' => function () {},
+];
+
+foreach ($cases as $label => $value) {
+    check($label, fn () => Issue2689::assign($value), $value);
+}
+
+check('omitted nullable param', fn () => Issue2689::fromNullable(), null);
+
+var_export(Issue2689::assign(['x' => 1]));
+echo "\n";
+var_export(Issue2689::fromNullable([3]));
+echo "\n";
+var_export(Issue2689::insideTry('abc'));
+echo "\n";
+var_export(Issue2689::insideTry([5]));
+echo "\n";
+--EXPECT--
+object: same
+string: same
+int: same
+float: same
+true: same
+false: same
+null: same
+closure: same
+omitted nullable param: same
+array (
+  'x' => 1,
+)
+array (
+  0 => 3,
+)
+array (
+  0 => 
+  array (
+    0 => 'kept',
+  ),
+  1 => 'Cannot assign string to variable $a of type array',
+)
+array (
+  0 => 
+  array (
+    0 => 5,
+  ),
+  1 => 'none',
+)

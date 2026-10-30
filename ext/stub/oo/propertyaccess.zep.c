@@ -93,16 +93,28 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	zephir_read_property_cached(&_2, &test, _zephir_prop_0, 0, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_3);
 	zephir_array_fetch_long(&_3, &_2, 0, PH_NOISY, "stub/oo/propertyaccess.zep", 17);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(&test, _zephir_prop_1, 0, &_3);
 	zephir_read_property_cached(&_4, &test, _zephir_prop_0, 0, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_5);
 	zephir_array_fetch_long(&_5, &_4, 1, PH_NOISY, "stub/oo/propertyaccess.zep", 18);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(&test, _zephir_prop_2, 0, &_5);
 	ZEPHIR_INIT_VAR(&_6);
 	zephir_create_array(&_6, 4, 0);
 	zephir_read_property_cached(&_7, &test, _zephir_prop_0, 0, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_8);
 	zephir_array_fetch_long(&_8, &_7, 1, PH_NOISY, "stub/oo/propertyaccess.zep", 19);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(&_6, &_8);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 1);
@@ -114,12 +126,12 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	ZVAL_LONG(&_1, 3);
 	zephir_array_fast_append(&_6, &_1);
 	zephir_update_property_zval_cached(&test, _zephir_prop_2, 0, &_6);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 90, &test);
-	zephir_read_property_cached(&_9, this_ptr, _zephir_prop_3, 90, PH_NOISY_CC | PH_READONLY);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 105, &test);
+	zephir_read_property_cached(&_9, this_ptr, _zephir_prop_3, 105, PH_NOISY_CC | PH_READONLY);
 	zephir_read_property_cached(&_10, &_9, _zephir_prop_1, 0, PH_NOISY_CC | PH_READONLY);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_4, 91, &_10);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_4, 106, &_10);
 	zephir_memory_observe(&test1);
-	zephir_read_property_cached(&test1, this_ptr, _zephir_prop_3, 90, PH_NOISY_CC);
+	zephir_read_property_cached(&test1, this_ptr, _zephir_prop_3, 105, PH_NOISY_CC);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -141,7 +153,7 @@ PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 92, value);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 107, value);
 	RETURN_THISW();
 }
 

@@ -61,11 +61,11 @@ class DivOperator extends ArithmeticalBaseOperator
 
         return match ($shape) {
             'long_long'     => $this->consumerIsDouble($compilationContext)
-                ? $this->doubleResult('zephir_safe_div_long_long', $leftOperand, $rightOperand, $expression)
+                ? $this->nativeResult('double', 'zephir_safe_div_long_long', $leftOperand, $rightOperand, $expression, $compilationContext)
                 : $this->zvalResult('zephir_div_long_long', $leftOperand, $rightOperand, $expression, $compilationContext, self::QUOTIENT_TYPES),
-            'long_double'   => $this->doubleResult('zephir_safe_div_long_double', $leftOperand, $rightOperand, $expression),
-            'double_long'   => $this->doubleResult('zephir_safe_div_double_long', $leftOperand, $rightOperand, $expression),
-            'double_double' => $this->doubleResult('zephir_safe_div_double_double', $leftOperand, $rightOperand, $expression),
+            'long_double'   => $this->nativeResult('double', 'zephir_safe_div_long_double', $leftOperand, $rightOperand, $expression, $compilationContext),
+            'double_long'   => $this->nativeResult('double', 'zephir_safe_div_double_long', $leftOperand, $rightOperand, $expression, $compilationContext),
+            'double_double' => $this->nativeResult('double', 'zephir_safe_div_double_double', $leftOperand, $rightOperand, $expression, $compilationContext),
             'zval_long'     => $this->zvalResult('zephir_div_zval_long', $leftOperand, $rightOperand, $expression, $compilationContext, self::QUOTIENT_TYPES),
             'long_zval'     => $this->zvalResult('zephir_div_long_zval', $leftOperand, $rightOperand, $expression, $compilationContext, self::QUOTIENT_TYPES),
             'zval_double'   => $this->zvalResult('zephir_div_zval_double', $leftOperand, $rightOperand, $expression, $compilationContext, self::QUOTIENT_TYPES),
@@ -98,14 +98,5 @@ class DivOperator extends ArithmeticalBaseOperator
         $returnTypes = array_keys($method->getReturnTypes());
 
         return $method->areReturnTypesDoubleCompatible() && [] === array_diff($returnTypes, ['double', 'null']);
-    }
-
-    private function doubleResult(string $helper, array $left, array $right, array $expression): CompiledExpression
-    {
-        return new CompiledExpression(
-            'double',
-            $helper . '(' . $left['code'] . ', ' . $right['code'] . ')',
-            $expression
-        );
     }
 }

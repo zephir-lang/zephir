@@ -168,7 +168,9 @@ class Constant
         }
 
         if ('static-constant-access' === $this->value['type']) {
-            $compiledExpression = (new StaticConstantAccess())->compile($this->value, $compilationContext);
+            $access = new StaticConstantAccess();
+            $access->setAlwaysFold(true);
+            $compiledExpression = $access->compile($this->value, $compilationContext);
 
             $this->value = [
                 'type'  => $compiledExpression->getType(),

@@ -113,6 +113,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             $indexExpression = new Expression($indexExpr);
 
             $resolvedIndex = $indexExpression->compile($compilationContext);
+            $resolvedIndex = $compilationContext->backend->boxArrayKey($resolvedIndex, $compilationContext);
             switch ($resolvedIndex->getType()) {
                 case 'string':
                 case 'int':
@@ -164,6 +165,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
          */
         $indexExpression = new Expression($statement['index-expr'][0]);
         $resolvedIndex   = $indexExpression->compile($compilationContext);
+        $resolvedIndex = $compilationContext->backend->boxArrayKey($resolvedIndex, $compilationContext);
 
         switch ($resolvedIndex->getType()) {
             case 'string':
@@ -227,6 +229,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             case 'int':
             case 'uint':
             case 'long':
+            case 'ulong':
                 $indexVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                     'variable',
                     $compilationContext,
@@ -262,6 +265,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                     case 'int':
                     case 'uint':
                     case 'long':
+                    case 'ulong':
                         $indexVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                             'variable',
                             $compilationContext,

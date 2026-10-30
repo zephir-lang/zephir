@@ -1,0 +1,59 @@
+--TEST--
+Issue #2731: an inline method cache is not shared between this and another receiver of a sibling class
+--FILE--
+namespace Stub;
+
+class Base
+{
+    public function who() -> string
+    {
+        return "base";
+    }
+
+    public function pair(<Base> other) -> string
+    {
+        return this->who() . this->who() . other->who();
+    }
+
+    public function twice() -> string
+    {
+        var first, second;
+
+        let first = new ChildOne();
+        let second = new ChildOne();
+
+        return first->who() . second->who();
+    }
+}
+--FILE--
+namespace Stub;
+
+class ChildOne extends Base
+{
+    public function who() -> string
+    {
+        return "one";
+    }
+}
+--FILE--
+namespace Stub;
+
+class ChildTwo extends Base
+{
+    public function who() -> string
+    {
+        return "two";
+    }
+}
+--USAGE--
+// The first call runs with a cold function cache, which is when a shared
+// entry handed one receiver's method to the other.
+echo (new \Stub\ChildOne())->pair(new \Stub\ChildTwo()), "\n";
+echo (new \Stub\ChildTwo())->pair(new \Stub\ChildOne()), "\n";
+echo (new \Stub\ChildOne())->pair(new \Stub\ChildTwo()), "\n";
+echo (new \Stub\Base())->twice(), "\n";
+--EXPECT--
+oneonetwo
+twotwoone
+oneonetwo
+oneone

@@ -18,7 +18,6 @@ namespace Zephir\Operators\Arithmetical;
  */
 class SubOperator extends ArithmeticalBaseOperator
 {
-    protected string $bitOperator  = '&';
     protected string $operator     = '-';
     protected string $zvalOperator = 'zephir_sub_function';
 }

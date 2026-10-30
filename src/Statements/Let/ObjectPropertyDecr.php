@@ -104,11 +104,11 @@ class ObjectPropertyDecr
             }
         }
 
-        $symbolVariable->setUsed(true);
         $compilationContext->headersManager->add('kernel/object');
         $compilationContext->codePrinter->output(
-            'RETURN_ON_FAILURE(' . $this->zephirMethod . '(' . $symbolVariable->getName(
-            ) . ', SL("' . $property . '")));'
+            'RETURN_ON_FAILURE(' . $this->zephirMethod . '('
+            . $compilationContext->backend->getVariableCode($symbolVariable)
+            . ', SL("' . $property . '")));'
         );
     }
 }

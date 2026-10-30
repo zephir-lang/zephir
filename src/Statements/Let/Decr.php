@@ -99,6 +99,7 @@ class Decr
 
                 $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
                 $compilationContext->codePrinter->output($this->zephirMethod . '(' . $symbol . ');');
+                $compilationContext->emitExceptionCheck();
                 break;
 
             default:

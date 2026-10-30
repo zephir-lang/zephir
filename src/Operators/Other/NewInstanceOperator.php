@@ -77,6 +77,8 @@ class NewInstanceOperator extends AbstractOperator
         if ('self' == $expression['class'] || 'static' == $expression['class']) {
             $className = $compilationContext->classDefinition->getCompleteName();
             $isLateStaticBinding = 'static' == $expression['class'];
+        } elseif ('parent' === $expression['class'] && !$expression['dynamic']) {
+            $className = $compilationContext->parentClassName($expression);
         } else {
             $className = $expression['class'];
             $dynamic   = $expression['dynamic'];
@@ -129,21 +131,9 @@ class NewInstanceOperator extends AbstractOperator
                  * is still recorded for type inference because all LSB
                  * classes are subclasses of it — see
                  * https://github.com/zephir-lang/zephir/issues/2324.
-                 *
-                 * zend_get_called_scope() resolves through the call frame's
-                 * $this, which in a capturing closure is the capture carrier,
-                 * not the enclosing object; the rebound `this_ptr` local is —
-                 * see https://github.com/zephir-lang/zephir/issues/2652.
                  */
-                $lateStaticEntry = 'zend_get_called_scope(execute_data)';
-                if (true === $compilationContext->currentMethod?->hasCaptures()) {
-                    $lateStaticEntry = 'Z_OBJCE_P(' . $compilationContext->backend->getVariableCode(
-                        $compilationContext->symbolTable->getVariable('this')
-                    ) . ')';
-                }
-
                 $classEntry = $isLateStaticBinding
-                    ? $lateStaticEntry
+                    ? $compilationContext->lateStaticClassEntry()
                     : $classDefinition->getClassEntry($compilationContext);
 
                 $compilationContext->backend->initObject(
@@ -225,7 +215,8 @@ class NewInstanceOperator extends AbstractOperator
                             throw new CompilerException('Traits cannot be instantiated', $expression);
                         }
 
-                        $classEntry = (new Entry($expression['class'], $compilationContext))->get();
+                        $entryName  = 'parent' === $expression['class'] ? $className : $expression['class'];
+                        $classEntry = (new Entry($entryName, $compilationContext))->get();
                         $symbolVariable->setAssociatedClass($reflectionClass);
                     }
 
@@ -249,14 +240,16 @@ class NewInstanceOperator extends AbstractOperator
         }
 
         /**
-         * Dynamic instantiation (`new {var}()`) resolves the class at runtime,
-         * so it must honour the constructor's visibility exactly like PHP's
-         * `new` operator. Without this guard a class with a protected or
-         * private constructor could be instantiated from any scope.
+         * `new` honours the constructor's visibility exactly like PHP's `new`
+         * operator, with PHP's message and without the `__call()` fallback a
+         * method call would take. Only a constructor known to be public (or
+         * absent) skips the check: a dynamic class is resolved at runtime, and
+         * a class outside the extension may not exist at compile time.
          *
          * @see https://github.com/zephir-lang/zephir/issues/882
+         * @see https://github.com/zephir-lang/zephir/issues/2734
          */
-        if ($dynamic) {
+        if ($dynamic || !$this->hasPublicConstructor($className, $isLateStaticBinding, $compilationContext)) {
             $compilationContext->headersManager->add('kernel/fcall');
             $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -346,5 +339,36 @@ class NewInstanceOperator extends AbstractOperator
         }
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * Whether `new` is known to reach a public constructor, or none at all.
+     *
+     * `new static()` never is: a subclass may narrow the constructor it
+     * inherits, and PHP checks the one of the class actually instantiated.
+     */
+    private function hasPublicConstructor(
+        string $className,
+        bool $isLateStaticBinding,
+        CompilationContext $compilationContext
+    ): bool {
+        if ($isLateStaticBinding) {
+            return false;
+        }
+
+        $compiler = $compilationContext->compiler;
+        if ($compiler->isClass($className)) {
+            $constructor = $compiler->getClassDefinition($className)->getMethod('__construct');
+
+            return null === $constructor || (!$constructor->isPrivate() && !$constructor->isProtected());
+        }
+
+        if (!class_exists($className, false)) {
+            return false;
+        }
+
+        $constructor = (new ReflectionClass($className))->getConstructor();
+
+        return null === $constructor || $constructor->isPublic();
     }
 }

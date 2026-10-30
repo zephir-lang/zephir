@@ -1,0 +1,748 @@
+--TEST--
+is_*() compared with a bool keeps PHP precedence: `true !== is_array(v)` is not always false (#2810)
+--FILE--
+namespace Stub;
+
+class IsTypePrecedence
+{
+	public static function m0(var v) -> bool
+	{
+		return true == is_array(v);
+	}
+
+	public static function m1(var v) -> bool
+	{
+		return is_array(v) == true;
+	}
+
+	public static function m2(var v) -> bool
+	{
+		return false == is_array(v);
+	}
+
+	public static function m3(var v) -> bool
+	{
+		return is_array(v) == false;
+	}
+
+	public static function m4(var v, bool b) -> bool
+	{
+		return b == is_array(v);
+	}
+
+	public static function m5(var v) -> bool
+	{
+		return true != is_array(v);
+	}
+
+	public static function m6(var v) -> bool
+	{
+		return is_array(v) != true;
+	}
+
+	public static function m7(var v) -> bool
+	{
+		return false != is_array(v);
+	}
+
+	public static function m8(var v) -> bool
+	{
+		return is_array(v) != false;
+	}
+
+	public static function m9(var v, bool b) -> bool
+	{
+		return b != is_array(v);
+	}
+
+	public static function m10(var v) -> bool
+	{
+		return true === is_array(v);
+	}
+
+	public static function m11(var v) -> bool
+	{
+		return is_array(v) === true;
+	}
+
+	public static function m12(var v) -> bool
+	{
+		return false === is_array(v);
+	}
+
+	public static function m13(var v) -> bool
+	{
+		return is_array(v) === false;
+	}
+
+	public static function m14(var v, bool b) -> bool
+	{
+		return b === is_array(v);
+	}
+
+	public static function m15(var v) -> bool
+	{
+		return true !== is_array(v);
+	}
+
+	public static function m16(var v) -> bool
+	{
+		return is_array(v) !== true;
+	}
+
+	public static function m17(var v) -> bool
+	{
+		return false !== is_array(v);
+	}
+
+	public static function m18(var v) -> bool
+	{
+		return is_array(v) !== false;
+	}
+
+	public static function m19(var v, bool b) -> bool
+	{
+		return b !== is_array(v);
+	}
+
+	public static function m20(var v) -> bool
+	{
+		return true == is_null(v);
+	}
+
+	public static function m21(var v) -> bool
+	{
+		return is_null(v) == true;
+	}
+
+	public static function m22(var v) -> bool
+	{
+		return false == is_null(v);
+	}
+
+	public static function m23(var v) -> bool
+	{
+		return is_null(v) == false;
+	}
+
+	public static function m24(var v, bool b) -> bool
+	{
+		return b == is_null(v);
+	}
+
+	public static function m25(var v) -> bool
+	{
+		return true != is_null(v);
+	}
+
+	public static function m26(var v) -> bool
+	{
+		return is_null(v) != true;
+	}
+
+	public static function m27(var v) -> bool
+	{
+		return false != is_null(v);
+	}
+
+	public static function m28(var v) -> bool
+	{
+		return is_null(v) != false;
+	}
+
+	public static function m29(var v, bool b) -> bool
+	{
+		return b != is_null(v);
+	}
+
+	public static function m30(var v) -> bool
+	{
+		return true === is_null(v);
+	}
+
+	public static function m31(var v) -> bool
+	{
+		return is_null(v) === true;
+	}
+
+	public static function m32(var v) -> bool
+	{
+		return false === is_null(v);
+	}
+
+	public static function m33(var v) -> bool
+	{
+		return is_null(v) === false;
+	}
+
+	public static function m34(var v, bool b) -> bool
+	{
+		return b === is_null(v);
+	}
+
+	public static function m35(var v) -> bool
+	{
+		return true !== is_null(v);
+	}
+
+	public static function m36(var v) -> bool
+	{
+		return is_null(v) !== true;
+	}
+
+	public static function m37(var v) -> bool
+	{
+		return false !== is_null(v);
+	}
+
+	public static function m38(var v) -> bool
+	{
+		return is_null(v) !== false;
+	}
+
+	public static function m39(var v, bool b) -> bool
+	{
+		return b !== is_null(v);
+	}
+
+	public static function m40(var v) -> bool
+	{
+		return true == is_object(v);
+	}
+
+	public static function m41(var v) -> bool
+	{
+		return is_object(v) == true;
+	}
+
+	public static function m42(var v) -> bool
+	{
+		return false == is_object(v);
+	}
+
+	public static function m43(var v) -> bool
+	{
+		return is_object(v) == false;
+	}
+
+	public static function m44(var v, bool b) -> bool
+	{
+		return b == is_object(v);
+	}
+
+	public static function m45(var v) -> bool
+	{
+		return true != is_object(v);
+	}
+
+	public static function m46(var v) -> bool
+	{
+		return is_object(v) != true;
+	}
+
+	public static function m47(var v) -> bool
+	{
+		return false != is_object(v);
+	}
+
+	public static function m48(var v) -> bool
+	{
+		return is_object(v) != false;
+	}
+
+	public static function m49(var v, bool b) -> bool
+	{
+		return b != is_object(v);
+	}
+
+	public static function m50(var v) -> bool
+	{
+		return true === is_object(v);
+	}
+
+	public static function m51(var v) -> bool
+	{
+		return is_object(v) === true;
+	}
+
+	public static function m52(var v) -> bool
+	{
+		return false === is_object(v);
+	}
+
+	public static function m53(var v) -> bool
+	{
+		return is_object(v) === false;
+	}
+
+	public static function m54(var v, bool b) -> bool
+	{
+		return b === is_object(v);
+	}
+
+	public static function m55(var v) -> bool
+	{
+		return true !== is_object(v);
+	}
+
+	public static function m56(var v) -> bool
+	{
+		return is_object(v) !== true;
+	}
+
+	public static function m57(var v) -> bool
+	{
+		return false !== is_object(v);
+	}
+
+	public static function m58(var v) -> bool
+	{
+		return is_object(v) !== false;
+	}
+
+	public static function m59(var v, bool b) -> bool
+	{
+		return b !== is_object(v);
+	}
+
+	public static function m60(var v) -> bool
+	{
+		return true == is_string(v);
+	}
+
+	public static function m61(var v) -> bool
+	{
+		return is_string(v) == true;
+	}
+
+	public static function m62(var v) -> bool
+	{
+		return false == is_string(v);
+	}
+
+	public static function m63(var v) -> bool
+	{
+		return is_string(v) == false;
+	}
+
+	public static function m64(var v, bool b) -> bool
+	{
+		return b == is_string(v);
+	}
+
+	public static function m65(var v) -> bool
+	{
+		return true != is_string(v);
+	}
+
+	public static function m66(var v) -> bool
+	{
+		return is_string(v) != true;
+	}
+
+	public static function m67(var v) -> bool
+	{
+		return false != is_string(v);
+	}
+
+	public static function m68(var v) -> bool
+	{
+		return is_string(v) != false;
+	}
+
+	public static function m69(var v, bool b) -> bool
+	{
+		return b != is_string(v);
+	}
+
+	public static function m70(var v) -> bool
+	{
+		return true === is_string(v);
+	}
+
+	public static function m71(var v) -> bool
+	{
+		return is_string(v) === true;
+	}
+
+	public static function m72(var v) -> bool
+	{
+		return false === is_string(v);
+	}
+
+	public static function m73(var v) -> bool
+	{
+		return is_string(v) === false;
+	}
+
+	public static function m74(var v, bool b) -> bool
+	{
+		return b === is_string(v);
+	}
+
+	public static function m75(var v) -> bool
+	{
+		return true !== is_string(v);
+	}
+
+	public static function m76(var v) -> bool
+	{
+		return is_string(v) !== true;
+	}
+
+	public static function m77(var v) -> bool
+	{
+		return false !== is_string(v);
+	}
+
+	public static function m78(var v) -> bool
+	{
+		return is_string(v) !== false;
+	}
+
+	public static function m79(var v, bool b) -> bool
+	{
+		return b !== is_string(v);
+	}
+
+	public static function m80(var v) -> bool
+	{
+		return true == is_int(v);
+	}
+
+	public static function m81(var v) -> bool
+	{
+		return is_int(v) == true;
+	}
+
+	public static function m82(var v) -> bool
+	{
+		return false == is_int(v);
+	}
+
+	public static function m83(var v) -> bool
+	{
+		return is_int(v) == false;
+	}
+
+	public static function m84(var v, bool b) -> bool
+	{
+		return b == is_int(v);
+	}
+
+	public static function m85(var v) -> bool
+	{
+		return true != is_int(v);
+	}
+
+	public static function m86(var v) -> bool
+	{
+		return is_int(v) != true;
+	}
+
+	public static function m87(var v) -> bool
+	{
+		return false != is_int(v);
+	}
+
+	public static function m88(var v) -> bool
+	{
+		return is_int(v) != false;
+	}
+
+	public static function m89(var v, bool b) -> bool
+	{
+		return b != is_int(v);
+	}
+
+	public static function m90(var v) -> bool
+	{
+		return true === is_int(v);
+	}
+
+	public static function m91(var v) -> bool
+	{
+		return is_int(v) === true;
+	}
+
+	public static function m92(var v) -> bool
+	{
+		return false === is_int(v);
+	}
+
+	public static function m93(var v) -> bool
+	{
+		return is_int(v) === false;
+	}
+
+	public static function m94(var v, bool b) -> bool
+	{
+		return b === is_int(v);
+	}
+
+	public static function m95(var v) -> bool
+	{
+		return true !== is_int(v);
+	}
+
+	public static function m96(var v) -> bool
+	{
+		return is_int(v) !== true;
+	}
+
+	public static function m97(var v) -> bool
+	{
+		return false !== is_int(v);
+	}
+
+	public static function m98(var v) -> bool
+	{
+		return is_int(v) !== false;
+	}
+
+	public static function m99(var v, bool b) -> bool
+	{
+		return b !== is_int(v);
+	}
+
+	public static function m100(var v) -> bool
+	{
+		return true == is_resource(v);
+	}
+
+	public static function m101(var v) -> bool
+	{
+		return is_resource(v) == true;
+	}
+
+	public static function m102(var v) -> bool
+	{
+		return false == is_resource(v);
+	}
+
+	public static function m103(var v) -> bool
+	{
+		return is_resource(v) == false;
+	}
+
+	public static function m104(var v, bool b) -> bool
+	{
+		return b == is_resource(v);
+	}
+
+	public static function m105(var v) -> bool
+	{
+		return true != is_resource(v);
+	}
+
+	public static function m106(var v) -> bool
+	{
+		return is_resource(v) != true;
+	}
+
+	public static function m107(var v) -> bool
+	{
+		return false != is_resource(v);
+	}
+
+	public static function m108(var v) -> bool
+	{
+		return is_resource(v) != false;
+	}
+
+	public static function m109(var v, bool b) -> bool
+	{
+		return b != is_resource(v);
+	}
+
+	public static function m110(var v) -> bool
+	{
+		return true === is_resource(v);
+	}
+
+	public static function m111(var v) -> bool
+	{
+		return is_resource(v) === true;
+	}
+
+	public static function m112(var v) -> bool
+	{
+		return false === is_resource(v);
+	}
+
+	public static function m113(var v) -> bool
+	{
+		return is_resource(v) === false;
+	}
+
+	public static function m114(var v, bool b) -> bool
+	{
+		return b === is_resource(v);
+	}
+
+	public static function m115(var v) -> bool
+	{
+		return true !== is_resource(v);
+	}
+
+	public static function m116(var v) -> bool
+	{
+		return is_resource(v) !== true;
+	}
+
+	public static function m117(var v) -> bool
+	{
+		return false !== is_resource(v);
+	}
+
+	public static function m118(var v) -> bool
+	{
+		return is_resource(v) !== false;
+	}
+
+	public static function m119(var v, bool b) -> bool
+	{
+		return b !== is_resource(v);
+	}
+}
+--USAGE--
+$values = ['array' => [1], 'string' => 'x', 'null' => null, 'int' => 1, 'object' => new \stdClass(), 'resource' => fopen('php://memory', 'r'), 'float' => 1.5];
+$cases = [
+    'm0' => [fn($v) => true == is_array($v), 'true == is_array(v)'],
+    'm1' => [fn($v) => is_array($v) == true, 'is_array(v) == true'],
+    'm2' => [fn($v) => false == is_array($v), 'false == is_array(v)'],
+    'm3' => [fn($v) => is_array($v) == false, 'is_array(v) == false'],
+    'm4' => [fn($v, $b) => $b == is_array($v), 'b == is_array(v)', true],
+    'm5' => [fn($v) => true != is_array($v), 'true != is_array(v)'],
+    'm6' => [fn($v) => is_array($v) != true, 'is_array(v) != true'],
+    'm7' => [fn($v) => false != is_array($v), 'false != is_array(v)'],
+    'm8' => [fn($v) => is_array($v) != false, 'is_array(v) != false'],
+    'm9' => [fn($v, $b) => $b != is_array($v), 'b != is_array(v)', true],
+    'm10' => [fn($v) => true === is_array($v), 'true === is_array(v)'],
+    'm11' => [fn($v) => is_array($v) === true, 'is_array(v) === true'],
+    'm12' => [fn($v) => false === is_array($v), 'false === is_array(v)'],
+    'm13' => [fn($v) => is_array($v) === false, 'is_array(v) === false'],
+    'm14' => [fn($v, $b) => $b === is_array($v), 'b === is_array(v)', true],
+    'm15' => [fn($v) => true !== is_array($v), 'true !== is_array(v)'],
+    'm16' => [fn($v) => is_array($v) !== true, 'is_array(v) !== true'],
+    'm17' => [fn($v) => false !== is_array($v), 'false !== is_array(v)'],
+    'm18' => [fn($v) => is_array($v) !== false, 'is_array(v) !== false'],
+    'm19' => [fn($v, $b) => $b !== is_array($v), 'b !== is_array(v)', true],
+    'm20' => [fn($v) => true == is_null($v), 'true == is_null(v)'],
+    'm21' => [fn($v) => is_null($v) == true, 'is_null(v) == true'],
+    'm22' => [fn($v) => false == is_null($v), 'false == is_null(v)'],
+    'm23' => [fn($v) => is_null($v) == false, 'is_null(v) == false'],
+    'm24' => [fn($v, $b) => $b == is_null($v), 'b == is_null(v)', true],
+    'm25' => [fn($v) => true != is_null($v), 'true != is_null(v)'],
+    'm26' => [fn($v) => is_null($v) != true, 'is_null(v) != true'],
+    'm27' => [fn($v) => false != is_null($v), 'false != is_null(v)'],
+    'm28' => [fn($v) => is_null($v) != false, 'is_null(v) != false'],
+    'm29' => [fn($v, $b) => $b != is_null($v), 'b != is_null(v)', true],
+    'm30' => [fn($v) => true === is_null($v), 'true === is_null(v)'],
+    'm31' => [fn($v) => is_null($v) === true, 'is_null(v) === true'],
+    'm32' => [fn($v) => false === is_null($v), 'false === is_null(v)'],
+    'm33' => [fn($v) => is_null($v) === false, 'is_null(v) === false'],
+    'm34' => [fn($v, $b) => $b === is_null($v), 'b === is_null(v)', true],
+    'm35' => [fn($v) => true !== is_null($v), 'true !== is_null(v)'],
+    'm36' => [fn($v) => is_null($v) !== true, 'is_null(v) !== true'],
+    'm37' => [fn($v) => false !== is_null($v), 'false !== is_null(v)'],
+    'm38' => [fn($v) => is_null($v) !== false, 'is_null(v) !== false'],
+    'm39' => [fn($v, $b) => $b !== is_null($v), 'b !== is_null(v)', true],
+    'm40' => [fn($v) => true == is_object($v), 'true == is_object(v)'],
+    'm41' => [fn($v) => is_object($v) == true, 'is_object(v) == true'],
+    'm42' => [fn($v) => false == is_object($v), 'false == is_object(v)'],
+    'm43' => [fn($v) => is_object($v) == false, 'is_object(v) == false'],
+    'm44' => [fn($v, $b) => $b == is_object($v), 'b == is_object(v)', true],
+    'm45' => [fn($v) => true != is_object($v), 'true != is_object(v)'],
+    'm46' => [fn($v) => is_object($v) != true, 'is_object(v) != true'],
+    'm47' => [fn($v) => false != is_object($v), 'false != is_object(v)'],
+    'm48' => [fn($v) => is_object($v) != false, 'is_object(v) != false'],
+    'm49' => [fn($v, $b) => $b != is_object($v), 'b != is_object(v)', true],
+    'm50' => [fn($v) => true === is_object($v), 'true === is_object(v)'],
+    'm51' => [fn($v) => is_object($v) === true, 'is_object(v) === true'],
+    'm52' => [fn($v) => false === is_object($v), 'false === is_object(v)'],
+    'm53' => [fn($v) => is_object($v) === false, 'is_object(v) === false'],
+    'm54' => [fn($v, $b) => $b === is_object($v), 'b === is_object(v)', true],
+    'm55' => [fn($v) => true !== is_object($v), 'true !== is_object(v)'],
+    'm56' => [fn($v) => is_object($v) !== true, 'is_object(v) !== true'],
+    'm57' => [fn($v) => false !== is_object($v), 'false !== is_object(v)'],
+    'm58' => [fn($v) => is_object($v) !== false, 'is_object(v) !== false'],
+    'm59' => [fn($v, $b) => $b !== is_object($v), 'b !== is_object(v)', true],
+    'm60' => [fn($v) => true == is_string($v), 'true == is_string(v)'],
+    'm61' => [fn($v) => is_string($v) == true, 'is_string(v) == true'],
+    'm62' => [fn($v) => false == is_string($v), 'false == is_string(v)'],
+    'm63' => [fn($v) => is_string($v) == false, 'is_string(v) == false'],
+    'm64' => [fn($v, $b) => $b == is_string($v), 'b == is_string(v)', true],
+    'm65' => [fn($v) => true != is_string($v), 'true != is_string(v)'],
+    'm66' => [fn($v) => is_string($v) != true, 'is_string(v) != true'],
+    'm67' => [fn($v) => false != is_string($v), 'false != is_string(v)'],
+    'm68' => [fn($v) => is_string($v) != false, 'is_string(v) != false'],
+    'm69' => [fn($v, $b) => $b != is_string($v), 'b != is_string(v)', true],
+    'm70' => [fn($v) => true === is_string($v), 'true === is_string(v)'],
+    'm71' => [fn($v) => is_string($v) === true, 'is_string(v) === true'],
+    'm72' => [fn($v) => false === is_string($v), 'false === is_string(v)'],
+    'm73' => [fn($v) => is_string($v) === false, 'is_string(v) === false'],
+    'm74' => [fn($v, $b) => $b === is_string($v), 'b === is_string(v)', true],
+    'm75' => [fn($v) => true !== is_string($v), 'true !== is_string(v)'],
+    'm76' => [fn($v) => is_string($v) !== true, 'is_string(v) !== true'],
+    'm77' => [fn($v) => false !== is_string($v), 'false !== is_string(v)'],
+    'm78' => [fn($v) => is_string($v) !== false, 'is_string(v) !== false'],
+    'm79' => [fn($v, $b) => $b !== is_string($v), 'b !== is_string(v)', true],
+    'm80' => [fn($v) => true == is_int($v), 'true == is_int(v)'],
+    'm81' => [fn($v) => is_int($v) == true, 'is_int(v) == true'],
+    'm82' => [fn($v) => false == is_int($v), 'false == is_int(v)'],
+    'm83' => [fn($v) => is_int($v) == false, 'is_int(v) == false'],
+    'm84' => [fn($v, $b) => $b == is_int($v), 'b == is_int(v)', true],
+    'm85' => [fn($v) => true != is_int($v), 'true != is_int(v)'],
+    'm86' => [fn($v) => is_int($v) != true, 'is_int(v) != true'],
+    'm87' => [fn($v) => false != is_int($v), 'false != is_int(v)'],
+    'm88' => [fn($v) => is_int($v) != false, 'is_int(v) != false'],
+    'm89' => [fn($v, $b) => $b != is_int($v), 'b != is_int(v)', true],
+    'm90' => [fn($v) => true === is_int($v), 'true === is_int(v)'],
+    'm91' => [fn($v) => is_int($v) === true, 'is_int(v) === true'],
+    'm92' => [fn($v) => false === is_int($v), 'false === is_int(v)'],
+    'm93' => [fn($v) => is_int($v) === false, 'is_int(v) === false'],
+    'm94' => [fn($v, $b) => $b === is_int($v), 'b === is_int(v)', true],
+    'm95' => [fn($v) => true !== is_int($v), 'true !== is_int(v)'],
+    'm96' => [fn($v) => is_int($v) !== true, 'is_int(v) !== true'],
+    'm97' => [fn($v) => false !== is_int($v), 'false !== is_int(v)'],
+    'm98' => [fn($v) => is_int($v) !== false, 'is_int(v) !== false'],
+    'm99' => [fn($v, $b) => $b !== is_int($v), 'b !== is_int(v)', true],
+    'm100' => [fn($v) => true == is_resource($v), 'true == is_resource(v)'],
+    'm101' => [fn($v) => is_resource($v) == true, 'is_resource(v) == true'],
+    'm102' => [fn($v) => false == is_resource($v), 'false == is_resource(v)'],
+    'm103' => [fn($v) => is_resource($v) == false, 'is_resource(v) == false'],
+    'm104' => [fn($v, $b) => $b == is_resource($v), 'b == is_resource(v)', true],
+    'm105' => [fn($v) => true != is_resource($v), 'true != is_resource(v)'],
+    'm106' => [fn($v) => is_resource($v) != true, 'is_resource(v) != true'],
+    'm107' => [fn($v) => false != is_resource($v), 'false != is_resource(v)'],
+    'm108' => [fn($v) => is_resource($v) != false, 'is_resource(v) != false'],
+    'm109' => [fn($v, $b) => $b != is_resource($v), 'b != is_resource(v)', true],
+    'm110' => [fn($v) => true === is_resource($v), 'true === is_resource(v)'],
+    'm111' => [fn($v) => is_resource($v) === true, 'is_resource(v) === true'],
+    'm112' => [fn($v) => false === is_resource($v), 'false === is_resource(v)'],
+    'm113' => [fn($v) => is_resource($v) === false, 'is_resource(v) === false'],
+    'm114' => [fn($v, $b) => $b === is_resource($v), 'b === is_resource(v)', true],
+    'm115' => [fn($v) => true !== is_resource($v), 'true !== is_resource(v)'],
+    'm116' => [fn($v) => is_resource($v) !== true, 'is_resource(v) !== true'],
+    'm117' => [fn($v) => false !== is_resource($v), 'false !== is_resource(v)'],
+    'm118' => [fn($v) => is_resource($v) !== false, 'is_resource(v) !== false'],
+    'm119' => [fn($v, $b) => $b !== is_resource($v), 'b !== is_resource(v)', true],
+];
+$checked = 0; $diffs = 0;
+foreach ($cases as $method => $case) {
+    foreach ($values as $label => $value) {
+        foreach (isset($case[2]) ? [true, false] : [null] as $b) {
+            $expected = $b === null ? $case[0]($value) : $case[0]($value, $b);
+            $actual = $b === null ? \Stub\IsTypePrecedence::$method($value) : \Stub\IsTypePrecedence::$method($value, $b);
+            $checked++;
+            if ($actual !== $expected) {
+                $diffs++;
+                echo "DIFF {$case[1]} v={$label}", $b === null ? '' : ' b=' . var_export($b, true), ": zephir ", var_export($actual, true), " php ", var_export($expected, true), "\n";
+            }
+        }
+    }
+}
+echo "checked {$checked}, diffs {$diffs}\n";
+--EXPECT--
+checked 1008, diffs 0

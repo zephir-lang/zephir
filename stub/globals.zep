@@ -183,4 +183,32 @@ class Globals
 	{
 		globals_set("module_setting", value);
 	}
+
+	/* `hash` globals had no accessor at all before #2726 */
+
+	public function setHashValue(value) -> void
+	{
+		globals_set("my_setting_7", value);
+	}
+
+	/**
+	 * @return array|null
+	 */
+	public function getHashValue()
+	{
+		return globals_get("my_setting_7");
+	}
+
+	public function setDefaultGlobalsOrmAstCache(value) -> void
+	{
+		globals_set("orm.ast_cache", value);
+	}
+
+	/**
+	 * @return array|null
+	 */
+	public function getDefaultGlobalsOrmAstCache()
+	{
+		return globals_get("orm.ast_cache");
+	}
 }

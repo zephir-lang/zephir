@@ -179,6 +179,10 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, issue733BuiltInJoinSpecialChars)
 	ZEPHIR_CPY_WRT(b, &_5);
 	ZEPHIR_INIT_VAR(&_7);
 	ZEPHIR_CONCAT_SVS(&_7, "/^[", b, "]+/u");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_3);
 	ZVAL_STRING(&_3, "");
 	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace", &_6, 17, &_7, &_3, &a_zv);

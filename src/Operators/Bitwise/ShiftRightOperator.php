@@ -13,9 +13,15 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Bitwise;
 
-class ShiftRightOperator extends BitwiseBaseOperator
+class ShiftRightOperator extends ShiftBaseOperator
 {
     protected string $bitOperator  = '>>';
     protected string $operator     = '>>';
+    protected string $safeHelper   = 'zephir_safe_shift_right_long';
     protected string $zvalOperator = 'zephir_shift_right_function';
+
+    protected function inlineShift(string $left, string $right): string
+    {
+        return '(' . $left . ' >> ' . $right . ')';
+    }
 }

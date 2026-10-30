@@ -61,8 +61,14 @@ class InstanceOfOperator extends AbstractOperator
                              * TODO: It's an optimization variant, but maybe we need to get entry in runtime?
                              */
                             $classEntry = $context->classDefinition->getClassEntry($context);
+                        } elseif ('static' === $resolvedVariable) {
+                            $classEntry = $context->lateStaticClassEntry();
                         } elseif (!$context->symbolTable->hasVariable($resolvedVariable)) {
-                            $className = $context->getFullName($resolvedVariable);
+                            $className = match ($resolvedVariable) {
+                                'self'   => $context->classDefinition->getCompleteName(),
+                                'parent' => $context->parentClassName($expression),
+                                default  => $context->getFullName($resolvedVariable),
+                            };
 
                             if ('Traversable' === $className) {
                                 $symbol = $context->backend->getVariableCode($symbolVariable);
@@ -85,7 +91,8 @@ class InstanceOfOperator extends AbstractOperator
                                     if (!class_exists($className, false)) {
                                         $code = 'SL("' . trim(Entry::escape($className), '\\') . '")';
                                     } else {
-                                        $entry      = (new Entry($resolvedVariable, $context));
+                                        $entryName  = in_array($resolvedVariable, ['self', 'parent'], true) ? $className : $resolvedVariable;
+                                        $entry      = (new Entry($entryName, $context));
                                         $classEntry = $entry->get();
 
                                         if (!$entry->isInternal()) {

@@ -19,9 +19,9 @@ use Zephir\Detectors\ReadDetector;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\AssignVariableOperator;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
+use Zephir\Statements\Let\ArrayIndexOperator;
 use Zephir\Statements\Let\AssignmentFactory;
 use Zephir\Variable\Variable;
 
@@ -30,6 +30,69 @@ use Zephir\Variable\Variable;
  */
 class LetStatement extends StatementAbstract
 {
+    /**
+     * Assignments whose target is reached through one or more index
+     * expressions, `a[i] = v`, `this->p[i][] = v`, `self::p[i] = v`.
+     */
+    private const INDEXED_ASSIGN_TYPES = [
+        'array-index',
+        'array-index-append',
+        'object-property-array-index',
+        'object-property-array-index-append',
+        'static-property-array-index',
+        'static-property-array-index-append',
+    ];
+
+    /**
+     * Expressions that emit no code of their own: a literal, a constant or a
+     * plain variable, read where it is used.
+     */
+    private const IN_PLACE_EXPRESSIONS = [
+        'null',
+        'int',
+        'integer',
+        'long',
+        'double',
+        'bool',
+        'string',
+        'istring',
+        'char',
+        'variable',
+        'constant',
+        'static-constant-access',
+        'empty-array',
+    ];
+
+    private const NATIVE_INDEX_TYPES = ['int', 'uint', 'long', 'ulong', 'bool', 'double', 'char', 'uchar'];
+
+    /**
+     * Assignments whose target is a property: `this->p`, `self::p`,
+     * `this->{name}` and `this->{"name"}`.
+     */
+    private const PROPERTY_ASSIGN_TYPES = [
+        'object-property',
+        'static-property',
+        'variable-dynamic-object-property',
+        'string-dynamic-object-property',
+    ];
+
+    /**
+     * The binary operator each compound assignment applies.
+     */
+    private const COMPOUND_OPERATORS = [
+        AssignVariableOperator::OPERATOR_ADD                => BinaryOperator::OPERATOR_ADD,
+        AssignVariableOperator::OPERATOR_SUB                => BinaryOperator::OPERATOR_SUB,
+        AssignVariableOperator::OPERATOR_MUL                => BinaryOperator::OPERATOR_MUL,
+        AssignVariableOperator::OPERATOR_DIV                => BinaryOperator::OPERATOR_DIV,
+        AssignVariableOperator::OPERATOR_MOD                => BinaryOperator::OPERATOR_MOD,
+        AssignVariableOperator::OPERATOR_CONCAT             => BinaryOperator::OPERATOR_CONCAT,
+        AssignVariableOperator::OPERATOR_BITWISE_AND        => BinaryOperator::OPERATOR_BITWISE_AND,
+        AssignVariableOperator::OPERATOR_BITWISE_OR         => BinaryOperator::OPERATOR_BITWISE_OR,
+        AssignVariableOperator::OPERATOR_BITWISE_XOR        => BinaryOperator::OPERATOR_BITWISE_XOR,
+        AssignVariableOperator::OPERATOR_BITWISE_SHIFTLEFT  => BinaryOperator::OPERATOR_BITWISE_SHIFT_LEFT,
+        AssignVariableOperator::OPERATOR_BITWISE_SHIFTRIGHT => BinaryOperator::OPERATOR_BITWISE_SHIFT_RIGHT,
+    ];
+
     /**
      * @throws ReflectionException
      * @throws Exception
@@ -92,11 +155,13 @@ class LetStatement extends StatementAbstract
             $resolvedExpr = null;
             if (isset($assignment['expr'])) {
                 /**
-                 * Replace on direct-assignment if this bitwise-assignment
-                 * TODO: Replace on supported native bitwise-assignment
+                 * A compound assignment no handler applies in place becomes a
+                 * read, PHP's operator and a plain assignment.
                  */
+                $assignment = $this->replacePropertyCompoundAssign($assignment, $compilationContext);
                 $assignment = $this->replaceAssignBitwiseOnDirect($assignment);
-                $assignment = $this->replaceDivModAssignOnDirect($assignment, $symbolVariable);
+                $assignment = $this->replaceArithmeticAssignOnDirect($assignment, $symbolVariable);
+                $assignment = $this->evaluateIndexesFirst($assignment, $compilationContext);
 
                 $expr = new Expression($assignment['expr']);
 
@@ -175,18 +240,129 @@ class LetStatement extends StatementAbstract
     }
 
     /**
+     * Rewrites a compound assignment to a property, `this->p op= e`,
+     * `self::p op= e`, `this->{n} op= e` or `this->{"p"} op= e`, as a read, the
+     * operator and a write back, which is what PHP's ASSIGN_OBJ_OP and
+     * ASSIGN_STATIC_PROP_OP do.
+     *
+     * PHP evaluates `e` before it reads the property, so an `e` that runs code,
+     * such as a call that changes the property, is evaluated first. It also
+     * converts a dynamic property name once, so a name that is not a `string`
+     * is converted once into a temporary that the read and the write share.
+     *
+     * `self::p += e`, `self::p -= e` and `.=` on an object or static property
+     * already read and write in place.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2753
+     */
+    protected function replacePropertyCompoundAssign(array $assignment, CompilationContext $compilationContext): array
+    {
+        $binaryOperator = self::COMPOUND_OPERATORS[$assignment['operator'] ?? ''] ?? null;
+        if (null === $binaryOperator || !in_array($assignment['assign-type'], self::PROPERTY_ASSIGN_TYPES, true)) {
+            return $assignment;
+        }
+
+        $inPlace = match ($assignment['operator']) {
+            AssignVariableOperator::OPERATOR_ADD,
+            AssignVariableOperator::OPERATOR_SUB    => 'static-property' === $assignment['assign-type'],
+            AssignVariableOperator::OPERATOR_CONCAT => in_array(
+                $assignment['assign-type'],
+                ['object-property', 'static-property'],
+                true
+            ),
+            default                                 => false,
+        };
+        if ($inPlace) {
+            return $assignment;
+        }
+
+        if (!in_array($assignment['expr']['type'], self::IN_PLACE_EXPRESSIONS, true)) {
+            $assignment['expr'] = $this->evaluatedIndex($assignment['expr'], $compilationContext);
+        }
+
+        if ('variable-dynamic-object-property' === $assignment['assign-type']) {
+            $assignment['property'] = $this->propertyNameOnce($assignment, $compilationContext);
+        }
+
+        $object   = $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']]);
+        $property = $this->astNode($assignment, [
+            'type'  => 'string-dynamic-object-property' === $assignment['assign-type'] ? 'string' : 'variable',
+            'value' => $assignment['property'],
+        ]);
+        $target   = $this->astNode($assignment, [
+            'type'  => match ($assignment['assign-type']) {
+                'object-property'                  => 'property-access',
+                'static-property'                  => 'static-property-access',
+                'variable-dynamic-object-property' => 'property-dynamic-access',
+                'string-dynamic-object-property'   => 'property-string-access',
+            },
+            'left'  => $object,
+            'right' => $property,
+        ]);
+
+        $assignment['expr']     = $this->astNode($assignment, [
+            'type'                => $binaryOperator,
+            'left'                => $target,
+            'right'               => $assignment['expr'],
+            'compound-assignment' => true,
+        ]);
+        $assignment['operator'] = AssignVariableOperator::OPERATOR_ASSIGN;
+
+        return $assignment;
+    }
+
+    /**
+     * The name of `this->{name}` as a string the read and the write of a
+     * compound assignment share, converted once as PHP converts it.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function propertyNameOnce(array $assignment, CompilationContext $compilationContext): string
+    {
+        $name = $compilationContext->symbolTable->getVariableForRead(
+            $assignment['property'],
+            $compilationContext,
+            $assignment
+        );
+        if ('string' === $name->getType()) {
+            return $assignment['property'];
+        }
+
+        $cast = new Expression($this->astNode($assignment, [
+            'type'  => 'cast',
+            'left'  => 'string',
+            'right' => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['property']]),
+        ]));
+
+        return (string) $cast->compile($compilationContext)->getCode();
+    }
+
+    /**
      * Rewrites `x /= e` and `x %= e` as `x = x / e` and `x = x % e`, so
      * DivOperator and ModOperator produce the value PHP does, with its
      * TypeError and its zero divisor guard. A C `/=` or `%=` on a typed local
      * would raise SIGFPE for a zero divisor, and `%=` on a C double does not
      * compile.
      *
+     * `+=`, `-=` and `*=` on a `var` or `mixed` local are rewritten the same
+     * way, so a string, null, array or bool operand reaches PHP's own
+     * operator: the direct forms rejected a string or bool operand and
+     * ignored `null`. Typed number locals keep their native C forms. A
+     * property is rewritten by replacePropertyCompoundAssign().
+     *
      * @see https://github.com/zephir-lang/zephir/issues/2675
      * @see https://github.com/zephir-lang/zephir/issues/2676
      */
-    protected function replaceDivModAssignOnDirect(array $assignment, ?Variable $symbolVariable): array
+    protected function replaceArithmeticAssignOnDirect(array $assignment, ?Variable $symbolVariable): array
     {
         $binaryOperator = match ($assignment['operator'] ?? null) {
+            AssignVariableOperator::OPERATOR_ADD => BinaryOperator::OPERATOR_ADD,
+            AssignVariableOperator::OPERATOR_SUB => BinaryOperator::OPERATOR_SUB,
+            AssignVariableOperator::OPERATOR_MUL => BinaryOperator::OPERATOR_MUL,
             AssignVariableOperator::OPERATOR_DIV => BinaryOperator::OPERATOR_DIV,
             AssignVariableOperator::OPERATOR_MOD => BinaryOperator::OPERATOR_MOD,
             default                              => null,
@@ -195,17 +371,15 @@ class LetStatement extends StatementAbstract
             return $assignment;
         }
 
-        $numberTargets = ['variable', 'mixed', 'int', 'uint', 'long', 'ulong', 'double'];
-        $dividend      = match ($assignment['assign-type']) {
-            'variable'        => in_array($symbolVariable?->getType(), $numberTargets, true)
+        $isDivMod = in_array($binaryOperator, [BinaryOperator::OPERATOR_DIV, BinaryOperator::OPERATOR_MOD], true);
+        $targets  = $isDivMod
+            ? ['variable', 'mixed', 'int', 'uint', 'long', 'ulong', 'double']
+            : ['variable', 'mixed'];
+        $dividend = match ($assignment['assign-type']) {
+            'variable' => in_array($symbolVariable?->getType(), $targets, true)
                 ? $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']])
                 : null,
-            'object-property' => $this->astNode($assignment, [
-                'type'  => 'property-access',
-                'left'  => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']]),
-                'right' => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['property']]),
-            ]),
-            default           => null,
+            default    => null,
         };
 
         if (null === $dividend) {
@@ -220,6 +394,82 @@ class LetStatement extends StatementAbstract
         $assignment['operator'] = AssignVariableOperator::OPERATOR_ASSIGN;
 
         return $assignment;
+    }
+
+    /**
+     * Evaluates the index expressions of `x[i] = e` before `e`, as PHP does.
+     *
+     * PHP compiles every index operand before the right-hand side and delays
+     * only the fetches themselves (`zend_delayed_compile_dim()`,
+     * Zend/zend_compile.c), so in `a[k()] = v()` the key is computed first and
+     * `a[this->n] = this->bump()` uses the counter before the bump. A plain
+     * variable index is the exception: a CV operand is read when the element
+     * is written, after the right-hand side, so it stays where it is, and so
+     * do literals and constants, which nothing can change.
+     *
+     * Each such index is compiled here, ahead of the right-hand side, and its
+     * node is replaced by one naming the value it produced, which the
+     * assignment handler then reads without evaluating anything again. When
+     * the right-hand side itself emits no code the order is not observable,
+     * and the statement is left exactly as it was.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    protected function evaluateIndexesFirst(array $assignment, CompilationContext $compilationContext): array
+    {
+        if (
+            !in_array($assignment['assign-type'], self::INDEXED_ASSIGN_TYPES, true)
+            || in_array($assignment['expr']['type'], self::IN_PLACE_EXPRESSIONS, true)
+        ) {
+            return $assignment;
+        }
+
+        foreach ($assignment['index-expr'] as $position => $indexExpr) {
+            if (in_array($indexExpr['type'], self::IN_PLACE_EXPRESSIONS, true)) {
+                continue;
+            }
+
+            $assignment['index-expr'][$position] = $this->evaluatedIndex($indexExpr, $compilationContext);
+        }
+
+        return $assignment;
+    }
+
+    /**
+     * Compiles one index, or the right-hand side of a compound assignment to a
+     * property, and returns a node for its value.
+     *
+     * The value is owned, never borrowed: the right-hand side runs userland
+     * code before the index is used, and that code may release whatever a
+     * borrowed read pointed into. A native result is stored in a temp of its
+     * own type, because its C expression would otherwise be evaluated only
+     * where the handler emits it.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function evaluatedIndex(array $indexExpr, CompilationContext $compilationContext): array
+    {
+        $expression = new Expression($indexExpr);
+        $expression->setReadOnly(false);
+        $compiled = $expression->compile($compilationContext);
+        $type     = $compiled->getType();
+
+        if ('variable' === $type || 'array' === $type) {
+            return $this->astNode($indexExpr, ['type' => 'variable', 'value' => $compiled->getCode()]);
+        }
+
+        if (in_array($type, self::NATIVE_INDEX_TYPES, true)) {
+            $temp = $compilationContext->symbolTable->getTempVariableForWrite($type, $compilationContext);
+            $compilationContext->codePrinter->output(
+                $temp->getName() . ' = ' . ('bool' === $type ? $compiled->getBooleanCode() : $compiled->getCode()) . ';'
+            );
+
+            return $this->astNode($indexExpr, ['type' => 'variable', 'value' => $temp->getName()]);
+        }
+
+        return $this->astNode($indexExpr, ['type' => $type, 'value' => $compiled->getCode()]);
     }
 
     /**
@@ -267,19 +517,39 @@ class LetStatement extends StatementAbstract
                 return $assignment;
         }
 
-        if ($assignment['assign-type'] !== 'variable') {
+        /**
+         * An array element is read and written in place by the kernel.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2747
+         */
+        if (ArrayIndexOperator::handles($assignment)) {
+            return $assignment;
+        }
+
+        /**
+         * So is a dynamic variable, `let {name} <<= 2`.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2710
+         */
+        if (in_array($assignment['assign-type'], ['dynamic-variable', 'dynamic-variable-string'], true)) {
+            return $assignment;
+        }
+
+        /**
+         * A property was rewritten by replacePropertyCompoundAssign().
+         */
+        if ('variable' !== $assignment['assign-type']) {
             throw new CompilerException(
                 "Operator '" . $assignment['operator'] . "' is not supported assign-type: " . $assignment['assign-type']
             );
         }
 
-        $builderExpr        = BuilderFactory::getInstance();
-        $leftExpression     = $builderExpr->variable($assignment['variable']);
-        $assignment['expr'] = $builderExpr->operators()
-                                          ->binary($operator, $leftExpression, $builderExpr->raw($assignment['expr']))
-                                          ->build()
-        ;
-
+        $assignment['expr']     = $this->astNode($assignment, [
+            'type'                => $operator,
+            'left'                => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']]),
+            'right'               => $assignment['expr'],
+            'compound-assignment' => true,
+        ]);
         $assignment['operator'] = AssignVariableOperator::OPERATOR_ASSIGN;
 
         return $assignment;

@@ -20,6 +20,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
+use Zephir\Variable\Variable;
 
 /**
  * Checks if an array offset or a property is defined on a polymorphic variable
@@ -93,15 +94,19 @@ class IssetOperator extends AbstractOperator
                 $expr->setReadOnly(true);
                 $expr->setNoisy(false);
                 $resolvedExpr = $expr->compile($compilationContext);
+                $resolvedExpr = $compilationContext->backend->boxArrayKey($resolvedExpr, $compilationContext);
 
                 switch ($resolvedExpr->getType()) {
                     case 'int':
                     case 'long':
                     case 'string':
-                        return $compilationContext->backend->arrayIsset(
-                            $variable,
-                            $resolvedExpr,
-                            $left['right'],
+                        // isset throws for an illegal key or from offsetExists()
+                        $isset = $compilationContext->backend->arrayIsset($variable, $resolvedExpr, $left['right']);
+
+                        return new CompiledExpression(
+                            'bool',
+                            $compilationContext->emitCheckedBool($isset->getCode()),
+                            $left['right']
                         );
 
                     case 'variable':
@@ -112,10 +117,13 @@ class IssetOperator extends AbstractOperator
                             $left['right']
                         );
 
-                        return $compilationContext->backend->arrayIsset(
-                            $variable,
-                            $indexVariable,
-                            $left['right'],
+                        // isset throws for an illegal key or from offsetExists()
+                        $isset = $compilationContext->backend->arrayIsset($variable, $indexVariable, $left['right']);
+
+                        return new CompiledExpression(
+                            'bool',
+                            $compilationContext->emitCheckedBool($isset->getCode()),
+                            $left['right']
                         );
 
 
@@ -171,35 +179,48 @@ class IssetOperator extends AbstractOperator
                 $expr->setReadOnly(true);
                 $expr->setNoisy(false);
                 $resolvedExpr = $expr->compile($compilationContext);
+                $resolvedExpr = $compilationContext->backend->boxArrayKey($resolvedExpr, $compilationContext);
 
                 switch ($resolvedExpr->getType()) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'ulong':
+                        $indexVariable = $this->boxIntegerKey($resolvedExpr->getCode(), $compilationContext);
+                        break;
+
                     case 'variable':
                         $indexVariable = $compilationContext->symbolTable->getVariableForRead(
                             $resolvedExpr->getCode(),
                             $compilationContext,
                             $left['right']
                         );
-                        switch ($indexVariable->getType()) {
-                            case 'variable':
-                            case 'mixed':
-                            case 'string':
-                                $indexVariableCode = $compilationContext->backend->getVariableCode($indexVariable);
-
-                                /* PHP isset() semantics — see https://github.com/zephir-lang/zephir/issues/2385. */
-                                return new CompiledExpression(
-                                    'bool',
-                                    'zephir_isset_property_value_zval(' . $variableCode . ', ' . $indexVariableCode . ')',
-                                    $left['right']
-                                );
-
-                            default:
-                                throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
+                        if (in_array($indexVariable->getType(), ['int', 'uint', 'long', 'ulong'], true)) {
+                            $indexVariable = $this->boxIntegerKey($indexVariable, $compilationContext);
                         }
-
+                        break;
 
                     default:
                         throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
                 }
+
+                if (!in_array($indexVariable->getType(), ['variable', 'mixed', 'string'], true)) {
+                    throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
+                }
+
+                $indexVariableCode = $compilationContext->backend->getVariableCode($indexVariable);
+
+                /*
+                 * PHP isset() semantics, see https://github.com/zephir-lang/zephir/issues/2385;
+                 * it throws for an illegal key or from offsetExists().
+                 */
+                return new CompiledExpression(
+                    'bool',
+                    $compilationContext->emitCheckedBool(
+                        'zephir_isset_property_value_zval(' . $variableCode . ', ' . $indexVariableCode . ')'
+                    ),
+                    $left['right']
+                );
 
 
             case 'property-string-access':
@@ -209,5 +230,16 @@ class IssetOperator extends AbstractOperator
             default:
                 throw new CompilerException('This expression is not valid for "isset" operator', $expression);
         }
+    }
+
+    /**
+     * An integer key as a temp zval, for the zval-keyed property helpers.
+     */
+    private function boxIntegerKey($value, CompilationContext $compilationContext): Variable
+    {
+        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+        $compilationContext->backend->assignLong($tempVariable, $value, $compilationContext);
+
+        return $tempVariable;
     }
 }

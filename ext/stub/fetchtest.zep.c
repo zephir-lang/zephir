@@ -44,7 +44,7 @@ PHP_METHOD(Stub_FetchTest, setValues)
 		Z_PARAM_ZVAL(values)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &values);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 41, values);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 42, values);
 	RETURN_THISW();
 }
 
@@ -56,6 +56,7 @@ PHP_METHOD(Stub_FetchTest, getValues)
 
 PHP_METHOD(Stub_FetchTest, testFetchArray1)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, *b, b_sub, c;
 
@@ -70,11 +71,17 @@ PHP_METHOD(Stub_FetchTest, testFetchArray1)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &b);
 	zephir_memory_observe(&c);
-	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, b, 0));
+	_0 = zephir_array_isset_fetch(&c, a, b, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_FetchTest, testFetchArray2)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a = NULL, a_sub, *b, b_sub;
 
@@ -89,11 +96,17 @@ PHP_METHOD(Stub_FetchTest, testFetchArray2)
 	zephir_fetch_params(1, 2, 0, &a, &b);
 	ZEPHIR_SEPARATE_PARAM(a);
 	ZEPHIR_OBS_NVAR(a);
-	RETURN_MM_BOOL(zephir_array_isset_fetch(a, a, b, 0));
+	_0 = zephir_array_isset_fetch(a, a, b, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_FetchTest, testFetchArray3)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long b;
 	zval *a, a_sub, *b_param = NULL, c;
@@ -108,11 +121,17 @@ PHP_METHOD(Stub_FetchTest, testFetchArray3)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &b_param);
 	zephir_memory_observe(&c);
-	RETURN_MM_BOOL(zephir_array_isset_long_fetch(&c, a, b, 0));
+	_0 = zephir_array_isset_long_fetch(&c, a, b, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_FetchTest, testFetchArray4)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long b;
 	zval *a = NULL, a_sub, *b_param = NULL;
@@ -127,11 +146,17 @@ PHP_METHOD(Stub_FetchTest, testFetchArray4)
 	zephir_fetch_params(1, 2, 0, &a, &b_param);
 	ZEPHIR_SEPARATE_PARAM(a);
 	ZEPHIR_OBS_NVAR(a);
-	RETURN_MM_BOOL(zephir_array_isset_long_fetch(a, a, b, 0));
+	_0 = zephir_array_isset_long_fetch(a, a, b, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_FetchTest, testFetchArray5)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_string *b = NULL;
 	zval *a, a_sub, b_zv, c;
@@ -149,11 +174,17 @@ PHP_METHOD(Stub_FetchTest, testFetchArray5)
 	zephir_memory_observe(&b_zv);
 	ZVAL_STR_COPY(&b_zv, b);
 	zephir_memory_observe(&c);
-	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, &b_zv, 0));
+	_0 = zephir_array_isset_fetch(&c, a, &b_zv, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_FetchTest, testFetchArray6)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_string *b = NULL;
 	zval *a = NULL, a_sub, b_zv;
@@ -171,7 +202,12 @@ PHP_METHOD(Stub_FetchTest, testFetchArray6)
 	zephir_memory_observe(&b_zv);
 	ZVAL_STR_COPY(&b_zv, b);
 	ZEPHIR_OBS_NVAR(a);
-	RETURN_MM_BOOL(zephir_array_isset_fetch(a, a, &b_zv, 0));
+	_0 = zephir_array_isset_fetch(a, a, &b_zv, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_0);
 }
 
 PHP_METHOD(Stub_FetchTest, testFetchObject1)
@@ -214,6 +250,7 @@ PHP_METHOD(Stub_FetchTest, testFetchObject2)
 
 PHP_METHOD(Stub_FetchTest, testFetchPost)
 {
+	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *b, b_sub, _POST, c;
 
@@ -228,7 +265,12 @@ PHP_METHOD(Stub_FetchTest, testFetchPost)
 	zephir_get_global(&_POST, SL("_POST"));
 	zephir_fetch_params(1, 1, 0, &b);
 	zephir_memory_observe(&c);
-	if (!(zephir_array_isset_fetch(&c, &_POST, b, 0))) {
+	_0 = zephir_array_isset_fetch(&c, &_POST, b, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	if (!(_0)) {
 		RETURN_MM_BOOL(0);
 	}
 	RETURN_CCTOR(&c);
@@ -236,12 +278,13 @@ PHP_METHOD(Stub_FetchTest, testFetchPost)
 
 PHP_METHOD(Stub_FetchTest, hasValue)
 {
-	zval *name, name_sub, _POST, _0$$4;
+	zend_bool _0, _2$$4;
+	zval *name, name_sub, _POST, _1$$4;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&name_sub);
 	ZVAL_UNDEF(&_POST);
-	ZVAL_UNDEF(&_0$$4);
+	ZVAL_UNDEF(&_1$$4);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("values", 6, 1);
@@ -252,11 +295,19 @@ PHP_METHOD(Stub_FetchTest, hasValue)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_get_global(&_POST, SL("_POST"));
 	zephir_fetch_params_without_memory_grow(1, 0, &name);
-	if (zephir_array_isset_value(&_POST, name)) {
+	_0 = zephir_array_isset_value(&_POST, name);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	if (_0) {
 		RETURN_BOOL(1);
 	} else {
-		zephir_read_property_cached(&_0$$4, this_ptr, _zephir_prop_0, 41, PH_NOISY_CC | PH_READONLY);
-		if (zephir_array_isset_value(&_0$$4, name)) {
+		zephir_read_property_cached(&_1$$4, this_ptr, _zephir_prop_0, 42, PH_NOISY_CC | PH_READONLY);
+		_2$$4 = zephir_array_isset_value(&_1$$4, name);
+		if (UNEXPECTED(EG(exception))) {
+			return;
+		}
+		if (_2$$4) {
 			RETURN_BOOL(1);
 		}
 	}
@@ -265,14 +316,15 @@ PHP_METHOD(Stub_FetchTest, hasValue)
 
 PHP_METHOD(Stub_FetchTest, getValue)
 {
+	zend_bool _0, _2$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *name, name_sub, _POST, value, _0$$3;
+	zval *name, name_sub, _POST, value, _1$$3;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&name_sub);
 	ZVAL_UNDEF(&_POST);
 	ZVAL_UNDEF(&value);
-	ZVAL_UNDEF(&_0$$3);
+	ZVAL_UNDEF(&_1$$3);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("values", 6, 1);
@@ -286,10 +338,20 @@ PHP_METHOD(Stub_FetchTest, getValue)
 	zephir_get_global(&_POST, SL("_POST"));
 	zephir_fetch_params(1, 1, 0, &name);
 	zephir_memory_observe(&value);
-	if (!(zephir_array_isset_fetch(&value, &_POST, name, 0))) {
+	_0 = zephir_array_isset_fetch(&value, &_POST, name, 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	if (!(_0)) {
 		ZEPHIR_OBS_NVAR(&value);
-		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 41, PH_NOISY_CC | PH_READONLY);
-		if (!(zephir_array_isset_fetch(&value, &_0$$3, name, 0))) {
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 42, PH_NOISY_CC | PH_READONLY);
+		_2$$3 = zephir_array_isset_fetch(&value, &_1$$3, name, 0);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
+		if (!(_2$$3)) {
 			RETURN_MM_NULL();
 		}
 	}

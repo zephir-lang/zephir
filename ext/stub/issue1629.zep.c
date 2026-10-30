@@ -64,7 +64,15 @@ PHP_METHOD(Stub_Issue1629, stringTarget)
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_string_offset_read(&_1, &keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_get_strval(&ch, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&ch);
 }
 
@@ -96,10 +104,18 @@ PHP_METHOD(Stub_Issue1629, charTarget)
 	ZEPHIR_INIT_VAR(&pieces);
 	array_init(&pieces);
 	ch = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ch = ch;
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, ch);
 	zephir_array_append(&pieces, &_0, PH_SEPARATE, "stub/issue1629.zep", 37);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&pieces);
 }
 
@@ -146,7 +162,15 @@ PHP_METHOD(Stub_Issue1629, rebuild)
 			i = _1;
 			ZEPHIR_INIT_NVAR(&_4$$3);
 			zephir_string_offset_read(&_4$$3, &keyspace_zv, i, PH_NOISY);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			zephir_array_append(&pieces, &_4$$3, PH_SEPARATE, "stub/issue1629.zep", 54);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	zephir_fast_join_str(return_value, SL(""), &pieces);
@@ -178,6 +202,10 @@ PHP_METHOD(Stub_Issue1629, varTarget)
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_string_offset_read(&_1, &keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&ch, &_1);
 	RETURN_CCTOR(&ch);
 }
@@ -200,6 +228,9 @@ PHP_METHOD(Stub_Issue1629, intTarget)
 	nb_param = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&keyspace_zv, keyspace);
 	_0 = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	c = _0;
 	RETURN_LONG(c);
 }
@@ -229,7 +260,15 @@ PHP_METHOD(Stub_Issue1629, arrayIndexTarget)
 	array_init(&pieces);
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_string_offset_read(&_1, &keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_update_long(&pieces, 3, &_1, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&pieces);
 }
 
@@ -261,10 +300,18 @@ PHP_METHOD(Stub_Issue1629, propertyAppendTarget)
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 52, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 53, &_0);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_string_offset_read(&_2, &keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_array_append(this_ptr, SL("parts"), &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM_MEMBER_TYPED(getThis(), "parts", IS_ARRAY);
 }
 
@@ -297,12 +344,20 @@ PHP_METHOD(Stub_Issue1629, propertyIndexTarget)
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 52, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 53, &_0);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_string_offset_read(&_2, &keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_STRING(&_3, "k");
 	zephir_update_property_array(this_ptr, SL("parts"), &_3, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM_MEMBER_TYPED(getThis(), "parts", IS_ARRAY);
 }
 
@@ -332,7 +387,15 @@ PHP_METHOD(Stub_Issue1629, staticIndexTarget)
 	zephir_update_static_property_ce(stub_issue1629_ce, ZEND_STRL("staticParts"), &_0);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_string_offset_read(&_2, &keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_static_property_array_multi_ce(stub_issue1629_ce, SL("staticParts"), &_2, SL("l"), 1, (zend_long) 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_read_static_property_ce(&_3, stub_issue1629_ce, SL("staticParts"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTOR(&_3);
 }
@@ -363,7 +426,15 @@ PHP_METHOD(Stub_Issue1629, staticAppendTarget)
 	zephir_update_static_property_ce(stub_issue1629_ce, ZEND_STRL("staticParts"), &_0);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_string_offset_read(&_2, &keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_static_property_array_multi_ce(stub_issue1629_ce, SL("staticParts"), &_2, SL("a"), 1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_read_static_property_ce(&_3, stub_issue1629_ce, SL("staticParts"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTOR(&_3);
 }
@@ -393,6 +464,10 @@ PHP_METHOD(Stub_Issue1629, charToStringTarget)
 	zephir_memory_observe(&keyspace_zv);
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
 	ch = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ch = ch;
 	ZEPHIR_INIT_VAR(&out);
 	ZVAL_STRINGL(&out, &ch, 1);
@@ -439,6 +514,10 @@ PHP_METHOD(Stub_Issue1629, castStringOfChar)
 	zephir_memory_observe(&keyspace_zv);
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
 	ch = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ch = ch;
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRINGL(&_0, &ch, 1);
@@ -469,7 +548,15 @@ PHP_METHOD(Stub_Issue1629, castStringOfOffset)
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_string_offset_read(&_1, &keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_cast_to_string(&_2, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&out, &_2);
 	RETURN_CTOR(&out);
 }
@@ -537,6 +624,10 @@ PHP_METHOD(Stub_Issue1629, keyedCharArray)
 	zephir_memory_observe(&keyspace_zv);
 	ZVAL_STR_COPY(&keyspace_zv, keyspace);
 	ch = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ch = ch;
 	zephir_create_array(return_value, 2, 0);
 	ZEPHIR_INIT_VAR(&_0);
@@ -564,6 +655,9 @@ PHP_METHOD(Stub_Issue1629, doubleFromChar)
 	nb_param = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&keyspace_zv, keyspace);
 	ch = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	ch = ch;
 	d = (double) ch;
 	RETURN_DOUBLE(d);
@@ -585,6 +679,9 @@ PHP_METHOD(Stub_Issue1629, boolFromChar)
 	nb_param = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&keyspace_zv, keyspace);
 	ch = zephir_string_offset_byte(&keyspace_zv, nb, PH_NOISY);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	ch = ch;
 	b = ((ch) ? 1 : 0);
 	RETURN_BOOL(b);
@@ -634,6 +731,10 @@ PHP_METHOD(Stub_Issue1629, appendCharLiteral)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 'a');
 	zephir_array_append(&pieces, &_0, PH_SEPARATE, "stub/issue1629.zep", 229);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&pieces);
 }
 

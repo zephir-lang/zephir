@@ -61,6 +61,9 @@ PHP_METHOD(Stub_ArrayAccessProperty, set)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &k, &v);
 	zephir_update_property_array(this_ptr, SL("data"), k, v);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_ArrayAccessProperty, setNested)
@@ -78,5 +81,8 @@ PHP_METHOD(Stub_ArrayAccessProperty, setNested)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(3, 0, &a, &b, &v);
 	zephir_update_property_array_multi(this_ptr, SL("data"), v, SL("zz"), 2, a, b);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 

@@ -17,6 +17,7 @@ use ReflectionException;
 use ReflectionMethod;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
+use Zephir\Class\Visibility;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Traits\VariablesTrait;
@@ -181,7 +182,7 @@ class MethodCall extends Call
                 );
             }
 
-            if ($variableMethod->isNotVariableAndString()) {
+            if ($variableMethod->isNotVariableAndMixedAndString()) {
                 throw CompilerException::cannotUseVariableTypeAs(
                     $variableMethod,
                     'as a dynamic method name',
@@ -319,17 +320,7 @@ class MethodCall extends Call
                 }
 
                 if ($check) {
-                    /*
-                     * Private methods must be called in their declaration scope
-                     */
-                    if ($classMethod->isPrivate()) {
-                        if ($classMethod->getClassDefinition() !== $classDefinition) {
-                            throw new CompilerException(
-                                "Cannot call private method '" . $expression['name'] . "' out of its scope",
-                                $expression
-                            );
-                        }
-                    }
+                    $this->checkVisibility($classMethod, $classDefinition, $expression, $compilationContext);
 
                     /*
                      * Try to produce an exception if method is called with a wrong number of parameters
@@ -423,37 +414,7 @@ class MethodCall extends Call
 
                                 $method = $classDefinition->getMethod($methodName);
 
-                                /*
-                                 * Private methods must be called in their declaration scope
-                                 */
-                                if ($method->isPrivate()) {
-                                    if ($method->getClassDefinition() !== $classDefinition) {
-                                        throw new CompilerException(
-                                            sprintf(
-                                                "Cannot call private method '%s' out of its scope",
-                                                $expression['name']
-                                            ),
-                                            $expression
-                                        );
-                                    }
-                                }
-
-                                /*
-                                 * Check visibility for protected methods
-                                 */
-                                if (
-                                    $method->isProtected() &&
-                                    $method->getClassDefinition() !== $classDefinition &&
-                                    $method->getClassDefinition() !== $classDefinition->getExtendsClassDefinition()
-                                ) {
-                                    throw new CompilerException(
-                                        sprintf(
-                                            "Cannot call protected method '%s' out of its scope",
-                                            $expression['name']
-                                        ),
-                                        $expression
-                                    );
-                                }
+                                $this->checkVisibility($method, $classDefinition, $expression, $compilationContext);
 
                                 /**
                                  * Try to produce an exception if a method is called with a wrong number of parameters
@@ -890,7 +851,8 @@ class MethodCall extends Call
                 if ($isExpecting) {
                     $symbolCode = $compilationContext->backend->getVariableCode($symbolVariable);
                 }
-                $variableCode = $compilationContext->backend->getVariableCode($variableVariable);
+                $variableCode = $compilationContext->backend->getVariableCode($variableVariable)
+                    . ', ' . $method->getClassDefinition()->getClassEntry($compilationContext);
                 $paramCount   = count($params);
                 $paramsStr    = $paramCount ? ', ' . implode(', ', $params) : '';
 
@@ -919,6 +881,7 @@ class MethodCall extends Call
                 switch ($variableMethod->getType()) {
                     case 'string':
                     case 'variable':
+                    case 'mixed':
                         break;
                     default:
                         throw CompilerException::cannotUseVariableTypeAs(
@@ -1072,6 +1035,21 @@ class MethodCall extends Call
             return false;
         }
 
+        /**
+         * The engine settles the target only once it knows the calling class:
+         * an inaccessible method goes to `__call()`, and a private method of
+         * the calling class wins over a same-named method of a subclass
+         * (ZEND_ACC_CHANGED). Either way it is not the method resolved here.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2734
+         */
+        if (
+            !Visibility::canCallMethod($method, $compilationContext)
+            || $this->isShadowedByScope($method, $compilationContext)
+        ) {
+            return false;
+        }
+
         if ($method->isFinal()) {
             return true;
         }
@@ -1091,5 +1069,44 @@ class MethodCall extends Call
         return $receiver === $scope
             && $receiver->isFinal()
             && null === $scope->getEnclosingClassDefinition();
+    }
+
+    /**
+     * Rejects a call PHP would refuse from the class being compiled.
+     *
+     * A receiver whose class has `__call()` takes every call it cannot make
+     * itself, so that decision is left to the run time.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2734
+     */
+    private function checkVisibility(
+        Method $method,
+        Definition $receiver,
+        array $expression,
+        CompilationContext $compilationContext
+    ): void {
+        if (Visibility::canCallMethod($method, $compilationContext) || $receiver->hasMethod('__call')) {
+            return;
+        }
+
+        throw new CompilerException(
+            sprintf(
+                "Cannot call %s method '%s' out of its scope",
+                $method->isPrivate() ? 'private' : 'protected',
+                $expression['name']
+            ),
+            $expression
+        );
+    }
+
+    /**
+     * Whether the calling class has a private method of the same name that is
+     * not $method: PHP calls that one on any object of a subclass.
+     */
+    private function isShadowedByScope(Method $method, CompilationContext $compilationContext): bool
+    {
+        $own = Visibility::scopeOf($compilationContext)?->getMethod($method->getName(), false);
+
+        return null !== $own && $own !== $method && $own->isPrivate();
     }
 }

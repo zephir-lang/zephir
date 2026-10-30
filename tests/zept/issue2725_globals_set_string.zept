@@ -1,0 +1,237 @@
+--TEST--
+Issue #2725: globals_set() converts a value the way a PHP cast does, and a conversion that throws writes nothing and stops
+--CONFIG--
+{"globals": {
+    "a_string":    {"type": "string", "default": "compiled"},
+    "db.a_string": {"type": "string", "default": "dotted"},
+    "per_process": {"type": "string", "default": "module", "module": true},
+    "an_int":      {"type": "int",    "default": 10},
+    "a_uint":      {"type": "uint",   "default": 64},
+    "a_double":    {"type": "double", "default": 15.2},
+    "a_char":      {"type": "char",   "default": "A"}
+}}
+--FILE--
+namespace Stub;
+
+class Settings
+{
+	public function setString(value) -> void
+	{
+		globals_set("a_string", value);
+		echo "continued";
+	}
+
+	public function getString()
+	{
+		return globals_get("a_string");
+	}
+
+	public function setDotted(value) -> void
+	{
+		globals_set("db.a_string", value);
+		echo "continued";
+	}
+
+	public function getDotted()
+	{
+		return globals_get("db.a_string");
+	}
+
+	public function setModule(value) -> void
+	{
+		globals_set("per_process", value);
+		echo "continued";
+	}
+
+	public function getModule()
+	{
+		return globals_get("per_process");
+	}
+
+	public function setInt(value) -> void
+	{
+		globals_set("an_int", value);
+		echo "continued";
+	}
+
+	public function getInt()
+	{
+		return globals_get("an_int");
+	}
+
+	public function setUint(value) -> void
+	{
+		globals_set("a_uint", value);
+		echo "continued";
+	}
+
+	public function getUint()
+	{
+		return globals_get("a_uint");
+	}
+
+	public function setDouble(value) -> void
+	{
+		globals_set("a_double", value);
+		echo "continued";
+	}
+
+	public function getDouble()
+	{
+		return globals_get("a_double");
+	}
+
+	public function setChar(value) -> void
+	{
+		globals_set("a_char", value);
+		echo "continued";
+	}
+
+	public function getChar()
+	{
+		return globals_get("a_char");
+	}
+}
+--USAGE--
+final class Name
+{
+    public function __construct(private string $name)
+    {
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+}
+
+final class Boom
+{
+    public function __toString(): string
+    {
+        throw new \RuntimeException('boom');
+    }
+}
+
+/**
+ * Runs $action and records what it returned, printed, warned and threw. With
+ * $throwOnWarning the error handler turns every warning into an
+ * ErrorException, as frameworks commonly do.
+ */
+function observe(callable $action, bool $throwOnWarning): array
+{
+    $warnings = [];
+    set_error_handler(static function (int $no, string $message) use (&$warnings, $throwOnWarning): bool {
+        if ($throwOnWarning) {
+            throw new \ErrorException($message, 0, $no);
+        }
+        $warnings[] = $message;
+
+        return true;
+    });
+
+    $result = null;
+    $thrown = null;
+    ob_start();
+    try {
+        $result = $action();
+    } catch (\Throwable $e) {
+        $thrown = get_class($e) . ': ' . $e->getMessage();
+    } finally {
+        $output = ob_get_clean();
+        restore_error_handler();
+    }
+
+    return ['result' => $result, 'warnings' => $warnings, 'thrown' => $thrown, 'output' => $output];
+}
+
+/**
+ * Sets one global to each value and compares the outcome with PHP's own cast
+ * of the same value: the stored value, the warnings, the exception, and
+ * whether the method kept running past globals_set().
+ */
+function compare(string $label, callable $set, callable $get, callable $cast, array $cases): void
+{
+    $problems = [];
+    foreach ($cases as $case => [$value, $throwOnWarning]) {
+        $before = $get();
+        $php    = observe(static fn() => $cast($value), $throwOnWarning);
+        $zep    = observe(static fn() => $set($value), $throwOnWarning);
+        $after  = $get();
+
+        // A cast that throws produces no value, so nothing may be written.
+        $expected = null === $php['thrown'] ? $php['result'] : $before;
+        if ($after !== $expected) {
+            $problems[] = "$case: global " . var_export($after, true) . ', expected ' . var_export($expected, true);
+        }
+        if ($zep['warnings'] !== $php['warnings']) {
+            $problems[] = "$case: warnings " . json_encode($zep['warnings']) . ', expected ' . json_encode($php['warnings']);
+        }
+        if ($zep['thrown'] !== $php['thrown']) {
+            $problems[] = "$case: threw " . var_export($zep['thrown'], true) . ', expected ' . var_export($php['thrown'], true);
+        }
+        $continued = 'continued' === $zep['output'];
+        if ($continued !== (null === $php['thrown'])) {
+            $problems[] = $continued ? "$case: kept running after the exception" : "$case: stopped without an exception";
+        }
+    }
+
+    echo $label, ': ', [] === $problems ? 'all ' . count($cases) . ' cases match PHP' : implode(PHP_EOL . '  ', $problems), "\n";
+}
+
+$s = new \Stub\Settings();
+
+$stringCases = [
+    'int'                       => [42, false],
+    'negative int'              => [-7, false],
+    'float'                     => [1.5, false],
+    'inexact float'             => [0.1 + 0.2, false],
+    'big float'                 => [1e100, false],
+    'true'                      => [true, false],
+    'false'                     => [false, false],
+    'null'                      => [null, false],
+    'Stringable'                => [new Name('stringable'), false],
+    'runtime string'            => [str_repeat('ab', 3) . PHP_VERSION_ID, false],
+    // Before 'array', so the value a wrong write would leave is not already there.
+    'array, throwing handler'   => [[1, 2], true],
+    'array'                     => [[1, 2], false],
+    'object without __toString' => [new \stdClass(), false],
+    'throwing __toString'       => [new Boom(), false],
+];
+
+$toString = static fn($v) => (string) $v;
+compare('string', [$s, 'setString'], [$s, 'getString'], $toString, $stringCases);
+compare('dotted', [$s, 'setDotted'], [$s, 'getDotted'], $toString, $stringCases);
+compare('module', [$s, 'setModule'], [$s, 'getModule'], $toString, $stringCases);
+
+// globals_set() writes the global only; the directive keeps its own value.
+foreach (['stub.a_string', 'stub.db.a_string', 'stub.per_process'] as $directive) {
+    echo $directive, ' ini=', var_export(ini_get($directive), true), "\n";
+}
+
+// A scalar conversion only warns, but an error handler can turn that warning
+// into an exception, and then PHP's cast produces no value either.
+$objectCases = [
+    // First, so the 1 a wrong write would leave is not already there.
+    'object, throwing handler'  => [new \stdClass(), true],
+    'object'                    => [new \stdClass(), false],
+];
+
+$toInt = static fn($v) => (int) $v;
+compare('int', [$s, 'setInt'], [$s, 'getInt'], $toInt, $objectCases);
+compare('uint', [$s, 'setUint'], [$s, 'getUint'], $toInt, $objectCases);
+compare('double', [$s, 'setDouble'], [$s, 'getDouble'], static fn($v) => (float) $v, $objectCases);
+// A char global reads back as its character code; a non-string goes through
+// the integer conversion.
+compare('char', [$s, 'setChar'], [$s, 'getChar'], $toInt, $objectCases);
+--EXPECT--
+string: all 14 cases match PHP
+dotted: all 14 cases match PHP
+module: all 14 cases match PHP
+stub.a_string ini='compiled'
+stub.db.a_string ini='dotted'
+stub.per_process ini='module'
+int: all 2 cases match PHP
+uint: all 2 cases match PHP
+double: all 2 cases match PHP
+char: all 2 cases match PHP

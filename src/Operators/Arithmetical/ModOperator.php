@@ -57,24 +57,15 @@ class ModOperator extends ArithmeticalBaseOperator
         $shape = $leftOperand['kind'] . '_' . $rightOperand['kind'];
 
         return match ($shape) {
-            'long_long'     => $this->intResult('zephir_safe_mod_long_long', $leftOperand, $rightOperand, $expression),
-            'long_double'   => $this->intResult('zephir_safe_mod_long_double', $leftOperand, $rightOperand, $expression),
-            'double_long'   => $this->intResult('zephir_safe_mod_double_long', $leftOperand, $rightOperand, $expression),
-            'double_double' => $this->intResult('zephir_safe_mod_double_double', $leftOperand, $rightOperand, $expression),
+            'long_long'     => $this->nativeResult('int', 'zephir_safe_mod_long_long', $leftOperand, $rightOperand, $expression, $compilationContext),
+            'long_double'   => $this->nativeResult('int', 'zephir_safe_mod_long_double', $leftOperand, $rightOperand, $expression, $compilationContext),
+            'double_long'   => $this->nativeResult('int', 'zephir_safe_mod_double_long', $leftOperand, $rightOperand, $expression, $compilationContext),
+            'double_double' => $this->nativeResult('int', 'zephir_safe_mod_double_double', $leftOperand, $rightOperand, $expression, $compilationContext),
             'zval_long'     => $this->zvalResult('zephir_mod_zval_long', $leftOperand, $rightOperand, $expression, $compilationContext, self::REMAINDER_TYPES),
             'long_zval'     => $this->zvalResult('zephir_mod_long_zval', $leftOperand, $rightOperand, $expression, $compilationContext, self::REMAINDER_TYPES),
             'zval_double'   => $this->zvalResult('zephir_mod_zval_double', $leftOperand, $rightOperand, $expression, $compilationContext, self::REMAINDER_TYPES),
             'double_zval'   => $this->zvalResult('zephir_mod_double_zval', $leftOperand, $rightOperand, $expression, $compilationContext, self::REMAINDER_TYPES),
             'zval_zval'     => $this->zvalResult($this->zvalOperator, $leftOperand, $rightOperand, $expression, $compilationContext, self::REMAINDER_TYPES),
         };
-    }
-
-    private function intResult(string $helper, array $left, array $right, array $expression): CompiledExpression
-    {
-        return new CompiledExpression(
-            'int',
-            $helper . '(' . $left['code'] . ', ' . $right['code'] . ')',
-            $expression
-        );
     }
 }

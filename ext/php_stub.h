@@ -14,7 +14,7 @@
 #define PHP_STUB_VERSION     "1.0.0"
 #define PHP_STUB_EXTNAME     "stub"
 #define PHP_STUB_AUTHOR      "Phalcon Team and contributors"
-#define PHP_STUB_ZEPVERSION  "1.6.1-$Id$"
+#define PHP_STUB_ZEPVERSION  "1.7.0-$Id$"
 #define PHP_STUB_DESCRIPTION "Description <b>test</b> for<br/>Test Extension."
 
 #define ZEPHIR_GENERATOR_ENABLED 1
@@ -33,6 +33,8 @@ typedef struct _zephir_struct_orm {
 	zend_long cache_level;
 	zend_bool cache_enable;
 	char * cache_prefix;
+	char * zephir_owned_cache_prefix;
+	HashTable * ast_cache;
 } zephir_struct_orm;
 
 typedef struct _zephir_struct_extension { 
@@ -69,7 +71,9 @@ ZEND_BEGIN_MODULE_GLOBALS(stub)
 	double my_setting_3;
 	char my_setting_4;
 	char * my_setting_5;
+	char * zephir_owned_my_setting_5;
 	zend_ulong my_setting_6;
+	HashTable * my_setting_7;
 	zend_bool module_setting;
 
 ZEND_END_MODULE_GLOBALS(stub)

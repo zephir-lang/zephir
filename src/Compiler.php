@@ -22,6 +22,7 @@ use ReflectionClass;
 use ReflectionException;
 use Zephir\Backend\Backend;
 use Zephir\Cache\PropertyCacheSlots;
+use Zephir\Cache\SlotsCache;
 use Zephir\Backend\FcallManagerInterface;
 use Zephir\Backend\StringsManager;
 use Zephir\Class\Definition\AttributeEmitter;
@@ -39,12 +40,16 @@ use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\NotImplementedException;
 use Zephir\Exception\ParseException;
 use Zephir\Exception\RuntimeException;
+use Zephir\Expression\Closure;
 use Zephir\FileSystem\FileSystemInterface;
 use Zephir\FileSystem\HardDisk;
 use Zephir\Parser\Manager;
+use Zephir\Types\Types;
 
 use function array_diff_key;
 use function array_filter;
+use function array_intersect_key;
+use function array_keys;
 use function array_map;
 use function array_merge;
 use function array_unique;
@@ -255,9 +260,12 @@ final class Compiler
         $this->stringManager = new StringsManager();
         $this->fcallManager  = $this->backend->getFcallManager();
 
-        // Fresh inline-property-cache slot numbering per compilation run
-        // (keeps slot indices stable/deterministic per build).
+        // Fresh numbering per compilation run: property cache slots, call
+        // cache slots and closure class names must not depend on earlier
+        // compilations in the same process (see #2687).
         PropertyCacheSlots::reset();
+        SlotsCache::reset();
+        Closure::reset();
 
         try {
             $this->assertRequiredExtensionsIsPresent();
@@ -842,8 +850,15 @@ final class Compiler
         /**
          * Round 3. Process extension globals
          */
-        [$globalCode, $globalStruct, $globalsDefault, $initEntries, $requestIniGlobals] =
-            $this->processExtensionGlobals($project);
+        [
+            $globalCode,
+            $globalStruct,
+            $globalsDefault,
+            $initEntries,
+            $requestIniGlobals,
+            $globalsRelease,
+            $requestGlobalsRelease,
+        ] = $this->processExtensionGlobals($project);
         if ('zend' == $project) {
             $safeProject = 'zend_';
         } else {
@@ -939,7 +954,11 @@ final class Compiler
                 array_merge((array)$globalsDefault[0], [$glbInitializers])
             ),
             '%INIT_MODULE_GLOBALS%'  => $globalsDefault[1],
-            '%DESTROY_GLOBALS%'      => $glbDestructors,
+            '%DESTROY_GLOBALS%'      => implode(
+                PHP_EOL . "\t",
+                // After the user's own destructors, which may still read a global.
+                array_merge(array_filter([$glbDestructors]), $globalsRelease)
+            ),
             '%EXTENSION_INFO%'       => $phpInfo,
             '%EXTRA_INCLUDES%'       => implode(
                 PHP_EOL,
@@ -954,7 +973,11 @@ final class Compiler
                 PHP_EOL . "\t",
                 array_merge($this->internalInitializers, [$reqInitializers])
             ),
-            '%REQ_DESTRUCTORS%'      => $reqDestructors,
+            '%REQ_DESTRUCTORS%'      => implode(
+                PHP_EOL . "\t",
+                // After the user's own destructors, which may still read a global.
+                array_merge(array_filter([$reqDestructors]), $requestGlobalsRelease)
+            ),
             '%POSTREQ_DESTRUCTORS%'  => empty($prqDestructors) ? '' : implode(
                 PHP_EOL,
                 [
@@ -1497,17 +1520,7 @@ final class Compiler
                 continue;
             }
 
-            /**
-             * The pass only runs for a function with a body, and there is no
-             * other route to a compilation context here. A bodyless function
-             * already fails in generateFunctionInformation() below, so
-             * skipping keeps this from being a second, earlier crash.
-             */
-            if (!$func->hasCallGathererPass()) {
-                continue;
-            }
-
-            $context               = $func->getCallGathererPass()->getCompilationContext();
+            $context               = $func->getPreCompilationContext();
             $previousPrinter       = $context->codePrinter;
             $context->codePrinter  = new Printer();
 
@@ -1557,7 +1570,7 @@ final class Compiler
                 $func->getArgInfoName(),
                 $func,
                 $headerPrinter,
-                $func->getCallGathererPass()->getCompilationContext()
+                $func->getPreCompilationContext()
             );
 
             $funcName    = $func->getInternalName();
@@ -1570,25 +1583,22 @@ final class Compiler
 
             $argInfo->render();
 
-            /** Generate FE's */
-            $paramData = 'NULL';
-
-            $richFormat = $func->isReturnTypesHintDetermined() && $func->areReturnTypesCompatible();
-
-            if ($richFormat || $func->hasParameters()) {
-                $paramData = $argInfoName;
-            }
-
+            /**
+             * Generate FE's. render() always declares the arginfo, and PHP 8
+             * raises "Missing arginfo" on every startup for an entry without
+             * one, which a function with neither parameters nor a return
+             * type used to get (#2731).
+             */
             if ($func->isGlobal()) {
                 $entryPrinter->output(
-                    'ZEND_NAMED_FE(' . $func->getName() . ', ZEND_FN(' . $funcName . '), ' . $paramData . ')'
+                    'ZEND_NAMED_FE(' . $func->getName() . ', ZEND_FN(' . $funcName . '), ' . $argInfoName . ')'
                 );
             } else {
                 $entryPrinter->output(
                     'ZEND_NS_NAMED_FE("' . str_replace('\\', '\\\\', $func->getNamespace()) . '", ' .
                     $func->getName() .
                     ', ZEND_FN(' . $funcName . '), ' .
-                    $paramData . ')'
+                    $argInfoName . ')'
                 );
             }
         }
@@ -2111,14 +2121,15 @@ final class Compiler
             mkdir(dirname($prelude), 0755, true);
         }
 
-        $flags = $this->precompiledHeaderFlags($development, $extPath, $toolchain);
+        $compiler       = $this->precompiledHeaderCompiler($extPath);
+        $compileCommand = $compiler . ' ' . $this->precompiledHeaderFlags($development, $extPath, $toolchain);
 
         /**
          * Already built in this very process, for these very flags — which is
          * what install() hits right after compile(). Nothing in between
          * rewrites a header: generate() invalidates this.
          */
-        if ($flags === $this->precompiledHeaderBuiltFor && (null === $this->precompiledHeader || is_file($gch))) {
+        if ($compileCommand === $this->precompiledHeaderBuiltFor && (null === $this->precompiledHeader || is_file($gch))) {
             return $this->precompiledHeader;
         }
 
@@ -2133,12 +2144,12 @@ final class Compiler
             unlink($gch);
         }
 
-        $this->precompiledHeaderBuiltFor = $flags;
+        $this->precompiledHeaderBuiltFor = $compileCommand;
         $this->precompiledHeader         = null;
 
         $this->logger->info('Pre-compiling headers...');
         exec(
-            sprintf('gcc %s -x c-header %s -o %s 2>&1', $flags, escapeshellarg($prelude), escapeshellarg($gch)),
+            sprintf('%s -x c-header %s -o %s 2>&1', $compileCommand, escapeshellarg($prelude), escapeshellarg($gch)),
             $output,
             $exit
         );
@@ -2149,7 +2160,7 @@ final class Compiler
             return null;
         }
 
-        if (!$this->precompiledHeaderIsUsable($prelude, $flags)) {
+        if (!$this->precompiledHeaderIsUsable($prelude, $compileCommand)) {
             $this->logger->info('Pre-compiled headers were rejected by the compiler, compiling without them');
             unlink($gch);
 
@@ -2243,24 +2254,51 @@ final class Compiler
      *
      * Returns, in order: the globals struct members, the typedefs of the
      * compound ones, the [request, module] default assignments, the
-     * PHP_INI_BEGIN() entries, and the names of the request-scoped directives
-     * that have to be re-applied at the start of every request.
+     * PHP_INI_BEGIN() entries, the names of the request-scoped directives
+     * that have to be re-applied at the start of every request, the
+     * GSHUTDOWN calls that free what globals_set() copied, and the RSHUTDOWN
+     * calls that release the tables request `hash` globals hold.
      *
      * @throws Exception
      */
     public function processExtensionGlobals(string $namespace): array
+    {
+        try {
+            return $this->buildExtensionGlobals($namespace);
+        } catch (InvalidArgumentException $e) {
+            /**
+             * A bad `globals` entry is the user's config.json, not an internal
+             * error, which is how the CLI reports an InvalidArgumentException.
+             */
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * @see processExtensionGlobals()
+     *
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    private function buildExtensionGlobals(string $namespace): array
     {
         $globalCode        = '';
         $globalStruct      = '';
         $globalsDefault    = [[], []];
         $initEntries       = [];
         $requestIniGlobals = [];
+        $globalsRelease    = [];
+        $requestRelease    = [];
 
         $globals = $this->config->get('globals');
         if (is_array($globals)) {
             $structures = [];
             $variables  = [];
             foreach ($globals as $name => $global) {
+                /* A numeric JSON key arrives as an int. */
+                $name = (string) $name;
+                ExtensionGlobal::assertValidName($name);
+
                 $parts = explode('.', $name);
                 if (isset($parts[1])) {
                     $structures[$parts[0]][$parts[1]] = $global;
@@ -2270,26 +2308,38 @@ final class Compiler
             }
 
             /**
+             * A struct is itself a member of the module globals, next to the
+             * plain globals, so the two cannot share a name.
+             */
+            foreach (array_keys(array_intersect_key($variables, $structures)) as $clash) {
+                throw new Exception(sprintf(
+                    'Extension global "%1$s" clashes with the "%1$s.*" globals: both would be the member "%1$s"',
+                    $clash
+                ));
+            }
+
+            /**
              * Process compound structures
              */
             foreach ($structures as $structureName => $internalStructure) {
-                if (preg_match('/^[0-9a-zA-Z_]$/', $structureName)) {
-                    throw new Exception("Struct name: '" . $structureName . "' contains invalid characters");
-                }
-
                 $structBuilder = new Struct('_zephir_struct_' . $structureName, $structureName);
                 foreach ($internalStructure as $field => $global) {
-                    if (preg_match('/^[0-9a-zA-Z_]$/', $field)) {
-                        throw new Exception("Struct field name: '" . $field . "' contains invalid characters");
+                    $extensionGlobal = new ExtensionGlobal($structureName . '.' . $field, $global);
+                    $structBuilder->addProperty($field, $global['type']);
+
+                    $owned = $extensionGlobal->ownedMember();
+                    if (null !== $owned) {
+                        $structBuilder->addProperty(explode('.', $owned)[1], Types::T_STRING);
                     }
 
-                    $structBuilder->addProperty($field, $global['type']);
                     $this->collectExtensionGlobal(
-                        new ExtensionGlobal($structureName . '.' . $field, $global),
+                        $extensionGlobal,
                         $namespace,
                         $globalsDefault,
                         $initEntries,
                         $requestIniGlobals,
+                        $globalsRelease,
+                        $requestRelease,
                     );
                 }
 
@@ -2305,10 +2355,6 @@ final class Compiler
              * Process single variables
              */
             foreach ($variables as $name => $global) {
-                if (preg_match('/^[0-9a-zA-Z_]$/', $name)) {
-                    throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
-                }
-
                 $extensionGlobal = new ExtensionGlobal($name, $global);
                 $this->collectExtensionGlobal(
                     $extensionGlobal,
@@ -2316,25 +2362,44 @@ final class Compiler
                     $globalsDefault,
                     $initEntries,
                     $requestIniGlobals,
+                    $globalsRelease,
+                    $requestRelease,
                 );
 
                 $globalCode .= "\t" . $extensionGlobal->cType() . ' ' . $name . ';' . PHP_EOL;
+
+                $owned = $extensionGlobal->ownedMember();
+                if (null !== $owned) {
+                    $globalCode .= "\t" . ExtensionGlobal::cTypeOf(Types::T_STRING) . ' ' . $owned . ';' . PHP_EOL;
+                }
             }
         }
 
         $globalsDefault[0] = implode(PHP_EOL . "\t", $globalsDefault[0]);
         $globalsDefault[1] = implode(PHP_EOL . "\t", $globalsDefault[1]);
 
-        return [$globalCode, $globalStruct, $globalsDefault, $initEntries, $requestIniGlobals];
+        return [
+            $globalCode,
+            $globalStruct,
+            $globalsDefault,
+            $initEntries,
+            $requestIniGlobals,
+            $globalsRelease,
+            $requestRelease,
+        ];
     }
 
     /**
-     * Records one global's default, its php.ini directive, and whether that
-     * directive has to be re-applied each request.
+     * Records one global's default, its php.ini directive, whether that
+     * directive has to be re-applied each request, the lifetime of the copy
+     * globals_set() keeps for a `string` global, and the release of the table
+     * a request `hash` global holds.
      *
      * @param array $globalsDefault    [request, module] assignment lists
      * @param array $initEntries       PHP_INI_BEGIN() lines
      * @param array $requestIniGlobals directive names reset on every request
+     * @param array $globalsRelease    GSHUTDOWN lines freeing owned copies
+     * @param array $requestRelease    RSHUTDOWN lines releasing hash tables
      *
      * @throws Exception
      */
@@ -2344,10 +2409,28 @@ final class Compiler
         array &$globalsDefault,
         array &$initEntries,
         array &$requestIniGlobals,
+        array &$globalsRelease,
+        array &$requestRelease,
     ): void {
         $default = $global->cDefault($namespace);
         if ('' !== $default) {
             $globalsDefault[(int) $global->isModule()][] = $default;
+        }
+
+        $release = $global->requestRelease();
+        if ('' !== $release) {
+            $requestRelease[] = $release;
+        }
+
+        /**
+         * The owned copy is started empty once per thread, whatever the
+         * global's own scope: it is persistent memory, freed only when it is
+         * replaced or when the globals are destroyed.
+         */
+        $ownedInit = $global->ownedInit($namespace);
+        if ('' !== $ownedInit) {
+            $globalsDefault[1][] = $ownedInit;
+            $globalsRelease[]    = $global->ownedRelease($namespace);
         }
 
         if (!$global->isIniCapable()) {
@@ -2840,6 +2923,20 @@ final class Compiler
     }
 
     /**
+     * The compiler the pre-compiled header is built with: the generated
+     * Makefile's `CC`, which its recipes use. configure is run with
+     * `CC="gcc"`, but autoconf may append a language standard to it
+     * (`gcc -std=gnu23` with Apple clang on macOS 15), and clang rejects a PCH
+     * built for another standard outright where GCC would only ignore it.
+     *
+     * Plain `gcc` is the fallback before the project has been configured.
+     */
+    private function precompiledHeaderCompiler(string $extPath): string
+    {
+        return $this->makefileVariable($extPath, 'CC') ?? 'gcc';
+    }
+
+    /**
      * Compiler flags the pre-compiled header is built with.
      *
      * A PCH is only accepted for a translation unit compiled with the same
@@ -2942,7 +3039,7 @@ final class Compiler
      * unless asked with -Winvalid-pch. The probe is a minimal translation unit
      * shaped like a generated one: same header prelude, force-included PCH.
      */
-    private function precompiledHeaderIsUsable(string $prelude, string $flags): bool
+    private function precompiledHeaderIsUsable(string $prelude, string $compileCommand): bool
     {
         $probe = $this->filesystem->path('pch/zephir_pch_probe.c', false);
 
@@ -2953,8 +3050,8 @@ final class Compiler
 
         exec(
             sprintf(
-                'gcc %s -Winvalid-pch -include %s -c %s -o %s 2>&1',
-                $flags,
+                '%s -Winvalid-pch -include %s -c %s -o %s 2>&1',
+                $compileCommand,
                 escapeshellarg($prelude),
                 escapeshellarg($probe),
                 escapeshellarg($probe . '.o')

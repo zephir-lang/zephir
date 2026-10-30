@@ -71,6 +71,10 @@ PHP_METHOD(Stub_BuiltIn_CharMethods, getHexForString)
 		ZVAL_STRINGL(&_3$$3, &ch, 1);
 		zephir_string_to_hex(&_2$$3, &_3$$3);
 		zephir_concat_self(&o, &_2$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	}
 	RETURN_CCTOR(&o);
 }

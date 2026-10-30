@@ -69,6 +69,7 @@ use Zephir\Operators\Unary\MinusOperator;
 use Zephir\Operators\Unary\NotOperator;
 use Zephir\Variable\Variable;
 
+use function in_array;
 use function str_replace;
 use function strlen;
 use function substr;
@@ -357,14 +358,25 @@ class Expression
                 $expr         = new self($expression['left']);
                 $expr->setExpectReturn($this->expecting, $this->expectingVariable);
                 $resolved = $expr->compile($compilationContext);
-                if (($compilationContext->codePrinter->getNumberPrints() - $numberPrints) <= 1) {
-                    if (str_contains($resolved->getCode(), ' ')) {
-                        return new CompiledExpression(
-                            $resolved->getType(),
-                            '(' . $resolved->getCode() . ')',
-                            $expression
-                        );
-                    }
+                /**
+                 * A native result is a C expression, so it always keeps its
+                 * parentheses, however many lines (such as exception checks)
+                 * its operands printed.
+                 */
+                $isNativeExpression = in_array(
+                    $resolved->getType(),
+                    ['bool', 'int', 'uint', 'long', 'ulong', 'double', 'char', 'uchar'],
+                    true
+                );
+                if (
+                    ($isNativeExpression || ($compilationContext->codePrinter->getNumberPrints() - $numberPrints) <= 1)
+                    && str_contains((string) $resolved->getCode(), ' ')
+                ) {
+                    return new CompiledExpression(
+                        $resolved->getType(),
+                        '(' . $resolved->getCode() . ')',
+                        $expression
+                    );
                 }
 
                 return $resolved;

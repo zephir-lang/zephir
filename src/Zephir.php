@@ -25,5 +25,5 @@ final class Zephir
 
 
 ASCII;
-    public const VERSION = '1.6.1-$Id$';
+    public const VERSION = '1.7.0-$Id$';
 }

@@ -19,7 +19,7 @@ use ReturnTypeWillChange;
 
 use function array_key_exists;
 use function array_keys;
-use function array_merge;
+use function array_replace_recursive;
 use function array_values;
 use function count;
 use function current;
@@ -92,27 +92,28 @@ class Config implements ArrayAccess, JsonSerializable
     ];
 
     /**
-     * Sections whose file contents are merged into the defaults rather than
-     * replacing them.
-     *
-     * A `warnings` block that omits a key used to delete it, so the key read
-     * back as null, which is falsy, which the formatter took for "off". That
-     * is how `deprecated-strict-type` went dead for every build run from this
-     * repo's own root (#2727).
-     *
-     * `optimizations` is deliberately absent: cphalcon's config.json omits
-     * `call-gatherer-pass`, so merging would switch it on and change the
-     * generated C. That one needs its own change and its own validation.
-     */
-    private const MERGED_SECTIONS = ['warnings'];
-
-    /**
      * Sections whose keys are checked against the ones Zephir reads.
      *
      * A misspelling here is inert, exactly like a misspelled top-level
      * setting, and used to be just as silent.
      */
     private const VALIDATED_SECTIONS = ['warnings', 'optimizations'];
+
+    /**
+     * Command-line flags that set a top-level setting: flag => [setting, value].
+     *
+     * Matched before the generic `--<name>` pattern, which used to swallow
+     * `--quiet` and `--verbose`. Taken out of argv like every other flag
+     * handled here, otherwise the CLI parser reads the command that follows
+     * as the flag's value (#2728).
+     */
+    private const OUTPUT_FLAGS = [
+        '-q'        => ['silent', true],
+        '--quiet'   => ['silent', true],
+        '-v'        => ['verbose', true],
+        '--verbose' => ['verbose', true],
+        '-V'        => ['verbose', false],
+    ];
 
     /**
      * Is config changed?
@@ -122,10 +123,10 @@ class Config implements ArrayAccess, JsonSerializable
     /**
      * The built-in configuration, captured before config.json is read.
      *
-     * `populate()` overwrites whole sections of `$container`, so the container
-     * cannot answer "is this a setting Zephir knows about?" once a project
-     * file has been loaded. This snapshot can, and it is the single registry
-     * of warning keys (#2727).
+     * A project file may add keys of its own to a section, so the container
+     * cannot answer "is this a setting Zephir knows about?" once that file
+     * has been loaded. This snapshot can, and it is the single registry of
+     * warning keys (#2727).
      */
     private array $defaults;
 
@@ -199,6 +200,7 @@ class Config implements ArrayAccess, JsonSerializable
             'non-valid-require'                  => true,
             'non-valid-require-once'             => true,
             'extra-parentheses'                  => true,
+            'lossy-float-key'                    => true,
             'missing-optimizer'                  => false,
         ],
         'optimizations' => [
@@ -276,6 +278,13 @@ class Config implements ArrayAccess, JsonSerializable
             for ($i = 1; $i < $_SERVER['argc']; ++$i) {
                 $parameter = $argv[$i];
 
+                if (isset(self::OUTPUT_FLAGS[$parameter])) {
+                    [$setting, $value] = self::OUTPUT_FLAGS[$parameter];
+                    $config->set($setting, $value);
+                    unset($argv[$i]);
+                    continue;
+                }
+
                 if (preg_match('/^-fno-([a-z0-9\-]+)$/', $parameter, $matches)) {
                     $config->setFlag('optimizations', $matches[1], false);
                     unset($argv[$i]);
@@ -316,24 +325,6 @@ class Config implements ArrayAccess, JsonSerializable
                         $config->set($matches[1], $matches[2], 'extra');
                         unset($argv[$i]);
                     }
-
-                    continue;
-                }
-
-                switch ($parameter) {
-                    case '-q':
-                    case '--quiet':
-                        $config->set('silent', true);
-                        break;
-                    case '-v':
-                    case '--verbose':
-                        $config->set('verbose', true);
-                        break;
-                    case '-V':
-                        $config->set('verbose', false);
-                        break;
-                    default:
-                        break;
                 }
             }
 
@@ -536,8 +527,19 @@ class Config implements ArrayAccess, JsonSerializable
                         $this->collectUnknownSectionKeys((string) $key, $configSection);
                     }
 
-                    if (is_array($configSection) && in_array((string) $key, self::MERGED_SECTIONS, true)) {
-                        $this->container[$key] = array_merge($this->defaults[$key], $configSection);
+                    /**
+                     * A section overrides the defaults key by key. Replacing
+                     * it deleted every key it left out, which then read back
+                     * as null: cphalcon lists 5 of the 8 optimizations, so
+                     * `call-gatherer-pass` was off there, and a `stubs` block
+                     * without `path` broke `zephir stubs` (#2727, #2731).
+                     *
+                     * Recursive, so `api.theme.options` survives a `theme`
+                     * that only names itself. A list default would merge by
+                     * index; the only one, `requires.extensions`, is empty.
+                     */
+                    if (is_array($configSection) && is_array($this->defaults[$key] ?? null)) {
+                        $this->container[$key] = array_replace_recursive($this->defaults[$key], $configSection);
                         continue;
                     }
 

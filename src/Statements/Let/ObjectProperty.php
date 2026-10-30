@@ -23,6 +23,7 @@ use Zephir\Traits\ConcatSelfTrait;
 use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
+use function array_intersect_key;
 use function sprintf;
 
 /**
@@ -172,8 +173,9 @@ class ObjectProperty
                         $codePrinter->output(
                             $functionName . '(' . $context->backend->getVariableCode(
                                 $tempVariable
-                            ) . ', ' . $context->backend->getVariableCode($resolvedVariable) . ')'
+                            ) . ', ' . $context->backend->getVariableCode($resolvedVariable) . ');'
                         );
+                        $context->emitExceptionCheck($codePrinter);
                         break;
 
                     case 'assign':
@@ -252,8 +254,9 @@ class ObjectProperty
                         $codePrinter->output(
                             $functionName . '(' . $context->backend->getVariableCode(
                                 $tempVariable
-                            ) . ', ' . $context->backend->getVariableCode($resolvedVariable) . ')'
+                            ) . ', ' . $context->backend->getVariableCode($resolvedVariable) . ');'
                         );
+                        $context->emitExceptionCheck($codePrinter);
                         break;
 
                     case 'assign':
@@ -343,11 +346,12 @@ class ObjectProperty
                             $context->backend->assignLong($resolvedVariable, $variableVariable, $context);
                             $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
                             $codePrinter->output(sprintf(
-                                '%s(%s, %s)',
+                                '%s(%s, %s);',
                                 $assignMacro,
                                 $context->backend->getVariableCode($tempVariable),
                                 $context->backend->getVariableCode($resolvedVariable)
                             ));
+                            $context->emitExceptionCheck($codePrinter);
                         } else {
                             $context->backend->assignLong($tempVariable, $variableVariable, $context);
                         }
@@ -363,11 +367,12 @@ class ObjectProperty
                             $context->backend->assignDouble($resolvedVariable, $variableVariable, $context);
                             $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
                             $codePrinter->output(sprintf(
-                                '%s(%s, %s)',
+                                '%s(%s, %s);',
                                 $assignMacro,
                                 $context->backend->getVariableCode($tempVariable),
                                 $context->backend->getVariableCode($resolvedVariable)
                             ));
+                            $context->emitExceptionCheck($codePrinter);
                         } else {
                             $context->backend->assignDouble($tempVariable, $variableVariable, $context);
                         }
@@ -404,11 +409,12 @@ class ObjectProperty
                             $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context);
                             $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
                             $codePrinter->output(sprintf(
-                                '%s(%s, %s)',
+                                '%s(%s, %s);',
                                 $assignMacro,
                                 $context->backend->getVariableCode($tempVariable),
                                 $context->backend->getVariableCode($variableVariable)
                             ));
+                            $context->emitExceptionCheck($codePrinter);
                             $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
                             $tempVariable->setIdle(true);
                         } else {
@@ -439,7 +445,7 @@ class ObjectProperty
         Context $context,
         array $statement
     ): void {
-        $tempVariable = $this->fetchPropertyValue($variable, $propertyName, $context);
+        $tempVariable = $this->fetchPropertyValue($variable, $propertyName, $context, $statement);
 
         $this->concatSelfOntoTarget(
             $context->backend->getVariableCode($tempVariable),
@@ -447,6 +453,7 @@ class ObjectProperty
             $context,
             $statement
         );
+        $context->emitExceptionCheck($context->codePrinter);
 
         $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
         $tempVariable->setIdle(true);
@@ -473,25 +480,30 @@ class ObjectProperty
     /**
      * Reads the current value of an object property into a fresh temp variable
      * (used to support read-modify-write operators such as concat-assign).
+     *
+     * The read carries the statement's position: PropertyAccess compares its
+     * line with the last call, and failed to compile without one (#2753).
      */
     private function fetchPropertyValue(
         string $variable,
         string $propertyName,
-        Context $context
+        Context $context,
+        array $statement
     ): ZephirVariable {
         $tempVariable = $context->symbolTable->getTempVariableForObserveOrNullify('variable', $context);
 
+        $position   = array_intersect_key($statement, ['file' => true, 'line' => true, 'char' => true]);
         $expression = new ZephirExpression([
             'type'  => 'property-access',
-            'left'  => ['type' => 'variable', 'value' => $variable],
+            'left'  => ['type' => 'variable', 'value' => $variable] + $position,
             'right' => ['value' => $propertyName],
-        ]);
+        ] + $position);
         $expression->setExpectReturn(true, $tempVariable);
 
         try {
             $expression->compile($context);
         } catch (ZephirException $e) {
-            throw new CompilerException($e->getMessage(), [], $e->getCode(), $e);
+            throw new CompilerException($e->getMessage(), $statement, $e->getCode(), $e);
         }
 
         return $tempVariable;

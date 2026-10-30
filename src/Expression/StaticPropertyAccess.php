@@ -15,6 +15,7 @@ namespace Zephir\Expression;
 
 use ReflectionException;
 use Zephir\Class\Property;
+use Zephir\Class\Visibility;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -24,6 +25,7 @@ use Zephir\Traits\WriteContextSlotTrait;
 use Zephir\Variable\Variable;
 
 use function in_array;
+use function sprintf;
 
 /**
  * Resolves class static properties
@@ -37,6 +39,7 @@ class StaticPropertyAccess
     protected ?Variable $expectingVariable = null;
     protected bool      $readOnly          = false;
     protected bool      $writeThrough      = false;
+    protected bool      $readWrite         = false;
 
     /**
      * Access a static property.
@@ -70,19 +73,10 @@ class StaticPropertyAccess
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ('parent' === $className) {
-                    $classDefinition = $compilationContext->classDefinition;
-                    if (!$classDefinition->getExtendsClass()) {
-                        throw new CompilerException(
-                            'Cannot access static property "'
-                            . $property
-                            . '" on parent because class '
-                            . $classDefinition->getCompleteName()
-                            . ' does not extend any class',
-                            $expression
-                        );
-                    } else {
-                        $classDefinition = $classDefinition->getExtendsClassDefinition();
-                    }
+                    $classDefinition = $compilationContext->parentClassDefinition(
+                        'access static property "' . $property . '"',
+                        $expression
+                    );
                 }
             }
         }
@@ -102,30 +96,20 @@ class StaticPropertyAccess
             $expression
         );
 
-        if ($propertyDefinition->isPrivate()) {
-            if ($classDefinition !== $compilationContext->classDefinition) {
-                throw new CompilerException(
-                    "Cannot access private static property '"
-                    . $classDefinition->getCompleteName()
-                    . '::'
-                    . $property
-                    . "' out of its declaring context",
-                    $expression
-                );
-            }
-        }
-
-        if (
-            $propertyDefinition->isProtected() &&
-            $classDefinition !== $compilationContext->classDefinition &&
-            $classDefinition !== $compilationContext->classDefinition->getExtendsClassDefinition()
-        ) {
+        /**
+         * Checked against the class the code is written in, at any depth of
+         * inheritance, as PHP checks it.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2734
+         */
+        if (!Visibility::canAccessProperty($propertyDefinition, $compilationContext)) {
             throw new CompilerException(
-                "Cannot access protected static property '"
-                . $classDefinition->getCompleteName()
-                . '::'
-                . $property
-                . "' out of its declaring context",
+                sprintf(
+                    "Cannot access %s static property '%s::%s' out of its declaring context",
+                    $propertyDefinition->isPrivate() ? 'private' : 'protected',
+                    $classDefinition->getCompleteName(),
+                    $property
+                ),
                 $expression
             );
         }
@@ -144,7 +128,8 @@ class StaticPropertyAccess
                 $classDefinition,
                 $property,
                 $fallback,
-                $compilationContext
+                $compilationContext,
+                $this->readWrite
             );
 
             return new CompiledExpression('variable', $slot->getRealName(), $expression);
@@ -225,10 +210,15 @@ class StaticPropertyAccess
      * Sets whether the caller will write through the property instead of only
      * reading it, which is what a by-reference call argument does.
      *
+     * `readWrite` asks for the slot a compound assignment reads and then
+     * writes, which PHP fetches read-write.
+     *
      * @see https://github.com/zephir-lang/zephir/issues/2691
+     * @see https://github.com/zephir-lang/zephir/issues/2747
      */
-    public function setWriteThrough(bool $writeThrough): void
+    public function setWriteThrough(bool $writeThrough, bool $readWrite = false): void
     {
         $this->writeThrough = $writeThrough;
+        $this->readWrite    = $readWrite;
     }
 }

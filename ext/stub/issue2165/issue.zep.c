@@ -16,6 +16,7 @@
 #include "kernel/memory.h"
 #include "kernel/operators.h"
 #include "kernel/object.h"
+#include "kernel/main.h"
 #include "kernel/exception.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/concat.h"
@@ -71,10 +72,10 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 	zend_string *_5$$3;
 	zend_ulong _4$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zephir_fcall_cache_entry *_2 = NULL, *_9 = NULL, *_12 = NULL, *_18 = NULL;
+	zephir_fcall_cache_entry *_2 = NULL, *_9 = NULL, *_12 = NULL, *_18 = NULL, *_22 = NULL, *_30 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, m, n;
-	zend_bool validate, _23$$4, _16$$6, _24$$8;
-	zval *a_param = NULL, *validate_param = NULL, i, rowA, valueA, _0, _30, _1$$3, *_3$$3, _6$$5, _7$$5, _8$$5, _10$$5, _11$$5, *_13$$4, _14$$4, *_15$$4, _22$$4, _29$$4, _17$$6, _19$$7, _20$$7, _21$$7, _25$$8, _26$$9, _27$$9, _28$$9;
+	zend_bool validate, _24$$4, _16$$6, _25$$8;
+	zval *a_param = NULL, *validate_param = NULL, i, rowA, valueA, _0, _32, _1$$3, *_3$$3, _6$$5, _7$$5, _8$$5, _10$$5, _11$$5, *_13$$4, _14$$4, *_15$$4, _23$$4, _31$$4, _17$$6, _19$$7, _20$$7, _21$$7, _26$$8, _27$$9, _28$$9, _29$$9;
 	zval a;
 	zval *this_ptr = getThis();
 
@@ -83,7 +84,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 	ZVAL_UNDEF(&rowA);
 	ZVAL_UNDEF(&valueA);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_30);
+	ZVAL_UNDEF(&_32);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_6$$5);
 	ZVAL_UNDEF(&_7$$5);
@@ -91,16 +92,16 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 	ZVAL_UNDEF(&_10$$5);
 	ZVAL_UNDEF(&_11$$5);
 	ZVAL_UNDEF(&_14$$4);
-	ZVAL_UNDEF(&_22$$4);
-	ZVAL_UNDEF(&_29$$4);
+	ZVAL_UNDEF(&_23$$4);
+	ZVAL_UNDEF(&_31$$4);
 	ZVAL_UNDEF(&_17$$6);
 	ZVAL_UNDEF(&_19$$7);
 	ZVAL_UNDEF(&_20$$7);
 	ZVAL_UNDEF(&_21$$7);
-	ZVAL_UNDEF(&_25$$8);
-	ZVAL_UNDEF(&_26$$9);
+	ZVAL_UNDEF(&_26$$8);
 	ZVAL_UNDEF(&_27$$9);
 	ZVAL_UNDEF(&_28$$9);
+	ZVAL_UNDEF(&_29$$9);
 	static zend_string *_zephir_prop_0 = NULL;
 	static zend_string *_zephir_prop_1 = NULL;
 	static zend_string *_zephir_prop_2 = NULL;
@@ -134,6 +135,11 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 	if (validate) {
 		ZEPHIR_CALL_FUNCTION(&_1$$3, "array_values", &_2, 62, &a);
 		zephir_check_call_status();
+		if (UNEXPECTED(Z_TYPE_P(&_1$$3) != IS_ARRAY)) {
+			zephir_throw_variable_type_error(&_1$$3, "a", "array");
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CPY_WRT(&a, &_1$$3);
 		zephir_is_iterable(&a, 0, "stub/issue2165/issue.zep", 47);
 		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&a), _4$$3, _5$$3, _3$$3)
@@ -156,6 +162,10 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 				ZVAL_LONG(&_10$$5, zephir_fast_count_int(&rowA));
 				ZEPHIR_INIT_NVAR(&_11$$5);
 				ZEPHIR_CONCAT_SSVSVSSVS(&_11$$5, "The number of columns", " must be equal for all rows, ", &_8$$5, " needed but ", &_10$$5, " given", " at row offset ", &i, ".");
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				ZEPHIR_CALL_METHOD(NULL, &_6$$5, "__construct", &_12, 64, &_11$$5);
 				zephir_check_call_status();
 				zephir_throw_exception_debug(&_6$$5, "stub/issue2165/issue.zep", 34);
@@ -175,7 +185,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 				{
 					ZEPHIR_INIT_NVAR(&valueA);
 					ZVAL_COPY(&valueA, _15$$4);
-					_16$$6 = !(Z_TYPE_P(&valueA) == IS_LONG);
+					_16$$6 = !((Z_TYPE_P(&valueA) == IS_LONG));
 					if (_16$$6) {
 						ZEPHIR_CALL_FUNCTION(&_17$$6, "is_float", &_18, 65, &valueA);
 						zephir_check_call_status();
@@ -188,7 +198,11 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 						zephir_gettype(&_20$$7, &valueA);
 						ZEPHIR_INIT_NVAR(&_21$$7);
 						ZEPHIR_CONCAT_SSVS(&_21$$7, "Matrix element must", " be an integer or floating point number, ", &_20$$7, " given.");
-						ZEPHIR_CALL_METHOD(NULL, &_19$$7, "__construct", &_12, 64, &_21$$7);
+						if (UNEXPECTED(EG(exception))) {
+							ZEPHIR_MM_RESTORE();
+							return;
+						}
+						ZEPHIR_CALL_METHOD(NULL, &_19$$7, "__construct", &_22, 64, &_21$$7);
 						zephir_check_call_status();
 						zephir_throw_exception_debug(&_19$$7, "stub/issue2165/issue.zep", 41);
 						ZEPHIR_MM_RESTORE();
@@ -198,57 +212,65 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 			} else {
 				ZEPHIR_CALL_METHOD(NULL, _13$$4, "rewind", NULL, 0);
 				zephir_check_call_status();
-				_23$$4 = 1;
+				_24$$4 = 1;
 				while (1) {
-					if (_23$$4) {
-						_23$$4 = 0;
+					if (_24$$4) {
+						_24$$4 = 0;
 					} else {
 						ZEPHIR_CALL_METHOD(NULL, _13$$4, "next", NULL, 0);
 						zephir_check_call_status();
 					}
-					ZEPHIR_CALL_METHOD(&_22$$4, _13$$4, "valid", NULL, 0);
+					ZEPHIR_CALL_METHOD(&_23$$4, _13$$4, "valid", NULL, 0);
 					zephir_check_call_status();
-					if (!zend_is_true(&_22$$4)) {
+					if (!zend_is_true(&_23$$4)) {
 						break;
 					}
 					ZEPHIR_CALL_METHOD(&valueA, _13$$4, "current", NULL, 0);
 					zephir_check_call_status();
-						_24$$8 = !(Z_TYPE_P(&valueA) == IS_LONG);
-						if (_24$$8) {
-							ZEPHIR_CALL_FUNCTION(&_25$$8, "is_float", &_18, 65, &valueA);
+						_25$$8 = !((Z_TYPE_P(&valueA) == IS_LONG));
+						if (_25$$8) {
+							ZEPHIR_CALL_FUNCTION(&_26$$8, "is_float", &_18, 65, &valueA);
 							zephir_check_call_status();
-							_24$$8 = !zephir_is_true(&_25$$8);
+							_25$$8 = !zephir_is_true(&_26$$8);
 						}
-						if (UNEXPECTED(_24$$8)) {
-							ZEPHIR_INIT_NVAR(&_26$$9);
-							object_init_ex(&_26$$9, spl_ce_InvalidArgumentException);
+						if (UNEXPECTED(_25$$8)) {
 							ZEPHIR_INIT_NVAR(&_27$$9);
-							zephir_gettype(&_27$$9, &valueA);
+							object_init_ex(&_27$$9, spl_ce_InvalidArgumentException);
 							ZEPHIR_INIT_NVAR(&_28$$9);
-							ZEPHIR_CONCAT_SSVS(&_28$$9, "Matrix element must", " be an integer or floating point number, ", &_27$$9, " given.");
-							ZEPHIR_CALL_METHOD(NULL, &_26$$9, "__construct", &_12, 64, &_28$$9);
+							zephir_gettype(&_28$$9, &valueA);
+							ZEPHIR_INIT_NVAR(&_29$$9);
+							ZEPHIR_CONCAT_SSVS(&_29$$9, "Matrix element must", " be an integer or floating point number, ", &_28$$9, " given.");
+							if (UNEXPECTED(EG(exception))) {
+								ZEPHIR_MM_RESTORE();
+								return;
+							}
+							ZEPHIR_CALL_METHOD(NULL, &_27$$9, "__construct", &_30, 64, &_29$$9);
 							zephir_check_call_status();
-							zephir_throw_exception_debug(&_26$$9, "stub/issue2165/issue.zep", 41);
+							zephir_throw_exception_debug(&_27$$9, "stub/issue2165/issue.zep", 41);
 							ZEPHIR_MM_RESTORE();
 							return;
 						}
 				}
 			}
 			ZEPHIR_INIT_NVAR(&valueA);
-			ZEPHIR_CALL_FUNCTION(&_29$$4, "array_values", &_2, 62, &rowA);
+			ZEPHIR_CALL_FUNCTION(&_31$$4, "array_values", &_2, 62, &rowA);
 			zephir_check_call_status();
-			zephir_array_append(&rowA, &_29$$4, PH_SEPARATE, "stub/issue2165/issue.zep", 45);
+			zephir_array_append(&rowA, &_31$$4, PH_SEPARATE, "stub/issue2165/issue.zep", 45);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		} ZEND_HASH_FOREACH_END();
 		ZEPHIR_INIT_NVAR(&rowA);
 		ZEPHIR_INIT_NVAR(&i);
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 55, &a);
-	ZVAL_UNDEF(&_30);
-	ZVAL_LONG(&_30, m);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 56, &_30);
-	ZVAL_UNDEF(&_30);
-	ZVAL_LONG(&_30, n);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 57, &_30);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 56, &a);
+	ZVAL_UNDEF(&_32);
+	ZVAL_LONG(&_32, m);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 57, &_32);
+	ZVAL_UNDEF(&_32);
+	ZVAL_LONG(&_32, n);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 58, &_32);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -338,7 +360,7 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 3, 0, &value, &m_param, &n_param);
-	_0 = !(Z_TYPE_P(value) == IS_LONG);
+	_0 = !((Z_TYPE_P(value) == IS_LONG));
 	if (_0) {
 		ZEPHIR_CALL_FUNCTION(&_1, "is_float", NULL, 65, value);
 		zephir_check_call_status();
@@ -351,6 +373,10 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 		zephir_gettype(&_3$$3, value);
 		ZEPHIR_INIT_VAR(&_4$$3);
 		ZEPHIR_CONCAT_SSVS(&_4$$3, "Value must be an", " integer or floating point number, ", &_3$$3, " given.");
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CALL_METHOD(NULL, &_2$$3, "__construct", NULL, 64, &_4$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(&_2$$3, "stub/issue2165/issue.zep", 69);
@@ -365,6 +391,10 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&_9$$4);
 		ZEPHIR_CONCAT_SSVS(&_9$$4, "M must be", " greater than 0, ", &_7$$4, " given.");
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CALL_METHOD(NULL, &_5$$4, "__construct", NULL, 64, &_9$$4);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(&_5$$4, "stub/issue2165/issue.zep", 74);
@@ -379,6 +409,10 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&_13$$5);
 		ZEPHIR_CONCAT_SSVS(&_13$$5, "N must be", " greater than 0, ", &_12$$5, " given.");
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CALL_METHOD(NULL, &_10$$5, "__construct", NULL, 64, &_13$$5);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(&_10$$5, "stub/issue2165/issue.zep", 79);
@@ -419,8 +453,8 @@ PHP_METHOD(Stub_Issue2165_Issue, reciprocal)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 56, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 57, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 57, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 58, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_SELF(&_0, "ones", NULL, 0, &_1, &_2);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_METHOD(&_0, "divideMatrix", NULL, 0, this_ptr);

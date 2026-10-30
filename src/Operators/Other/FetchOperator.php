@@ -141,14 +141,22 @@ class FetchOperator extends AbstractOperator
                 $expr->setReadOnly(true);
                 $expr->setNoisy(false);
                 $resolvedExpr = $expr->compile($compilationContext);
+                $resolvedExpr = $compilationContext->backend->boxArrayKey($resolvedExpr, $compilationContext);
 
-                return $compilationContext->backend->arrayIssetFetch(
+                $fetched = $compilationContext->backend->arrayIssetFetch(
                     $variable,
                     $evalVariable,
                     $resolvedExpr,
                     $flags,
                     $expression,
                     $compilationContext
+                );
+
+                // fetch throws for an illegal key or from offsetExists()/offsetGet()
+                return new CompiledExpression(
+                    'bool',
+                    $compilationContext->emitCheckedBool($fetched->getCode()),
+                    $expression
                 );
 
             case 'property-access':

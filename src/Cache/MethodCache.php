@@ -125,9 +125,16 @@ class MethodCache
                 return 'NULL, 0';
             }
 
+            /**
+             * One entry per receiver. The kernel reuses a filled entry without
+             * checking the object's class, so `this->who()` and `other->who()`
+             * sharing one ran the method resolved for `this` on `other` when
+             * `other` was a sibling class overriding it (#2731).
+             */
             $completeName = $method->getClassDefinition()->getCompleteName();
-            if (isset($this->cache[$completeName][$method->getName()])) {
-                return $this->cache[$completeName][$method->getName()]
+            $receiver     = $caller->getName();
+            if (isset($this->cache[$receiver][$completeName][$method->getName()])) {
+                return $this->cache[$receiver][$completeName][$method->getName()]
                     . ', '
                     . SlotsCache::getExistingMethodSlot($method);
             }
@@ -173,7 +180,7 @@ class MethodCache
         }
 
         if (!($method instanceof ReflectionMethod)) {
-            $this->cache[$completeName][$method->getName()] = $functionCache;
+            $this->cache[$receiver][$completeName][$method->getName()] = $functionCache;
         }
 
         return $functionCache . ', ' . $cacheSlot;

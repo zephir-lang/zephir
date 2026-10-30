@@ -33,15 +33,33 @@ use function is_array;
  */
 class Closure
 {
+    /**
+     * Native C scalar types. A capture of one of them is boxed into a zval
+     * that holds no reference: a long, a double or a bool.
+     */
+    public const SCALAR_CAPTURE_TYPES = ['int', 'uint', 'long', 'ulong', 'char', 'uchar', 'double', 'bool'];
+
     protected bool $expecting = true;
 
     protected ?Variable $expectingVariable = null;
     /**
      * Unique closure ID.
      */
-    protected static $id = 0;
+    protected static int $id = 0;
 
     protected bool $readOnly = false;
+
+    /**
+     * Restarts closure class numbering for a fresh compilation run, so a
+     * closure's class name depends on the source, not on how many
+     * compilations the process ran before.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2687
+     */
+    public static function reset(): void
+    {
+        self::$id = 0;
+    }
 
     /**
      * Recursively checks if an AST node references `this`.
@@ -112,11 +130,16 @@ class Closure
     }
 
     /**
-     * Creates a closure.
+     * Creates and registers the anonymous class a closure compiles to.
      *
-     * @throws Exception
+     * The body is compiled later in a context of its own, so it has to carry
+     * the name-resolution scope of the code it is written in: the `use ... as`
+     * aliases (through the context handed to the anonymous file) and the
+     * namespace. The class itself always lives in the extension namespace.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2686
      */
-    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
+    protected function createClosureClass(CompilationContext $compilationContext): Definition
     {
         $classDefinition = new Definition(
             $compilationContext->config->get('namespace'),
@@ -124,11 +147,38 @@ class Closure
         );
 
         $classDefinition->setIsFinal(true);
+        $classDefinition->setIsClosure(true);
+        $classDefinition->setSourceNamespace($compilationContext->currentNamespace());
+
+        /**
+         * The body runs in the scope of the class it is written in, whether or
+         * not it uses `this`: PHP checks every private and protected member it
+         * reaches against that class. A closure in a function has no class.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2734
+         */
+        if (null !== $compilationContext->classDefinition) {
+            $classDefinition->setEnclosingClassDefinition(
+                self::enclosingUserClass($compilationContext->classDefinition)
+            );
+        }
 
         $compilerFile = new CompilerFileAnonymous($classDefinition, $compilationContext->config, $compilationContext);
         $compilerFile->setLogger($compilationContext->logger);
 
         $compilationContext->compiler->addClassDefinition($compilerFile, $classDefinition);
+
+        return $classDefinition;
+    }
+
+    /**
+     * Creates a closure.
+     *
+     * @throws Exception
+     */
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
+    {
+        $classDefinition = $this->createClosureClass($compilationContext);
 
         $parameters = null;
         if (isset($expression['left'])) {
@@ -190,15 +240,10 @@ class Closure
 
         /**
          * Detect if the closure body references `this`.
-         * If so, we need to bind the enclosing object to the closure and set
-         * the enclosing class definition for compile-time resolution.
+         * If so, we need to bind the enclosing object to the closure.
          */
         $bindThis = self::astReferencesThis($block);
         if ($bindThis) {
-            $classDefinition->setEnclosingClassDefinition(
-                self::enclosingUserClass($compilationContext->classDefinition)
-            );
-
             // Ensure this_ptr is declared and not stripped in the enclosing method
             if ($compilationContext->symbolTable->hasVariable('this')) {
                 $compilationContext->symbolTable->getVariable('this')->setUsed(true);
@@ -354,7 +399,7 @@ class Closure
     {
         $type = $var->getType();
 
-        if (!in_array($type, ['int', 'uint', 'long', 'ulong', 'char', 'uchar', 'double', 'bool'], true)) {
+        if (!in_array($type, self::SCALAR_CAPTURE_TYPES, true)) {
             return $var;
         }
 

@@ -224,6 +224,10 @@ PHP_METHOD(Stub_Exceptions, testExceptionConcat)
 	ZVAL_STR_COPY(&language_zv, language);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_SVSV(&_0, "Framework ", &framework_zv, " written using ", &language_zv);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_throw_exception_debug(&_0, "stub/exceptions.zep", 73);
 	ZEPHIR_MM_RESTORE();
 	return;
@@ -255,6 +259,9 @@ PHP_METHOD(Stub_Exceptions, testExceptionRethrow)
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&e, &_0);
 			zephir_throw_exception_debug(&e, "stub/exceptions.zep", 83);
+			ZEPHIR_MM_RESTORE();
+			return;
+		} else {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
@@ -298,9 +305,9 @@ PHP_METHOD(Stub_Exceptions, testMultiException)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &returnValue, &exception);
 	zephir_memory_observe(&iexc);
-	zephir_read_property_cached(&iexc, this_ptr, _zephir_prop_0, 39, PH_NOISY_CC);
+	zephir_read_property_cached(&iexc, this_ptr, _zephir_prop_0, 40, PH_NOISY_CC);
 	zephir_memory_observe(&exc);
-	zephir_read_property_cached(&exc, this_ptr, _zephir_prop_1, 40, PH_NOISY_CC);
+	zephir_read_property_cached(&exc, this_ptr, _zephir_prop_1, 41, PH_NOISY_CC);
 
 	/* try_start_1: */
 
@@ -375,6 +382,9 @@ PHP_METHOD(Stub_Exceptions, testMultiException)
 							ZEPHIR_MM_RESTORE();
 							return;
 						}
+					} else {
+						ZEPHIR_MM_RESTORE();
+						return;
 					}
 				}
 			}
@@ -412,6 +422,9 @@ PHP_METHOD(Stub_Exceptions, issue1325)
 			ZEPHIR_CPY_WRT(&e, &_0);
 			ZEPHIR_INIT_NVAR(&status);
 			ZVAL_STRING(&status, "woop");
+		} else {
+			ZEPHIR_MM_RESTORE();
+			return;
 		}
 	}
 	RETURN_MM_LONG(1);

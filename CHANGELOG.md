@@ -6,6 +6,155 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-10-30
+
+### Fixed
+- Fixed a `bool` compared with `==`, `!=`, `===` or `!==` to `is_array()`, `is_null()`, `is_object()`, `is_string()`, `is_int()` or `is_resource()`, such as `true !== is_array(v)`, giving the wrong result because the condition was emitted without parentheses [#2810](https://github.com/zephir-lang/zephir/issues/2810)
+- Fixed `+=`, `-=`, `*=`, `/=`, `%=` and `.=` on a dynamic property such as `this->{name}` overwriting it, and `|=`, `&=`, `^=`, `<<=` and `>>=` on it failing to compile [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed `*=`, `/=` and `%=` on a static property overwriting it instead of applying the operator [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed a compound assignment on a property reading the property before the right-hand side, losing a change the right-hand side makes to it [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed `.=` on an object property crashing the compiler in a method that made a call before it [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed `1 << n` shifting the literal as a 32-bit C `int` [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed bitwise operators truncating a `double` operand to 32 bits and skipping PHP's float to int deprecation [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed a `bool` left operand of a bitwise operator turning a literal right operand into 0 or 1 [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed bitwise operators reading a `var` operand like an `(int)` cast instead of throwing `TypeError`, warning or using GMP's operator as PHP does [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed a `var` local assigned a bitwise or `~` result becoming `bool` or `double` instead of an integer [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed `~` on a `bool` not throwing `TypeError`, and `~` on a `double`, a `string` or a local `var` failing to compile [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed bitwise operators with a `double`, `bool`, string or `null` literal, or a `mixed` or `string` variable, failing to compile or emitting invalid C [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed a bitwise operation on a fractional float literal being folded at compile time instead of deprecating at runtime [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed a bitwise result folded to `PHP_INT_MIN` emitting a C literal that compilers warn about [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed `|=`, `&=`, `^=`, `<<=` and `>>=` on an object or static property failing to compile [#2753](https://github.com/zephir-lang/zephir/issues/2753)
+- Fixed `let x[] = value`, `let x[key] = value` and `let x->prop++` on a closure capture being rejected as "local only" [#2736](https://github.com/zephir-lang/zephir/issues/2736)
+- Fixed `let x->prop++` and `let x->prop--` on a local variable breaking the C build [#2736](https://github.com/zephir-lang/zephir/issues/2736)
+- Fixed a closure capture losing its value when the body assigns it a ternary or a runtime constant [#2736](https://github.com/zephir-lang/zephir/issues/2736)
+- Fixed `.=` on a variable captured by reference replacing the reference instead of appending to the shared value [#2736](https://github.com/zephir-lang/zephir/issues/2736)
+- Fixed a closure leaking memory when the body assigns a string or an array to a captured `int`, `double` or `bool` [#2736](https://github.com/zephir-lang/zephir/issues/2736)
+- Fixed a protected method or static property inherited from a grandparent being rejected at compile time [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed a protected or private method called on a typed variable from an unrelated class compiling [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed protected and private methods being callable from any class at runtime instead of throwing `Error` [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed an inaccessible method not falling back to `__call()` or `__callStatic()`, and a subclass method running instead of the caller's private method of the same name [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed closures running in the scope of the class of `this` instead of the class they are written in [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed an `internal` method running in the scope of the object's class instead of its own class [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed `self::method()` running the method of the object's class instead of the one where the call is written [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed `static::method()` reusing the private method resolved for another called class [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed `new` of a class outside the extension or with `static`, and `clone`, ignoring the visibility of `__construct()` and `__clone()` [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed an array callable crashing when called a second time, and an inaccessible one reported as an undefined function [#2734](https://github.com/zephir-lang/zephir/issues/2734)
+- Fixed a key omitted from the `optimizations` section of `config.json` being turned off instead of keeping its default [#2731](https://github.com/zephir-lang/zephir/issues/2731)
+- Fixed a key omitted from the `stubs`, `extra` or `api` section of `config.json` breaking `zephir stubs`, `zephir api` and `--indent` instead of keeping its default [#2731](https://github.com/zephir-lang/zephir/issues/2731)
+- Fixed `call-gatherer-pass` turned off crashing the compiler on a function and dropping function attributes [#2731](https://github.com/zephir-lang/zephir/issues/2731)
+- Fixed a function with an empty body crashing the compiler [#2731](https://github.com/zephir-lang/zephir/issues/2731)
+- Fixed a function without parameters or return type raising a `Missing arginfo` warning when the extension loads [#2731](https://github.com/zephir-lang/zephir/issues/2731)
+- Fixed a method call on another object reusing the inline cache of `this->method()` calls and running the method of the wrong class [#2731](https://github.com/zephir-lang/zephir/issues/2731)
+- Fixed calling a namespaced Zephir function by its short, relative or fully qualified name failing with `Call to undefined function` or calling a PHP function of the same name [#2731](https://github.com/zephir-lang/zephir/issues/2731)
+- Fixed `--quiet` and `--verbose` being ignored while `-q` and `-v` worked [#2728](https://github.com/zephir-lang/zephir/issues/2728)
+- Fixed `-q`, `-v`, `-V`, `--quiet` or `--verbose` before the command printing the help screen instead of running it [#2728](https://github.com/zephir-lang/zephir/issues/2728)
+- Fixed the `verbose` setting and `-v` having no effect instead of printing the stack trace of a failed `generate` or `build` [#2728](https://github.com/zephir-lang/zephir/issues/2728)
+- Fixed `--version`, `--dumpversion` and `-dumpversion` printing the help screen instead of the version [#2728](https://github.com/zephir-lang/zephir/issues/2728)
+- Fixed `globals_get()` and `globals_set()` rejecting `hash` extension globals [#2726](https://github.com/zephir-lang/zephir/issues/2726)
+- Fixed a `hash` global with a default other than `NULL` breaking the C build instead of being reported [#2726](https://github.com/zephir-lang/zephir/issues/2726)
+- Fixed an `ini-entry` on a `hash` global being silently ignored [#2726](https://github.com/zephir-lang/zephir/issues/2726)
+- Fixed `globals_set()` on a `string` global leaking the value on every call [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed a `module` `string` global set by `globals_set()` reading freed memory in the next request [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed `globals_set()` writing an empty string and continuing when the value cannot be converted to `string` [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed `globals_set()` on a numeric or `char` global writing the value and continuing when the conversion threw [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed `globals_get()` on a `string` global yielding the text `ZEPHIR_GLOBAL(...)` instead of its value anywhere but a direct `return` [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed a one character extension global name being rejected while names that are not C identifiers, such as `my-setting` or `1abc`, broke the C build [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed an extension global nested more than one level deep, or clashing with a struct or a kernel member, being silently merged or breaking the C build instead of being reported [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed an invalid `globals` entry in `config.json` being reported as an internal error [#2725](https://github.com/zephir-lang/zephir/issues/2725)
+- Fixed `{class}::{method}()` failing to compile in C when the method name is a parameter [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `self::{method}()`, `parent::{method}()` and `Class::{method}()` compiling to nothing [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `Class::{"method"}()`, `self::{"method"}()` and `static::{"method"}()` compiling to nothing, and `{class}::{"method"}()` reading a variable named after the string [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `static::{method}()` and `CONSTANT::{method}()` compiling to nothing [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `{class}::method()` and `{class}::{method}()` used as statements crashing the compiler [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed a dynamic method name that is not a string calling a method named `""` instead of throwing `Error` as PHP does [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `let name = obj->{name}()` and `let name = {class}::{name}()` reading the method name after clearing it [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `{class}::method()` dispatching on `stdClass` with a warning for an object or a non-string class instead of using the object's class or throwing `Error` [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `{class}::method()` with an unknown class raising an uncatchable fatal error after evaluating the arguments [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed a dynamic static call to a non-static method running without `$this` instead of forwarding `$this` or throwing `Error` as PHP does [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed the `__call()` and `__callStatic()` fallback of `self::{method}()` resolving `self` against the calling script and deprecating on PHP 8.2+ [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `parent::{method}()` naming the wrong class for an undefined method called on a grandchild [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `mixed` variables being rejected as dynamic class and method names [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `let param = parent::method()` failing to compile in C [#2723](https://github.com/zephir-lang/zephir/issues/2723)
+- Fixed `static::CONSTANT` reading the declaring class constant instead of the called class one [#2711](https://github.com/zephir-lang/zephir/issues/2711)
+- Fixed class constant, property and parameter defaults reading a class constant failing to compile, or reflecting `null`, with `static-constant-class-folding` off [#2711](https://github.com/zephir-lang/zephir/issues/2711)
+- Fixed a typed variable failing to compile when assigned a class constant with `static-constant-class-folding` off [#2711](https://github.com/zephir-lang/zephir/issues/2711)
+- Fixed a PHP internal class constant such as `\PDO::ATTR_PERSISTENT` emitting an undeclared class entry with `static-constant-class-folding` off [#2711](https://github.com/zephir-lang/zephir/issues/2711)
+- Fixed compound assignment operators on dynamic variables `let {x} op= v` being compiled as a plain assignment or rejected [#2710](https://github.com/zephir-lang/zephir/issues/2710)
+- Fixed dynamic variables ignoring non-string names, accepting `this`, exporting an array literal as `null` and not writing through the caller's variables and references as PHP does [#2710](https://github.com/zephir-lang/zephir/issues/2710)
+- Fixed `unset` and `array_key_exists()` looking up a `null` key as a one byte key instead of the empty string [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `unset` and `array_key_exists()` converting float, bool and resource keys and reporting illegal keys differently from PHP [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `array_key_exists()` and `in_array()` returning `false` instead of throwing `TypeError` for a non-array [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed an array literal with a variable key failing to compile, or emitting C that does not compile, for most value types [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `double`, `bool` and literal `null` array keys failing to compile, or emitting invalid C for `empty`, instead of converting as PHP does [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `fetch` with a literal key crashing the compiler instead of reporting a compile error [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `let a[k][] = v` on an `array` parameter failing to compile with "Cannot use non-initialized variable as an object" [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `mixed` array keys, and `uint` and `ulong` keys in `isset`, `fetch`, `unset` and reads, failing to compile or passing the key's address to the kernel [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed `isset this->p[k]` rejecting integer keys [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed float, bool and null keys in class constant and property default arrays failing to compile, becoming string keys, or deprecating on every `new` and at startup instead of being converted as PHP does [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed execution continuing after an array or string offset read, write, `isset`, `fetch`, `empty`, property `isset`, `array_key_exists()` or `in_array()` threw [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Fixed closure class names continuing to count up across compilations in one process, orphaning previously generated files [#2687](https://github.com/zephir-lang/zephir/issues/2687)
+- Fixed function and method call cache slots continuing to count up across compilations in one process [#2687](https://github.com/zephir-lang/zephir/issues/2687)
+- Fixed arrow closures failing to resolve `use ... as` aliases declared in the file [#2686](https://github.com/zephir-lang/zephir/issues/2686)
+- Fixed closures in a sub-namespace resolving unqualified class names against the extension root namespace [#2686](https://github.com/zephir-lang/zephir/issues/2686)
+- Fixed optional parameters with a `null` default on methods of extension classes being counted as required, failing calls that omit them [#2763](https://github.com/zephir-lang/zephir/issues/2763)
+- Fixed calls passing several arguments to a variadic method of an extension class failing to compile [#2763](https://github.com/zephir-lang/zephir/issues/2763)
+- Fixed property shortcuts ignoring the declared property type, leaving the generated getter and setter untyped [#2761](https://github.com/zephir-lang/zephir/issues/2761)
+- Fixed a class-typed `@var` on a property shortcut producing an untyped getter, or a compile error with a `set` shortcut, instead of a class type [#2761](https://github.com/zephir-lang/zephir/issues/2761)
+- Fixed a typed getter reporting a return-type `TypeError` instead of PHP's uninitialized property `Error` [#2761](https://github.com/zephir-lang/zephir/issues/2761)
+- Fixed union-typed parameters accepting any value instead of checking and coercing it as PHP does [#2761](https://github.com/zephir-lang/zephir/issues/2761)
+- Fixed `unset this->{"name"}[key]` and `unset this->{name}[key]` silently leaving the key in place [#2705](https://github.com/zephir-lang/zephir/issues/2705)
+- Fixed nested `unset a[x][y]` on properties and locals, and `unset self::p[x]`, removing the key from a copy instead of the container [#2705](https://github.com/zephir-lang/zephir/issues/2705)
+- Fixed execution continuing after an `unset` threw [#2705](https://github.com/zephir-lang/zephir/issues/2705)
+- Fixed a property named by a non-string variable reporting "Cannot access empty property" instead of converting the name as PHP does [#2705](https://github.com/zephir-lang/zephir/issues/2705)
+- Fixed `explode()` raising a warning and returning an empty string for a non-string separator or subject instead of coercing it or throwing `TypeError` as PHP does [#2684](https://github.com/zephir-lang/zephir/issues/2684)
+- Fixed `explode()` silently converting an invalid limit instead of throwing `TypeError`, and execution continuing after `explode()` threw [#2684](https://github.com/zephir-lang/zephir/issues/2684)
+- Fixed `zephir compile` failing on macOS 15 because pre-compiled headers were built without the C standard autoconf adds to the compiler
+- Fixed `parent::` method calls, constants and static properties crashing the compiler when the parent class cannot be located instead of reporting a compile error [#2714](https://github.com/zephir-lang/zephir/issues/2714)
+- Fixed a class with an array property crashing the compiler when its parent class cannot be located [#2714](https://github.com/zephir-lang/zephir/issues/2714)
+- Fixed `let parent::x = v` and its compound forms always failing to compile with "does not extend any class" [#2714](https://github.com/zephir-lang/zephir/issues/2714)
+- Fixed `new parent()`, `instanceof parent` and `instanceof self` resolving to a class named `parent` or `self` in the current namespace [#2714](https://github.com/zephir-lang/zephir/issues/2714)
+- Fixed `<<` and `>>` between two dynamic variables calling kernel functions that were never defined, so the extension failed to load
+- Fixed `<<` and `>>` on integers using C shifts instead of PHP's rules, where a count of 64 or more yields 0 or -1 and a negative count throws `ArithmeticError`, and a negative literal count crashing the compiler
+- Fixed unary minus on a dynamic variable negating the variable itself, hanging on an array or object, and ignoring PHP's warnings, `TypeError` and integer overflow to float
+- Fixed the short ternary `a ?: b` evaluating `a` twice when it is truthy, repeating its side effects
+- Fixed `continue` in a `do`-`while` loop skipping the code that evaluates the condition, so the loop tested a stale or uninitialized value
+- Fixed execution continuing after an operator throws, such as `+`, `/`, `%`, `.`, `++`, bitwise and loose comparisons, instead of stopping as PHP does
+- Fixed a compound assignment on a property or static property writing the value back after the operator threw, and a static property `+=`/`-=` leaking its new value
+- Fixed code after a nested `try` jumping to the inner `catch`, and an exception no `catch` matches being swallowed instead of propagating
+- Fixed assigning a non-array value, including `null`, to an `array` variable storing it instead of throwing PHP's `TypeError` [#2689](https://github.com/zephir-lang/zephir/issues/2689)
+- Fixed assigning a typed non-array variable or a closure to an `array` variable generating invalid C or storing it instead of failing to compile [#2689](https://github.com/zephir-lang/zephir/issues/2689)
+- Fixed `let a[k] += v` and every other compound assignment on an array element, including a property or static property element, overwriting the element instead of applying the operator [#2747](https://github.com/zephir-lang/zephir/issues/2747)
+- Fixed a compound assignment on an appended element such as `let a[] -= v` appending `v` instead of applying the operator to `null` [#2747](https://github.com/zephir-lang/zephir/issues/2747)
+- Fixed bitwise compound assignments such as `let a[k] &= v` on an array element failing to compile [#2747](https://github.com/zephir-lang/zephir/issues/2747)
+- Fixed the index of an element assignment such as `let a[k()] = v()` being evaluated after the right-hand side instead of before it as PHP does [#2747](https://github.com/zephir-lang/zephir/issues/2747)
+- Fixed reading a missing array key raising the PHP 5 notice `Undefined index` instead of PHP's `Undefined array key` warning
+- Fixed reading an offset of `null` or a scalar being silent or raising `Cannot use a scalar value as an array` instead of PHP's `Trying to access array offset` warning
+- Fixed reading an array offset ignoring PHP's float and null offset deprecations, resource offset warning and illegal offset `TypeError`
+- Fixed reading an offset of an object without `ArrayAccess` returning `null` instead of using the object's own handler, as for a `SimpleXMLElement` attribute
+- Fixed writing an offset of a scalar warning `Cannot use a scalar value as an array (2)` or turning it into an array instead of throwing as PHP does
+- Fixed a nested write such as `let a[i][j] = v` on a container that is not an array being a fatal error instead of PHP's behavior
+- Fixed writing an offset ignoring PHP's offset conversions, deprecations and `TypeError`, and the deprecation for turning `false` into an array
+- Fixed writing an offset of an object without `ArrayAccess` being ignored instead of using the object's own handler or throwing
+- Fixed writing an array element that is a reference replacing the reference instead of writing through it
+- Fixed writing an offset of a typed property that does not allow arrays turning it into an array instead of throwing `Cannot auto-initialize an array inside property`
+- Fixed writing an offset of a property of a non-object being silently ignored instead of throwing `Attempt to modify property`
+- Fixed `isset`, `empty()` and `fetch` on an illegal array offset warning `Illegal offset type` instead of throwing PHP's `TypeError`, and ignoring PHP's float, null and resource offset diagnostics
+- Fixed `isset`, `empty()` and `fetch` on an object without `ArrayAccess` answering `false` instead of asking the object's own handler, as for a `SimpleXMLElement` attribute
+- Fixed `empty(a[k])` written with parentheses reading the offset noisily instead of using PHP's silent `empty()` handler
+- Fixed writing an offset through an array element that is a reference to a typed property turning it into an array instead of throwing when the type does not allow one
+- Fixed `+`, `-`, `*`, `/` and `%` with a string or array local, or a string, null or array literal, failing to compile instead of computing or throwing `TypeError` as PHP does [#2676](https://github.com/zephir-lang/zephir/issues/2676)
+- Fixed `+=`, `-=` and `*=` on a `var` or an object property rejecting a string or bool operand and ignoring `null` [#2676](https://github.com/zephir-lang/zephir/issues/2676)
+- Fixed `+`, `-` and `*` with a bool operand applying the wrong operator or yielding a bool instead of PHP's integer result [#2677](https://github.com/zephir-lang/zephir/issues/2677)
+- Fixed `+`, `-` and `*` of an integer local with a float literal truncating the result to an integer
+
+### Added
+- Added the `lossy-float-key` warning, reporting at compile time a fractional float key in a class constant or property default that PHP deprecates when it evaluates the declaration [#2706](https://github.com/zephir-lang/zephir/issues/2706)
+- Added `instanceof static`, which tests against the called class as PHP does [#2714](https://github.com/zephir-lang/zephir/issues/2714)
+
+### Changed
+- Raised the minimum `ext-zephir_parser` to 2.10.0 for the `instanceof static` [#2714](https://github.com/zephir-lang/zephir/issues/2714), `static::CONSTANT` [#2711](https://github.com/zephir-lang/zephir/issues/2711), `static::{method}()` and `CONSTANT::{method}()` [#2723](https://github.com/zephir-lang/zephir/issues/2723) grammar
+- Released the table a request `hash` global holds at the end of the request, so C code freeing it must reset it to `NULL` [#2726](https://github.com/zephir-lang/zephir/issues/2726)
+
 ## [1.6.1] - 2026-10-02
 
 ### Fixed

@@ -44,11 +44,19 @@ PHP_METHOD(Stub_Globals_Server, f1)
 
 	zephir_memory_observe(&_0);
 	zephir_array_fetch_string(&_0, &_SERVER, SL("PHP_SELF"), PH_NOISY, "stub/globals/server.zep", 10);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zend_print_zval(&_0, 0);
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "f2", NULL, 0);
 	zephir_check_call_status();
 	zephir_memory_observe(&_1);
 	zephir_array_fetch_string(&_1, &_SERVER, SL("PHP_SELF"), PH_NOISY, "stub/globals/server.zep", 12);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zend_print_zval(&_1, 0);
 	ZEPHIR_MM_RESTORE();
 }
@@ -66,6 +74,10 @@ PHP_METHOD(Stub_Globals_Server, f2)
 
 	zephir_memory_observe(&_0);
 	zephir_array_fetch_string(&_0, &_SERVER, SL("SCRIPT_NAME"), PH_NOISY, "stub/globals/server.zep", 17);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zend_print_zval(&_0, 0);
 	ZEPHIR_MM_RESTORE();
 }
@@ -86,6 +98,10 @@ PHP_METHOD(Stub_Globals_Server, check)
 
 	zephir_memory_observe(&_0);
 	zephir_array_fetch_string(&_0, &_SERVER, SL("HTTP_USER_AGENT"), PH_NOISY, "stub/globals/server.zep", 25);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 

@@ -55,7 +55,7 @@ PHP_METHOD(Stub_Oo, testInstance2)
 
 	ZEPHIR_INIT_VAR(&o);
 	object_init_ex(&o, stub_oo_ooconstruct_ce);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 89);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 88);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 }
@@ -98,7 +98,7 @@ PHP_METHOD(Stub_Oo, testInstance4)
 	ZVAL_STRING(&b, "b");
 	ZEPHIR_INIT_VAR(&o);
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 90, &a, &b);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 89, &a, &b);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 }
@@ -121,7 +121,7 @@ PHP_METHOD(Stub_Oo, testInstance5)
 	ZVAL_STRING(&_0, "a");
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "b");
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 90, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 89, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 }
@@ -142,7 +142,7 @@ PHP_METHOD(Stub_Oo, testInstance6)
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
 	ZVAL_LONG(&_0, 1);
 	ZVAL_LONG(&_1, 2);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 90, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 89, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 }
@@ -163,7 +163,7 @@ PHP_METHOD(Stub_Oo, testInstance7)
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
 	ZVAL_BOOL(&_0, 0);
 	ZVAL_BOOL(&_1, 1);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 90, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 89, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 }
@@ -184,7 +184,7 @@ PHP_METHOD(Stub_Oo, testInstance8)
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
 	ZVAL_DOUBLE(&_0, 1.2);
 	ZVAL_DOUBLE(&_1, 7.30);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 90, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 89, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 }
@@ -235,7 +235,7 @@ PHP_METHOD(Stub_Oo, testInstance11)
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
 	ZVAL_LONG(&_0, 1);
 	ZVAL_LONG(&_1, 2);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 90, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 89, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 }
@@ -292,6 +292,10 @@ PHP_METHOD(Stub_Oo, createInstancesInLoop)
 		ZVAL_COPY(&className, _2);
 		ZEPHIR_INIT_NVAR(&fqcn);
 		ZEPHIR_CONCAT_SV(&fqcn, "Stub\\Oo\\", &className);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_NVAR(&instance);
 		zephir_fetch_safe_class(&_3$$3, &fqcn);
 		_4$$3 = zephir_fetch_class_str_ex(Z_STRVAL_P(&_3$$3), Z_STRLEN_P(&_3$$3), ZEND_FETCH_CLASS_AUTO);
@@ -309,9 +313,17 @@ PHP_METHOD(Stub_Oo, createInstancesInLoop)
 		ZEPHIR_CALL_METHOD(&_5$$3, &instance, "execute", NULL, 0);
 		zephir_check_call_status();
 		zephir_array_append(&result, &_5$$3, PH_SEPARATE, "stub/oo.zep", 108);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CALL_METHOD(&_6$$3, &instance, "execute2", NULL, 0);
 		zephir_check_call_status();
 		zephir_array_append(&result, &_6$$3, PH_SEPARATE, "stub/oo.zep", 109);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&className);
 	RETURN_CTOR(&result);

@@ -12,7 +12,6 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/operators.h"
 #include "kernel/string.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
@@ -52,7 +51,10 @@ PHP_METHOD(Stub_Issue2674, explodeStrLimit)
 		Z_PARAM_ZVAL(limit)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &source, &limit);
-	zephir_fast_explode_str(return_value, SL(","), source, zephir_get_intval(limit) );
+	zephir_fast_explode_str(return_value, SL(","), source, limit);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -72,7 +74,10 @@ PHP_METHOD(Stub_Issue2674, explodeLimit)
 		Z_PARAM_ZVAL(limit)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(3, 0, &delimiter, &source, &limit);
-	zephir_fast_explode(return_value, delimiter, source, zephir_get_intval(limit) );
+	zephir_fast_explode(return_value, delimiter, source, limit);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -90,7 +95,10 @@ PHP_METHOD(Stub_Issue2674, explodeNoLimit)
 		Z_PARAM_ZVAL(source)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &delimiter, &source);
-	zephir_fast_explode(return_value, delimiter, source, ZEND_LONG_MAX);
+	zephir_fast_explode(return_value, delimiter, source, NULL);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -100,14 +108,19 @@ PHP_METHOD(Stub_Issue2674, explodeNoLimit)
  */
 PHP_METHOD(Stub_Issue2674, explodeConstLimit)
 {
-	zval *source, source_sub;
+	zval *source, source_sub, _0;
 
 	ZVAL_UNDEF(&source_sub);
+	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(source)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &source);
-	zephir_fast_explode_str(return_value, SL(","), source, -2 );
+	ZVAL_LONG(&_0, -2);
+	zephir_fast_explode_str(return_value, SL(","), source, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 

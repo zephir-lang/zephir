@@ -90,6 +90,10 @@ PHP_METHOD(Stub_Issue2738, described)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, ZEND_ATTRIBUTE_TARGET_ALL);
 	ZEPHIR_CONCAT_SV(return_value, "flags=", &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

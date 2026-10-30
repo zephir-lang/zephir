@@ -22,6 +22,7 @@ use Stub\Attributes\Counter;
 use Stub\Attributes\CounterUser;
 use Stub\Attributes\Demo;
 use Stub\Attributes\Marker;
+use Stub\Attributes\Tools;
 
 /**
  * PHP attributes on a compiled Zephir class, checked through the same
@@ -231,6 +232,16 @@ final class AttributesTest extends TestCase
             'on-a-function-parameter',
             $function->getParameters()[0]->getAttributes()[0]->newInstance()->text
         );
+    }
+
+    /**
+     * `tagged(a)` names `Stub\Attributes\tagged()` inside that namespace, as
+     * it does in PHP. It used to call the global `tagged()`, which does not
+     * exist (#2731).
+     */
+    public function testAClassCallsAFunctionOfItsNamespaceByItsShortName(): void
+    {
+        $this->assertSame(5, (new Tools())->callTagged(5));
     }
 
     public function testFilteringByAttributeNameWorks(): void

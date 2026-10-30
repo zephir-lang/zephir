@@ -79,13 +79,13 @@ PHP_METHOD(Stub_Logical, testAnd4)
 
 PHP_METHOD(Stub_Logical, testAnd9)
 {
-	zend_bool _0;
+	zend_bool _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long b;
-	zval *a, a_sub, *b_param = NULL, _1$$3;
+	zval *a, a_sub, *b_param = NULL, _2$$3;
 
 	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&_1$$3);
+	ZVAL_UNDEF(&_2$$3);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_LONG(b)
@@ -95,12 +95,21 @@ PHP_METHOD(Stub_Logical, testAnd9)
 	zephir_fetch_params(1, 2, 0, &a, &b_param);
 	_0 = Z_TYPE_P(a) == IS_ARRAY;
 	if (_0) {
-		_0 = zephir_array_isset_value_long(a, b);
+		_1 = zephir_array_isset_value_long(a, b);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
+		_0 = _1;
 	}
 	if (_0) {
-		zephir_memory_observe(&_1$$3);
-		zephir_array_fetch_long(&_1$$3, a, b, PH_NOISY, "stub/logical.zep", 35);
-		RETURN_CCTOR(&_1$$3);
+		zephir_memory_observe(&_2$$3);
+		zephir_array_fetch_long(&_2$$3, a, b, PH_NOISY, "stub/logical.zep", 35);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
+		RETURN_CCTOR(&_2$$3);
 	}
 	RETURN_MM_NULL();
 }
@@ -162,7 +171,7 @@ PHP_METHOD(Stub_Logical, testMixed2)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &match, &minLength);
-	_0 = Z_TYPE_P(match) == IS_ARRAY;
+	_0 = (Z_TYPE_P(match) == IS_ARRAY);
 	if (_0) {
 		_0 = zephir_fast_count_int(match) == 2;
 	}
@@ -170,6 +179,10 @@ PHP_METHOD(Stub_Logical, testMixed2)
 	if (_1) {
 		zephir_memory_observe(&_2);
 		zephir_array_fetch_long(&_2, match, 0, PH_NOISY, "stub/logical.zep", 65);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		_1 = ZEPHIR_LE_LONG(minLength, zephir_fast_strlen_ev(&_2));
 	}
 	if (_1) {

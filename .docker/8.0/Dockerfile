@@ -4,6 +4,10 @@ FROM php:8.0-fpm
 RUN CPU_CORES="$(getconf _NPROCESSORS_ONLN)";
 ENV MAKEFLAGS="-j${CPU_CORES}"
 
+# php:8.0-fpm is Debian bullseye, which is now only served by archive.debian.org:
+# deb.debian.org keeps its index but has pruned the packages it lists (404).
+RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list
+
 RUN apt update -y && apt install -y \
     wget \
     zip \

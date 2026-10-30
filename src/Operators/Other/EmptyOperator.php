@@ -44,10 +44,12 @@ class EmptyOperator extends AbstractOperator
          * missing key, an out-of-range string offset or an illegal offset
          * type, and calls all of them empty. Composing it out of a read would
          * emit diagnostics PHP does not and answer differently for an offset
-         * the read path rejects.
+         * the read path rejects. `empty(c[i])` parses as a parenthesised
+         * `list` node around the subscript, as IssetOperator also unwraps.
          */
-        if ('array-access' === $expression['left']['type']) {
-            return $this->compileDimension($expression['left'], $compilationContext);
+        $operand = 'list' === $expression['left']['type'] ? $expression['left']['left'] : $expression['left'];
+        if ('array-access' === $operand['type']) {
+            return $this->compileDimension($operand, $compilationContext);
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -126,6 +128,7 @@ class EmptyOperator extends AbstractOperator
         $offsetExpr->setReadOnly(true);
         $offsetExpr->setNoisy(false);
         $offset = $offsetExpr->compile($compilationContext);
+        $offset = $compilationContext->backend->boxArrayKey($offset, $compilationContext);
 
         switch ($offset->getType()) {
             case 'int':
@@ -168,6 +171,7 @@ class EmptyOperator extends AbstractOperator
                 );
         }
 
-        return new CompiledExpression('bool', $code, $arrayAccess);
+        // empty() throws for an illegal key or from offsetExists()/offsetGet()
+        return new CompiledExpression('bool', $compilationContext->emitCheckedBool($code), $arrayAccess);
     }
 }

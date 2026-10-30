@@ -23,6 +23,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Operators\AbstractOperator;
 use Zephir\Statements\IfStatement;
+use Zephir\Statements\LetStatement;
 
 /**
  * a ?: b
@@ -40,54 +41,43 @@ class ShortTernaryOperator extends AbstractOperator
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         /**
-         * This variable is used to check if the compound and expression is evaluated as true or false:
-         * Ensure that newly allocated variables are local-only (setReadOnly)
+         * The left operand is evaluated once, into a temporary that is also
+         * the result, and the right operand only replaces it when it is falsy.
+         *
+         * The result never goes straight into the assigned variable: the right
+         * operand may read that variable (`let a = b ?: a;`), and writing the
+         * left operand first would clobber it.
          */
-        $this->setReadOnly(false);
-        $returnVariable = $this->getExpected($compilationContext, $expression, false);
-        /* Make sure that passed variables (passed symbol variables) are promoted */
-        $returnVariable->setLocalOnly(false);
+        $returnVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+            'variable',
+            $compilationContext
+        );
+        $this->checkVariableTemporal($returnVariable);
 
-        if ('variable' != $returnVariable->getType() || 'return_value' == $returnVariable->getName()) {
-            $returnVariable = $compilationContext->symbolTable->getTempVariableForWrite(
-                'variable',
-                $compilationContext
-            );
-            $this->checkVariableTemporal($returnVariable);
-        }
+        $position = [
+            'file' => $expression['file'],
+            'line' => $expression['line'],
+            'char' => $expression['char'],
+        ];
+
+        $letLeft = new LetStatement((new LetStatementBuilder([
+            'assign-type' => 'variable',
+            'variable'    => $returnVariable->getName(),
+            'operator'    => 'assign',
+        ] + $position, $expression['left']))->get());
+        $letLeft->compile($compilationContext);
 
         $ifBuilder = new IfStatementBuilder(
             new UnaryOperatorBuilder(
                 'not',
-                $expression['left']
+                ['type' => 'variable', 'value' => $returnVariable->getName()] + $position
             ),
             new StatementsBlockBuilder([
-                /**
-                 * Create an implicit 'let' operation to update the evaluated right operator
-                 */
                 new LetStatementBuilder([
                     'assign-type' => 'variable',
                     'variable'    => $returnVariable->getName(),
                     'operator'    => 'assign',
-                    'expr'        => $expression['extra'],
-                    'file'        => $expression['file'],
-                    'line'        => $expression['line'],
-                    'char'        => $expression['char'],
-                ], $expression['extra']),
-            ]),
-            new StatementsBlockBuilder([
-                /**
-                 * Create an implicit 'let' operation to update the evaluated right operator
-                 */
-                new LetStatementBuilder([
-                    'assign-type' => 'variable',
-                    'variable'    => $returnVariable->getName(),
-                    'operator'    => 'assign',
-                    'expr'        => $expression['left'],
-                    'file'        => $expression['file'],
-                    'line'        => $expression['line'],
-                    'char'        => $expression['char'],
-                ], $expression['extra']),
+                ] + $position, $expression['extra']),
             ])
         );
 

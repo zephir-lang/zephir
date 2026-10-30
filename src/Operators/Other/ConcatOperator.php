@@ -56,6 +56,7 @@ class ConcatOperator extends AbstractOperator
             $compilationContext->codePrinter->output(
                 sprintf('ZEPHIR_CONCAT_%s(%s, %s);', strtoupper($optimized[0]), $expectedCode, $optimized[1])
             );
+            $compilationContext->emitExceptionCheck();
 
             return new CompiledExpression('variable', $expected->getName(), $expression);
         }

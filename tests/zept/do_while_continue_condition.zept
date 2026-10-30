@@ -1,0 +1,183 @@
+--TEST--
+`continue` in a do-while evaluates the condition afresh, as in PHP, even when the condition needs a call
+--FILE--
+namespace Stub;
+
+class DoWhileContinue
+{
+    public static function below(long i, long n) -> bool
+    {
+        echo "c" . i . " ";
+
+        return i < n;
+    }
+
+    public static function skipOne() -> array
+    {
+        var log = [];
+        long i = 0;
+
+        do {
+            let i++;
+            if i == 2 {
+                continue;
+            }
+            let log[] = i;
+        } while self::below(i, 4);
+
+        return log;
+    }
+
+    public static function continueOnLast() -> array
+    {
+        var log = [];
+        long i = 0;
+
+        do {
+            let i++;
+            let log[] = i;
+            if i == 3 {
+                continue;
+            }
+        } while self::below(i, 3);
+
+        return log;
+    }
+
+    public static function innerLoopContinue() -> array
+    {
+        var log = [];
+        long i = 0, j;
+
+        do {
+            let i++;
+            let j = 0;
+            while j < 2 {
+                let j++;
+                if j == 1 {
+                    continue;
+                }
+                let log[] = i . ":" . j;
+            }
+        } while self::below(i, 2);
+
+        return log;
+    }
+
+    public static function switchInside() -> array
+    {
+        var log = [];
+        long i = 0;
+
+        do {
+            let i++;
+            switch i {
+                case 2:
+                    let log[] = "two";
+                    break;
+            }
+            if i == 1 {
+                continue;
+            }
+            let log[] = i;
+        } while self::below(i, 3);
+
+        return log;
+    }
+}
+--USAGE--
+use Stub\DoWhileContinue;
+
+class PhpDoWhileContinue
+{
+    public static function below(int $i, int $n): bool
+    {
+        echo 'c' . $i . ' ';
+
+        return $i < $n;
+    }
+
+    public static function skipOne(): array
+    {
+        $log = [];
+        $i = 0;
+        do {
+            $i++;
+            if ($i == 2) {
+                continue;
+            }
+            $log[] = $i;
+        } while (self::below($i, 4));
+
+        return $log;
+    }
+
+    public static function continueOnLast(): array
+    {
+        $log = [];
+        $i = 0;
+        do {
+            $i++;
+            $log[] = $i;
+            if ($i == 3) {
+                continue;
+            }
+        } while (self::below($i, 3));
+
+        return $log;
+    }
+
+    public static function innerLoopContinue(): array
+    {
+        $log = [];
+        $i = 0;
+        do {
+            $i++;
+            $j = 0;
+            while ($j < 2) {
+                $j++;
+                if ($j == 1) {
+                    continue;
+                }
+                $log[] = $i . ':' . $j;
+            }
+        } while (self::below($i, 2));
+
+        return $log;
+    }
+
+    public static function switchInside(): array
+    {
+        $log = [];
+        $i = 0;
+        do {
+            $i++;
+            switch ($i) {
+                case 2:
+                    $log[] = 'two';
+                    break;
+            }
+            if ($i == 1) {
+                continue;
+            }
+            $log[] = $i;
+        } while (self::below($i, 3));
+
+        return $log;
+    }
+}
+
+foreach (['skipOne', 'continueOnLast', 'innerLoopContinue', 'switchInside'] as $method) {
+    ob_start();
+    $zephirResult = json_encode(DoWhileContinue::$method());
+    $zephir = ob_get_clean() . $zephirResult;
+    ob_start();
+    $phpResult = json_encode(PhpDoWhileContinue::$method());
+    $php = ob_get_clean() . $phpResult;
+    echo $method, ': ', $zephir === $php ? 'same' : "DIFF\n  zephir: $zephir\n  php:    $php", "\n";
+}
+--EXPECT--
+skipOne: same
+continueOnLast: same
+innerLoopContinue: same
+switchInside: same

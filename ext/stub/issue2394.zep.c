@@ -107,6 +107,10 @@ PHP_METHOD(Stub_Issue2394, division)
 	zephir_fetch_params(1, 1, 0, &a_param);
 	ZEPHIR_INIT_VAR(&x);
 	zephir_div_long_long(&x, a, 2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&x);
 }
 
@@ -151,6 +155,10 @@ PHP_METHOD(Stub_Issue2394, concatenation)
 	ZVAL_STR_COPY(&b_zv, b);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_VV(&_0, &a_zv, &b_zv);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&s, &_0);
 	RETURN_CCTOR(&s);
 }
@@ -255,10 +263,18 @@ PHP_METHOD(Stub_Issue2394, backslashLoop)
 			ZEPHIR_INIT_NVAR(&_4$$4);
 			zephir_substr(&_4$$4, &format_zv, zephir_get_intval(&_2$$4), 1 , 0);
 			zephir_concat_self(&out, &_4$$4);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			i = (i + 2);
 			continue;
 		}
 		zephir_concat_self(&out, &sub);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		i = (i + 1);
 	}
 	RETURN_CCTOR(&out);

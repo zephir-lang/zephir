@@ -39,6 +39,7 @@ ZEPHIR_INIT_CLASS(Stub_Issue808)
  */
 PHP_METHOD(Stub_Issue808, testDynamicUnset)
 {
+	zend_bool _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *propertyName, propertyName_sub, obj, _0;
 
@@ -57,7 +58,16 @@ PHP_METHOD(Stub_Issue808, testDynamicUnset)
 	ZVAL_STRING(&_0, "value");
 	zephir_update_property_zval_zval(&obj, propertyName, &_0);
 	zephir_unset_property_zval(&obj, propertyName);
-	RETURN_MM_BOOL(zephir_isset_property_value_zval(&obj, propertyName));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	_1 = zephir_isset_property_value_zval(&obj, propertyName);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_MM_BOOL(_1);
 }
 
 /**
@@ -96,6 +106,10 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetSelective)
 	ZVAL_STRING(&_0, "remove_value");
 	zephir_update_property_zval_cached(&obj, _zephir_prop_1, 0, &_0);
 	zephir_unset_property_zval(&obj, toRemove);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&obj);
 }
 
@@ -126,6 +140,10 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetStringKey)
 	ZVAL_STRING(&_0, "value");
 	zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_0);
 	zephir_unset_property(&obj, "name");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	static zend_string *_zephir_isset_0 = NULL;
 	if (UNEXPECTED(!_zephir_isset_0)) {
 		_zephir_isset_0 = zend_string_init("name", 4, 1);
@@ -165,6 +183,10 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetNonExistentProperty)
 	ZVAL_STRING(&_0, "keep_value");
 	zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_0);
 	zephir_unset_property_zval(&obj, propertyName);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&obj);
 }
 

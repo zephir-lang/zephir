@@ -91,6 +91,10 @@ PHP_METHOD(Stub_Factorial, intRecursiveFactorial)
 		ZVAL_LONG(&_4, num);
 		ZEPHIR_INIT_NVAR(&_0);
 		mul_function(&_0, &_4, &_2);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	}
 	RETURN_CCTOR(&_0);
 }

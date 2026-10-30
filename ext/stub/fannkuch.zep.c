@@ -90,6 +90,10 @@ PHP_METHOD(Stub_Fannkuch, process)
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_LONG(&_3$$3, i);
 			zephir_array_update_long(&perm1, i, &_3$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 	}
 	r = n;
@@ -104,6 +108,10 @@ PHP_METHOD(Stub_Fannkuch, process)
 			ZEPHIR_INIT_NVAR(&_4$$6);
 			ZVAL_LONG(&_4$$6, r);
 			zephir_array_update_long(&count, (r - 1), &_4$$6, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			r--;
 		}
 		_7$$4 = n;
@@ -121,25 +129,49 @@ PHP_METHOD(Stub_Fannkuch, process)
 				}
 				i = _6$$4;
 				zephir_array_fetch_long(&_8$$7, &perm1, i, PH_NOISY | PH_READONLY, "stub/fannkuch.zep", 43);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				zephir_array_update_long(&perm, i, &_8$$7, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 			}
 		}
 		flipsCount = 0;
 		k = 0;
 		while (1) {
 			zephir_array_fetch_long(&_9$$4, &perm, 0, PH_NOISY | PH_READONLY, "stub/fannkuch.zep", 48);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			if (!(!ZEPHIR_IS_LONG(&_9$$4, 0))) {
 				break;
 			}
 			ZEPHIR_OBS_NVAR(&_10$$8);
 			zephir_array_fetch_long(&_10$$8, &perm, 0, PH_NOISY, "stub/fannkuch.zep", 49);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			k = zephir_get_intval(&_10$$8);
 			ZEPHIR_INIT_NVAR(&_11$$8);
 			zephir_div_long_long(&_11$$8, ((k + 1)), 2);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			ZEPHIR_INIT_NVAR(&_12$$8);
 			ZVAL_LONG(&_12$$8, 1);
 			ZEPHIR_INIT_NVAR(&_13$$8);
 			zephir_sub_function(&_13$$8, &_11$$8, &_12$$8);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			k2 = zephir_get_intval(&_13$$8);
 			_16$$8 = k2;
 			_15$$8 = 0;
@@ -156,9 +188,25 @@ PHP_METHOD(Stub_Fannkuch, process)
 					}
 					i = _15$$8;
 					zephir_array_fetch_long(&temp, &perm, i, PH_NOISY | PH_READONLY, "stub/fannkuch.zep", 51);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_fetch_long(&_17$$9, &perm, (k - i), PH_NOISY | PH_READONLY, "stub/fannkuch.zep", 51);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_update_long(&perm, i, &_17$$9, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 					zephir_array_update_long(&perm, (k - i), &temp, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 				}
 			}
 			flipsCount++;
@@ -186,6 +234,10 @@ PHP_METHOD(Stub_Fannkuch, process)
 				RETURN_MM();
 			}
 			zephir_array_fetch_long(&perm0, &perm1, 0, PH_NOISY | PH_READONLY, "stub/fannkuch.zep", 75);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			i = 0;
 			while (1) {
 				if (!(i < r)) {
@@ -193,17 +245,45 @@ PHP_METHOD(Stub_Fannkuch, process)
 				}
 				j = (i + 1);
 				zephir_array_fetch_long(&_19$$15, &perm1, j, PH_NOISY | PH_READONLY, "stub/fannkuch.zep", 78);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				zephir_array_update_long(&perm1, i, &_19$$15, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 				i = j;
 			}
 			zephir_array_update_long(&perm1, r, &perm0, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			zephir_array_fetch_long(&_20$$13, &count, r, PH_NOISY | PH_READONLY, "stub/fannkuch.zep", 82);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			ZEPHIR_INIT_NVAR(&_21$$13);
 			ZVAL_LONG(&_21$$13, 1);
 			ZEPHIR_INIT_NVAR(&_22$$13);
 			zephir_sub_function(&_22$$13, &_20$$13, &_21$$13);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			zephir_array_update_long(&count, r, &_22$$13, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			zephir_array_fetch_long(&_20$$13, &count, r, PH_NOISY | PH_READONLY, "stub/fannkuch.zep", 83);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			if (ZEPHIR_GT_LONG(&_20$$13, 0)) {
 				break;
 			}

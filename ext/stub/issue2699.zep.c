@@ -76,6 +76,9 @@ PHP_METHOD(Stub_Issue2699, add)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&key_zv, key);
 	zephir_update_property_array(this_ptr, SL("components"), &key_zv, &__$true);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2699, getComponents)

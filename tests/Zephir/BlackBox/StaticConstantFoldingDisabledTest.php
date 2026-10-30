@@ -91,6 +91,22 @@ final class StaticConstantFoldingDisabledTest extends TestCase
         );
 
         file_put_contents(
+            $projectDir . '/' . $project . '/bag.zep',
+            <<<'ZEP'
+                namespace Constfold;
+
+                class Bag extends \ArrayObject
+                {
+                    public function fromInternalParent()
+                    {
+                        return parent::STD_PROP_LIST;
+                    }
+                }
+
+                ZEP,
+        );
+
+        file_put_contents(
             $projectDir . '/' . $project . '/reader.zep',
             <<<'ZEP'
                 namespace Constfold;
@@ -98,6 +114,14 @@ final class StaticConstantFoldingDisabledTest extends TestCase
                 class Reader extends Base implements Marker
                 {
                     const OWN = "own";
+                    const NUM = 7;
+                    const RATE = 1.5;
+                    const FLAG = true;
+                    const DERIVED = self::OWN;
+                    const SUM = self::NUM + 1;
+
+                    public prop = self::OWN;
+                    public label = self::OWN . "!";
 
                     public function own()
                     {
@@ -119,6 +143,11 @@ final class StaticConstantFoldingDisabledTest extends TestCase
                         return self::FROM_INTERFACE;
                     }
 
+                    public function fromInternalClass()
+                    {
+                        return \ArrayObject::ARRAY_AS_PROPS;
+                    }
+
                     public function intoLocal()
                     {
                         var value;
@@ -126,6 +155,49 @@ final class StaticConstantFoldingDisabledTest extends TestCase
                         let value = self::OWN;
 
                         return value;
+                    }
+
+                    public function intDefault(int n = self::NUM) -> int
+                    {
+                        return n;
+                    }
+
+                    public function doubleDefault(double d = self::RATE) -> double
+                    {
+                        return d;
+                    }
+
+                    public function boolDefault(bool b = self::FLAG) -> bool
+                    {
+                        return b;
+                    }
+
+                    public function stringDefault(string s = self::OWN) -> string
+                    {
+                        return s;
+                    }
+
+                    public function varDefault(var v = self::OWN)
+                    {
+                        return v;
+                    }
+
+                    public function typedLocal() -> string
+                    {
+                        string s;
+
+                        let s = self::OWN;
+
+                        return s;
+                    }
+
+                    public function arithmetic() -> int
+                    {
+                        int n;
+
+                        let n = self::NUM + 1;
+
+                        return n;
                     }
                 }
 
@@ -160,10 +232,17 @@ final class StaticConstantFoldingDisabledTest extends TestCase
             "compile failed with constant folding disabled:\n" . $compile['stdout'] . $compile['stderr'],
         );
 
+        /**
+         * Expected values are what a plain PHP twin of these classes prints on
+         * 8.0 through 8.5: declaration defaults hold the constant's value, and a
+         * subclass overriding `OWN` does not change what `self::OWN` meant in
+         * an initializer. Reflection reports the defaults too. `static::` is covered by tests/zept/issue2711_*.zept,
+         * and through ext-zephir_parser by ParserExtensionGrammarTest.
+         */
         $this->assertSame(
-            '["own","parent","parent","interface","own"]',
+            '["own","parent","parent","interface",2,"own","own","own",7,1.5,true,"own","own","own",8,"own","own",8,"own!",1,7,"own"]',
             $this->readConstantsThroughTheExtension($projectDir),
-            'The run-time read must produce the same values the folded read inlines.',
+            'The run-time read must produce the same values PHP gives.',
         );
     }
 
@@ -186,8 +265,14 @@ final class StaticConstantFoldingDisabledTest extends TestCase
         $modules = glob($projectDir . '/ext/modules/*.so');
         $this->assertNotEmpty($modules, 'compile reported success but produced no extension.');
 
-        $code = '$r = new \\Constfold\\Reader();'
-            . ' echo json_encode([$r->own(), $r->fromParent(), $r->fromNamedClass(), $r->fromInterface(), $r->intoLocal()]);';
+        $code = 'class Child extends \\Constfold\\Reader { const OWN = "child"; }'
+            . ' $r = new \\Constfold\\Reader(); $c = new Child();'
+            . ' echo json_encode([$r->own(), $r->fromParent(), $r->fromNamedClass(), $r->fromInterface(), $r->fromInternalClass(), $r->intoLocal(),'
+            . ' \\Constfold\\Reader::DERIVED, $r->prop, $r->intDefault(), $r->doubleDefault(), $r->boolDefault(),'
+            . ' $r->stringDefault(), $r->varDefault(), $r->typedLocal(), $r->arithmetic(),'
+            . ' Child::DERIVED, $c->prop, \\Constfold\\Reader::SUM, $r->label, (new \\Constfold\\Bag())->fromInternalParent(),'
+            . ' (new ReflectionMethod(\\Constfold\\Reader::class, "intDefault"))->getParameters()[0]->getDefaultValue(),'
+            . ' (new ReflectionMethod(\\Constfold\\Reader::class, "stringDefault"))->getParameters()[0]->getDefaultValue()]);';
 
         $command = sprintf(
             '%s -n -d extension=%s -r %s 2>&1',

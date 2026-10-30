@@ -95,4 +95,48 @@ final class InfoCommandsTest extends TestCase
         $this->assertStringNotContainsString('Usage:', $result['stdout']);
         $this->assertStringNotContainsString('Available commands:', $result['stdout']);
     }
+
+    /**
+     * The help screen exits 0 as well, so an exit code alone cannot tell the
+     * two apart.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2728
+     */
+    public function testVersionPrintsTheVersionLine(): void
+    {
+        $result = $this->runZephir('--version', $this->cwd);
+
+        $this->assertSame(0, $result['exitCode']);
+        $this->assertSame(
+            sprintf('Zephir %s by the Phalcon Team', $this->declaredVersion()),
+            trim($result['stdout'])
+        );
+    }
+
+    /**
+     * @dataProvider dumpVersionProvider
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2728
+     */
+    public function testDumpVersionPrintsTheBareVersion(string $flag): void
+    {
+        $result = $this->runZephir($flag, $this->cwd);
+
+        $this->assertSame(0, $result['exitCode']);
+        $this->assertSame($this->declaredVersion(), trim($result['stdout']));
+        $this->assertDirectoryDoesNotExist($this->cwd . '/.zephir');
+    }
+
+    public function dumpVersionProvider(): array
+    {
+        return [
+            'double hyphen' => ['--dumpversion'],
+            'single hyphen' => ['-dumpversion'],
+        ];
+    }
+
+    private function declaredVersion(): string
+    {
+        return explode('-', \Zephir\Zephir::VERSION)[0];
+    }
 }

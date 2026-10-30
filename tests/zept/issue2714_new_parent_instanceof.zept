@@ -1,0 +1,76 @@
+--TEST--
+`new parent()`, `instanceof parent` and `instanceof self` name the parent and the current class, as in PHP, instead of a class called `parent` or `self`
+--FILE--
+namespace Stub;
+
+class Issue2714NewBase
+{
+	public v;
+
+	public function __construct(var v = "none")
+	{
+		let this->v = v;
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2714NewChild extends Issue2714NewBase
+{
+	public function make()
+	{
+		return new parent();
+	}
+
+	public function makeWith(var v)
+	{
+		return new parent(v);
+	}
+
+	public function isParent(var o) -> bool
+	{
+		return o instanceof parent;
+	}
+
+	public function isSelf(var o) -> bool
+	{
+		return o instanceof self;
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2714NewException extends \Exception
+{
+	public function make()
+	{
+		return new parent("m", 3);
+	}
+
+	public function isParent(var o) -> bool
+	{
+		return o instanceof parent;
+	}
+}
+--USAGE--
+use Stub\Issue2714NewBase;
+use Stub\Issue2714NewChild;
+use Stub\Issue2714NewException;
+
+$c = new Issue2714NewChild();
+$p = $c->make();
+echo get_class($p), " ", $p->v, "\n";
+$p = $c->makeWith(5);
+echo get_class($p), " ", $p->v, "\n";
+echo var_export($c->isParent(new Issue2714NewBase()), true), " ", var_export($c->isParent($c), true), " ", var_export($c->isParent(new stdClass()), true), "\n";
+echo var_export($c->isSelf($c), true), " ", var_export($c->isSelf(new Issue2714NewBase()), true), "\n";
+$e = (new Issue2714NewException())->make();
+echo get_class($e), " ", $e->getMessage(), " ", $e->getCode(), "\n";
+echo var_export((new Issue2714NewException())->isParent(new Exception()), true), " ", var_export((new Issue2714NewException())->isParent(new Error()), true), "\n";
+--EXPECT--
+Stub\Issue2714NewBase none
+Stub\Issue2714NewBase 5
+true true false
+true false
+Exception m 3
+true false

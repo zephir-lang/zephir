@@ -64,7 +64,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, __construct)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	zephir_array_fast_append(&_0, &_1);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 96, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 111, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -84,7 +84,15 @@ PHP_METHOD(Stub_Properties_PropertyArray, appendSome)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &value);
 	zephir_cast_to_string(&_0, value);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_array_append(this_ptr, SL("someArray"), &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -103,7 +111,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, setOtherArray)
 		Z_PARAM_ZVAL(arr)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &arr);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 97, arr);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 112, arr);
 }
 
 PHP_METHOD(Stub_Properties_PropertyArray, getOtherArray)
@@ -147,16 +155,20 @@ PHP_METHOD(Stub_Properties_PropertyArray, testIssues1831)
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(&_3$$3);
 		ZVAL_STRING(&_3$$3, "header");
-		ZEPHIR_CALL_FUNCTION(&_4$$3, "stripos", &_5, 100, &info, &_3$$3);
+		ZEPHIR_CALL_FUNCTION(&_4$$3, "stripos", &_5, 99, &info, &_3$$3);
 		zephir_check_call_status();
 		if (!ZEPHIR_IS_FALSE_IDENTICAL(&_4$$3)) {
 			zephir_array_append(&headers, &info, PH_SEPARATE, "stub/properties/propertyarray.zep", 51);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			continue;
 		} else {
 			ZEPHIR_OBS_NVAR(&_6$$5);
 			_7$$5 = zephir_fetch_property_write(this_ptr, _zephir_prop_0, &_6$$5);
 			ZEPHIR_MAKE_WRITE_REF(_7$$5);
-			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_8, 101, _7$$5, &info);
+			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_8, 100, _7$$5, &info);
 			ZEPHIR_UNREF_WRITE(_7$$5);
 			zephir_check_call_status();
 			break;

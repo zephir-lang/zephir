@@ -89,6 +89,13 @@ final class Definition extends AbstractDefinition
     protected ?Definition $enclosingClassDefinition = null;
 
     /**
+     * For closure classes: the namespace of the code the closure is written in.
+     * Names in the closure body resolve against it, while the class itself
+     * stays in the extension namespace.
+     */
+    protected ?string $sourceNamespace = null;
+
+    /**
      * When class is from external dependency
      */
     protected bool $external = false;
@@ -97,6 +104,11 @@ final class Definition extends AbstractDefinition
      * Contains "final" in the definition
      */
     protected bool $final = false;
+
+    /**
+     * Whether this is the class Zephir generates for a closure.
+     */
+    protected bool $closure = false;
 
     protected array $implementedInterfaceDefinitions = [];
 
@@ -270,6 +282,7 @@ final class Definition extends AbstractDefinition
                     'const'     => 0,
                     'data-type' => 'variable',
                     'mandatory' => !$row->isOptional(),
+                    'variadic'  => $row->isVariadic(),
                 ];
 
                 if (!$params['mandatory']) {
@@ -1118,6 +1131,22 @@ final class Definition extends AbstractDefinition
     }
 
     /**
+     * Return the namespace that names in the class body resolve against.
+     */
+    public function getSourceNamespace(): string
+    {
+        return $this->sourceNamespace ?? $this->namespace;
+    }
+
+    /**
+     * Sets the namespace that names in a closure class body resolve against.
+     */
+    public function setSourceNamespace(string $sourceNamespace): void
+    {
+        $this->sourceNamespace = $sourceNamespace;
+    }
+
+    /**
      * Returns the parsed docBlock.
      */
     public function getParsedDocBlock(): ?DocBlock
@@ -1339,6 +1368,16 @@ final class Definition extends AbstractDefinition
     }
 
     /**
+     * Whether this is the class Zephir generates for a closure, in which `self`,
+     * `static` and `parent` name the closure class rather than the class the
+     * closure is written in.
+     */
+    public function isClosure(): bool
+    {
+        return $this->closure;
+    }
+
+    /**
      * Check if the class definition correspond to an interface.
      */
     public function isInterface(): bool
@@ -1514,6 +1553,14 @@ final class Definition extends AbstractDefinition
     public function setIsFinal(bool $final): void
     {
         $this->final = $final;
+    }
+
+    /**
+     * Marks the class Zephir generates for a closure.
+     */
+    public function setIsClosure(bool $closure): void
+    {
+        $this->closure = $closure;
     }
 
     /**
@@ -1698,7 +1745,7 @@ final class Definition extends AbstractDefinition
      * that setter rejects the `false` Compiler::getClassDefinition() returns
      * for an unknown name.
      */
-    private function resolveExtendsDefinition(): ?self
+    public function resolveExtendsDefinition(): ?self
     {
         if (!$this->extendsClass) {
             return null;

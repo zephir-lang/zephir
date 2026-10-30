@@ -89,6 +89,10 @@ PHP_METHOD(Stub_FunctionExists, testBuiltInFunctions)
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		ZVAL_BOOL(&_2$$3, (zephir_function_exists(&func) == SUCCESS));
 		zephir_array_update_zval(&result, &func, &_2$$3, PH_COPY | PH_SEPARATE);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&func);
 	RETURN_CTOR(&result);

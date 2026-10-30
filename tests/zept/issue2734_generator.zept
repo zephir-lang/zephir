@@ -1,0 +1,52 @@
+--TEST--
+Issue #2734: a generator body calls methods with the visibility of its class
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class GBase
+{
+    protected function prot() -> string
+    {
+        return "GBase::prot";
+    }
+
+    public function gen(var o)
+    {
+        yield o->prot();
+    }
+}
+--FILE--
+namespace Stub;
+
+class GChild extends GBase
+{
+}
+--FILE--
+namespace Stub;
+
+class GOther
+{
+    public function gen(var o)
+    {
+        yield o->prot();
+    }
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+function first($g) { foreach ($g as $v) { return $v; } return "none"; }
+
+t("generator in related class", fn() => first((new \Stub\GChild())->gen(new \Stub\GBase())));
+t("generator in unrelated class", fn() => first((new \Stub\GOther())->gen(new \Stub\GBase())));
+--EXPECT--
+generator in related class: GBase::prot
+generator in unrelated class: Error: Call to protected method Stub\GBase::prot() from scope Stub\GOther

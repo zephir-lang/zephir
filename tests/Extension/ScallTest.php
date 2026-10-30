@@ -15,6 +15,7 @@ namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 use Stub\Scall;
+use Stub\ScallDynamic;
 use Stub\Scallparent;
 
 final class ScallTest extends TestCase
@@ -73,5 +74,17 @@ final class ScallTest extends TestCase
         $content = ob_get_clean();
 
         $this->assertSame('hello Scall', $content);
+    }
+
+    /**
+     * `self::{methodName}()` used to compile to nothing and return null.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/2723
+     */
+    public function testSelfDynamicCallReachesEveryVisibility(): void
+    {
+        $this->assertSame('hello public', ScallDynamic::selfDynamicCall1('testMethod1'));
+        $this->assertSame('hello protected', ScallDynamic::selfDynamicCall1('testMethod2'));
+        $this->assertSame('hello private', ScallDynamic::selfDynamicCall1('testMethod3'));
     }
 }

@@ -60,6 +60,10 @@ PHP_METHOD(Stub_Sort, quick)
 	}
 	zephir_memory_observe(&_0);
 	zephir_array_fetch_long(&_0, &arr, 0, PH_NOISY, "stub/sort.zep", 18);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	pivot = zephir_get_intval(&_0);
 	ZEPHIR_INIT_VAR(&left);
 	array_init(&left);
@@ -81,28 +85,40 @@ PHP_METHOD(Stub_Sort, quick)
 			i = _2;
 			ZEPHIR_OBS_NVAR(&_4$$4);
 			zephir_array_fetch_long(&_4$$4, &arr, i, PH_NOISY, "stub/sort.zep", 23);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			item = zephir_get_intval(&_4$$4);
 			if (item < pivot) {
 				ZEPHIR_INIT_NVAR(&_5$$5);
 				ZVAL_LONG(&_5$$5, item);
 				zephir_array_append(&left, &_5$$5, PH_SEPARATE, "stub/sort.zep", 25);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 			} else {
 				ZEPHIR_INIT_NVAR(&_6$$6);
 				ZVAL_LONG(&_6$$6, item);
 				zephir_array_append(&right, &_6$$6, PH_SEPARATE, "stub/sort.zep", 27);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
 			}
 		}
 	}
-	ZEPHIR_CALL_METHOD(&_7, this_ptr, "quick", &_8, 115, &left);
+	ZEPHIR_CALL_METHOD(&_7, this_ptr, "quick", &_8, 114, &left);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_9);
 	zephir_create_array(&_9, 1, 0);
 	ZEPHIR_INIT_VAR(&_10);
 	ZVAL_LONG(&_10, pivot);
 	zephir_array_fast_append(&_9, &_10);
-	ZEPHIR_CALL_METHOD(&_11, this_ptr, "quick", &_8, 115, &right);
+	ZEPHIR_CALL_METHOD(&_11, this_ptr, "quick", &_8, 114, &right);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_FUNCTION("array_merge", NULL, 116, &_7, &_9, &_11);
+	ZEPHIR_RETURN_CALL_FUNCTION("array_merge", NULL, 115, &_7, &_9, &_11);
 	zephir_check_call_status();
 	RETURN_MM();
 }

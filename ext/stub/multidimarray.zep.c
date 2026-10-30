@@ -82,6 +82,10 @@ PHP_METHOD(Stub_MultiDimArray, generate)
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			array_init(&_3$$3);
 			zephir_array_update_zval(&output, &i, &_3$$3, PH_COPY | PH_SEPARATE);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			_6$$3 = size;
 			_5$$3 = 0;
 			_4$$3 = 0;
@@ -100,6 +104,10 @@ PHP_METHOD(Stub_MultiDimArray, generate)
 					ZEPHIR_INIT_NVAR(&_7$$4);
 					ZVAL_LONG(&_7$$4, 1);
 					zephir_array_update_multi(&output, &_7$$4, SL("zz"), 2, &i, &j);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 				}
 			}
 		}
@@ -149,6 +157,10 @@ PHP_METHOD(Stub_MultiDimArray, generateTyped)
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			array_init(&_3$$3);
 			zephir_array_update_long(&output, i, &_3$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 			_6$$3 = size;
 			_5$$3 = 0;
 			_4$$3 = 0;
@@ -166,6 +178,10 @@ PHP_METHOD(Stub_MultiDimArray, generateTyped)
 					ZEPHIR_INIT_NVAR(&_7$$4);
 					ZVAL_LONG(&_7$$4, 1);
 					zephir_array_update_multi(&output, &_7$$4, SL("ll"), 2, (zend_long) i, (zend_long) j);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
+						return;
+					}
 				}
 			}
 		}
@@ -191,6 +207,10 @@ PHP_METHOD(Stub_MultiDimArray, intKeys)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 10);
 	zephir_array_update_multi(&a, &_0, SL("ll"), 2, (zend_long) 0, (zend_long) 1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -212,6 +232,10 @@ PHP_METHOD(Stub_MultiDimArray, stringKeys)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 10);
 	zephir_array_update_multi(&a, &_0, SL("ss"), 4, SL("x"), SL("y"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -233,6 +257,10 @@ PHP_METHOD(Stub_MultiDimArray, threeLevel)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 10);
 	zephir_array_update_multi(&a, &_0, SL("sss"), 6, SL("x"), SL("y"), SL("z"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -254,9 +282,17 @@ PHP_METHOD(Stub_MultiDimArray, mixedKeys)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_multi(&a, &_0, SL("sl"), 3, SL("k"), (zend_long) 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_LONG(&_0, 2);
 	zephir_array_update_multi(&a, &_0, SL("ls"), 3, (zend_long) 1, SL("k"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -280,12 +316,24 @@ PHP_METHOD(Stub_MultiDimArray, appendFinal)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "first");
 	zephir_array_update_multi(&a, &_0, SL("la"), 2, (zend_long) 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "second");
 	zephir_array_update_multi(&a, &_1, SL("la"), 2, (zend_long) 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_LONG(&_2, 1);
 	zephir_array_update_multi(&a, &_2, SL("sa"), 3, SL("bag"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -308,9 +356,17 @@ PHP_METHOD(Stub_MultiDimArray, overwriteFinal)
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_update_multi(&a, &_0, SL("ll"), 2, (zend_long) 0, (zend_long) 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_LONG(&_0, 2);
 	zephir_array_update_multi(&a, &_0, SL("ll"), 2, (zend_long) 0, (zend_long) 0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 
@@ -344,9 +400,17 @@ PHP_METHOD(Stub_MultiDimArray, overwriteArrayWithScalar)
 	ZVAL_LONG(&_1, 3);
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_update_multi(&a, &_0, SL("ss"), 4, SL("p"), SL("q"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 99);
 	zephir_array_update_multi(&a, &_1, SL("ss"), 4, SL("p"), SL("q"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&a);
 }
 

@@ -23,13 +23,15 @@ use Zephir\Class\Definition\GeneratorTransformer;
 use Zephir\Class\Entry as ClassEntry;
 use Zephir\Code\Printer;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\Detectors\WriteDetector;
 use Zephir\Detectors\YieldDetector;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
-use Zephir\Expression;
+use Zephir\Expression\Closure;
+use Zephir\Expression\StaticConstantAccess;
 use Zephir\Name;
 use Zephir\Passes\CallGathererPass;
 use Zephir\Passes\DefiniteAssignmentPass;
@@ -97,6 +99,12 @@ class Method
      * Call Gatherer Pass.
      */
     protected ?CallGathererPass $callGathererPass = null;
+
+    /**
+     * The context preCompile() ran in, kept for the code generated outside
+     * the method body (arginfo, attributes).
+     */
+    protected ?CompilationContext $preCompilationContext = null;
 
     /**
      * Whether the method is abstract or not.
@@ -211,6 +219,15 @@ class Method
      * the ones the memory frame has to release again.
      */
     private array    $capturesToRelease = [];
+    /**
+     * By-value captures of a native scalar type, keyed by name. Reading one
+     * takes no reference, but the body can overwrite it with a string or an
+     * array, so whenever the closure has a memory frame anyway the frame
+     * releases them as well.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2736
+     */
+    private array    $scalarCaptures = [];
     /**
      * Static Type Inference Pass.
      */
@@ -409,9 +426,7 @@ class Method
                             $compilationContext,
                             $parameter['default']
                         );
-                        $expression     = new Expression($parameter['default']);
-                        $expression->setExpectReturn(true, $symbolVariable);
-                        $compiledExpression = $expression->compile($compilationContext);
+                        $compiledExpression = $this->foldDefaultConstant($parameter['default'], $symbolVariable, $compilationContext);
 
                         if ('int' != $compiledExpression->getType()) {
                             throw new CompilerException(
@@ -498,9 +513,7 @@ class Method
                             $compilationContext,
                             $parameter['default']
                         );
-                        $expression     = new Expression($parameter['default']);
-                        $expression->setExpectReturn(true, $symbolVariable);
-                        $compiledExpression = $expression->compile($compilationContext);
+                        $compiledExpression = $this->foldDefaultConstant($parameter['default'], $symbolVariable, $compilationContext);
 
                         if ('bool' !== $compiledExpression->getType()) {
                             throw new CompilerException(
@@ -664,9 +677,7 @@ class Method
                          *
                          * TODO: Rewrite all to codePrinter
                          */
-                        $expression = new Expression($parameter['default']);
-                        $expression->setExpectReturn(true, $symbolVariable);
-                        $compiledExpression = $expression->compile($compilationContext);
+                        $compiledExpression = $this->foldDefaultConstant($parameter['default'], $symbolVariable, $compilationContext);
 
                         $parameter['default']['type']  = $compiledExpression->getType();
                         $parameter['default']['value'] = $compiledExpression->getCode();
@@ -1070,6 +1081,7 @@ class Method
         $symbolTable->setClosureReferences($byRefCaptures);
 
         $this->capturesToRelease = [];
+        $this->scalarCaptures    = [];
         foreach ($this->staticVariables as $var) {
             /**
              * A refcountable capture is read off the carrier with a ZVAL_COPY,
@@ -1092,9 +1104,21 @@ class Method
                 $this->capturesToRelease[$var->getName()] = true;
             }
 
+            if (!$var->isClosureReference() && in_array($var->getType(), Closure::SCALAR_CAPTURE_TYPES, true)) {
+                $this->scalarCaptures[$var->getName()] = true;
+            }
+
+            /**
+             * The clone carries what the local-context pass decided about the
+             * enclosing method's local, which says nothing about how the
+             * closure body uses it: a capture can be mutated in place.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2736
+             */
             $localVar = clone $var;
             $localVar->setIsExternal(true);
-            $localVar->setLocalOnly(true);
+            $localVar->setIsClosureCapture(true);
+            $localVar->setLocalOnly(false);
             $localVar->setDynamicTypes($localVar->getType());
             $localVar->setType('variable');
             $localVar->setIsDoublePointer(false);
@@ -1129,8 +1153,7 @@ class Method
                     $compilationContext->branchManager->getCurrentBranch()
                 );
                 $paramVar->setIsInitialized(true, $compilationContext);
-                /* external => declared even when unused; do NOT combine with
-                 * setLocalOnly() — external+localOnly means "local static". */
+                /* external => declared even when unused */
                 $paramVar->setIsExternal(true);
 
                 if (isset($parameter['cast'])) {
@@ -1184,8 +1207,11 @@ class Method
         $compilationContext->insideCycle     = 0;
         $compilationContext->switchTargets   = [];
         $compilationContext->switchLabelId   = 0;
+        $compilationContext->doWhileTargets  = [];
+        $compilationContext->doWhileLabelId  = 0;
         $compilationContext->insideTryCatch  = 0;
         $compilationContext->currentTryCatch = 0;
+        $compilationContext->tryCatchLabelId = 0;
 
         /**
          * Reset per-method isset() interned-string cache.
@@ -1497,14 +1523,6 @@ class Method
                 $reference->setIsInitialized(true, $compilationContext);
                 $reference->setOriginal($declaredParameter);
                 $reference->increaseUses();
-
-                /**
-                 * It is a local of this method, never a capture read off a
-                 * carrier: isClosureCapture() is `external && localOnly`, and a
-                 * true reading there would route it into the closure
-                 * prologue's carrier reads.
-                 */
-                $reference->setLocalOnly(false);
 
                 if (isset($declaredParameter['cast'])) {
                     $reference->setDynamicTypes('object');
@@ -1962,7 +1980,8 @@ class Method
             if ($variable->isClosureCapture()) {
                 $capture     = $symbolTable->getVariable($name);
                 $captureName = $capture->getName();
-                $mustRelease = isset($this->capturesToRelease[$captureName]);
+                $mustRelease = isset($this->capturesToRelease[$captureName])
+                    || (isset($this->scalarCaptures[$captureName]) && $symbolTable->getMustGrownStack());
 
                 $codePrinter->preOutput(
                     sprintf(
@@ -2206,6 +2225,10 @@ class Method
             }
 
             $tempCodePrinter->output("\t" . 'ZEND_PARSE_PARAMETERS_END();');
+
+            foreach ($this->unionParameterChecks() as $check) {
+                $tempCodePrinter->output("\t" . $check);
+            }
         }
 
         $codePrinter->preOutput($tempCodePrinter->getOutput());
@@ -2514,6 +2537,18 @@ class Method
     }
 
     /**
+     * The context preCompile() ran in, or null before it has run.
+     *
+     * Functions used to reach it through the call gatherer pass, which only
+     * exists for a non-empty body with that optimization on, so turning it
+     * off or writing `function f() {}` crashed the compiler (#2731).
+     */
+    public function getPreCompilationContext(): ?CompilationContext
+    {
+        return $this->preCompilationContext;
+    }
+
+    /**
      * Returns the class definition where the method was declared.
      */
     public function getClassDefinition(): ?Definition
@@ -2661,7 +2696,11 @@ class Method
             if (!empty($parameter['variadic'])) {
                 continue;
             }
-            if (!isset($parameter['default'])) {
+            /**
+             * Presence, not value: a reflected parameter stores the raw PHP
+             * default, which is `null` for `?T $x = null` (#2763).
+             */
+            if (!array_key_exists('default', $parameter)) {
                 ++$required;
             }
         }
@@ -3680,6 +3719,8 @@ class Method
         $callGathererPass   = null;
         $nativeArray        = null;
 
+        $this->preCompilationContext = $compilationContext;
+
         if (is_object($this->statements)) {
             $compilationContext->currentMethod = $this;
 
@@ -3928,6 +3969,38 @@ class Method
      *
      * @see https://github.com/zephir-lang/zephir/issues/2668
      */
+    /**
+     * Union-typed parameters are fetched as a plain zval, so nothing checks
+     * them on entry. Each passed one is checked against its arg-info, and
+     * coerced, the way the engine checks a PHP parameter.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2761
+     *
+     * @return string[]
+     */
+    private function unionParameterChecks(): array
+    {
+        $checks = [];
+
+        foreach (array_values($this->parameters->getParameters()) as $position => $parameter) {
+            if (empty($parameter['data-types']) || !empty($parameter['variadic'])) {
+                continue;
+            }
+
+            $name     = $this->shadowName($parameter['name']);
+            $checks[] = sprintf(
+                'if (%s && UNEXPECTED(!zephir_verify_union_arg(%s, %d))) {',
+                $name,
+                $name,
+                $position + 1
+            );
+            $checks[] = "\t" . 'RETURN_THROWS();';
+            $checks[] = '}';
+        }
+
+        return $checks;
+    }
+
     private function shadowParameter(array $parameter): array
     {
         $parameter['name'] = $this->shadowName($parameter['name']);
@@ -4266,6 +4339,26 @@ class Method
     }
 
     /**
+     * A parameter default is a constant expression in PHP, so a class constant
+     * in it is folded whatever `static-constant-class-folding` says: the C
+     * emitted here needs the literal. See #2711.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function foldDefaultConstant(
+        array $default,
+        Variable $symbolVariable,
+        CompilationContext $compilationContext
+    ): CompiledExpression {
+        $access = new StaticConstantAccess();
+        $access->setExpectReturn(true, $symbolVariable);
+        $access->setAlwaysFold(true);
+
+        return $access->compile($default, $compilationContext);
+    }
+
+    /**
      * @param CompilationContext $compilationContext
      * @param array              $parameter
      * @param Printer            $oldCodePrinter
@@ -4292,9 +4385,7 @@ class Method
             $compilationContext,
             $parameter['default']
         );
-        $expression     = new Expression($parameter['default']);
-        $expression->setExpectReturn(true, $symbolVariable);
-        $compiledExpression = $expression->compile($compilationContext);
+        $compiledExpression = $this->foldDefaultConstant($parameter['default'], $symbolVariable, $compilationContext);
 
         if ($type !== $compiledExpression->getType()) {
             throw new CompilerException(

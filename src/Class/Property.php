@@ -19,10 +19,10 @@ use Zephir\Class\Entry;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
-use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Expression\ConstantExpressionEvaluator;
+use Zephir\Expression\StaticConstantAccess;
 use Zephir\Name;
 use Zephir\StatementsBlock;
 use Zephir\Types\Types;
@@ -185,8 +185,9 @@ class Property
                 break;
 
             case 'static-constant-access':
-                $expression         = new Expression($this->defaultValue);
-                $compiledExpression = $expression->compile($compilationContext);
+                $access = new StaticConstantAccess();
+                $access->setAlwaysFold(true);
+                $compiledExpression = $access->compile($this->defaultValue, $compilationContext);
 
                 $this->declareProperty(
                     $compilationContext,
@@ -659,7 +660,11 @@ class Property
     private function initializeArray(): void
     {
         $classDefinition       = $this->classDefinition;
+        // A parent only known at runtime has no init method to merge.
         $parentClassDefinition = $classDefinition->getExtendsClassDefinition();
+        if (!$parentClassDefinition instanceof Definition) {
+            $parentClassDefinition = null;
+        }
 
         if (!$this->isStatic()) {
             $constructParentMethod = $parentClassDefinition?->getInitMethod();

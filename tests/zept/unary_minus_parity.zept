@@ -1,0 +1,99 @@
+--TEST--
+Unary minus on a zval leaves its operand untouched and behaves as PHP's `-$x`, which is `$x * -1`
+--FILE--
+namespace Stub;
+
+class UnaryMinus
+{
+    public static function negate(var a)
+    {
+        var b;
+
+        let b = -a;
+
+        return [a, b];
+    }
+
+    public static function negateSelf(var a)
+    {
+        let a = -a;
+
+        return a;
+    }
+
+    public static function negateInExpression(var a)
+    {
+        return -a + 1;
+    }
+
+    public static function stopsOnThrow(var a)
+    {
+        var b;
+
+        let b = -a;
+        echo "after";
+
+        return b;
+    }
+}
+--USAGE--
+use Stub\UnaryMinus;
+
+class PhpUnaryMinus
+{
+    public static function negate($a) { $b = -$a; return [$a, $b]; }
+    public static function negateSelf($a) { $a = -$a; return $a; }
+    public static function negateInExpression($a) { return -$a + 1; }
+    public static function stopsOnThrow($a) { $b = -$a; echo 'after'; return $b; }
+}
+
+function outcome(callable $call): string
+{
+    $diagnostics = [];
+    set_error_handler(function ($no, $message) use (&$diagnostics) {
+        $diagnostics[] = $message;
+
+        return true;
+    });
+    ob_start();
+    try {
+        $result = 'ok ' . var_export($call(), true);
+    } catch (\Throwable $e) {
+        $result = get_class($e) . ': ' . $e->getMessage();
+    } finally {
+        restore_error_handler();
+    }
+
+    return $result . ' | echoed=' . ob_get_clean() . ' | diag=' . implode(';', $diagnostics);
+}
+
+$values = [
+    'int'        => 5,
+    'negative'   => -3,
+    'float'      => 1.5,
+    'numeric'    => '5',
+    'float str'  => '1.5',
+    'leading ws' => ' 7',
+    'leading num'=> '5abc',
+    'non-numeric'=> 'abc',
+    'empty str'  => '',
+    'array'      => [1],
+    'null'       => null,
+    'true'       => true,
+    'false'      => false,
+    'int min'    => PHP_INT_MIN,
+    'object'     => new \stdClass(),
+];
+
+foreach (['negate', 'negateSelf', 'negateInExpression', 'stopsOnThrow'] as $method) {
+    foreach ($values as $label => $value) {
+        $zephir = outcome(fn () => UnaryMinus::$method($value));
+        $php    = outcome(fn () => PhpUnaryMinus::$method($value));
+        if ($zephir !== $php) {
+            echo "$method($label): DIFF\n  zephir: $zephir\n  php:    $php\n";
+        }
+    }
+}
+echo "done\n";
+--EXPECT--
+done

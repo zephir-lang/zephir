@@ -1,0 +1,117 @@
+--TEST--
+Issue #2734: a static method call checks visibility against the calling class, falls back to __callStatic(), and self:: and static:: resolve as PHP does
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class SBase
+{
+    protected static function sprot() -> string
+    {
+        return "SBase::sprot";
+    }
+
+    private static function spriv() -> string
+    {
+        return "SBase::spriv";
+    }
+
+    private function sh() -> string
+    {
+        return "SBase::sh";
+    }
+
+    public function viaSelf() -> string
+    {
+        return self::sh();
+    }
+
+    public static function lsb() -> string
+    {
+        return static::spriv();
+    }
+}
+--FILE--
+namespace Stub;
+
+class SChild extends SBase
+{
+    private function sh() -> string
+    {
+        return "SChild::sh";
+    }
+
+    public static function callGrandProt(string cls) -> string
+    {
+        return {cls}::sprot();
+    }
+}
+--FILE--
+namespace Stub;
+
+class SLsb extends SBase
+{
+    private static function spriv() -> string
+    {
+        return "SLsb::spriv";
+    }
+}
+--FILE--
+namespace Stub;
+
+class SUnrelated
+{
+    public static function callSprot(string cls) -> string
+    {
+        return {cls}::sprot();
+    }
+
+    public static function callSpriv(string cls) -> string
+    {
+        return {cls}::spriv();
+    }
+}
+--FILE--
+namespace Stub;
+
+class SMagic
+{
+    protected static function sprot() -> string
+    {
+        return "SMagic::sprot";
+    }
+
+    public static function __callStatic(string name, array args) -> string
+    {
+        return "SMagic::__callStatic(" . name . ")";
+    }
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+
+t("unrelated sprot", fn() => \Stub\SUnrelated::callSprot(\Stub\SBase::class));
+t("unrelated sprot inherited", fn() => \Stub\SUnrelated::callSprot(\Stub\SChild::class));
+t("unrelated spriv", fn() => \Stub\SUnrelated::callSpriv(\Stub\SBase::class));
+t("unrelated __callStatic", fn() => \Stub\SUnrelated::callSprot(\Stub\SMagic::class));
+t("child sprot", fn() => \Stub\SChild::callGrandProt(\Stub\SBase::class));
+t("self shadowed private", fn() => (new \Stub\SChild())->viaSelf());
+t("lsb inherited private", fn() => \Stub\SChild::lsb());
+t("lsb redeclared private", fn() => \Stub\SLsb::lsb());
+--EXPECT--
+unrelated sprot: Error: Call to protected method Stub\SBase::sprot() from scope Stub\SUnrelated
+unrelated sprot inherited: Error: Call to protected method Stub\SBase::sprot() from scope Stub\SUnrelated
+unrelated spriv: Error: Call to private method Stub\SBase::spriv() from scope Stub\SUnrelated
+unrelated __callStatic: SMagic::__callStatic(sprot)
+child sprot: SBase::sprot
+self shadowed private: SBase::sh
+lsb inherited private: SBase::spriv
+lsb redeclared private: Error: Call to private method Stub\SLsb::spriv() from scope Stub\SBase

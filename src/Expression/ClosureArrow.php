@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
-use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
 use Zephir\Class\Method\Parameters;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\CompilerFileAnonymous;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\StatementsBlock;
@@ -35,17 +33,7 @@ class ClosureArrow extends Closure
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
-        $classDefinition = new Definition(
-            $compilationContext->config->get('namespace'),
-            self::$id . '__closure'
-        );
-
-        $classDefinition->setIsFinal(true);
-
-        $compilerFile = new CompilerFileAnonymous($classDefinition, $compilationContext->config);
-        $compilerFile->setLogger($compilationContext->logger);
-
-        $compilationContext->compiler->addClassDefinition($compilerFile, $classDefinition);
+        $classDefinition = $this->createClosureClass($compilationContext);
 
         /**
          * Builds parameters using the only parameter available.
@@ -88,10 +76,6 @@ class ClosureArrow extends Closure
          */
         $bindThis = self::astReferencesThis($expression['right']);
         if ($bindThis) {
-            $classDefinition->setEnclosingClassDefinition(
-                self::enclosingUserClass($compilationContext->classDefinition)
-            );
-
             // Ensure this_ptr is declared and not stripped in the enclosing method
             if ($compilationContext->symbolTable->hasVariable('this')) {
                 $compilationContext->symbolTable->getVariable('this')->setUsed(true);

@@ -15,12 +15,14 @@ namespace Zephir\Statements\Let;
 
 use ReflectionException;
 use Zephir\Class\Property;
+use Zephir\Class\Visibility;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 
 use function in_array;
+use function sprintf;
 
 /**
  * Updates object properties dynamically
@@ -57,20 +59,10 @@ class StaticPropertyAppend extends ArrayIndex
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ('parent' == $className) {
-                    $classDefinition = $compilationContext->classDefinition;
-                    $extendsClass    = $classDefinition->getExtendsClass();
-                    if (!$extendsClass) {
-                        throw new CompilerException(
-                            'Cannot assign static property "'
-                            . $property
-                            . '" on parent because class '
-                            . $classDefinition->getCompleteName()
-                            . ' does not extend any class',
-                            $statement
-                        );
-                    } else {
-                        $classDefinition = $classDefinition->getExtendsClassDefinition();
-                    }
+                    $classDefinition = $compilationContext->parentClassDefinition(
+                        'assign static property "' . $property . '"',
+                        $statement
+                    );
                 }
             }
         }
@@ -90,17 +82,19 @@ class StaticPropertyAppend extends ArrayIndex
             $statement
         );
 
-        if ($propertyDefinition->isPrivate()) {
-            if ($classDefinition !== $compilationContext->classDefinition) {
-                throw new CompilerException(
-                    "Cannot access private static property '"
-                    . $classDefinition->getCompleteName()
-                    . '::'
-                    . $property
-                    . "' out of its declaring context",
-                    $statement
-                );
-            }
+        /**
+         * @see https://github.com/zephir-lang/zephir/issues/2734
+         */
+        if (!Visibility::canAccessProperty($propertyDefinition, $compilationContext)) {
+            throw new CompilerException(
+                sprintf(
+                    "Cannot access %s static property '%s::%s' out of its declaring context",
+                    $propertyDefinition->isPrivate() ? 'private' : 'protected',
+                    $classDefinition->getCompleteName(),
+                    $property
+                ),
+                $statement
+            );
         }
 
         $compilationContext->headersManager->add('kernel/object');

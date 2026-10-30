@@ -166,8 +166,11 @@ final class VariableTest extends TestCase
         $this->zephirVar->setType('not-a-type');
         $this->assertFalse($this->zephirVar->isVariable());
 
+        // A capture has a flag of its own; `external` plus `localOnly` is not one (#2736).
         $this->zephirVar->setLocalOnly(true);
         $this->zephirVar->setIsExternal(true);
+        $this->assertFalse($this->zephirVar->isClosureCapture());
+        $this->zephirVar->setIsClosureCapture(true);
         $this->assertTrue($this->zephirVar->isClosureCapture());
 
         $superglobalVar = new Variable('', '_SERVER');

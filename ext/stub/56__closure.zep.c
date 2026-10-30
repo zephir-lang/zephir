@@ -39,6 +39,10 @@ PHP_METHOD(stub_56__closure, __invoke)
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_VS(&_0, Z_REFVAL_P(&s), "!");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(Z_REFVAL_P(&s), &_0);
 	RETVAL_ZVAL(Z_REFVAL_P(&s), 1, 0);
 	RETURN_MM();

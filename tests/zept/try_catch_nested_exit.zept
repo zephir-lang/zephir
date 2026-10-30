@@ -1,0 +1,274 @@
+--TEST--
+An exception after a nested try reaches the outer catch, and one no catch matches leaves the method, as in PHP
+--FILE--
+namespace Stub;
+
+class TryExit
+{
+    public static calls = 0;
+
+    public static function boomOnce()
+    {
+        let self::calls = self::calls + 1;
+        if self::calls == 1 {
+            throw new \LogicException("boom");
+        }
+
+        return "second";
+    }
+
+    public static function afterNestedOperator(var a, var b)
+    {
+        var e, r;
+
+        try {
+            try {
+                echo "inner";
+            } catch \TypeError, e {
+                echo "inner-catch";
+            }
+            let r = a + b;
+            echo "after";
+        } catch \TypeError, e {
+            echo "outer-catch";
+        }
+        echo "end";
+
+        return true;
+    }
+
+    public static function afterSiblingsOperator(var a, var b)
+    {
+        var e, r;
+
+        try {
+            try {
+                echo "one";
+            } catch \TypeError, e {
+                echo "one-catch";
+            }
+            try {
+                echo "two";
+            } catch \TypeError, e {
+                echo "two-catch";
+            }
+            let r = a + b;
+            echo "after";
+        } catch \TypeError, e {
+            echo "outer-catch";
+        }
+        echo "end";
+
+        return true;
+    }
+
+    public static function afterNestedCall()
+    {
+        var e, r;
+
+        let self::calls = 0;
+        try {
+            try {
+                echo "inner";
+            } catch \LogicException, e {
+                echo "inner-catch";
+            }
+            let r = self::boomOnce();
+            echo "after:" . r;
+        } catch \LogicException, e {
+            echo "outer-catch";
+        }
+        echo "end";
+
+        return self::calls;
+    }
+
+    public static function noMatchingCatch(var a, var b)
+    {
+        var e, r;
+
+        try {
+            let r = a + b;
+            echo "after";
+        } catch \RuntimeException, e {
+            echo "caught";
+        }
+        echo "end";
+
+        return true;
+    }
+
+    public static function noMatchingCatchCall()
+    {
+        var e;
+
+        let self::calls = 0;
+        try {
+            self::boomOnce();
+            echo "after";
+        } catch \RuntimeException, e {
+            echo "caught";
+        }
+        echo "end";
+
+        return true;
+    }
+
+    public static function noMatchingInnerCatch(var a, var b)
+    {
+        var e, r;
+
+        try {
+            try {
+                let r = a + b;
+                echo "after";
+            } catch \RuntimeException, e {
+                echo "inner-catch";
+            }
+            echo "between";
+        } catch \TypeError, e {
+            echo "outer-catch";
+        }
+        echo "end";
+
+        return true;
+    }
+}
+--USAGE--
+use Stub\TryExit;
+
+class PhpTryExit
+{
+    public static $calls = 0;
+
+    public static function boomOnce()
+    {
+        self::$calls++;
+        if (self::$calls == 1) {
+            throw new \LogicException('boom');
+        }
+
+        return 'second';
+    }
+
+    public static function afterNestedOperator($a, $b)
+    {
+        try {
+            try { echo 'inner'; } catch (\TypeError $e) { echo 'inner-catch'; }
+            $r = $a + $b;
+            echo 'after';
+        } catch (\TypeError $e) {
+            echo 'outer-catch';
+        }
+        echo 'end';
+
+        return true;
+    }
+
+    public static function afterSiblingsOperator($a, $b)
+    {
+        try {
+            try { echo 'one'; } catch (\TypeError $e) { echo 'one-catch'; }
+            try { echo 'two'; } catch (\TypeError $e) { echo 'two-catch'; }
+            $r = $a + $b;
+            echo 'after';
+        } catch (\TypeError $e) {
+            echo 'outer-catch';
+        }
+        echo 'end';
+
+        return true;
+    }
+
+    public static function afterNestedCall()
+    {
+        self::$calls = 0;
+        try {
+            try { echo 'inner'; } catch (\LogicException $e) { echo 'inner-catch'; }
+            $r = self::boomOnce();
+            echo 'after:' . $r;
+        } catch (\LogicException $e) {
+            echo 'outer-catch';
+        }
+        echo 'end';
+
+        return self::$calls;
+    }
+
+    public static function noMatchingCatch($a, $b)
+    {
+        try {
+            $r = $a + $b;
+            echo 'after';
+        } catch (\RuntimeException $e) {
+            echo 'caught';
+        }
+        echo 'end';
+
+        return true;
+    }
+
+    public static function noMatchingCatchCall()
+    {
+        self::$calls = 0;
+        try {
+            self::boomOnce();
+            echo 'after';
+        } catch (\RuntimeException $e) {
+            echo 'caught';
+        }
+        echo 'end';
+
+        return true;
+    }
+
+    public static function noMatchingInnerCatch($a, $b)
+    {
+        try {
+            try {
+                $r = $a + $b;
+                echo 'after';
+            } catch (\RuntimeException $e) {
+                echo 'inner-catch';
+            }
+            echo 'between';
+        } catch (\TypeError $e) {
+            echo 'outer-catch';
+        }
+        echo 'end';
+
+        return true;
+    }
+}
+
+function outcome(callable $call): string
+{
+    ob_start();
+    try {
+        $result = 'ok ' . var_export($call(), true);
+    } catch (\Throwable $e) {
+        $result = get_class($e) . ': ' . $e->getMessage();
+    }
+
+    return $result . ' | echoed=' . ob_get_clean();
+}
+
+foreach ([
+    ['afterNestedOperator', [[1], 2]],
+    ['afterSiblingsOperator', [[1], 2]],
+    ['afterNestedCall', []],
+    ['noMatchingCatch', [[1], 2]],
+    ['noMatchingCatchCall', []],
+    ['noMatchingInnerCatch', [[1], 2]],
+] as [$method, $args]) {
+    $zephir = outcome(fn () => TryExit::$method(...$args));
+    $php    = outcome(fn () => PhpTryExit::$method(...$args));
+    echo $method, ': ', $zephir === $php ? 'same' : "DIFF\n  zephir: $zephir\n  php:    $php", "\n";
+}
+--EXPECT--
+afterNestedOperator: same
+afterSiblingsOperator: same
+afterNestedCall: same
+noMatchingCatch: same
+noMatchingCatchCall: same
+noMatchingInnerCatch: same

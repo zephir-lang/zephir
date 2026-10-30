@@ -80,6 +80,10 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	ZVAL_STRING(&_1, "Stub\\PdoStatement");
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_update_long(attrs, 13, &_0, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CALL_PARENT(NULL, stub_oo_extendpdoclass_ce, getThis(), "__construct", NULL, 0, &dsn_zv, &username_zv, &password_zv, attrs);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();

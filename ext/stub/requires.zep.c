@@ -88,7 +88,7 @@ PHP_METHOD(Stub_Requires, requireExternal3)
 		zephir_check_call_status();
 	}
 
-	ZEPHIR_CALL_METHOD(NULL, &external3, "req", NULL, 106, path, this_ptr);
+	ZEPHIR_CALL_METHOD(NULL, &external3, "req", NULL, 105, path, this_ptr);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER(getThis(), "content");
 }
@@ -108,7 +108,7 @@ PHP_METHOD(Stub_Requires, setContent)
 		Z_PARAM_ZVAL(content)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &content);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 109, content);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 124, content);
 }
 
 PHP_METHOD(Stub_Requires, renderTemplate)
@@ -163,7 +163,9 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 				ZEPHIR_INIT_NVAR(&value);
 				ZVAL_COPY(&value, _3$$3);
 				ZEPHIR_CPY_WRT(&_6$$4, &value);
-				if (zephir_set_symbol(&key, &_6$$4) == FAILURE) {
+				zephir_set_symbol(&key, &_6$$4);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
 					return;
 				}
 			} ZEND_HASH_FOREACH_END();
@@ -188,7 +190,9 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 				ZEPHIR_CALL_METHOD(&value, _1$$3, "current", NULL, 0);
 				zephir_check_call_status();
 					ZEPHIR_CPY_WRT(&_9$$5, &value);
-					if (zephir_set_symbol(&key, &_9$$5) == FAILURE) {
+					zephir_set_symbol(&key, &_9$$5);
+					if (UNEXPECTED(EG(exception))) {
+						ZEPHIR_MM_RESTORE();
 						return;
 					}
 			}

@@ -224,7 +224,10 @@ PHP_METHOD(Stub_Strings, testExplode)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &delimiter, &str);
-	zephir_fast_explode(return_value, delimiter, str, ZEND_LONG_MAX);
+	zephir_fast_explode(return_value, delimiter, str, NULL);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -237,7 +240,10 @@ PHP_METHOD(Stub_Strings, testExplodeStr)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
-	zephir_fast_explode_str(return_value, SL(","), str, ZEND_LONG_MAX);
+	zephir_fast_explode_str(return_value, SL(","), str, NULL);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -254,7 +260,10 @@ PHP_METHOD(Stub_Strings, testExplodeLimit)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &limit_param);
 	ZVAL_LONG(&_0, limit);
-	zephir_fast_explode_str(return_value, SL(","), str, zephir_get_intval(&_0) );
+	zephir_fast_explode_str(return_value, SL(","), str, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -477,11 +486,19 @@ PHP_METHOD(Stub_Strings, strToHex)
 		}
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		zephir_string_offset_read(&_2$$3, &value_zv, i, PH_NOISY);
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 125, &_2$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 124, &_2$$3);
 		zephir_check_call_status();
 		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 20, &_3$$3);
 		zephir_check_call_status();
 		zephir_concat_self(&ret, &_5$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		i++;
 	}
 	RETURN_CTOR(&ret);
@@ -532,13 +549,13 @@ PHP_METHOD(Stub_Strings, issue1267)
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(value, &_4);
 	ZEPHIR_INIT_NVAR(&_0);
-	ZEPHIR_CALL_FUNCTION(&_4, "strip_tags", &_5, 126, value);
+	ZEPHIR_CALL_FUNCTION(&_4, "strip_tags", &_5, 125, value);
 	zephir_check_call_status();
 	zephir_stripslashes(&_0, &_4);
 	ZEPHIR_INIT_VAR(&x);
 	zephir_fast_trim(&x, &_0, NULL , ZEPHIR_TRIM_BOTH);
 	ZEPHIR_INIT_VAR(&_6);
-	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 126, value);
+	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 125, value);
 	zephir_check_call_status();
 	zephir_stripcslashes(&_6, &_7);
 	zephir_fast_trim(return_value, &_6, NULL , ZEPHIR_TRIM_BOTH);
@@ -676,6 +693,10 @@ PHP_METHOD(Stub_Strings, issue2186Child2)
 	if (!(ZEPHIR_IS_EMPTY(&val_zv))) {
 		ZEPHIR_INIT_VAR(&_0$$3);
 		ZEPHIR_CONCAT_VS(&_0$$3, &val_zv, " all ok");
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CPY_WRT(&output, &_0$$3);
 	}
 	RETURN_CCTOR(&output);

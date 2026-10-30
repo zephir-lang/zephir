@@ -15,6 +15,7 @@ namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 use Stub\Closures;
+use Stub\Constants;
 use TypeError;
 
 final class ClosureTest extends TestCase
@@ -638,5 +639,20 @@ final class ClosureTest extends TestCase
             $test->issue2668ByRefRewrite('a')
         );
         $this->assertSame(8, $test->issue2668ByRefRewriteArray([1]));
+    }
+
+    /**
+     * An arrow closure body resolves `use ... as` aliases like a regular one.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/2686
+     */
+    public function testIssue2686ArrowClosureResolvesAlias(): void
+    {
+        $test = new Closures();
+
+        $this->assertSame(15, ($test->issue2686ArrowAliasConstant())(5));
+        $this->assertTrue(($test->issue2686ArrowAliasInstanceOf())(new Constants()));
+        $this->assertFalse(($test->issue2686ArrowAliasInstanceOf())(new \stdClass()));
+        $this->assertSame(Constants::class, ($test->issue2686ArrowAliasClassName())(0));
     }
 }
