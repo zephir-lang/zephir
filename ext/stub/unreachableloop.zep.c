@@ -94,7 +94,7 @@ PHP_METHOD(Stub_UnreachableLoop, toPropertyString)
 				ZEPHIR_MM_RESTORE();
 				return;
 			}
-			if (Z_TYPE_P(&v) == IS_ARRAY) {
+			if ((Z_TYPE_P(&v) == IS_ARRAY)) {
 				ZEPHIR_INIT_NVAR(&_4$$5);
 				zephir_fast_join_str(&_4$$5, SL("\", \""), &v);
 				ZEPHIR_INIT_NVAR(&_5$$5);
@@ -161,7 +161,7 @@ PHP_METHOD(Stub_UnreachableLoop, toPropertyString)
 					ZEPHIR_MM_RESTORE();
 					return;
 				}
-				if (Z_TYPE_P(&v) == IS_ARRAY) {
+				if ((Z_TYPE_P(&v) == IS_ARRAY)) {
 					ZEPHIR_INIT_NVAR(&_10$$9);
 					zephir_fast_join_str(&_10$$9, SL("\", \""), &v);
 					ZEPHIR_INIT_NVAR(&_11$$9);

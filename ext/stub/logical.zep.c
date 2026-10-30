@@ -171,7 +171,7 @@ PHP_METHOD(Stub_Logical, testMixed2)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &match, &minLength);
-	_0 = Z_TYPE_P(match) == IS_ARRAY;
+	_0 = (Z_TYPE_P(match) == IS_ARRAY);
 	if (_0) {
 		_0 = zephir_fast_count_int(match) == 2;
 	}

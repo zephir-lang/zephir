@@ -52,7 +52,10 @@ abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
                 $resolvedParam,
             );
         } else {
-            $condition = 'Z_TYPE_P(' . $resolvedParam . ') == ' . $this->getType();
+            // Parenthesized so the condition stays one operand: as the right side of
+            // `true !== is_array(v)` a bare `1 != Z_TYPE_P(v) == IS_ARRAY` groups as
+            // `(1 != Z_TYPE_P(v)) == IS_ARRAY`, which is always false.
+            $condition = '(Z_TYPE_P(' . $resolvedParam . ') == ' . $this->getType() . ')';
         }
 
         return new CompiledExpression('bool', $condition, $expression);

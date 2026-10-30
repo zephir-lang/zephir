@@ -619,7 +619,8 @@ zend_property_info *zephir_declare_typed_property(zend_class_entry *ce, const ch
  */
 static int zephir_union_arg_is_instance(zend_type type, zend_object *object)
 {
-	zend_type *list_type;
+	/* const: PHP 8.5's ZEND_TYPE_LIST_FOREACH iterates a const zend_type list. */
+	const zend_type *list_type;
 
 	if (ZEND_TYPE_HAS_LIST(type)) {
 		ZEND_TYPE_LIST_FOREACH(ZEND_TYPE_LIST(type), list_type) {
