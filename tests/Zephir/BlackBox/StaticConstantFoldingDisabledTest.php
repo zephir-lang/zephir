@@ -237,7 +237,7 @@ final class StaticConstantFoldingDisabledTest extends TestCase
          * 8.0 through 8.5: declaration defaults hold the constant's value, and a
          * subclass overriding `OWN` does not change what `self::OWN` meant in
          * an initializer. Reflection reports the defaults too. `static::` is covered by tests/zept/issue2711_*.zept,
-         * since only the pure-PHP parser accepts `static::CONSTANT` today.
+         * and through ext-zephir_parser by ParserExtensionGrammarTest.
          */
         $this->assertSame(
             '["own","parent","parent","interface",2,"own","own","own",7,1.5,true,"own","own","own",8,"own","own",8,"own!",1,7,"own"]',

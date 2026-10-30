@@ -150,7 +150,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Added `instanceof static`, which tests against the called class as PHP does [#2714](https://github.com/zephir-lang/zephir/issues/2714)
 
 ### Changed
-- Raised the minimum `ext-zephir_parser` to 2.9.0 for the `instanceof static` grammar [#2714](https://github.com/zephir-lang/zephir/issues/2714)
+- Raised the minimum `ext-zephir_parser` to 2.10.0 for the `instanceof static` [#2714](https://github.com/zephir-lang/zephir/issues/2714), `static::CONSTANT` [#2711](https://github.com/zephir-lang/zephir/issues/2711), `static::{method}()` and `CONSTANT::{method}()` [#2723](https://github.com/zephir-lang/zephir/issues/2723) grammar
 - Released the table a request `hash` global holds at the end of the request, so C code freeing it must reset it to `NULL` [#2726](https://github.com/zephir-lang/zephir/issues/2726)
 
 ## [1.6.1] - 2026-10-02
