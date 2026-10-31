@@ -1087,14 +1087,15 @@ PHP_METHOD(Stub_Bitwise, testbitwiseXor)
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&j);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[2];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, 123);
-	ZEPHIR_CALL_METHOD(&i, this_ptr, "getInt", NULL, 0, &_0);
+	ZEPHIR_CALL_METHOD_CACHED(&i, this_ptr, "getInt", &_zephir_call_cache[0], &_0);
 	zephir_check_call_status();
 	ZVAL_LONG(&_0, 321);
-	ZEPHIR_CALL_METHOD(&j, this_ptr, "getInt", NULL, 0, &_0);
+	ZEPHIR_CALL_METHOD_CACHED(&j, this_ptr, "getInt", &_zephir_call_cache[1], &_0);
 	zephir_check_call_status();
 	zephir_bitwise_xor_function(return_value, &i, &j);
 	if (UNEXPECTED(EG(exception))) {

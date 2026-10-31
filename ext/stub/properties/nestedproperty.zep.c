@@ -37,6 +37,7 @@ PHP_METHOD(Stub_Properties_NestedProperty, __construct)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("bar", 3, 1);
@@ -47,7 +48,7 @@ PHP_METHOD(Stub_Properties_NestedProperty, __construct)
 	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, stub_properties_nestedpropertytarget_ce);
 	if (zephir_has_constructor(&_0)) {
-		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, &_0, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 	}
 

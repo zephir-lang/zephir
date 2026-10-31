@@ -257,6 +257,7 @@ PHP_METHOD(Stub_Fasta, main)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)
 	ZEND_PARSE_PARAMETERS_END();
@@ -302,7 +303,7 @@ PHP_METHOD(Stub_Fasta, main)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "fastaRepeat", NULL, 0, &_2, &alu);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, this_ptr, "fastaRepeat", &_zephir_call_cache[0], &_2, &alu);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 }

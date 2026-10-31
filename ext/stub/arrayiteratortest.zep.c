@@ -40,12 +40,13 @@ PHP_METHOD(Stub_ArrayIteratorTest, test)
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_5);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[6];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&arr);
 	object_init_ex(&arr, stub_arrayiterator_ce);
-	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 5);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, &arr, "__construct", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	if (Z_TYPE_P(&arr) == IS_STRING) {
 		ZEPHIR_INIT_VAR(&_1);
@@ -74,24 +75,24 @@ PHP_METHOD(Stub_ArrayIteratorTest, test)
 			RETURN_MM();
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, _0, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "rewind", &_zephir_call_cache[1]);
 		zephir_check_call_status();
 		_6 = 1;
 		while (1) {
 			if (_6) {
 				_6 = 0;
 			} else {
-				ZEPHIR_CALL_METHOD(NULL, _0, "next", NULL, 0);
+				ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "next", &_zephir_call_cache[2]);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_5, _0, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&_5, _0, "valid", &_zephir_call_cache[3]);
 			zephir_check_call_status();
 			if (!zend_is_true(&_5)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&k, _0, "key", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&k, _0, "key", &_zephir_call_cache[4]);
 			zephir_check_call_status();
-			ZEPHIR_CALL_METHOD(&v, _0, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&v, _0, "current", &_zephir_call_cache[5]);
 			zephir_check_call_status();
 				ZEPHIR_CONCAT_VV(return_value, &k, &v);
 				if (UNEXPECTED(EG(exception))) {

@@ -143,7 +143,7 @@ PHP_METHOD(Stub_Issue2691, pushAndReturn)
 		return;
 	}
 	ZEPHIR_MAKE_WRITE_REF(&_5);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 69, &_5, &value_zv);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 45, &_5, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER_TYPED(getThis(), "prefixes", IS_ARRAY);
 }
@@ -211,7 +211,7 @@ PHP_METHOD(Stub_Issue2691, pushIntoDynamic)
 		return;
 	}
 	ZEPHIR_MAKE_WRITE_REF(&_5);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 69, &_5, &value_zv);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 45, &_5, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER_TYPED(getThis(), "prefixes", IS_ARRAY);
 }
@@ -239,7 +239,7 @@ PHP_METHOD(Stub_Issue2691, shiftDynamic)
 	zephir_memory_observe(&_0);
 	_1 = zephir_fetch_property_write_zval(this_ptr, &name_zv, &_0);
 	ZEPHIR_MAKE_WRITE_REF(_1);
-	ZEPHIR_RETURN_CALL_FUNCTION("array_shift", NULL, 70, _1);
+	ZEPHIR_RETURN_CALL_FUNCTION("array_shift", NULL, 46, _1);
 	ZEPHIR_UNREF_WRITE(_1);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -303,7 +303,7 @@ PHP_METHOD(Stub_Issue2691, pushIntoBracedLiteral)
 		return;
 	}
 	ZEPHIR_MAKE_WRITE_REF(&_5);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 69, &_5, &value_zv);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 45, &_5, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER_TYPED(getThis(), "prefixes", IS_ARRAY);
 }
@@ -350,7 +350,7 @@ PHP_METHOD(Stub_Issue2691, pushIntoReadonly)
 		return;
 	}
 	ZEPHIR_MAKE_WRITE_REF(&_2);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 69, &_2, &value_zv);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 45, &_2, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(1);
 }
@@ -430,7 +430,7 @@ PHP_METHOD(Stub_Issue2691, pushThenCopy)
 		return;
 	}
 	ZEPHIR_MAKE_WRITE_REF(&_5);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 69, &_5, &value_zv);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 45, &_5, &value_zv);
 	zephir_check_call_status();
 	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_0, 70, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&copy);
@@ -532,7 +532,7 @@ PHP_METHOD(Stub_Issue2691, pushStatic)
 		return;
 	}
 	ZEPHIR_MAKE_WRITE_REF(&_5);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 69, &_5, &value_zv);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 45, &_5, &value_zv);
 	zephir_check_call_status();
 	zephir_read_static_property_ce(&_6, stub_issue2691_ce, SL("staticPrefixes"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTOR(&_6);
@@ -599,7 +599,7 @@ PHP_METHOD(Stub_Issue2691, pushIntoLocalShared)
 		return;
 	}
 	ZEPHIR_MAKE_WRITE_REF(&_1);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 69, &_1, &value_zv);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 45, &_1, &value_zv);
 	zephir_check_call_status();
 	zephir_create_array(return_value, 2, 0);
 	zephir_array_update_string(return_value, SL("container"), &container, PH_COPY | PH_SEPARATE);
@@ -632,7 +632,7 @@ PHP_METHOD(Stub_Issue2691, shiftRows)
 	zephir_memory_observe(&_0);
 	_1 = zephir_fetch_property_write(this_ptr, _zephir_prop_0, &_0);
 	ZEPHIR_MAKE_WRITE_REF(_1);
-	ZEPHIR_RETURN_CALL_FUNCTION("array_shift", NULL, 70, _1);
+	ZEPHIR_RETURN_CALL_FUNCTION("array_shift", NULL, 46, _1);
 	ZEPHIR_UNREF_WRITE(_1);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -668,7 +668,7 @@ PHP_METHOD(Stub_Issue2691, retypeValue)
 	zephir_memory_observe(&_0);
 	_1 = zephir_fetch_property_write(this_ptr, _zephir_prop_0, &_0);
 	ZEPHIR_MAKE_WRITE_REF(_1);
-	ZEPHIR_RETURN_CALL_FUNCTION("settype", NULL, 71, _1, &type_zv);
+	ZEPHIR_RETURN_CALL_FUNCTION("settype", NULL, 47, _1, &type_zv);
 	ZEPHIR_UNREF_WRITE(_1);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -715,7 +715,7 @@ PHP_METHOD(Stub_Issue2691, pushMissingKey)
 		return;
 	}
 	ZEPHIR_MAKE_WRITE_REF(&_2);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 69, &_2, &value_zv);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 45, &_2, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER_TYPED(getThis(), "prefixes", IS_ARRAY);
 }
@@ -765,7 +765,7 @@ PHP_METHOD(Stub_Issue2691, pushIntoOverloaded)
 		return;
 	}
 	ZEPHIR_MAKE_WRITE_REF(&_2);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 69, &_2, &value_zv);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 45, &_2, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(1);
 }
@@ -835,7 +835,7 @@ PHP_METHOD(Stub_Issue2691, writeLeakProbe)
 {
 	zval _1$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zephir_fcall_cache_entry *_0 = NULL, *_3 = NULL;
+	zephir_fcall_cache_entry *_0 = NULL;
 	zval *iterations_param = NULL, before, after, sink, _2$$3;
 	zend_long iterations, ZEPHIR_LAST_CALL_STATUS, i = 0;
 	zval *this_ptr = getThis();
@@ -845,6 +845,7 @@ PHP_METHOD(Stub_Issue2691, writeLeakProbe)
 	ZVAL_UNDEF(&sink);
 	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_1$$3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("rows", 4, 1);
@@ -858,7 +859,7 @@ PHP_METHOD(Stub_Issue2691, writeLeakProbe)
 	zephir_fetch_params(1, 1, 0, &iterations_param);
 	ZEPHIR_INIT_VAR(&sink);
 	ZVAL_NULL(&sink);
-	ZEPHIR_CALL_FUNCTION(&before, "memory_get_usage", &_0, 49);
+	ZEPHIR_CALL_FUNCTION(&before, "memory_get_usage", &_0, 36);
 	zephir_check_call_status();
 	i = 0;
 	while (1) {
@@ -874,11 +875,11 @@ PHP_METHOD(Stub_Issue2691, writeLeakProbe)
 		ZVAL_STRING(&_2$$3, "next");
 		zephir_array_fast_append(&_1$$3, &_2$$3);
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 71, &_1$$3);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "shiftRows", &_3, 0);
+		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "shiftRows", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		i++;
 	}
-	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
+	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 36);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
 	if (UNEXPECTED(EG(exception))) {
@@ -907,7 +908,7 @@ PHP_METHOD(Stub_Issue2691, leakProbeControl)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &iterations_param);
-	ZEPHIR_CALL_FUNCTION(&before, "memory_get_usage", &_0, 49);
+	ZEPHIR_CALL_FUNCTION(&before, "memory_get_usage", &_0, 36);
 	zephir_check_call_status();
 	i = 0;
 	while (1) {
@@ -917,7 +918,7 @@ PHP_METHOD(Stub_Issue2691, leakProbeControl)
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "x");
 		ZVAL_LONG(&_2$$3, 64);
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "str_repeat", &_4, 30, &_1$$3, &_2$$3);
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "str_repeat", &_4, 22, &_1$$3, &_2$$3);
 		zephir_check_call_status();
 		zephir_update_property_array_append(this_ptr, SL("retained"), &_3$$3);
 		if (UNEXPECTED(EG(exception))) {
@@ -926,7 +927,7 @@ PHP_METHOD(Stub_Issue2691, leakProbeControl)
 		}
 		i++;
 	}
-	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
+	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 36);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
 	if (UNEXPECTED(EG(exception))) {

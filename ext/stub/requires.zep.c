@@ -72,6 +72,7 @@ PHP_METHOD(Stub_Requires, requireExternal3)
 	ZVAL_UNDEF(&path_sub);
 	ZVAL_UNDEF(&external3);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[2];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(path)
 	ZEND_PARSE_PARAMETERS_END();
@@ -84,11 +85,11 @@ PHP_METHOD(Stub_Requires, requireExternal3)
 	ZEPHIR_INIT_VAR(&external3);
 	object_init_ex(&external3, stub_requires_external3_ce);
 	if (zephir_has_constructor(&external3)) {
-		ZEPHIR_CALL_METHOD(NULL, &external3, "__construct", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, &external3, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 	}
 
-	ZEPHIR_CALL_METHOD(NULL, &external3, "req", NULL, 105, path, this_ptr);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, &external3, "req", &_zephir_call_cache[1], path, this_ptr);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER(getThis(), "content");
 }
@@ -130,6 +131,7 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	ZVAL_UNDEF(&_7$$3);
 	ZVAL_UNDEF(&_6$$4);
 	ZVAL_UNDEF(&_9$$5);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[5];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(templatePath)
 		Z_PARAM_ZVAL(params)
@@ -170,24 +172,24 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 				}
 			} ZEND_HASH_FOREACH_END();
 		} else {
-			ZEPHIR_CALL_METHOD(NULL, _1$$3, "rewind", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, _1$$3, "rewind", &_zephir_call_cache[0]);
 			zephir_check_call_status();
 			_8$$3 = 1;
 			while (1) {
 				if (_8$$3) {
 					_8$$3 = 0;
 				} else {
-					ZEPHIR_CALL_METHOD(NULL, _1$$3, "next", NULL, 0);
+					ZEPHIR_CALL_METHOD_CACHED(NULL, _1$$3, "next", &_zephir_call_cache[1]);
 					zephir_check_call_status();
 				}
-				ZEPHIR_CALL_METHOD(&_7$$3, _1$$3, "valid", NULL, 0);
+				ZEPHIR_CALL_METHOD_CACHED(&_7$$3, _1$$3, "valid", &_zephir_call_cache[2]);
 				zephir_check_call_status();
 				if (!zend_is_true(&_7$$3)) {
 					break;
 				}
-				ZEPHIR_CALL_METHOD(&key, _1$$3, "key", NULL, 0);
+				ZEPHIR_CALL_METHOD_CACHED(&key, _1$$3, "key", &_zephir_call_cache[3]);
 				zephir_check_call_status();
-				ZEPHIR_CALL_METHOD(&value, _1$$3, "current", NULL, 0);
+				ZEPHIR_CALL_METHOD_CACHED(&value, _1$$3, "current", &_zephir_call_cache[4]);
 				zephir_check_call_status();
 					ZEPHIR_CPY_WRT(&_9$$5, &value);
 					zephir_set_symbol(&key, &_9$$5);

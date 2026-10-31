@@ -784,7 +784,12 @@ class Backend
         CompilationContext $context
     ): void {
         $paramStr = null != $params ? ', ' . implode(', ', $params) : '';
-        $macro    = 'CALL_METHOD';
+
+        /**
+         * A name known at compile time comes with the site's own inline cache
+         * record; a name held in a variable comes with `NULL, 0` (#2790).
+         */
+        $macro = 'CALL_METHOD_CACHED';
         if ($methodName instanceof Variable) {
             $macro      = 'CALL_METHOD_ZVAL';
             $methodName = $this->getVariableCode($methodName);
@@ -1976,6 +1981,7 @@ class Backend
              * @see https://github.com/zephir-lang/zephir/issues/2546
              */
             $firstIterFlag = $compilationContext->symbolTable->addTemp('bool', $compilationContext);
+            $methodCache   = $compilationContext->cacheManager->getMethodCache();
 
             if ($emitTypeWrapper) {
                 $codePrinter->output('} else {');
@@ -1983,7 +1989,8 @@ class Backend
             }
 
             $codePrinter->output(
-                'ZEPHIR_CALL_METHOD(NULL, ' . $this->getVariableCode($exprVariable) . ', "rewind", NULL, 0);'
+                'ZEPHIR_CALL_METHOD_CACHED(NULL, ' . $this->getVariableCode($exprVariable) . ', "rewind", '
+                . $methodCache->get($compilationContext) . ');'
             );
             $codePrinter->output('zephir_check_call_status();');
             $codePrinter->output($firstIterFlag->getName() . ' = 1;');
@@ -1999,16 +2006,17 @@ class Backend
             $codePrinter->output('} else {');
             $codePrinter->increaseLevel();
             $codePrinter->output(
-                'ZEPHIR_CALL_METHOD(NULL, ' . $this->getVariableCode($exprVariable) . ', "next", NULL, 0);'
+                'ZEPHIR_CALL_METHOD_CACHED(NULL, ' . $this->getVariableCode($exprVariable) . ', "next", '
+                . $methodCache->get($compilationContext) . ');'
             );
             $codePrinter->output('zephir_check_call_status();');
             $codePrinter->decreaseLevel();
             $codePrinter->output('}');
 
             $codePrinter->output(
-                'ZEPHIR_CALL_METHOD(&' . $tempValidVariable->getName() . ', ' . $this->getVariableCode(
+                'ZEPHIR_CALL_METHOD_CACHED(&' . $tempValidVariable->getName() . ', ' . $this->getVariableCode(
                     $exprVariable
-                ) . ', "valid", NULL, 0);'
+                ) . ', "valid", ' . $methodCache->get($compilationContext) . ');'
             );
             $codePrinter->output('zephir_check_call_status();');
             $codePrinter->output('if (!zend_is_true(&' . $tempValidVariable->getName() . ')) {');
@@ -2019,18 +2027,18 @@ class Backend
 
             if (isset($keyVariable)) {
                 $codePrinter->output(
-                    'ZEPHIR_CALL_METHOD(' . $this->getVariableCode($keyVariable) . ', ' . $this->getVariableCode(
+                    'ZEPHIR_CALL_METHOD_CACHED(' . $this->getVariableCode($keyVariable) . ', ' . $this->getVariableCode(
                         $exprVariable
-                    ) . ', "key", NULL, 0);'
+                    ) . ', "key", ' . $methodCache->get($compilationContext) . ');'
                 );
                 $codePrinter->output('zephir_check_call_status();');
             }
 
             if (isset($variable)) {
                 $codePrinter->output(
-                    'ZEPHIR_CALL_METHOD(' . $this->getVariableCode($variable) . ', ' . $this->getVariableCode(
+                    'ZEPHIR_CALL_METHOD_CACHED(' . $this->getVariableCode($variable) . ', ' . $this->getVariableCode(
                         $exprVariable
-                    ) . ', "current", NULL, 0);'
+                    ) . ', "current", ' . $methodCache->get($compilationContext) . ');'
                 );
                 $codePrinter->output('zephir_check_call_status();');
             }

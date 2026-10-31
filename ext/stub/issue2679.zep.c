@@ -277,6 +277,7 @@ PHP_METHOD(Stub_Issue2679, loopOnly)
 	ZVAL_UNDEF(&x);
 	ZVAL_UNDEF(&item);
 	ZVAL_UNDEF(&_1);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[4];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		ZEPHIR_Z_PARAM_ARRAY(items, items_param)
 	ZEND_PARSE_PARAMETERS_END();
@@ -294,22 +295,22 @@ PHP_METHOD(Stub_Issue2679, loopOnly)
 			ZEPHIR_CPY_WRT(&x, &item);
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, &items, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, &items, "rewind", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		_2 = 1;
 		while (1) {
 			if (_2) {
 				_2 = 0;
 			} else {
-				ZEPHIR_CALL_METHOD(NULL, &items, "next", NULL, 0);
+				ZEPHIR_CALL_METHOD_CACHED(NULL, &items, "next", &_zephir_call_cache[1]);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_1, &items, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&_1, &items, "valid", &_zephir_call_cache[2]);
 			zephir_check_call_status();
 			if (!zend_is_true(&_1)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&item, &items, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&item, &items, "current", &_zephir_call_cache[3]);
 			zephir_check_call_status();
 				ZEPHIR_CPY_WRT(&x, &item);
 		}
@@ -430,6 +431,7 @@ PHP_METHOD(Stub_Issue2679, tryOnly)
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_0$$4);
 	ZVAL_UNDEF(&_1$$4);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_BOOL(boom)
 	ZEND_PARSE_PARAMETERS_END();
@@ -445,7 +447,7 @@ PHP_METHOD(Stub_Issue2679, tryOnly)
 			object_init_ex(&_0$$4, spl_ce_RuntimeException);
 			ZEPHIR_INIT_VAR(&_1$$4);
 			ZVAL_STRING(&_1$$4, "boom");
-			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 68, &_1$$4);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_0$$4, "__construct", &_zephir_call_cache[0], &_1$$4);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_0$$4, "stub/issue2679.zep", 206);
 			goto try_end_1;
@@ -668,7 +670,7 @@ PHP_METHOD(Stub_Issue2679, conditionalHeap)
 		ZEPHIR_INIT_VAR(&_0$$3);
 		ZVAL_STRING(&_0$$3, "x");
 		ZVAL_LONG(&_1$$3, 256);
-		ZEPHIR_CALL_FUNCTION(&x, "str_repeat", NULL, 30, &_0$$3, &_1$$3);
+		ZEPHIR_CALL_FUNCTION(&x, "str_repeat", NULL, 22, &_0$$3, &_1$$3);
 		zephir_check_call_status();
 	}
 	ZEPHIR_INIT_VAR(&_2);
@@ -683,10 +685,10 @@ PHP_METHOD(Stub_Issue2679, conditionalHeap)
  */
 PHP_METHOD(Stub_Issue2679, leakProbe)
 {
-	zval _6$$3;
+	zval _3$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zephir_fcall_cache_entry *_0 = NULL, *_2 = NULL, *_3 = NULL, *_5 = NULL, *_8 = NULL, *_9 = NULL, *_10 = NULL, *_11 = NULL, *_12 = NULL, *_13 = NULL, *_14 = NULL;
-	zval *iterations_param = NULL, before, after, sink, _1$$3, _4$$3, _7$$3;
+	zephir_fcall_cache_entry *_0 = NULL;
+	zval *iterations_param = NULL, before, after, sink, _1$$3, _2$$3, _4$$3;
 	zend_long iterations, ZEPHIR_LAST_CALL_STATUS, i = 0;
 	zval *this_ptr = getThis();
 
@@ -694,9 +696,10 @@ PHP_METHOD(Stub_Issue2679, leakProbe)
 	ZVAL_UNDEF(&after);
 	ZVAL_UNDEF(&sink);
 	ZVAL_UNDEF(&_1$$3);
+	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_4$$3);
-	ZVAL_UNDEF(&_7$$3);
-	ZVAL_UNDEF(&_6$$3);
+	ZVAL_UNDEF(&_3$$3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[12];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(iterations)
 	ZEND_PARSE_PARAMETERS_END();
@@ -705,7 +708,7 @@ PHP_METHOD(Stub_Issue2679, leakProbe)
 	zephir_fetch_params(1, 1, 0, &iterations_param);
 	ZEPHIR_INIT_VAR(&sink);
 	ZVAL_NULL(&sink);
-	ZEPHIR_CALL_FUNCTION(&before, "memory_get_usage", &_0, 49);
+	ZEPHIR_CALL_FUNCTION(&before, "memory_get_usage", &_0, 36);
 	zephir_check_call_status();
 	i = 0;
 	while (1) {
@@ -713,52 +716,52 @@ PHP_METHOD(Stub_Issue2679, leakProbe)
 			break;
 		}
 		ZVAL_BOOL(&_1$$3, 1);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "conditional", &_2, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "conditional", &_zephir_call_cache[0], &_1$$3);
 		zephir_check_call_status();
 		ZVAL_BOOL(&_1$$3, 0);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "conditional", &_2, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "conditional", &_zephir_call_cache[1], &_1$$3);
 		zephir_check_call_status();
 		ZVAL_BOOL(&_1$$3, 1);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "conditionalHeap", &_3, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "conditionalHeap", &_zephir_call_cache[2], &_1$$3);
 		zephir_check_call_status();
 		ZVAL_BOOL(&_1$$3, 0);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "conditionalHeap", &_3, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "conditionalHeap", &_zephir_call_cache[3], &_1$$3);
 		zephir_check_call_status();
 		ZVAL_BOOL(&_1$$3, 1);
-		ZVAL_BOOL(&_4$$3, 1);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "multiBranch", &_5, 0, &_1$$3, &_4$$3);
+		ZVAL_BOOL(&_2$$3, 1);
+		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "multiBranch", &_zephir_call_cache[4], &_1$$3, &_2$$3);
 		zephir_check_call_status();
-		ZEPHIR_INIT_NVAR(&_6$$3);
-		zephir_create_array(&_6$$3, 2, 0);
-		ZEPHIR_INIT_NVAR(&_7$$3);
-		ZVAL_LONG(&_7$$3, 1);
-		zephir_array_fast_append(&_6$$3, &_7$$3);
-		ZEPHIR_INIT_NVAR(&_7$$3);
-		ZVAL_LONG(&_7$$3, 2);
-		zephir_array_fast_append(&_6$$3, &_7$$3);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "loopOnly", &_8, 0, &_6$$3);
+		ZEPHIR_INIT_NVAR(&_3$$3);
+		zephir_create_array(&_3$$3, 2, 0);
+		ZEPHIR_INIT_NVAR(&_4$$3);
+		ZVAL_LONG(&_4$$3, 1);
+		zephir_array_fast_append(&_3$$3, &_4$$3);
+		ZEPHIR_INIT_NVAR(&_4$$3);
+		ZVAL_LONG(&_4$$3, 2);
+		zephir_array_fast_append(&_3$$3, &_4$$3);
+		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "loopOnly", &_zephir_call_cache[5], &_3$$3);
 		zephir_check_call_status();
 		ZVAL_LONG(&_1$$3, 2);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "whileOnly", &_9, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "whileOnly", &_zephir_call_cache[6], &_1$$3);
 		zephir_check_call_status();
 		ZVAL_LONG(&_1$$3, 1);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "switchWithoutDefault", &_10, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "switchWithoutDefault", &_zephir_call_cache[7], &_1$$3);
 		zephir_check_call_status();
 		ZVAL_BOOL(&_1$$3, 0);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "tryOnly", &_11, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "tryOnly", &_zephir_call_cache[8], &_1$$3);
 		zephir_check_call_status();
 		ZVAL_BOOL(&_1$$3, 1);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "stringLocal", &_12, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "stringLocal", &_zephir_call_cache[9], &_1$$3);
 		zephir_check_call_status();
 		ZVAL_BOOL(&_1$$3, 1);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "arrayLocal", &_13, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "arrayLocal", &_zephir_call_cache[10], &_1$$3);
 		zephir_check_call_status();
 		ZVAL_BOOL(&_1$$3, 1);
-		ZEPHIR_CALL_METHOD(&sink, this_ptr, "passAsArgument", &_14, 0, &_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "passAsArgument", &_zephir_call_cache[11], &_1$$3);
 		zephir_check_call_status();
 		i++;
 	}
-	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
+	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 36);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
 	if (UNEXPECTED(EG(exception))) {
@@ -776,7 +779,7 @@ PHP_METHOD(Stub_Issue2679, leakProbe)
 PHP_METHOD(Stub_Issue2679, leakProbeControl)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zephir_fcall_cache_entry *_0 = NULL, *_3 = NULL;
+	zephir_fcall_cache_entry *_0 = NULL;
 	zval *iterations_param = NULL, before, after, _1$$3, _2$$3;
 	zend_long iterations, ZEPHIR_LAST_CALL_STATUS, i = 0;
 	zval *this_ptr = getThis();
@@ -785,13 +788,14 @@ PHP_METHOD(Stub_Issue2679, leakProbeControl)
 	ZVAL_UNDEF(&after);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(iterations)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &iterations_param);
-	ZEPHIR_CALL_FUNCTION(&before, "memory_get_usage", &_0, 49);
+	ZEPHIR_CALL_FUNCTION(&before, "memory_get_usage", &_0, 36);
 	zephir_check_call_status();
 	i = 0;
 	while (1) {
@@ -799,7 +803,7 @@ PHP_METHOD(Stub_Issue2679, leakProbeControl)
 			break;
 		}
 		ZVAL_BOOL(&_2$$3, 1);
-		ZEPHIR_CALL_METHOD(&_1$$3, this_ptr, "conditionalHeap", &_3, 0, &_2$$3);
+		ZEPHIR_CALL_METHOD_CACHED(&_1$$3, this_ptr, "conditionalHeap", &_zephir_call_cache[0], &_2$$3);
 		zephir_check_call_status();
 		zephir_update_property_array_append(this_ptr, SL("retained"), &_1$$3);
 		if (UNEXPECTED(EG(exception))) {
@@ -808,7 +812,7 @@ PHP_METHOD(Stub_Issue2679, leakProbeControl)
 		}
 		i++;
 	}
-	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 49);
+	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 36);
 	zephir_check_call_status();
 	zephir_sub_function(return_value, &after, &before);
 	if (UNEXPECTED(EG(exception))) {

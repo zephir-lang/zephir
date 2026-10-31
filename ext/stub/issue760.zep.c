@@ -641,6 +641,7 @@ PHP_METHOD(Stub_Issue760, dynTraverse)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&out);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[4];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(s)
 	ZEND_PARSE_PARAMETERS_END();
@@ -669,22 +670,22 @@ PHP_METHOD(Stub_Issue760, dynTraverse)
 			}
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, _0, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "rewind", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		_4 = 1;
 		while (1) {
 			if (_4) {
 				_4 = 0;
 			} else {
-				ZEPHIR_CALL_METHOD(NULL, _0, "next", NULL, 0);
+				ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "next", &_zephir_call_cache[1]);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_3, _0, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&_3, _0, "valid", &_zephir_call_cache[2]);
 			zephir_check_call_status();
 			if (!zend_is_true(&_3)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&c, _0, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&c, _0, "current", &_zephir_call_cache[3]);
 			zephir_check_call_status();
 				zephir_array_append(&out, &c, PH_SEPARATE, "stub/issue760.zep", 226);
 				if (UNEXPECTED(EG(exception))) {
@@ -715,6 +716,7 @@ PHP_METHOD(Stub_Issue760, dynTraverseKeyed)
 	ZVAL_UNDEF(&out);
 	ZVAL_UNDEF(&_5$$3);
 	ZVAL_UNDEF(&_8$$4);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[5];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(s)
 	ZEND_PARSE_PARAMETERS_END();
@@ -753,24 +755,24 @@ PHP_METHOD(Stub_Issue760, dynTraverseKeyed)
 			}
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, _0, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "rewind", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		_7 = 1;
 		while (1) {
 			if (_7) {
 				_7 = 0;
 			} else {
-				ZEPHIR_CALL_METHOD(NULL, _0, "next", NULL, 0);
+				ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "next", &_zephir_call_cache[1]);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_6, _0, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&_6, _0, "valid", &_zephir_call_cache[2]);
 			zephir_check_call_status();
 			if (!zend_is_true(&_6)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&k, _0, "key", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&k, _0, "key", &_zephir_call_cache[3]);
 			zephir_check_call_status();
-			ZEPHIR_CALL_METHOD(&c, _0, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&c, _0, "current", &_zephir_call_cache[4]);
 			zephir_check_call_status();
 				ZEPHIR_INIT_NVAR(&_8$$4);
 				zephir_create_array(&_8$$4, 2, 0);
@@ -801,6 +803,7 @@ PHP_METHOD(Stub_Issue760, dynTraverseReverse)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&out);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[4];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(s)
 	ZEND_PARSE_PARAMETERS_END();
@@ -829,22 +832,22 @@ PHP_METHOD(Stub_Issue760, dynTraverseReverse)
 			}
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, _0, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "rewind", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		_4 = 1;
 		while (1) {
 			if (_4) {
 				_4 = 0;
 			} else {
-				ZEPHIR_CALL_METHOD(NULL, _0, "next", NULL, 0);
+				ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "next", &_zephir_call_cache[1]);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_3, _0, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&_3, _0, "valid", &_zephir_call_cache[2]);
 			zephir_check_call_status();
 			if (!zend_is_true(&_3)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&c, _0, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&c, _0, "current", &_zephir_call_cache[3]);
 			zephir_check_call_status();
 				zephir_array_append(&out, &c, PH_SEPARATE, "stub/issue760.zep", 250);
 				if (UNEXPECTED(EG(exception))) {

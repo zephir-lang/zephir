@@ -77,6 +77,7 @@ PHP_METHOD(Stub_Issue2428, classUnion)
 	zend_bool flag;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_BOOL(flag)
 	ZEND_PARSE_PARAMETERS_END();
@@ -90,7 +91,7 @@ PHP_METHOD(Stub_Issue2428, classUnion)
 	} else {
 		ZEPHIR_INIT_NVAR(&_0);
 		object_init_ex(&_0, spl_ce_ArrayObject);
-		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 59);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, &_0, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 	}
 	RETURN_CCTOR(&_0);

@@ -30,12 +30,12 @@ ZEPHIR_INIT_CLASS(Stub_Geometry)
 PHP_METHOD(Stub_Geometry, run)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zephir_fcall_cache_entry *_0 = NULL;
 	zend_long count, ZEPHIR_LAST_CALL_STATUS, i;
-	zval *list_param = NULL, *count_param = NULL, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3, _6$$3, _7$$3, _8$$3;
+	zval *list_param = NULL, *count_param = NULL, _0$$3, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3, _6$$3, _7$$3;
 	zval list;
 
 	ZVAL_UNDEF(&list);
+	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_3$$3);
@@ -43,7 +43,7 @@ PHP_METHOD(Stub_Geometry, run)
 	ZVAL_UNDEF(&_5$$3);
 	ZVAL_UNDEF(&_6$$3);
 	ZVAL_UNDEF(&_7$$3);
-	ZVAL_UNDEF(&_8$$3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		ZEPHIR_Z_PARAM_ARRAY(list, list_param)
 		Z_PARAM_LONG(count)
@@ -57,51 +57,51 @@ PHP_METHOD(Stub_Geometry, run)
 		if (!(i < count)) {
 			break;
 		}
-		zephir_array_fetch_long(&_1$$3, &list, i, PH_NOISY | PH_READONLY, "stub/geometry.zep", 11);
+		zephir_array_fetch_long(&_0$$3, &list, i, PH_NOISY | PH_READONLY, "stub/geometry.zep", 11);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		ZEPHIR_OBS_NVAR(&_2$$3);
-		zephir_array_fetch_long(&_2$$3, &_1$$3, 0, PH_NOISY, "stub/geometry.zep", 11);
+		ZEPHIR_OBS_NVAR(&_1$$3);
+		zephir_array_fetch_long(&_1$$3, &_0$$3, 0, PH_NOISY, "stub/geometry.zep", 11);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		zephir_array_fetch_long(&_3$$3, &list, i, PH_NOISY | PH_READONLY, "stub/geometry.zep", 11);
+		zephir_array_fetch_long(&_2$$3, &list, i, PH_NOISY | PH_READONLY, "stub/geometry.zep", 11);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		ZEPHIR_OBS_NVAR(&_4$$3);
-		zephir_array_fetch_long(&_4$$3, &_3$$3, 1, PH_NOISY, "stub/geometry.zep", 11);
+		ZEPHIR_OBS_NVAR(&_3$$3);
+		zephir_array_fetch_long(&_3$$3, &_2$$3, 1, PH_NOISY, "stub/geometry.zep", 11);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		zephir_array_fetch_long(&_5$$3, &list, i, PH_NOISY | PH_READONLY, "stub/geometry.zep", 11);
+		zephir_array_fetch_long(&_4$$3, &list, i, PH_NOISY | PH_READONLY, "stub/geometry.zep", 11);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		ZEPHIR_OBS_NVAR(&_6$$3);
-		zephir_array_fetch_long(&_6$$3, &_5$$3, 2, PH_NOISY, "stub/geometry.zep", 11);
+		ZEPHIR_OBS_NVAR(&_5$$3);
+		zephir_array_fetch_long(&_5$$3, &_4$$3, 2, PH_NOISY, "stub/geometry.zep", 11);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		zephir_array_fetch_long(&_7$$3, &list, i, PH_NOISY | PH_READONLY, "stub/geometry.zep", 11);
+		zephir_array_fetch_long(&_6$$3, &list, i, PH_NOISY | PH_READONLY, "stub/geometry.zep", 11);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		ZEPHIR_OBS_NVAR(&_8$$3);
-		zephir_array_fetch_long(&_8$$3, &_7$$3, 3, PH_NOISY, "stub/geometry.zep", 11);
+		ZEPHIR_OBS_NVAR(&_7$$3);
+		zephir_array_fetch_long(&_7$$3, &_6$$3, 3, PH_NOISY, "stub/geometry.zep", 11);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		ZEPHIR_CALL_STATIC(NULL, "distanceStatic", &_0, 0, &_2$$3, &_4$$3, &_6$$3, &_8$$3);
+		ZEPHIR_CALL_STATIC_CACHED(NULL, "distanceStatic", &_zephir_call_cache[0], &_1$$3, &_3$$3, &_5$$3, &_7$$3);
 		zephir_check_call_status();
 		i = (i + 1);
 	}
@@ -111,17 +111,17 @@ PHP_METHOD(Stub_Geometry, run)
 PHP_METHOD(Stub_Geometry, runOptimize)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zephir_fcall_cache_entry *_0 = NULL;
 	zend_long count, ZEPHIR_LAST_CALL_STATUS, i;
-	zval *list_param = NULL, *count_param = NULL, item, _1$$3, _2$$3, _3$$3, _4$$3;
+	zval *list_param = NULL, *count_param = NULL, item, _0$$3, _1$$3, _2$$3, _3$$3;
 	zval list;
 
 	ZVAL_UNDEF(&list);
 	ZVAL_UNDEF(&item);
+	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_3$$3);
-	ZVAL_UNDEF(&_4$$3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		ZEPHIR_Z_PARAM_ARRAY(list, list_param)
 		Z_PARAM_LONG(count)
@@ -141,31 +141,31 @@ PHP_METHOD(Stub_Geometry, runOptimize)
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
+		ZEPHIR_OBS_NVAR(&_0$$3);
+		zephir_array_fetch_long(&_0$$3, &item, 0, PH_NOISY, "stub/geometry.zep", 24);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_OBS_NVAR(&_1$$3);
-		zephir_array_fetch_long(&_1$$3, &item, 0, PH_NOISY, "stub/geometry.zep", 24);
+		zephir_array_fetch_long(&_1$$3, &item, 1, PH_NOISY, "stub/geometry.zep", 24);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
 		ZEPHIR_OBS_NVAR(&_2$$3);
-		zephir_array_fetch_long(&_2$$3, &item, 1, PH_NOISY, "stub/geometry.zep", 24);
+		zephir_array_fetch_long(&_2$$3, &item, 2, PH_NOISY, "stub/geometry.zep", 24);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
 		ZEPHIR_OBS_NVAR(&_3$$3);
-		zephir_array_fetch_long(&_3$$3, &item, 2, PH_NOISY, "stub/geometry.zep", 24);
+		zephir_array_fetch_long(&_3$$3, &item, 3, PH_NOISY, "stub/geometry.zep", 24);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		ZEPHIR_OBS_NVAR(&_4$$3);
-		zephir_array_fetch_long(&_4$$3, &item, 3, PH_NOISY, "stub/geometry.zep", 24);
-		if (UNEXPECTED(EG(exception))) {
-			ZEPHIR_MM_RESTORE();
-			return;
-		}
-		ZEPHIR_CALL_STATIC(NULL, "distanceStatic", &_0, 0, &_1$$3, &_2$$3, &_3$$3, &_4$$3);
+		ZEPHIR_CALL_STATIC_CACHED(NULL, "distanceStatic", &_zephir_call_cache[0], &_0$$3, &_1$$3, &_2$$3, &_3$$3);
 		zephir_check_call_status();
 		i++;
 	}

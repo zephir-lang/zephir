@@ -33,9 +33,8 @@ ZEPHIR_INIT_CLASS(Stub_Globals_ServerRequestFactory)
 PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zephir_fcall_cache_entry *_1 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *server_param = NULL, *get_param = NULL, *post_param = NULL, *cookies_param = NULL, *files_param = NULL, _COOKIE, _FILES, _GET, _POST, _SERVER, _0, _2, _3, _4, _5;
+	zval *server_param = NULL, *get_param = NULL, *post_param = NULL, *cookies_param = NULL, *files_param = NULL, _COOKIE, _FILES, _GET, _POST, _SERVER, _0, _1, _2, _3, _4;
 	zval server, get, post, cookies, files, globalCookies, globalFiles, globalGet, globalPost, globalServer;
 	zval *this_ptr = getThis();
 
@@ -55,10 +54,11 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 	ZVAL_UNDEF(&_POST);
 	ZVAL_UNDEF(&_SERVER);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
-	ZVAL_UNDEF(&_5);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[5];
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 5)
 		Z_PARAM_OPTIONAL
@@ -151,7 +151,7 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 		}
 		ZEPHIR_CPY_WRT(&globalServer, &_SERVER);
 	}
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkNullArray", &_1, 58, &server, &globalServer);
+	ZEPHIR_CALL_METHOD_CACHED(&_0, this_ptr, "checkNullArray", &_zephir_call_cache[0], &server, &globalServer);
 	zephir_check_call_status();
 	if (UNEXPECTED(Z_TYPE_P(&_0) != IS_ARRAY)) {
 		zephir_throw_variable_type_error(&_0, "server", "array");
@@ -159,38 +159,38 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 		return;
 	}
 	ZEPHIR_CPY_WRT(&server, &_0);
-	ZEPHIR_CALL_METHOD(&_2, this_ptr, "checkNullArray", &_1, 58, &files, &globalFiles);
+	ZEPHIR_CALL_METHOD_CACHED(&_1, this_ptr, "checkNullArray", &_zephir_call_cache[1], &files, &globalFiles);
+	zephir_check_call_status();
+	if (UNEXPECTED(Z_TYPE_P(&_1) != IS_ARRAY)) {
+		zephir_throw_variable_type_error(&_1, "files", "array");
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_CPY_WRT(&files, &_1);
+	ZEPHIR_CALL_METHOD_CACHED(&_2, this_ptr, "checkNullArray", &_zephir_call_cache[2], &cookies, &globalCookies);
 	zephir_check_call_status();
 	if (UNEXPECTED(Z_TYPE_P(&_2) != IS_ARRAY)) {
-		zephir_throw_variable_type_error(&_2, "files", "array");
+		zephir_throw_variable_type_error(&_2, "cookies", "array");
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CPY_WRT(&files, &_2);
-	ZEPHIR_CALL_METHOD(&_3, this_ptr, "checkNullArray", &_1, 58, &cookies, &globalCookies);
+	ZEPHIR_CPY_WRT(&cookies, &_2);
+	ZEPHIR_CALL_METHOD_CACHED(&_3, this_ptr, "checkNullArray", &_zephir_call_cache[3], &get, &globalGet);
 	zephir_check_call_status();
 	if (UNEXPECTED(Z_TYPE_P(&_3) != IS_ARRAY)) {
-		zephir_throw_variable_type_error(&_3, "cookies", "array");
+		zephir_throw_variable_type_error(&_3, "get", "array");
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CPY_WRT(&cookies, &_3);
-	ZEPHIR_CALL_METHOD(&_4, this_ptr, "checkNullArray", &_1, 58, &get, &globalGet);
+	ZEPHIR_CPY_WRT(&get, &_3);
+	ZEPHIR_CALL_METHOD_CACHED(&_4, this_ptr, "checkNullArray", &_zephir_call_cache[4], &post, &globalPost);
 	zephir_check_call_status();
 	if (UNEXPECTED(Z_TYPE_P(&_4) != IS_ARRAY)) {
-		zephir_throw_variable_type_error(&_4, "get", "array");
+		zephir_throw_variable_type_error(&_4, "post", "array");
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CPY_WRT(&get, &_4);
-	ZEPHIR_CALL_METHOD(&_5, this_ptr, "checkNullArray", &_1, 58, &post, &globalPost);
-	zephir_check_call_status();
-	if (UNEXPECTED(Z_TYPE_P(&_5) != IS_ARRAY)) {
-		zephir_throw_variable_type_error(&_5, "post", "array");
-		ZEPHIR_MM_RESTORE();
-		return;
-	}
-	ZEPHIR_CPY_WRT(&post, &_5);
+	ZEPHIR_CPY_WRT(&post, &_4);
 	zephir_create_array(return_value, 5, 0);
 	zephir_array_update_string(return_value, SL("server"), &server, PH_COPY | PH_SEPARATE);
 	zephir_array_update_string(return_value, SL("files"), &files, PH_COPY | PH_SEPARATE);

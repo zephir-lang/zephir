@@ -52,6 +52,7 @@ PHP_METHOD(Stub_Issue2546, collectExcluding)
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[4];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(items)
 		Z_PARAM_ZVAL(skip)
@@ -84,22 +85,22 @@ PHP_METHOD(Stub_Issue2546, collectExcluding)
 			}
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, _0, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "rewind", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		_4 = 1;
 		while (1) {
 			if (_4) {
 				_4 = 0;
 			} else {
-				ZEPHIR_CALL_METHOD(NULL, _0, "next", NULL, 0);
+				ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "next", &_zephir_call_cache[1]);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_3, _0, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&_3, _0, "valid", &_zephir_call_cache[2]);
 			zephir_check_call_status();
 			if (!zend_is_true(&_3)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&item, _0, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&item, _0, "current", &_zephir_call_cache[3]);
 			zephir_check_call_status();
 				if (ZEPHIR_IS_IDENTICAL(&item, skip)) {
 					continue;
@@ -131,6 +132,7 @@ PHP_METHOD(Stub_Issue2546, collectUntil)
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[4];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(items)
 		Z_PARAM_ZVAL(stop)
@@ -163,22 +165,22 @@ PHP_METHOD(Stub_Issue2546, collectUntil)
 			}
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, _0, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "rewind", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		_4 = 1;
 		while (1) {
 			if (_4) {
 				_4 = 0;
 			} else {
-				ZEPHIR_CALL_METHOD(NULL, _0, "next", NULL, 0);
+				ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "next", &_zephir_call_cache[1]);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_3, _0, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&_3, _0, "valid", &_zephir_call_cache[2]);
 			zephir_check_call_status();
 			if (!zend_is_true(&_3)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&item, _0, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&item, _0, "current", &_zephir_call_cache[3]);
 			zephir_check_call_status();
 				if (ZEPHIR_IS_IDENTICAL(&item, stop)) {
 					break;
@@ -214,6 +216,7 @@ PHP_METHOD(Stub_Issue2546, collectKeysExcluding)
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_5);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[5];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(items)
 		Z_PARAM_ZVAL(skipKey)
@@ -252,24 +255,24 @@ PHP_METHOD(Stub_Issue2546, collectKeysExcluding)
 			}
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, _0, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "rewind", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		_6 = 1;
 		while (1) {
 			if (_6) {
 				_6 = 0;
 			} else {
-				ZEPHIR_CALL_METHOD(NULL, _0, "next", NULL, 0);
+				ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "next", &_zephir_call_cache[1]);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_5, _0, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&_5, _0, "valid", &_zephir_call_cache[2]);
 			zephir_check_call_status();
 			if (!zend_is_true(&_5)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&k, _0, "key", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&k, _0, "key", &_zephir_call_cache[3]);
 			zephir_check_call_status();
-			ZEPHIR_CALL_METHOD(&v, _0, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&v, _0, "current", &_zephir_call_cache[4]);
 			zephir_check_call_status();
 				if (ZEPHIR_IS_IDENTICAL(&k, skipKey)) {
 					continue;

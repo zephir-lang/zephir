@@ -45,7 +45,7 @@ PHP_METHOD(Stub_ArrayAccessProperty, __construct)
 		Z_PARAM_OBJECT_OF_CLASS(data, zend_ce_arrayaccess)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &data);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 11, data);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 13, data);
 }
 
 PHP_METHOD(Stub_ArrayAccessProperty, set)

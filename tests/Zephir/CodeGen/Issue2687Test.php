@@ -88,13 +88,15 @@ ZEP;
 
     public function testCallCacheSlotsRestartPerCompiler(): void
     {
-        $first = $this->compileOnce('Stub\\Issue2687\\Calls', 'stub/issue2687/calls.zep', $this->privateCall('a'));
-        $this->assertStringContainsString('ZEPHIR_CALL_METHOD(NULL, this_ptr, "a", NULL, 1);', $first);
+        $first = $this->compileOnce('Stub\\Issue2687\\Calls', 'stub/issue2687/calls.zep', $this->privateCall('a', 'soundex'));
+        $this->assertStringContainsString('ZEPHIR_CALL_FUNCTION(NULL, "soundex", NULL, 1, &_0);', $first);
+        $this->assertStringContainsString('ZEPHIR_CALL_METHOD_CACHED(NULL, this_ptr, "a", &_zephir_call_cache[0]);', $first);
 
         $this->restartCompiler();
 
-        $second = $this->compileOnce('Stub\\Issue2687\\Calls', 'stub/issue2687/calls.zep', $this->privateCall('b'));
-        $this->assertStringContainsString('ZEPHIR_CALL_METHOD(NULL, this_ptr, "b", NULL, 1);', $second);
+        $second = $this->compileOnce('Stub\\Issue2687\\Calls', 'stub/issue2687/calls.zep', $this->privateCall('b', 'str_rot13'));
+        $this->assertStringContainsString('ZEPHIR_CALL_FUNCTION(NULL, "str_rot13", NULL, 1, &_0);', $second);
+        $this->assertStringContainsString('ZEPHIR_CALL_METHOD_CACHED(NULL, this_ptr, "b", &_zephir_call_cache[0]);', $second);
     }
 
     private function compileOnce(string $fqcn, string $relPath, string $zep): string
@@ -104,7 +106,7 @@ ZEP;
         return $this->generatedC($relPath);
     }
 
-    private function privateCall(string $method): string
+    private function privateCall(string $method, string $function): string
     {
         return <<<ZEP
 namespace Stub\Issue2687;
@@ -113,6 +115,7 @@ class Calls
 {
     public function run() -> void
     {
+        {$function}("x");
         this->{$method}();
     }
 

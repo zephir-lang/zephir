@@ -584,4 +584,84 @@ class Bench
             let i++;
         }
     }
+
+    /**
+     * Call-site inline cache workloads (#2790). Each iteration calls a helper
+     * whose own call sits outside any loop, the case that had no call cache
+     * at all before.
+     */
+    public function siteMethodLoop(long n) -> long
+    {
+        long i = 0, sum = 0;
+
+        while i < n {
+            let sum += this->siteMethodOnce();
+            let i++;
+        }
+
+        return sum;
+    }
+
+    public function siteMethodOnce() -> long
+    {
+        return this->returnConst();
+    }
+
+    public function siteOtherLoop(var other, long n) -> long
+    {
+        long i = 0, sum = 0;
+
+        while i < n {
+            let sum += this->siteOtherOnce(other);
+            let i++;
+        }
+
+        return sum;
+    }
+
+    public function siteOtherOnce(var other) -> long
+    {
+        return other->returnConst();
+    }
+
+    public function siteStaticLoop(long n) -> long
+    {
+        long i = 0, sum = 0;
+
+        while i < n {
+            let sum += this->siteStaticOnce();
+            let i++;
+        }
+
+        return sum;
+    }
+
+    public function siteStaticOnce() -> long
+    {
+        return self::staticReturnConst();
+    }
+
+    public function siteIteratorLoop(var it, long n) -> long
+    {
+        long i = 0, sum = 0;
+
+        while i < n {
+            let sum += this->siteIteratorOnce(it);
+            let i++;
+        }
+
+        return sum;
+    }
+
+    public function siteIteratorOnce(var it) -> long
+    {
+        var v;
+        long sum = 0;
+
+        for v in it {
+            let sum += v;
+        }
+
+        return sum;
+    }
 }

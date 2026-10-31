@@ -92,7 +92,7 @@ PHP_METHOD(Stub_Properties_PublicProperties, setSomeGetterSetterArray)
 		Z_PARAM_ZVAL(someGetterSetterArray)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &someGetterSetterArray);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 3, someGetterSetterArray);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 5, someGetterSetterArray);
 	RETURN_THISW();
 }
 
@@ -117,7 +117,7 @@ PHP_METHOD(Stub_Properties_PublicProperties, test394Issue)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_memory_observe(&_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 4, PH_NOISY_CC);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 6, PH_NOISY_CC);
 	RETURN_CCTOR(&_0);
 }
 

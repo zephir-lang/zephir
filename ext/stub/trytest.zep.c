@@ -42,6 +42,7 @@ PHP_METHOD(Stub_TryTest, testThrow2)
 
 	ZVAL_UNDEF(&message);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -49,7 +50,7 @@ PHP_METHOD(Stub_TryTest, testThrow2)
 	ZVAL_STRING(&message, "error");
 	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, zend_ce_exception);
-	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 42, &message);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, &_0, "__construct", &_zephir_call_cache[0], &message);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&_0, "stub/trytest.zep", 16);
 	ZEPHIR_MM_RESTORE();
@@ -73,6 +74,7 @@ PHP_METHOD(Stub_TryTest, testTry2)
 
 	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&_1$$3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	/* try_start_1: */
@@ -81,7 +83,7 @@ PHP_METHOD(Stub_TryTest, testTry2)
 		object_init_ex(&_0$$3, zend_ce_exception);
 		ZEPHIR_INIT_VAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "error!");
-		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", NULL, 42, &_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, &_0$$3, "__construct", &_zephir_call_cache[0], &_1$$3);
 		zephir_check_call_status_or_jump(try_end_1);
 		zephir_throw_exception_debug(&_0$$3, "stub/trytest.zep", 27);
 		goto try_end_1;
@@ -101,6 +103,7 @@ PHP_METHOD(Stub_TryTest, testTry3)
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	/* try_start_1: */
@@ -109,7 +112,7 @@ PHP_METHOD(Stub_TryTest, testTry3)
 		object_init_ex(&_0$$3, zend_ce_exception);
 		ZEPHIR_INIT_VAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "error!");
-		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", NULL, 42, &_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, &_0$$3, "__construct", &_zephir_call_cache[0], &_1$$3);
 		zephir_check_call_status_or_jump(try_end_1);
 		zephir_throw_exception_debug(&_0$$3, "stub/trytest.zep", 34);
 		goto try_end_1;
@@ -146,6 +149,7 @@ PHP_METHOD(Stub_TryTest, testTry4)
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_6);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[2];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_BOOL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -159,7 +163,7 @@ PHP_METHOD(Stub_TryTest, testTry4)
 			object_init_ex(&_0$$4, zend_ce_exception);
 			ZEPHIR_INIT_VAR(&_1$$4);
 			ZVAL_STRING(&_1$$4, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 42, &_1$$4);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_0$$4, "__construct", &_zephir_call_cache[0], &_1$$4);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_0$$4, "stub/trytest.zep", 46);
 			goto try_end_1;
@@ -169,7 +173,7 @@ PHP_METHOD(Stub_TryTest, testTry4)
 			object_init_ex(&_2$$5, spl_ce_RuntimeException);
 			ZEPHIR_INIT_VAR(&_3$$5);
 			ZVAL_STRING(&_3$$5, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_2$$5, "__construct", NULL, 68, &_3$$5);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_2$$5, "__construct", &_zephir_call_cache[1], &_3$$5);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_2$$5, "stub/trytest.zep", 48);
 			goto try_end_1;
@@ -215,6 +219,7 @@ PHP_METHOD(Stub_TryTest, testTry5)
 	ZVAL_UNDEF(&_3$$5);
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[2];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_BOOL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -228,7 +233,7 @@ PHP_METHOD(Stub_TryTest, testTry5)
 			object_init_ex(&_0$$4, zend_ce_exception);
 			ZEPHIR_INIT_VAR(&_1$$4);
 			ZVAL_STRING(&_1$$4, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 42, &_1$$4);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_0$$4, "__construct", &_zephir_call_cache[0], &_1$$4);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_0$$4, "stub/trytest.zep", 63);
 			goto try_end_1;
@@ -238,7 +243,7 @@ PHP_METHOD(Stub_TryTest, testTry5)
 			object_init_ex(&_2$$5, spl_ce_RuntimeException);
 			ZEPHIR_INIT_VAR(&_3$$5);
 			ZVAL_STRING(&_3$$5, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_2$$5, "__construct", NULL, 68, &_3$$5);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_2$$5, "__construct", &_zephir_call_cache[1], &_3$$5);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_2$$5, "stub/trytest.zep", 65);
 			goto try_end_1;
@@ -283,6 +288,7 @@ PHP_METHOD(Stub_TryTest, testTry6)
 	ZVAL_UNDEF(&_1$$4);
 	ZVAL_UNDEF(&_2$$5);
 	ZVAL_UNDEF(&_3$$5);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[2];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_BOOL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -296,7 +302,7 @@ PHP_METHOD(Stub_TryTest, testTry6)
 			object_init_ex(&_0$$4, zend_ce_exception);
 			ZEPHIR_INIT_VAR(&_1$$4);
 			ZVAL_STRING(&_1$$4, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 42, &_1$$4);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_0$$4, "__construct", &_zephir_call_cache[0], &_1$$4);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_0$$4, "stub/trytest.zep", 80);
 			goto try_end_1;
@@ -306,7 +312,7 @@ PHP_METHOD(Stub_TryTest, testTry6)
 			object_init_ex(&_2$$5, spl_ce_RuntimeException);
 			ZEPHIR_INIT_VAR(&_3$$5);
 			ZVAL_STRING(&_3$$5, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_2$$5, "__construct", NULL, 68, &_3$$5);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_2$$5, "__construct", &_zephir_call_cache[1], &_3$$5);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_2$$5, "stub/trytest.zep", 82);
 			goto try_end_1;
@@ -350,6 +356,7 @@ PHP_METHOD(Stub_TryTest, testTry7)
 	ZVAL_UNDEF(&_1$$4);
 	ZVAL_UNDEF(&_2$$5);
 	ZVAL_UNDEF(&_3$$5);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[2];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_BOOL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -363,7 +370,7 @@ PHP_METHOD(Stub_TryTest, testTry7)
 			object_init_ex(&_0$$4, zend_ce_exception);
 			ZEPHIR_INIT_VAR(&_1$$4);
 			ZVAL_STRING(&_1$$4, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 42, &_1$$4);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_0$$4, "__construct", &_zephir_call_cache[0], &_1$$4);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_0$$4, "stub/trytest.zep", 99);
 			goto try_end_1;
@@ -373,7 +380,7 @@ PHP_METHOD(Stub_TryTest, testTry7)
 			object_init_ex(&_2$$5, spl_ce_RuntimeException);
 			ZEPHIR_INIT_VAR(&_3$$5);
 			ZVAL_STRING(&_3$$5, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_2$$5, "__construct", NULL, 68, &_3$$5);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_2$$5, "__construct", &_zephir_call_cache[1], &_3$$5);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_2$$5, "stub/trytest.zep", 101);
 			goto try_end_1;
@@ -411,6 +418,7 @@ PHP_METHOD(Stub_TryTest, testTry8)
 
 	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&_1$$3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	/* try_start_1: */
@@ -419,7 +427,7 @@ PHP_METHOD(Stub_TryTest, testTry8)
 		object_init_ex(&_0$$3, zend_ce_exception);
 		ZEPHIR_INIT_VAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "error 1!");
-		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", NULL, 42, &_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, &_0$$3, "__construct", &_zephir_call_cache[0], &_1$$3);
 		zephir_check_call_status_or_jump(try_end_1);
 		zephir_throw_exception_debug(&_0$$3, "stub/trytest.zep", 111);
 		goto try_end_1;
@@ -453,11 +461,12 @@ PHP_METHOD(Stub_TryTest, testTry9)
 
 	ZVAL_UNDEF(&e);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "someMethod1", NULL, 126);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, this_ptr, "someMethod1", &_zephir_call_cache[0]);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched");
 
@@ -488,11 +497,12 @@ PHP_METHOD(Stub_TryTest, testTry10)
 
 	ZVAL_UNDEF(&e);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "someMethod2", NULL, 127);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, this_ptr, "someMethod2", &_zephir_call_cache[0]);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched");
 

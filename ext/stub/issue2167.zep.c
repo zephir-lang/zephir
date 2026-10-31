@@ -106,7 +106,7 @@ PHP_METHOD(Stub_Issue2167, reduceWithArrayCallable)
 	zephir_array_fast_append(&_1, &_2);
 	ZEPHIR_INIT_NVAR(&_2);
 	ZVAL_STRING(&_2, "");
-	ZEPHIR_CALL_FUNCTION(&_3, "array_reduce", NULL, 66, &_0, &_1, &_2);
+	ZEPHIR_CALL_FUNCTION(&_3, "array_reduce", NULL, 44, &_0, &_1, &_2);
 	zephir_check_call_status();
 	zephir_cast_to_string(&_4, &_3);
 	if (UNEXPECTED(EG(exception))) {
@@ -148,7 +148,7 @@ PHP_METHOD(Stub_Issue2167, reduceWithClosureWrapper)
 	zephir_create_closure_ex(&_1, NULL, stub_66__closure_ce, SL("__invoke"));
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "");
-	ZEPHIR_CALL_FUNCTION(&_3, "array_reduce", NULL, 66, &_0, &_1, &_2);
+	ZEPHIR_CALL_FUNCTION(&_3, "array_reduce", NULL, 44, &_0, &_1, &_2);
 	zephir_check_call_status();
 	zephir_cast_to_string(&_4, &_3);
 	if (UNEXPECTED(EG(exception))) {

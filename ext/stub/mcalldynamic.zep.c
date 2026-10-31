@@ -44,12 +44,13 @@ PHP_METHOD(Stub_McallDynamic, testMagicCall1)
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[2];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "method1", NULL, 0);
+	ZEPHIR_CALL_METHOD_CACHED(&_0, this_ptr, "method1", &_zephir_call_cache[0]);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_1, this_ptr, "METHOD1", NULL, 0);
+	ZEPHIR_CALL_METHOD_CACHED(&_1, this_ptr, "METHOD1", &_zephir_call_cache[1]);
 	zephir_check_call_status();
 	zephir_add_function(return_value, &_0, &_1);
 	if (UNEXPECTED(EG(exception))) {
@@ -98,13 +99,14 @@ PHP_METHOD(Stub_McallDynamic, testCallAnonymousFunctionWithContext)
 
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	zephir_create_closure_ex(&_0, NULL, stub_76__closure_ce, SL("__invoke"));
-	ZEPHIR_CALL_CE_STATIC(&result, stub_mcall_caller_ce, "start", NULL, 0, &_0);
+	ZEPHIR_CALL_CE_STATIC_CACHED(&result, stub_mcall_caller_ce, "start", &_zephir_call_cache[0], &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&result);
 }

@@ -143,16 +143,16 @@ PHP_METHOD(Stub_Attributes_Marker, __construct)
 		number = 0;
 	} else {
 		}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 23, &text_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 25, &text_zv);
 	if (flag) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 24, &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 26, &__$true);
 	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 24, &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 26, &__$false);
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 25, &extra);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 27, &extra);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, number);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 26, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 28, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 

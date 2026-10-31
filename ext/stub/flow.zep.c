@@ -641,13 +641,13 @@ PHP_METHOD(Stub_Flow, testWhileNextTest)
 	array_init(&returnValue);
 	while (1) {
 		ZEPHIR_MAKE_REF(variable);
-		ZEPHIR_CALL_FUNCTION(&_0, "next", &_1, 55, variable);
+		ZEPHIR_CALL_FUNCTION(&_0, "next", &_1, 38, variable);
 		ZEPHIR_UNREF(variable);
 		zephir_check_call_status();
 		if (!(zephir_is_true(&_0))) {
 			break;
 		}
-		ZEPHIR_CALL_FUNCTION(&_2$$3, "current", &_3, 56, variable);
+		ZEPHIR_CALL_FUNCTION(&_2$$3, "current", &_3, 39, variable);
 		zephir_check_call_status();
 		zephir_array_append(&returnValue, &_2$$3, PH_SEPARATE, "stub/flow.zep", 420);
 		if (UNEXPECTED(EG(exception))) {
@@ -678,7 +678,7 @@ PHP_METHOD(Stub_Flow, testWhileDoNextTest)
 	ZEPHIR_INIT_VAR(&returnValue);
 	array_init(&returnValue);
 	do {
-		ZEPHIR_CALL_FUNCTION(&_0$$3, "current", &_1, 56, variable);
+		ZEPHIR_CALL_FUNCTION(&_0$$3, "current", &_1, 39, variable);
 		zephir_check_call_status();
 		zephir_array_append(&returnValue, &_0$$3, PH_SEPARATE, "stub/flow.zep", 430);
 		if (UNEXPECTED(EG(exception))) {
@@ -686,7 +686,7 @@ PHP_METHOD(Stub_Flow, testWhileDoNextTest)
 			return;
 		}
 		ZEPHIR_MAKE_REF(variable);
-		ZEPHIR_CALL_FUNCTION(&_2, "next", &_3, 55, variable);
+		ZEPHIR_CALL_FUNCTION(&_2, "next", &_3, 38, variable);
 		ZEPHIR_UNREF(variable);
 		zephir_check_call_status();
 	} while (zephir_is_true(&_2));
@@ -1721,6 +1721,7 @@ PHP_METHOD(Stub_Flow, testFor32)
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[4];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(e)
 	ZEND_PARSE_PARAMETERS_END();
@@ -1744,22 +1745,22 @@ PHP_METHOD(Stub_Flow, testFor32)
 			sum += zephir_get_numberval(&v);
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, _0, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "rewind", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		_4 = 1;
 		while (1) {
 			if (_4) {
 				_4 = 0;
 			} else {
-				ZEPHIR_CALL_METHOD(NULL, _0, "next", NULL, 0);
+				ZEPHIR_CALL_METHOD_CACHED(NULL, _0, "next", &_zephir_call_cache[1]);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_3, _0, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&_3, _0, "valid", &_zephir_call_cache[2]);
 			zephir_check_call_status();
 			if (!zend_is_true(&_3)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&v, _0, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&v, _0, "current", &_zephir_call_cache[3]);
 			zephir_check_call_status();
 				sum += zephir_get_numberval(&v);
 		}
@@ -1865,12 +1866,12 @@ PHP_METHOD(Stub_Flow, testFor35)
 	zend_bool _0;
 	zval i, _3$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zephir_fcall_cache_entry *_4 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1, _2;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_3$$3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -1891,7 +1892,7 @@ PHP_METHOD(Stub_Flow, testFor35)
 			ZVAL_LONG(&i, _1);
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_STRING(&_3$$3, "hello");
-			ZEPHIR_CALL_METHOD(NULL, this_ptr, "testFor35Aux", &_4, 0, &_3$$3);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, this_ptr, "testFor35Aux", &_zephir_call_cache[0], &_3$$3);
 			zephir_check_call_status();
 		}
 	}
@@ -1917,12 +1918,12 @@ PHP_METHOD(Stub_Flow, testFor36)
 	zend_bool _0;
 	zval i, _3$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zephir_fcall_cache_entry *_4 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1, _2;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_3$$3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -1943,7 +1944,7 @@ PHP_METHOD(Stub_Flow, testFor36)
 			ZVAL_LONG(&i, _1);
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_STRING(&_3$$3, "hello");
-			ZEPHIR_CALL_METHOD(NULL, this_ptr, "testFor36Aux", &_4, 0, &_3$$3);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, this_ptr, "testFor36Aux", &_zephir_call_cache[0], &_3$$3);
 			zephir_check_call_status();
 		}
 	}

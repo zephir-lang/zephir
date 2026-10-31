@@ -104,7 +104,15 @@ final class ExtensionGlobal
      * templates/engine/php_project.h. A global or a struct of the same name
      * would declare the member twice.
      */
-    private const KERNEL_MEMBERS = ['initialized', 'fcache', 'scache', 'pcache', 'cache_enabled', 'recursive_lock'];
+    private const KERNEL_MEMBERS = [
+        'initialized',
+        'fcache',
+        'scache',
+        'pcache',
+        'cache_enabled',
+        'request_number',
+        'recursive_lock',
+    ];
 
     /**
      * @param string $member     C member path, `my_setting` or `db.my_setting`

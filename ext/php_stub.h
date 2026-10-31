@@ -58,6 +58,9 @@ ZEND_BEGIN_MODULE_GLOBALS(stub)
 	/* Cache enabled */
 	unsigned int cache_enabled;
 
+	/* The request this thread is serving: a call site's inline cache filled in an earlier one is stale (#2790) */
+	uint64_t request_number;
+
 	/* Max recursion control */
 	unsigned int recursive_lock;
 

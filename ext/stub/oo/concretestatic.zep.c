@@ -34,10 +34,12 @@ PHP_METHOD(Stub_Oo_ConcreteStatic, childFunction)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_SELF("parentFunction", NULL, 0);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("parentFunction", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -46,10 +48,12 @@ PHP_METHOD(Stub_Oo_ConcreteStatic, callParentFunction)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_PARENT(stub_oo_concretestatic_ce, getThis(), "getCalledClass", NULL, 0);
+	ZEPHIR_RETURN_CALL_PARENT_CACHED(stub_oo_concretestatic_ce, getThis(), "getCalledClass", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }

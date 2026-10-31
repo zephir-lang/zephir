@@ -85,6 +85,7 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex1)
 	ZVAL_UNDEF(&y_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[2];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(y)
@@ -97,10 +98,10 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex1)
 		ZEPHIR_INIT_NVAR(&_0);
 		ZVAL_LONG(&_0, ((zend_long) 1 + 100));
 	} else {
-		ZEPHIR_CALL_METHOD(&_1, a, "y", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(&_1, a, "y", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		if (zephir_is_true(&_1)) {
-			ZEPHIR_CALL_METHOD(&_0, a, "x", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&_0, a, "x", &_zephir_call_cache[1]);
 			zephir_check_call_status();
 		} else {
 			_2 = zephir_array_isset_value(a, y);
@@ -127,6 +128,7 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex2)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[2];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(y)
@@ -139,10 +141,10 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex2)
 		ZEPHIR_INIT_NVAR(&_0);
 		ZVAL_LONG(&_0, ((zend_long) 1 + 100));
 	} else {
-		ZEPHIR_CALL_METHOD(&_1, a, "y", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(&_1, a, "y", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		if (zephir_is_true(&_1)) {
-			ZEPHIR_CALL_METHOD(&_0, a, "x", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&_0, a, "x", &_zephir_call_cache[1]);
 			zephir_check_call_status();
 		} else {
 			_2 = zephir_array_isset_value(a, y);

@@ -38,11 +38,11 @@ final class Issue2715Test extends TestCase
      */
     public static function callProvider(): iterable
     {
-        yield 'method'           => ['ZEPHIR_RETURN_CALL_METHOD(receiver, "NoPeCaSe"'];
-        yield 'method in braces' => ['ZEPHIR_RETURN_CALL_METHOD(receiver, "AlSoMiXeD"'];
-        yield 'class static'     => ['ZEPHIR_RETURN_CALL_CE_STATIC(stub_probebase_ce, "AnotherMiXeD"'];
-        yield 'self'             => ['ZEPHIR_RETURN_CALL_SELF("SelfMiXeD"'];
-        yield 'parent'           => ['ZEPHIR_RETURN_CALL_PARENT(stub_probe_ce, getThis(), "BaseMiXeD"'];
+        yield 'method'           => ['ZEPHIR_RETURN_CALL_METHOD_CACHED(receiver, "NoPeCaSe"'];
+        yield 'method in braces' => ['ZEPHIR_RETURN_CALL_METHOD_CACHED(receiver, "AlSoMiXeD"'];
+        yield 'class static'     => ['ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(stub_probebase_ce, "AnotherMiXeD"'];
+        yield 'self'             => ['ZEPHIR_RETURN_CALL_SELF_CACHED("SelfMiXeD"'];
+        yield 'parent'           => ['ZEPHIR_RETURN_CALL_PARENT_CACHED(stub_probe_ce, getThis(), "BaseMiXeD"'];
         yield 'function'         => ['ZEPHIR_RETURN_CALL_FUNCTION("no_SuCh_FuNcTiOn"'];
     }
 

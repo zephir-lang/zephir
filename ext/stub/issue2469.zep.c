@@ -52,12 +52,13 @@ PHP_METHOD(Stub_Issue2469, callWithLiteral)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "a");
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "peek", NULL, 67, &_0);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "peek", &_zephir_call_cache[0], &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -71,13 +72,14 @@ PHP_METHOD(Stub_Issue2469, callWithVariable)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	chTmp = '>';
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRINGL(&_0, &chTmp, 1);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "peek", NULL, 67, &_0);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "peek", &_zephir_call_cache[0], &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -90,12 +92,13 @@ PHP_METHOD(Stub_Issue2469, callWithLiteralUchar)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "Z");
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "peek", NULL, 67, &_0);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "peek", &_zephir_call_cache[0], &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

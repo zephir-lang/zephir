@@ -1,0 +1,200 @@
+--TEST--
+Issue #2790: a cached call site checks visibility for each calling scope and never caches a __call() or __callStatic() dispatch
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class IcScope
+{
+    protected function prot() -> string
+    {
+        return "IcScope::prot";
+    }
+
+    public function caller()
+    {
+        return function (var o) {
+            return o->prot();
+        };
+    }
+}
+--FILE--
+namespace Stub;
+
+class IcShadowBase
+{
+    private function sh() -> string
+    {
+        return "IcShadowBase::sh";
+    }
+
+    public function callSh(var o) -> string
+    {
+        return o->sh();
+    }
+}
+--FILE--
+namespace Stub;
+
+class IcShadowChild extends IcShadowBase
+{
+    public function sh() -> string
+    {
+        return "IcShadowChild::sh";
+    }
+}
+--FILE--
+namespace Stub;
+
+class IcMagic
+{
+    public function real() -> string
+    {
+        return "IcMagic::real";
+    }
+
+    protected function hidden() -> string
+    {
+        return "IcMagic::hidden";
+    }
+
+    public function __call(string name, array args) -> string
+    {
+        return "IcMagic::__call(" . name . ")";
+    }
+}
+--FILE--
+namespace Stub;
+
+class IcMagicCaller
+{
+    public function callReal(var o) -> string
+    {
+        return o->real();
+    }
+
+    public function callHidden(var o) -> string
+    {
+        return o->hidden();
+    }
+
+    public static function callStatic(string cls) -> string
+    {
+        return {cls}::sm();
+    }
+}
+--FILE--
+namespace Stub;
+
+class IcStaticMagic
+{
+    public static function __callStatic(string name, array args) -> string
+    {
+        return "IcStaticMagic::__callStatic(" . name . ")";
+    }
+}
+--FILE--
+namespace Stub;
+
+class IcStaticReal
+{
+    public static function sm() -> string
+    {
+        return "IcStaticReal::sm";
+    }
+}
+--USAGE--
+/* Userland on purpose: PHP refuses to rebind a closure to the scope of an internal class. */
+class IcScopeSub extends \Stub\IcScope {}
+class IcStranger {}
+
+class IcShadowUser
+{
+    public function sh(): string { return "IcShadowUser::sh"; }
+}
+
+class IcMagicSub extends \Stub\IcMagic
+{
+    public function hidden(): string { return "IcMagicSub::hidden"; }
+}
+
+class IcRealless
+{
+    public function __call($name, $args) { return "IcRealless::__call(" . $name . ")"; }
+}
+
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+
+// One call site in a closure body, run from three scopes in turn.
+$o = new \Stub\IcScope();
+$own = (new \Stub\IcScope())->caller();
+$stranger = Closure::bind($own, new IcStranger(), IcStranger::class);
+$sub = Closure::bind($own, new IcScopeSub(), IcScopeSub::class);
+t("own scope", fn() => $own($o));
+t("own scope again", fn() => $own($o));
+t("stranger scope", fn() => $stranger($o));
+t("own scope after stranger", fn() => $own($o));
+t("subclass scope", fn() => $sub($o));
+t("stranger scope again", fn() => $stranger($o));
+t("subclass scope again", fn() => $sub($o));
+
+// A private method of the calling class wins over a public one of a subclass.
+$sb = new \Stub\IcShadowBase();
+t("shadow child", fn() => $sb->callSh(new \Stub\IcShadowChild()));
+t("shadow base", fn() => $sb->callSh(new \Stub\IcShadowBase()));
+t("shadow child again", fn() => $sb->callSh(new \Stub\IcShadowChild()));
+t("shadow unrelated", fn() => $sb->callSh(new IcShadowUser()));
+t("shadow child third", fn() => $sb->callSh(new \Stub\IcShadowChild()));
+
+// __call() and __callStatic() alternating with real methods at one site.
+$mc = new \Stub\IcMagicCaller();
+t("hidden via __call", fn() => $mc->callHidden(new \Stub\IcMagic()));
+t("hidden made public", fn() => $mc->callHidden(new IcMagicSub()));
+t("hidden via __call again", fn() => $mc->callHidden(new \Stub\IcMagic()));
+t("hidden made public again", fn() => $mc->callHidden(new IcMagicSub()));
+t("real", fn() => $mc->callReal(new \Stub\IcMagic()));
+t("real via __call", fn() => $mc->callReal(new IcRealless()));
+t("real again", fn() => $mc->callReal(new \Stub\IcMagic()));
+t("real via __call again", fn() => $mc->callReal(new IcRealless()));
+t("static real", fn() => \Stub\IcMagicCaller::callStatic(\Stub\IcStaticReal::class));
+t("static via __callStatic", fn() => \Stub\IcMagicCaller::callStatic(\Stub\IcStaticMagic::class));
+t("static real again", fn() => \Stub\IcMagicCaller::callStatic(\Stub\IcStaticReal::class));
+t("static via __callStatic again", fn() => \Stub\IcMagicCaller::callStatic(\Stub\IcStaticMagic::class));
+t("static missing class", fn() => \Stub\IcMagicCaller::callStatic("Stub\\IcNoSuch"));
+t("static real after missing", fn() => \Stub\IcMagicCaller::callStatic(\Stub\IcStaticReal::class));
+--EXPECT--
+own scope: IcScope::prot
+own scope again: IcScope::prot
+stranger scope: Error: Call to protected method Stub\IcScope::prot() from scope IcStranger
+own scope after stranger: IcScope::prot
+subclass scope: IcScope::prot
+stranger scope again: Error: Call to protected method Stub\IcScope::prot() from scope IcStranger
+subclass scope again: IcScope::prot
+shadow child: IcShadowBase::sh
+shadow base: IcShadowBase::sh
+shadow child again: IcShadowBase::sh
+shadow unrelated: IcShadowUser::sh
+shadow child third: IcShadowBase::sh
+hidden via __call: IcMagic::__call(hidden)
+hidden made public: IcMagicSub::hidden
+hidden via __call again: IcMagic::__call(hidden)
+hidden made public again: IcMagicSub::hidden
+real: IcMagic::real
+real via __call: IcRealless::__call(real)
+real again: IcMagic::real
+real via __call again: IcRealless::__call(real)
+static real: IcStaticReal::sm
+static via __callStatic: IcStaticMagic::__callStatic(sm)
+static real again: IcStaticReal::sm
+static via __callStatic again: IcStaticMagic::__callStatic(sm)
+static missing class: Error: Class "Stub\IcNoSuch" not found
+static real after missing: IcStaticReal::sm

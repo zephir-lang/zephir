@@ -69,7 +69,7 @@ final class Issue2723Test extends TestCase
         ];
         yield 'dynamic class, literal name, statement' => [
             'public function m(var className) { {className}::target(); }',
-            'ZEPHIR_CALL_CE_STATIC(NULL, _0, "target", NULL, 0);',
+            'ZEPHIR_CALL_CE_STATIC_CACHED(NULL, _0, "target", &_zephir_call_cache[0]);',
         ];
         yield 'mixed class' => [
             'public function m(mixed className) { return {className}::target(); }',
@@ -109,27 +109,27 @@ final class Issue2723Test extends TestCase
         ];
         yield 'self, string name' => [
             'public function m() { return self::{"target"}(); }',
-            'ZEPHIR_RETURN_CALL_SELF("target", NULL, 0);',
+            'ZEPHIR_RETURN_CALL_SELF_CACHED("target", &_zephir_call_cache[0]);',
         ];
         yield 'static, string name' => [
             'public function m() { return static::{"target"}(); }',
-            'ZEPHIR_RETURN_CALL_STATIC("target", NULL, 0);',
+            'ZEPHIR_RETURN_CALL_STATIC_CACHED("target", &_zephir_call_cache[0]);',
         ];
         yield 'named class, string name' => [
             'public function m() { return ProbeBase::{"baseTarget"}(); }',
-            'ZEPHIR_RETURN_CALL_CE_STATIC(stub_probebase_ce, "baseTarget", NULL, 0);',
+            'ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(stub_probebase_ce, "baseTarget", &_zephir_call_cache[0]);',
         ];
         yield 'constant class, string name' => [
             'public function m() { return PROBEBASE::{"baseTarget"}(); }',
-            'ZEPHIR_RETURN_CALL_CE_STATIC(stub_probebase_ce, "baseTarget", NULL, 0);',
+            'ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(stub_probebase_ce, "baseTarget", &_zephir_call_cache[0]);',
         ];
         yield 'dynamic class, string name' => [
             'public function m(var className) { return {className}::{"target"}(); }',
-            'ZEPHIR_RETURN_CALL_CE_STATIC(_0, "target", NULL, 0);',
+            'ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(_0, "target", &_zephir_call_cache[0]);',
         ];
         yield 'parent result into a parameter' => [
             'public function m(var p) { let p = parent::baseTarget(); return p; }',
-            'ZEPHIR_CALL_PARENT(p, stub_probe_ce, getThis(), "baseTarget", NULL, 0);',
+            'ZEPHIR_CALL_PARENT_CACHED(p, stub_probe_ce, getThis(), "baseTarget", &_zephir_call_cache[0]);',
         ];
         yield 'named class, dynamic name, in a closure' => [
             'public function m() { return function (name) { return ProbeBase::{name}(); }; }',
