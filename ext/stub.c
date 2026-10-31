@@ -46,6 +46,7 @@ zend_class_entry *stub_invokes_abstractprotected_ce;
 zend_class_entry *stub_oo_extend_exception_ce;
 zend_class_entry *stub_oo_extend_db_exception_ce;
 zend_class_entry *stub_scallparent_ce;
+zend_class_entry *stub_bench_ce;
 zend_class_entry *stub_constantsparent_ce;
 zend_class_entry *stub_globals_session_base_ce;
 zend_class_entry *stub_invokes_abstractinvoker_ce;
@@ -162,8 +163,8 @@ zend_class_entry *stub_attributes_counteruser_ce;
 zend_class_entry *stub_attributes_demo_ce;
 zend_class_entry *stub_attributes_marker_ce;
 zend_class_entry *stub_attributes_tools_ce;
-zend_class_entry *stub_bench_ce;
 zend_class_entry *stub_bench_foo_ce;
+zend_class_entry *stub_bench_sitechild_ce;
 zend_class_entry *stub_bitwise_ce;
 zend_class_entry *stub_branchprediction_ce;
 zend_class_entry *stub_bufferops_ce;
@@ -286,6 +287,7 @@ zend_class_entry *stub_issue2746_ce;
 zend_class_entry *stub_issue2747_ce;
 zend_class_entry *stub_issue2761_accessors_ce;
 zend_class_entry *stub_issue2761_collaborator_ce;
+zend_class_entry *stub_issue2790_ce;
 zend_class_entry *stub_issue663_ce;
 zend_class_entry *stub_issue760_ce;
 zend_class_entry *stub_issue808_ce;
@@ -493,6 +495,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Oo_Extend_Exception);
 	ZEPHIR_INIT(Stub_Oo_Extend_Db_Exception);
 	ZEPHIR_INIT(Stub_ScallParent);
+	ZEPHIR_INIT(Stub_Bench);
 	ZEPHIR_INIT(Stub_ConstantsParent);
 	ZEPHIR_INIT(Stub_Globals_Session_Base);
 	ZEPHIR_INIT(Stub_Invokes_AbstractInvoker);
@@ -530,8 +533,8 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Attributes_Demo);
 	ZEPHIR_INIT(Stub_Attributes_Marker);
 	ZEPHIR_INIT(Stub_Attributes_Tools);
-	ZEPHIR_INIT(Stub_Bench);
 	ZEPHIR_INIT(Stub_Bench_Foo);
+	ZEPHIR_INIT(Stub_Bench_SiteChild);
 	ZEPHIR_INIT(Stub_Bitwise);
 	ZEPHIR_INIT(Stub_BranchPrediction);
 	ZEPHIR_INIT(Stub_BufferOps);
@@ -654,6 +657,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Issue2747);
 	ZEPHIR_INIT(Stub_Issue2761_Accessors);
 	ZEPHIR_INIT(Stub_Issue2761_Collaborator);
+	ZEPHIR_INIT(Stub_Issue2790);
 	ZEPHIR_INIT(Stub_Issue663);
 	ZEPHIR_INIT(Stub_Issue760);
 	ZEPHIR_INIT(Stub_Issue808);
@@ -935,6 +939,8 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
  */
 static void php_zephir_init_module_globals(zend_stub_globals *stub_globals)
 {
+	/* No request yet: a call site's inline cache starts zeroed, so it never matches */
+	stub_globals->request_number = 0;
 	stub_globals->orm.zephir_owned_cache_prefix = NULL;
 	stub_globals->zephir_owned_my_setting_5 = NULL;
 }
@@ -953,6 +959,7 @@ static PHP_RINIT_FUNCTION(stub)
 	stub_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(stub_globals_ptr);
+	stub_globals_ptr->request_number++;
 	zephir_ini_activate_globals(zephir_request_ini_entries);
 	zephir_initialize_memory(stub_globals_ptr);
 

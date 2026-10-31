@@ -165,6 +165,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 	ZVAL_UNDEF(&_31$$14);
 	ZVAL_UNDEF(&_33$$14);
 	ZVAL_UNDEF(&_34$$14);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[4];
 	static zend_string *_zephir_prop_0 = NULL;
 	static zend_string *_zephir_prop_1 = NULL;
 	static zend_string *_zephir_prop_2 = NULL;
@@ -221,18 +222,18 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 		}
 	zephir_read_static_property_ce(&_0, stub_oo_oodestruct_ce, SL("checked"), PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_is_true(&_0))) {
-		ZEPHIR_CALL_SELF(NULL, "check", NULL, 0);
+		ZEPHIR_CALL_SELF_CACHED(NULL, "check", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 98, &file_zv);
 	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 98, PH_NOISY_CC | PH_READONLY);
 	if ((zephir_file_exists(&_1) == SUCCESS)) {
 		zephir_read_property_cached(&_2$$4, this_ptr, _zephir_prop_0, 98, PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_CALL_FUNCTION(&_3$$4, "realpath", NULL, 91, &_2$$4);
+		ZEPHIR_CALL_FUNCTION(&_3$$4, "realpath", NULL, 51, &_2$$4);
 		zephir_check_call_status();
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 99, &_3$$4);
 		zephir_read_property_cached(&_4$$4, this_ptr, _zephir_prop_0, 98, PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_CALL_FUNCTION(&imageinfo, "getimagesize", NULL, 92, &_4$$4);
+		ZEPHIR_CALL_FUNCTION(&imageinfo, "getimagesize", NULL, 52, &_4$$4);
 		zephir_check_call_status();
 		if (zephir_is_true(&imageinfo)) {
 			zephir_memory_observe(&_5$$5);
@@ -319,7 +320,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 						ZEPHIR_MM_RESTORE();
 						return;
 					}
-					ZEPHIR_CALL_METHOD(NULL, &_21$$12, "__construct", NULL, 0, &_24$$12);
+					ZEPHIR_CALL_METHOD_CACHED(NULL, &_21$$12, "__construct", &_zephir_call_cache[1], &_24$$12);
 					zephir_check_call_status();
 				}
 
@@ -337,7 +338,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 			if (zephir_has_constructor(&_25$$11)) {
 				ZEPHIR_INIT_VAR(&_27$$11);
 				ZVAL_STRING(&_27$$11, "Installed GD does not support such images");
-				ZEPHIR_CALL_METHOD(NULL, &_25$$11, "__construct", NULL, 0, &_27$$11);
+				ZEPHIR_CALL_METHOD_CACHED(NULL, &_25$$11, "__construct", &_zephir_call_cache[2], &_27$$11);
 				zephir_check_call_status();
 			}
 
@@ -371,7 +372,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 					ZEPHIR_MM_RESTORE();
 					return;
 				}
-				ZEPHIR_CALL_METHOD(NULL, &_31$$14, "__construct", NULL, 0, &_34$$14);
+				ZEPHIR_CALL_METHOD_CACHED(NULL, &_31$$14, "__construct", &_zephir_call_cache[3], &_34$$14);
 				zephir_check_call_status();
 			}
 
@@ -385,7 +386,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 		zephir_check_call_status();
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 104, &_37$$13);
 		zephir_read_property_cached(&_35$$13, this_ptr, _zephir_prop_6, 104, PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_CALL_FUNCTION(NULL, "imagealphablending", NULL, 93, &_35$$13, &__$true);
+		ZEPHIR_CALL_FUNCTION(NULL, "imagealphablending", NULL, 53, &_35$$13, &__$true);
 		zephir_check_call_status();
 		zephir_read_property_cached(&_36$$13, this_ptr, _zephir_prop_6, 104, PH_NOISY_CC | PH_READONLY);
 		ZVAL_BOOL(&_38$$13, 1);
@@ -453,6 +454,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 	ZVAL_UNDEF(&_3$$4);
 	ZVAL_UNDEF(&_7$$5);
 	ZVAL_UNDEF(&_9$$5);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[3];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -471,7 +473,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 		if (zephir_has_constructor(&_1$$4)) {
 			ZEPHIR_INIT_VAR(&_3$$4);
 			ZVAL_STRING(&_3$$4, "GD is either not installed or not enabled, check your configuration");
-			ZEPHIR_CALL_METHOD(NULL, &_1$$4, "__construct", NULL, 0, &_3$$4);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_1$$4, "__construct", &_zephir_call_cache[0], &_3$$4);
 			zephir_check_call_status();
 		}
 
@@ -479,13 +481,13 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CALL_SELF(&version, "getVersion", NULL, 0);
+	ZEPHIR_CALL_SELF_CACHED(&version, "getVersion", &_zephir_call_cache[1]);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_4);
 	ZVAL_STRING(&_4, "2.0.1");
 	ZEPHIR_INIT_VAR(&_5);
 	ZVAL_STRING(&_5, ">=");
-	ZEPHIR_CALL_FUNCTION(&_6, "version_compare", NULL, 84, &version, &_4, &_5);
+	ZEPHIR_CALL_FUNCTION(&_6, "version_compare", NULL, 48, &version, &_4, &_5);
 	zephir_check_call_status();
 	if (UNEXPECTED(!zephir_is_true(&_6))) {
 		ZEPHIR_INIT_VAR(&_7$$5);
@@ -502,7 +504,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 				ZEPHIR_MM_RESTORE();
 				return;
 			}
-			ZEPHIR_CALL_METHOD(NULL, &_7$$5, "__construct", NULL, 0, &_9$$5);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_7$$5, "__construct", &_zephir_call_cache[2], &_9$$5);
 			zephir_check_call_status();
 		}
 
@@ -533,6 +535,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, getVersion)
 	ZVAL_UNDEF(&_6$$5);
 	ZVAL_UNDEF(&_7$$5);
 	ZVAL_UNDEF(&_8$$5);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -547,7 +550,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, getVersion)
 		if (zephir_has_constructor(&_0$$3)) {
 			ZEPHIR_INIT_VAR(&_2$$3);
 			ZVAL_STRING(&_2$$3, "GD is either not installed or not enabled, check your configuration");
-			ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", NULL, 0, &_2$$3);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_0$$3, "__construct", &_zephir_call_cache[0], &_2$$3);
 			zephir_check_call_status();
 		}
 
@@ -559,13 +562,13 @@ PHP_METHOD(Stub_Oo_OoDestruct, getVersion)
 	ZVAL_NULL(&version);
 	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_STRING(&_3, "GD_VERSION");
-	ZEPHIR_CALL_FUNCTION(&_4, "defined", NULL, 94, &_3);
+	ZEPHIR_CALL_FUNCTION(&_4, "defined", NULL, 54, &_3);
 	zephir_check_call_status();
 	if (zephir_is_true(&_4)) {
 		ZEPHIR_INIT_NVAR(&version);
 		ZEPHIR_GET_CONSTANT(&version, "GD_VERSION");
 	} else {
-		ZEPHIR_CALL_FUNCTION(&info, "gd_info", NULL, 95);
+		ZEPHIR_CALL_FUNCTION(&info, "gd_info", NULL, 55);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&matches);
 		ZVAL_NULL(&matches);

@@ -33,10 +33,12 @@ PHP_METHOD(Stub_ScallLateConstruct, __construct)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "testPublicInit", NULL, 0);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, this_ptr, "testPublicInit", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 }
@@ -55,6 +57,7 @@ PHP_METHOD(Stub_ScallLateConstruct, testPublicInit)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("protectedVar", 12, 1);
@@ -62,7 +65,7 @@ PHP_METHOD(Stub_ScallLateConstruct, testPublicInit)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_SELF(&_0, "testStaticInit", NULL, 0);
+	ZEPHIR_CALL_SELF_CACHED(&_0, "testStaticInit", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 150, &_0);
 	ZEPHIR_MM_RESTORE();

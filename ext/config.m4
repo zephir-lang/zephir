@@ -17,6 +17,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2635/outer.zep.c
 	stub/oo/extend/db/exception.zep.c
 	stub/scallparent.zep.c
+	stub/bench.zep.c
 	stub/constantsparent.zep.c
 	stub/globals/session/base.zep.c
 	stub/interfaces/interfaceint.zep.c
@@ -62,8 +63,8 @@ if test "$PHP_STUB" = "yes"; then
 	stub/attributes/demo.zep.c
 	stub/attributes/marker.zep.c
 	stub/attributes/tools.zep.c
-	stub/bench.zep.c
 	stub/bench/foo.zep.c
+	stub/bench/sitechild.zep.c
 	stub/bitwise.zep.c
 	stub/branchprediction.zep.c
 	stub/bufferops.zep.c
@@ -190,6 +191,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2747.zep.c
 	stub/issue2761/accessors.zep.c
 	stub/issue2761/collaborator.zep.c
+	stub/issue2790.zep.c
 	stub/issue663.zep.c
 	stub/issue760.zep.c
 	stub/issue808.zep.c

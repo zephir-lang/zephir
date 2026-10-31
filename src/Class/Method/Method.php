@@ -1225,6 +1225,11 @@ class Method
         $compilationContext->propertyNameCache        = [];
         $compilationContext->propertyNameCacheCounter = 0;
 
+        /**
+         * Reset per-method call site inline caches.
+         */
+        $compilationContext->callCacheCounter = 0;
+
         if ($this->parameters instanceof Parameters) {
             /**
              * Round 1. Create variables in parameters in the symbol table.
@@ -2254,6 +2259,20 @@ class Method
                 $slotPrinter->output("\t" . '}');
             }
             $codePrinter->preOutput($slotPrinter->getOutput());
+        }
+
+        /**
+         * Declare the inline cache records of the call sites in this function,
+         * at function scope so every nested block reaches them. `ZEND_TLS` is
+         * `static`, and thread local under ZTS.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2790
+         */
+        if ($compilationContext->callCacheCounter > 0) {
+            $codePrinter->preOutput(
+                "\t" . 'ZEND_TLS zephir_method_cache _zephir_call_cache['
+                . $compilationContext->callCacheCounter . '];'
+            );
         }
 
         /**

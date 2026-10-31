@@ -30,10 +30,12 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, run)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "callPrivateMethod", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "callPrivateMethod", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -118,7 +120,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getObjVars)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &obj);
-	ZEPHIR_RETURN_CALL_FUNCTION("get_object_vars", NULL, 96, obj);
+	ZEPHIR_RETURN_CALL_FUNCTION("get_object_vars", NULL, 56, obj);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -136,6 +138,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getNewVars)
 
 	ZVAL_UNDEF(&className_zv);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(className)
 	ZEND_PARSE_PARAMETERS_END();
@@ -146,7 +149,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getNewVars)
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(&_0, &className_zv);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "getObjVars", NULL, 0, &_0);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "getObjVars", &_zephir_call_cache[0], &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

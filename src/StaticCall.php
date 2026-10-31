@@ -426,18 +426,6 @@ class StaticCall extends Call
             $symbolVariable->trackVariant($compilationContext);
         }
 
-        /**
-         * Check if the  method call can have an inline cache.
-         *
-         * `static::` resolves against the called class, which may declare a
-         * private method of the same name: a cache shared by every called
-         * class would hand it the method found here instead (#2734).
-         */
-        $methodCache  = $compilationContext->cacheManager->getStaticMethodCache();
-        $cachePointer = 'STATIC' === $context && isset($method) && $method->isPrivate()
-            ? 'NULL, 0'
-            : $methodCache->get($compilationContext, $method ?? null);
-
         $params = [];
         if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
@@ -452,19 +440,25 @@ class StaticCall extends Call
 
         $isInternal = isset($method) && $method->isInternal();
         if (!$isInternal) {
+            /**
+             * The site's own inline cache, keyed by the class the call resolves
+             * against, which for `static::` is the called class (#2790).
+             */
+            $cachePointer = $compilationContext->cacheManager->getMethodCache()->get($compilationContext);
+
             if ($isExpecting) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output(
-                        'ZEPHIR_RETURN_CALL_' . $context . '("' . $callName . '", ' . $cachePointer . $paramsStr . ');'
+                        'ZEPHIR_RETURN_CALL_' . $context . '_CACHED("' . $callName . '", ' . $cachePointer . $paramsStr . ');'
                     );
                 } else {
                     $codePrinter->output(
-                        'ZEPHIR_CALL_' . $context . '(' . $symbol . ', "' . $callName . '", ' . $cachePointer . $paramsStr . ');'
+                        'ZEPHIR_CALL_' . $context . '_CACHED(' . $symbol . ', "' . $callName . '", ' . $cachePointer . $paramsStr . ');'
                     );
                 }
             } else {
                 $codePrinter->output(
-                    'ZEPHIR_CALL_' . $context . '(NULL, "' . $callName . '", ' . $cachePointer . $paramsStr . ');'
+                    'ZEPHIR_CALL_' . $context . '_CACHED(NULL, "' . $callName . '", ' . $cachePointer . $paramsStr . ');'
                 );
             }
         } else {
@@ -543,12 +537,6 @@ class StaticCall extends Call
             $method = $method->getOptimizedMethod();
         }
 
-        /**
-         * Check if the  method call can have an inline cache.
-         */
-        $methodCache  = $compilationContext->cacheManager->getStaticMethodCache();
-        $cachePointer = $methodCache->get($compilationContext, $method);
-
         $params = [];
         if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
@@ -579,21 +567,7 @@ class StaticCall extends Call
                 $codePrinter->output($macro . '(' . $ce . ', ' . $method->getInternalName() . $paramsStr . ');');
             }
         } else {
-            if ($isExpecting) {
-                if ('return_value' == $symbolVariable->getName()) {
-                    $codePrinter->output(
-                        'ZEPHIR_RETURN_CALL_CE_STATIC(' . $classEntry . ', "' . $callName . '", ' . $cachePointer . $paramsStr . ');'
-                    );
-                } else {
-                    $codePrinter->output(
-                        'ZEPHIR_CALL_CE_STATIC(' . $symbol . ', ' . $classEntry . ', "' . $callName . '", ' . $cachePointer . $paramsStr . ');'
-                    );
-                }
-            } else {
-                $codePrinter->output(
-                    'ZEPHIR_CALL_CE_STATIC(NULL, ' . $classEntry . ', "' . $callName . '", ' . $cachePointer . $paramsStr . ');'
-                );
-            }
+            $this->emitClassCall($symbolVariable, $isExpecting, $classEntry, $callName, $paramsStr, $compilationContext);
         }
 
         /**
@@ -626,54 +600,9 @@ class StaticCall extends Call
     ): void {
         [$params, $classEntry] = $this->fetchClassParams($expression, $compilationContext, $symbolVariable, $mustInit);
 
-        if ($symbolVariable) {
-            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
-        }
+        $paramsStr = count($params) ? ', ' . implode(', ', $params) : '';
 
-        $cachePointer = 'NULL, 0';
-
-        if (!count($params)) {
-            if ($isExpecting) {
-                if ('return_value' == $symbolVariable->getName()) {
-                    $compilationContext->codePrinter->output(
-                        'ZEPHIR_RETURN_CALL_CE_STATIC(' . $classEntry . ', "' . $callName . '", ' . $cachePointer . ');'
-                    );
-                } else {
-                    $compilationContext->codePrinter->output(
-                        'ZEPHIR_CALL_CE_STATIC(' . $symbol . ', ' . $classEntry . ', "' . $callName . '", ' . $cachePointer . ');'
-                    );
-                }
-            } else {
-                $compilationContext->codePrinter->output(
-                    'ZEPHIR_CALL_CE_STATIC(NULL, ' . $classEntry . ', "' . $callName . '", ' . $cachePointer . ');'
-                );
-            }
-        } else {
-            if ($isExpecting) {
-                if ('return_value' == $symbolVariable->getName()) {
-                    $compilationContext->codePrinter->output(
-                        'ZEPHIR_RETURN_CALL_CE_STATIC(' . $classEntry . ', "' . $callName . '", ' . $cachePointer . ', ' . implode(
-                            ', ',
-                            $params
-                        ) . ');'
-                    );
-                } else {
-                    $compilationContext->codePrinter->output(
-                        'ZEPHIR_CALL_CE_STATIC(' . $symbol . ', ' . $classEntry . ', "' . $callName . '", ' . $cachePointer . ', ' . implode(
-                            ', ',
-                            $params
-                        ) . ');'
-                    );
-                }
-            } else {
-                $compilationContext->codePrinter->output(
-                    'ZEPHIR_CALL_CE_STATIC(NULL, ' . $classEntry . ', "' . $callName . '", ' . $cachePointer . ', ' . implode(
-                        ', ',
-                        $params
-                    ) . ');'
-                );
-            }
-        }
+        $this->emitClassCall($symbolVariable, $isExpecting, $classEntry, $callName, $paramsStr, $compilationContext);
 
         /**
          * Temporary variables must be copied if they have more than one reference
@@ -905,60 +834,24 @@ class StaticCall extends Call
             $symbolVariable->trackVariant($compilationContext);
         }
 
-        /**
-         * Check if the  method call can have an inline cache.
-         */
-        $methodCache  = $compilationContext->cacheManager->getStaticMethodCache();
-        $cachePointer = $methodCache->get($compilationContext, $method ?? null);
-
         $params = [];
         if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         }
 
-        if (!count($params)) {
-            if ($isExpecting) {
-                if ('return_value' == $symbolVariable->getName()) {
-                    $codePrinter->output(
-                        'ZEPHIR_RETURN_CALL_PARENT(' . $classCe . ', getThis(), "' . $callName . '", ' . $cachePointer . ');'
-                    );
-                } else {
-                    $codePrinter->output(
-                        'ZEPHIR_CALL_PARENT(' . $compilationContext->backend->getVariableCode($symbolVariable)
-                        . ', ' . $classCe . ', getThis(), "' . $callName . '", ' . $cachePointer . ');'
-                    );
-                }
-            } else {
-                $codePrinter->output(
-                    'ZEPHIR_CALL_PARENT(NULL, ' . $classCe . ', getThis(), "' . $callName . '", ' . $cachePointer . ');'
-                );
-            }
+        $paramsStr    = count($params) ? ', ' . implode(', ', $params) : '';
+        $cachePointer = $compilationContext->cacheManager->getMethodCache()->get($compilationContext);
+        $target       = $classCe . ', getThis(), "' . $callName . '", ' . $cachePointer . $paramsStr;
+
+        if (!$isExpecting) {
+            $codePrinter->output('ZEPHIR_CALL_PARENT_CACHED(NULL, ' . $target . ');');
+        } elseif ('return_value' == $symbolVariable->getName()) {
+            $codePrinter->output('ZEPHIR_RETURN_CALL_PARENT_CACHED(' . $target . ');');
         } else {
-            if ($isExpecting) {
-                if ('return_value' == $symbolVariable->getName()) {
-                    $codePrinter->output(
-                        'ZEPHIR_RETURN_CALL_PARENT(' . $classCe . ', getThis(), "' . $callName . '", ' . $cachePointer . ', ' . implode(
-                            ', ',
-                            $params
-                        ) . ');'
-                    );
-                } else {
-                    $codePrinter->output(
-                        'ZEPHIR_CALL_PARENT(' . $compilationContext->backend->getVariableCode($symbolVariable)
-                        . ', ' . $classCe . ', getThis(), "' . $callName . '", ' . $cachePointer . ', ' . implode(
-                            ', ',
-                            $params
-                        ) . ');'
-                    );
-                }
-            } else {
-                $codePrinter->output(
-                    'ZEPHIR_CALL_PARENT(NULL, ' . $classCe . ', getThis(), "' . $callName . '", ' . $cachePointer . ', ' . implode(
-                        ', ',
-                        $params
-                    ) . ');'
-                );
-            }
+            $codePrinter->output(
+                'ZEPHIR_CALL_PARENT_CACHED('
+                . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $target . ');'
+            );
         }
 
         /**
@@ -969,6 +862,33 @@ class StaticCall extends Call
         }
 
         $this->addCallStatusOrJump($compilationContext);
+    }
+
+    /**
+     * Emits `Class::method()` for a class entry known in C, through the call
+     * site's own inline cache (#2790).
+     */
+    private function emitClassCall(
+        ?Variable $symbolVariable,
+        bool $isExpecting,
+        string $classEntry,
+        string $callName,
+        string $paramsStr,
+        CompilationContext $compilationContext
+    ): void {
+        $cachePointer = $compilationContext->cacheManager->getMethodCache()->get($compilationContext);
+        $target       = $classEntry . ', "' . $callName . '", ' . $cachePointer . $paramsStr;
+
+        if (!$isExpecting) {
+            $compilationContext->codePrinter->output('ZEPHIR_CALL_CE_STATIC_CACHED(NULL, ' . $target . ');');
+        } elseif ('return_value' == $symbolVariable->getName()) {
+            $compilationContext->codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(' . $target . ');');
+        } else {
+            $compilationContext->codePrinter->output(
+                'ZEPHIR_CALL_CE_STATIC_CACHED('
+                . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $target . ');'
+            );
+        }
     }
 
     /**

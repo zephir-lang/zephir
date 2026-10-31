@@ -241,6 +241,7 @@ PHP_METHOD(Stub_Destructure, fromCall)
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("calls", 5, 1);
@@ -248,7 +249,7 @@ PHP_METHOD(Stub_Destructure, fromCall)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "pair", NULL, 0);
+	ZEPHIR_CALL_METHOD_CACHED(&_0, this_ptr, "pair", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	zephir_memory_observe(&a);
 	zephir_array_fetch_long(&a, &_0, 0, PH_NOISY, "stub/destructure.zep", 64);

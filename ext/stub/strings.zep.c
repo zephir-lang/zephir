@@ -490,9 +490,9 @@ PHP_METHOD(Stub_Strings, strToHex)
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 124, &_2$$3);
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 67, &_2$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 20, &_3$$3);
+		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 12, &_3$$3);
 		zephir_check_call_status();
 		zephir_concat_self(&ret, &_5$$3);
 		if (UNEXPECTED(EG(exception))) {
@@ -545,17 +545,17 @@ PHP_METHOD(Stub_Strings, issue1267)
 	zephir_fast_str_replace(&_0, &_1, &_2, value);
 	ZEPHIR_CPY_WRT(value, &_0);
 	ZVAL_LONG(&_3, 516);
-	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 57, value, &_3);
+	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 40, value, &_3);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(value, &_4);
 	ZEPHIR_INIT_NVAR(&_0);
-	ZEPHIR_CALL_FUNCTION(&_4, "strip_tags", &_5, 125, value);
+	ZEPHIR_CALL_FUNCTION(&_4, "strip_tags", &_5, 68, value);
 	zephir_check_call_status();
 	zephir_stripslashes(&_0, &_4);
 	ZEPHIR_INIT_VAR(&x);
 	zephir_fast_trim(&x, &_0, NULL , ZEPHIR_TRIM_BOTH);
 	ZEPHIR_INIT_VAR(&_6);
-	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 125, value);
+	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 68, value);
 	zephir_check_call_status();
 	zephir_stripcslashes(&_6, &_7);
 	zephir_fast_trim(return_value, &_6, NULL , ZEPHIR_TRIM_BOTH);
@@ -620,6 +620,7 @@ PHP_METHOD(Stub_Strings, issue2186SegFaultCall)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_zv);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
@@ -633,7 +634,7 @@ PHP_METHOD(Stub_Strings, issue2186SegFaultCall)
 		zephir_memory_observe(&val_zv);
 	ZVAL_STR_COPY(&val_zv, val);
 	}
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2186Child1", NULL, 0, &val_zv);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "issue2186Child1", &_zephir_call_cache[0], &val_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -647,6 +648,7 @@ PHP_METHOD(Stub_Strings, issue2186Child1)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_zv);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
@@ -660,7 +662,7 @@ PHP_METHOD(Stub_Strings, issue2186Child1)
 		zephir_memory_observe(&val_zv);
 	ZVAL_STR_COPY(&val_zv, val);
 	}
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2186Child2", NULL, 0, &val_zv);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "issue2186Child2", &_zephir_call_cache[0], &val_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -740,6 +742,7 @@ PHP_METHOD(Stub_Strings, issue2234StrictParent)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_zv);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
@@ -753,7 +756,7 @@ PHP_METHOD(Stub_Strings, issue2234StrictParent)
 	zephir_memory_observe(&val_zv);
 	ZVAL_STR_COPY(&val_zv, val);
 	}
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2234StrictChild", NULL, 0, &val_zv);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "issue2234StrictChild", &_zephir_call_cache[0], &val_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }

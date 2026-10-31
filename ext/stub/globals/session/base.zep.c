@@ -77,6 +77,7 @@ PHP_METHOD(Stub_Globals_Session_Base, __set)
 
 	ZVAL_UNDEF(&index_zv);
 	ZVAL_UNDEF(&value_sub);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(index)
 		Z_PARAM_ZVAL(value)
@@ -86,7 +87,7 @@ PHP_METHOD(Stub_Globals_Session_Base, __set)
 	value = ZEND_CALL_ARG(execute_data, 2);
 	zephir_memory_observe(&index_zv);
 	ZVAL_STR_COPY(&index_zv, index);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "set", NULL, 0, &index_zv, value);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "set", &_zephir_call_cache[0], &index_zv, value);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -100,6 +101,7 @@ PHP_METHOD(Stub_Globals_Session_Base, __unset)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&index_zv);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(index)
 	ZEND_PARSE_PARAMETERS_END();
@@ -107,7 +109,7 @@ PHP_METHOD(Stub_Globals_Session_Base, __unset)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&index_zv);
 	ZVAL_STR_COPY(&index_zv, index);
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "remove", NULL, 0, &index_zv);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, this_ptr, "remove", &_zephir_call_cache[0], &index_zv);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 }

@@ -34,6 +34,7 @@ PHP_METHOD(stub_21__closure, __invoke)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&matches);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		ZEPHIR_Z_PARAM_ARRAY(matches, matches_param)
 	ZEND_PARSE_PARAMETERS_END();
@@ -41,7 +42,7 @@ PHP_METHOD(stub_21__closure, __invoke)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &matches_param);
 	zephir_get_arrval(&matches, matches_param);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2321ProtectedUpper", NULL, 0, &matches);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "issue2321ProtectedUpper", &_zephir_call_cache[0], &matches);
 	zephir_check_call_status();
 	RETURN_MM();
 }

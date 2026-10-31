@@ -111,10 +111,12 @@ PHP_METHOD(Stub_Scall, testCall1)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_SELF("testMethod1", NULL, 0);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("testMethod1", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -123,10 +125,12 @@ PHP_METHOD(Stub_Scall, testCall2)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_SELF("testMethod2", NULL, 0);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("testMethod2", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -135,11 +139,12 @@ PHP_METHOD(Stub_Scall, testCall3)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_0 = NULL;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_SELF("testMethod3", &_0, 110);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("testMethod3", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -152,6 +157,7 @@ PHP_METHOD(Stub_Scall, testCall4)
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -159,7 +165,7 @@ PHP_METHOD(Stub_Scall, testCall4)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &b);
-	ZEPHIR_RETURN_CALL_SELF("testMethod4", NULL, 0, a, b);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("testMethod4", &_zephir_call_cache[0], a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -172,6 +178,7 @@ PHP_METHOD(Stub_Scall, testCall5)
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -179,7 +186,7 @@ PHP_METHOD(Stub_Scall, testCall5)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &b);
-	ZEPHIR_RETURN_CALL_SELF("testMethod5", NULL, 0, a, b);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("testMethod5", &_zephir_call_cache[0], a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -188,11 +195,11 @@ PHP_METHOD(Stub_Scall, testCall6)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_0 = NULL;
 	zval *a, a_sub, *b, b_sub;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -200,7 +207,7 @@ PHP_METHOD(Stub_Scall, testCall6)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &b);
-	ZEPHIR_RETURN_CALL_SELF("testMethod6", &_0, 111, a, b);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("testMethod6", &_zephir_call_cache[0], a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -209,10 +216,12 @@ PHP_METHOD(Stub_Scall, testCall7)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_SELF("testMethod1", NULL, 0);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("testMethod1", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -221,10 +230,12 @@ PHP_METHOD(Stub_Scall, testCall8)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_SELF("testMethod2", NULL, 0);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("testMethod2", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -233,11 +244,12 @@ PHP_METHOD(Stub_Scall, testCall9)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_0 = NULL;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_SELF("testMethod3", &_0, 110);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("testMethod3", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -250,6 +262,7 @@ PHP_METHOD(Stub_Scall, testCall10)
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -257,7 +270,7 @@ PHP_METHOD(Stub_Scall, testCall10)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &b);
-	ZEPHIR_RETURN_CALL_SELF("testMethod4", NULL, 0, a, b);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("testMethod4", &_zephir_call_cache[0], a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -270,6 +283,7 @@ PHP_METHOD(Stub_Scall, testCall11)
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -277,7 +291,7 @@ PHP_METHOD(Stub_Scall, testCall11)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &b);
-	ZEPHIR_RETURN_CALL_SELF("testMethod5", NULL, 0, a, b);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("testMethod5", &_zephir_call_cache[0], a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -286,11 +300,11 @@ PHP_METHOD(Stub_Scall, testCall12)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_0 = NULL;
 	zval *a, a_sub, *b, b_sub;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -298,7 +312,7 @@ PHP_METHOD(Stub_Scall, testCall12)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &b);
-	ZEPHIR_RETURN_CALL_SELF("testMethod6", &_0, 111, a, b);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("testMethod6", &_zephir_call_cache[0], a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -307,10 +321,12 @@ PHP_METHOD(Stub_Scall, testCall13)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_PARENT(stub_scall_ce, getThis(), "testMethod1", NULL, 0);
+	ZEPHIR_RETURN_CALL_PARENT_CACHED(stub_scall_ce, getThis(), "testMethod1", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -319,10 +335,12 @@ PHP_METHOD(Stub_Scall, testCall14)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_PARENT(stub_scall_ce, getThis(), "testMethod2", NULL, 0);
+	ZEPHIR_RETURN_CALL_PARENT_CACHED(stub_scall_ce, getThis(), "testMethod2", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -331,10 +349,12 @@ PHP_METHOD(Stub_Scall, testCall15)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_SELF("testMethod7", NULL, 0);
+	ZEPHIR_RETURN_CALL_SELF_CACHED("testMethod7", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -357,12 +377,12 @@ PHP_METHOD(Stub_Scall, testCall17)
 	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1;
-	zephir_fcall_cache_entry *_4 = NULL;
 	zval *k_param = NULL, *p, p_sub, _3$$3;
 	zend_long k, i = 0, j, _2;
 
 	ZVAL_UNDEF(&p_sub);
 	ZVAL_UNDEF(&_3$$3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(k)
 		Z_PARAM_ZVAL(p)
@@ -385,7 +405,7 @@ PHP_METHOD(Stub_Scall, testCall17)
 				_0 = 1;
 			}
 			i = _1;
-			ZEPHIR_CALL_CE_STATIC(&_3$$3, stub_scallexternal_ce, "testMethod3", &_4, 0, p, p);
+			ZEPHIR_CALL_CE_STATIC_CACHED(&_3$$3, stub_scallexternal_ce, "testMethod3", &_zephir_call_cache[0], p, p);
 			zephir_check_call_status();
 			j += zephir_get_numberval(&_3$$3);
 		}
@@ -398,12 +418,12 @@ PHP_METHOD(Stub_Scall, testCall18)
 	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1;
-	zephir_fcall_cache_entry *_4 = NULL;
 	zval *k_param = NULL, *p, p_sub, _3$$3;
 	zend_long k, i = 0, j, _2;
 
 	ZVAL_UNDEF(&p_sub);
 	ZVAL_UNDEF(&_3$$3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(k)
 		Z_PARAM_ZVAL(p)
@@ -426,7 +446,7 @@ PHP_METHOD(Stub_Scall, testCall18)
 				_0 = 1;
 			}
 			i = _1;
-			ZEPHIR_CALL_SELF(&_3$$3, "testMethod16", &_4, 0, p, p);
+			ZEPHIR_CALL_SELF_CACHED(&_3$$3, "testMethod16", &_zephir_call_cache[0], p, p);
 			zephir_check_call_status();
 			j += zephir_get_numberval(&_3$$3);
 		}

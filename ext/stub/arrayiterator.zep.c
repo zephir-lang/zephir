@@ -59,10 +59,10 @@ PHP_METHOD(Stub_ArrayIterator, __construct)
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "three");
 	zephir_array_fast_append(&_0, &_1);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 15, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 17, &_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_LONG(&_2, 0);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 16, &_2);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 18, &_2);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -78,7 +78,7 @@ PHP_METHOD(Stub_ArrayIterator, rewind)
 	}
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 0);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 16, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 18, &_0);
 }
 
 PHP_METHOD(Stub_ArrayIterator, current)
@@ -101,10 +101,10 @@ PHP_METHOD(Stub_ArrayIterator, current)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 15, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 17, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_1);
 	zephir_memory_observe(&_2);
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 16, PH_NOISY_CC);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 18, PH_NOISY_CC);
 	zephir_array_fetch(&_1, &_0, &_2, PH_NOISY, "stub/arrayiterator.zep", 25);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
@@ -141,8 +141,8 @@ PHP_METHOD(Stub_ArrayIterator, valid)
 	if (UNEXPECTED(!_zephir_prop_1)) {
 		_zephir_prop_1 = zend_string_init("position", 8, 1);
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 15, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 16, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 17, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 18, PH_NOISY_CC | PH_READONLY);
 	_2 = zephir_array_isset_value(&_0, &_1);
 	if (UNEXPECTED(EG(exception))) {
 		return;

@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Changed
+- Added an inline cache to each method and static call site, so a call on the same class from the same class runs the method it resolved before without looking it up again [#2790](https://github.com/zephir-lang/zephir/issues/2790)
+
+### Fixed
+- Fixed a recursive `this->m()` in a loop, and a call in a loop on a local first assigned with `new`, running the method another object's class resolved to [#2790](https://github.com/zephir-lang/zephir/issues/2790)
+
 ## [1.7.0] - 2026-10-30
 
 ### Fixed

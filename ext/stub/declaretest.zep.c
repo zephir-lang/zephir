@@ -182,10 +182,11 @@ PHP_METHOD(Stub_DeclareTest, testDeclareMcallExpression)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(&a, this_ptr, "testDeclare14", NULL, 0);
+	ZEPHIR_CALL_METHOD_CACHED(&a, this_ptr, "testDeclare14", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_CCTOR(&a);
 }

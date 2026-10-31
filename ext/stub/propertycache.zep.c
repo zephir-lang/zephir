@@ -56,7 +56,7 @@ PHP_METHOD(Stub_PropertyCache, setPub)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 5, value);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 7, value);
 }
 
 PHP_METHOD(Stub_PropertyCache, getProt)
@@ -80,7 +80,7 @@ PHP_METHOD(Stub_PropertyCache, setProt)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 6, value);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 8, value);
 }
 
 PHP_METHOD(Stub_PropertyCache, getPriv)
@@ -104,7 +104,7 @@ PHP_METHOD(Stub_PropertyCache, setPriv)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 7, value);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 9, value);
 }
 
 /**
@@ -126,7 +126,7 @@ PHP_METHOD(Stub_PropertyCache, incPub)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 5, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 7, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	ZEPHIR_INIT_VAR(&_2);
@@ -135,7 +135,7 @@ PHP_METHOD(Stub_PropertyCache, incPub)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 5, &_2);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 7, &_2);
 	RETURN_MM_MEMBER(getThis(), "pub");
 }
 
@@ -154,8 +154,8 @@ PHP_METHOD(Stub_PropertyCache, sumPubTwice)
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("pub", 3, 1);
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 5, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 5, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 7, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 7, PH_NOISY_CC | PH_READONLY);
 	zephir_add_function(return_value, &_0, &_1);
 	if (UNEXPECTED(EG(exception))) {
 		return;
@@ -194,10 +194,10 @@ PHP_METHOD(Stub_PropertyCache, swapArrayScalar)
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 3);
 	zephir_array_fast_append(&_0, &_1);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 5, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 7, &_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_LONG(&_2, 42);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 5, &_2);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 7, &_2);
 	RETURN_MM_MEMBER(getThis(), "pub");
 }
 
@@ -237,12 +237,12 @@ PHP_METHOD(Stub_PropertyCache, branchedRead)
 	ZVAL_LONG(&out, 0);
 	if (flag) {
 		ZEPHIR_OBS_NVAR(&out);
-		zephir_read_property_cached(&out, this_ptr, _zephir_prop_0, 5, PH_NOISY_CC);
+		zephir_read_property_cached(&out, this_ptr, _zephir_prop_0, 7, PH_NOISY_CC);
 	} else {
 		ZEPHIR_OBS_NVAR(&out);
-		zephir_read_property_cached(&out, this_ptr, _zephir_prop_1, 6, PH_NOISY_CC);
+		zephir_read_property_cached(&out, this_ptr, _zephir_prop_1, 8, PH_NOISY_CC);
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_2, 7, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_2, 9, PH_NOISY_CC | PH_READONLY);
 	zephir_add_function(return_value, &out, &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
@@ -296,7 +296,7 @@ PHP_METHOD(Stub_PropertyCache, readLoop)
 			}
 			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
-			zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 5, PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 7, PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_INIT_NVAR(&_4$$3);
 			zephir_add_function(&_4$$3, &total, &_3$$3);
 			if (UNEXPECTED(EG(exception))) {
@@ -358,8 +358,8 @@ PHP_METHOD(Stub_PropertyCache, mutateInLoop)
 			}
 			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
-			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 5, &i);
-			zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 5, PH_NOISY_CC | PH_READONLY);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 7, &i);
+			zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 7, PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_INIT_NVAR(&_4$$3);
 			zephir_add_function(&_4$$3, &total, &_3$$3);
 			if (UNEXPECTED(EG(exception))) {
@@ -404,7 +404,7 @@ PHP_METHOD(Stub_PropertyCache, accumulateInLoop)
 	ZVAL_LONG(&i, 0);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 0);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 5, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 7, &_0);
 	_3 = n;
 	_2 = 1;
 	_1 = 0;
@@ -420,14 +420,14 @@ PHP_METHOD(Stub_PropertyCache, accumulateInLoop)
 			}
 			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _2);
-			zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_0, 5, PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_0, 7, PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_INIT_NVAR(&_5$$3);
 			zephir_add_function(&_5$$3, &_4$$3, &i);
 			if (UNEXPECTED(EG(exception))) {
 				ZEPHIR_MM_RESTORE();
 				return;
 			}
-			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 5, &_5$$3);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 7, &_5$$3);
 		}
 	}
 	RETURN_MM_MEMBER(getThis(), "pub");

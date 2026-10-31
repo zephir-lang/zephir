@@ -31,6 +31,7 @@ PHP_METHOD(Stub_Issue2565, resolveType)
 	zval *type, type_sub;
 
 	ZVAL_UNDEF(&type_sub);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(type, zephir_get_internal_ce(SL("reflectiontype")))
 	ZEND_PARSE_PARAMETERS_END();
@@ -38,7 +39,7 @@ PHP_METHOD(Stub_Issue2565, resolveType)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &type);
 	if (zephir_is_instance_of(type, SL("ReflectionNamedType"))) {
-		ZEPHIR_RETURN_CALL_METHOD(type, "getName", NULL, 0);
+		ZEPHIR_RETURN_CALL_METHOD_CACHED(type, "getName", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		RETURN_MM();
 	}

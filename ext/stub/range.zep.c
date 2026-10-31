@@ -45,7 +45,7 @@ PHP_METHOD(Stub_Range, inclusive1)
 
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, 10);
-	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 102, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 62, &_0, &_1);
 	zephir_check_call_status();
 	zephir_get_arrval(&_3, &_2);
 	RETURN_CTOR(&_3);
@@ -67,7 +67,7 @@ PHP_METHOD(Stub_Range, exclusive1)
 
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, 10);
-	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 102, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 62, &_0, &_1);
 	zephir_check_call_status();
 	zephir_get_arrval(&_3, &_2);
 	RETURN_CTOR(&_3);
@@ -315,6 +315,7 @@ PHP_METHOD(Stub_Range, loopChars)
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_3);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[4];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -324,7 +325,7 @@ PHP_METHOD(Stub_Range, loopChars)
 	ZVAL_STRING(&_0, "a");
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "e");
-	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 102, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 62, &_0, &_1);
 	zephir_check_call_status();
 	zephir_get_arrval(&_3, &_2);
 	zephir_is_iterable(&_3, 0, "stub/range.zep", 89);
@@ -340,22 +341,22 @@ PHP_METHOD(Stub_Range, loopChars)
 			}
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, &_3, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, &_3, "rewind", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		_6 = 1;
 		while (1) {
 			if (_6) {
 				_6 = 0;
 			} else {
-				ZEPHIR_CALL_METHOD(NULL, &_3, "next", NULL, 0);
+				ZEPHIR_CALL_METHOD_CACHED(NULL, &_3, "next", &_zephir_call_cache[1]);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_5, &_3, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&_5, &_3, "valid", &_zephir_call_cache[2]);
 			zephir_check_call_status();
 			if (!zend_is_true(&_5)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&ch, &_3, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(&ch, &_3, "current", &_zephir_call_cache[3]);
 			zephir_check_call_status();
 				zephir_concat_self(&out, &ch);
 				if (UNEXPECTED(EG(exception))) {

@@ -68,12 +68,13 @@ PHP_METHOD(Stub_Invoke, test)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&func);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&func);
 	object_init_ex(&func, stub_invoke_ce);
-	ZEPHIR_CALL_METHOD(NULL, &func, "__construct", NULL, 60);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, &func, "__construct", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(&func, NULL, 0);
 	zephir_check_call_status();

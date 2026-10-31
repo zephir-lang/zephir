@@ -32,6 +32,25 @@ typedef struct _zephir_function_cache {
 
 typedef zend_function zephir_fcall_cache_entry;
 
+/**
+ * The inline cache of one method or static call site: the method a call
+ * resolved to, for the class it looked the method up in and the class the
+ * calling code belongs to. The method PHP runs depends on nothing else, so a
+ * later call with both classes unchanged runs it without looking it up.
+ *
+ * Each record is declared in the C function holding its call site. `request`
+ * is the request that filled it: a class declared by a request is freed when
+ * that request ends, and another class can take its address in the next.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2790
+ */
+typedef struct _zephir_method_cache {
+	zend_class_entry *ce;
+	const zend_class_entry *scope;
+	zend_function *func;
+	uint64_t request;
+} zephir_method_cache;
+
 #define ZEPHIR_INIT_FUNCS(class_functions) static const zend_function_entry class_functions[] =
 
 /** Define FASTCALL */

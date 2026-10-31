@@ -271,6 +271,79 @@ extern zend_internal_function zephir_internal_call_frame_func;
 	} while (0)
 
 /**
+ * The `_CACHED` forms of the calls above, for a call site whose method name is
+ * known at compile time. `cache` is the site's own record, declared in the
+ * function that holds the site: a later call on the same class from the same
+ * class runs the method it holds without looking it up.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2790
+ */
+#define ZEPHIR_CALL_METHOD_CACHED(return_value_ptr, object, method, cache, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_cached(return_value_ptr, Z_TYPE_P(object) == IS_OBJECT ? Z_OBJCE_P(object) : NULL, zephir_fcall_method, object, method, strlen(method), cache, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+#define ZEPHIR_RETURN_CALL_METHOD_CACHED(object, method, cache, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method_cached(return_value, Z_TYPE_P(object) == IS_OBJECT ? Z_OBJCE_P(object) : NULL, zephir_fcall_method, object, method, strlen(method), cache, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+#define ZEPHIR_CALL_PARENT_CACHED(return_value_ptr, class_entry, this_ptr, method, cache, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_cached(return_value_ptr, class_entry, zephir_fcall_parent, this_ptr, method, strlen(method), cache, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+#define ZEPHIR_RETURN_CALL_PARENT_CACHED(class_entry, this_ptr, method, cache, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method_cached(return_value, class_entry, zephir_fcall_parent, this_ptr, method, strlen(method), cache, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+#define ZEPHIR_CALL_SELF_CACHED(return_value_ptr, method, cache, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_cached(return_value_ptr, zephir_get_calling_scope(), zephir_fcall_self, getThis(), method, strlen(method), cache, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+#define ZEPHIR_RETURN_CALL_SELF_CACHED(method, cache, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method_cached(return_value, zephir_get_calling_scope(), zephir_fcall_self, getThis(), method, strlen(method), cache, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+#define ZEPHIR_CALL_STATIC_CACHED(return_value_ptr, method, cache, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_cached(return_value_ptr, zend_get_called_scope(EG(current_execute_data)), zephir_fcall_static, getThis(), method, strlen(method), cache, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+#define ZEPHIR_RETURN_CALL_STATIC_CACHED(method, cache, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method_cached(return_value, zend_get_called_scope(EG(current_execute_data)), zephir_fcall_static, getThis(), method, strlen(method), cache, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+#define ZEPHIR_CALL_CE_STATIC_CACHED(return_value_ptr, class_entry, method, cache, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_cached(return_value_ptr, class_entry, zephir_fcall_ce, NULL, method, strlen(method), cache, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+#define ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(class_entry, method, cache, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method_cached(return_value, class_entry, zephir_fcall_ce, NULL, method, strlen(method), cache, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+/**
  * Static calls whose method name is a variable: `{cls}::{name}()`,
  * `Cls::{name}()`, `self::{name}()`, `parent::{name}()` and
  * `static::{name}()`. Each passes the class PHP looks the method up in, and the
@@ -387,6 +460,17 @@ int zephir_call_class_method_zval(
 	uint32_t param_count,
 	zval **params) ZEPHIR_ATTR_WARN_UNUSED_RESULT;
 
+int zephir_call_class_method_cached(
+	zval *return_value_ptr,
+	zend_class_entry *ce,
+	zephir_call_type type,
+	zval *object,
+	const char *method_name,
+	uint32_t method_len,
+	zephir_method_cache *cache,
+	uint32_t param_count,
+	zval **params) ZEPHIR_ATTR_WARN_UNUSED_RESULT;
+
 ZEPHIR_ATTR_WARN_UNUSED_RESULT static inline int zephir_return_call_function(
 	zval *return_value,
 	const char *func,
@@ -484,6 +568,48 @@ ZEPHIR_ATTR_WARN_UNUSED_RESULT static inline int zephir_return_call_class_method
 	}
 
 	status = zephir_call_class_method_aparams(rvp, ce, type, object, method_name, method_len, cache_entry, cache_slot, param_count, params);
+
+	if (status == FAILURE) {
+		if (return_value) {
+			if (EG(exception)) {
+				ZVAL_NULL(return_value);
+			}
+		} else {
+			zval_ptr_dtor(&rv);
+		}
+
+		return FAILURE;
+	}
+
+	if (!return_value) {
+		zval_ptr_dtor(&rv);
+	}
+
+	return SUCCESS;
+}
+
+ZEPHIR_ATTR_WARN_UNUSED_RESULT static inline int zephir_return_call_class_method_cached(
+	zval *return_value,
+	zend_class_entry *ce,
+	zephir_call_type type,
+	zval *object,
+	const char *method_name,
+	uint32_t method_len,
+	zephir_method_cache *cache,
+	uint32_t param_count,
+	zval **params
+) {
+	zval rv, *rvp = return_value ? return_value : &rv;
+	int status;
+
+	ZVAL_UNDEF(&rv);
+
+	if (return_value) {
+		zval_ptr_dtor(return_value);
+		ZVAL_UNDEF(return_value);
+	}
+
+	status = zephir_call_class_method_cached(rvp, ce, type, object, method_name, method_len, cache, param_count, params);
 
 	if (status == FAILURE) {
 		if (return_value) {

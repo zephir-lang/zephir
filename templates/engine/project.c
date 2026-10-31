@@ -99,6 +99,8 @@ static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER
  */
 static void php_zephir_init_module_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals)
 {
+	/* No request yet: a call site's inline cache starts zeroed, so it never matches */
+	%PROJECT_LOWER%_globals->request_number = 0;
 	%INIT_MODULE_GLOBALS%
 }
 
@@ -108,6 +110,7 @@ static void php_zephir_init_module_globals(zend_%PROJECT_LOWER%_globals *%PROJEC
 	%PROJECT_LOWER%_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(%PROJECT_LOWER%_globals_ptr);
+	%PROJECT_LOWER%_globals_ptr->request_number++;
 	zephir_ini_activate_globals(zephir_request_ini_entries);
 	zephir_initialize_memory(%PROJECT_LOWER%_globals_ptr);
 

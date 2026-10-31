@@ -822,14 +822,13 @@ class MethodCall extends Call
             }
 
             if (!$isInternal) {
-                // Check if the method call can have an inline cache
-                $methodCache = $compilationContext->cacheManager->getMethodCache();
-
-                $cachePointer = $methodCache->get(
-                    $compilationContext,
-                    $methodName,
-                    $variableVariable
-                );
+                /**
+                 * The site's own inline cache: the kernel keys it by the
+                 * receiver's class, so it serves any object the site sees.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2790
+                 */
+                $cachePointer = $compilationContext->cacheManager->getMethodCache()->get($compilationContext);
 
                 /**
                  * The call carries the name as it was written, not the lowered

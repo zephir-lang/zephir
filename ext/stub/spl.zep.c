@@ -36,6 +36,7 @@ PHP_METHOD(Stub_Spl, issue1212)
 	zend_string *file = NULL;
 
 	ZVAL_UNDEF(&file_zv);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(file)
 	ZEND_PARSE_PARAMETERS_END();
@@ -44,7 +45,7 @@ PHP_METHOD(Stub_Spl, issue1212)
 	zephir_memory_observe(&file_zv);
 	ZVAL_STR_COPY(&file_zv, file);
 	object_init_ex(return_value, spl_ce_SplFileObject);
-	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 123, &file_zv);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0], &file_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }

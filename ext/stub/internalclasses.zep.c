@@ -29,11 +29,13 @@ PHP_METHOD(Stub_InternalClasses, testStaticCall)
 	zend_class_entry *_0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	_0 = zephir_fetch_class_str_ex(SL("Phalcon\\Di"), ZEND_FETCH_CLASS_AUTO);
-	ZEPHIR_RETURN_CALL_CE_STATIC(_0, "getDefault", NULL, 0);
+	ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(_0, "getDefault", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }

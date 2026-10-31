@@ -36,6 +36,7 @@ PHP_METHOD(Stub_Issue2324, makeStatic)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&obj);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -43,7 +44,7 @@ PHP_METHOD(Stub_Issue2324, makeStatic)
 	object_init_ex(&obj, zend_get_called_scope(execute_data));
 	ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(&obj);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(NULL, &obj, "__construct", NULL, 1);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, &obj, "__construct", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	zephir_get_class(return_value, &obj, 0);
 	RETURN_MM();
@@ -56,12 +57,13 @@ PHP_METHOD(Stub_Issue2324, makeSelf)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&obj);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&obj);
 	object_init_ex(&obj, stub_issue2324_ce);
-	ZEPHIR_CALL_METHOD(NULL, &obj, "__construct", NULL, 1);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, &obj, "__construct", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	zephir_get_class(return_value, &obj, 0);
 	RETURN_MM();
@@ -74,6 +76,7 @@ PHP_METHOD(Stub_Issue2324, makeStaticInstance)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&obj);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -81,7 +84,7 @@ PHP_METHOD(Stub_Issue2324, makeStaticInstance)
 	object_init_ex(&obj, zend_get_called_scope(execute_data));
 	ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(&obj);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(NULL, &obj, "__construct", NULL, 1);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, &obj, "__construct", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	zephir_get_class(return_value, &obj, 0);
 	RETURN_MM();

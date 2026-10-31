@@ -38,6 +38,7 @@ PHP_METHOD(Stub_Requires_External3, req)
 	ZVAL_UNDEF(&path_sub);
 	ZVAL_UNDEF(&requires_sub);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(path)
 		Z_PARAM_ZVAL(requires)
@@ -45,14 +46,14 @@ PHP_METHOD(Stub_Requires_External3, req)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &path, &requires);
-	ZEPHIR_CALL_FUNCTION(NULL, "ob_clean", NULL, 106);
+	ZEPHIR_CALL_FUNCTION(NULL, "ob_clean", NULL, 63);
 	zephir_check_call_status();
 	if (zephir_require_zval(path) == FAILURE) {
 		RETURN_MM_NULL();
 	}
-	ZEPHIR_CALL_FUNCTION(&_0, "ob_get_contents", NULL, 107);
+	ZEPHIR_CALL_FUNCTION(&_0, "ob_get_contents", NULL, 64);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(NULL, requires, "setContent", NULL, 0, &_0);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, requires, "setContent", &_zephir_call_cache[0], &_0);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 }

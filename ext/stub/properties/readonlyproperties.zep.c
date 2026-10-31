@@ -73,6 +73,7 @@ PHP_METHOD(Stub_Properties_ReadonlyProperties, __construct)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	static zend_string *_zephir_prop_0 = NULL;
 	static zend_string *_zephir_prop_1 = NULL;
 	static zend_string *_zephir_prop_2 = NULL;
@@ -120,7 +121,7 @@ PHP_METHOD(Stub_Properties_ReadonlyProperties, __construct)
 	ZEPHIR_INIT_NVAR(&_1);
 	object_init_ex(&_1, stub_properties_publicproperties_ce);
 	if (zephir_has_constructor(&_1)) {
-		ZEPHIR_CALL_METHOD(NULL, &_1, "__construct", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, &_1, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 	}
 

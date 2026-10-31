@@ -33,6 +33,7 @@ PHP_METHOD(Stub_Properties_StaticPrivateProperties, getInstance)
 
 	ZVAL_UNDEF(&localInstance);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -42,7 +43,7 @@ PHP_METHOD(Stub_Properties_StaticPrivateProperties, getInstance)
 		ZEPHIR_INIT_NVAR(&localInstance);
 		object_init_ex(&localInstance, stub_properties_staticprivateproperties_ce);
 		if (zephir_has_constructor(&localInstance)) {
-			ZEPHIR_CALL_METHOD(NULL, &localInstance, "__construct", NULL, 0);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &localInstance, "__construct", &_zephir_call_cache[0]);
 			zephir_check_call_status();
 		}
 

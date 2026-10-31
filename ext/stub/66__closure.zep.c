@@ -32,6 +32,7 @@ PHP_METHOD(stub_66__closure, __invoke)
 
 	ZVAL_UNDEF(&carry_sub);
 	ZVAL_UNDEF(&row_sub);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(carry)
 		Z_PARAM_ZVAL(row)
@@ -39,7 +40,7 @@ PHP_METHOD(stub_66__closure, __invoke)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &carry, &row);
-	ZEPHIR_RETURN_CALL_CE_STATIC(stub_issue2167_ce, "implodeRow", NULL, 0, carry, row);
+	ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(stub_issue2167_ce, "implodeRow", &_zephir_call_cache[0], carry, row);
 	zephir_check_call_status();
 	RETURN_MM();
 }

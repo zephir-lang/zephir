@@ -54,12 +54,13 @@ PHP_METHOD(Stub_McallChained, testChained1)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[2];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testMethod1", NULL, 0);
+	ZEPHIR_CALL_METHOD_CACHED(&_0, this_ptr, "testMethod1", &_zephir_call_cache[0]);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(&_0, "testMethod2", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(&_0, "testMethod2", &_zephir_call_cache[1]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -73,14 +74,15 @@ PHP_METHOD(Stub_McallChained, testChained2)
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[3];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testMethod1", NULL, 0);
+	ZEPHIR_CALL_METHOD_CACHED(&_0, this_ptr, "testMethod1", &_zephir_call_cache[0]);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_1, &_0, "testMethod3", NULL, 0);
+	ZEPHIR_CALL_METHOD_CACHED(&_1, &_0, "testMethod3", &_zephir_call_cache[1]);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(&_1, "testMethod2", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(&_1, "testMethod2", &_zephir_call_cache[2]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -94,14 +96,15 @@ PHP_METHOD(Stub_McallChained, testChained3)
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[3];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testMethod3", NULL, 86);
+	ZEPHIR_CALL_METHOD_CACHED(&_0, this_ptr, "testMethod3", &_zephir_call_cache[0]);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_1, &_0, "testMethod2", NULL, 0);
+	ZEPHIR_CALL_METHOD_CACHED(&_1, &_0, "testMethod2", &_zephir_call_cache[1]);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(&_1, "testMethod1", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(&_1, "testMethod1", &_zephir_call_cache[2]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -115,6 +118,7 @@ PHP_METHOD(Stub_McallChained, testChained4)
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[2];
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("temp", 4, 1);
@@ -124,9 +128,9 @@ PHP_METHOD(Stub_McallChained, testChained4)
 
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 90, this_ptr);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 90, PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_CALL_METHOD(&_1, &_0, "testMethod1", NULL, 0);
+	ZEPHIR_CALL_METHOD_CACHED(&_1, &_0, "testMethod1", &_zephir_call_cache[0]);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(&_1, "testMethod2", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(&_1, "testMethod2", &_zephir_call_cache[1]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
