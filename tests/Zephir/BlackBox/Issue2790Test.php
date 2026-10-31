@@ -271,9 +271,10 @@ final class Issue2790Test extends TestCase
         $result = $this->runZephir('generate --no-ansi', $projectDir);
         $this->assertSame(0, $result['exitCode'], $result['stdout'] . $result['stderr']);
 
+        /* Windows writes the generated C with CRLF line endings. */
         return [
-            'base'  => (string) file_get_contents($projectDir . '/ext/callcache/base.zep.c'),
-            'child' => (string) file_get_contents($projectDir . '/ext/callcache/child.zep.c'),
+            'base'  => str_replace("\r\n", "\n", (string) file_get_contents($projectDir . '/ext/callcache/base.zep.c')),
+            'child' => str_replace("\r\n", "\n", (string) file_get_contents($projectDir . '/ext/callcache/child.zep.c')),
         ];
     }
 
