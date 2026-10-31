@@ -1,0 +1,175 @@
+--TEST--
+Issue #2771: a computed bool in an array literal is stored as its value, and a property default key that is a constant or an expression compiles
+--CONFIG--
+{"globals": {
+    "flag_bool": {"type": "bool", "default": true}
+}}
+--FILE--
+namespace Stub;
+
+class ArrayLiteralBool
+{
+    const ON = true;
+    const OFF = false;
+    const D = 2.0;
+    const NUL = null;
+
+    protected computed = ["not": !false, "notTrue": !true, "cmp": 1 > 0, "notCmp": 1 < 0];
+
+    protected boolKeys = [1 > 0: "gt", 1 < 0: "lt"];
+
+    protected constKeys = [self::ON: "on", self::OFF: "off", self::D: "d", self::NUL: "nul"];
+
+    protected exprKeys = [1.5 + 0.5: "sum"];
+
+    protected static staticKeys = [self::ON: "on", self::D: "d"];
+
+    public function getDefaults() -> array
+    {
+        return [this->computed, this->boolKeys, this->constKeys, this->exprKeys, self::staticKeys];
+    }
+
+    public function setFlag(bool flag) -> void
+    {
+        globals_set("flag_bool", flag);
+    }
+
+    public function stringKeys(var x, int i) -> array
+    {
+        return [
+            "typeof": typeof x == "string",
+            "cast": (bool) x,
+            "cmp": i > 3,
+            "not": !x,
+            "and": x && i,
+            "or": x || i,
+            "isset": isset this->computed["not"],
+            "notIsset": isset this->computed["missing"],
+            "empty": empty x,
+            "instanceof": x instanceof \stdClass,
+            "isString": is_string(x),
+            "equals": x == "a",
+            "identical": x === "a",
+            "global": globals_get("flag_bool"),
+            "true": true,
+            "false": false
+        ];
+    }
+
+    public function intKeys(var x, int i) -> array
+    {
+        return [
+            0: typeof x == "string",
+            1: (bool) x,
+            2: i > 3,
+            3: !x,
+            4: x && i,
+            5: x || i,
+            6: empty x,
+            7: is_string(x),
+            8: x === "a",
+            9: globals_get("flag_bool"),
+            10: true,
+            11: false
+        ];
+    }
+
+    public function nested(var x, int i) -> array
+    {
+        array items = [];
+        var direct;
+
+        let items[] = ["named": typeof x == "string"];
+        let items[] = ["named": (bool) x];
+        let items[] = [7: i > 3];
+        let direct = ["outer": ["inner": !x, 1: i > 3]];
+        let items[] = direct;
+
+        return items;
+    }
+}
+--USAGE--
+$o = new \Stub\ArrayLiteralBool();
+
+foreach ($o->getDefaults() as $default) {
+    echo var_export($default, true), "\n";
+}
+
+$stringKeys = fn ($x, $i, $flag) => [
+    "typeof" => is_string($x),
+    "cast" => (bool) $x,
+    "cmp" => $i > 3,
+    "not" => !$x,
+    "and" => $x && $i,
+    "or" => $x || $i,
+    "isset" => true,
+    "notIsset" => false,
+    "empty" => empty($x),
+    "instanceof" => $x instanceof \stdClass,
+    "isString" => is_string($x),
+    "equals" => $x == "a",
+    "identical" => $x === "a",
+    "global" => $flag,
+    "true" => true,
+    "false" => false,
+];
+$intKeys = fn ($x, $i, $flag) => [
+    is_string($x), (bool) $x, $i > 3, !$x, $x && $i, $x || $i,
+    empty($x), is_string($x), $x === "a", $flag, true, false,
+];
+$nested = fn ($x, $i) => [
+    ["named" => is_string($x)],
+    ["named" => (bool) $x],
+    [7 => $i > 3],
+    ["outer" => ["inner" => !$x, 1 => $i > 3]],
+];
+
+$inputs = ["a", "", "0", 0, 1, null, [], [1], new \stdClass()];
+$checked = 0;
+$mismatches = 0;
+foreach ([true, false] as $flag) {
+    $o->setFlag($flag);
+    foreach ($inputs as $x) {
+        foreach ([0, 5] as $i) {
+            $cases = [
+                'stringKeys' => [$o->stringKeys($x, $i), $stringKeys($x, $i, $flag)],
+                'intKeys' => [$o->intKeys($x, $i), $intKeys($x, $i, $flag)],
+                'nested' => [$o->nested($x, $i), $nested($x, $i)],
+            ];
+            foreach ($cases as $name => [$zephir, $php]) {
+                $checked++;
+                if ($zephir !== $php) {
+                    $mismatches++;
+                    echo $name, "(", json_encode($x), ", ", $i, ", flag ", var_export($flag, true), "): zephir ",
+                        json_encode($zephir), " php ", json_encode($php), "\n";
+                }
+            }
+        }
+    }
+}
+echo "checked ", $checked, ", mismatches ", $mismatches, "\n";
+--EXPECT--
+array (
+  'not' => true,
+  'notTrue' => false,
+  'cmp' => true,
+  'notCmp' => false,
+)
+array (
+  1 => 'gt',
+  0 => 'lt',
+)
+array (
+  1 => 'on',
+  0 => 'off',
+  2 => 'd',
+  '' => 'nul',
+)
+array (
+  2 => 'sum',
+)
+array (
+  1 => 'on',
+  2 => 'd',
+)
+checked 108, mismatches 0

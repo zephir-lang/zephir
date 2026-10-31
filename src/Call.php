@@ -209,17 +209,25 @@ class Call
                     break;
 
                 case 'bool':
-                    if ('true' == $compiledExpression->getCode()) {
-                        $params[] = $compilationContext->backend->resolveValue('true', $compilationContext);
+                    $booleanCode = $compiledExpression->getBooleanCode();
+                    if ('1' === $booleanCode || '0' === $booleanCode) {
+                        $params[] = $compilationContext->backend->resolveValue(
+                            '1' === $booleanCode ? 'true' : 'false',
+                            $compilationContext
+                        );
                     } else {
-                        if ('false' == $compiledExpression->getCode()) {
-                            $params[] = $compilationContext->backend->resolveValue('false', $compilationContext);
-                        } else {
-                            throw new CompilerException(
-                                'Unable to resolve parameter using zval',
-                                $expression
-                            );
-                        }
+                        // A computed bool, such as a comparison, is boxed like any other scalar (#2771).
+                        $parameterVariable = $compilationContext->backend->getScalarTempVariable(
+                            'variable',
+                            $compilationContext
+                        );
+                        $compilationContext->backend->assignBool(
+                            $parameterVariable,
+                            $booleanCode,
+                            $compilationContext
+                        );
+                        $this->temporalVariables[] = $parameterVariable;
+                        $params[]                  = '&' . $parameterVariable->getName();
                     }
                     $types[]        = 'bool';
                     $dynamicTypes[] = 'bool';

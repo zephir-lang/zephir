@@ -22,6 +22,7 @@ class NotEqualsOperator extends ComparisonBaseOperator
     protected string $zvalBoolFalseOperator = '!ZEPHIR_IS_FALSE';
     protected string $zvalBoolOperator      = '!ZEPHIR_IS_BOOL_VALUE';
     protected string $zvalBoolTrueOperator  = '!ZEPHIR_IS_TRUE';
+    protected string $zvalDoubleNegOperator = '!ZEPHIR_IS_DOUBLE';
     protected string $zvalDoubleOperator    = '!ZEPHIR_IS_DOUBLE';
     protected string $zvalLongNegOperator   = '!ZEPHIR_IS_LONG';
     protected string $zvalLongOperator      = '!ZEPHIR_IS_LONG';

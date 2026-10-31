@@ -17,8 +17,8 @@ class LessEqualOperator extends ComparisonBaseOperator
 {
     protected string $bitOperator           = '<=';
     protected string $operator              = '<=';
-    protected string $zvalDoubleNegOperator = '!ZEPHIR_LT_DOUBLE';
-    protected string $zvalDoubleOperator    = '!ZEPHIR_GT_DOUBLE';
+    protected string $zvalDoubleNegOperator = 'ZEPHIR_GE_DOUBLE';
+    protected string $zvalDoubleOperator    = 'ZEPHIR_LE_DOUBLE';
     protected string $zvalLongNegOperator   = 'ZEPHIR_GE_LONG';
     protected string $zvalLongOperator      = 'ZEPHIR_LE_LONG';
     protected string $zvalOperator          = 'ZEPHIR_LE';

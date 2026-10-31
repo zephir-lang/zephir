@@ -1,0 +1,126 @@
+--TEST--
+Issue #2771: a computed bool argument to a PHP function, a PHP bool constant and a "boolean" extension global compile and keep their value
+--CONFIG--
+{"globals": {
+    "flag": {"type": "bool", "default": false},
+    "legacy_flag": {"type": "boolean", "default": true}
+}}
+--FILE--
+namespace Stub;
+
+class BoolArguments
+{
+    public function intvalOf(int a, int b) -> int
+    {
+        return intval(a > b);
+    }
+
+    public function printR(var x, bool quiet) -> var
+    {
+        return print_r(x, !quiet);
+    }
+
+    public function decode(string s, int assoc) -> var
+    {
+        return json_decode(s, assoc == 1);
+    }
+
+    public function isBool(int a, int b) -> bool
+    {
+        return is_bool(a == b);
+    }
+
+    public function setFlag(int a, int b) -> bool
+    {
+        globals_set("flag", a > b);
+
+        return globals_get("flag");
+    }
+
+    public function threadSafe() -> bool
+    {
+        return ZEND_THREAD_SAFE;
+    }
+
+    public function constantsInArray() -> array
+    {
+        return ["ts": ZEND_THREAD_SAFE, "debug": ZEND_DEBUG_BUILD];
+    }
+
+    public function legacyFlag() -> bool
+    {
+        return globals_get("legacy_flag");
+    }
+
+    public function legacyFlagInArray() -> array
+    {
+        return ["k": globals_get("legacy_flag")];
+    }
+
+    public function setLegacyFlag(int a, int b) -> bool
+    {
+        globals_set("legacy_flag", a > b);
+
+        return globals_get("legacy_flag");
+    }
+}
+--USAGE--
+$o = new \Stub\BoolArguments();
+var_dump($o->legacyFlag());
+var_dump($o->legacyFlagInArray());
+
+function capture(callable $call): string
+{
+    ob_start();
+    $result = $call();
+
+    return var_export($result, true) . ' / ' . ob_get_clean();
+}
+
+$cases = [];
+foreach ([[1, 2], [2, 1], [3, 3]] as [$a, $b]) {
+    $cases["intval($a > $b)"] = [$o->intvalOf($a, $b), intval($a > $b)];
+    $cases["is_bool($a == $b)"] = [$o->isBool($a, $b), is_bool($a == $b)];
+    $cases["globals_set flag $a > $b"] = [$o->setFlag($a, $b), $a > $b];
+    $cases["globals_set legacy_flag $a > $b"] = [$o->setLegacyFlag($a, $b), $a > $b];
+}
+foreach ([true, false] as $quiet) {
+    $label = var_export($quiet, true);
+    $cases["print_r quiet $label"] = [
+        capture(fn () => $o->printR([1, "a"], $quiet)),
+        capture(fn () => print_r([1, "a"], !$quiet)),
+    ];
+}
+foreach ([0, 1] as $assoc) {
+    $cases["json_decode assoc $assoc"] = [
+        var_export($o->decode('{"a":1}', $assoc), true),
+        var_export(json_decode('{"a":1}', $assoc == 1), true),
+    ];
+}
+$cases["ZEND_THREAD_SAFE"] = [$o->threadSafe(), ZEND_THREAD_SAFE];
+$cases["constants in array"] = [$o->constantsInArray(), ["ts" => ZEND_THREAD_SAFE, "debug" => ZEND_DEBUG_BUILD]];
+
+$mismatches = 0;
+foreach ($cases as $name => [$zephir, $php]) {
+    if ($zephir !== $php) {
+        $mismatches++;
+        echo $name, ": zephir ", var_export($zephir, true), " php ", var_export($php, true), "\n";
+    }
+}
+echo "checked ", count($cases), ", mismatches ", $mismatches, "\n";
+
+$fresh = new \Stub\BoolArguments();
+var_dump($fresh->legacyFlag());
+var_dump($fresh->legacyFlagInArray());
+--EXPECT--
+bool(true)
+array(1) {
+  ["k"]=>
+  bool(true)
+}
+checked 18, mismatches 0
+bool(false)
+array(1) {
+  ["k"]=>
+  bool(false)
+}

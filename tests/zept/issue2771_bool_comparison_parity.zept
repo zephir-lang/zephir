@@ -1,0 +1,3022 @@
+--TEST--
+Issue #2771: every comparison operator between a bool (literal, typed, computed or inferred) and any other operand gives PHP's result
+--FILE--
+namespace Stub;
+
+class BoolComparison
+{
+    public function m1() -> string
+    {
+        return (true == true ? "1" : "0")
+            . (true != true ? "1" : "0")
+            . (true === true ? "1" : "0")
+            . (true !== true ? "1" : "0")
+            . (true < true ? "1" : "0")
+            . (true <= true ? "1" : "0")
+            . (true > true ? "1" : "0")
+            . (true >= true ? "1" : "0");
+    }
+
+    public function m2() -> string
+    {
+        return (true == false ? "1" : "0")
+            . (true != false ? "1" : "0")
+            . (true === false ? "1" : "0")
+            . (true !== false ? "1" : "0")
+            . (true < false ? "1" : "0")
+            . (true <= false ? "1" : "0")
+            . (true > false ? "1" : "0")
+            . (true >= false ? "1" : "0");
+    }
+
+    public function m3() -> string
+    {
+        return (false == true ? "1" : "0")
+            . (false != true ? "1" : "0")
+            . (false === true ? "1" : "0")
+            . (false !== true ? "1" : "0")
+            . (false < true ? "1" : "0")
+            . (false <= true ? "1" : "0")
+            . (false > true ? "1" : "0")
+            . (false >= true ? "1" : "0");
+    }
+
+    public function m4(bool b2) -> string
+    {
+        return (true == b2 ? "1" : "0")
+            . (true != b2 ? "1" : "0")
+            . (true === b2 ? "1" : "0")
+            . (true !== b2 ? "1" : "0")
+            . (true < b2 ? "1" : "0")
+            . (true <= b2 ? "1" : "0")
+            . (true > b2 ? "1" : "0")
+            . (true >= b2 ? "1" : "0");
+    }
+
+    public function m5(bool b2) -> string
+    {
+        return (b2 == true ? "1" : "0")
+            . (b2 != true ? "1" : "0")
+            . (b2 === true ? "1" : "0")
+            . (b2 !== true ? "1" : "0")
+            . (b2 < true ? "1" : "0")
+            . (b2 <= true ? "1" : "0")
+            . (b2 > true ? "1" : "0")
+            . (b2 >= true ? "1" : "0");
+    }
+
+    public function m6(int p2, int q2) -> string
+    {
+        return (true == (p2 > q2) ? "1" : "0")
+            . (true != (p2 > q2) ? "1" : "0")
+            . (true === (p2 > q2) ? "1" : "0")
+            . (true !== (p2 > q2) ? "1" : "0")
+            . (true < (p2 > q2) ? "1" : "0")
+            . (true <= (p2 > q2) ? "1" : "0")
+            . (true > (p2 > q2) ? "1" : "0")
+            . (true >= (p2 > q2) ? "1" : "0");
+    }
+
+    public function m7(int p2, int q2) -> string
+    {
+        return ((p2 > q2) == true ? "1" : "0")
+            . ((p2 > q2) != true ? "1" : "0")
+            . ((p2 > q2) === true ? "1" : "0")
+            . ((p2 > q2) !== true ? "1" : "0")
+            . ((p2 > q2) < true ? "1" : "0")
+            . ((p2 > q2) <= true ? "1" : "0")
+            . ((p2 > q2) > true ? "1" : "0")
+            . ((p2 > q2) >= true ? "1" : "0");
+    }
+
+    public function m8(int r2, int w2) -> string
+    {
+        var t2;
+        let t2 = r2 > w2;
+
+        return (true == t2 ? "1" : "0")
+            . (true != t2 ? "1" : "0")
+            . (true === t2 ? "1" : "0")
+            . (true !== t2 ? "1" : "0")
+            . (true < t2 ? "1" : "0")
+            . (true <= t2 ? "1" : "0")
+            . (true > t2 ? "1" : "0")
+            . (true >= t2 ? "1" : "0");
+    }
+
+    public function m9(int r2, int w2) -> string
+    {
+        var t2;
+        let t2 = r2 > w2;
+
+        return (t2 == true ? "1" : "0")
+            . (t2 != true ? "1" : "0")
+            . (t2 === true ? "1" : "0")
+            . (t2 !== true ? "1" : "0")
+            . (t2 < true ? "1" : "0")
+            . (t2 <= true ? "1" : "0")
+            . (t2 > true ? "1" : "0")
+            . (t2 >= true ? "1" : "0");
+    }
+
+    public function m10() -> string
+    {
+        return (true == 0 ? "1" : "0")
+            . (true != 0 ? "1" : "0")
+            . (true === 0 ? "1" : "0")
+            . (true !== 0 ? "1" : "0")
+            . (true < 0 ? "1" : "0")
+            . (true <= 0 ? "1" : "0")
+            . (true > 0 ? "1" : "0")
+            . (true >= 0 ? "1" : "0");
+    }
+
+    public function m11() -> string
+    {
+        return (0 == true ? "1" : "0")
+            . (0 != true ? "1" : "0")
+            . (0 === true ? "1" : "0")
+            . (0 !== true ? "1" : "0")
+            . (0 < true ? "1" : "0")
+            . (0 <= true ? "1" : "0")
+            . (0 > true ? "1" : "0")
+            . (0 >= true ? "1" : "0");
+    }
+
+    public function m12() -> string
+    {
+        return (true == 1 ? "1" : "0")
+            . (true != 1 ? "1" : "0")
+            . (true === 1 ? "1" : "0")
+            . (true !== 1 ? "1" : "0")
+            . (true < 1 ? "1" : "0")
+            . (true <= 1 ? "1" : "0")
+            . (true > 1 ? "1" : "0")
+            . (true >= 1 ? "1" : "0");
+    }
+
+    public function m13() -> string
+    {
+        return (1 == true ? "1" : "0")
+            . (1 != true ? "1" : "0")
+            . (1 === true ? "1" : "0")
+            . (1 !== true ? "1" : "0")
+            . (1 < true ? "1" : "0")
+            . (1 <= true ? "1" : "0")
+            . (1 > true ? "1" : "0")
+            . (1 >= true ? "1" : "0");
+    }
+
+    public function m14() -> string
+    {
+        return (true == 5 ? "1" : "0")
+            . (true != 5 ? "1" : "0")
+            . (true === 5 ? "1" : "0")
+            . (true !== 5 ? "1" : "0")
+            . (true < 5 ? "1" : "0")
+            . (true <= 5 ? "1" : "0")
+            . (true > 5 ? "1" : "0")
+            . (true >= 5 ? "1" : "0");
+    }
+
+    public function m15() -> string
+    {
+        return (5 == true ? "1" : "0")
+            . (5 != true ? "1" : "0")
+            . (5 === true ? "1" : "0")
+            . (5 !== true ? "1" : "0")
+            . (5 < true ? "1" : "0")
+            . (5 <= true ? "1" : "0")
+            . (5 > true ? "1" : "0")
+            . (5 >= true ? "1" : "0");
+    }
+
+    public function m16() -> string
+    {
+        return (true == -1 ? "1" : "0")
+            . (true != -1 ? "1" : "0")
+            . (true === -1 ? "1" : "0")
+            . (true !== -1 ? "1" : "0")
+            . (true < -1 ? "1" : "0")
+            . (true <= -1 ? "1" : "0")
+            . (true > -1 ? "1" : "0")
+            . (true >= -1 ? "1" : "0");
+    }
+
+    public function m17() -> string
+    {
+        return (-1 == true ? "1" : "0")
+            . (-1 != true ? "1" : "0")
+            . (-1 === true ? "1" : "0")
+            . (-1 !== true ? "1" : "0")
+            . (-1 < true ? "1" : "0")
+            . (-1 <= true ? "1" : "0")
+            . (-1 > true ? "1" : "0")
+            . (-1 >= true ? "1" : "0");
+    }
+
+    public function m18(int n) -> string
+    {
+        return (true == n ? "1" : "0")
+            . (true != n ? "1" : "0")
+            . (true === n ? "1" : "0")
+            . (true !== n ? "1" : "0")
+            . (true < n ? "1" : "0")
+            . (true <= n ? "1" : "0")
+            . (true > n ? "1" : "0")
+            . (true >= n ? "1" : "0");
+    }
+
+    public function m19(int n) -> string
+    {
+        return (n == true ? "1" : "0")
+            . (n != true ? "1" : "0")
+            . (n === true ? "1" : "0")
+            . (n !== true ? "1" : "0")
+            . (n < true ? "1" : "0")
+            . (n <= true ? "1" : "0")
+            . (n > true ? "1" : "0")
+            . (n >= true ? "1" : "0");
+    }
+
+    public function m20() -> string
+    {
+        return (true == 0.0 ? "1" : "0")
+            . (true != 0.0 ? "1" : "0")
+            . (true === 0.0 ? "1" : "0")
+            . (true !== 0.0 ? "1" : "0")
+            . (true < 0.0 ? "1" : "0")
+            . (true <= 0.0 ? "1" : "0")
+            . (true > 0.0 ? "1" : "0")
+            . (true >= 0.0 ? "1" : "0");
+    }
+
+    public function m21() -> string
+    {
+        return (0.0 == true ? "1" : "0")
+            . (0.0 != true ? "1" : "0")
+            . (0.0 === true ? "1" : "0")
+            . (0.0 !== true ? "1" : "0")
+            . (0.0 < true ? "1" : "0")
+            . (0.0 <= true ? "1" : "0")
+            . (0.0 > true ? "1" : "0")
+            . (0.0 >= true ? "1" : "0");
+    }
+
+    public function m22() -> string
+    {
+        return (true == 0.5 ? "1" : "0")
+            . (true != 0.5 ? "1" : "0")
+            . (true === 0.5 ? "1" : "0")
+            . (true !== 0.5 ? "1" : "0")
+            . (true < 0.5 ? "1" : "0")
+            . (true <= 0.5 ? "1" : "0")
+            . (true > 0.5 ? "1" : "0")
+            . (true >= 0.5 ? "1" : "0");
+    }
+
+    public function m23() -> string
+    {
+        return (0.5 == true ? "1" : "0")
+            . (0.5 != true ? "1" : "0")
+            . (0.5 === true ? "1" : "0")
+            . (0.5 !== true ? "1" : "0")
+            . (0.5 < true ? "1" : "0")
+            . (0.5 <= true ? "1" : "0")
+            . (0.5 > true ? "1" : "0")
+            . (0.5 >= true ? "1" : "0");
+    }
+
+    public function m24() -> string
+    {
+        return (true == -1.5 ? "1" : "0")
+            . (true != -1.5 ? "1" : "0")
+            . (true === -1.5 ? "1" : "0")
+            . (true !== -1.5 ? "1" : "0")
+            . (true < -1.5 ? "1" : "0")
+            . (true <= -1.5 ? "1" : "0")
+            . (true > -1.5 ? "1" : "0")
+            . (true >= -1.5 ? "1" : "0");
+    }
+
+    public function m25() -> string
+    {
+        return (-1.5 == true ? "1" : "0")
+            . (-1.5 != true ? "1" : "0")
+            . (-1.5 === true ? "1" : "0")
+            . (-1.5 !== true ? "1" : "0")
+            . (-1.5 < true ? "1" : "0")
+            . (-1.5 <= true ? "1" : "0")
+            . (-1.5 > true ? "1" : "0")
+            . (-1.5 >= true ? "1" : "0");
+    }
+
+    public function m26(double d) -> string
+    {
+        return (true == d ? "1" : "0")
+            . (true != d ? "1" : "0")
+            . (true === d ? "1" : "0")
+            . (true !== d ? "1" : "0")
+            . (true < d ? "1" : "0")
+            . (true <= d ? "1" : "0")
+            . (true > d ? "1" : "0")
+            . (true >= d ? "1" : "0");
+    }
+
+    public function m27(double d) -> string
+    {
+        return (d == true ? "1" : "0")
+            . (d != true ? "1" : "0")
+            . (d === true ? "1" : "0")
+            . (d !== true ? "1" : "0")
+            . (d < true ? "1" : "0")
+            . (d <= true ? "1" : "0")
+            . (d > true ? "1" : "0")
+            . (d >= true ? "1" : "0");
+    }
+
+    public function m28() -> string
+    {
+        return (true == 'a' ? "1" : "0")
+            . (true != 'a' ? "1" : "0")
+            . (true === 'a' ? "1" : "0")
+            . (true !== 'a' ? "1" : "0")
+            . (true < 'a' ? "1" : "0")
+            . (true <= 'a' ? "1" : "0")
+            . (true > 'a' ? "1" : "0")
+            . (true >= 'a' ? "1" : "0");
+    }
+
+    public function m29() -> string
+    {
+        return ('a' == true ? "1" : "0")
+            . ('a' != true ? "1" : "0")
+            . ('a' === true ? "1" : "0")
+            . ('a' !== true ? "1" : "0")
+            . ('a' < true ? "1" : "0")
+            . ('a' <= true ? "1" : "0")
+            . ('a' > true ? "1" : "0")
+            . ('a' >= true ? "1" : "0");
+    }
+
+    public function m30() -> string
+    {
+        return (true == '0' ? "1" : "0")
+            . (true != '0' ? "1" : "0")
+            . (true === '0' ? "1" : "0")
+            . (true !== '0' ? "1" : "0")
+            . (true < '0' ? "1" : "0")
+            . (true <= '0' ? "1" : "0")
+            . (true > '0' ? "1" : "0")
+            . (true >= '0' ? "1" : "0");
+    }
+
+    public function m31() -> string
+    {
+        return ('0' == true ? "1" : "0")
+            . ('0' != true ? "1" : "0")
+            . ('0' === true ? "1" : "0")
+            . ('0' !== true ? "1" : "0")
+            . ('0' < true ? "1" : "0")
+            . ('0' <= true ? "1" : "0")
+            . ('0' > true ? "1" : "0")
+            . ('0' >= true ? "1" : "0");
+    }
+
+    public function m32() -> string
+    {
+        return (true == null ? "1" : "0")
+            . (true != null ? "1" : "0")
+            . (true === null ? "1" : "0")
+            . (true !== null ? "1" : "0")
+            . (true < null ? "1" : "0")
+            . (true <= null ? "1" : "0")
+            . (true > null ? "1" : "0")
+            . (true >= null ? "1" : "0");
+    }
+
+    public function m33() -> string
+    {
+        return (null == true ? "1" : "0")
+            . (null != true ? "1" : "0")
+            . (null === true ? "1" : "0")
+            . (null !== true ? "1" : "0")
+            . (null < true ? "1" : "0")
+            . (null <= true ? "1" : "0")
+            . (null > true ? "1" : "0")
+            . (null >= true ? "1" : "0");
+    }
+
+    public function m34() -> string
+    {
+        return (true == "" ? "1" : "0")
+            . (true != "" ? "1" : "0")
+            . (true === "" ? "1" : "0")
+            . (true !== "" ? "1" : "0")
+            . (true < "" ? "1" : "0")
+            . (true <= "" ? "1" : "0")
+            . (true > "" ? "1" : "0")
+            . (true >= "" ? "1" : "0");
+    }
+
+    public function m35() -> string
+    {
+        return ("" == true ? "1" : "0")
+            . ("" != true ? "1" : "0")
+            . ("" === true ? "1" : "0")
+            . ("" !== true ? "1" : "0")
+            . ("" < true ? "1" : "0")
+            . ("" <= true ? "1" : "0")
+            . ("" > true ? "1" : "0")
+            . ("" >= true ? "1" : "0");
+    }
+
+    public function m36() -> string
+    {
+        return (true == "0" ? "1" : "0")
+            . (true != "0" ? "1" : "0")
+            . (true === "0" ? "1" : "0")
+            . (true !== "0" ? "1" : "0")
+            . (true < "0" ? "1" : "0")
+            . (true <= "0" ? "1" : "0")
+            . (true > "0" ? "1" : "0")
+            . (true >= "0" ? "1" : "0");
+    }
+
+    public function m37() -> string
+    {
+        return ("0" == true ? "1" : "0")
+            . ("0" != true ? "1" : "0")
+            . ("0" === true ? "1" : "0")
+            . ("0" !== true ? "1" : "0")
+            . ("0" < true ? "1" : "0")
+            . ("0" <= true ? "1" : "0")
+            . ("0" > true ? "1" : "0")
+            . ("0" >= true ? "1" : "0");
+    }
+
+    public function m38() -> string
+    {
+        return (true == "a" ? "1" : "0")
+            . (true != "a" ? "1" : "0")
+            . (true === "a" ? "1" : "0")
+            . (true !== "a" ? "1" : "0")
+            . (true < "a" ? "1" : "0")
+            . (true <= "a" ? "1" : "0")
+            . (true > "a" ? "1" : "0")
+            . (true >= "a" ? "1" : "0");
+    }
+
+    public function m39() -> string
+    {
+        return ("a" == true ? "1" : "0")
+            . ("a" != true ? "1" : "0")
+            . ("a" === true ? "1" : "0")
+            . ("a" !== true ? "1" : "0")
+            . ("a" < true ? "1" : "0")
+            . ("a" <= true ? "1" : "0")
+            . ("a" > true ? "1" : "0")
+            . ("a" >= true ? "1" : "0");
+    }
+
+    public function m40() -> string
+    {
+        return (true == "\x30" ? "1" : "0")
+            . (true != "\x30" ? "1" : "0")
+            . (true === "\x30" ? "1" : "0")
+            . (true !== "\x30" ? "1" : "0")
+            . (true < "\x30" ? "1" : "0")
+            . (true <= "\x30" ? "1" : "0")
+            . (true > "\x30" ? "1" : "0")
+            . (true >= "\x30" ? "1" : "0");
+    }
+
+    public function m41() -> string
+    {
+        return ("\x30" == true ? "1" : "0")
+            . ("\x30" != true ? "1" : "0")
+            . ("\x30" === true ? "1" : "0")
+            . ("\x30" !== true ? "1" : "0")
+            . ("\x30" < true ? "1" : "0")
+            . ("\x30" <= true ? "1" : "0")
+            . ("\x30" > true ? "1" : "0")
+            . ("\x30" >= true ? "1" : "0");
+    }
+
+    public function m42(string s) -> string
+    {
+        return (true == s ? "1" : "0")
+            . (true != s ? "1" : "0")
+            . (true === s ? "1" : "0")
+            . (true !== s ? "1" : "0")
+            . (true < s ? "1" : "0")
+            . (true <= s ? "1" : "0")
+            . (true > s ? "1" : "0")
+            . (true >= s ? "1" : "0");
+    }
+
+    public function m43(string s) -> string
+    {
+        return (s == true ? "1" : "0")
+            . (s != true ? "1" : "0")
+            . (s === true ? "1" : "0")
+            . (s !== true ? "1" : "0")
+            . (s < true ? "1" : "0")
+            . (s <= true ? "1" : "0")
+            . (s > true ? "1" : "0")
+            . (s >= true ? "1" : "0");
+    }
+
+    public function m44(array a) -> string
+    {
+        return (true == a ? "1" : "0")
+            . (true != a ? "1" : "0")
+            . (true === a ? "1" : "0")
+            . (true !== a ? "1" : "0")
+            . (true < a ? "1" : "0")
+            . (true <= a ? "1" : "0")
+            . (true > a ? "1" : "0")
+            . (true >= a ? "1" : "0");
+    }
+
+    public function m45(array a) -> string
+    {
+        return (a == true ? "1" : "0")
+            . (a != true ? "1" : "0")
+            . (a === true ? "1" : "0")
+            . (a !== true ? "1" : "0")
+            . (a < true ? "1" : "0")
+            . (a <= true ? "1" : "0")
+            . (a > true ? "1" : "0")
+            . (a >= true ? "1" : "0");
+    }
+
+    public function m46(var x) -> string
+    {
+        return (true == x ? "1" : "0")
+            . (true != x ? "1" : "0")
+            . (true === x ? "1" : "0")
+            . (true !== x ? "1" : "0")
+            . (true < x ? "1" : "0")
+            . (true <= x ? "1" : "0")
+            . (true > x ? "1" : "0")
+            . (true >= x ? "1" : "0");
+    }
+
+    public function m47(var x) -> string
+    {
+        return (x == true ? "1" : "0")
+            . (x != true ? "1" : "0")
+            . (x === true ? "1" : "0")
+            . (x !== true ? "1" : "0")
+            . (x < true ? "1" : "0")
+            . (x <= true ? "1" : "0")
+            . (x > true ? "1" : "0")
+            . (x >= true ? "1" : "0");
+    }
+
+    public function m48() -> string
+    {
+        return (false == false ? "1" : "0")
+            . (false != false ? "1" : "0")
+            . (false === false ? "1" : "0")
+            . (false !== false ? "1" : "0")
+            . (false < false ? "1" : "0")
+            . (false <= false ? "1" : "0")
+            . (false > false ? "1" : "0")
+            . (false >= false ? "1" : "0");
+    }
+
+    public function m49(bool b2) -> string
+    {
+        return (false == b2 ? "1" : "0")
+            . (false != b2 ? "1" : "0")
+            . (false === b2 ? "1" : "0")
+            . (false !== b2 ? "1" : "0")
+            . (false < b2 ? "1" : "0")
+            . (false <= b2 ? "1" : "0")
+            . (false > b2 ? "1" : "0")
+            . (false >= b2 ? "1" : "0");
+    }
+
+    public function m50(bool b2) -> string
+    {
+        return (b2 == false ? "1" : "0")
+            . (b2 != false ? "1" : "0")
+            . (b2 === false ? "1" : "0")
+            . (b2 !== false ? "1" : "0")
+            . (b2 < false ? "1" : "0")
+            . (b2 <= false ? "1" : "0")
+            . (b2 > false ? "1" : "0")
+            . (b2 >= false ? "1" : "0");
+    }
+
+    public function m51(int p2, int q2) -> string
+    {
+        return (false == (p2 > q2) ? "1" : "0")
+            . (false != (p2 > q2) ? "1" : "0")
+            . (false === (p2 > q2) ? "1" : "0")
+            . (false !== (p2 > q2) ? "1" : "0")
+            . (false < (p2 > q2) ? "1" : "0")
+            . (false <= (p2 > q2) ? "1" : "0")
+            . (false > (p2 > q2) ? "1" : "0")
+            . (false >= (p2 > q2) ? "1" : "0");
+    }
+
+    public function m52(int p2, int q2) -> string
+    {
+        return ((p2 > q2) == false ? "1" : "0")
+            . ((p2 > q2) != false ? "1" : "0")
+            . ((p2 > q2) === false ? "1" : "0")
+            . ((p2 > q2) !== false ? "1" : "0")
+            . ((p2 > q2) < false ? "1" : "0")
+            . ((p2 > q2) <= false ? "1" : "0")
+            . ((p2 > q2) > false ? "1" : "0")
+            . ((p2 > q2) >= false ? "1" : "0");
+    }
+
+    public function m53(int r2, int w2) -> string
+    {
+        var t2;
+        let t2 = r2 > w2;
+
+        return (false == t2 ? "1" : "0")
+            . (false != t2 ? "1" : "0")
+            . (false === t2 ? "1" : "0")
+            . (false !== t2 ? "1" : "0")
+            . (false < t2 ? "1" : "0")
+            . (false <= t2 ? "1" : "0")
+            . (false > t2 ? "1" : "0")
+            . (false >= t2 ? "1" : "0");
+    }
+
+    public function m54(int r2, int w2) -> string
+    {
+        var t2;
+        let t2 = r2 > w2;
+
+        return (t2 == false ? "1" : "0")
+            . (t2 != false ? "1" : "0")
+            . (t2 === false ? "1" : "0")
+            . (t2 !== false ? "1" : "0")
+            . (t2 < false ? "1" : "0")
+            . (t2 <= false ? "1" : "0")
+            . (t2 > false ? "1" : "0")
+            . (t2 >= false ? "1" : "0");
+    }
+
+    public function m55() -> string
+    {
+        return (false == 0 ? "1" : "0")
+            . (false != 0 ? "1" : "0")
+            . (false === 0 ? "1" : "0")
+            . (false !== 0 ? "1" : "0")
+            . (false < 0 ? "1" : "0")
+            . (false <= 0 ? "1" : "0")
+            . (false > 0 ? "1" : "0")
+            . (false >= 0 ? "1" : "0");
+    }
+
+    public function m56() -> string
+    {
+        return (0 == false ? "1" : "0")
+            . (0 != false ? "1" : "0")
+            . (0 === false ? "1" : "0")
+            . (0 !== false ? "1" : "0")
+            . (0 < false ? "1" : "0")
+            . (0 <= false ? "1" : "0")
+            . (0 > false ? "1" : "0")
+            . (0 >= false ? "1" : "0");
+    }
+
+    public function m57() -> string
+    {
+        return (false == 1 ? "1" : "0")
+            . (false != 1 ? "1" : "0")
+            . (false === 1 ? "1" : "0")
+            . (false !== 1 ? "1" : "0")
+            . (false < 1 ? "1" : "0")
+            . (false <= 1 ? "1" : "0")
+            . (false > 1 ? "1" : "0")
+            . (false >= 1 ? "1" : "0");
+    }
+
+    public function m58() -> string
+    {
+        return (1 == false ? "1" : "0")
+            . (1 != false ? "1" : "0")
+            . (1 === false ? "1" : "0")
+            . (1 !== false ? "1" : "0")
+            . (1 < false ? "1" : "0")
+            . (1 <= false ? "1" : "0")
+            . (1 > false ? "1" : "0")
+            . (1 >= false ? "1" : "0");
+    }
+
+    public function m59() -> string
+    {
+        return (false == 5 ? "1" : "0")
+            . (false != 5 ? "1" : "0")
+            . (false === 5 ? "1" : "0")
+            . (false !== 5 ? "1" : "0")
+            . (false < 5 ? "1" : "0")
+            . (false <= 5 ? "1" : "0")
+            . (false > 5 ? "1" : "0")
+            . (false >= 5 ? "1" : "0");
+    }
+
+    public function m60() -> string
+    {
+        return (5 == false ? "1" : "0")
+            . (5 != false ? "1" : "0")
+            . (5 === false ? "1" : "0")
+            . (5 !== false ? "1" : "0")
+            . (5 < false ? "1" : "0")
+            . (5 <= false ? "1" : "0")
+            . (5 > false ? "1" : "0")
+            . (5 >= false ? "1" : "0");
+    }
+
+    public function m61() -> string
+    {
+        return (false == -1 ? "1" : "0")
+            . (false != -1 ? "1" : "0")
+            . (false === -1 ? "1" : "0")
+            . (false !== -1 ? "1" : "0")
+            . (false < -1 ? "1" : "0")
+            . (false <= -1 ? "1" : "0")
+            . (false > -1 ? "1" : "0")
+            . (false >= -1 ? "1" : "0");
+    }
+
+    public function m62() -> string
+    {
+        return (-1 == false ? "1" : "0")
+            . (-1 != false ? "1" : "0")
+            . (-1 === false ? "1" : "0")
+            . (-1 !== false ? "1" : "0")
+            . (-1 < false ? "1" : "0")
+            . (-1 <= false ? "1" : "0")
+            . (-1 > false ? "1" : "0")
+            . (-1 >= false ? "1" : "0");
+    }
+
+    public function m63(int n) -> string
+    {
+        return (false == n ? "1" : "0")
+            . (false != n ? "1" : "0")
+            . (false === n ? "1" : "0")
+            . (false !== n ? "1" : "0")
+            . (false < n ? "1" : "0")
+            . (false <= n ? "1" : "0")
+            . (false > n ? "1" : "0")
+            . (false >= n ? "1" : "0");
+    }
+
+    public function m64(int n) -> string
+    {
+        return (n == false ? "1" : "0")
+            . (n != false ? "1" : "0")
+            . (n === false ? "1" : "0")
+            . (n !== false ? "1" : "0")
+            . (n < false ? "1" : "0")
+            . (n <= false ? "1" : "0")
+            . (n > false ? "1" : "0")
+            . (n >= false ? "1" : "0");
+    }
+
+    public function m65() -> string
+    {
+        return (false == 0.0 ? "1" : "0")
+            . (false != 0.0 ? "1" : "0")
+            . (false === 0.0 ? "1" : "0")
+            . (false !== 0.0 ? "1" : "0")
+            . (false < 0.0 ? "1" : "0")
+            . (false <= 0.0 ? "1" : "0")
+            . (false > 0.0 ? "1" : "0")
+            . (false >= 0.0 ? "1" : "0");
+    }
+
+    public function m66() -> string
+    {
+        return (0.0 == false ? "1" : "0")
+            . (0.0 != false ? "1" : "0")
+            . (0.0 === false ? "1" : "0")
+            . (0.0 !== false ? "1" : "0")
+            . (0.0 < false ? "1" : "0")
+            . (0.0 <= false ? "1" : "0")
+            . (0.0 > false ? "1" : "0")
+            . (0.0 >= false ? "1" : "0");
+    }
+
+    public function m67() -> string
+    {
+        return (false == 0.5 ? "1" : "0")
+            . (false != 0.5 ? "1" : "0")
+            . (false === 0.5 ? "1" : "0")
+            . (false !== 0.5 ? "1" : "0")
+            . (false < 0.5 ? "1" : "0")
+            . (false <= 0.5 ? "1" : "0")
+            . (false > 0.5 ? "1" : "0")
+            . (false >= 0.5 ? "1" : "0");
+    }
+
+    public function m68() -> string
+    {
+        return (0.5 == false ? "1" : "0")
+            . (0.5 != false ? "1" : "0")
+            . (0.5 === false ? "1" : "0")
+            . (0.5 !== false ? "1" : "0")
+            . (0.5 < false ? "1" : "0")
+            . (0.5 <= false ? "1" : "0")
+            . (0.5 > false ? "1" : "0")
+            . (0.5 >= false ? "1" : "0");
+    }
+
+    public function m69() -> string
+    {
+        return (false == -1.5 ? "1" : "0")
+            . (false != -1.5 ? "1" : "0")
+            . (false === -1.5 ? "1" : "0")
+            . (false !== -1.5 ? "1" : "0")
+            . (false < -1.5 ? "1" : "0")
+            . (false <= -1.5 ? "1" : "0")
+            . (false > -1.5 ? "1" : "0")
+            . (false >= -1.5 ? "1" : "0");
+    }
+
+    public function m70() -> string
+    {
+        return (-1.5 == false ? "1" : "0")
+            . (-1.5 != false ? "1" : "0")
+            . (-1.5 === false ? "1" : "0")
+            . (-1.5 !== false ? "1" : "0")
+            . (-1.5 < false ? "1" : "0")
+            . (-1.5 <= false ? "1" : "0")
+            . (-1.5 > false ? "1" : "0")
+            . (-1.5 >= false ? "1" : "0");
+    }
+
+    public function m71(double d) -> string
+    {
+        return (false == d ? "1" : "0")
+            . (false != d ? "1" : "0")
+            . (false === d ? "1" : "0")
+            . (false !== d ? "1" : "0")
+            . (false < d ? "1" : "0")
+            . (false <= d ? "1" : "0")
+            . (false > d ? "1" : "0")
+            . (false >= d ? "1" : "0");
+    }
+
+    public function m72(double d) -> string
+    {
+        return (d == false ? "1" : "0")
+            . (d != false ? "1" : "0")
+            . (d === false ? "1" : "0")
+            . (d !== false ? "1" : "0")
+            . (d < false ? "1" : "0")
+            . (d <= false ? "1" : "0")
+            . (d > false ? "1" : "0")
+            . (d >= false ? "1" : "0");
+    }
+
+    public function m73() -> string
+    {
+        return (false == 'a' ? "1" : "0")
+            . (false != 'a' ? "1" : "0")
+            . (false === 'a' ? "1" : "0")
+            . (false !== 'a' ? "1" : "0")
+            . (false < 'a' ? "1" : "0")
+            . (false <= 'a' ? "1" : "0")
+            . (false > 'a' ? "1" : "0")
+            . (false >= 'a' ? "1" : "0");
+    }
+
+    public function m74() -> string
+    {
+        return ('a' == false ? "1" : "0")
+            . ('a' != false ? "1" : "0")
+            . ('a' === false ? "1" : "0")
+            . ('a' !== false ? "1" : "0")
+            . ('a' < false ? "1" : "0")
+            . ('a' <= false ? "1" : "0")
+            . ('a' > false ? "1" : "0")
+            . ('a' >= false ? "1" : "0");
+    }
+
+    public function m75() -> string
+    {
+        return (false == '0' ? "1" : "0")
+            . (false != '0' ? "1" : "0")
+            . (false === '0' ? "1" : "0")
+            . (false !== '0' ? "1" : "0")
+            . (false < '0' ? "1" : "0")
+            . (false <= '0' ? "1" : "0")
+            . (false > '0' ? "1" : "0")
+            . (false >= '0' ? "1" : "0");
+    }
+
+    public function m76() -> string
+    {
+        return ('0' == false ? "1" : "0")
+            . ('0' != false ? "1" : "0")
+            . ('0' === false ? "1" : "0")
+            . ('0' !== false ? "1" : "0")
+            . ('0' < false ? "1" : "0")
+            . ('0' <= false ? "1" : "0")
+            . ('0' > false ? "1" : "0")
+            . ('0' >= false ? "1" : "0");
+    }
+
+    public function m77() -> string
+    {
+        return (false == null ? "1" : "0")
+            . (false != null ? "1" : "0")
+            . (false === null ? "1" : "0")
+            . (false !== null ? "1" : "0")
+            . (false < null ? "1" : "0")
+            . (false <= null ? "1" : "0")
+            . (false > null ? "1" : "0")
+            . (false >= null ? "1" : "0");
+    }
+
+    public function m78() -> string
+    {
+        return (null == false ? "1" : "0")
+            . (null != false ? "1" : "0")
+            . (null === false ? "1" : "0")
+            . (null !== false ? "1" : "0")
+            . (null < false ? "1" : "0")
+            . (null <= false ? "1" : "0")
+            . (null > false ? "1" : "0")
+            . (null >= false ? "1" : "0");
+    }
+
+    public function m79() -> string
+    {
+        return (false == "" ? "1" : "0")
+            . (false != "" ? "1" : "0")
+            . (false === "" ? "1" : "0")
+            . (false !== "" ? "1" : "0")
+            . (false < "" ? "1" : "0")
+            . (false <= "" ? "1" : "0")
+            . (false > "" ? "1" : "0")
+            . (false >= "" ? "1" : "0");
+    }
+
+    public function m80() -> string
+    {
+        return ("" == false ? "1" : "0")
+            . ("" != false ? "1" : "0")
+            . ("" === false ? "1" : "0")
+            . ("" !== false ? "1" : "0")
+            . ("" < false ? "1" : "0")
+            . ("" <= false ? "1" : "0")
+            . ("" > false ? "1" : "0")
+            . ("" >= false ? "1" : "0");
+    }
+
+    public function m81() -> string
+    {
+        return (false == "0" ? "1" : "0")
+            . (false != "0" ? "1" : "0")
+            . (false === "0" ? "1" : "0")
+            . (false !== "0" ? "1" : "0")
+            . (false < "0" ? "1" : "0")
+            . (false <= "0" ? "1" : "0")
+            . (false > "0" ? "1" : "0")
+            . (false >= "0" ? "1" : "0");
+    }
+
+    public function m82() -> string
+    {
+        return ("0" == false ? "1" : "0")
+            . ("0" != false ? "1" : "0")
+            . ("0" === false ? "1" : "0")
+            . ("0" !== false ? "1" : "0")
+            . ("0" < false ? "1" : "0")
+            . ("0" <= false ? "1" : "0")
+            . ("0" > false ? "1" : "0")
+            . ("0" >= false ? "1" : "0");
+    }
+
+    public function m83() -> string
+    {
+        return (false == "a" ? "1" : "0")
+            . (false != "a" ? "1" : "0")
+            . (false === "a" ? "1" : "0")
+            . (false !== "a" ? "1" : "0")
+            . (false < "a" ? "1" : "0")
+            . (false <= "a" ? "1" : "0")
+            . (false > "a" ? "1" : "0")
+            . (false >= "a" ? "1" : "0");
+    }
+
+    public function m84() -> string
+    {
+        return ("a" == false ? "1" : "0")
+            . ("a" != false ? "1" : "0")
+            . ("a" === false ? "1" : "0")
+            . ("a" !== false ? "1" : "0")
+            . ("a" < false ? "1" : "0")
+            . ("a" <= false ? "1" : "0")
+            . ("a" > false ? "1" : "0")
+            . ("a" >= false ? "1" : "0");
+    }
+
+    public function m85() -> string
+    {
+        return (false == "\x30" ? "1" : "0")
+            . (false != "\x30" ? "1" : "0")
+            . (false === "\x30" ? "1" : "0")
+            . (false !== "\x30" ? "1" : "0")
+            . (false < "\x30" ? "1" : "0")
+            . (false <= "\x30" ? "1" : "0")
+            . (false > "\x30" ? "1" : "0")
+            . (false >= "\x30" ? "1" : "0");
+    }
+
+    public function m86() -> string
+    {
+        return ("\x30" == false ? "1" : "0")
+            . ("\x30" != false ? "1" : "0")
+            . ("\x30" === false ? "1" : "0")
+            . ("\x30" !== false ? "1" : "0")
+            . ("\x30" < false ? "1" : "0")
+            . ("\x30" <= false ? "1" : "0")
+            . ("\x30" > false ? "1" : "0")
+            . ("\x30" >= false ? "1" : "0");
+    }
+
+    public function m87(string s) -> string
+    {
+        return (false == s ? "1" : "0")
+            . (false != s ? "1" : "0")
+            . (false === s ? "1" : "0")
+            . (false !== s ? "1" : "0")
+            . (false < s ? "1" : "0")
+            . (false <= s ? "1" : "0")
+            . (false > s ? "1" : "0")
+            . (false >= s ? "1" : "0");
+    }
+
+    public function m88(string s) -> string
+    {
+        return (s == false ? "1" : "0")
+            . (s != false ? "1" : "0")
+            . (s === false ? "1" : "0")
+            . (s !== false ? "1" : "0")
+            . (s < false ? "1" : "0")
+            . (s <= false ? "1" : "0")
+            . (s > false ? "1" : "0")
+            . (s >= false ? "1" : "0");
+    }
+
+    public function m89(array a) -> string
+    {
+        return (false == a ? "1" : "0")
+            . (false != a ? "1" : "0")
+            . (false === a ? "1" : "0")
+            . (false !== a ? "1" : "0")
+            . (false < a ? "1" : "0")
+            . (false <= a ? "1" : "0")
+            . (false > a ? "1" : "0")
+            . (false >= a ? "1" : "0");
+    }
+
+    public function m90(array a) -> string
+    {
+        return (a == false ? "1" : "0")
+            . (a != false ? "1" : "0")
+            . (a === false ? "1" : "0")
+            . (a !== false ? "1" : "0")
+            . (a < false ? "1" : "0")
+            . (a <= false ? "1" : "0")
+            . (a > false ? "1" : "0")
+            . (a >= false ? "1" : "0");
+    }
+
+    public function m91(var x) -> string
+    {
+        return (false == x ? "1" : "0")
+            . (false != x ? "1" : "0")
+            . (false === x ? "1" : "0")
+            . (false !== x ? "1" : "0")
+            . (false < x ? "1" : "0")
+            . (false <= x ? "1" : "0")
+            . (false > x ? "1" : "0")
+            . (false >= x ? "1" : "0");
+    }
+
+    public function m92(var x) -> string
+    {
+        return (x == false ? "1" : "0")
+            . (x != false ? "1" : "0")
+            . (x === false ? "1" : "0")
+            . (x !== false ? "1" : "0")
+            . (x < false ? "1" : "0")
+            . (x <= false ? "1" : "0")
+            . (x > false ? "1" : "0")
+            . (x >= false ? "1" : "0");
+    }
+
+    public function m93(bool b, bool b2) -> string
+    {
+        return (b == b2 ? "1" : "0")
+            . (b != b2 ? "1" : "0")
+            . (b === b2 ? "1" : "0")
+            . (b !== b2 ? "1" : "0")
+            . (b < b2 ? "1" : "0")
+            . (b <= b2 ? "1" : "0")
+            . (b > b2 ? "1" : "0")
+            . (b >= b2 ? "1" : "0");
+    }
+
+    public function m94(bool b, int p2, int q2) -> string
+    {
+        return (b == (p2 > q2) ? "1" : "0")
+            . (b != (p2 > q2) ? "1" : "0")
+            . (b === (p2 > q2) ? "1" : "0")
+            . (b !== (p2 > q2) ? "1" : "0")
+            . (b < (p2 > q2) ? "1" : "0")
+            . (b <= (p2 > q2) ? "1" : "0")
+            . (b > (p2 > q2) ? "1" : "0")
+            . (b >= (p2 > q2) ? "1" : "0");
+    }
+
+    public function m95(int p2, int q2, bool b) -> string
+    {
+        return ((p2 > q2) == b ? "1" : "0")
+            . ((p2 > q2) != b ? "1" : "0")
+            . ((p2 > q2) === b ? "1" : "0")
+            . ((p2 > q2) !== b ? "1" : "0")
+            . ((p2 > q2) < b ? "1" : "0")
+            . ((p2 > q2) <= b ? "1" : "0")
+            . ((p2 > q2) > b ? "1" : "0")
+            . ((p2 > q2) >= b ? "1" : "0");
+    }
+
+    public function m96(bool b, int r2, int w2) -> string
+    {
+        var t2;
+        let t2 = r2 > w2;
+
+        return (b == t2 ? "1" : "0")
+            . (b != t2 ? "1" : "0")
+            . (b === t2 ? "1" : "0")
+            . (b !== t2 ? "1" : "0")
+            . (b < t2 ? "1" : "0")
+            . (b <= t2 ? "1" : "0")
+            . (b > t2 ? "1" : "0")
+            . (b >= t2 ? "1" : "0");
+    }
+
+    public function m97(int r2, int w2, bool b) -> string
+    {
+        var t2;
+        let t2 = r2 > w2;
+
+        return (t2 == b ? "1" : "0")
+            . (t2 != b ? "1" : "0")
+            . (t2 === b ? "1" : "0")
+            . (t2 !== b ? "1" : "0")
+            . (t2 < b ? "1" : "0")
+            . (t2 <= b ? "1" : "0")
+            . (t2 > b ? "1" : "0")
+            . (t2 >= b ? "1" : "0");
+    }
+
+    public function m98(bool b) -> string
+    {
+        return (b == 0 ? "1" : "0")
+            . (b != 0 ? "1" : "0")
+            . (b === 0 ? "1" : "0")
+            . (b !== 0 ? "1" : "0")
+            . (b < 0 ? "1" : "0")
+            . (b <= 0 ? "1" : "0")
+            . (b > 0 ? "1" : "0")
+            . (b >= 0 ? "1" : "0");
+    }
+
+    public function m99(bool b) -> string
+    {
+        return (0 == b ? "1" : "0")
+            . (0 != b ? "1" : "0")
+            . (0 === b ? "1" : "0")
+            . (0 !== b ? "1" : "0")
+            . (0 < b ? "1" : "0")
+            . (0 <= b ? "1" : "0")
+            . (0 > b ? "1" : "0")
+            . (0 >= b ? "1" : "0");
+    }
+
+    public function m100(bool b) -> string
+    {
+        return (b == 1 ? "1" : "0")
+            . (b != 1 ? "1" : "0")
+            . (b === 1 ? "1" : "0")
+            . (b !== 1 ? "1" : "0")
+            . (b < 1 ? "1" : "0")
+            . (b <= 1 ? "1" : "0")
+            . (b > 1 ? "1" : "0")
+            . (b >= 1 ? "1" : "0");
+    }
+
+    public function m101(bool b) -> string
+    {
+        return (1 == b ? "1" : "0")
+            . (1 != b ? "1" : "0")
+            . (1 === b ? "1" : "0")
+            . (1 !== b ? "1" : "0")
+            . (1 < b ? "1" : "0")
+            . (1 <= b ? "1" : "0")
+            . (1 > b ? "1" : "0")
+            . (1 >= b ? "1" : "0");
+    }
+
+    public function m102(bool b) -> string
+    {
+        return (b == 5 ? "1" : "0")
+            . (b != 5 ? "1" : "0")
+            . (b === 5 ? "1" : "0")
+            . (b !== 5 ? "1" : "0")
+            . (b < 5 ? "1" : "0")
+            . (b <= 5 ? "1" : "0")
+            . (b > 5 ? "1" : "0")
+            . (b >= 5 ? "1" : "0");
+    }
+
+    public function m103(bool b) -> string
+    {
+        return (5 == b ? "1" : "0")
+            . (5 != b ? "1" : "0")
+            . (5 === b ? "1" : "0")
+            . (5 !== b ? "1" : "0")
+            . (5 < b ? "1" : "0")
+            . (5 <= b ? "1" : "0")
+            . (5 > b ? "1" : "0")
+            . (5 >= b ? "1" : "0");
+    }
+
+    public function m104(bool b) -> string
+    {
+        return (b == -1 ? "1" : "0")
+            . (b != -1 ? "1" : "0")
+            . (b === -1 ? "1" : "0")
+            . (b !== -1 ? "1" : "0")
+            . (b < -1 ? "1" : "0")
+            . (b <= -1 ? "1" : "0")
+            . (b > -1 ? "1" : "0")
+            . (b >= -1 ? "1" : "0");
+    }
+
+    public function m105(bool b) -> string
+    {
+        return (-1 == b ? "1" : "0")
+            . (-1 != b ? "1" : "0")
+            . (-1 === b ? "1" : "0")
+            . (-1 !== b ? "1" : "0")
+            . (-1 < b ? "1" : "0")
+            . (-1 <= b ? "1" : "0")
+            . (-1 > b ? "1" : "0")
+            . (-1 >= b ? "1" : "0");
+    }
+
+    public function m106(bool b, int n) -> string
+    {
+        return (b == n ? "1" : "0")
+            . (b != n ? "1" : "0")
+            . (b === n ? "1" : "0")
+            . (b !== n ? "1" : "0")
+            . (b < n ? "1" : "0")
+            . (b <= n ? "1" : "0")
+            . (b > n ? "1" : "0")
+            . (b >= n ? "1" : "0");
+    }
+
+    public function m107(int n, bool b) -> string
+    {
+        return (n == b ? "1" : "0")
+            . (n != b ? "1" : "0")
+            . (n === b ? "1" : "0")
+            . (n !== b ? "1" : "0")
+            . (n < b ? "1" : "0")
+            . (n <= b ? "1" : "0")
+            . (n > b ? "1" : "0")
+            . (n >= b ? "1" : "0");
+    }
+
+    public function m108(bool b) -> string
+    {
+        return (b == 0.0 ? "1" : "0")
+            . (b != 0.0 ? "1" : "0")
+            . (b === 0.0 ? "1" : "0")
+            . (b !== 0.0 ? "1" : "0")
+            . (b < 0.0 ? "1" : "0")
+            . (b <= 0.0 ? "1" : "0")
+            . (b > 0.0 ? "1" : "0")
+            . (b >= 0.0 ? "1" : "0");
+    }
+
+    public function m109(bool b) -> string
+    {
+        return (0.0 == b ? "1" : "0")
+            . (0.0 != b ? "1" : "0")
+            . (0.0 === b ? "1" : "0")
+            . (0.0 !== b ? "1" : "0")
+            . (0.0 < b ? "1" : "0")
+            . (0.0 <= b ? "1" : "0")
+            . (0.0 > b ? "1" : "0")
+            . (0.0 >= b ? "1" : "0");
+    }
+
+    public function m110(bool b) -> string
+    {
+        return (b == 0.5 ? "1" : "0")
+            . (b != 0.5 ? "1" : "0")
+            . (b === 0.5 ? "1" : "0")
+            . (b !== 0.5 ? "1" : "0")
+            . (b < 0.5 ? "1" : "0")
+            . (b <= 0.5 ? "1" : "0")
+            . (b > 0.5 ? "1" : "0")
+            . (b >= 0.5 ? "1" : "0");
+    }
+
+    public function m111(bool b) -> string
+    {
+        return (0.5 == b ? "1" : "0")
+            . (0.5 != b ? "1" : "0")
+            . (0.5 === b ? "1" : "0")
+            . (0.5 !== b ? "1" : "0")
+            . (0.5 < b ? "1" : "0")
+            . (0.5 <= b ? "1" : "0")
+            . (0.5 > b ? "1" : "0")
+            . (0.5 >= b ? "1" : "0");
+    }
+
+    public function m112(bool b) -> string
+    {
+        return (b == -1.5 ? "1" : "0")
+            . (b != -1.5 ? "1" : "0")
+            . (b === -1.5 ? "1" : "0")
+            . (b !== -1.5 ? "1" : "0")
+            . (b < -1.5 ? "1" : "0")
+            . (b <= -1.5 ? "1" : "0")
+            . (b > -1.5 ? "1" : "0")
+            . (b >= -1.5 ? "1" : "0");
+    }
+
+    public function m113(bool b) -> string
+    {
+        return (-1.5 == b ? "1" : "0")
+            . (-1.5 != b ? "1" : "0")
+            . (-1.5 === b ? "1" : "0")
+            . (-1.5 !== b ? "1" : "0")
+            . (-1.5 < b ? "1" : "0")
+            . (-1.5 <= b ? "1" : "0")
+            . (-1.5 > b ? "1" : "0")
+            . (-1.5 >= b ? "1" : "0");
+    }
+
+    public function m114(bool b, double d) -> string
+    {
+        return (b == d ? "1" : "0")
+            . (b != d ? "1" : "0")
+            . (b === d ? "1" : "0")
+            . (b !== d ? "1" : "0")
+            . (b < d ? "1" : "0")
+            . (b <= d ? "1" : "0")
+            . (b > d ? "1" : "0")
+            . (b >= d ? "1" : "0");
+    }
+
+    public function m115(double d, bool b) -> string
+    {
+        return (d == b ? "1" : "0")
+            . (d != b ? "1" : "0")
+            . (d === b ? "1" : "0")
+            . (d !== b ? "1" : "0")
+            . (d < b ? "1" : "0")
+            . (d <= b ? "1" : "0")
+            . (d > b ? "1" : "0")
+            . (d >= b ? "1" : "0");
+    }
+
+    public function m116(bool b) -> string
+    {
+        return (b == 'a' ? "1" : "0")
+            . (b != 'a' ? "1" : "0")
+            . (b === 'a' ? "1" : "0")
+            . (b !== 'a' ? "1" : "0")
+            . (b < 'a' ? "1" : "0")
+            . (b <= 'a' ? "1" : "0")
+            . (b > 'a' ? "1" : "0")
+            . (b >= 'a' ? "1" : "0");
+    }
+
+    public function m117(bool b) -> string
+    {
+        return ('a' == b ? "1" : "0")
+            . ('a' != b ? "1" : "0")
+            . ('a' === b ? "1" : "0")
+            . ('a' !== b ? "1" : "0")
+            . ('a' < b ? "1" : "0")
+            . ('a' <= b ? "1" : "0")
+            . ('a' > b ? "1" : "0")
+            . ('a' >= b ? "1" : "0");
+    }
+
+    public function m118(bool b) -> string
+    {
+        return (b == '0' ? "1" : "0")
+            . (b != '0' ? "1" : "0")
+            . (b === '0' ? "1" : "0")
+            . (b !== '0' ? "1" : "0")
+            . (b < '0' ? "1" : "0")
+            . (b <= '0' ? "1" : "0")
+            . (b > '0' ? "1" : "0")
+            . (b >= '0' ? "1" : "0");
+    }
+
+    public function m119(bool b) -> string
+    {
+        return ('0' == b ? "1" : "0")
+            . ('0' != b ? "1" : "0")
+            . ('0' === b ? "1" : "0")
+            . ('0' !== b ? "1" : "0")
+            . ('0' < b ? "1" : "0")
+            . ('0' <= b ? "1" : "0")
+            . ('0' > b ? "1" : "0")
+            . ('0' >= b ? "1" : "0");
+    }
+
+    public function m120(bool b) -> string
+    {
+        return (b == null ? "1" : "0")
+            . (b != null ? "1" : "0")
+            . (b === null ? "1" : "0")
+            . (b !== null ? "1" : "0")
+            . (b < null ? "1" : "0")
+            . (b <= null ? "1" : "0")
+            . (b > null ? "1" : "0")
+            . (b >= null ? "1" : "0");
+    }
+
+    public function m121(bool b) -> string
+    {
+        return (null == b ? "1" : "0")
+            . (null != b ? "1" : "0")
+            . (null === b ? "1" : "0")
+            . (null !== b ? "1" : "0")
+            . (null < b ? "1" : "0")
+            . (null <= b ? "1" : "0")
+            . (null > b ? "1" : "0")
+            . (null >= b ? "1" : "0");
+    }
+
+    public function m122(bool b) -> string
+    {
+        return (b == "" ? "1" : "0")
+            . (b != "" ? "1" : "0")
+            . (b === "" ? "1" : "0")
+            . (b !== "" ? "1" : "0")
+            . (b < "" ? "1" : "0")
+            . (b <= "" ? "1" : "0")
+            . (b > "" ? "1" : "0")
+            . (b >= "" ? "1" : "0");
+    }
+
+    public function m123(bool b) -> string
+    {
+        return ("" == b ? "1" : "0")
+            . ("" != b ? "1" : "0")
+            . ("" === b ? "1" : "0")
+            . ("" !== b ? "1" : "0")
+            . ("" < b ? "1" : "0")
+            . ("" <= b ? "1" : "0")
+            . ("" > b ? "1" : "0")
+            . ("" >= b ? "1" : "0");
+    }
+
+    public function m124(bool b) -> string
+    {
+        return (b == "0" ? "1" : "0")
+            . (b != "0" ? "1" : "0")
+            . (b === "0" ? "1" : "0")
+            . (b !== "0" ? "1" : "0")
+            . (b < "0" ? "1" : "0")
+            . (b <= "0" ? "1" : "0")
+            . (b > "0" ? "1" : "0")
+            . (b >= "0" ? "1" : "0");
+    }
+
+    public function m125(bool b) -> string
+    {
+        return ("0" == b ? "1" : "0")
+            . ("0" != b ? "1" : "0")
+            . ("0" === b ? "1" : "0")
+            . ("0" !== b ? "1" : "0")
+            . ("0" < b ? "1" : "0")
+            . ("0" <= b ? "1" : "0")
+            . ("0" > b ? "1" : "0")
+            . ("0" >= b ? "1" : "0");
+    }
+
+    public function m126(bool b) -> string
+    {
+        return (b == "a" ? "1" : "0")
+            . (b != "a" ? "1" : "0")
+            . (b === "a" ? "1" : "0")
+            . (b !== "a" ? "1" : "0")
+            . (b < "a" ? "1" : "0")
+            . (b <= "a" ? "1" : "0")
+            . (b > "a" ? "1" : "0")
+            . (b >= "a" ? "1" : "0");
+    }
+
+    public function m127(bool b) -> string
+    {
+        return ("a" == b ? "1" : "0")
+            . ("a" != b ? "1" : "0")
+            . ("a" === b ? "1" : "0")
+            . ("a" !== b ? "1" : "0")
+            . ("a" < b ? "1" : "0")
+            . ("a" <= b ? "1" : "0")
+            . ("a" > b ? "1" : "0")
+            . ("a" >= b ? "1" : "0");
+    }
+
+    public function m128(bool b) -> string
+    {
+        return (b == "\x30" ? "1" : "0")
+            . (b != "\x30" ? "1" : "0")
+            . (b === "\x30" ? "1" : "0")
+            . (b !== "\x30" ? "1" : "0")
+            . (b < "\x30" ? "1" : "0")
+            . (b <= "\x30" ? "1" : "0")
+            . (b > "\x30" ? "1" : "0")
+            . (b >= "\x30" ? "1" : "0");
+    }
+
+    public function m129(bool b) -> string
+    {
+        return ("\x30" == b ? "1" : "0")
+            . ("\x30" != b ? "1" : "0")
+            . ("\x30" === b ? "1" : "0")
+            . ("\x30" !== b ? "1" : "0")
+            . ("\x30" < b ? "1" : "0")
+            . ("\x30" <= b ? "1" : "0")
+            . ("\x30" > b ? "1" : "0")
+            . ("\x30" >= b ? "1" : "0");
+    }
+
+    public function m130(bool b, string s) -> string
+    {
+        return (b == s ? "1" : "0")
+            . (b != s ? "1" : "0")
+            . (b === s ? "1" : "0")
+            . (b !== s ? "1" : "0")
+            . (b < s ? "1" : "0")
+            . (b <= s ? "1" : "0")
+            . (b > s ? "1" : "0")
+            . (b >= s ? "1" : "0");
+    }
+
+    public function m131(string s, bool b) -> string
+    {
+        return (s == b ? "1" : "0")
+            . (s != b ? "1" : "0")
+            . (s === b ? "1" : "0")
+            . (s !== b ? "1" : "0")
+            . (s < b ? "1" : "0")
+            . (s <= b ? "1" : "0")
+            . (s > b ? "1" : "0")
+            . (s >= b ? "1" : "0");
+    }
+
+    public function m132(bool b, array a) -> string
+    {
+        return (b == a ? "1" : "0")
+            . (b != a ? "1" : "0")
+            . (b === a ? "1" : "0")
+            . (b !== a ? "1" : "0")
+            . (b < a ? "1" : "0")
+            . (b <= a ? "1" : "0")
+            . (b > a ? "1" : "0")
+            . (b >= a ? "1" : "0");
+    }
+
+    public function m133(array a, bool b) -> string
+    {
+        return (a == b ? "1" : "0")
+            . (a != b ? "1" : "0")
+            . (a === b ? "1" : "0")
+            . (a !== b ? "1" : "0")
+            . (a < b ? "1" : "0")
+            . (a <= b ? "1" : "0")
+            . (a > b ? "1" : "0")
+            . (a >= b ? "1" : "0");
+    }
+
+    public function m134(bool b, var x) -> string
+    {
+        return (b == x ? "1" : "0")
+            . (b != x ? "1" : "0")
+            . (b === x ? "1" : "0")
+            . (b !== x ? "1" : "0")
+            . (b < x ? "1" : "0")
+            . (b <= x ? "1" : "0")
+            . (b > x ? "1" : "0")
+            . (b >= x ? "1" : "0");
+    }
+
+    public function m135(var x, bool b) -> string
+    {
+        return (x == b ? "1" : "0")
+            . (x != b ? "1" : "0")
+            . (x === b ? "1" : "0")
+            . (x !== b ? "1" : "0")
+            . (x < b ? "1" : "0")
+            . (x <= b ? "1" : "0")
+            . (x > b ? "1" : "0")
+            . (x >= b ? "1" : "0");
+    }
+
+    public function m136(int p, int q, int p2, int q2) -> string
+    {
+        return ((p > q) == (p2 > q2) ? "1" : "0")
+            . ((p > q) != (p2 > q2) ? "1" : "0")
+            . ((p > q) === (p2 > q2) ? "1" : "0")
+            . ((p > q) !== (p2 > q2) ? "1" : "0")
+            . ((p > q) < (p2 > q2) ? "1" : "0")
+            . ((p > q) <= (p2 > q2) ? "1" : "0")
+            . ((p > q) > (p2 > q2) ? "1" : "0")
+            . ((p > q) >= (p2 > q2) ? "1" : "0");
+    }
+
+    public function m137(int p, int q, int r2, int w2) -> string
+    {
+        var t2;
+        let t2 = r2 > w2;
+
+        return ((p > q) == t2 ? "1" : "0")
+            . ((p > q) != t2 ? "1" : "0")
+            . ((p > q) === t2 ? "1" : "0")
+            . ((p > q) !== t2 ? "1" : "0")
+            . ((p > q) < t2 ? "1" : "0")
+            . ((p > q) <= t2 ? "1" : "0")
+            . ((p > q) > t2 ? "1" : "0")
+            . ((p > q) >= t2 ? "1" : "0");
+    }
+
+    public function m138(int r2, int w2, int p, int q) -> string
+    {
+        var t2;
+        let t2 = r2 > w2;
+
+        return (t2 == (p > q) ? "1" : "0")
+            . (t2 != (p > q) ? "1" : "0")
+            . (t2 === (p > q) ? "1" : "0")
+            . (t2 !== (p > q) ? "1" : "0")
+            . (t2 < (p > q) ? "1" : "0")
+            . (t2 <= (p > q) ? "1" : "0")
+            . (t2 > (p > q) ? "1" : "0")
+            . (t2 >= (p > q) ? "1" : "0");
+    }
+
+    public function m139(int p, int q) -> string
+    {
+        return ((p > q) == 0 ? "1" : "0")
+            . ((p > q) != 0 ? "1" : "0")
+            . ((p > q) === 0 ? "1" : "0")
+            . ((p > q) !== 0 ? "1" : "0")
+            . ((p > q) < 0 ? "1" : "0")
+            . ((p > q) <= 0 ? "1" : "0")
+            . ((p > q) > 0 ? "1" : "0")
+            . ((p > q) >= 0 ? "1" : "0");
+    }
+
+    public function m140(int p, int q) -> string
+    {
+        return (0 == (p > q) ? "1" : "0")
+            . (0 != (p > q) ? "1" : "0")
+            . (0 === (p > q) ? "1" : "0")
+            . (0 !== (p > q) ? "1" : "0")
+            . (0 < (p > q) ? "1" : "0")
+            . (0 <= (p > q) ? "1" : "0")
+            . (0 > (p > q) ? "1" : "0")
+            . (0 >= (p > q) ? "1" : "0");
+    }
+
+    public function m141(int p, int q) -> string
+    {
+        return ((p > q) == 1 ? "1" : "0")
+            . ((p > q) != 1 ? "1" : "0")
+            . ((p > q) === 1 ? "1" : "0")
+            . ((p > q) !== 1 ? "1" : "0")
+            . ((p > q) < 1 ? "1" : "0")
+            . ((p > q) <= 1 ? "1" : "0")
+            . ((p > q) > 1 ? "1" : "0")
+            . ((p > q) >= 1 ? "1" : "0");
+    }
+
+    public function m142(int p, int q) -> string
+    {
+        return (1 == (p > q) ? "1" : "0")
+            . (1 != (p > q) ? "1" : "0")
+            . (1 === (p > q) ? "1" : "0")
+            . (1 !== (p > q) ? "1" : "0")
+            . (1 < (p > q) ? "1" : "0")
+            . (1 <= (p > q) ? "1" : "0")
+            . (1 > (p > q) ? "1" : "0")
+            . (1 >= (p > q) ? "1" : "0");
+    }
+
+    public function m143(int p, int q) -> string
+    {
+        return ((p > q) == 5 ? "1" : "0")
+            . ((p > q) != 5 ? "1" : "0")
+            . ((p > q) === 5 ? "1" : "0")
+            . ((p > q) !== 5 ? "1" : "0")
+            . ((p > q) < 5 ? "1" : "0")
+            . ((p > q) <= 5 ? "1" : "0")
+            . ((p > q) > 5 ? "1" : "0")
+            . ((p > q) >= 5 ? "1" : "0");
+    }
+
+    public function m144(int p, int q) -> string
+    {
+        return (5 == (p > q) ? "1" : "0")
+            . (5 != (p > q) ? "1" : "0")
+            . (5 === (p > q) ? "1" : "0")
+            . (5 !== (p > q) ? "1" : "0")
+            . (5 < (p > q) ? "1" : "0")
+            . (5 <= (p > q) ? "1" : "0")
+            . (5 > (p > q) ? "1" : "0")
+            . (5 >= (p > q) ? "1" : "0");
+    }
+
+    public function m145(int p, int q) -> string
+    {
+        return ((p > q) == -1 ? "1" : "0")
+            . ((p > q) != -1 ? "1" : "0")
+            . ((p > q) === -1 ? "1" : "0")
+            . ((p > q) !== -1 ? "1" : "0")
+            . ((p > q) < -1 ? "1" : "0")
+            . ((p > q) <= -1 ? "1" : "0")
+            . ((p > q) > -1 ? "1" : "0")
+            . ((p > q) >= -1 ? "1" : "0");
+    }
+
+    public function m146(int p, int q) -> string
+    {
+        return (-1 == (p > q) ? "1" : "0")
+            . (-1 != (p > q) ? "1" : "0")
+            . (-1 === (p > q) ? "1" : "0")
+            . (-1 !== (p > q) ? "1" : "0")
+            . (-1 < (p > q) ? "1" : "0")
+            . (-1 <= (p > q) ? "1" : "0")
+            . (-1 > (p > q) ? "1" : "0")
+            . (-1 >= (p > q) ? "1" : "0");
+    }
+
+    public function m147(int p, int q, int n) -> string
+    {
+        return ((p > q) == n ? "1" : "0")
+            . ((p > q) != n ? "1" : "0")
+            . ((p > q) === n ? "1" : "0")
+            . ((p > q) !== n ? "1" : "0")
+            . ((p > q) < n ? "1" : "0")
+            . ((p > q) <= n ? "1" : "0")
+            . ((p > q) > n ? "1" : "0")
+            . ((p > q) >= n ? "1" : "0");
+    }
+
+    public function m148(int n, int p, int q) -> string
+    {
+        return (n == (p > q) ? "1" : "0")
+            . (n != (p > q) ? "1" : "0")
+            . (n === (p > q) ? "1" : "0")
+            . (n !== (p > q) ? "1" : "0")
+            . (n < (p > q) ? "1" : "0")
+            . (n <= (p > q) ? "1" : "0")
+            . (n > (p > q) ? "1" : "0")
+            . (n >= (p > q) ? "1" : "0");
+    }
+
+    public function m149(int p, int q) -> string
+    {
+        return ((p > q) == 0.0 ? "1" : "0")
+            . ((p > q) != 0.0 ? "1" : "0")
+            . ((p > q) === 0.0 ? "1" : "0")
+            . ((p > q) !== 0.0 ? "1" : "0")
+            . ((p > q) < 0.0 ? "1" : "0")
+            . ((p > q) <= 0.0 ? "1" : "0")
+            . ((p > q) > 0.0 ? "1" : "0")
+            . ((p > q) >= 0.0 ? "1" : "0");
+    }
+
+    public function m150(int p, int q) -> string
+    {
+        return (0.0 == (p > q) ? "1" : "0")
+            . (0.0 != (p > q) ? "1" : "0")
+            . (0.0 === (p > q) ? "1" : "0")
+            . (0.0 !== (p > q) ? "1" : "0")
+            . (0.0 < (p > q) ? "1" : "0")
+            . (0.0 <= (p > q) ? "1" : "0")
+            . (0.0 > (p > q) ? "1" : "0")
+            . (0.0 >= (p > q) ? "1" : "0");
+    }
+
+    public function m151(int p, int q) -> string
+    {
+        return ((p > q) == 0.5 ? "1" : "0")
+            . ((p > q) != 0.5 ? "1" : "0")
+            . ((p > q) === 0.5 ? "1" : "0")
+            . ((p > q) !== 0.5 ? "1" : "0")
+            . ((p > q) < 0.5 ? "1" : "0")
+            . ((p > q) <= 0.5 ? "1" : "0")
+            . ((p > q) > 0.5 ? "1" : "0")
+            . ((p > q) >= 0.5 ? "1" : "0");
+    }
+
+    public function m152(int p, int q) -> string
+    {
+        return (0.5 == (p > q) ? "1" : "0")
+            . (0.5 != (p > q) ? "1" : "0")
+            . (0.5 === (p > q) ? "1" : "0")
+            . (0.5 !== (p > q) ? "1" : "0")
+            . (0.5 < (p > q) ? "1" : "0")
+            . (0.5 <= (p > q) ? "1" : "0")
+            . (0.5 > (p > q) ? "1" : "0")
+            . (0.5 >= (p > q) ? "1" : "0");
+    }
+
+    public function m153(int p, int q) -> string
+    {
+        return ((p > q) == -1.5 ? "1" : "0")
+            . ((p > q) != -1.5 ? "1" : "0")
+            . ((p > q) === -1.5 ? "1" : "0")
+            . ((p > q) !== -1.5 ? "1" : "0")
+            . ((p > q) < -1.5 ? "1" : "0")
+            . ((p > q) <= -1.5 ? "1" : "0")
+            . ((p > q) > -1.5 ? "1" : "0")
+            . ((p > q) >= -1.5 ? "1" : "0");
+    }
+
+    public function m154(int p, int q) -> string
+    {
+        return (-1.5 == (p > q) ? "1" : "0")
+            . (-1.5 != (p > q) ? "1" : "0")
+            . (-1.5 === (p > q) ? "1" : "0")
+            . (-1.5 !== (p > q) ? "1" : "0")
+            . (-1.5 < (p > q) ? "1" : "0")
+            . (-1.5 <= (p > q) ? "1" : "0")
+            . (-1.5 > (p > q) ? "1" : "0")
+            . (-1.5 >= (p > q) ? "1" : "0");
+    }
+
+    public function m155(int p, int q, double d) -> string
+    {
+        return ((p > q) == d ? "1" : "0")
+            . ((p > q) != d ? "1" : "0")
+            . ((p > q) === d ? "1" : "0")
+            . ((p > q) !== d ? "1" : "0")
+            . ((p > q) < d ? "1" : "0")
+            . ((p > q) <= d ? "1" : "0")
+            . ((p > q) > d ? "1" : "0")
+            . ((p > q) >= d ? "1" : "0");
+    }
+
+    public function m156(double d, int p, int q) -> string
+    {
+        return (d == (p > q) ? "1" : "0")
+            . (d != (p > q) ? "1" : "0")
+            . (d === (p > q) ? "1" : "0")
+            . (d !== (p > q) ? "1" : "0")
+            . (d < (p > q) ? "1" : "0")
+            . (d <= (p > q) ? "1" : "0")
+            . (d > (p > q) ? "1" : "0")
+            . (d >= (p > q) ? "1" : "0");
+    }
+
+    public function m157(int p, int q) -> string
+    {
+        return ((p > q) == 'a' ? "1" : "0")
+            . ((p > q) != 'a' ? "1" : "0")
+            . ((p > q) === 'a' ? "1" : "0")
+            . ((p > q) !== 'a' ? "1" : "0")
+            . ((p > q) < 'a' ? "1" : "0")
+            . ((p > q) <= 'a' ? "1" : "0")
+            . ((p > q) > 'a' ? "1" : "0")
+            . ((p > q) >= 'a' ? "1" : "0");
+    }
+
+    public function m158(int p, int q) -> string
+    {
+        return ('a' == (p > q) ? "1" : "0")
+            . ('a' != (p > q) ? "1" : "0")
+            . ('a' === (p > q) ? "1" : "0")
+            . ('a' !== (p > q) ? "1" : "0")
+            . ('a' < (p > q) ? "1" : "0")
+            . ('a' <= (p > q) ? "1" : "0")
+            . ('a' > (p > q) ? "1" : "0")
+            . ('a' >= (p > q) ? "1" : "0");
+    }
+
+    public function m159(int p, int q) -> string
+    {
+        return ((p > q) == '0' ? "1" : "0")
+            . ((p > q) != '0' ? "1" : "0")
+            . ((p > q) === '0' ? "1" : "0")
+            . ((p > q) !== '0' ? "1" : "0")
+            . ((p > q) < '0' ? "1" : "0")
+            . ((p > q) <= '0' ? "1" : "0")
+            . ((p > q) > '0' ? "1" : "0")
+            . ((p > q) >= '0' ? "1" : "0");
+    }
+
+    public function m160(int p, int q) -> string
+    {
+        return ('0' == (p > q) ? "1" : "0")
+            . ('0' != (p > q) ? "1" : "0")
+            . ('0' === (p > q) ? "1" : "0")
+            . ('0' !== (p > q) ? "1" : "0")
+            . ('0' < (p > q) ? "1" : "0")
+            . ('0' <= (p > q) ? "1" : "0")
+            . ('0' > (p > q) ? "1" : "0")
+            . ('0' >= (p > q) ? "1" : "0");
+    }
+
+    public function m161(int p, int q) -> string
+    {
+        return ((p > q) == null ? "1" : "0")
+            . ((p > q) != null ? "1" : "0")
+            . ((p > q) === null ? "1" : "0")
+            . ((p > q) !== null ? "1" : "0")
+            . ((p > q) < null ? "1" : "0")
+            . ((p > q) <= null ? "1" : "0")
+            . ((p > q) > null ? "1" : "0")
+            . ((p > q) >= null ? "1" : "0");
+    }
+
+    public function m162(int p, int q) -> string
+    {
+        return (null == (p > q) ? "1" : "0")
+            . (null != (p > q) ? "1" : "0")
+            . (null === (p > q) ? "1" : "0")
+            . (null !== (p > q) ? "1" : "0")
+            . (null < (p > q) ? "1" : "0")
+            . (null <= (p > q) ? "1" : "0")
+            . (null > (p > q) ? "1" : "0")
+            . (null >= (p > q) ? "1" : "0");
+    }
+
+    public function m163(int p, int q) -> string
+    {
+        return ((p > q) == "" ? "1" : "0")
+            . ((p > q) != "" ? "1" : "0")
+            . ((p > q) === "" ? "1" : "0")
+            . ((p > q) !== "" ? "1" : "0")
+            . ((p > q) < "" ? "1" : "0")
+            . ((p > q) <= "" ? "1" : "0")
+            . ((p > q) > "" ? "1" : "0")
+            . ((p > q) >= "" ? "1" : "0");
+    }
+
+    public function m164(int p, int q) -> string
+    {
+        return ("" == (p > q) ? "1" : "0")
+            . ("" != (p > q) ? "1" : "0")
+            . ("" === (p > q) ? "1" : "0")
+            . ("" !== (p > q) ? "1" : "0")
+            . ("" < (p > q) ? "1" : "0")
+            . ("" <= (p > q) ? "1" : "0")
+            . ("" > (p > q) ? "1" : "0")
+            . ("" >= (p > q) ? "1" : "0");
+    }
+
+    public function m165(int p, int q) -> string
+    {
+        return ((p > q) == "0" ? "1" : "0")
+            . ((p > q) != "0" ? "1" : "0")
+            . ((p > q) === "0" ? "1" : "0")
+            . ((p > q) !== "0" ? "1" : "0")
+            . ((p > q) < "0" ? "1" : "0")
+            . ((p > q) <= "0" ? "1" : "0")
+            . ((p > q) > "0" ? "1" : "0")
+            . ((p > q) >= "0" ? "1" : "0");
+    }
+
+    public function m166(int p, int q) -> string
+    {
+        return ("0" == (p > q) ? "1" : "0")
+            . ("0" != (p > q) ? "1" : "0")
+            . ("0" === (p > q) ? "1" : "0")
+            . ("0" !== (p > q) ? "1" : "0")
+            . ("0" < (p > q) ? "1" : "0")
+            . ("0" <= (p > q) ? "1" : "0")
+            . ("0" > (p > q) ? "1" : "0")
+            . ("0" >= (p > q) ? "1" : "0");
+    }
+
+    public function m167(int p, int q) -> string
+    {
+        return ((p > q) == "a" ? "1" : "0")
+            . ((p > q) != "a" ? "1" : "0")
+            . ((p > q) === "a" ? "1" : "0")
+            . ((p > q) !== "a" ? "1" : "0")
+            . ((p > q) < "a" ? "1" : "0")
+            . ((p > q) <= "a" ? "1" : "0")
+            . ((p > q) > "a" ? "1" : "0")
+            . ((p > q) >= "a" ? "1" : "0");
+    }
+
+    public function m168(int p, int q) -> string
+    {
+        return ("a" == (p > q) ? "1" : "0")
+            . ("a" != (p > q) ? "1" : "0")
+            . ("a" === (p > q) ? "1" : "0")
+            . ("a" !== (p > q) ? "1" : "0")
+            . ("a" < (p > q) ? "1" : "0")
+            . ("a" <= (p > q) ? "1" : "0")
+            . ("a" > (p > q) ? "1" : "0")
+            . ("a" >= (p > q) ? "1" : "0");
+    }
+
+    public function m169(int p, int q) -> string
+    {
+        return ((p > q) == "\x30" ? "1" : "0")
+            . ((p > q) != "\x30" ? "1" : "0")
+            . ((p > q) === "\x30" ? "1" : "0")
+            . ((p > q) !== "\x30" ? "1" : "0")
+            . ((p > q) < "\x30" ? "1" : "0")
+            . ((p > q) <= "\x30" ? "1" : "0")
+            . ((p > q) > "\x30" ? "1" : "0")
+            . ((p > q) >= "\x30" ? "1" : "0");
+    }
+
+    public function m170(int p, int q) -> string
+    {
+        return ("\x30" == (p > q) ? "1" : "0")
+            . ("\x30" != (p > q) ? "1" : "0")
+            . ("\x30" === (p > q) ? "1" : "0")
+            . ("\x30" !== (p > q) ? "1" : "0")
+            . ("\x30" < (p > q) ? "1" : "0")
+            . ("\x30" <= (p > q) ? "1" : "0")
+            . ("\x30" > (p > q) ? "1" : "0")
+            . ("\x30" >= (p > q) ? "1" : "0");
+    }
+
+    public function m171(int p, int q, string s) -> string
+    {
+        return ((p > q) == s ? "1" : "0")
+            . ((p > q) != s ? "1" : "0")
+            . ((p > q) === s ? "1" : "0")
+            . ((p > q) !== s ? "1" : "0")
+            . ((p > q) < s ? "1" : "0")
+            . ((p > q) <= s ? "1" : "0")
+            . ((p > q) > s ? "1" : "0")
+            . ((p > q) >= s ? "1" : "0");
+    }
+
+    public function m172(string s, int p, int q) -> string
+    {
+        return (s == (p > q) ? "1" : "0")
+            . (s != (p > q) ? "1" : "0")
+            . (s === (p > q) ? "1" : "0")
+            . (s !== (p > q) ? "1" : "0")
+            . (s < (p > q) ? "1" : "0")
+            . (s <= (p > q) ? "1" : "0")
+            . (s > (p > q) ? "1" : "0")
+            . (s >= (p > q) ? "1" : "0");
+    }
+
+    public function m173(int p, int q, array a) -> string
+    {
+        return ((p > q) == a ? "1" : "0")
+            . ((p > q) != a ? "1" : "0")
+            . ((p > q) === a ? "1" : "0")
+            . ((p > q) !== a ? "1" : "0")
+            . ((p > q) < a ? "1" : "0")
+            . ((p > q) <= a ? "1" : "0")
+            . ((p > q) > a ? "1" : "0")
+            . ((p > q) >= a ? "1" : "0");
+    }
+
+    public function m174(array a, int p, int q) -> string
+    {
+        return (a == (p > q) ? "1" : "0")
+            . (a != (p > q) ? "1" : "0")
+            . (a === (p > q) ? "1" : "0")
+            . (a !== (p > q) ? "1" : "0")
+            . (a < (p > q) ? "1" : "0")
+            . (a <= (p > q) ? "1" : "0")
+            . (a > (p > q) ? "1" : "0")
+            . (a >= (p > q) ? "1" : "0");
+    }
+
+    public function m175(int p, int q, var x) -> string
+    {
+        return ((p > q) == x ? "1" : "0")
+            . ((p > q) != x ? "1" : "0")
+            . ((p > q) === x ? "1" : "0")
+            . ((p > q) !== x ? "1" : "0")
+            . ((p > q) < x ? "1" : "0")
+            . ((p > q) <= x ? "1" : "0")
+            . ((p > q) > x ? "1" : "0")
+            . ((p > q) >= x ? "1" : "0");
+    }
+
+    public function m176(var x, int p, int q) -> string
+    {
+        return (x == (p > q) ? "1" : "0")
+            . (x != (p > q) ? "1" : "0")
+            . (x === (p > q) ? "1" : "0")
+            . (x !== (p > q) ? "1" : "0")
+            . (x < (p > q) ? "1" : "0")
+            . (x <= (p > q) ? "1" : "0")
+            . (x > (p > q) ? "1" : "0")
+            . (x >= (p > q) ? "1" : "0");
+    }
+
+    public function m177(int r, int w, int r2, int w2) -> string
+    {
+        var t;
+        let t = r > w;
+        var t2;
+        let t2 = r2 > w2;
+
+        return (t == t2 ? "1" : "0")
+            . (t != t2 ? "1" : "0")
+            . (t === t2 ? "1" : "0")
+            . (t !== t2 ? "1" : "0")
+            . (t < t2 ? "1" : "0")
+            . (t <= t2 ? "1" : "0")
+            . (t > t2 ? "1" : "0")
+            . (t >= t2 ? "1" : "0");
+    }
+
+    public function m178(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == 0 ? "1" : "0")
+            . (t != 0 ? "1" : "0")
+            . (t === 0 ? "1" : "0")
+            . (t !== 0 ? "1" : "0")
+            . (t < 0 ? "1" : "0")
+            . (t <= 0 ? "1" : "0")
+            . (t > 0 ? "1" : "0")
+            . (t >= 0 ? "1" : "0");
+    }
+
+    public function m179(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (0 == t ? "1" : "0")
+            . (0 != t ? "1" : "0")
+            . (0 === t ? "1" : "0")
+            . (0 !== t ? "1" : "0")
+            . (0 < t ? "1" : "0")
+            . (0 <= t ? "1" : "0")
+            . (0 > t ? "1" : "0")
+            . (0 >= t ? "1" : "0");
+    }
+
+    public function m180(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == 1 ? "1" : "0")
+            . (t != 1 ? "1" : "0")
+            . (t === 1 ? "1" : "0")
+            . (t !== 1 ? "1" : "0")
+            . (t < 1 ? "1" : "0")
+            . (t <= 1 ? "1" : "0")
+            . (t > 1 ? "1" : "0")
+            . (t >= 1 ? "1" : "0");
+    }
+
+    public function m181(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (1 == t ? "1" : "0")
+            . (1 != t ? "1" : "0")
+            . (1 === t ? "1" : "0")
+            . (1 !== t ? "1" : "0")
+            . (1 < t ? "1" : "0")
+            . (1 <= t ? "1" : "0")
+            . (1 > t ? "1" : "0")
+            . (1 >= t ? "1" : "0");
+    }
+
+    public function m182(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == 5 ? "1" : "0")
+            . (t != 5 ? "1" : "0")
+            . (t === 5 ? "1" : "0")
+            . (t !== 5 ? "1" : "0")
+            . (t < 5 ? "1" : "0")
+            . (t <= 5 ? "1" : "0")
+            . (t > 5 ? "1" : "0")
+            . (t >= 5 ? "1" : "0");
+    }
+
+    public function m183(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (5 == t ? "1" : "0")
+            . (5 != t ? "1" : "0")
+            . (5 === t ? "1" : "0")
+            . (5 !== t ? "1" : "0")
+            . (5 < t ? "1" : "0")
+            . (5 <= t ? "1" : "0")
+            . (5 > t ? "1" : "0")
+            . (5 >= t ? "1" : "0");
+    }
+
+    public function m184(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == -1 ? "1" : "0")
+            . (t != -1 ? "1" : "0")
+            . (t === -1 ? "1" : "0")
+            . (t !== -1 ? "1" : "0")
+            . (t < -1 ? "1" : "0")
+            . (t <= -1 ? "1" : "0")
+            . (t > -1 ? "1" : "0")
+            . (t >= -1 ? "1" : "0");
+    }
+
+    public function m185(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (-1 == t ? "1" : "0")
+            . (-1 != t ? "1" : "0")
+            . (-1 === t ? "1" : "0")
+            . (-1 !== t ? "1" : "0")
+            . (-1 < t ? "1" : "0")
+            . (-1 <= t ? "1" : "0")
+            . (-1 > t ? "1" : "0")
+            . (-1 >= t ? "1" : "0");
+    }
+
+    public function m186(int r, int w, int n) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == n ? "1" : "0")
+            . (t != n ? "1" : "0")
+            . (t === n ? "1" : "0")
+            . (t !== n ? "1" : "0")
+            . (t < n ? "1" : "0")
+            . (t <= n ? "1" : "0")
+            . (t > n ? "1" : "0")
+            . (t >= n ? "1" : "0");
+    }
+
+    public function m187(int n, int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (n == t ? "1" : "0")
+            . (n != t ? "1" : "0")
+            . (n === t ? "1" : "0")
+            . (n !== t ? "1" : "0")
+            . (n < t ? "1" : "0")
+            . (n <= t ? "1" : "0")
+            . (n > t ? "1" : "0")
+            . (n >= t ? "1" : "0");
+    }
+
+    public function m188(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == 0.0 ? "1" : "0")
+            . (t != 0.0 ? "1" : "0")
+            . (t === 0.0 ? "1" : "0")
+            . (t !== 0.0 ? "1" : "0")
+            . (t < 0.0 ? "1" : "0")
+            . (t <= 0.0 ? "1" : "0")
+            . (t > 0.0 ? "1" : "0")
+            . (t >= 0.0 ? "1" : "0");
+    }
+
+    public function m189(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (0.0 == t ? "1" : "0")
+            . (0.0 != t ? "1" : "0")
+            . (0.0 === t ? "1" : "0")
+            . (0.0 !== t ? "1" : "0")
+            . (0.0 < t ? "1" : "0")
+            . (0.0 <= t ? "1" : "0")
+            . (0.0 > t ? "1" : "0")
+            . (0.0 >= t ? "1" : "0");
+    }
+
+    public function m190(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == 0.5 ? "1" : "0")
+            . (t != 0.5 ? "1" : "0")
+            . (t === 0.5 ? "1" : "0")
+            . (t !== 0.5 ? "1" : "0")
+            . (t < 0.5 ? "1" : "0")
+            . (t <= 0.5 ? "1" : "0")
+            . (t > 0.5 ? "1" : "0")
+            . (t >= 0.5 ? "1" : "0");
+    }
+
+    public function m191(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (0.5 == t ? "1" : "0")
+            . (0.5 != t ? "1" : "0")
+            . (0.5 === t ? "1" : "0")
+            . (0.5 !== t ? "1" : "0")
+            . (0.5 < t ? "1" : "0")
+            . (0.5 <= t ? "1" : "0")
+            . (0.5 > t ? "1" : "0")
+            . (0.5 >= t ? "1" : "0");
+    }
+
+    public function m192(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == -1.5 ? "1" : "0")
+            . (t != -1.5 ? "1" : "0")
+            . (t === -1.5 ? "1" : "0")
+            . (t !== -1.5 ? "1" : "0")
+            . (t < -1.5 ? "1" : "0")
+            . (t <= -1.5 ? "1" : "0")
+            . (t > -1.5 ? "1" : "0")
+            . (t >= -1.5 ? "1" : "0");
+    }
+
+    public function m193(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (-1.5 == t ? "1" : "0")
+            . (-1.5 != t ? "1" : "0")
+            . (-1.5 === t ? "1" : "0")
+            . (-1.5 !== t ? "1" : "0")
+            . (-1.5 < t ? "1" : "0")
+            . (-1.5 <= t ? "1" : "0")
+            . (-1.5 > t ? "1" : "0")
+            . (-1.5 >= t ? "1" : "0");
+    }
+
+    public function m194(int r, int w, double d) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == d ? "1" : "0")
+            . (t != d ? "1" : "0")
+            . (t === d ? "1" : "0")
+            . (t !== d ? "1" : "0")
+            . (t < d ? "1" : "0")
+            . (t <= d ? "1" : "0")
+            . (t > d ? "1" : "0")
+            . (t >= d ? "1" : "0");
+    }
+
+    public function m195(double d, int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (d == t ? "1" : "0")
+            . (d != t ? "1" : "0")
+            . (d === t ? "1" : "0")
+            . (d !== t ? "1" : "0")
+            . (d < t ? "1" : "0")
+            . (d <= t ? "1" : "0")
+            . (d > t ? "1" : "0")
+            . (d >= t ? "1" : "0");
+    }
+
+    public function m196(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == 'a' ? "1" : "0")
+            . (t != 'a' ? "1" : "0")
+            . (t === 'a' ? "1" : "0")
+            . (t !== 'a' ? "1" : "0")
+            . (t < 'a' ? "1" : "0")
+            . (t <= 'a' ? "1" : "0")
+            . (t > 'a' ? "1" : "0")
+            . (t >= 'a' ? "1" : "0");
+    }
+
+    public function m197(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return ('a' == t ? "1" : "0")
+            . ('a' != t ? "1" : "0")
+            . ('a' === t ? "1" : "0")
+            . ('a' !== t ? "1" : "0")
+            . ('a' < t ? "1" : "0")
+            . ('a' <= t ? "1" : "0")
+            . ('a' > t ? "1" : "0")
+            . ('a' >= t ? "1" : "0");
+    }
+
+    public function m198(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == '0' ? "1" : "0")
+            . (t != '0' ? "1" : "0")
+            . (t === '0' ? "1" : "0")
+            . (t !== '0' ? "1" : "0")
+            . (t < '0' ? "1" : "0")
+            . (t <= '0' ? "1" : "0")
+            . (t > '0' ? "1" : "0")
+            . (t >= '0' ? "1" : "0");
+    }
+
+    public function m199(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return ('0' == t ? "1" : "0")
+            . ('0' != t ? "1" : "0")
+            . ('0' === t ? "1" : "0")
+            . ('0' !== t ? "1" : "0")
+            . ('0' < t ? "1" : "0")
+            . ('0' <= t ? "1" : "0")
+            . ('0' > t ? "1" : "0")
+            . ('0' >= t ? "1" : "0");
+    }
+
+    public function m200(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == null ? "1" : "0")
+            . (t != null ? "1" : "0")
+            . (t === null ? "1" : "0")
+            . (t !== null ? "1" : "0")
+            . (t < null ? "1" : "0")
+            . (t <= null ? "1" : "0")
+            . (t > null ? "1" : "0")
+            . (t >= null ? "1" : "0");
+    }
+
+    public function m201(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (null == t ? "1" : "0")
+            . (null != t ? "1" : "0")
+            . (null === t ? "1" : "0")
+            . (null !== t ? "1" : "0")
+            . (null < t ? "1" : "0")
+            . (null <= t ? "1" : "0")
+            . (null > t ? "1" : "0")
+            . (null >= t ? "1" : "0");
+    }
+
+    public function m202(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == "" ? "1" : "0")
+            . (t != "" ? "1" : "0")
+            . (t === "" ? "1" : "0")
+            . (t !== "" ? "1" : "0")
+            . (t < "" ? "1" : "0")
+            . (t <= "" ? "1" : "0")
+            . (t > "" ? "1" : "0")
+            . (t >= "" ? "1" : "0");
+    }
+
+    public function m203(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return ("" == t ? "1" : "0")
+            . ("" != t ? "1" : "0")
+            . ("" === t ? "1" : "0")
+            . ("" !== t ? "1" : "0")
+            . ("" < t ? "1" : "0")
+            . ("" <= t ? "1" : "0")
+            . ("" > t ? "1" : "0")
+            . ("" >= t ? "1" : "0");
+    }
+
+    public function m204(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == "0" ? "1" : "0")
+            . (t != "0" ? "1" : "0")
+            . (t === "0" ? "1" : "0")
+            . (t !== "0" ? "1" : "0")
+            . (t < "0" ? "1" : "0")
+            . (t <= "0" ? "1" : "0")
+            . (t > "0" ? "1" : "0")
+            . (t >= "0" ? "1" : "0");
+    }
+
+    public function m205(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return ("0" == t ? "1" : "0")
+            . ("0" != t ? "1" : "0")
+            . ("0" === t ? "1" : "0")
+            . ("0" !== t ? "1" : "0")
+            . ("0" < t ? "1" : "0")
+            . ("0" <= t ? "1" : "0")
+            . ("0" > t ? "1" : "0")
+            . ("0" >= t ? "1" : "0");
+    }
+
+    public function m206(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == "a" ? "1" : "0")
+            . (t != "a" ? "1" : "0")
+            . (t === "a" ? "1" : "0")
+            . (t !== "a" ? "1" : "0")
+            . (t < "a" ? "1" : "0")
+            . (t <= "a" ? "1" : "0")
+            . (t > "a" ? "1" : "0")
+            . (t >= "a" ? "1" : "0");
+    }
+
+    public function m207(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return ("a" == t ? "1" : "0")
+            . ("a" != t ? "1" : "0")
+            . ("a" === t ? "1" : "0")
+            . ("a" !== t ? "1" : "0")
+            . ("a" < t ? "1" : "0")
+            . ("a" <= t ? "1" : "0")
+            . ("a" > t ? "1" : "0")
+            . ("a" >= t ? "1" : "0");
+    }
+
+    public function m208(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == "\x30" ? "1" : "0")
+            . (t != "\x30" ? "1" : "0")
+            . (t === "\x30" ? "1" : "0")
+            . (t !== "\x30" ? "1" : "0")
+            . (t < "\x30" ? "1" : "0")
+            . (t <= "\x30" ? "1" : "0")
+            . (t > "\x30" ? "1" : "0")
+            . (t >= "\x30" ? "1" : "0");
+    }
+
+    public function m209(int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return ("\x30" == t ? "1" : "0")
+            . ("\x30" != t ? "1" : "0")
+            . ("\x30" === t ? "1" : "0")
+            . ("\x30" !== t ? "1" : "0")
+            . ("\x30" < t ? "1" : "0")
+            . ("\x30" <= t ? "1" : "0")
+            . ("\x30" > t ? "1" : "0")
+            . ("\x30" >= t ? "1" : "0");
+    }
+
+    public function m210(int r, int w, string s) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == s ? "1" : "0")
+            . (t != s ? "1" : "0")
+            . (t === s ? "1" : "0")
+            . (t !== s ? "1" : "0")
+            . (t < s ? "1" : "0")
+            . (t <= s ? "1" : "0")
+            . (t > s ? "1" : "0")
+            . (t >= s ? "1" : "0");
+    }
+
+    public function m211(string s, int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (s == t ? "1" : "0")
+            . (s != t ? "1" : "0")
+            . (s === t ? "1" : "0")
+            . (s !== t ? "1" : "0")
+            . (s < t ? "1" : "0")
+            . (s <= t ? "1" : "0")
+            . (s > t ? "1" : "0")
+            . (s >= t ? "1" : "0");
+    }
+
+    public function m212(int r, int w, array a) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == a ? "1" : "0")
+            . (t != a ? "1" : "0")
+            . (t === a ? "1" : "0")
+            . (t !== a ? "1" : "0")
+            . (t < a ? "1" : "0")
+            . (t <= a ? "1" : "0")
+            . (t > a ? "1" : "0")
+            . (t >= a ? "1" : "0");
+    }
+
+    public function m213(array a, int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (a == t ? "1" : "0")
+            . (a != t ? "1" : "0")
+            . (a === t ? "1" : "0")
+            . (a !== t ? "1" : "0")
+            . (a < t ? "1" : "0")
+            . (a <= t ? "1" : "0")
+            . (a > t ? "1" : "0")
+            . (a >= t ? "1" : "0");
+    }
+
+    public function m214(int r, int w, var x) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (t == x ? "1" : "0")
+            . (t != x ? "1" : "0")
+            . (t === x ? "1" : "0")
+            . (t !== x ? "1" : "0")
+            . (t < x ? "1" : "0")
+            . (t <= x ? "1" : "0")
+            . (t > x ? "1" : "0")
+            . (t >= x ? "1" : "0");
+    }
+
+    public function m215(var x, int r, int w) -> string
+    {
+        var t;
+        let t = r > w;
+
+        return (x == t ? "1" : "0")
+            . (x != t ? "1" : "0")
+            . (x === t ? "1" : "0")
+            . (x !== t ? "1" : "0")
+            . (x < t ? "1" : "0")
+            . (x <= t ? "1" : "0")
+            . (x > t ? "1" : "0")
+            . (x >= t ? "1" : "0");
+    }
+}
+--USAGE--
+// Each case runs PHP's own expression; against null, a native local is
+// compared by value with `===` too, since it cannot hold null (a null
+// argument becomes its zero), so the PHP side uses `==` there.
+$o = new \Stub\BoolComparison();
+$cases = [
+    ["true ? true", 'm1', fn () => (true == true ? "1" : "0") . (true != true ? "1" : "0") . (true === true ? "1" : "0") . (true !== true ? "1" : "0") . (true < true ? "1" : "0") . (true <= true ? "1" : "0") . (true > true ? "1" : "0") . (true >= true ? "1" : "0"), []],
+    ["true ? false", 'm2', fn () => (true == false ? "1" : "0") . (true != false ? "1" : "0") . (true === false ? "1" : "0") . (true !== false ? "1" : "0") . (true < false ? "1" : "0") . (true <= false ? "1" : "0") . (true > false ? "1" : "0") . (true >= false ? "1" : "0"), []],
+    ["false ? true", 'm3', fn () => (false == true ? "1" : "0") . (false != true ? "1" : "0") . (false === true ? "1" : "0") . (false !== true ? "1" : "0") . (false < true ? "1" : "0") . (false <= true ? "1" : "0") . (false > true ? "1" : "0") . (false >= true ? "1" : "0"), []],
+    ["true ? bool param", 'm4', fn ($b2) => (true == $b2 ? "1" : "0") . (true != $b2 ? "1" : "0") . (true === $b2 ? "1" : "0") . (true !== $b2 ? "1" : "0") . (true < $b2 ? "1" : "0") . (true <= $b2 ? "1" : "0") . (true > $b2 ? "1" : "0") . (true >= $b2 ? "1" : "0"), [[true, false]]],
+    ["bool param ? true", 'm5', fn ($b2) => ($b2 == true ? "1" : "0") . ($b2 != true ? "1" : "0") . ($b2 === true ? "1" : "0") . ($b2 !== true ? "1" : "0") . ($b2 < true ? "1" : "0") . ($b2 <= true ? "1" : "0") . ($b2 > true ? "1" : "0") . ($b2 >= true ? "1" : "0"), [[true, false]]],
+    ["true ? computed bool", 'm6', fn ($p2, $q2) => (true == ($p2 > $q2) ? "1" : "0") . (true != ($p2 > $q2) ? "1" : "0") . (true === ($p2 > $q2) ? "1" : "0") . (true !== ($p2 > $q2) ? "1" : "0") . (true < ($p2 > $q2) ? "1" : "0") . (true <= ($p2 > $q2) ? "1" : "0") . (true > ($p2 > $q2) ? "1" : "0") . (true >= ($p2 > $q2) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? true", 'm7', fn ($p2, $q2) => (($p2 > $q2) == true ? "1" : "0") . (($p2 > $q2) != true ? "1" : "0") . (($p2 > $q2) === true ? "1" : "0") . (($p2 > $q2) !== true ? "1" : "0") . (($p2 > $q2) < true ? "1" : "0") . (($p2 > $q2) <= true ? "1" : "0") . (($p2 > $q2) > true ? "1" : "0") . (($p2 > $q2) >= true ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["true ? inferred bool", 'm8', fn ($r2, $w2) => (true == ($r2 > $w2) ? "1" : "0") . (true != ($r2 > $w2) ? "1" : "0") . (true === ($r2 > $w2) ? "1" : "0") . (true !== ($r2 > $w2) ? "1" : "0") . (true < ($r2 > $w2) ? "1" : "0") . (true <= ($r2 > $w2) ? "1" : "0") . (true > ($r2 > $w2) ? "1" : "0") . (true >= ($r2 > $w2) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? true", 'm9', fn ($r2, $w2) => (($r2 > $w2) == true ? "1" : "0") . (($r2 > $w2) != true ? "1" : "0") . (($r2 > $w2) === true ? "1" : "0") . (($r2 > $w2) !== true ? "1" : "0") . (($r2 > $w2) < true ? "1" : "0") . (($r2 > $w2) <= true ? "1" : "0") . (($r2 > $w2) > true ? "1" : "0") . (($r2 > $w2) >= true ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["true ? 0", 'm10', fn () => (true == 0 ? "1" : "0") . (true != 0 ? "1" : "0") . (true === 0 ? "1" : "0") . (true !== 0 ? "1" : "0") . (true < 0 ? "1" : "0") . (true <= 0 ? "1" : "0") . (true > 0 ? "1" : "0") . (true >= 0 ? "1" : "0"), []],
+    ["0 ? true", 'm11', fn () => (0 == true ? "1" : "0") . (0 != true ? "1" : "0") . (0 === true ? "1" : "0") . (0 !== true ? "1" : "0") . (0 < true ? "1" : "0") . (0 <= true ? "1" : "0") . (0 > true ? "1" : "0") . (0 >= true ? "1" : "0"), []],
+    ["true ? 1", 'm12', fn () => (true == 1 ? "1" : "0") . (true != 1 ? "1" : "0") . (true === 1 ? "1" : "0") . (true !== 1 ? "1" : "0") . (true < 1 ? "1" : "0") . (true <= 1 ? "1" : "0") . (true > 1 ? "1" : "0") . (true >= 1 ? "1" : "0"), []],
+    ["1 ? true", 'm13', fn () => (1 == true ? "1" : "0") . (1 != true ? "1" : "0") . (1 === true ? "1" : "0") . (1 !== true ? "1" : "0") . (1 < true ? "1" : "0") . (1 <= true ? "1" : "0") . (1 > true ? "1" : "0") . (1 >= true ? "1" : "0"), []],
+    ["true ? 5", 'm14', fn () => (true == 5 ? "1" : "0") . (true != 5 ? "1" : "0") . (true === 5 ? "1" : "0") . (true !== 5 ? "1" : "0") . (true < 5 ? "1" : "0") . (true <= 5 ? "1" : "0") . (true > 5 ? "1" : "0") . (true >= 5 ? "1" : "0"), []],
+    ["5 ? true", 'm15', fn () => (5 == true ? "1" : "0") . (5 != true ? "1" : "0") . (5 === true ? "1" : "0") . (5 !== true ? "1" : "0") . (5 < true ? "1" : "0") . (5 <= true ? "1" : "0") . (5 > true ? "1" : "0") . (5 >= true ? "1" : "0"), []],
+    ["true ? -1", 'm16', fn () => (true == -1 ? "1" : "0") . (true != -1 ? "1" : "0") . (true === -1 ? "1" : "0") . (true !== -1 ? "1" : "0") . (true < -1 ? "1" : "0") . (true <= -1 ? "1" : "0") . (true > -1 ? "1" : "0") . (true >= -1 ? "1" : "0"), []],
+    ["-1 ? true", 'm17', fn () => (-1 == true ? "1" : "0") . (-1 != true ? "1" : "0") . (-1 === true ? "1" : "0") . (-1 !== true ? "1" : "0") . (-1 < true ? "1" : "0") . (-1 <= true ? "1" : "0") . (-1 > true ? "1" : "0") . (-1 >= true ? "1" : "0"), []],
+    ["true ? int param", 'm18', fn ($n) => (true == $n ? "1" : "0") . (true != $n ? "1" : "0") . (true === $n ? "1" : "0") . (true !== $n ? "1" : "0") . (true < $n ? "1" : "0") . (true <= $n ? "1" : "0") . (true > $n ? "1" : "0") . (true >= $n ? "1" : "0"), [[0, 1, 5, -1]]],
+    ["int param ? true", 'm19', fn ($n) => ($n == true ? "1" : "0") . ($n != true ? "1" : "0") . ($n === true ? "1" : "0") . ($n !== true ? "1" : "0") . ($n < true ? "1" : "0") . ($n <= true ? "1" : "0") . ($n > true ? "1" : "0") . ($n >= true ? "1" : "0"), [[0, 1, 5, -1]]],
+    ["true ? 0.0", 'm20', fn () => (true == 0.0 ? "1" : "0") . (true != 0.0 ? "1" : "0") . (true === 0.0 ? "1" : "0") . (true !== 0.0 ? "1" : "0") . (true < 0.0 ? "1" : "0") . (true <= 0.0 ? "1" : "0") . (true > 0.0 ? "1" : "0") . (true >= 0.0 ? "1" : "0"), []],
+    ["0.0 ? true", 'm21', fn () => (0.0 == true ? "1" : "0") . (0.0 != true ? "1" : "0") . (0.0 === true ? "1" : "0") . (0.0 !== true ? "1" : "0") . (0.0 < true ? "1" : "0") . (0.0 <= true ? "1" : "0") . (0.0 > true ? "1" : "0") . (0.0 >= true ? "1" : "0"), []],
+    ["true ? 0.5", 'm22', fn () => (true == 0.5 ? "1" : "0") . (true != 0.5 ? "1" : "0") . (true === 0.5 ? "1" : "0") . (true !== 0.5 ? "1" : "0") . (true < 0.5 ? "1" : "0") . (true <= 0.5 ? "1" : "0") . (true > 0.5 ? "1" : "0") . (true >= 0.5 ? "1" : "0"), []],
+    ["0.5 ? true", 'm23', fn () => (0.5 == true ? "1" : "0") . (0.5 != true ? "1" : "0") . (0.5 === true ? "1" : "0") . (0.5 !== true ? "1" : "0") . (0.5 < true ? "1" : "0") . (0.5 <= true ? "1" : "0") . (0.5 > true ? "1" : "0") . (0.5 >= true ? "1" : "0"), []],
+    ["true ? -1.5", 'm24', fn () => (true == -1.5 ? "1" : "0") . (true != -1.5 ? "1" : "0") . (true === -1.5 ? "1" : "0") . (true !== -1.5 ? "1" : "0") . (true < -1.5 ? "1" : "0") . (true <= -1.5 ? "1" : "0") . (true > -1.5 ? "1" : "0") . (true >= -1.5 ? "1" : "0"), []],
+    ["-1.5 ? true", 'm25', fn () => (-1.5 == true ? "1" : "0") . (-1.5 != true ? "1" : "0") . (-1.5 === true ? "1" : "0") . (-1.5 !== true ? "1" : "0") . (-1.5 < true ? "1" : "0") . (-1.5 <= true ? "1" : "0") . (-1.5 > true ? "1" : "0") . (-1.5 >= true ? "1" : "0"), []],
+    ["true ? double param", 'm26', fn ($d) => (true == $d ? "1" : "0") . (true != $d ? "1" : "0") . (true === $d ? "1" : "0") . (true !== $d ? "1" : "0") . (true < $d ? "1" : "0") . (true <= $d ? "1" : "0") . (true > $d ? "1" : "0") . (true >= $d ? "1" : "0"), [[0.0, 0.5, -1.5, NAN, INF]]],
+    ["double param ? true", 'm27', fn ($d) => ($d == true ? "1" : "0") . ($d != true ? "1" : "0") . ($d === true ? "1" : "0") . ($d !== true ? "1" : "0") . ($d < true ? "1" : "0") . ($d <= true ? "1" : "0") . ($d > true ? "1" : "0") . ($d >= true ? "1" : "0"), [[0.0, 0.5, -1.5, NAN, INF]]],
+    ["true ? char \'a\'", 'm28', fn () => (true == 97 ? "1" : "0") . (true != 97 ? "1" : "0") . (true === 97 ? "1" : "0") . (true !== 97 ? "1" : "0") . (true < 97 ? "1" : "0") . (true <= 97 ? "1" : "0") . (true > 97 ? "1" : "0") . (true >= 97 ? "1" : "0"), []],
+    ["char \'a\' ? true", 'm29', fn () => (97 == true ? "1" : "0") . (97 != true ? "1" : "0") . (97 === true ? "1" : "0") . (97 !== true ? "1" : "0") . (97 < true ? "1" : "0") . (97 <= true ? "1" : "0") . (97 > true ? "1" : "0") . (97 >= true ? "1" : "0"), []],
+    ["true ? char \'0\'", 'm30', fn () => (true == 48 ? "1" : "0") . (true != 48 ? "1" : "0") . (true === 48 ? "1" : "0") . (true !== 48 ? "1" : "0") . (true < 48 ? "1" : "0") . (true <= 48 ? "1" : "0") . (true > 48 ? "1" : "0") . (true >= 48 ? "1" : "0"), []],
+    ["char \'0\' ? true", 'm31', fn () => (48 == true ? "1" : "0") . (48 != true ? "1" : "0") . (48 === true ? "1" : "0") . (48 !== true ? "1" : "0") . (48 < true ? "1" : "0") . (48 <= true ? "1" : "0") . (48 > true ? "1" : "0") . (48 >= true ? "1" : "0"), []],
+    ["true ? null", 'm32', fn () => (true == null ? "1" : "0") . (true != null ? "1" : "0") . (true == null ? "1" : "0") . (true != null ? "1" : "0") . (true < null ? "1" : "0") . (true <= null ? "1" : "0") . (true > null ? "1" : "0") . (true >= null ? "1" : "0"), []],
+    ["null ? true", 'm33', fn () => (null == true ? "1" : "0") . (null != true ? "1" : "0") . (null == true ? "1" : "0") . (null != true ? "1" : "0") . (null < true ? "1" : "0") . (null <= true ? "1" : "0") . (null > true ? "1" : "0") . (null >= true ? "1" : "0"), []],
+    ["true ? \"\"", 'm34', fn () => (true == "" ? "1" : "0") . (true != "" ? "1" : "0") . (true === "" ? "1" : "0") . (true !== "" ? "1" : "0") . (true < "" ? "1" : "0") . (true <= "" ? "1" : "0") . (true > "" ? "1" : "0") . (true >= "" ? "1" : "0"), []],
+    ["\"\" ? true", 'm35', fn () => ("" == true ? "1" : "0") . ("" != true ? "1" : "0") . ("" === true ? "1" : "0") . ("" !== true ? "1" : "0") . ("" < true ? "1" : "0") . ("" <= true ? "1" : "0") . ("" > true ? "1" : "0") . ("" >= true ? "1" : "0"), []],
+    ["true ? \"0\"", 'm36', fn () => (true == "0" ? "1" : "0") . (true != "0" ? "1" : "0") . (true === "0" ? "1" : "0") . (true !== "0" ? "1" : "0") . (true < "0" ? "1" : "0") . (true <= "0" ? "1" : "0") . (true > "0" ? "1" : "0") . (true >= "0" ? "1" : "0"), []],
+    ["\"0\" ? true", 'm37', fn () => ("0" == true ? "1" : "0") . ("0" != true ? "1" : "0") . ("0" === true ? "1" : "0") . ("0" !== true ? "1" : "0") . ("0" < true ? "1" : "0") . ("0" <= true ? "1" : "0") . ("0" > true ? "1" : "0") . ("0" >= true ? "1" : "0"), []],
+    ["true ? \"a\"", 'm38', fn () => (true == "a" ? "1" : "0") . (true != "a" ? "1" : "0") . (true === "a" ? "1" : "0") . (true !== "a" ? "1" : "0") . (true < "a" ? "1" : "0") . (true <= "a" ? "1" : "0") . (true > "a" ? "1" : "0") . (true >= "a" ? "1" : "0"), []],
+    ["\"a\" ? true", 'm39', fn () => ("a" == true ? "1" : "0") . ("a" != true ? "1" : "0") . ("a" === true ? "1" : "0") . ("a" !== true ? "1" : "0") . ("a" < true ? "1" : "0") . ("a" <= true ? "1" : "0") . ("a" > true ? "1" : "0") . ("a" >= true ? "1" : "0"), []],
+    ["true ? string \"\\x30\"", 'm40', fn () => (true == "\x30" ? "1" : "0") . (true != "\x30" ? "1" : "0") . (true === "\x30" ? "1" : "0") . (true !== "\x30" ? "1" : "0") . (true < "\x30" ? "1" : "0") . (true <= "\x30" ? "1" : "0") . (true > "\x30" ? "1" : "0") . (true >= "\x30" ? "1" : "0"), []],
+    ["string \"\\x30\" ? true", 'm41', fn () => ("\x30" == true ? "1" : "0") . ("\x30" != true ? "1" : "0") . ("\x30" === true ? "1" : "0") . ("\x30" !== true ? "1" : "0") . ("\x30" < true ? "1" : "0") . ("\x30" <= true ? "1" : "0") . ("\x30" > true ? "1" : "0") . ("\x30" >= true ? "1" : "0"), []],
+    ["true ? string param", 'm42', fn ($s) => (true == $s ? "1" : "0") . (true != $s ? "1" : "0") . (true === $s ? "1" : "0") . (true !== $s ? "1" : "0") . (true < $s ? "1" : "0") . (true <= $s ? "1" : "0") . (true > $s ? "1" : "0") . (true >= $s ? "1" : "0"), [["", "0", "0.0", "a"]]],
+    ["string param ? true", 'm43', fn ($s) => ($s == true ? "1" : "0") . ($s != true ? "1" : "0") . ($s === true ? "1" : "0") . ($s !== true ? "1" : "0") . ($s < true ? "1" : "0") . ($s <= true ? "1" : "0") . ($s > true ? "1" : "0") . ($s >= true ? "1" : "0"), [["", "0", "0.0", "a"]]],
+    ["true ? array param", 'm44', fn ($a) => (true == $a ? "1" : "0") . (true != $a ? "1" : "0") . (true === $a ? "1" : "0") . (true !== $a ? "1" : "0") . (true < $a ? "1" : "0") . (true <= $a ? "1" : "0") . (true > $a ? "1" : "0") . (true >= $a ? "1" : "0"), [[[], [1]]]],
+    ["array param ? true", 'm45', fn ($a) => ($a == true ? "1" : "0") . ($a != true ? "1" : "0") . ($a === true ? "1" : "0") . ($a !== true ? "1" : "0") . ($a < true ? "1" : "0") . ($a <= true ? "1" : "0") . ($a > true ? "1" : "0") . ($a >= true ? "1" : "0"), [[[], [1]]]],
+    ["true ? var param", 'm46', fn ($x) => (true == $x ? "1" : "0") . (true != $x ? "1" : "0") . (true === $x ? "1" : "0") . (true !== $x ? "1" : "0") . (true < $x ? "1" : "0") . (true <= $x ? "1" : "0") . (true > $x ? "1" : "0") . (true >= $x ? "1" : "0"), [[0, 1, 5, -1, 0.0, 0.5, -1.5, NAN, INF, "", "0", "0.0", "a", "1.5", [], [1], null, true, false, new \stdClass()]]],
+    ["var param ? true", 'm47', fn ($x) => ($x == true ? "1" : "0") . ($x != true ? "1" : "0") . ($x === true ? "1" : "0") . ($x !== true ? "1" : "0") . ($x < true ? "1" : "0") . ($x <= true ? "1" : "0") . ($x > true ? "1" : "0") . ($x >= true ? "1" : "0"), [[0, 1, 5, -1, 0.0, 0.5, -1.5, NAN, INF, "", "0", "0.0", "a", "1.5", [], [1], null, true, false, new \stdClass()]]],
+    ["false ? false", 'm48', fn () => (false == false ? "1" : "0") . (false != false ? "1" : "0") . (false === false ? "1" : "0") . (false !== false ? "1" : "0") . (false < false ? "1" : "0") . (false <= false ? "1" : "0") . (false > false ? "1" : "0") . (false >= false ? "1" : "0"), []],
+    ["false ? bool param", 'm49', fn ($b2) => (false == $b2 ? "1" : "0") . (false != $b2 ? "1" : "0") . (false === $b2 ? "1" : "0") . (false !== $b2 ? "1" : "0") . (false < $b2 ? "1" : "0") . (false <= $b2 ? "1" : "0") . (false > $b2 ? "1" : "0") . (false >= $b2 ? "1" : "0"), [[true, false]]],
+    ["bool param ? false", 'm50', fn ($b2) => ($b2 == false ? "1" : "0") . ($b2 != false ? "1" : "0") . ($b2 === false ? "1" : "0") . ($b2 !== false ? "1" : "0") . ($b2 < false ? "1" : "0") . ($b2 <= false ? "1" : "0") . ($b2 > false ? "1" : "0") . ($b2 >= false ? "1" : "0"), [[true, false]]],
+    ["false ? computed bool", 'm51', fn ($p2, $q2) => (false == ($p2 > $q2) ? "1" : "0") . (false != ($p2 > $q2) ? "1" : "0") . (false === ($p2 > $q2) ? "1" : "0") . (false !== ($p2 > $q2) ? "1" : "0") . (false < ($p2 > $q2) ? "1" : "0") . (false <= ($p2 > $q2) ? "1" : "0") . (false > ($p2 > $q2) ? "1" : "0") . (false >= ($p2 > $q2) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? false", 'm52', fn ($p2, $q2) => (($p2 > $q2) == false ? "1" : "0") . (($p2 > $q2) != false ? "1" : "0") . (($p2 > $q2) === false ? "1" : "0") . (($p2 > $q2) !== false ? "1" : "0") . (($p2 > $q2) < false ? "1" : "0") . (($p2 > $q2) <= false ? "1" : "0") . (($p2 > $q2) > false ? "1" : "0") . (($p2 > $q2) >= false ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["false ? inferred bool", 'm53', fn ($r2, $w2) => (false == ($r2 > $w2) ? "1" : "0") . (false != ($r2 > $w2) ? "1" : "0") . (false === ($r2 > $w2) ? "1" : "0") . (false !== ($r2 > $w2) ? "1" : "0") . (false < ($r2 > $w2) ? "1" : "0") . (false <= ($r2 > $w2) ? "1" : "0") . (false > ($r2 > $w2) ? "1" : "0") . (false >= ($r2 > $w2) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? false", 'm54', fn ($r2, $w2) => (($r2 > $w2) == false ? "1" : "0") . (($r2 > $w2) != false ? "1" : "0") . (($r2 > $w2) === false ? "1" : "0") . (($r2 > $w2) !== false ? "1" : "0") . (($r2 > $w2) < false ? "1" : "0") . (($r2 > $w2) <= false ? "1" : "0") . (($r2 > $w2) > false ? "1" : "0") . (($r2 > $w2) >= false ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["false ? 0", 'm55', fn () => (false == 0 ? "1" : "0") . (false != 0 ? "1" : "0") . (false === 0 ? "1" : "0") . (false !== 0 ? "1" : "0") . (false < 0 ? "1" : "0") . (false <= 0 ? "1" : "0") . (false > 0 ? "1" : "0") . (false >= 0 ? "1" : "0"), []],
+    ["0 ? false", 'm56', fn () => (0 == false ? "1" : "0") . (0 != false ? "1" : "0") . (0 === false ? "1" : "0") . (0 !== false ? "1" : "0") . (0 < false ? "1" : "0") . (0 <= false ? "1" : "0") . (0 > false ? "1" : "0") . (0 >= false ? "1" : "0"), []],
+    ["false ? 1", 'm57', fn () => (false == 1 ? "1" : "0") . (false != 1 ? "1" : "0") . (false === 1 ? "1" : "0") . (false !== 1 ? "1" : "0") . (false < 1 ? "1" : "0") . (false <= 1 ? "1" : "0") . (false > 1 ? "1" : "0") . (false >= 1 ? "1" : "0"), []],
+    ["1 ? false", 'm58', fn () => (1 == false ? "1" : "0") . (1 != false ? "1" : "0") . (1 === false ? "1" : "0") . (1 !== false ? "1" : "0") . (1 < false ? "1" : "0") . (1 <= false ? "1" : "0") . (1 > false ? "1" : "0") . (1 >= false ? "1" : "0"), []],
+    ["false ? 5", 'm59', fn () => (false == 5 ? "1" : "0") . (false != 5 ? "1" : "0") . (false === 5 ? "1" : "0") . (false !== 5 ? "1" : "0") . (false < 5 ? "1" : "0") . (false <= 5 ? "1" : "0") . (false > 5 ? "1" : "0") . (false >= 5 ? "1" : "0"), []],
+    ["5 ? false", 'm60', fn () => (5 == false ? "1" : "0") . (5 != false ? "1" : "0") . (5 === false ? "1" : "0") . (5 !== false ? "1" : "0") . (5 < false ? "1" : "0") . (5 <= false ? "1" : "0") . (5 > false ? "1" : "0") . (5 >= false ? "1" : "0"), []],
+    ["false ? -1", 'm61', fn () => (false == -1 ? "1" : "0") . (false != -1 ? "1" : "0") . (false === -1 ? "1" : "0") . (false !== -1 ? "1" : "0") . (false < -1 ? "1" : "0") . (false <= -1 ? "1" : "0") . (false > -1 ? "1" : "0") . (false >= -1 ? "1" : "0"), []],
+    ["-1 ? false", 'm62', fn () => (-1 == false ? "1" : "0") . (-1 != false ? "1" : "0") . (-1 === false ? "1" : "0") . (-1 !== false ? "1" : "0") . (-1 < false ? "1" : "0") . (-1 <= false ? "1" : "0") . (-1 > false ? "1" : "0") . (-1 >= false ? "1" : "0"), []],
+    ["false ? int param", 'm63', fn ($n) => (false == $n ? "1" : "0") . (false != $n ? "1" : "0") . (false === $n ? "1" : "0") . (false !== $n ? "1" : "0") . (false < $n ? "1" : "0") . (false <= $n ? "1" : "0") . (false > $n ? "1" : "0") . (false >= $n ? "1" : "0"), [[0, 1, 5, -1]]],
+    ["int param ? false", 'm64', fn ($n) => ($n == false ? "1" : "0") . ($n != false ? "1" : "0") . ($n === false ? "1" : "0") . ($n !== false ? "1" : "0") . ($n < false ? "1" : "0") . ($n <= false ? "1" : "0") . ($n > false ? "1" : "0") . ($n >= false ? "1" : "0"), [[0, 1, 5, -1]]],
+    ["false ? 0.0", 'm65', fn () => (false == 0.0 ? "1" : "0") . (false != 0.0 ? "1" : "0") . (false === 0.0 ? "1" : "0") . (false !== 0.0 ? "1" : "0") . (false < 0.0 ? "1" : "0") . (false <= 0.0 ? "1" : "0") . (false > 0.0 ? "1" : "0") . (false >= 0.0 ? "1" : "0"), []],
+    ["0.0 ? false", 'm66', fn () => (0.0 == false ? "1" : "0") . (0.0 != false ? "1" : "0") . (0.0 === false ? "1" : "0") . (0.0 !== false ? "1" : "0") . (0.0 < false ? "1" : "0") . (0.0 <= false ? "1" : "0") . (0.0 > false ? "1" : "0") . (0.0 >= false ? "1" : "0"), []],
+    ["false ? 0.5", 'm67', fn () => (false == 0.5 ? "1" : "0") . (false != 0.5 ? "1" : "0") . (false === 0.5 ? "1" : "0") . (false !== 0.5 ? "1" : "0") . (false < 0.5 ? "1" : "0") . (false <= 0.5 ? "1" : "0") . (false > 0.5 ? "1" : "0") . (false >= 0.5 ? "1" : "0"), []],
+    ["0.5 ? false", 'm68', fn () => (0.5 == false ? "1" : "0") . (0.5 != false ? "1" : "0") . (0.5 === false ? "1" : "0") . (0.5 !== false ? "1" : "0") . (0.5 < false ? "1" : "0") . (0.5 <= false ? "1" : "0") . (0.5 > false ? "1" : "0") . (0.5 >= false ? "1" : "0"), []],
+    ["false ? -1.5", 'm69', fn () => (false == -1.5 ? "1" : "0") . (false != -1.5 ? "1" : "0") . (false === -1.5 ? "1" : "0") . (false !== -1.5 ? "1" : "0") . (false < -1.5 ? "1" : "0") . (false <= -1.5 ? "1" : "0") . (false > -1.5 ? "1" : "0") . (false >= -1.5 ? "1" : "0"), []],
+    ["-1.5 ? false", 'm70', fn () => (-1.5 == false ? "1" : "0") . (-1.5 != false ? "1" : "0") . (-1.5 === false ? "1" : "0") . (-1.5 !== false ? "1" : "0") . (-1.5 < false ? "1" : "0") . (-1.5 <= false ? "1" : "0") . (-1.5 > false ? "1" : "0") . (-1.5 >= false ? "1" : "0"), []],
+    ["false ? double param", 'm71', fn ($d) => (false == $d ? "1" : "0") . (false != $d ? "1" : "0") . (false === $d ? "1" : "0") . (false !== $d ? "1" : "0") . (false < $d ? "1" : "0") . (false <= $d ? "1" : "0") . (false > $d ? "1" : "0") . (false >= $d ? "1" : "0"), [[0.0, 0.5, -1.5, NAN, INF]]],
+    ["double param ? false", 'm72', fn ($d) => ($d == false ? "1" : "0") . ($d != false ? "1" : "0") . ($d === false ? "1" : "0") . ($d !== false ? "1" : "0") . ($d < false ? "1" : "0") . ($d <= false ? "1" : "0") . ($d > false ? "1" : "0") . ($d >= false ? "1" : "0"), [[0.0, 0.5, -1.5, NAN, INF]]],
+    ["false ? char \'a\'", 'm73', fn () => (false == 97 ? "1" : "0") . (false != 97 ? "1" : "0") . (false === 97 ? "1" : "0") . (false !== 97 ? "1" : "0") . (false < 97 ? "1" : "0") . (false <= 97 ? "1" : "0") . (false > 97 ? "1" : "0") . (false >= 97 ? "1" : "0"), []],
+    ["char \'a\' ? false", 'm74', fn () => (97 == false ? "1" : "0") . (97 != false ? "1" : "0") . (97 === false ? "1" : "0") . (97 !== false ? "1" : "0") . (97 < false ? "1" : "0") . (97 <= false ? "1" : "0") . (97 > false ? "1" : "0") . (97 >= false ? "1" : "0"), []],
+    ["false ? char \'0\'", 'm75', fn () => (false == 48 ? "1" : "0") . (false != 48 ? "1" : "0") . (false === 48 ? "1" : "0") . (false !== 48 ? "1" : "0") . (false < 48 ? "1" : "0") . (false <= 48 ? "1" : "0") . (false > 48 ? "1" : "0") . (false >= 48 ? "1" : "0"), []],
+    ["char \'0\' ? false", 'm76', fn () => (48 == false ? "1" : "0") . (48 != false ? "1" : "0") . (48 === false ? "1" : "0") . (48 !== false ? "1" : "0") . (48 < false ? "1" : "0") . (48 <= false ? "1" : "0") . (48 > false ? "1" : "0") . (48 >= false ? "1" : "0"), []],
+    ["false ? null", 'm77', fn () => (false == null ? "1" : "0") . (false != null ? "1" : "0") . (false == null ? "1" : "0") . (false != null ? "1" : "0") . (false < null ? "1" : "0") . (false <= null ? "1" : "0") . (false > null ? "1" : "0") . (false >= null ? "1" : "0"), []],
+    ["null ? false", 'm78', fn () => (null == false ? "1" : "0") . (null != false ? "1" : "0") . (null == false ? "1" : "0") . (null != false ? "1" : "0") . (null < false ? "1" : "0") . (null <= false ? "1" : "0") . (null > false ? "1" : "0") . (null >= false ? "1" : "0"), []],
+    ["false ? \"\"", 'm79', fn () => (false == "" ? "1" : "0") . (false != "" ? "1" : "0") . (false === "" ? "1" : "0") . (false !== "" ? "1" : "0") . (false < "" ? "1" : "0") . (false <= "" ? "1" : "0") . (false > "" ? "1" : "0") . (false >= "" ? "1" : "0"), []],
+    ["\"\" ? false", 'm80', fn () => ("" == false ? "1" : "0") . ("" != false ? "1" : "0") . ("" === false ? "1" : "0") . ("" !== false ? "1" : "0") . ("" < false ? "1" : "0") . ("" <= false ? "1" : "0") . ("" > false ? "1" : "0") . ("" >= false ? "1" : "0"), []],
+    ["false ? \"0\"", 'm81', fn () => (false == "0" ? "1" : "0") . (false != "0" ? "1" : "0") . (false === "0" ? "1" : "0") . (false !== "0" ? "1" : "0") . (false < "0" ? "1" : "0") . (false <= "0" ? "1" : "0") . (false > "0" ? "1" : "0") . (false >= "0" ? "1" : "0"), []],
+    ["\"0\" ? false", 'm82', fn () => ("0" == false ? "1" : "0") . ("0" != false ? "1" : "0") . ("0" === false ? "1" : "0") . ("0" !== false ? "1" : "0") . ("0" < false ? "1" : "0") . ("0" <= false ? "1" : "0") . ("0" > false ? "1" : "0") . ("0" >= false ? "1" : "0"), []],
+    ["false ? \"a\"", 'm83', fn () => (false == "a" ? "1" : "0") . (false != "a" ? "1" : "0") . (false === "a" ? "1" : "0") . (false !== "a" ? "1" : "0") . (false < "a" ? "1" : "0") . (false <= "a" ? "1" : "0") . (false > "a" ? "1" : "0") . (false >= "a" ? "1" : "0"), []],
+    ["\"a\" ? false", 'm84', fn () => ("a" == false ? "1" : "0") . ("a" != false ? "1" : "0") . ("a" === false ? "1" : "0") . ("a" !== false ? "1" : "0") . ("a" < false ? "1" : "0") . ("a" <= false ? "1" : "0") . ("a" > false ? "1" : "0") . ("a" >= false ? "1" : "0"), []],
+    ["false ? string \"\\x30\"", 'm85', fn () => (false == "\x30" ? "1" : "0") . (false != "\x30" ? "1" : "0") . (false === "\x30" ? "1" : "0") . (false !== "\x30" ? "1" : "0") . (false < "\x30" ? "1" : "0") . (false <= "\x30" ? "1" : "0") . (false > "\x30" ? "1" : "0") . (false >= "\x30" ? "1" : "0"), []],
+    ["string \"\\x30\" ? false", 'm86', fn () => ("\x30" == false ? "1" : "0") . ("\x30" != false ? "1" : "0") . ("\x30" === false ? "1" : "0") . ("\x30" !== false ? "1" : "0") . ("\x30" < false ? "1" : "0") . ("\x30" <= false ? "1" : "0") . ("\x30" > false ? "1" : "0") . ("\x30" >= false ? "1" : "0"), []],
+    ["false ? string param", 'm87', fn ($s) => (false == $s ? "1" : "0") . (false != $s ? "1" : "0") . (false === $s ? "1" : "0") . (false !== $s ? "1" : "0") . (false < $s ? "1" : "0") . (false <= $s ? "1" : "0") . (false > $s ? "1" : "0") . (false >= $s ? "1" : "0"), [["", "0", "0.0", "a"]]],
+    ["string param ? false", 'm88', fn ($s) => ($s == false ? "1" : "0") . ($s != false ? "1" : "0") . ($s === false ? "1" : "0") . ($s !== false ? "1" : "0") . ($s < false ? "1" : "0") . ($s <= false ? "1" : "0") . ($s > false ? "1" : "0") . ($s >= false ? "1" : "0"), [["", "0", "0.0", "a"]]],
+    ["false ? array param", 'm89', fn ($a) => (false == $a ? "1" : "0") . (false != $a ? "1" : "0") . (false === $a ? "1" : "0") . (false !== $a ? "1" : "0") . (false < $a ? "1" : "0") . (false <= $a ? "1" : "0") . (false > $a ? "1" : "0") . (false >= $a ? "1" : "0"), [[[], [1]]]],
+    ["array param ? false", 'm90', fn ($a) => ($a == false ? "1" : "0") . ($a != false ? "1" : "0") . ($a === false ? "1" : "0") . ($a !== false ? "1" : "0") . ($a < false ? "1" : "0") . ($a <= false ? "1" : "0") . ($a > false ? "1" : "0") . ($a >= false ? "1" : "0"), [[[], [1]]]],
+    ["false ? var param", 'm91', fn ($x) => (false == $x ? "1" : "0") . (false != $x ? "1" : "0") . (false === $x ? "1" : "0") . (false !== $x ? "1" : "0") . (false < $x ? "1" : "0") . (false <= $x ? "1" : "0") . (false > $x ? "1" : "0") . (false >= $x ? "1" : "0"), [[0, 1, 5, -1, 0.0, 0.5, -1.5, NAN, INF, "", "0", "0.0", "a", "1.5", [], [1], null, true, false, new \stdClass()]]],
+    ["var param ? false", 'm92', fn ($x) => ($x == false ? "1" : "0") . ($x != false ? "1" : "0") . ($x === false ? "1" : "0") . ($x !== false ? "1" : "0") . ($x < false ? "1" : "0") . ($x <= false ? "1" : "0") . ($x > false ? "1" : "0") . ($x >= false ? "1" : "0"), [[0, 1, 5, -1, 0.0, 0.5, -1.5, NAN, INF, "", "0", "0.0", "a", "1.5", [], [1], null, true, false, new \stdClass()]]],
+    ["bool param ? bool param", 'm93', fn ($b, $b2) => ($b == $b2 ? "1" : "0") . ($b != $b2 ? "1" : "0") . ($b === $b2 ? "1" : "0") . ($b !== $b2 ? "1" : "0") . ($b < $b2 ? "1" : "0") . ($b <= $b2 ? "1" : "0") . ($b > $b2 ? "1" : "0") . ($b >= $b2 ? "1" : "0"), [[true, false], [true, false]]],
+    ["bool param ? computed bool", 'm94', fn ($b, $p2, $q2) => ($b == ($p2 > $q2) ? "1" : "0") . ($b != ($p2 > $q2) ? "1" : "0") . ($b === ($p2 > $q2) ? "1" : "0") . ($b !== ($p2 > $q2) ? "1" : "0") . ($b < ($p2 > $q2) ? "1" : "0") . ($b <= ($p2 > $q2) ? "1" : "0") . ($b > ($p2 > $q2) ? "1" : "0") . ($b >= ($p2 > $q2) ? "1" : "0"), [[true, false], [1, 2], [1, 2]]],
+    ["computed bool ? bool param", 'm95', fn ($p2, $q2, $b) => (($p2 > $q2) == $b ? "1" : "0") . (($p2 > $q2) != $b ? "1" : "0") . (($p2 > $q2) === $b ? "1" : "0") . (($p2 > $q2) !== $b ? "1" : "0") . (($p2 > $q2) < $b ? "1" : "0") . (($p2 > $q2) <= $b ? "1" : "0") . (($p2 > $q2) > $b ? "1" : "0") . (($p2 > $q2) >= $b ? "1" : "0"), [[1, 2], [1, 2], [true, false]]],
+    ["bool param ? inferred bool", 'm96', fn ($b, $r2, $w2) => ($b == ($r2 > $w2) ? "1" : "0") . ($b != ($r2 > $w2) ? "1" : "0") . ($b === ($r2 > $w2) ? "1" : "0") . ($b !== ($r2 > $w2) ? "1" : "0") . ($b < ($r2 > $w2) ? "1" : "0") . ($b <= ($r2 > $w2) ? "1" : "0") . ($b > ($r2 > $w2) ? "1" : "0") . ($b >= ($r2 > $w2) ? "1" : "0"), [[true, false], [1, 2], [1, 2]]],
+    ["inferred bool ? bool param", 'm97', fn ($r2, $w2, $b) => (($r2 > $w2) == $b ? "1" : "0") . (($r2 > $w2) != $b ? "1" : "0") . (($r2 > $w2) === $b ? "1" : "0") . (($r2 > $w2) !== $b ? "1" : "0") . (($r2 > $w2) < $b ? "1" : "0") . (($r2 > $w2) <= $b ? "1" : "0") . (($r2 > $w2) > $b ? "1" : "0") . (($r2 > $w2) >= $b ? "1" : "0"), [[1, 2], [1, 2], [true, false]]],
+    ["bool param ? 0", 'm98', fn ($b) => ($b == 0 ? "1" : "0") . ($b != 0 ? "1" : "0") . ($b === 0 ? "1" : "0") . ($b !== 0 ? "1" : "0") . ($b < 0 ? "1" : "0") . ($b <= 0 ? "1" : "0") . ($b > 0 ? "1" : "0") . ($b >= 0 ? "1" : "0"), [[true, false]]],
+    ["0 ? bool param", 'm99', fn ($b) => (0 == $b ? "1" : "0") . (0 != $b ? "1" : "0") . (0 === $b ? "1" : "0") . (0 !== $b ? "1" : "0") . (0 < $b ? "1" : "0") . (0 <= $b ? "1" : "0") . (0 > $b ? "1" : "0") . (0 >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? 1", 'm100', fn ($b) => ($b == 1 ? "1" : "0") . ($b != 1 ? "1" : "0") . ($b === 1 ? "1" : "0") . ($b !== 1 ? "1" : "0") . ($b < 1 ? "1" : "0") . ($b <= 1 ? "1" : "0") . ($b > 1 ? "1" : "0") . ($b >= 1 ? "1" : "0"), [[true, false]]],
+    ["1 ? bool param", 'm101', fn ($b) => (1 == $b ? "1" : "0") . (1 != $b ? "1" : "0") . (1 === $b ? "1" : "0") . (1 !== $b ? "1" : "0") . (1 < $b ? "1" : "0") . (1 <= $b ? "1" : "0") . (1 > $b ? "1" : "0") . (1 >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? 5", 'm102', fn ($b) => ($b == 5 ? "1" : "0") . ($b != 5 ? "1" : "0") . ($b === 5 ? "1" : "0") . ($b !== 5 ? "1" : "0") . ($b < 5 ? "1" : "0") . ($b <= 5 ? "1" : "0") . ($b > 5 ? "1" : "0") . ($b >= 5 ? "1" : "0"), [[true, false]]],
+    ["5 ? bool param", 'm103', fn ($b) => (5 == $b ? "1" : "0") . (5 != $b ? "1" : "0") . (5 === $b ? "1" : "0") . (5 !== $b ? "1" : "0") . (5 < $b ? "1" : "0") . (5 <= $b ? "1" : "0") . (5 > $b ? "1" : "0") . (5 >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? -1", 'm104', fn ($b) => ($b == -1 ? "1" : "0") . ($b != -1 ? "1" : "0") . ($b === -1 ? "1" : "0") . ($b !== -1 ? "1" : "0") . ($b < -1 ? "1" : "0") . ($b <= -1 ? "1" : "0") . ($b > -1 ? "1" : "0") . ($b >= -1 ? "1" : "0"), [[true, false]]],
+    ["-1 ? bool param", 'm105', fn ($b) => (-1 == $b ? "1" : "0") . (-1 != $b ? "1" : "0") . (-1 === $b ? "1" : "0") . (-1 !== $b ? "1" : "0") . (-1 < $b ? "1" : "0") . (-1 <= $b ? "1" : "0") . (-1 > $b ? "1" : "0") . (-1 >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? int param", 'm106', fn ($b, $n) => ($b == $n ? "1" : "0") . ($b != $n ? "1" : "0") . ($b === $n ? "1" : "0") . ($b !== $n ? "1" : "0") . ($b < $n ? "1" : "0") . ($b <= $n ? "1" : "0") . ($b > $n ? "1" : "0") . ($b >= $n ? "1" : "0"), [[true, false], [0, 1, 5, -1]]],
+    ["int param ? bool param", 'm107', fn ($n, $b) => ($n == $b ? "1" : "0") . ($n != $b ? "1" : "0") . ($n === $b ? "1" : "0") . ($n !== $b ? "1" : "0") . ($n < $b ? "1" : "0") . ($n <= $b ? "1" : "0") . ($n > $b ? "1" : "0") . ($n >= $b ? "1" : "0"), [[0, 1, 5, -1], [true, false]]],
+    ["bool param ? 0.0", 'm108', fn ($b) => ($b == 0.0 ? "1" : "0") . ($b != 0.0 ? "1" : "0") . ($b === 0.0 ? "1" : "0") . ($b !== 0.0 ? "1" : "0") . ($b < 0.0 ? "1" : "0") . ($b <= 0.0 ? "1" : "0") . ($b > 0.0 ? "1" : "0") . ($b >= 0.0 ? "1" : "0"), [[true, false]]],
+    ["0.0 ? bool param", 'm109', fn ($b) => (0.0 == $b ? "1" : "0") . (0.0 != $b ? "1" : "0") . (0.0 === $b ? "1" : "0") . (0.0 !== $b ? "1" : "0") . (0.0 < $b ? "1" : "0") . (0.0 <= $b ? "1" : "0") . (0.0 > $b ? "1" : "0") . (0.0 >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? 0.5", 'm110', fn ($b) => ($b == 0.5 ? "1" : "0") . ($b != 0.5 ? "1" : "0") . ($b === 0.5 ? "1" : "0") . ($b !== 0.5 ? "1" : "0") . ($b < 0.5 ? "1" : "0") . ($b <= 0.5 ? "1" : "0") . ($b > 0.5 ? "1" : "0") . ($b >= 0.5 ? "1" : "0"), [[true, false]]],
+    ["0.5 ? bool param", 'm111', fn ($b) => (0.5 == $b ? "1" : "0") . (0.5 != $b ? "1" : "0") . (0.5 === $b ? "1" : "0") . (0.5 !== $b ? "1" : "0") . (0.5 < $b ? "1" : "0") . (0.5 <= $b ? "1" : "0") . (0.5 > $b ? "1" : "0") . (0.5 >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? -1.5", 'm112', fn ($b) => ($b == -1.5 ? "1" : "0") . ($b != -1.5 ? "1" : "0") . ($b === -1.5 ? "1" : "0") . ($b !== -1.5 ? "1" : "0") . ($b < -1.5 ? "1" : "0") . ($b <= -1.5 ? "1" : "0") . ($b > -1.5 ? "1" : "0") . ($b >= -1.5 ? "1" : "0"), [[true, false]]],
+    ["-1.5 ? bool param", 'm113', fn ($b) => (-1.5 == $b ? "1" : "0") . (-1.5 != $b ? "1" : "0") . (-1.5 === $b ? "1" : "0") . (-1.5 !== $b ? "1" : "0") . (-1.5 < $b ? "1" : "0") . (-1.5 <= $b ? "1" : "0") . (-1.5 > $b ? "1" : "0") . (-1.5 >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? double param", 'm114', fn ($b, $d) => ($b == $d ? "1" : "0") . ($b != $d ? "1" : "0") . ($b === $d ? "1" : "0") . ($b !== $d ? "1" : "0") . ($b < $d ? "1" : "0") . ($b <= $d ? "1" : "0") . ($b > $d ? "1" : "0") . ($b >= $d ? "1" : "0"), [[true, false], [0.0, 0.5, -1.5, NAN, INF]]],
+    ["double param ? bool param", 'm115', fn ($d, $b) => ($d == $b ? "1" : "0") . ($d != $b ? "1" : "0") . ($d === $b ? "1" : "0") . ($d !== $b ? "1" : "0") . ($d < $b ? "1" : "0") . ($d <= $b ? "1" : "0") . ($d > $b ? "1" : "0") . ($d >= $b ? "1" : "0"), [[0.0, 0.5, -1.5, NAN, INF], [true, false]]],
+    ["bool param ? char \'a\'", 'm116', fn ($b) => ($b == 97 ? "1" : "0") . ($b != 97 ? "1" : "0") . ($b === 97 ? "1" : "0") . ($b !== 97 ? "1" : "0") . ($b < 97 ? "1" : "0") . ($b <= 97 ? "1" : "0") . ($b > 97 ? "1" : "0") . ($b >= 97 ? "1" : "0"), [[true, false]]],
+    ["char \'a\' ? bool param", 'm117', fn ($b) => (97 == $b ? "1" : "0") . (97 != $b ? "1" : "0") . (97 === $b ? "1" : "0") . (97 !== $b ? "1" : "0") . (97 < $b ? "1" : "0") . (97 <= $b ? "1" : "0") . (97 > $b ? "1" : "0") . (97 >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? char \'0\'", 'm118', fn ($b) => ($b == 48 ? "1" : "0") . ($b != 48 ? "1" : "0") . ($b === 48 ? "1" : "0") . ($b !== 48 ? "1" : "0") . ($b < 48 ? "1" : "0") . ($b <= 48 ? "1" : "0") . ($b > 48 ? "1" : "0") . ($b >= 48 ? "1" : "0"), [[true, false]]],
+    ["char \'0\' ? bool param", 'm119', fn ($b) => (48 == $b ? "1" : "0") . (48 != $b ? "1" : "0") . (48 === $b ? "1" : "0") . (48 !== $b ? "1" : "0") . (48 < $b ? "1" : "0") . (48 <= $b ? "1" : "0") . (48 > $b ? "1" : "0") . (48 >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? null", 'm120', fn ($b) => ($b == null ? "1" : "0") . ($b != null ? "1" : "0") . ($b == null ? "1" : "0") . ($b != null ? "1" : "0") . ($b < null ? "1" : "0") . ($b <= null ? "1" : "0") . ($b > null ? "1" : "0") . ($b >= null ? "1" : "0"), [[true, false]]],
+    ["null ? bool param", 'm121', fn ($b) => (null == $b ? "1" : "0") . (null != $b ? "1" : "0") . (null == $b ? "1" : "0") . (null != $b ? "1" : "0") . (null < $b ? "1" : "0") . (null <= $b ? "1" : "0") . (null > $b ? "1" : "0") . (null >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? \"\"", 'm122', fn ($b) => ($b == "" ? "1" : "0") . ($b != "" ? "1" : "0") . ($b === "" ? "1" : "0") . ($b !== "" ? "1" : "0") . ($b < "" ? "1" : "0") . ($b <= "" ? "1" : "0") . ($b > "" ? "1" : "0") . ($b >= "" ? "1" : "0"), [[true, false]]],
+    ["\"\" ? bool param", 'm123', fn ($b) => ("" == $b ? "1" : "0") . ("" != $b ? "1" : "0") . ("" === $b ? "1" : "0") . ("" !== $b ? "1" : "0") . ("" < $b ? "1" : "0") . ("" <= $b ? "1" : "0") . ("" > $b ? "1" : "0") . ("" >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? \"0\"", 'm124', fn ($b) => ($b == "0" ? "1" : "0") . ($b != "0" ? "1" : "0") . ($b === "0" ? "1" : "0") . ($b !== "0" ? "1" : "0") . ($b < "0" ? "1" : "0") . ($b <= "0" ? "1" : "0") . ($b > "0" ? "1" : "0") . ($b >= "0" ? "1" : "0"), [[true, false]]],
+    ["\"0\" ? bool param", 'm125', fn ($b) => ("0" == $b ? "1" : "0") . ("0" != $b ? "1" : "0") . ("0" === $b ? "1" : "0") . ("0" !== $b ? "1" : "0") . ("0" < $b ? "1" : "0") . ("0" <= $b ? "1" : "0") . ("0" > $b ? "1" : "0") . ("0" >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? \"a\"", 'm126', fn ($b) => ($b == "a" ? "1" : "0") . ($b != "a" ? "1" : "0") . ($b === "a" ? "1" : "0") . ($b !== "a" ? "1" : "0") . ($b < "a" ? "1" : "0") . ($b <= "a" ? "1" : "0") . ($b > "a" ? "1" : "0") . ($b >= "a" ? "1" : "0"), [[true, false]]],
+    ["\"a\" ? bool param", 'm127', fn ($b) => ("a" == $b ? "1" : "0") . ("a" != $b ? "1" : "0") . ("a" === $b ? "1" : "0") . ("a" !== $b ? "1" : "0") . ("a" < $b ? "1" : "0") . ("a" <= $b ? "1" : "0") . ("a" > $b ? "1" : "0") . ("a" >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? string \"\\x30\"", 'm128', fn ($b) => ($b == "\x30" ? "1" : "0") . ($b != "\x30" ? "1" : "0") . ($b === "\x30" ? "1" : "0") . ($b !== "\x30" ? "1" : "0") . ($b < "\x30" ? "1" : "0") . ($b <= "\x30" ? "1" : "0") . ($b > "\x30" ? "1" : "0") . ($b >= "\x30" ? "1" : "0"), [[true, false]]],
+    ["string \"\\x30\" ? bool param", 'm129', fn ($b) => ("\x30" == $b ? "1" : "0") . ("\x30" != $b ? "1" : "0") . ("\x30" === $b ? "1" : "0") . ("\x30" !== $b ? "1" : "0") . ("\x30" < $b ? "1" : "0") . ("\x30" <= $b ? "1" : "0") . ("\x30" > $b ? "1" : "0") . ("\x30" >= $b ? "1" : "0"), [[true, false]]],
+    ["bool param ? string param", 'm130', fn ($b, $s) => ($b == $s ? "1" : "0") . ($b != $s ? "1" : "0") . ($b === $s ? "1" : "0") . ($b !== $s ? "1" : "0") . ($b < $s ? "1" : "0") . ($b <= $s ? "1" : "0") . ($b > $s ? "1" : "0") . ($b >= $s ? "1" : "0"), [[true, false], ["", "0", "0.0", "a"]]],
+    ["string param ? bool param", 'm131', fn ($s, $b) => ($s == $b ? "1" : "0") . ($s != $b ? "1" : "0") . ($s === $b ? "1" : "0") . ($s !== $b ? "1" : "0") . ($s < $b ? "1" : "0") . ($s <= $b ? "1" : "0") . ($s > $b ? "1" : "0") . ($s >= $b ? "1" : "0"), [["", "0", "0.0", "a"], [true, false]]],
+    ["bool param ? array param", 'm132', fn ($b, $a) => ($b == $a ? "1" : "0") . ($b != $a ? "1" : "0") . ($b === $a ? "1" : "0") . ($b !== $a ? "1" : "0") . ($b < $a ? "1" : "0") . ($b <= $a ? "1" : "0") . ($b > $a ? "1" : "0") . ($b >= $a ? "1" : "0"), [[true, false], [[], [1]]]],
+    ["array param ? bool param", 'm133', fn ($a, $b) => ($a == $b ? "1" : "0") . ($a != $b ? "1" : "0") . ($a === $b ? "1" : "0") . ($a !== $b ? "1" : "0") . ($a < $b ? "1" : "0") . ($a <= $b ? "1" : "0") . ($a > $b ? "1" : "0") . ($a >= $b ? "1" : "0"), [[[], [1]], [true, false]]],
+    ["bool param ? var param", 'm134', fn ($b, $x) => ($b == $x ? "1" : "0") . ($b != $x ? "1" : "0") . ($b === $x ? "1" : "0") . ($b !== $x ? "1" : "0") . ($b < $x ? "1" : "0") . ($b <= $x ? "1" : "0") . ($b > $x ? "1" : "0") . ($b >= $x ? "1" : "0"), [[true, false], [0, 1, 5, -1, 0.0, 0.5, -1.5, NAN, INF, "", "0", "0.0", "a", "1.5", [], [1], null, true, false, new \stdClass()]]],
+    ["var param ? bool param", 'm135', fn ($x, $b) => ($x == $b ? "1" : "0") . ($x != $b ? "1" : "0") . ($x === $b ? "1" : "0") . ($x !== $b ? "1" : "0") . ($x < $b ? "1" : "0") . ($x <= $b ? "1" : "0") . ($x > $b ? "1" : "0") . ($x >= $b ? "1" : "0"), [[0, 1, 5, -1, 0.0, 0.5, -1.5, NAN, INF, "", "0", "0.0", "a", "1.5", [], [1], null, true, false, new \stdClass()], [true, false]]],
+    ["computed bool ? computed bool", 'm136', fn ($p, $q, $p2, $q2) => (($p > $q) == ($p2 > $q2) ? "1" : "0") . (($p > $q) != ($p2 > $q2) ? "1" : "0") . (($p > $q) === ($p2 > $q2) ? "1" : "0") . (($p > $q) !== ($p2 > $q2) ? "1" : "0") . (($p > $q) < ($p2 > $q2) ? "1" : "0") . (($p > $q) <= ($p2 > $q2) ? "1" : "0") . (($p > $q) > ($p2 > $q2) ? "1" : "0") . (($p > $q) >= ($p2 > $q2) ? "1" : "0"), [[1, 2], [1, 2], [1, 2], [1, 2]]],
+    ["computed bool ? inferred bool", 'm137', fn ($p, $q, $r2, $w2) => (($p > $q) == ($r2 > $w2) ? "1" : "0") . (($p > $q) != ($r2 > $w2) ? "1" : "0") . (($p > $q) === ($r2 > $w2) ? "1" : "0") . (($p > $q) !== ($r2 > $w2) ? "1" : "0") . (($p > $q) < ($r2 > $w2) ? "1" : "0") . (($p > $q) <= ($r2 > $w2) ? "1" : "0") . (($p > $q) > ($r2 > $w2) ? "1" : "0") . (($p > $q) >= ($r2 > $w2) ? "1" : "0"), [[1, 2], [1, 2], [1, 2], [1, 2]]],
+    ["inferred bool ? computed bool", 'm138', fn ($r2, $w2, $p, $q) => (($r2 > $w2) == ($p > $q) ? "1" : "0") . (($r2 > $w2) != ($p > $q) ? "1" : "0") . (($r2 > $w2) === ($p > $q) ? "1" : "0") . (($r2 > $w2) !== ($p > $q) ? "1" : "0") . (($r2 > $w2) < ($p > $q) ? "1" : "0") . (($r2 > $w2) <= ($p > $q) ? "1" : "0") . (($r2 > $w2) > ($p > $q) ? "1" : "0") . (($r2 > $w2) >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2], [1, 2], [1, 2]]],
+    ["computed bool ? 0", 'm139', fn ($p, $q) => (($p > $q) == 0 ? "1" : "0") . (($p > $q) != 0 ? "1" : "0") . (($p > $q) === 0 ? "1" : "0") . (($p > $q) !== 0 ? "1" : "0") . (($p > $q) < 0 ? "1" : "0") . (($p > $q) <= 0 ? "1" : "0") . (($p > $q) > 0 ? "1" : "0") . (($p > $q) >= 0 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["0 ? computed bool", 'm140', fn ($p, $q) => (0 == ($p > $q) ? "1" : "0") . (0 != ($p > $q) ? "1" : "0") . (0 === ($p > $q) ? "1" : "0") . (0 !== ($p > $q) ? "1" : "0") . (0 < ($p > $q) ? "1" : "0") . (0 <= ($p > $q) ? "1" : "0") . (0 > ($p > $q) ? "1" : "0") . (0 >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? 1", 'm141', fn ($p, $q) => (($p > $q) == 1 ? "1" : "0") . (($p > $q) != 1 ? "1" : "0") . (($p > $q) === 1 ? "1" : "0") . (($p > $q) !== 1 ? "1" : "0") . (($p > $q) < 1 ? "1" : "0") . (($p > $q) <= 1 ? "1" : "0") . (($p > $q) > 1 ? "1" : "0") . (($p > $q) >= 1 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["1 ? computed bool", 'm142', fn ($p, $q) => (1 == ($p > $q) ? "1" : "0") . (1 != ($p > $q) ? "1" : "0") . (1 === ($p > $q) ? "1" : "0") . (1 !== ($p > $q) ? "1" : "0") . (1 < ($p > $q) ? "1" : "0") . (1 <= ($p > $q) ? "1" : "0") . (1 > ($p > $q) ? "1" : "0") . (1 >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? 5", 'm143', fn ($p, $q) => (($p > $q) == 5 ? "1" : "0") . (($p > $q) != 5 ? "1" : "0") . (($p > $q) === 5 ? "1" : "0") . (($p > $q) !== 5 ? "1" : "0") . (($p > $q) < 5 ? "1" : "0") . (($p > $q) <= 5 ? "1" : "0") . (($p > $q) > 5 ? "1" : "0") . (($p > $q) >= 5 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["5 ? computed bool", 'm144', fn ($p, $q) => (5 == ($p > $q) ? "1" : "0") . (5 != ($p > $q) ? "1" : "0") . (5 === ($p > $q) ? "1" : "0") . (5 !== ($p > $q) ? "1" : "0") . (5 < ($p > $q) ? "1" : "0") . (5 <= ($p > $q) ? "1" : "0") . (5 > ($p > $q) ? "1" : "0") . (5 >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? -1", 'm145', fn ($p, $q) => (($p > $q) == -1 ? "1" : "0") . (($p > $q) != -1 ? "1" : "0") . (($p > $q) === -1 ? "1" : "0") . (($p > $q) !== -1 ? "1" : "0") . (($p > $q) < -1 ? "1" : "0") . (($p > $q) <= -1 ? "1" : "0") . (($p > $q) > -1 ? "1" : "0") . (($p > $q) >= -1 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["-1 ? computed bool", 'm146', fn ($p, $q) => (-1 == ($p > $q) ? "1" : "0") . (-1 != ($p > $q) ? "1" : "0") . (-1 === ($p > $q) ? "1" : "0") . (-1 !== ($p > $q) ? "1" : "0") . (-1 < ($p > $q) ? "1" : "0") . (-1 <= ($p > $q) ? "1" : "0") . (-1 > ($p > $q) ? "1" : "0") . (-1 >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? int param", 'm147', fn ($p, $q, $n) => (($p > $q) == $n ? "1" : "0") . (($p > $q) != $n ? "1" : "0") . (($p > $q) === $n ? "1" : "0") . (($p > $q) !== $n ? "1" : "0") . (($p > $q) < $n ? "1" : "0") . (($p > $q) <= $n ? "1" : "0") . (($p > $q) > $n ? "1" : "0") . (($p > $q) >= $n ? "1" : "0"), [[1, 2], [1, 2], [0, 1, 5, -1]]],
+    ["int param ? computed bool", 'm148', fn ($n, $p, $q) => ($n == ($p > $q) ? "1" : "0") . ($n != ($p > $q) ? "1" : "0") . ($n === ($p > $q) ? "1" : "0") . ($n !== ($p > $q) ? "1" : "0") . ($n < ($p > $q) ? "1" : "0") . ($n <= ($p > $q) ? "1" : "0") . ($n > ($p > $q) ? "1" : "0") . ($n >= ($p > $q) ? "1" : "0"), [[0, 1, 5, -1], [1, 2], [1, 2]]],
+    ["computed bool ? 0.0", 'm149', fn ($p, $q) => (($p > $q) == 0.0 ? "1" : "0") . (($p > $q) != 0.0 ? "1" : "0") . (($p > $q) === 0.0 ? "1" : "0") . (($p > $q) !== 0.0 ? "1" : "0") . (($p > $q) < 0.0 ? "1" : "0") . (($p > $q) <= 0.0 ? "1" : "0") . (($p > $q) > 0.0 ? "1" : "0") . (($p > $q) >= 0.0 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["0.0 ? computed bool", 'm150', fn ($p, $q) => (0.0 == ($p > $q) ? "1" : "0") . (0.0 != ($p > $q) ? "1" : "0") . (0.0 === ($p > $q) ? "1" : "0") . (0.0 !== ($p > $q) ? "1" : "0") . (0.0 < ($p > $q) ? "1" : "0") . (0.0 <= ($p > $q) ? "1" : "0") . (0.0 > ($p > $q) ? "1" : "0") . (0.0 >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? 0.5", 'm151', fn ($p, $q) => (($p > $q) == 0.5 ? "1" : "0") . (($p > $q) != 0.5 ? "1" : "0") . (($p > $q) === 0.5 ? "1" : "0") . (($p > $q) !== 0.5 ? "1" : "0") . (($p > $q) < 0.5 ? "1" : "0") . (($p > $q) <= 0.5 ? "1" : "0") . (($p > $q) > 0.5 ? "1" : "0") . (($p > $q) >= 0.5 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["0.5 ? computed bool", 'm152', fn ($p, $q) => (0.5 == ($p > $q) ? "1" : "0") . (0.5 != ($p > $q) ? "1" : "0") . (0.5 === ($p > $q) ? "1" : "0") . (0.5 !== ($p > $q) ? "1" : "0") . (0.5 < ($p > $q) ? "1" : "0") . (0.5 <= ($p > $q) ? "1" : "0") . (0.5 > ($p > $q) ? "1" : "0") . (0.5 >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? -1.5", 'm153', fn ($p, $q) => (($p > $q) == -1.5 ? "1" : "0") . (($p > $q) != -1.5 ? "1" : "0") . (($p > $q) === -1.5 ? "1" : "0") . (($p > $q) !== -1.5 ? "1" : "0") . (($p > $q) < -1.5 ? "1" : "0") . (($p > $q) <= -1.5 ? "1" : "0") . (($p > $q) > -1.5 ? "1" : "0") . (($p > $q) >= -1.5 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["-1.5 ? computed bool", 'm154', fn ($p, $q) => (-1.5 == ($p > $q) ? "1" : "0") . (-1.5 != ($p > $q) ? "1" : "0") . (-1.5 === ($p > $q) ? "1" : "0") . (-1.5 !== ($p > $q) ? "1" : "0") . (-1.5 < ($p > $q) ? "1" : "0") . (-1.5 <= ($p > $q) ? "1" : "0") . (-1.5 > ($p > $q) ? "1" : "0") . (-1.5 >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? double param", 'm155', fn ($p, $q, $d) => (($p > $q) == $d ? "1" : "0") . (($p > $q) != $d ? "1" : "0") . (($p > $q) === $d ? "1" : "0") . (($p > $q) !== $d ? "1" : "0") . (($p > $q) < $d ? "1" : "0") . (($p > $q) <= $d ? "1" : "0") . (($p > $q) > $d ? "1" : "0") . (($p > $q) >= $d ? "1" : "0"), [[1, 2], [1, 2], [0.0, 0.5, -1.5, NAN, INF]]],
+    ["double param ? computed bool", 'm156', fn ($d, $p, $q) => ($d == ($p > $q) ? "1" : "0") . ($d != ($p > $q) ? "1" : "0") . ($d === ($p > $q) ? "1" : "0") . ($d !== ($p > $q) ? "1" : "0") . ($d < ($p > $q) ? "1" : "0") . ($d <= ($p > $q) ? "1" : "0") . ($d > ($p > $q) ? "1" : "0") . ($d >= ($p > $q) ? "1" : "0"), [[0.0, 0.5, -1.5, NAN, INF], [1, 2], [1, 2]]],
+    ["computed bool ? char \'a\'", 'm157', fn ($p, $q) => (($p > $q) == 97 ? "1" : "0") . (($p > $q) != 97 ? "1" : "0") . (($p > $q) === 97 ? "1" : "0") . (($p > $q) !== 97 ? "1" : "0") . (($p > $q) < 97 ? "1" : "0") . (($p > $q) <= 97 ? "1" : "0") . (($p > $q) > 97 ? "1" : "0") . (($p > $q) >= 97 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["char \'a\' ? computed bool", 'm158', fn ($p, $q) => (97 == ($p > $q) ? "1" : "0") . (97 != ($p > $q) ? "1" : "0") . (97 === ($p > $q) ? "1" : "0") . (97 !== ($p > $q) ? "1" : "0") . (97 < ($p > $q) ? "1" : "0") . (97 <= ($p > $q) ? "1" : "0") . (97 > ($p > $q) ? "1" : "0") . (97 >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? char \'0\'", 'm159', fn ($p, $q) => (($p > $q) == 48 ? "1" : "0") . (($p > $q) != 48 ? "1" : "0") . (($p > $q) === 48 ? "1" : "0") . (($p > $q) !== 48 ? "1" : "0") . (($p > $q) < 48 ? "1" : "0") . (($p > $q) <= 48 ? "1" : "0") . (($p > $q) > 48 ? "1" : "0") . (($p > $q) >= 48 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["char \'0\' ? computed bool", 'm160', fn ($p, $q) => (48 == ($p > $q) ? "1" : "0") . (48 != ($p > $q) ? "1" : "0") . (48 === ($p > $q) ? "1" : "0") . (48 !== ($p > $q) ? "1" : "0") . (48 < ($p > $q) ? "1" : "0") . (48 <= ($p > $q) ? "1" : "0") . (48 > ($p > $q) ? "1" : "0") . (48 >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? null", 'm161', fn ($p, $q) => (($p > $q) == null ? "1" : "0") . (($p > $q) != null ? "1" : "0") . (($p > $q) == null ? "1" : "0") . (($p > $q) != null ? "1" : "0") . (($p > $q) < null ? "1" : "0") . (($p > $q) <= null ? "1" : "0") . (($p > $q) > null ? "1" : "0") . (($p > $q) >= null ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["null ? computed bool", 'm162', fn ($p, $q) => (null == ($p > $q) ? "1" : "0") . (null != ($p > $q) ? "1" : "0") . (null == ($p > $q) ? "1" : "0") . (null != ($p > $q) ? "1" : "0") . (null < ($p > $q) ? "1" : "0") . (null <= ($p > $q) ? "1" : "0") . (null > ($p > $q) ? "1" : "0") . (null >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? \"\"", 'm163', fn ($p, $q) => (($p > $q) == "" ? "1" : "0") . (($p > $q) != "" ? "1" : "0") . (($p > $q) === "" ? "1" : "0") . (($p > $q) !== "" ? "1" : "0") . (($p > $q) < "" ? "1" : "0") . (($p > $q) <= "" ? "1" : "0") . (($p > $q) > "" ? "1" : "0") . (($p > $q) >= "" ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["\"\" ? computed bool", 'm164', fn ($p, $q) => ("" == ($p > $q) ? "1" : "0") . ("" != ($p > $q) ? "1" : "0") . ("" === ($p > $q) ? "1" : "0") . ("" !== ($p > $q) ? "1" : "0") . ("" < ($p > $q) ? "1" : "0") . ("" <= ($p > $q) ? "1" : "0") . ("" > ($p > $q) ? "1" : "0") . ("" >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? \"0\"", 'm165', fn ($p, $q) => (($p > $q) == "0" ? "1" : "0") . (($p > $q) != "0" ? "1" : "0") . (($p > $q) === "0" ? "1" : "0") . (($p > $q) !== "0" ? "1" : "0") . (($p > $q) < "0" ? "1" : "0") . (($p > $q) <= "0" ? "1" : "0") . (($p > $q) > "0" ? "1" : "0") . (($p > $q) >= "0" ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["\"0\" ? computed bool", 'm166', fn ($p, $q) => ("0" == ($p > $q) ? "1" : "0") . ("0" != ($p > $q) ? "1" : "0") . ("0" === ($p > $q) ? "1" : "0") . ("0" !== ($p > $q) ? "1" : "0") . ("0" < ($p > $q) ? "1" : "0") . ("0" <= ($p > $q) ? "1" : "0") . ("0" > ($p > $q) ? "1" : "0") . ("0" >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? \"a\"", 'm167', fn ($p, $q) => (($p > $q) == "a" ? "1" : "0") . (($p > $q) != "a" ? "1" : "0") . (($p > $q) === "a" ? "1" : "0") . (($p > $q) !== "a" ? "1" : "0") . (($p > $q) < "a" ? "1" : "0") . (($p > $q) <= "a" ? "1" : "0") . (($p > $q) > "a" ? "1" : "0") . (($p > $q) >= "a" ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["\"a\" ? computed bool", 'm168', fn ($p, $q) => ("a" == ($p > $q) ? "1" : "0") . ("a" != ($p > $q) ? "1" : "0") . ("a" === ($p > $q) ? "1" : "0") . ("a" !== ($p > $q) ? "1" : "0") . ("a" < ($p > $q) ? "1" : "0") . ("a" <= ($p > $q) ? "1" : "0") . ("a" > ($p > $q) ? "1" : "0") . ("a" >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? string \"\\x30\"", 'm169', fn ($p, $q) => (($p > $q) == "\x30" ? "1" : "0") . (($p > $q) != "\x30" ? "1" : "0") . (($p > $q) === "\x30" ? "1" : "0") . (($p > $q) !== "\x30" ? "1" : "0") . (($p > $q) < "\x30" ? "1" : "0") . (($p > $q) <= "\x30" ? "1" : "0") . (($p > $q) > "\x30" ? "1" : "0") . (($p > $q) >= "\x30" ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["string \"\\x30\" ? computed bool", 'm170', fn ($p, $q) => ("\x30" == ($p > $q) ? "1" : "0") . ("\x30" != ($p > $q) ? "1" : "0") . ("\x30" === ($p > $q) ? "1" : "0") . ("\x30" !== ($p > $q) ? "1" : "0") . ("\x30" < ($p > $q) ? "1" : "0") . ("\x30" <= ($p > $q) ? "1" : "0") . ("\x30" > ($p > $q) ? "1" : "0") . ("\x30" >= ($p > $q) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["computed bool ? string param", 'm171', fn ($p, $q, $s) => (($p > $q) == $s ? "1" : "0") . (($p > $q) != $s ? "1" : "0") . (($p > $q) === $s ? "1" : "0") . (($p > $q) !== $s ? "1" : "0") . (($p > $q) < $s ? "1" : "0") . (($p > $q) <= $s ? "1" : "0") . (($p > $q) > $s ? "1" : "0") . (($p > $q) >= $s ? "1" : "0"), [[1, 2], [1, 2], ["", "0", "0.0", "a"]]],
+    ["string param ? computed bool", 'm172', fn ($s, $p, $q) => ($s == ($p > $q) ? "1" : "0") . ($s != ($p > $q) ? "1" : "0") . ($s === ($p > $q) ? "1" : "0") . ($s !== ($p > $q) ? "1" : "0") . ($s < ($p > $q) ? "1" : "0") . ($s <= ($p > $q) ? "1" : "0") . ($s > ($p > $q) ? "1" : "0") . ($s >= ($p > $q) ? "1" : "0"), [["", "0", "0.0", "a"], [1, 2], [1, 2]]],
+    ["computed bool ? array param", 'm173', fn ($p, $q, $a) => (($p > $q) == $a ? "1" : "0") . (($p > $q) != $a ? "1" : "0") . (($p > $q) === $a ? "1" : "0") . (($p > $q) !== $a ? "1" : "0") . (($p > $q) < $a ? "1" : "0") . (($p > $q) <= $a ? "1" : "0") . (($p > $q) > $a ? "1" : "0") . (($p > $q) >= $a ? "1" : "0"), [[1, 2], [1, 2], [[], [1]]]],
+    ["array param ? computed bool", 'm174', fn ($a, $p, $q) => ($a == ($p > $q) ? "1" : "0") . ($a != ($p > $q) ? "1" : "0") . ($a === ($p > $q) ? "1" : "0") . ($a !== ($p > $q) ? "1" : "0") . ($a < ($p > $q) ? "1" : "0") . ($a <= ($p > $q) ? "1" : "0") . ($a > ($p > $q) ? "1" : "0") . ($a >= ($p > $q) ? "1" : "0"), [[[], [1]], [1, 2], [1, 2]]],
+    ["computed bool ? var param", 'm175', fn ($p, $q, $x) => (($p > $q) == $x ? "1" : "0") . (($p > $q) != $x ? "1" : "0") . (($p > $q) === $x ? "1" : "0") . (($p > $q) !== $x ? "1" : "0") . (($p > $q) < $x ? "1" : "0") . (($p > $q) <= $x ? "1" : "0") . (($p > $q) > $x ? "1" : "0") . (($p > $q) >= $x ? "1" : "0"), [[1, 2], [1, 2], [0, 1, 5, -1, 0.0, 0.5, -1.5, NAN, INF, "", "0", "0.0", "a", "1.5", [], [1], null, true, false, new \stdClass()]]],
+    ["var param ? computed bool", 'm176', fn ($x, $p, $q) => ($x == ($p > $q) ? "1" : "0") . ($x != ($p > $q) ? "1" : "0") . ($x === ($p > $q) ? "1" : "0") . ($x !== ($p > $q) ? "1" : "0") . ($x < ($p > $q) ? "1" : "0") . ($x <= ($p > $q) ? "1" : "0") . ($x > ($p > $q) ? "1" : "0") . ($x >= ($p > $q) ? "1" : "0"), [[0, 1, 5, -1, 0.0, 0.5, -1.5, NAN, INF, "", "0", "0.0", "a", "1.5", [], [1], null, true, false, new \stdClass()], [1, 2], [1, 2]]],
+    ["inferred bool ? inferred bool", 'm177', fn ($r, $w, $r2, $w2) => (($r > $w) == ($r2 > $w2) ? "1" : "0") . (($r > $w) != ($r2 > $w2) ? "1" : "0") . (($r > $w) === ($r2 > $w2) ? "1" : "0") . (($r > $w) !== ($r2 > $w2) ? "1" : "0") . (($r > $w) < ($r2 > $w2) ? "1" : "0") . (($r > $w) <= ($r2 > $w2) ? "1" : "0") . (($r > $w) > ($r2 > $w2) ? "1" : "0") . (($r > $w) >= ($r2 > $w2) ? "1" : "0"), [[1, 2], [1, 2], [1, 2], [1, 2]]],
+    ["inferred bool ? 0", 'm178', fn ($r, $w) => (($r > $w) == 0 ? "1" : "0") . (($r > $w) != 0 ? "1" : "0") . (($r > $w) === 0 ? "1" : "0") . (($r > $w) !== 0 ? "1" : "0") . (($r > $w) < 0 ? "1" : "0") . (($r > $w) <= 0 ? "1" : "0") . (($r > $w) > 0 ? "1" : "0") . (($r > $w) >= 0 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["0 ? inferred bool", 'm179', fn ($r, $w) => (0 == ($r > $w) ? "1" : "0") . (0 != ($r > $w) ? "1" : "0") . (0 === ($r > $w) ? "1" : "0") . (0 !== ($r > $w) ? "1" : "0") . (0 < ($r > $w) ? "1" : "0") . (0 <= ($r > $w) ? "1" : "0") . (0 > ($r > $w) ? "1" : "0") . (0 >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? 1", 'm180', fn ($r, $w) => (($r > $w) == 1 ? "1" : "0") . (($r > $w) != 1 ? "1" : "0") . (($r > $w) === 1 ? "1" : "0") . (($r > $w) !== 1 ? "1" : "0") . (($r > $w) < 1 ? "1" : "0") . (($r > $w) <= 1 ? "1" : "0") . (($r > $w) > 1 ? "1" : "0") . (($r > $w) >= 1 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["1 ? inferred bool", 'm181', fn ($r, $w) => (1 == ($r > $w) ? "1" : "0") . (1 != ($r > $w) ? "1" : "0") . (1 === ($r > $w) ? "1" : "0") . (1 !== ($r > $w) ? "1" : "0") . (1 < ($r > $w) ? "1" : "0") . (1 <= ($r > $w) ? "1" : "0") . (1 > ($r > $w) ? "1" : "0") . (1 >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? 5", 'm182', fn ($r, $w) => (($r > $w) == 5 ? "1" : "0") . (($r > $w) != 5 ? "1" : "0") . (($r > $w) === 5 ? "1" : "0") . (($r > $w) !== 5 ? "1" : "0") . (($r > $w) < 5 ? "1" : "0") . (($r > $w) <= 5 ? "1" : "0") . (($r > $w) > 5 ? "1" : "0") . (($r > $w) >= 5 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["5 ? inferred bool", 'm183', fn ($r, $w) => (5 == ($r > $w) ? "1" : "0") . (5 != ($r > $w) ? "1" : "0") . (5 === ($r > $w) ? "1" : "0") . (5 !== ($r > $w) ? "1" : "0") . (5 < ($r > $w) ? "1" : "0") . (5 <= ($r > $w) ? "1" : "0") . (5 > ($r > $w) ? "1" : "0") . (5 >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? -1", 'm184', fn ($r, $w) => (($r > $w) == -1 ? "1" : "0") . (($r > $w) != -1 ? "1" : "0") . (($r > $w) === -1 ? "1" : "0") . (($r > $w) !== -1 ? "1" : "0") . (($r > $w) < -1 ? "1" : "0") . (($r > $w) <= -1 ? "1" : "0") . (($r > $w) > -1 ? "1" : "0") . (($r > $w) >= -1 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["-1 ? inferred bool", 'm185', fn ($r, $w) => (-1 == ($r > $w) ? "1" : "0") . (-1 != ($r > $w) ? "1" : "0") . (-1 === ($r > $w) ? "1" : "0") . (-1 !== ($r > $w) ? "1" : "0") . (-1 < ($r > $w) ? "1" : "0") . (-1 <= ($r > $w) ? "1" : "0") . (-1 > ($r > $w) ? "1" : "0") . (-1 >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? int param", 'm186', fn ($r, $w, $n) => (($r > $w) == $n ? "1" : "0") . (($r > $w) != $n ? "1" : "0") . (($r > $w) === $n ? "1" : "0") . (($r > $w) !== $n ? "1" : "0") . (($r > $w) < $n ? "1" : "0") . (($r > $w) <= $n ? "1" : "0") . (($r > $w) > $n ? "1" : "0") . (($r > $w) >= $n ? "1" : "0"), [[1, 2], [1, 2], [0, 1, 5, -1]]],
+    ["int param ? inferred bool", 'm187', fn ($n, $r, $w) => ($n == ($r > $w) ? "1" : "0") . ($n != ($r > $w) ? "1" : "0") . ($n === ($r > $w) ? "1" : "0") . ($n !== ($r > $w) ? "1" : "0") . ($n < ($r > $w) ? "1" : "0") . ($n <= ($r > $w) ? "1" : "0") . ($n > ($r > $w) ? "1" : "0") . ($n >= ($r > $w) ? "1" : "0"), [[0, 1, 5, -1], [1, 2], [1, 2]]],
+    ["inferred bool ? 0.0", 'm188', fn ($r, $w) => (($r > $w) == 0.0 ? "1" : "0") . (($r > $w) != 0.0 ? "1" : "0") . (($r > $w) === 0.0 ? "1" : "0") . (($r > $w) !== 0.0 ? "1" : "0") . (($r > $w) < 0.0 ? "1" : "0") . (($r > $w) <= 0.0 ? "1" : "0") . (($r > $w) > 0.0 ? "1" : "0") . (($r > $w) >= 0.0 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["0.0 ? inferred bool", 'm189', fn ($r, $w) => (0.0 == ($r > $w) ? "1" : "0") . (0.0 != ($r > $w) ? "1" : "0") . (0.0 === ($r > $w) ? "1" : "0") . (0.0 !== ($r > $w) ? "1" : "0") . (0.0 < ($r > $w) ? "1" : "0") . (0.0 <= ($r > $w) ? "1" : "0") . (0.0 > ($r > $w) ? "1" : "0") . (0.0 >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? 0.5", 'm190', fn ($r, $w) => (($r > $w) == 0.5 ? "1" : "0") . (($r > $w) != 0.5 ? "1" : "0") . (($r > $w) === 0.5 ? "1" : "0") . (($r > $w) !== 0.5 ? "1" : "0") . (($r > $w) < 0.5 ? "1" : "0") . (($r > $w) <= 0.5 ? "1" : "0") . (($r > $w) > 0.5 ? "1" : "0") . (($r > $w) >= 0.5 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["0.5 ? inferred bool", 'm191', fn ($r, $w) => (0.5 == ($r > $w) ? "1" : "0") . (0.5 != ($r > $w) ? "1" : "0") . (0.5 === ($r > $w) ? "1" : "0") . (0.5 !== ($r > $w) ? "1" : "0") . (0.5 < ($r > $w) ? "1" : "0") . (0.5 <= ($r > $w) ? "1" : "0") . (0.5 > ($r > $w) ? "1" : "0") . (0.5 >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? -1.5", 'm192', fn ($r, $w) => (($r > $w) == -1.5 ? "1" : "0") . (($r > $w) != -1.5 ? "1" : "0") . (($r > $w) === -1.5 ? "1" : "0") . (($r > $w) !== -1.5 ? "1" : "0") . (($r > $w) < -1.5 ? "1" : "0") . (($r > $w) <= -1.5 ? "1" : "0") . (($r > $w) > -1.5 ? "1" : "0") . (($r > $w) >= -1.5 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["-1.5 ? inferred bool", 'm193', fn ($r, $w) => (-1.5 == ($r > $w) ? "1" : "0") . (-1.5 != ($r > $w) ? "1" : "0") . (-1.5 === ($r > $w) ? "1" : "0") . (-1.5 !== ($r > $w) ? "1" : "0") . (-1.5 < ($r > $w) ? "1" : "0") . (-1.5 <= ($r > $w) ? "1" : "0") . (-1.5 > ($r > $w) ? "1" : "0") . (-1.5 >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? double param", 'm194', fn ($r, $w, $d) => (($r > $w) == $d ? "1" : "0") . (($r > $w) != $d ? "1" : "0") . (($r > $w) === $d ? "1" : "0") . (($r > $w) !== $d ? "1" : "0") . (($r > $w) < $d ? "1" : "0") . (($r > $w) <= $d ? "1" : "0") . (($r > $w) > $d ? "1" : "0") . (($r > $w) >= $d ? "1" : "0"), [[1, 2], [1, 2], [0.0, 0.5, -1.5, NAN, INF]]],
+    ["double param ? inferred bool", 'm195', fn ($d, $r, $w) => ($d == ($r > $w) ? "1" : "0") . ($d != ($r > $w) ? "1" : "0") . ($d === ($r > $w) ? "1" : "0") . ($d !== ($r > $w) ? "1" : "0") . ($d < ($r > $w) ? "1" : "0") . ($d <= ($r > $w) ? "1" : "0") . ($d > ($r > $w) ? "1" : "0") . ($d >= ($r > $w) ? "1" : "0"), [[0.0, 0.5, -1.5, NAN, INF], [1, 2], [1, 2]]],
+    ["inferred bool ? char \'a\'", 'm196', fn ($r, $w) => (($r > $w) == 97 ? "1" : "0") . (($r > $w) != 97 ? "1" : "0") . (($r > $w) === 97 ? "1" : "0") . (($r > $w) !== 97 ? "1" : "0") . (($r > $w) < 97 ? "1" : "0") . (($r > $w) <= 97 ? "1" : "0") . (($r > $w) > 97 ? "1" : "0") . (($r > $w) >= 97 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["char \'a\' ? inferred bool", 'm197', fn ($r, $w) => (97 == ($r > $w) ? "1" : "0") . (97 != ($r > $w) ? "1" : "0") . (97 === ($r > $w) ? "1" : "0") . (97 !== ($r > $w) ? "1" : "0") . (97 < ($r > $w) ? "1" : "0") . (97 <= ($r > $w) ? "1" : "0") . (97 > ($r > $w) ? "1" : "0") . (97 >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? char \'0\'", 'm198', fn ($r, $w) => (($r > $w) == 48 ? "1" : "0") . (($r > $w) != 48 ? "1" : "0") . (($r > $w) === 48 ? "1" : "0") . (($r > $w) !== 48 ? "1" : "0") . (($r > $w) < 48 ? "1" : "0") . (($r > $w) <= 48 ? "1" : "0") . (($r > $w) > 48 ? "1" : "0") . (($r > $w) >= 48 ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["char \'0\' ? inferred bool", 'm199', fn ($r, $w) => (48 == ($r > $w) ? "1" : "0") . (48 != ($r > $w) ? "1" : "0") . (48 === ($r > $w) ? "1" : "0") . (48 !== ($r > $w) ? "1" : "0") . (48 < ($r > $w) ? "1" : "0") . (48 <= ($r > $w) ? "1" : "0") . (48 > ($r > $w) ? "1" : "0") . (48 >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? null", 'm200', fn ($r, $w) => (($r > $w) == null ? "1" : "0") . (($r > $w) != null ? "1" : "0") . (($r > $w) == null ? "1" : "0") . (($r > $w) != null ? "1" : "0") . (($r > $w) < null ? "1" : "0") . (($r > $w) <= null ? "1" : "0") . (($r > $w) > null ? "1" : "0") . (($r > $w) >= null ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["null ? inferred bool", 'm201', fn ($r, $w) => (null == ($r > $w) ? "1" : "0") . (null != ($r > $w) ? "1" : "0") . (null == ($r > $w) ? "1" : "0") . (null != ($r > $w) ? "1" : "0") . (null < ($r > $w) ? "1" : "0") . (null <= ($r > $w) ? "1" : "0") . (null > ($r > $w) ? "1" : "0") . (null >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? \"\"", 'm202', fn ($r, $w) => (($r > $w) == "" ? "1" : "0") . (($r > $w) != "" ? "1" : "0") . (($r > $w) === "" ? "1" : "0") . (($r > $w) !== "" ? "1" : "0") . (($r > $w) < "" ? "1" : "0") . (($r > $w) <= "" ? "1" : "0") . (($r > $w) > "" ? "1" : "0") . (($r > $w) >= "" ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["\"\" ? inferred bool", 'm203', fn ($r, $w) => ("" == ($r > $w) ? "1" : "0") . ("" != ($r > $w) ? "1" : "0") . ("" === ($r > $w) ? "1" : "0") . ("" !== ($r > $w) ? "1" : "0") . ("" < ($r > $w) ? "1" : "0") . ("" <= ($r > $w) ? "1" : "0") . ("" > ($r > $w) ? "1" : "0") . ("" >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? \"0\"", 'm204', fn ($r, $w) => (($r > $w) == "0" ? "1" : "0") . (($r > $w) != "0" ? "1" : "0") . (($r > $w) === "0" ? "1" : "0") . (($r > $w) !== "0" ? "1" : "0") . (($r > $w) < "0" ? "1" : "0") . (($r > $w) <= "0" ? "1" : "0") . (($r > $w) > "0" ? "1" : "0") . (($r > $w) >= "0" ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["\"0\" ? inferred bool", 'm205', fn ($r, $w) => ("0" == ($r > $w) ? "1" : "0") . ("0" != ($r > $w) ? "1" : "0") . ("0" === ($r > $w) ? "1" : "0") . ("0" !== ($r > $w) ? "1" : "0") . ("0" < ($r > $w) ? "1" : "0") . ("0" <= ($r > $w) ? "1" : "0") . ("0" > ($r > $w) ? "1" : "0") . ("0" >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? \"a\"", 'm206', fn ($r, $w) => (($r > $w) == "a" ? "1" : "0") . (($r > $w) != "a" ? "1" : "0") . (($r > $w) === "a" ? "1" : "0") . (($r > $w) !== "a" ? "1" : "0") . (($r > $w) < "a" ? "1" : "0") . (($r > $w) <= "a" ? "1" : "0") . (($r > $w) > "a" ? "1" : "0") . (($r > $w) >= "a" ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["\"a\" ? inferred bool", 'm207', fn ($r, $w) => ("a" == ($r > $w) ? "1" : "0") . ("a" != ($r > $w) ? "1" : "0") . ("a" === ($r > $w) ? "1" : "0") . ("a" !== ($r > $w) ? "1" : "0") . ("a" < ($r > $w) ? "1" : "0") . ("a" <= ($r > $w) ? "1" : "0") . ("a" > ($r > $w) ? "1" : "0") . ("a" >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? string \"\\x30\"", 'm208', fn ($r, $w) => (($r > $w) == "\x30" ? "1" : "0") . (($r > $w) != "\x30" ? "1" : "0") . (($r > $w) === "\x30" ? "1" : "0") . (($r > $w) !== "\x30" ? "1" : "0") . (($r > $w) < "\x30" ? "1" : "0") . (($r > $w) <= "\x30" ? "1" : "0") . (($r > $w) > "\x30" ? "1" : "0") . (($r > $w) >= "\x30" ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["string \"\\x30\" ? inferred bool", 'm209', fn ($r, $w) => ("\x30" == ($r > $w) ? "1" : "0") . ("\x30" != ($r > $w) ? "1" : "0") . ("\x30" === ($r > $w) ? "1" : "0") . ("\x30" !== ($r > $w) ? "1" : "0") . ("\x30" < ($r > $w) ? "1" : "0") . ("\x30" <= ($r > $w) ? "1" : "0") . ("\x30" > ($r > $w) ? "1" : "0") . ("\x30" >= ($r > $w) ? "1" : "0"), [[1, 2], [1, 2]]],
+    ["inferred bool ? string param", 'm210', fn ($r, $w, $s) => (($r > $w) == $s ? "1" : "0") . (($r > $w) != $s ? "1" : "0") . (($r > $w) === $s ? "1" : "0") . (($r > $w) !== $s ? "1" : "0") . (($r > $w) < $s ? "1" : "0") . (($r > $w) <= $s ? "1" : "0") . (($r > $w) > $s ? "1" : "0") . (($r > $w) >= $s ? "1" : "0"), [[1, 2], [1, 2], ["", "0", "0.0", "a"]]],
+    ["string param ? inferred bool", 'm211', fn ($s, $r, $w) => ($s == ($r > $w) ? "1" : "0") . ($s != ($r > $w) ? "1" : "0") . ($s === ($r > $w) ? "1" : "0") . ($s !== ($r > $w) ? "1" : "0") . ($s < ($r > $w) ? "1" : "0") . ($s <= ($r > $w) ? "1" : "0") . ($s > ($r > $w) ? "1" : "0") . ($s >= ($r > $w) ? "1" : "0"), [["", "0", "0.0", "a"], [1, 2], [1, 2]]],
+    ["inferred bool ? array param", 'm212', fn ($r, $w, $a) => (($r > $w) == $a ? "1" : "0") . (($r > $w) != $a ? "1" : "0") . (($r > $w) === $a ? "1" : "0") . (($r > $w) !== $a ? "1" : "0") . (($r > $w) < $a ? "1" : "0") . (($r > $w) <= $a ? "1" : "0") . (($r > $w) > $a ? "1" : "0") . (($r > $w) >= $a ? "1" : "0"), [[1, 2], [1, 2], [[], [1]]]],
+    ["array param ? inferred bool", 'm213', fn ($a, $r, $w) => ($a == ($r > $w) ? "1" : "0") . ($a != ($r > $w) ? "1" : "0") . ($a === ($r > $w) ? "1" : "0") . ($a !== ($r > $w) ? "1" : "0") . ($a < ($r > $w) ? "1" : "0") . ($a <= ($r > $w) ? "1" : "0") . ($a > ($r > $w) ? "1" : "0") . ($a >= ($r > $w) ? "1" : "0"), [[[], [1]], [1, 2], [1, 2]]],
+    ["inferred bool ? var param", 'm214', fn ($r, $w, $x) => (($r > $w) == $x ? "1" : "0") . (($r > $w) != $x ? "1" : "0") . (($r > $w) === $x ? "1" : "0") . (($r > $w) !== $x ? "1" : "0") . (($r > $w) < $x ? "1" : "0") . (($r > $w) <= $x ? "1" : "0") . (($r > $w) > $x ? "1" : "0") . (($r > $w) >= $x ? "1" : "0"), [[1, 2], [1, 2], [0, 1, 5, -1, 0.0, 0.5, -1.5, NAN, INF, "", "0", "0.0", "a", "1.5", [], [1], null, true, false, new \stdClass()]]],
+    ["var param ? inferred bool", 'm215', fn ($x, $r, $w) => ($x == ($r > $w) ? "1" : "0") . ($x != ($r > $w) ? "1" : "0") . ($x === ($r > $w) ? "1" : "0") . ($x !== ($r > $w) ? "1" : "0") . ($x < ($r > $w) ? "1" : "0") . ($x <= ($r > $w) ? "1" : "0") . ($x > ($r > $w) ? "1" : "0") . ($x >= ($r > $w) ? "1" : "0"), [[0, 1, 5, -1, 0.0, 0.5, -1.5, NAN, INF, "", "0", "0.0", "a", "1.5", [], [1], null, true, false, new \stdClass()], [1, 2], [1, 2]]],
+];
+
+function product(array $lists): array
+{
+    $result = [[]];
+    foreach ($lists as $list) {
+        $next = [];
+        foreach ($result as $prefix) {
+            foreach ($list as $value) {
+                $next[] = array_merge($prefix, [$value]);
+            }
+        }
+        $result = $next;
+    }
+
+    return $result;
+}
+
+function collect(callable $call): array
+{
+    $errors = [];
+    set_error_handler(function (int $no, string $message) use (&$errors) {
+        $errors[] = $message;
+
+        return true;
+    });
+    try {
+        $result = $call();
+    } catch (\Throwable $e) {
+        $result = get_class($e) . ': ' . $e->getMessage();
+    } finally {
+        restore_error_handler();
+    }
+
+    return [$result, $errors];
+}
+
+$operators = array (
+  0 => '==',
+  1 => '!=',
+  2 => '===',
+  3 => '!==',
+  4 => '<',
+  5 => '<=',
+  6 => '>',
+  7 => '>=',
+);
+$checked = 0;
+$mismatches = 0;
+foreach ($cases as [$label, $method, $php, $values]) {
+    foreach (product($values) as $args) {
+        $checked++;
+        $zephir = collect(fn () => $o->$method(...$args));
+        $expected = collect(fn () => $php(...$args));
+        if ($zephir === $expected) {
+            continue;
+        }
+        $mismatches++;
+        $ops = [];
+        foreach ($operators as $i => $operator) {
+            if (!is_string($zephir[0]) || !is_string($expected[0]) || ($zephir[0][$i] ?? '') !== ($expected[0][$i] ?? '')) {
+                $ops[] = $operator;
+            }
+        }
+        echo $label, ' ', json_encode($args), ' [', implode(' ', $ops), ']: zephir ', json_encode($zephir),
+            ' php ', json_encode($expected), "\n";
+    }
+}
+echo "checked ", $checked, ", mismatches ", $mismatches, "\n";
+--EXPECT--
+checked 1320, mismatches 0
