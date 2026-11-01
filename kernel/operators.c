@@ -465,6 +465,25 @@ int zephir_is_equal(zval *op1, zval *op2)
 }
 
 /**
+ * Whether op == null, as PHP's zend_compare() decides it: a string equals
+ * null only when it is empty and an object never does, any other value
+ * when it is falsy.
+ */
+int zephir_is_equal_null(zval *op)
+{
+	ZVAL_DEREF(op);
+
+	switch (Z_TYPE_P(op)) {
+		case IS_STRING:
+			return Z_STRLEN_P(op) == 0;
+		case IS_OBJECT:
+			return 0;
+		default:
+			return !zend_is_true(op);
+	}
+}
+
+/**
  * Check if a zval is less than other
  */
 int zephir_less(zval *op1, zval *op2)

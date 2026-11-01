@@ -1800,12 +1800,16 @@ class Method
                  * Assign the default value according to the variable's type.
                  */
                 $targetVar = $compilationContext->symbolTable->getVariableForWrite($name, $compilationContext);
-                $initCode  .= "\t" . $compilationContext->backend->ifVariableValueUndefined(
+                $condition = $compilationContext->backend->ifVariableValueUndefined(
                     $targetVar,
                     $compilationContext,
-                    false,
+                    true,
                     false
-                ) . PHP_EOL;
+                );
+                if ($this->convertsNullArgument($parameter, $dataType, $targetVar)) {
+                    $condition .= ' || Z_TYPE_P(' . $targetVar->getName() . ') == IS_NULL';
+                }
+                $initCode .= "\t" . 'if (' . $condition . ') {' . PHP_EOL;
 
                 if ($targetVar->isDoublePointer() && isset($substituteVars[$parameter['name']])) {
                     $substituteVar = $substituteVars[$parameter['name']];
@@ -2808,6 +2812,18 @@ class Method
     public function getVisibility(): array
     {
         return $this->visibility;
+    }
+
+    /**
+     * A nullable `array` or `string` parameter held in a zval is converted by
+     * zephir_get_arrval() or zephir_get_strval(), which turn an explicit null
+     * into [] or "". Such a null takes the default branch, as PHP keeps it.
+     */
+    private function convertsNullArgument(array $parameter, string $dataType, Variable $targetVar): bool
+    {
+        return in_array($dataType, ['array', 'string'], true)
+            && !$targetVar->isNativeString()
+            && 'null' === ($parameter['default']['type'] ?? null);
     }
 
     /**

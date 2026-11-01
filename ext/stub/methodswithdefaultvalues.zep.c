@@ -95,7 +95,7 @@ PHP_METHOD(Stub_MethodsWithDefaultValues, testNullableString)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &param_param);
-	if (!param_param) {
+	if (!param_param || Z_TYPE_P(param_param) == IS_NULL) {
 		ZEPHIR_INIT_VAR(&param);
 	} else {
 		zephir_get_strval(&param, param_param);

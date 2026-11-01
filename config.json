@@ -64,7 +64,8 @@
     "non-valid-require-once": true,
     "extra-parentheses": true,
     "lossy-float-key": true,
-    "missing-optimizer": false
+    "missing-optimizer": false,
+    "loose-null-comparison": true
   },
   "optimizations": {
     "static-type-inference": true,

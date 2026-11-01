@@ -29,6 +29,7 @@
 #define ZEPHIR_IS_BOOL_IDENTICAL(op1, op2) ((Z_TYPE_P(op1) == IS_FALSE || Z_TYPE_P(op1) == IS_TRUE) && zephir_compare_strict_bool(op1, op2))
 
 #define ZEPHIR_IS_NULL(var) (Z_TYPE_P(var) == IS_NULL)
+#define ZEPHIR_IS_EQUAL_NULL(var) (Z_TYPE_P(var) <= IS_FALSE || zephir_is_equal_null(var))
 
 /** strict boolean comparison */
 #define ZEPHIR_IS_FALSE(var)       ((Z_TYPE_P(var) == IS_FALSE) || zephir_compare_strict_bool(var, 0))
@@ -121,6 +122,7 @@ zend_bool zephir_get_boolval_ex(zval *op);
 int zephir_is_numeric_ex(const zval *op);
 
 int zephir_is_equal(zval *op1, zval *op2);
+int zephir_is_equal_null(zval *op);
 int zephir_is_identical(zval *op1, zval *op2);
 
 int zephir_less(zval *op1, zval *op2);

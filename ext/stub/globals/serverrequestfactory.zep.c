@@ -76,27 +76,27 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 	zephir_get_global(&_FILES, SL("_FILES"));
 	zephir_get_global(&_COOKIE, SL("_COOKIE"));
 	zephir_fetch_params(1, 0, 5, &server_param, &get_param, &post_param, &cookies_param, &files_param);
-	if (!server_param) {
+	if (!server_param || Z_TYPE_P(server_param) == IS_NULL) {
 		ZEPHIR_INIT_VAR(&server);
 	} else {
 		zephir_get_arrval(&server, server_param);
 	}
-	if (!get_param) {
+	if (!get_param || Z_TYPE_P(get_param) == IS_NULL) {
 		ZEPHIR_INIT_VAR(&get);
 	} else {
 		zephir_get_arrval(&get, get_param);
 	}
-	if (!post_param) {
+	if (!post_param || Z_TYPE_P(post_param) == IS_NULL) {
 		ZEPHIR_INIT_VAR(&post);
 	} else {
 		zephir_get_arrval(&post, post_param);
 	}
-	if (!cookies_param) {
+	if (!cookies_param || Z_TYPE_P(cookies_param) == IS_NULL) {
 		ZEPHIR_INIT_VAR(&cookies);
 	} else {
 		zephir_get_arrval(&cookies, cookies_param);
 	}
-	if (!files_param) {
+	if (!files_param || Z_TYPE_P(files_param) == IS_NULL) {
 		ZEPHIR_INIT_VAR(&files);
 	} else {
 		zephir_get_arrval(&files, files_param);

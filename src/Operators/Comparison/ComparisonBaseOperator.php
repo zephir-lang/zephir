@@ -100,42 +100,14 @@ class ComparisonBaseOperator extends AbstractOperator
             return $this->compileBoxedStrictComparison($left, $right, $expression, $compilationContext);
         }
 
+        if ($this->comparesWithNull($left, $right)) {
+            return $this->compileNullComparison($left, $right, $expression, $compilationContext);
+        }
+
         switch ($left->getType()) {
             case 'null':
-                switch ($right->getType()) {
-                    case 'null':
-                        return new CompiledExpression('bool', '(0 ' . $this->operator . ' 0)', $expression);
-
-                    case 'variable':
-                        $variableRight = $compilationContext->symbolTable->getVariableForRead(
-                            $right->getCode(),
-                            $compilationContext,
-                            $expression['left']
-                        );
-                        switch ($variableRight->getType()) {
-                            case 'variable':
-                            case 'mixed':
-                            case 'string':
-                                $compilationContext->headersManager->add('kernel/operators');
-                                $condition = $compilationContext->backend->getTypeofCondition(
-                                    $variableRight,
-                                    $this->operator,
-                                    'null'
-                                );
-
-                                return new CompiledExpression('bool', $condition, $expression);
-
-                            default:
-                                throw new CompilerException(
-                                    'Unknown type: ' . $variableRight->getType(),
-                                    $expression['right']
-                                );
-                        }
-
-
-                    default:
-                        throw new CompilerException('Unknown type: ' . $right->getType(), $expression);
-                }
+                // Only null against null is left: comparesWithNull() took the rest.
+                return new CompiledExpression('bool', '(0 ' . $this->operator . ' 0)', $expression);
 
 
             case 'char':
@@ -232,14 +204,6 @@ class ComparisonBaseOperator extends AbstractOperator
                     true
                 );
                 switch ($right->getType()) {
-                    case 'null':
-                        return new CompiledExpression(
-                            'bool',
-                            $this->zvalNullOperator . '(' . $variableLeftCode . ')',
-                            $expression['left']
-                        );
-
-
                     case 'string':
                         $compilationContext->headersManager->add('kernel/operators');
 
@@ -436,13 +400,6 @@ class ComparisonBaseOperator extends AbstractOperator
 
                     case 'array':
                         switch ($right->getType()) {
-                            case 'null':
-                                return new CompiledExpression(
-                                    'bool',
-                                    $this->zvalNullOperator . '(' . $variableCode . ')',
-                                    $expression['left']
-                                );
-
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead(
                                     $right->getCode(),
@@ -476,13 +433,6 @@ class ComparisonBaseOperator extends AbstractOperator
                         $compilationContext->headersManager->add('kernel/operators');
 
                         switch ($right->getType()) {
-                            case 'null':
-                                return new CompiledExpression(
-                                    'bool',
-                                    $this->zvalNullOperator . '(' . $variableCode . ')',
-                                    $expression['left']
-                                );
-
                             case 'string':
                                 return new CompiledExpression(
                                     'bool',
@@ -523,15 +473,6 @@ class ComparisonBaseOperator extends AbstractOperator
                         $compilationContext->headersManager->add('kernel/operators');
 
                         switch ($right->getType()) {
-                            case 'null':
-                                $condition = $compilationContext->backend->getTypeofCondition(
-                                    $variable,
-                                    $this->operator,
-                                    'null'
-                                );
-
-                                return new CompiledExpression('bool', $condition, $expression['left']);
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -789,6 +730,65 @@ class ComparisonBaseOperator extends AbstractOperator
         return $this->zvalComparison(
             $this->boxedOperand($leftOperand, $compilationContext)['code'],
             $this->boxedOperand($rightOperand, $compilationContext)['code'],
+            $expression,
+            $compilationContext
+        );
+    }
+
+    /**
+     * One operand is the null literal and the other is not. Against a native
+     * operand comparesAsBools() has already decided, so the other one is a
+     * zval or a string or array literal.
+     */
+    private function comparesWithNull(CompiledExpression $left, CompiledExpression $right): bool
+    {
+        return (Types::T_NULL === $left->getType()) !== (Types::T_NULL === $right->getType());
+    }
+
+    /**
+     * `===` and `!==` test the type. `==` and `!=` are PHP's loose comparison,
+     * under which false, 0, 0.0, "" and [] equal null too, and the ordering
+     * operators run PHP's own comparison (#2820). `==` used to be the type
+     * test, so a variable compared that way is reported.
+     *
+     * @throws CompilerException
+     */
+    private function compileNullComparison(
+        CompiledExpression $left,
+        CompiledExpression $right,
+        array $expression,
+        CompilationContext $compilationContext
+    ): CompiledExpression {
+        $compilationContext->headersManager->add('kernel/operators');
+        $nullOnLeft = Types::T_NULL === $left->getType();
+        $other      = $nullOnLeft ? $right : $left;
+        $code       = $this->operand($other, $expression, $compilationContext)['code'];
+
+        if ($this->strict) {
+            return new CompiledExpression('bool', 'Z_TYPE_P(' . $code . ') ' . $this->operator . ' IS_NULL', $expression);
+        }
+
+        if ('==' === $this->operator || '!=' === $this->operator) {
+            if (Types::T_VARIABLE === $other->getType()) {
+                $compilationContext->logger->warning(
+                    sprintf(
+                        "'%s' with null is PHP's loose comparison, where false, 0, 0.0, \"\" and [] equal null; "
+                        . "use '%s=' to test for null",
+                        $this->operator,
+                        $this->operator
+                    ),
+                    ['loose-null-comparison', $expression]
+                );
+            }
+
+            return new CompiledExpression('bool', $this->zvalNullOperator . '(' . $code . ')', $expression);
+        }
+
+        $nullCode = $this->boxedComparisonOperand(['kind' => self::KIND_NULL], $compilationContext);
+
+        return $this->zvalOrdering(
+            $nullOnLeft ? $nullCode : $code,
+            $nullOnLeft ? $code : $nullCode,
             $expression,
             $compilationContext
         );
