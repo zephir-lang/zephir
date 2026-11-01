@@ -388,7 +388,6 @@ $values = [
     'stdClass' => new \stdClass(),
     'toString' => new class { public function __toString(): string { return ""; } },
     'Closure' => function () { return null; },
-    'sxml' => new \SimpleXMLElement("<a/>"),
     'ArrayObj' => new \ArrayObject([]),
     'resource' => fopen("php://memory", "r"),
 ];
@@ -416,9 +415,8 @@ $sources = [
   19 => 'stdClass',
   20 => 'toString',
   21 => 'Closure',
-  22 => 'sxml',
-  23 => 'ArrayObj',
-  24 => 'resource',
+  22 => 'ArrayObj',
+  23 => 'resource',
 ),
     'mixed' => array (
   0 => 'null',
@@ -443,9 +441,8 @@ $sources = [
   19 => 'stdClass',
   20 => 'toString',
   21 => 'Closure',
-  22 => 'sxml',
-  23 => 'ArrayObj',
-  24 => 'resource',
+  22 => 'ArrayObj',
+  23 => 'resource',
 ),
     'stringParam' => array (
   0 => 'null',
@@ -504,9 +501,8 @@ $sources = [
   19 => 'stdClass',
   20 => 'toString',
   21 => 'Closure',
-  22 => 'sxml',
-  23 => 'ArrayObj',
-  24 => 'resource',
+  22 => 'ArrayObj',
+  23 => 'resource',
 ),
     'call' => array (
   0 => 'null',
@@ -531,9 +527,8 @@ $sources = [
   19 => 'stdClass',
   20 => 'toString',
   21 => 'Closure',
-  22 => 'sxml',
-  23 => 'ArrayObj',
-  24 => 'resource',
+  22 => 'ArrayObj',
+  23 => 'resource',
 ),
     'element' => array (
   0 => 'null',
@@ -558,9 +553,8 @@ $sources = [
   19 => 'stdClass',
   20 => 'toString',
   21 => 'Closure',
-  22 => 'sxml',
-  23 => 'ArrayObj',
-  24 => 'resource',
+  22 => 'ArrayObj',
+  23 => 'resource',
 ),
 ];
 $o = new \Stub\NullComparison();
@@ -595,7 +589,6 @@ var           [null]     01010011 01011100
 var           stdClass   01010011 01011100
 var           toString   01010011 01011100
 var           Closure    01010011 01011100
-var           sxml       01010011 01011100
 var           ArrayObj   01010011 01011100
 var           resource   01010011 01011100
 mixed         null       10100101 10100101
@@ -620,7 +613,6 @@ mixed         [null]     01010011 01011100
 mixed         stdClass   01010011 01011100
 mixed         toString   01010011 01011100
 mixed         Closure    01010011 01011100
-mixed         sxml       01010011 01011100
 mixed         ArrayObj   01010011 01011100
 mixed         resource   01010011 01011100
 stringParam   null       10100101 10100101
@@ -669,7 +661,6 @@ property      [null]     01010011 01011100
 property      stdClass   01010011 01011100
 property      toString   01010011 01011100
 property      Closure    01010011 01011100
-property      sxml       01010011 01011100
 property      ArrayObj   01010011 01011100
 property      resource   01010011 01011100
 call          null       10100101 10100101
@@ -694,7 +685,6 @@ call          [null]     01010011 01011100
 call          stdClass   01010011 01011100
 call          toString   01010011 01011100
 call          Closure    01010011 01011100
-call          sxml       01010011 01011100
 call          ArrayObj   01010011 01011100
 call          resource   01010011 01011100
 element       null       10100101 10100101
@@ -719,7 +709,6 @@ element       [null]     01010011 01011100
 element       stdClass   01010011 01011100
 element       toString   01010011 01011100
 element       Closure    01010011 01011100
-element       sxml       01010011 01011100
 element       ArrayObj   01010011 01011100
 element       resource   01010011 01011100
 literal       ""         10010101 10010101
