@@ -18,10 +18,13 @@ class NotIdenticalOperator extends ComparisonBaseOperator
     protected string $bitOperator           = '!=';
     protected bool   $commutative           = true;
     protected bool   $inverse               = true;
+    protected bool   $strict                = true;
     protected string $operator              = '!=';
     protected string $zvalBoolFalseOperator = '!ZEPHIR_IS_FALSE_IDENTICAL';
     protected string $zvalBoolOperator      = '!ZEPHIR_IS_BOOL_IDENTICAL';
     protected string $zvalBoolTrueOperator  = '!ZEPHIR_IS_TRUE_IDENTICAL';
+    protected string $zvalDoubleNegOperator = '!ZEPHIR_IS_DOUBLE_IDENTICAL';
+    protected string $zvalDoubleOperator    = '!ZEPHIR_IS_DOUBLE_IDENTICAL';
     protected string $zvalLongNegOperator   = '!ZEPHIR_IS_LONG_IDENTICAL';
     protected string $zvalLongOperator      = '!ZEPHIR_IS_LONG_IDENTICAL';
     protected string $zvalNullOperator      = '!ZEPHIR_IS_NULL';

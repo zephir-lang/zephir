@@ -64,7 +64,7 @@ PHP_METHOD(Stub_Operator, testIdenticalIfComplex)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	if (!ZEPHIR_IS_FALSE_IDENTICAL(&_0)) {
+	if (!ZEPHIR_IS_BOOL_IDENTICAL(&_0, b)) {
 		RETURN_MM_BOOL(1);
 	}
 	RETURN_MM_BOOL(0);

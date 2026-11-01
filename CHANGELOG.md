@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Fixed
 - Fixed a recursive `this->m()` in a loop, and a call in a loop on a local first assigned with `new`, running the method another object's class resolved to [#2790](https://github.com/zephir-lang/zephir/issues/2790)
+- Fixed a computed `bool` in an array literal, such as `["k": a > b]`, being stored as `false` [#2771](https://github.com/zephir-lang/zephir/issues/2771)
+- Fixed a computed `bool` argument to a PHP function, such as `intval(a > b)`, failing to compile [#2771](https://github.com/zephir-lang/zephir/issues/2771)
+- Fixed `==` and `===` between a `bool` local or computed `bool` and a `var` always comparing the `var` with `false`, which broke `switch true { case x: }` [#2771](https://github.com/zephir-lang/zephir/issues/2771)
+- Fixed a `switch true` case such as `typeof x == "string"` never matching [#2771](https://github.com/zephir-lang/zephir/issues/2771)
+- Fixed a `bool` or `null` compared with a number being compared as numbers instead of as `bool` values [#2771](https://github.com/zephir-lang/zephir/issues/2771)
+- Fixed `<`, `<=`, `>` and `>=` between a `bool` and a `var`, and comparisons of a `bool` local with an `int` local or another `bool`, or of a native local with `null`, failing to compile [#2771](https://github.com/zephir-lang/zephir/issues/2771)
+- Fixed comparing a `var` with a `double` crashing the compiler, or failing to load because `zephir_compare_strict_double()` was missing [#2771](https://github.com/zephir-lang/zephir/issues/2771)
+- Fixed a `double` compared with an integer or a `var` being truncated to an integer, and `===` between an integer and a `double` being true [#2771](https://github.com/zephir-lang/zephir/issues/2771)
+- Fixed `>` and `>=` against a `var` holding `NAN` being true [#2771](https://github.com/zephir-lang/zephir/issues/2771)
+- Fixed a `char` extension global in a comparison being emitted as a multi-character C constant [#2771](https://github.com/zephir-lang/zephir/issues/2771)
+- Fixed a property default array key that is a constant or an expression, such as `self::ON`, failing to compile [#2771](https://github.com/zephir-lang/zephir/issues/2771)
+- Fixed PHP `bool` constants such as `ZEND_THREAD_SAFE` and `"boolean"` extension globals failing to compile [#2771](https://github.com/zephir-lang/zephir/issues/2771)
 
 ## [1.7.0] - 2026-10-30
 

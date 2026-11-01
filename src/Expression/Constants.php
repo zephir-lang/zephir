@@ -128,6 +128,10 @@ class Constants
                 case 'string':
                     return new LiteralCompiledExpression('string', Name::addSlashes($constantName), $expression);
 
+                case 'boolean':
+                    // gettype() names a bool "boolean", a type no consumer knows (#2771).
+                    return new LiteralCompiledExpression('bool', $constantName ? 'true' : 'false', $expression);
+
                 case 'object':
                     throw new CompilerException(
                         "PHP constant '" . $expression['value'] . "' resolves to an "

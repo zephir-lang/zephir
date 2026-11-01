@@ -1609,7 +1609,7 @@ PHP_METHOD(Stub_Arithmetic, less4)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	RETURN_BOOL(ZEPHIR_LT_LONG(a, 5.0));
+	RETURN_BOOL(ZEPHIR_LT_DOUBLE(a, 5.0));
 }
 
 PHP_METHOD(Stub_Arithmetic, greater1)
@@ -1649,7 +1649,7 @@ PHP_METHOD(Stub_Arithmetic, greater4)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	RETURN_BOOL(ZEPHIR_GT_LONG(a, 5.0));
+	RETURN_BOOL(ZEPHIR_GT_DOUBLE(a, 5.0));
 }
 
 PHP_METHOD(Stub_Arithmetic, letStatementIntMinus)
