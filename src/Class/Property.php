@@ -623,10 +623,11 @@ class Property
                         ->setChar($this->original['default']['char']),
         ]);
 
+        // `===`: the property is still unset. `==` would also match [] (#2820).
         return $exprBuilder->statements()->ifX()
                            ->setCondition(
                                $exprBuilder->operators()->binary(
-                                   BinaryOperator::OPERATOR_EQUALS,
+                                   BinaryOperator::OPERATOR_IDENTICAL,
                                    $exprBuilder->operators()->binary(
                                        BinaryOperator::OPERATOR_ACCESS_PROPERTY,
                                        $exprBuilder->variable('this'),

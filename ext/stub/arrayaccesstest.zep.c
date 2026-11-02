@@ -249,7 +249,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1094Test1)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &items_param);
-	if (!items_param) {
+	if (!items_param || Z_TYPE_P(items_param) == IS_NULL) {
 		ZEPHIR_INIT_VAR(&items);
 	} else {
 		zephir_get_arrval(&items, items_param);
@@ -273,12 +273,12 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1094Test2)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &items_param);
-	if (!items_param) {
+	if (!items_param || Z_TYPE_P(items_param) == IS_NULL) {
 		ZEPHIR_INIT_VAR(&items);
 	} else {
 		zephir_get_arrval(&items, items_param);
 	}
-	isItemsNULL = ZEPHIR_IS_NULL(&items);
+	isItemsNULL = Z_TYPE_P(&items) == IS_NULL;
 	RETURN_MM_BOOL(isItemsNULL);
 }
 
@@ -298,7 +298,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1094Test3)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &items_param);
-	if (!items_param) {
+	if (!items_param || Z_TYPE_P(items_param) == IS_NULL) {
 		ZEPHIR_INIT_VAR(&items);
 	} else {
 		zephir_get_arrval(&items, items_param);

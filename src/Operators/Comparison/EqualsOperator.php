@@ -25,7 +25,7 @@ class EqualsOperator extends ComparisonBaseOperator
     protected string $zvalDoubleOperator    = 'ZEPHIR_IS_DOUBLE';
     protected string $zvalLongNegOperator   = 'ZEPHIR_IS_LONG';
     protected string $zvalLongOperator      = 'ZEPHIR_IS_LONG';
-    protected string $zvalNullOperator      = 'ZEPHIR_IS_NULL';
+    protected string $zvalNullOperator      = 'ZEPHIR_IS_EQUAL_NULL';
     protected string $zvalOperator          = 'ZEPHIR_IS_EQUAL';
     protected string $zvalStringOperator    = 'ZEPHIR_IS_STRING';
 }

@@ -814,7 +814,7 @@ PHP_METHOD(Stub_Mcall, testArrayParamWithDefaultNullValue)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &driverOptions_param);
-	if (!driverOptions_param) {
+	if (!driverOptions_param || Z_TYPE_P(driverOptions_param) == IS_NULL) {
 		ZEPHIR_INIT_VAR(&driverOptions);
 	} else {
 		zephir_get_arrval(&driverOptions, driverOptions_param);

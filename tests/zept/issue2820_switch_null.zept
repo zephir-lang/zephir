@@ -1,0 +1,40 @@
+--TEST--
+Issue #2820: a `switch` with `case null` matches every value PHP's loose `==` finds equal to null
+--FILE--
+namespace Stub;
+
+class SwitchNull
+{
+    public function match(var x) -> string
+    {
+        switch x {
+            case null:
+                return "null";
+
+            case "0":
+                return "zero string";
+
+            default:
+                return "other";
+        }
+    }
+}
+--USAGE--
+$values = ['null' => null, 'false' => false, 'int 0' => 0, 'float 0' => 0.0, '""' => "", '[]' => [], '"0"' => "0", 'true' => true, 'int 1' => 1, '"a"' => "a", '[0]' => [0], 'stdClass' => new \stdClass()];
+$o = new \Stub\SwitchNull();
+foreach ($values as $label => $v) {
+    printf("%-8s %s\n", $label, $o->match($v));
+}
+--EXPECT--
+null     null
+false    null
+int 0    null
+float 0  null
+""       null
+[]       null
+"0"      zero string
+true     other
+int 1    other
+"a"      other
+[0]      other
+stdClass other

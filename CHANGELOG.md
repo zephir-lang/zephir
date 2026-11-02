@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Changed
 - Added an inline cache to each method and static call site, so a call on the same class from the same class runs the method it resolved before without looking it up again [#2790](https://github.com/zephir-lang/zephir/issues/2790)
+- Changed `==` and `!=` between `null` and a `var`, `string` or `array` to PHP's loose comparison, where `false`, `0`, `0.0`, `""` and `[]` equal `null`, reported by the new `loose-null-comparison` warning; use `===` to test for `null` [#2820](https://github.com/zephir-lang/zephir/issues/2820)
 
 ### Fixed
 - Fixed a recursive `this->m()` in a loop, and a call in a loop on a local first assigned with `new`, running the method another object's class resolved to [#2790](https://github.com/zephir-lang/zephir/issues/2790)
@@ -23,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed a `char` extension global in a comparison being emitted as a multi-character C constant [#2771](https://github.com/zephir-lang/zephir/issues/2771)
 - Fixed a property default array key that is a constant or an expression, such as `self::ON`, failing to compile [#2771](https://github.com/zephir-lang/zephir/issues/2771)
 - Fixed PHP `bool` constants such as `ZEND_THREAD_SAFE` and `"boolean"` extension globals failing to compile [#2771](https://github.com/zephir-lang/zephir/issues/2771)
+- Fixed `<`, `<=`, `>` and `>=` between `null` and a `var`, `string` or `array` comparing types instead of values [#2820](https://github.com/zephir-lang/zephir/issues/2820)
+- Fixed `null` compared with an `array` local or a string or array literal failing to compile [#2820](https://github.com/zephir-lang/zephir/issues/2820)
+- Fixed an explicit `null` passed to a nullable `array` or `string` parameter becoming `[]` or `""` [#2820](https://github.com/zephir-lang/zephir/issues/2820)
 
 ## [1.7.0] - 2026-10-30
 

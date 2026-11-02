@@ -582,7 +582,7 @@ PHP_METHOD(Stub_Strings, issue2186)
 		zephir_memory_observe(&val_zv);
 	ZVAL_STR_COPY(&val_zv, val);
 	}
-	RETURN_MM_BOOL(ZEPHIR_IS_NULL(&val_zv));
+	RETURN_MM_BOOL(Z_TYPE_P(&val_zv) == IS_NULL);
 }
 
 PHP_METHOD(Stub_Strings, issue2186SegFault)
@@ -727,7 +727,7 @@ PHP_METHOD(Stub_Strings, issue2234Strict)
 	zephir_memory_observe(&val_zv);
 	ZVAL_STR_COPY(&val_zv, val);
 	}
-	RETURN_MM_BOOL(ZEPHIR_IS_NULL(&val_zv));
+	RETURN_MM_BOOL(Z_TYPE_P(&val_zv) == IS_NULL);
 }
 
 /**
@@ -813,7 +813,7 @@ PHP_METHOD(Stub_Strings, nullableStringReturnType)
 	zephir_memory_observe(&val_zv);
 	ZVAL_STR_COPY(&val_zv, val);
 	}
-	if (!ZEPHIR_IS_NULL(&val_zv)) {
+	if (Z_TYPE_P(&val_zv) != IS_NULL) {
 		if (val) {
 			RETURN_MM_STR(zend_string_copy(val));
 		}

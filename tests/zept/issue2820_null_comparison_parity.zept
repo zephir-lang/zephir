@@ -1,0 +1,718 @@
+--TEST--
+Issue #2820: `==`, `!=` and the ordering operators between null and a var, mixed, string or array operand compare as PHP does, `===` and `!==` stay a type test, and a nullable string or array parameter keeps an explicit null
+--FILE--
+namespace Stub;
+
+class NullComparison
+{
+    protected p;
+
+    public function identity(var v)
+    {
+        return v;
+    }
+
+    public function varRight(var x) -> string
+    {
+        return (x == null ? "1" : "0")
+            . (x != null ? "1" : "0")
+            . (x === null ? "1" : "0")
+            . (x !== null ? "1" : "0")
+            . (x < null ? "1" : "0")
+            . (x <= null ? "1" : "0")
+            . (x > null ? "1" : "0")
+            . (x >= null ? "1" : "0");
+    }
+
+    public function varLeft(var x) -> string
+    {
+        return (null == x ? "1" : "0")
+            . (null != x ? "1" : "0")
+            . (null === x ? "1" : "0")
+            . (null !== x ? "1" : "0")
+            . (null < x ? "1" : "0")
+            . (null <= x ? "1" : "0")
+            . (null > x ? "1" : "0")
+            . (null >= x ? "1" : "0");
+    }
+
+    public function mixedRight(mixed x) -> string
+    {
+        return (x == null ? "1" : "0")
+            . (x != null ? "1" : "0")
+            . (x === null ? "1" : "0")
+            . (x !== null ? "1" : "0")
+            . (x < null ? "1" : "0")
+            . (x <= null ? "1" : "0")
+            . (x > null ? "1" : "0")
+            . (x >= null ? "1" : "0");
+    }
+
+    public function mixedLeft(mixed x) -> string
+    {
+        return (null == x ? "1" : "0")
+            . (null != x ? "1" : "0")
+            . (null === x ? "1" : "0")
+            . (null !== x ? "1" : "0")
+            . (null < x ? "1" : "0")
+            . (null <= x ? "1" : "0")
+            . (null > x ? "1" : "0")
+            . (null >= x ? "1" : "0");
+    }
+
+    public function stringParamRight(string x = null) -> string
+    {
+        return (x == null ? "1" : "0")
+            . (x != null ? "1" : "0")
+            . (x === null ? "1" : "0")
+            . (x !== null ? "1" : "0")
+            . (x < null ? "1" : "0")
+            . (x <= null ? "1" : "0")
+            . (x > null ? "1" : "0")
+            . (x >= null ? "1" : "0");
+    }
+
+    public function stringParamLeft(string x = null) -> string
+    {
+        return (null == x ? "1" : "0")
+            . (null != x ? "1" : "0")
+            . (null === x ? "1" : "0")
+            . (null !== x ? "1" : "0")
+            . (null < x ? "1" : "0")
+            . (null <= x ? "1" : "0")
+            . (null > x ? "1" : "0")
+            . (null >= x ? "1" : "0");
+    }
+
+    public function stringWrittenRight(string x = null) -> string
+    {
+        let x = x;
+        return (x == null ? "1" : "0")
+            . (x != null ? "1" : "0")
+            . (x === null ? "1" : "0")
+            . (x !== null ? "1" : "0")
+            . (x < null ? "1" : "0")
+            . (x <= null ? "1" : "0")
+            . (x > null ? "1" : "0")
+            . (x >= null ? "1" : "0");
+    }
+
+    public function stringWrittenLeft(string x = null) -> string
+    {
+        let x = x;
+        return (null == x ? "1" : "0")
+            . (null != x ? "1" : "0")
+            . (null === x ? "1" : "0")
+            . (null !== x ? "1" : "0")
+            . (null < x ? "1" : "0")
+            . (null <= x ? "1" : "0")
+            . (null > x ? "1" : "0")
+            . (null >= x ? "1" : "0");
+    }
+
+    public function stringLocalRight(string v) -> string
+    {
+        string x;
+        let x = v;
+        return (x == null ? "1" : "0")
+            . (x != null ? "1" : "0")
+            . (x === null ? "1" : "0")
+            . (x !== null ? "1" : "0")
+            . (x < null ? "1" : "0")
+            . (x <= null ? "1" : "0")
+            . (x > null ? "1" : "0")
+            . (x >= null ? "1" : "0");
+    }
+
+    public function stringLocalLeft(string v) -> string
+    {
+        string x;
+        let x = v;
+        return (null == x ? "1" : "0")
+            . (null != x ? "1" : "0")
+            . (null === x ? "1" : "0")
+            . (null !== x ? "1" : "0")
+            . (null < x ? "1" : "0")
+            . (null <= x ? "1" : "0")
+            . (null > x ? "1" : "0")
+            . (null >= x ? "1" : "0");
+    }
+
+    public function arrayParamRight(array x = null) -> string
+    {
+        return (x == null ? "1" : "0")
+            . (x != null ? "1" : "0")
+            . (x === null ? "1" : "0")
+            . (x !== null ? "1" : "0")
+            . (x < null ? "1" : "0")
+            . (x <= null ? "1" : "0")
+            . (x > null ? "1" : "0")
+            . (x >= null ? "1" : "0");
+    }
+
+    public function arrayParamLeft(array x = null) -> string
+    {
+        return (null == x ? "1" : "0")
+            . (null != x ? "1" : "0")
+            . (null === x ? "1" : "0")
+            . (null !== x ? "1" : "0")
+            . (null < x ? "1" : "0")
+            . (null <= x ? "1" : "0")
+            . (null > x ? "1" : "0")
+            . (null >= x ? "1" : "0");
+    }
+
+    public function arrayLocalRight(array v) -> string
+    {
+        array x;
+        let x = v;
+        return (x == null ? "1" : "0")
+            . (x != null ? "1" : "0")
+            . (x === null ? "1" : "0")
+            . (x !== null ? "1" : "0")
+            . (x < null ? "1" : "0")
+            . (x <= null ? "1" : "0")
+            . (x > null ? "1" : "0")
+            . (x >= null ? "1" : "0");
+    }
+
+    public function arrayLocalLeft(array v) -> string
+    {
+        array x;
+        let x = v;
+        return (null == x ? "1" : "0")
+            . (null != x ? "1" : "0")
+            . (null === x ? "1" : "0")
+            . (null !== x ? "1" : "0")
+            . (null < x ? "1" : "0")
+            . (null <= x ? "1" : "0")
+            . (null > x ? "1" : "0")
+            . (null >= x ? "1" : "0");
+    }
+
+    public function propertyRight(var v) -> string
+    {
+        let this->p = v;
+        return (this->p == null ? "1" : "0")
+            . (this->p != null ? "1" : "0")
+            . (this->p === null ? "1" : "0")
+            . (this->p !== null ? "1" : "0")
+            . (this->p < null ? "1" : "0")
+            . (this->p <= null ? "1" : "0")
+            . (this->p > null ? "1" : "0")
+            . (this->p >= null ? "1" : "0");
+    }
+
+    public function propertyLeft(var v) -> string
+    {
+        let this->p = v;
+        return (null == this->p ? "1" : "0")
+            . (null != this->p ? "1" : "0")
+            . (null === this->p ? "1" : "0")
+            . (null !== this->p ? "1" : "0")
+            . (null < this->p ? "1" : "0")
+            . (null <= this->p ? "1" : "0")
+            . (null > this->p ? "1" : "0")
+            . (null >= this->p ? "1" : "0");
+    }
+
+    public function callRight(var v) -> string
+    {
+        return (this->identity(v) == null ? "1" : "0")
+            . (this->identity(v) != null ? "1" : "0")
+            . (this->identity(v) === null ? "1" : "0")
+            . (this->identity(v) !== null ? "1" : "0")
+            . (this->identity(v) < null ? "1" : "0")
+            . (this->identity(v) <= null ? "1" : "0")
+            . (this->identity(v) > null ? "1" : "0")
+            . (this->identity(v) >= null ? "1" : "0");
+    }
+
+    public function callLeft(var v) -> string
+    {
+        return (null == this->identity(v) ? "1" : "0")
+            . (null != this->identity(v) ? "1" : "0")
+            . (null === this->identity(v) ? "1" : "0")
+            . (null !== this->identity(v) ? "1" : "0")
+            . (null < this->identity(v) ? "1" : "0")
+            . (null <= this->identity(v) ? "1" : "0")
+            . (null > this->identity(v) ? "1" : "0")
+            . (null >= this->identity(v) ? "1" : "0");
+    }
+
+    public function elementRight(var v) -> string
+    {
+        array a;
+        let a = [v];
+        return (a[0] == null ? "1" : "0")
+            . (a[0] != null ? "1" : "0")
+            . (a[0] === null ? "1" : "0")
+            . (a[0] !== null ? "1" : "0")
+            . (a[0] < null ? "1" : "0")
+            . (a[0] <= null ? "1" : "0")
+            . (a[0] > null ? "1" : "0")
+            . (a[0] >= null ? "1" : "0");
+    }
+
+    public function elementLeft(var v) -> string
+    {
+        array a;
+        let a = [v];
+        return (null == a[0] ? "1" : "0")
+            . (null != a[0] ? "1" : "0")
+            . (null === a[0] ? "1" : "0")
+            . (null !== a[0] ? "1" : "0")
+            . (null < a[0] ? "1" : "0")
+            . (null <= a[0] ? "1" : "0")
+            . (null > a[0] ? "1" : "0")
+            . (null >= a[0] ? "1" : "0");
+    }
+
+    public function literals() -> array
+    {
+        return [
+            "\"\"": [
+                ("" == null ? "1" : "0")
+            . ("" != null ? "1" : "0")
+            . ("" === null ? "1" : "0")
+            . ("" !== null ? "1" : "0")
+            . ("" < null ? "1" : "0")
+            . ("" <= null ? "1" : "0")
+            . ("" > null ? "1" : "0")
+            . ("" >= null ? "1" : "0"),
+                (null == "" ? "1" : "0")
+            . (null != "" ? "1" : "0")
+            . (null === "" ? "1" : "0")
+            . (null !== "" ? "1" : "0")
+            . (null < "" ? "1" : "0")
+            . (null <= "" ? "1" : "0")
+            . (null > "" ? "1" : "0")
+            . (null >= "" ? "1" : "0")
+            ],
+            "\"0\"": [
+                ("0" == null ? "1" : "0")
+            . ("0" != null ? "1" : "0")
+            . ("0" === null ? "1" : "0")
+            . ("0" !== null ? "1" : "0")
+            . ("0" < null ? "1" : "0")
+            . ("0" <= null ? "1" : "0")
+            . ("0" > null ? "1" : "0")
+            . ("0" >= null ? "1" : "0"),
+                (null == "0" ? "1" : "0")
+            . (null != "0" ? "1" : "0")
+            . (null === "0" ? "1" : "0")
+            . (null !== "0" ? "1" : "0")
+            . (null < "0" ? "1" : "0")
+            . (null <= "0" ? "1" : "0")
+            . (null > "0" ? "1" : "0")
+            . (null >= "0" ? "1" : "0")
+            ],
+            "\"a\"": [
+                ("a" == null ? "1" : "0")
+            . ("a" != null ? "1" : "0")
+            . ("a" === null ? "1" : "0")
+            . ("a" !== null ? "1" : "0")
+            . ("a" < null ? "1" : "0")
+            . ("a" <= null ? "1" : "0")
+            . ("a" > null ? "1" : "0")
+            . ("a" >= null ? "1" : "0"),
+                (null == "a" ? "1" : "0")
+            . (null != "a" ? "1" : "0")
+            . (null === "a" ? "1" : "0")
+            . (null !== "a" ? "1" : "0")
+            . (null < "a" ? "1" : "0")
+            . (null <= "a" ? "1" : "0")
+            . (null > "a" ? "1" : "0")
+            . (null >= "a" ? "1" : "0")
+            ],
+            "[]": [
+                ([] == null ? "1" : "0")
+            . ([] != null ? "1" : "0")
+            . ([] === null ? "1" : "0")
+            . ([] !== null ? "1" : "0")
+            . ([] < null ? "1" : "0")
+            . ([] <= null ? "1" : "0")
+            . ([] > null ? "1" : "0")
+            . ([] >= null ? "1" : "0"),
+                (null == [] ? "1" : "0")
+            . (null != [] ? "1" : "0")
+            . (null === [] ? "1" : "0")
+            . (null !== [] ? "1" : "0")
+            . (null < [] ? "1" : "0")
+            . (null <= [] ? "1" : "0")
+            . (null > [] ? "1" : "0")
+            . (null >= [] ? "1" : "0")
+            ],
+            "[0]": [
+                ([0] == null ? "1" : "0")
+            . ([0] != null ? "1" : "0")
+            . ([0] === null ? "1" : "0")
+            . ([0] !== null ? "1" : "0")
+            . ([0] < null ? "1" : "0")
+            . ([0] <= null ? "1" : "0")
+            . ([0] > null ? "1" : "0")
+            . ([0] >= null ? "1" : "0"),
+                (null == [0] ? "1" : "0")
+            . (null != [0] ? "1" : "0")
+            . (null === [0] ? "1" : "0")
+            . (null !== [0] ? "1" : "0")
+            . (null < [0] ? "1" : "0")
+            . (null <= [0] ? "1" : "0")
+            . (null > [0] ? "1" : "0")
+            . (null >= [0] ? "1" : "0")
+            ]
+        ];
+    }
+}
+--USAGE--
+$values = [
+    'null' => null,
+    'false' => false,
+    'true' => true,
+    'int 0' => 0,
+    'int 1' => 1,
+    'int -1' => -1,
+    'float 0' => 0.0,
+    'float -0' => -0.0,
+    'float 1.5' => 1.5,
+    'NAN' => NAN,
+    'INF' => INF,
+    '""' => "",
+    '"0"' => "0",
+    '"a"' => "a",
+    '" "' => " ",
+    '"null"' => "null",
+    '[]' => [],
+    '[0]' => [0],
+    '[null]' => [null],
+    'stdClass' => new \stdClass(),
+    'toString' => new class { public function __toString(): string { return ""; } },
+    'Closure' => function () { return null; },
+    'ArrayObj' => new \ArrayObject([]),
+    'resource' => fopen("php://memory", "r"),
+];
+$sources = [
+    'var' => array (
+  0 => 'null',
+  1 => 'false',
+  2 => 'true',
+  3 => 'int 0',
+  4 => 'int 1',
+  5 => 'int -1',
+  6 => 'float 0',
+  7 => 'float -0',
+  8 => 'float 1.5',
+  9 => 'NAN',
+  10 => 'INF',
+  11 => '""',
+  12 => '"0"',
+  13 => '"a"',
+  14 => '" "',
+  15 => '"null"',
+  16 => '[]',
+  17 => '[0]',
+  18 => '[null]',
+  19 => 'stdClass',
+  20 => 'toString',
+  21 => 'Closure',
+  22 => 'ArrayObj',
+  23 => 'resource',
+),
+    'mixed' => array (
+  0 => 'null',
+  1 => 'false',
+  2 => 'true',
+  3 => 'int 0',
+  4 => 'int 1',
+  5 => 'int -1',
+  6 => 'float 0',
+  7 => 'float -0',
+  8 => 'float 1.5',
+  9 => 'NAN',
+  10 => 'INF',
+  11 => '""',
+  12 => '"0"',
+  13 => '"a"',
+  14 => '" "',
+  15 => '"null"',
+  16 => '[]',
+  17 => '[0]',
+  18 => '[null]',
+  19 => 'stdClass',
+  20 => 'toString',
+  21 => 'Closure',
+  22 => 'ArrayObj',
+  23 => 'resource',
+),
+    'stringParam' => array (
+  0 => 'null',
+  1 => '""',
+  2 => '"0"',
+  3 => '"a"',
+  4 => '" "',
+  5 => '"null"',
+),
+    'stringWritten' => array (
+  0 => 'null',
+  1 => '""',
+  2 => '"0"',
+  3 => '"a"',
+  4 => '" "',
+  5 => '"null"',
+),
+    'stringLocal' => array (
+  0 => '""',
+  1 => '"0"',
+  2 => '"a"',
+  3 => '" "',
+  4 => '"null"',
+),
+    'arrayParam' => array (
+  0 => 'null',
+  1 => '[]',
+  2 => '[0]',
+  3 => '[null]',
+),
+    'arrayLocal' => array (
+  0 => '[]',
+  1 => '[0]',
+  2 => '[null]',
+),
+    'property' => array (
+  0 => 'null',
+  1 => 'false',
+  2 => 'true',
+  3 => 'int 0',
+  4 => 'int 1',
+  5 => 'int -1',
+  6 => 'float 0',
+  7 => 'float -0',
+  8 => 'float 1.5',
+  9 => 'NAN',
+  10 => 'INF',
+  11 => '""',
+  12 => '"0"',
+  13 => '"a"',
+  14 => '" "',
+  15 => '"null"',
+  16 => '[]',
+  17 => '[0]',
+  18 => '[null]',
+  19 => 'stdClass',
+  20 => 'toString',
+  21 => 'Closure',
+  22 => 'ArrayObj',
+  23 => 'resource',
+),
+    'call' => array (
+  0 => 'null',
+  1 => 'false',
+  2 => 'true',
+  3 => 'int 0',
+  4 => 'int 1',
+  5 => 'int -1',
+  6 => 'float 0',
+  7 => 'float -0',
+  8 => 'float 1.5',
+  9 => 'NAN',
+  10 => 'INF',
+  11 => '""',
+  12 => '"0"',
+  13 => '"a"',
+  14 => '" "',
+  15 => '"null"',
+  16 => '[]',
+  17 => '[0]',
+  18 => '[null]',
+  19 => 'stdClass',
+  20 => 'toString',
+  21 => 'Closure',
+  22 => 'ArrayObj',
+  23 => 'resource',
+),
+    'element' => array (
+  0 => 'null',
+  1 => 'false',
+  2 => 'true',
+  3 => 'int 0',
+  4 => 'int 1',
+  5 => 'int -1',
+  6 => 'float 0',
+  7 => 'float -0',
+  8 => 'float 1.5',
+  9 => 'NAN',
+  10 => 'INF',
+  11 => '""',
+  12 => '"0"',
+  13 => '"a"',
+  14 => '" "',
+  15 => '"null"',
+  16 => '[]',
+  17 => '[0]',
+  18 => '[null]',
+  19 => 'stdClass',
+  20 => 'toString',
+  21 => 'Closure',
+  22 => 'ArrayObj',
+  23 => 'resource',
+),
+];
+$o = new \Stub\NullComparison();
+foreach ($sources as $name => $labels) {
+    foreach ($labels as $label) {
+        printf("%-13s %-10s %s %s\n", $name, $label, $o->{$name . 'Right'}($values[$label]), $o->{$name . 'Left'}($values[$label]));
+    }
+}
+foreach ($o->literals() as $label => [$right, $left]) {
+    printf("%-13s %-10s %s %s\n", 'literal', $label, $right, $left);
+}
+--EXPECT--
+var           null       10100101 10100101
+var           false      10010101 10010101
+var           true       01010011 01011100
+var           int 0      10010101 10010101
+var           int 1      01010011 01011100
+var           int -1     01010011 01011100
+var           float 0    10010101 10010101
+var           float -0   10010101 10010101
+var           float 1.5  01010011 01011100
+var           NAN        01010011 01011100
+var           INF        01010011 01011100
+var           ""         10010101 10010101
+var           "0"        01010011 01011100
+var           "a"        01010011 01011100
+var           " "        01010011 01011100
+var           "null"     01010011 01011100
+var           []         10010101 10010101
+var           [0]        01010011 01011100
+var           [null]     01010011 01011100
+var           stdClass   01010011 01011100
+var           toString   01010011 01011100
+var           Closure    01010011 01011100
+var           ArrayObj   01010011 01011100
+var           resource   01010011 01011100
+mixed         null       10100101 10100101
+mixed         false      10010101 10010101
+mixed         true       01010011 01011100
+mixed         int 0      10010101 10010101
+mixed         int 1      01010011 01011100
+mixed         int -1     01010011 01011100
+mixed         float 0    10010101 10010101
+mixed         float -0   10010101 10010101
+mixed         float 1.5  01010011 01011100
+mixed         NAN        01010011 01011100
+mixed         INF        01010011 01011100
+mixed         ""         10010101 10010101
+mixed         "0"        01010011 01011100
+mixed         "a"        01010011 01011100
+mixed         " "        01010011 01011100
+mixed         "null"     01010011 01011100
+mixed         []         10010101 10010101
+mixed         [0]        01010011 01011100
+mixed         [null]     01010011 01011100
+mixed         stdClass   01010011 01011100
+mixed         toString   01010011 01011100
+mixed         Closure    01010011 01011100
+mixed         ArrayObj   01010011 01011100
+mixed         resource   01010011 01011100
+stringParam   null       10100101 10100101
+stringParam   ""         10010101 10010101
+stringParam   "0"        01010011 01011100
+stringParam   "a"        01010011 01011100
+stringParam   " "        01010011 01011100
+stringParam   "null"     01010011 01011100
+stringWritten null       10100101 10100101
+stringWritten ""         10010101 10010101
+stringWritten "0"        01010011 01011100
+stringWritten "a"        01010011 01011100
+stringWritten " "        01010011 01011100
+stringWritten "null"     01010011 01011100
+stringLocal   ""         10010101 10010101
+stringLocal   "0"        01010011 01011100
+stringLocal   "a"        01010011 01011100
+stringLocal   " "        01010011 01011100
+stringLocal   "null"     01010011 01011100
+arrayParam    null       10100101 10100101
+arrayParam    []         10010101 10010101
+arrayParam    [0]        01010011 01011100
+arrayParam    [null]     01010011 01011100
+arrayLocal    []         10010101 10010101
+arrayLocal    [0]        01010011 01011100
+arrayLocal    [null]     01010011 01011100
+property      null       10100101 10100101
+property      false      10010101 10010101
+property      true       01010011 01011100
+property      int 0      10010101 10010101
+property      int 1      01010011 01011100
+property      int -1     01010011 01011100
+property      float 0    10010101 10010101
+property      float -0   10010101 10010101
+property      float 1.5  01010011 01011100
+property      NAN        01010011 01011100
+property      INF        01010011 01011100
+property      ""         10010101 10010101
+property      "0"        01010011 01011100
+property      "a"        01010011 01011100
+property      " "        01010011 01011100
+property      "null"     01010011 01011100
+property      []         10010101 10010101
+property      [0]        01010011 01011100
+property      [null]     01010011 01011100
+property      stdClass   01010011 01011100
+property      toString   01010011 01011100
+property      Closure    01010011 01011100
+property      ArrayObj   01010011 01011100
+property      resource   01010011 01011100
+call          null       10100101 10100101
+call          false      10010101 10010101
+call          true       01010011 01011100
+call          int 0      10010101 10010101
+call          int 1      01010011 01011100
+call          int -1     01010011 01011100
+call          float 0    10010101 10010101
+call          float -0   10010101 10010101
+call          float 1.5  01010011 01011100
+call          NAN        01010011 01011100
+call          INF        01010011 01011100
+call          ""         10010101 10010101
+call          "0"        01010011 01011100
+call          "a"        01010011 01011100
+call          " "        01010011 01011100
+call          "null"     01010011 01011100
+call          []         10010101 10010101
+call          [0]        01010011 01011100
+call          [null]     01010011 01011100
+call          stdClass   01010011 01011100
+call          toString   01010011 01011100
+call          Closure    01010011 01011100
+call          ArrayObj   01010011 01011100
+call          resource   01010011 01011100
+element       null       10100101 10100101
+element       false      10010101 10010101
+element       true       01010011 01011100
+element       int 0      10010101 10010101
+element       int 1      01010011 01011100
+element       int -1     01010011 01011100
+element       float 0    10010101 10010101
+element       float -0   10010101 10010101
+element       float 1.5  01010011 01011100
+element       NAN        01010011 01011100
+element       INF        01010011 01011100
+element       ""         10010101 10010101
+element       "0"        01010011 01011100
+element       "a"        01010011 01011100
+element       " "        01010011 01011100
+element       "null"     01010011 01011100
+element       []         10010101 10010101
+element       [0]        01010011 01011100
+element       [null]     01010011 01011100
+element       stdClass   01010011 01011100
+element       toString   01010011 01011100
+element       Closure    01010011 01011100
+element       ArrayObj   01010011 01011100
+element       resource   01010011 01011100
+literal       ""         10010101 10010101
+literal       "0"        01010011 01011100
+literal       "a"        01010011 01011100
+literal       []         10010101 10010101
+literal       [0]        01010011 01011100
