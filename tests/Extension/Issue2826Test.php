@@ -20,7 +20,6 @@ use function array_map;
 use function array_merge;
 use function array_slice;
 use function debug_zval_dump;
-use function escapeshellarg;
 use function fclose;
 use function file_exists;
 use function file_put_contents;
@@ -29,7 +28,6 @@ use function ob_get_clean;
 use function ob_start;
 use function proc_close;
 use function proc_open;
-use function shell_exec;
 use function sprintf;
 use function stream_get_contents;
 use function sys_get_temp_dir;
@@ -239,6 +237,8 @@ final class Issue2826Test extends TestCase
     }
 
     /**
+     * Runs PHP without a shell: cmd.exe cannot redirect to `/dev/null`.
+     *
      * @return array{stdout: string, stderr: string, exit: int}
      */
     private function runPhp(array $command): array
@@ -255,19 +255,13 @@ final class Issue2826Test extends TestCase
     }
 
     /**
-     * CI enables the stub through a conf.d ini file, so a subprocess already
-     * has it; locally it is passed on the command line, which a subprocess
+     * CI enables the stub through an ini file, so a subprocess already has
+     * it; locally it is passed on the command line, which a subprocess
      * does not inherit. `-n` is not usable: the stub needs psr and mysqli.
      */
     private function extensionArguments(): array
     {
-        $probe = shell_exec(sprintf(
-            '%s -r %s 2>/dev/null',
-            escapeshellarg(PHP_BINARY),
-            escapeshellarg('echo (int) extension_loaded("stub");'),
-        ));
-
-        if ('1' === trim((string) $probe)) {
+        if ('1' === $this->runPhp([PHP_BINARY, '-r', 'echo (int) extension_loaded("stub");'])['stdout']) {
             return [];
         }
 

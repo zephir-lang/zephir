@@ -17,7 +17,6 @@ use PHPUnit\Framework\TestCase;
 
 use function array_merge;
 use function bin2hex;
-use function escapeshellarg;
 use function fclose;
 use function file_exists;
 use function file_get_contents;
@@ -26,14 +25,14 @@ use function fsockopen;
 use function is_resource;
 use function mkdir;
 use function mt_rand;
+use function proc_close;
 use function proc_get_status;
 use function proc_open;
 use function proc_terminate;
 use function random_bytes;
 use function rmdir;
-use function shell_exec;
-use function sprintf;
 use function stream_context_create;
+use function stream_get_contents;
 use function sys_get_temp_dir;
 use function trim;
 use function unlink;
@@ -83,8 +82,11 @@ final class Issue2790Test extends TestCase
 
     protected function tearDown(): void
     {
+        // Waits for the server to exit: Windows cannot delete its log while
+        // the process still holds it open.
         if (is_resource($this->server)) {
             proc_terminate($this->server);
+            proc_close($this->server);
         }
 
         foreach (['router.php', 'a.php', 'b.php', 'server.log'] as $file) {
@@ -155,19 +157,13 @@ final class Issue2790Test extends TestCase
     }
 
     /**
-     * CI enables the stub through a conf.d ini file, so the server already
-     * has it; locally it is passed on the command line, which a subprocess
+     * CI enables the stub through an ini file, so the server already has
+     * it; locally it is passed on the command line, which a subprocess
      * does not inherit. `-n` is not usable: the stub needs psr and mysqli.
      */
     private function extensionArguments(): array
     {
-        $probe = shell_exec(sprintf(
-            '%s -r %s 2>/dev/null',
-            escapeshellarg(PHP_BINARY),
-            escapeshellarg('echo (int) extension_loaded("stub");'),
-        ));
-
-        if ('1' === trim((string) $probe)) {
+        if ($this->stubLoaded()) {
             return [];
         }
 
@@ -179,5 +175,25 @@ final class Issue2790Test extends TestCase
         }
 
         return ['-d', 'extension=' . $extension];
+    }
+
+    /**
+     * Asks a PHP started without a shell: cmd.exe cannot redirect to
+     * `/dev/null`, so a shell probe never ran on Windows.
+     */
+    private function stubLoaded(): bool
+    {
+        $process = proc_open(
+            [PHP_BINARY, '-r', 'echo (int) extension_loaded("stub");'],
+            [1 => ['pipe', 'w'], 2 => ['pipe', 'w']],
+            $pipes,
+        );
+
+        $stdout = stream_get_contents($pipes[1]);
+        fclose($pipes[1]);
+        fclose($pipes[2]);
+        proc_close($process);
+
+        return '1' === trim((string) $stdout);
     }
 }
