@@ -15,6 +15,7 @@ namespace Zephir\Test\BlackBox;
 
 use PHPUnit\Framework\TestCase;
 
+use function addcslashes;
 use function bin2hex;
 use function file_get_contents;
 use function file_put_contents;
@@ -22,6 +23,8 @@ use function json_encode;
 use function mkdir;
 use function random_bytes;
 use function sys_get_temp_dir;
+
+use const PHP_EOL;
 
 /**
  * A class constant, `X::class` or PHP constant is resolved in every
@@ -121,7 +124,8 @@ final class Issue2825DeclarationTest extends TestCase
         $decl = (string) file_get_contents($this->projectDir . '/ext/stub/decl.zep.c');
         $this->assertStringNotContainsString('static-constant-access', $decl);
         $this->assertStringContainsString('"Stub\\\\Decl"', $decl);
-        $this->assertStringContainsString('SL("eol"), "\\n"', $decl);
+        // PHP_EOL folds to the value of the PHP running Zephir: "\r\n" on Windows.
+        $this->assertStringContainsString('SL("eol"), "' . addcslashes(PHP_EOL, "\r\n") . '"', $decl);
     }
 
     public function testCharConstantAsPropertyDefault(): void

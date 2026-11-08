@@ -15,6 +15,7 @@ namespace Zephir\Test\BlackBox;
 
 use PHPUnit\Framework\TestCase;
 
+use function addcslashes;
 use function bin2hex;
 use function dirname;
 use function file_get_contents;
@@ -24,6 +25,8 @@ use function json_encode;
 use function mkdir;
 use function random_bytes;
 use function sys_get_temp_dir;
+
+use const PHP_EOL;
 
 /**
  * `__CLASS__`, `__NAMESPACE__`, `__METHOD__`, `__FUNCTION__` and `__TRAIT__`
@@ -168,7 +171,8 @@ final class Issue2825MagicConstantTest extends TestCase
         $this->assertStringContainsString('SL("CLS"), "Stub\\\\Names")', $generated);
         $this->assertStringContainsString('SL("METHOD"), "")', $generated);
         $this->assertStringContainsString('SL("FUNC"), "")', $generated);
-        $this->assertStringContainsString('SL("EOL"), "\\n")', $generated);
+        // PHP_EOL folds to the value of the PHP running Zephir: "\r\n" on Windows.
+        $this->assertStringContainsString('SL("EOL"), "' . addcslashes(PHP_EOL, "\r\n") . '")', $generated);
     }
 
     /**
