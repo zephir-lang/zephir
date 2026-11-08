@@ -15,16 +15,10 @@ namespace Zephir\Test\BlackBox;
 
 use PHPUnit\Framework\TestCase;
 
-use function bin2hex;
 use function file_get_contents;
-use function file_put_contents;
 use function glob;
 use function implode;
-use function json_encode;
-use function mkdir;
 use function putenv;
-use function random_bytes;
-use function sys_get_temp_dir;
 
 /**
  * A closure resolves `self`, `parent` and `static` as the code it is written
@@ -35,21 +29,11 @@ use function sys_get_temp_dir;
  */
 final class Issue2825ClosureTest extends TestCase
 {
-    use RunsZephirCommands;
-
-    private string $projectDir;
+    use GeneratesStubProject;
 
     protected function setUp(): void
     {
-        $this->setUpZephirRunner();
-
-        $this->projectDir = sys_get_temp_dir() . '/zephir-issue2825c-' . bin2hex(random_bytes(6));
-        $this->cleanupPath($this->projectDir);
-        mkdir($this->projectDir . '/stub', 0777, true);
-        file_put_contents(
-            $this->projectDir . '/config.json',
-            json_encode(['namespace' => 'stub', 'name' => 'stub'])
-        );
+        $this->setUpStubProject();
     }
 
     protected function tearDown(): void
@@ -66,7 +50,7 @@ final class Issue2825ClosureTest extends TestCase
     {
         putenv('ZEPHIR_FORCE_PHP_PARSER=1');
 
-        $this->generateOk(<<<'ZEP'
+        $this->generateOk('names.zep', <<<'ZEP'
             namespace Stub;
 
             class Names
@@ -88,7 +72,7 @@ final class Issue2825ClosureTest extends TestCase
 
     public function testClassScopeCallInCapturingClosurePassesTheEnclosingObject(): void
     {
-        $this->generateOk(<<<'ZEP'
+        $this->generateOk('names.zep', <<<'ZEP'
             namespace Stub;
 
             class Names
@@ -111,7 +95,7 @@ final class Issue2825ClosureTest extends TestCase
 
     public function testSelfInAFunctionIsACompileError(): void
     {
-        file_put_contents($this->projectDir . '/stub/names.zep', <<<'ZEP'
+        $result = $this->generate(['names.zep' => <<<'ZEP'
             namespace Stub;
 
             function selfName() -> var { return self::C; }
@@ -120,23 +104,13 @@ final class Issue2825ClosureTest extends TestCase
             {
                 const C = 1;
             }
-            ZEP);
-
-        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
+            ZEP]);
 
         $this->assertNotSame(0, $result['exitCode']);
         $this->assertStringContainsString(
             'Cannot use "self" when no class scope is active',
             $result['stdout'] . $result['stderr']
         );
-    }
-
-    private function generateOk(string $source): void
-    {
-        file_put_contents($this->projectDir . '/stub/names.zep', $source . "\n");
-
-        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
-        $this->assertSame(0, $result['exitCode'], $result['stdout'] . $result['stderr']);
     }
 
     private function closureSources(): string

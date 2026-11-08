@@ -15,16 +15,8 @@ namespace Zephir\Test\BlackBox;
 
 use PHPUnit\Framework\TestCase;
 
-use function bin2hex;
-use function dirname;
 use function file_get_contents;
-use function file_put_contents;
 use function glob;
-use function is_dir;
-use function json_encode;
-use function mkdir;
-use function random_bytes;
-use function sys_get_temp_dir;
 
 /**
  * `X::class` is the name PHP resolves at compile time: as written, through
@@ -35,21 +27,11 @@ use function sys_get_temp_dir;
  */
 final class Issue2825Test extends TestCase
 {
-    use RunsZephirCommands;
-
-    private string $projectDir;
+    use GeneratesStubProject;
 
     protected function setUp(): void
     {
-        $this->setUpZephirRunner();
-
-        $this->projectDir = sys_get_temp_dir() . '/zephir-issue2825-' . bin2hex(random_bytes(6));
-        $this->cleanupPath($this->projectDir);
-        mkdir($this->projectDir . '/stub', 0777, true);
-        file_put_contents(
-            $this->projectDir . '/config.json',
-            json_encode(['namespace' => 'stub', 'name' => 'stub'])
-        );
+        $this->setUpStubProject();
     }
 
     protected function tearDown(): void
@@ -273,32 +255,5 @@ final class Issue2825Test extends TestCase
         foreach ($closures as $closure) {
             $this->assertStringContainsString('RETURN_STRING("ArrayObject");', (string) file_get_contents($closure));
         }
-    }
-
-    /**
-     * @param array<string, string> $files
-     *
-     * @return array{exitCode: int, stdout: string, stderr: string}
-     */
-    private function generate(array $files): array
-    {
-        foreach ($files as $name => $source) {
-            $path = $this->projectDir . '/stub/' . $name;
-            if (!is_dir(dirname($path))) {
-                mkdir(dirname($path), 0777, true);
-            }
-
-            file_put_contents($path, $source . "\n");
-        }
-
-        return $this->runZephir('generate --no-ansi', $this->projectDir);
-    }
-
-    private function generateOk(string $fileName, string $source): string
-    {
-        $result = $this->generate([$fileName => $source]);
-        $this->assertSame(0, $result['exitCode'], $result['stdout'] . $result['stderr']);
-
-        return (string) file_get_contents($this->projectDir . '/ext/stub/' . $fileName . '.c');
     }
 }
