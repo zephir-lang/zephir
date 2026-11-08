@@ -168,26 +168,26 @@ final class Issue2723Test extends TestCase
     }
 
     /**
-     * Inside a closure `self` and `parent` name the closure class, which the
-     * literal forms already refuse to compile against.
+     * Inside a closure `self` and `parent` name the class the closure is
+     * written in and its parent, as PHP resolves them; the call passes on the
+     * closure's object (#2825).
      *
      * @return iterable<string, array{0: string, 1: string}>
      */
     public static function closureScopeProvider(): iterable
     {
-        yield 'self'   => ['self::{name}()', 'Cannot call self::{name}() inside a closure'];
-        yield 'parent' => ['parent::{name}()', 'class stub\\0__closure does not extend any class'];
+        yield 'self'   => ['self::{name}()', 'ZEPHIR_RETURN_CALL_SELF_THIS_ZVAL(stub_probe_ce, getThis(), name, NULL, 0);'];
+        yield 'parent' => ['parent::{name}()', 'ZEPHIR_RETURN_CALL_PARENT_ZVAL(stub_probe_ce, getThis(), name, NULL, 0);'];
     }
 
     /**
      * @dataProvider closureScopeProvider
      */
-    public function testRejectsScopeKeywordsInAClosure(string $call, string $expectedError): void
+    public function testResolvesScopeKeywordsInAClosure(string $call, string $expectedCall): void
     {
-        $result = $this->runGenerate('public function m() { return function (name) { return ' . $call . '; }; }');
+        $generated = $this->generate('public function m() { return function (name) { return ' . $call . '; }; }');
 
-        $this->assertNotSame(0, $result['exitCode']);
-        $this->assertStringContainsString($expectedError, $result['stdout'] . $result['stderr']);
+        $this->assertStringContainsString($expectedCall, $generated);
     }
 
     protected function setUp(): void

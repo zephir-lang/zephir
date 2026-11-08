@@ -2,6 +2,7 @@ destructure_basic
 destructure_nested_in_class
 destructure_skip
 instanceof_static
+issue2825__class_name_grammar
 phpt__base_cblocks
 phpt__base_declare
 phpt__base_literals

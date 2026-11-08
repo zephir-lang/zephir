@@ -119,7 +119,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf6)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
-	object_init_ex(&a, zend_get_called_scope(execute_data));
+	object_init_ex(&a, zephir_get_called_scope(execute_data));
 	ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(&a);
 	zephir_check_call_status();
 	if (zephir_has_constructor(&a)) {
@@ -160,7 +160,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf8)
 	zephir_memory_observe(&test_zv);
 	ZVAL_STR_COPY(&test_zv, test);
 	ZEPHIR_INIT_VAR(&a);
-	object_init_ex(&a, zend_get_called_scope(execute_data));
+	object_init_ex(&a, zephir_get_called_scope(execute_data));
 	ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(&a);
 	zephir_check_call_status();
 	if (zephir_has_constructor(&a)) {

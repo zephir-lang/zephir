@@ -193,7 +193,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalparameterint, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalparametervar, 0, 0, 0)
-	ZEND_ARG_INFO(0, param)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, param, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalparameterbooltrue, 0, 0, 0)
@@ -217,7 +217,7 @@ ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, driverOptions, IS_ARRAY, 0, "[]")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_testarrayparamwithdefaultnullvalue, 0, 0, 0)
-ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, driverOptions, IS_ARRAY, 1, "[]")
+ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, driverOptions, IS_ARRAY, 1, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_testarrayparam, 0, 0, 1)
@@ -248,7 +248,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_issue1136, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_issue2245varargumentnullable, 0, 0, 0)
-	ZEND_ARG_INFO(0, param)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, param, "null")
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_mcall_method_entry) {

@@ -56,6 +56,13 @@ class InstanceOfOperator extends AbstractOperator
             default:
                 switch ($resolved->getType()) {
                     case 'variable':
+                        if (
+                            in_array($resolvedVariable, ['self', 'static', 'parent'], true)
+                            && null === $context->classScope($resolvedVariable, $expression)
+                        ) {
+                            return new CompiledExpression('bool', 'false', $expression);
+                        }
+
                         if ('this' === $resolvedVariable) {
                             /**
                              * TODO: It's an optimization variant, but maybe we need to get entry in runtime?
@@ -65,7 +72,7 @@ class InstanceOfOperator extends AbstractOperator
                             $classEntry = $context->lateStaticClassEntry();
                         } elseif (!$context->symbolTable->hasVariable($resolvedVariable)) {
                             $className = match ($resolvedVariable) {
-                                'self'   => $context->classDefinition->getCompleteName(),
+                                'self'   => $context->lexicalClassDefinition()->getCompleteName(),
                                 'parent' => $context->parentClassName($expression),
                                 default  => $context->getFullName($resolvedVariable),
                             };
@@ -91,7 +98,10 @@ class InstanceOfOperator extends AbstractOperator
                                     if (!class_exists($className, false)) {
                                         $code = 'SL("' . trim(Entry::escape($className), '\\') . '")';
                                     } else {
-                                        $entryName  = in_array($resolvedVariable, ['self', 'parent'], true) ? $className : $resolvedVariable;
+                                        // A resolved `self`/`parent` name is qualified, so Entry does not resolve it again.
+                                        $entryName  = in_array($resolvedVariable, ['self', 'parent'], true)
+                                            ? '\\' . ltrim($className, '\\')
+                                            : $resolvedVariable;
                                         $entry      = (new Entry($entryName, $context));
                                         $classEntry = $entry->get();
 

@@ -1,0 +1,70 @@
+--TEST--
+self, parent and static inside a closure written in a function throw PHP's Error (issue #2825)
+--FILE--
+namespace Stub;
+
+function noScopeClosures() -> array
+{
+	return [
+		"self::class": function () { return self::class; },
+		"static::class": function () { return static::class; },
+		"parent::class": function () { return parent::class; },
+		"__CLASS__": function () { return __CLASS__; },
+		"self::C": function () { return self::C; },
+		"static::C": function () { return static::C; },
+		"parent::C": function () { return parent::C; },
+		"self::m()": function () { return self::m(); },
+		"static::m()": function () { return static::m(); },
+		"parent::m()": function () { return parent::m(); },
+		"new self": function () { return new self(); },
+		"new static": function () { return new static(); },
+		"new parent": function () { return new parent(); },
+		"instanceof self": function () { var o; let o = new NoScope(); return o instanceof self; },
+		"instanceof static": function () { var o; let o = new NoScope(); return o instanceof static; },
+		"instanceof parent": function () { var o; let o = new NoScope(); return o instanceof parent; },
+		"self::sp": function () { return self::sp; },
+		"parent::sp": function () { return parent::sp; },
+		"self::sp write": function () { let self::sp = 2; return 1; }
+	];
+}
+
+class NoScope
+{
+	const C = 1;
+
+	public static sp = 1;
+
+	public static function m() -> int
+	{
+		return 1;
+	}
+}
+--USAGE--
+foreach (\Stub\noScopeClosures() as $label => $f) {
+    try {
+        $v = $f();
+    } catch (\Throwable $e) {
+        $v = get_class($e) . ": " . $e->getMessage();
+    }
+    echo $label, " = ", var_export($v, true), "\n";
+}
+--EXPECT--
+self::class = 'Error: Cannot use "self" in the global scope'
+static::class = 'Error: Cannot use "static" in the global scope'
+parent::class = 'Error: Cannot use "parent" in the global scope'
+__CLASS__ = ''
+self::C = 'Error: Cannot access "self" when no class scope is active'
+static::C = 'Error: Cannot access "static" when no class scope is active'
+parent::C = 'Error: Cannot access "parent" when no class scope is active'
+self::m() = 'Error: Cannot access "self" when no class scope is active'
+static::m() = 'Error: Cannot access "static" when no class scope is active'
+parent::m() = 'Error: Cannot access "parent" when no class scope is active'
+new self = 'Error: Cannot access "self" when no class scope is active'
+new static = 'Error: Cannot access "static" when no class scope is active'
+new parent = 'Error: Cannot access "parent" when no class scope is active'
+instanceof self = 'Error: Cannot access "self" when no class scope is active'
+instanceof static = 'Error: Cannot access "static" when no class scope is active'
+instanceof parent = 'Error: Cannot access "parent" when no class scope is active'
+self::sp = 'Error: Cannot access "self" when no class scope is active'
+parent::sp = 'Error: Cannot access "parent" when no class scope is active'
+self::sp write = 'Error: Cannot access "self" when no class scope is active'

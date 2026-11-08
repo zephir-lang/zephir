@@ -54,7 +54,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2654_writevar, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2654_optionalparam, 0, 0, IS_STRING, 0)
-	ZEND_ARG_INFO(0, b)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, b, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2654_leakprobe, 0, 1, IS_LONG, 0)

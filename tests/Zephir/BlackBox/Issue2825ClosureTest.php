@@ -1,0 +1,151 @@
+<?php
+
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Phalcon Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Zephir\Test\BlackBox;
+
+use PHPUnit\Framework\TestCase;
+
+use function bin2hex;
+use function file_get_contents;
+use function file_put_contents;
+use function glob;
+use function implode;
+use function json_encode;
+use function mkdir;
+use function putenv;
+use function random_bytes;
+use function sys_get_temp_dir;
+
+/**
+ * A closure resolves `self`, `parent` and `static` as the code it is written
+ * in, passes that code's object on to `self::`/`static::` calls, and is named
+ * as PHP names it.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2825
+ */
+final class Issue2825ClosureTest extends TestCase
+{
+    use RunsZephirCommands;
+
+    private string $projectDir;
+
+    protected function setUp(): void
+    {
+        $this->setUpZephirRunner();
+
+        $this->projectDir = sys_get_temp_dir() . '/zephir-issue2825c-' . bin2hex(random_bytes(6));
+        $this->cleanupPath($this->projectDir);
+        mkdir($this->projectDir . '/stub', 0777, true);
+        file_put_contents(
+            $this->projectDir . '/config.json',
+            json_encode(['namespace' => 'stub', 'name' => 'stub'])
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        putenv('ZEPHIR_FORCE_PHP_PARSER');
+        $this->tearDownZephirRunner();
+    }
+
+    /**
+     * The start line comes from the parser; zephir_parser 2.10.0 does not
+     * record it yet, so the pure-PHP parser is used.
+     */
+    public function testFunctionInClosureIsTheNamePhpGivesIt(): void
+    {
+        putenv('ZEPHIR_FORCE_PHP_PARSER=1');
+
+        $this->generateOk(<<<'ZEP'
+            namespace Stub;
+
+            class Names
+            {
+                public function make() -> var
+                {
+                    return function () {
+                        return __FUNCTION__;
+                    };
+                }
+            }
+            ZEP);
+
+        $this->assertStringContainsString(
+            'zephir_closure_name(return_value, SL("Stub\\\\{closure}"), SL("{closure:Stub\\\\Names::make():7}"));',
+            $this->closureSources()
+        );
+    }
+
+    public function testClassScopeCallInCapturingClosurePassesTheEnclosingObject(): void
+    {
+        $this->generateOk(<<<'ZEP'
+            namespace Stub;
+
+            class Names
+            {
+                public function im() -> int { return 1; }
+
+                public function make() -> var
+                {
+                    var x = 1;
+
+                    return function () use (x) { return self::im() + x; };
+                }
+            }
+            ZEP);
+
+        $closure = $this->closureSources();
+        $this->assertStringContainsString('this_ptr = &__$zephir_this;', $closure);
+        $this->assertStringContainsString('ZEPHIR_CALL_SELF_THIS_CACHED(&_0, this_ptr, "im"', $closure);
+    }
+
+    public function testSelfInAFunctionIsACompileError(): void
+    {
+        file_put_contents($this->projectDir . '/stub/names.zep', <<<'ZEP'
+            namespace Stub;
+
+            function selfName() -> var { return self::C; }
+
+            class Names
+            {
+                const C = 1;
+            }
+            ZEP);
+
+        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
+
+        $this->assertNotSame(0, $result['exitCode']);
+        $this->assertStringContainsString(
+            'Cannot use "self" when no class scope is active',
+            $result['stdout'] . $result['stderr']
+        );
+    }
+
+    private function generateOk(string $source): void
+    {
+        file_put_contents($this->projectDir . '/stub/names.zep', $source . "\n");
+
+        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
+        $this->assertSame(0, $result['exitCode'], $result['stdout'] . $result['stderr']);
+    }
+
+    private function closureSources(): string
+    {
+        $sources = [];
+        foreach (glob($this->projectDir . '/ext/stub/*__closure.zep.c') ?: [] as $file) {
+            $sources[] = (string) file_get_contents($file);
+        }
+
+        return implode("\n", $sources);
+    }
+}

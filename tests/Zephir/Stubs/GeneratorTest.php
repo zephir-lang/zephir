@@ -582,6 +582,29 @@ class GeneratorTest extends TestCase
             [
                 'empty-array', null, 'const TEST = [];',
             ],
+            // A string value is held as Zephir spells it; the stub spells the
+            // same runtime value in PHP (#2825).
+            [
+                'string', 'Stub\\\\Constants', 'const TEST = \'Stub\\\\Constants\';',
+            ],
+            [
+                'string', 'a\\nb\\t', 'const TEST = "a\\nb\\t";',
+            ],
+            [
+                'string', '$X$', 'const TEST = \'$X$\';',
+            ],
+            [
+                'string', "it's", 'const TEST = \'it\\\'s\';',
+            ],
+            [
+                'string', '\\x41\\u{263A}', 'const TEST = \'A☺\';',
+            ],
+            [
+                'string', '$\\n', 'const TEST = "\\$\\n";',
+            ],
+            [
+                'constant', 'PHP_EOL', 'const TEST = PHP_EOL;',
+            ],
             [
                 'static-constant-access', ['left' => '\Pdo', 'right' => 'FETCH_LAZY'], 'const TEST = \\Pdo::FETCH_LAZY;',
             ],

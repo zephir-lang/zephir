@@ -870,7 +870,7 @@ class FunctionCall extends Call
         $namespace = $this->callerNamespace($context);
 
         if (str_contains($name, '\\')) {
-            return Name::fetchFQN($name, $namespace, $context->aliasManager);
+            return Name::fetchFQN($name, $namespace, $context->currentAliasManager());
         }
 
         if ('' !== $namespace && $this->isDefinedFunction($namespace, $name, $context)) {

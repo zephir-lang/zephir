@@ -22,11 +22,13 @@ use Zephir\CompiledExpression;
 use Zephir\CompilerFileAnonymous;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
+use Zephir\FunctionDefinition;
 use Zephir\StatementsBlock;
 use Zephir\Variable\Variable;
 
 use function in_array;
 use function is_array;
+use function sprintf;
 
 /**
  * Creates an anonymous function within the extension simulating a closure
@@ -109,6 +111,35 @@ class Closure
     }
 
     /**
+     * Whether an AST node calls a method through `self::`, `parent::` or
+     * `static::`: PHP passes the closure's $this on to such a call, so a
+     * closure written in an instance method binds it, as PHP binds it there.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2825
+     */
+    protected static function astCallsClassScope(mixed $node): bool
+    {
+        if (!is_array($node)) {
+            return false;
+        }
+
+        if (
+            'scall' === ($node['type'] ?? null)
+            && in_array($node['class'] ?? null, ['self', 'parent', 'static'], true)
+        ) {
+            return true;
+        }
+
+        foreach ($node as $child) {
+            if (is_array($child) && self::astCallsClassScope($child)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * The user class a closure body's `this` belongs to.
      *
      * A closure declared inside another closure compiles with the *outer
@@ -120,10 +151,14 @@ class Closure
      *
      * @see https://github.com/zephir-lang/zephir/issues/2655
      */
-    protected static function enclosingUserClass(Definition $scope): Definition
+    protected static function enclosingUserClass(Definition $scope): ?Definition
     {
-        while (null !== ($outer = $scope->getEnclosingClassDefinition())) {
-            $scope = $outer;
+        while ($scope->isClosure()) {
+            $scope = $scope->getEnclosingClassDefinition();
+            if (null === $scope) {
+                // The outermost closure is written in a function.
+                return null;
+            }
         }
 
         return $scope;
@@ -151,16 +186,26 @@ class Closure
         $classDefinition->setSourceNamespace($compilationContext->currentNamespace());
 
         /**
+         * The body is compiled later, on its own, so it keeps the `use`
+         * aliases of the code it is written in, a merged trait method's too.
+         */
+        $aliasManager = $compilationContext->currentAliasManager();
+        if (null !== $aliasManager) {
+            $classDefinition->setAliasManager($aliasManager);
+        }
+
+        /**
          * The body runs in the scope of the class it is written in, whether or
          * not it uses `this`: PHP checks every private and protected member it
          * reaches against that class. A closure in a function has no class.
          *
          * @see https://github.com/zephir-lang/zephir/issues/2734
          */
-        if (null !== $compilationContext->classDefinition) {
-            $classDefinition->setEnclosingClassDefinition(
-                self::enclosingUserClass($compilationContext->classDefinition)
-            );
+        $enclosing = null === $compilationContext->classDefinition
+            ? null
+            : self::enclosingUserClass($compilationContext->classDefinition);
+        if (null !== $enclosing) {
+            $classDefinition->setEnclosingClassDefinition($enclosing);
         }
 
         $compilerFile = new CompilerFileAnonymous($classDefinition, $compilationContext->config, $compilationContext);
@@ -242,7 +287,12 @@ class Closure
          * Detect if the closure body references `this`.
          * If so, we need to bind the enclosing object to the closure.
          */
-        $bindThis = self::astReferencesThis($block);
+        $bindThis = self::astReferencesThis($block)
+            || (
+                !$compilationContext->staticContext
+                && null !== $compilationContext->lexicalClassDefinition()
+                && self::astCallsClassScope($block)
+            );
         if ($bindThis) {
             // Ensure this_ptr is declared and not stripped in the enclosing method
             if ($compilationContext->symbolTable->hasVariable('this')) {
@@ -487,6 +537,47 @@ class Closure
             $carrier
         );
 
+        [$legacyName, $modernName] = self::closureNames($expression, $compilationContext);
+        $classDefinition->setClosureNames($legacyName, $modernName);
+        $classDefinition->setClosureTrait(
+            $compilationContext->classDefinition?->isClosure()
+                ? $compilationContext->classDefinition->getClosureTrait()
+                : $compilationContext->declaringTraitDefinition()?->getCompleteName()
+        );
+
         return $symbolVariable;
+    }
+
+    /**
+     * The names PHP gives a closure written here: `Ns\{closure}` before PHP
+     * 8.4, and from 8.4 on `{closure:<where>:<line>}`, where it is written
+     * being the method as `Class::method()` (the trait, for a method merged
+     * from one), the function as `ns\fn()`, or the enclosing closure's own
+     * name, and the line the one it starts on.
+     *
+     * @return array{0: string, 1: string}
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2825
+     */
+    private static function closureNames(array $expression, CompilationContext $compilationContext): array
+    {
+        $method   = $compilationContext->currentMethod;
+        $function = $method instanceof FunctionDefinition ? $method : null;
+
+        $namespace  = null !== $function && $function->isGlobal() ? '' : $compilationContext->currentNamespace();
+        $legacyName = ('' === $namespace ? '' : $namespace . '\\') . '{closure}';
+
+        if (true === $compilationContext->classDefinition?->isClosure()) {
+            $where = (string) $compilationContext->classDefinition->getClosureNames()[1];
+        } elseif (null !== $function) {
+            $where = ($function->isGlobal() ? '' : $function->getNamespace() . '\\') . $function->getName() . '()';
+        } else {
+            $class = $compilationContext->declaringTraitDefinition() ?? $compilationContext->lexicalClassDefinition();
+            $where = $class->getCompleteName() . '::' . $method->getDeclaredName() . '()';
+        }
+
+        $line = $expression['start-line'] ?? $expression['line'];
+
+        return [$legacyName, sprintf('{closure:%s:%d}', $where, $line)];
     }
 }

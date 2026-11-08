@@ -78,7 +78,7 @@ final class ParserExtensionGrammarTest extends TestCase
         $fromPurePhp = $this->generate();
 
         // static::NAME is looked up on the called class at run time.
-        $this->assertStringContainsString('zend_get_called_scope(execute_data), SL("NAME")', $fromExtension);
+        $this->assertStringContainsString('zephir_get_called_scope(execute_data), SL("NAME")', $fromExtension);
         $this->assertSame($fromPurePhp, $fromExtension);
     }
 

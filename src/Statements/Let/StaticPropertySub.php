@@ -24,6 +24,7 @@ use Zephir\Traits\ConcatSelfTrait;
 use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable;
 
+use function in_array;
 use function sprintf;
 
 /**
@@ -49,6 +50,13 @@ class StaticPropertySub
         CompilationContext $compilationContext,
         array $statement
     ): void {
+        if (
+            in_array($className, ['self', 'static', 'parent'], true)
+            && null === $compilationContext->classScope($className, $statement)
+        ) {
+            return;
+        }
+
         $classDefinition = 'parent' === $className
             ? $compilationContext->parentClassDefinition('assign static property "' . $property . '"', $statement)
             : $compilationContext->classLookup($className, $statement);

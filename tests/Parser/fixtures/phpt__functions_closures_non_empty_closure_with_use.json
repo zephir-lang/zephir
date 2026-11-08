@@ -96,7 +96,8 @@
                                 ],
                                 "file": "phpt__functions_closures_non_empty_closure_with_use.zep",
                                 "line": 9,
-                                "char": 56
+                                "char": 56,
+                                "start-line": 9
                             },
                             "file": "phpt__functions_closures_non_empty_closure_with_use.zep",
                             "line": 10,

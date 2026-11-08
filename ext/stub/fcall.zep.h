@@ -48,7 +48,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_fcall_zvalfcallwith1parameter, 0, 0, 1)
 	ZEND_ARG_INFO(0, callback)
-	ZEND_ARG_INFO(0, param1)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, param1, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_fcall_testcall8, 0, 0, 2)

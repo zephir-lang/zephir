@@ -325,7 +325,8 @@
                                                 ],
                                                 "file": "stub__issue2167.zep",
                                                 "line": 54,
-                                                "char": 14
+                                                "char": 14,
+                                                "start-line": 52
                                             },
                                             "file": "stub__issue2167.zep",
                                             "line": 54,

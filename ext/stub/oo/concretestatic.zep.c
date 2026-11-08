@@ -27,7 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_Oo_ConcreteStatic)
 PHP_METHOD(Stub_Oo_ConcreteStatic, parentFunction)
 {
 
-	RETURN_STRING("ConcreteStatic:parentFunction");
+	RETURN_STRING("Stub\\Oo\\ConcreteStatic::parentFunction");
 }
 
 PHP_METHOD(Stub_Oo_ConcreteStatic, childFunction)

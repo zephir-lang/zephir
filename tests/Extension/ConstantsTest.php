@@ -79,7 +79,7 @@ final class ConstantsTest extends TestCase
         $this->assertSame($this->test->testNamespaceMagicConstant(), 'Stub');
         $this->assertSame($this->test->testClassMagicConstant(), 'Stub\Constants');
 
-        $this->assertSame($this->test->testMethodMagicConstant(), 'Constants:testMethodMagicConstant');
+        $this->assertSame($this->test->testMethodMagicConstant(), 'Stub\Constants::testMethodMagicConstant');
         $this->assertSame($this->test->testFunctionMagicConstant(), 'testFunctionMagicConstant');
 
         $this->assertSame(ConstantsInterface::CLASSNAME, 'Stub\Oo\ConstantsInterface');

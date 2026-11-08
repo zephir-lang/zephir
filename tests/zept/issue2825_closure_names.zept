@@ -1,0 +1,78 @@
+--TEST--
+__FUNCTION__ and __METHOD__ in a closure are the name PHP gives the closure (issue #2825)
+--FILE--
+namespace Stub;
+
+trait ClosureNamesTrait
+{
+	public function fromTrait() -> var
+	{
+		return function () { return __FUNCTION__; };
+	}
+}
+--FILE--
+namespace Stub;
+
+function closureNamesFunction() -> var
+{
+	return function () { return __FUNCTION__; };
+}
+
+class ClosureNames
+{
+	use ClosureNamesTrait;
+
+	public function make() -> var
+	{
+		return function () { return __FUNCTION__ . "|" . __METHOD__; };
+	}
+
+	public static function makeStatic() -> var
+	{
+		return function () { return __FUNCTION__; };
+	}
+
+	public function nested() -> var
+	{
+		return function () {
+			return [__FUNCTION__, function () { return __FUNCTION__; }];
+		};
+	}
+
+	public function arrow() -> var
+	{
+		return n => __FUNCTION__;
+	}
+}
+--USAGE--
+// php-src zend_begin_func_decl(): `Ns\{closure}` before 8.4, then the place
+// and the line the closure starts on.
+function expected(string $where, int $line): string
+{
+    return PHP_VERSION_ID >= 80400 ? '{closure:' . $where . ':' . $line . '}' : 'Stub\{closure}';
+}
+
+$o      = new \Stub\ClosureNames();
+$nested = $o->nested()();
+$make   = expected('Stub\ClosureNames::make()', 14);
+$cases  = [
+    'method' => [$o->make()(), $make . '|' . $make],
+    'static' => [\Stub\ClosureNames::makeStatic()(), expected('Stub\ClosureNames::makeStatic()', 19)],
+    'nested outer' => [$nested[0], expected('Stub\ClosureNames::nested()', 24)],
+    'nested inner' => [$nested[1](), PHP_VERSION_ID >= 80400 ? '{closure:{closure:Stub\ClosureNames::nested():24}:25}' : 'Stub\{closure}'],
+    'arrow' => [$o->arrow()(1), expected('Stub\ClosureNames::arrow()', 31)],
+    'function' => [\Stub\closureNamesFunction()(), expected('Stub\closureNamesFunction()', 5)],
+    'trait' => [$o->fromTrait()(), expected('Stub\ClosureNamesTrait::fromTrait()', 7)],
+];
+
+foreach ($cases as $label => [$actual, $expected]) {
+    echo $label, ': ', var_export($actual === $expected, true), "\n";
+}
+--EXPECT--
+method: true
+static: true
+nested outer: true
+nested inner: true
+arrow: true
+function: true
+trait: true

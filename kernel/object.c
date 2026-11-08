@@ -98,7 +98,7 @@ int zephir_zval_is_traversable(zval *object)
  */
 void zephir_get_called_class(zval *return_value)
 {
-	zend_class_entry *called_scope = zend_get_called_scope(EG(current_execute_data));
+	zend_class_entry *called_scope = zephir_get_called_scope(EG(current_execute_data));
 	if (called_scope) {
 		ZVAL_STR(return_value, zend_string_dup(called_scope->name, 0));
 	}
@@ -2114,13 +2114,18 @@ static int zephir_create_closure_impl(zval *return_value, zval *bound_this, zval
 	 * The scope is the class the closure is written in, as PHP takes it from
 	 * the declaring function, and not the class of the enclosing object, which
 	 * may be a subclass: the body reaches exactly the private and protected
-	 * members that code could. The called scope stays the enclosing object's
-	 * class, for `static`. A closure written in a function has no class.
+	 * members that code could. The called scope, what `static` names, is the
+	 * enclosing object's class or else the creator's own called scope, as PHP
+	 * takes it from the creating frame. A closure written in a function has
+	 * no class.
 	 *
 	 * @see https://github.com/zephir-lang/zephir/issues/2734
+	 * @see https://github.com/zephir-lang/zephir/issues/2825
 	 */
 	scope_ce  = zephir_get_calling_scope();
-	called_ce = (scope_this && Z_TYPE_P(scope_this) == IS_OBJECT) ? Z_OBJCE_P(scope_this) : ce;
+	called_ce = (scope_this && Z_TYPE_P(scope_this) == IS_OBJECT)
+		? Z_OBJCE_P(scope_this)
+		: zephir_get_called_scope(EG(current_execute_data));
 
 	/**
 	 * The engine wraps an internal function's handler with
@@ -2140,6 +2145,26 @@ static int zephir_create_closure_impl(zval *return_value, zval *bound_this, zval
 #endif
 
 	return SUCCESS;
+}
+
+/**
+ * The name PHP gives a closure, which `__FUNCTION__` and `__METHOD__` report
+ * in its body: `Ns\{closure}` before PHP 8.4 and `{closure:Class::method():LINE}`
+ * from 8.4 on.
+ *
+ * The closure itself keeps the name of the method it is built from: Xdebug
+ * reads a function with ZEND_ACC_CLOSURE and a name ending in `}` as a user
+ * closure, and dereferences op_array fields an internal function lacks.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2825
+ */
+void zephir_closure_name(zval *return_value, const char *legacy, size_t legacy_length, const char *modern, size_t modern_length)
+{
+#if PHP_VERSION_ID >= 80400
+	ZVAL_STRINGL(return_value, modern, modern_length);
+#else
+	ZVAL_STRINGL(return_value, legacy, legacy_length);
+#endif
 }
 
 /**

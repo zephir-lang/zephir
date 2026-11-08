@@ -18,8 +18,11 @@ use Zephir\Class\Method\Method;
 use Zephir\Class\Method\Parameters;
 use Zephir\CompilationContext;
 use Zephir\Exception;
+use Zephir\Expression\ConstantExpressionEvaluator;
 use Zephir\Expression\StaticConstantAccess;
+use Zephir\Name;
 
+use function addcslashes;
 use function array_key_exists;
 use function array_merge;
 use function count;
@@ -29,6 +32,7 @@ use function is_array;
 use function key;
 use function sprintf;
 use function str_replace;
+use function var_export;
 
 class ArgInfoDefinition
 {
@@ -131,25 +135,6 @@ class ArgInfoDefinition
         return false;
     }
 
-    private function defaultArrayValue(array $parameter): string
-    {
-        if ($parameter['default']['type'] === 'empty-array') {
-            return '"[]"';
-        }
-
-        // TODO: Come back later
-        /**
-         * It seems that it is impossible to pass default array with some data inside.
-         * Only empty array, even if manually specify not empty array - it will be ignored,
-         * for example:
-         *
-         * `ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, someDefaultData, IS_ARRAY, 0, "[\"key\" => \"value\"]")`
-         *
-         * Output of default value will be `[]` during method call.
-         */
-        return '"[]"';
-    }
-
     private function getReturnType(): string
     {
         // TODO: Come back here when PHP7.4 is deprecated.
@@ -228,7 +213,7 @@ class ArgInfoDefinition
                                 $this->passByReference($parameter),
                                 $parameter['name'],
                                 (int)$this->allowNull($parameter),
-                                $this->defaultArrayValue($parameter),
+                                '"' . $this->defaultValueSource($parameter['default']) . '"',
                             )
                         );
                     }
@@ -274,6 +259,16 @@ class ArgInfoDefinition
                                 )
                             );
                         }
+                    } elseif (isset($parameter['default'])) {
+                        // Reflection reads the default from here, as for a typed one (#2825).
+                        $this->codePrinter->output(
+                            sprintf(
+                                "\tZEND_ARG_INFO_WITH_DEFAULT_VALUE(%d, %s, \"%s\")",
+                                $this->passByReference($parameter),
+                                $parameter['name'],
+                                $this->defaultValueSource($parameter['default'])
+                            )
+                        );
                     } else {
                         $this->codePrinter->output(
                             sprintf(
@@ -373,7 +368,7 @@ class ArgInfoDefinition
 
         $maskBits = array_values(array_unique($maskBits));
         $default  = isset($parameter['default'])
-            ? '"' . ($this->foldConstantDefault($parameter['default'])['value'] ?? 'null') . '"'
+            ? '"' . $this->defaultValueSource($parameter['default']) . '"'
             : 'NULL';
 
         if ([] !== $classNames) {
@@ -452,11 +447,13 @@ class ArgInfoDefinition
         if ($gotDefault) {
             $default = $this->foldConstantDefault($parameter['default']);
 
-            if (isset($default['value']) && $zendType === 'IS_STRING' && !isset($default['native'])) {
-                $args[] = $this->escapeString((string)$default['value']);
-            } else {
-                $args[] = $default['value'] ?? 'null';
-            }
+            /**
+             * A char default of a number type is kept as it was written: a
+             * char is a byte value, which this does not change.
+             */
+            $args[] = 'char' === $default['type'] && 'IS_STRING' !== $zendType
+                ? $default['value']
+                : $this->defaultValueSource($default);
         }
 
         $this->codePrinter->output(vsprintf($format, $args));
@@ -506,12 +503,55 @@ class ArgInfoDefinition
         return ['type' => $compiled->getType(), 'value' => $compiled->getCode()];
     }
 
-    private function escapeString(string $value): string
+    /**
+     * The PHP source of a parameter default, which the engine evaluates when
+     * Reflection asks, escaped for the contents of a C string literal: names
+     * fully qualified, constants resolved and strings decoded from their
+     * Zephir spelling, so it gives the value the method itself uses (#2825).
+     */
+    private function defaultValueSource(array $default): string
     {
-        $escaped = str_replace("'", '\\\'', $value);
-        $escaped = Entry::escape($escaped);
+        $default = $this->foldConstantDefault($default);
 
-        return "'" . $escaped . "'";
+        // Already the escaped PHP spelling of an engine constant [#2738].
+        if (true === ($default['native'] ?? null)) {
+            return $default['value'];
+        }
+
+        if ('array' === $default['type']) {
+            $declarationContext              = clone $this->compilationContext;
+            $declarationContext->symbolTable = null;
+            $default = (new ConstantExpressionEvaluator())->reduce($default, $declarationContext);
+        }
+
+        return addcslashes($this->phpLiteral($default), "\0..\37\\\"\177");
+    }
+
+    /**
+     * The PHP spelling of a literal node.
+     */
+    private function phpLiteral(array $node): string
+    {
+        if (isset($node['native'])) {
+            return $node['native']['qualified'];
+        }
+
+        if ('array' === $node['type']) {
+            $items = [];
+            foreach ($node['left'] as $item) {
+                $items[] = (isset($item['key']) ? $this->phpLiteral($item['key']) . ' => ' : '')
+                    . $this->phpLiteral($item['value']);
+            }
+
+            return '[' . implode(', ', $items) . ']';
+        }
+
+        return match ($node['type']) {
+            'string', 'istring', 'char' => var_export(Name::decodeSource((string) $node['value']), true),
+            'null'                      => 'null',
+            'empty-array'               => '[]',
+            default                     => (string) ($node['value'] ?? 'null'),
+        };
     }
 
     /**

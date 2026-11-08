@@ -39,6 +39,12 @@ class CompilationContext
      */
     public ?AliasManager $aliasManager = null;
     /**
+     * The trait the member being compiled was merged from, if any: its names
+     * resolve in that trait's file, as PHP compiles a trait where it is
+     * written. See #2825.
+     */
+    public ?string $declaringTrait = null;
+    /**
      * The current backend.
      */
     public ?Backend $backend = null;
@@ -203,12 +209,79 @@ class CompilationContext
     public ?StaticTypeInference $typeInference = null;
 
     /**
+     * The class `self` names in the code being compiled: the class being
+     * compiled, or for a closure the class it is written in, which a closure
+     * written in a function does not have. PHP gives a closure the scope of
+     * the code that creates it.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2825
+     */
+    public function lexicalClassDefinition(): ?Definition
+    {
+        if (true === $this->classDefinition?->isClosure()) {
+            return $this->classDefinition->getEnclosingClassDefinition();
+        }
+
+        return $this->classDefinition;
+    }
+
+    /**
+     * The class `self`, `static` or `parent` is resolved against.
+     *
+     * Without one, a function fails to compile and a closure written in a
+     * function throws PHP's Error where the keyword is used, with the message
+     * `::class` has of its own; null is returned after that throw.
+     */
+    public function classScope(string $keyword, array $node, bool $className = false): ?Definition
+    {
+        $definition = $this->lexicalClassDefinition();
+        if (null !== $definition) {
+            return $definition;
+        }
+
+        if (true !== $this->classDefinition?->isClosure()) {
+            throw new CompilerException(sprintf('Cannot use "%s" when no class scope is active', $keyword), $node);
+        }
+
+        $message = $className
+            ? 'Cannot use \\"%s\\" in the global scope'
+            : 'Cannot access \\"%s\\" when no class scope is active';
+        $this->codePrinter->output(sprintf('zend_throw_error(NULL, "' . $message . '");', $keyword));
+        $this->emitExceptionExit();
+
+        return null;
+    }
+
+    /**
+     * The C expression of the object a `self::`, `static::` or `parent::` call
+     * passes on as `$this`.
+     *
+     * A capturing closure binds its capture carrier as `$this`, and `__invoke`
+     * re-points its `this_ptr` local at the enclosing object, when it has one.
+     * getThis() does not follow that rebind.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2652
+     */
+    public function enclosingObjectCode(): string
+    {
+        if (true !== $this->currentMethod?->hasCaptures()) {
+            return 'getThis()';
+        }
+
+        if (!$this->symbolTable->hasVariable(Method::CLOSURE_BOUND_THIS)) {
+            return 'NULL';
+        }
+
+        return $this->backend->getVariableCode($this->symbolTable->getVariable('this'));
+    }
+
+    /**
      * Lookup a class from a given class name; `parent` goes through parentClassDefinition().
      */
     public function classLookup(string $className, array $statement = []): AbstractDefinition
     {
         if (in_array($className, ['self', 'static'])) {
-            return $this->classDefinition;
+            return $this->lexicalClassDefinition();
         }
 
         $className = $this->getFullName($className);
@@ -223,17 +296,12 @@ class CompilationContext
      * The C expression for the class `static` stands for: the called class
      * (late static binding), as used by `new static()` and `instanceof static`.
      *
-     * zend_get_called_scope() resolves through the call frame's $this, which
-     * in a capturing closure is the capture carrier, not the enclosing object;
-     * the rebound `this_ptr` local is. See #2652.
+     * A closure keeps the called class of the code that created it, which
+     * neither the closure's frame nor its capture carrier knows. See #2825.
      */
     public function lateStaticClassEntry(): string
     {
-        if (true === $this->currentMethod?->hasCaptures()) {
-            return 'Z_OBJCE_P(' . $this->backend->getVariableCode($this->symbolTable->getVariable('this')) . ')';
-        }
-
-        return 'zend_get_called_scope(execute_data)';
+        return 'zephir_get_called_scope(execute_data)';
     }
 
     /**
@@ -245,12 +313,12 @@ class CompilationContext
      */
     public function parentClassName(array $node): string
     {
-        $parent = $this->classDefinition->getExtendsClassDefinition();
+        $parent = $this->lexicalClassDefinition()->getExtendsClassDefinition();
         if ($parent instanceof Definition) {
             return $parent->getCompleteName();
         }
 
-        $extendsClass = $this->classDefinition->getExtendsClass();
+        $extendsClass = $this->lexicalClassDefinition()->getExtendsClass();
         if (!$extendsClass) {
             // PHP's own compile error, zend_compile.c.
             throw new CompilerException('Cannot use "parent" when current class scope has no parent', $node);
@@ -271,19 +339,20 @@ class CompilationContext
      */
     public function parentClassDefinition(string $action, array $statement): Definition
     {
-        $extendsClass = $this->classDefinition->getExtendsClass();
+        $class        = $this->lexicalClassDefinition();
+        $extendsClass = $class->getExtendsClass();
         if (!$extendsClass) {
             throw new CompilerException(
                 sprintf(
                     'Cannot %s on parent because class %s does not extend any class',
                     $action,
-                    $this->classDefinition->getCompleteName()
+                    $class->getCompleteName()
                 ),
                 $statement
             );
         }
 
-        $parent = $this->classDefinition->getExtendsClassDefinition();
+        $parent = $class->getExtendsClassDefinition();
         if (!$parent instanceof Definition) {
             throw new CompilerException(
                 sprintf('Cannot %s on parent because class %s does not exist', $action, $extendsClass),
@@ -457,7 +526,15 @@ class CompilationContext
             return $this->currentMethod->getNamespace();
         }
 
-        return $this->classDefinition->getSourceNamespace();
+        return ($this->declaringTraitDefinition() ?? $this->classDefinition)->getSourceNamespace();
+    }
+
+    /**
+     * The `use` aliases names in the code being compiled resolve through.
+     */
+    public function currentAliasManager(): ?AliasManager
+    {
+        return $this->declaringTraitDefinition()?->getAliasManager() ?? $this->aliasManager;
     }
 
     /**
@@ -465,6 +542,42 @@ class CompilationContext
      */
     public function getFullName(string $className): string
     {
-        return Name::fetchFQN($className, $this->currentNamespace(), $this->aliasManager);
+        return Name::fetchFQN($className, $this->currentNamespace(), $this->currentAliasManager());
+    }
+
+    /**
+     * Compiles a class member with names resolving where it is written: in
+     * the file of the trait it was merged from, or else the class's own.
+     *
+     * @template T
+     *
+     * @param callable(): T $compile
+     *
+     * @return T
+     */
+    public function inDeclaringScope(?string $declaringTrait, callable $compile): mixed
+    {
+        $previous             = $this->declaringTrait;
+        $this->declaringTrait = $declaringTrait;
+
+        try {
+            return $compile();
+        } finally {
+            $this->declaringTrait = $previous;
+        }
+    }
+
+    /**
+     * The trait the member being compiled was merged from, if any.
+     */
+    public function declaringTraitDefinition(): ?Definition
+    {
+        if (null === $this->declaringTrait) {
+            return null;
+        }
+
+        $definition = $this->compiler->getClassDefinition($this->declaringTrait);
+
+        return $definition instanceof Definition ? $definition : null;
     }
 }
