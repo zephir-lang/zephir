@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `<`, `<=`, `>` and `>=` between `null` and a `var`, `string` or `array` comparing types instead of values [#2820](https://github.com/zephir-lang/zephir/issues/2820)
 - Fixed `null` compared with an `array` local or a string or array literal failing to compile [#2820](https://github.com/zephir-lang/zephir/issues/2820)
 - Fixed an explicit `null` passed to a nullable `array` or `string` parameter becoming `[]` or `""` [#2820](https://github.com/zephir-lang/zephir/issues/2820)
+- Fixed `fetch` and `empty` on an empty array element writing into the source array, corrupting OPcache shared memory and Zephir array constants [#2826](https://github.com/zephir-lang/zephir/issues/2826)
 
 ## [1.7.0] - 2026-10-30
 
