@@ -45,7 +45,10 @@ final class Issue1134Test extends TestCase
             $this->assertTrue($params2[0]->isDefaultValueAvailable());
         }
 
+        // The default is the array written, as in PHP (#2825).
+        $this->assertSame(['key' => 'val'], $params2[0]->getDefaultValue());
+
         $class = new Issue1134();
-        $this->assertSame([], $class->arrayWithFilledDefaultValue());
+        $this->assertSame(['key' => 'val'], $class->arrayWithFilledDefaultValue());
     }
 }

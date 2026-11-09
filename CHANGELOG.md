@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Changed
 - Added an inline cache to each method and static call site, so a call on the same class from the same class runs the method it resolved before without looking it up again [#2790](https://github.com/zephir-lang/zephir/issues/2790)
 - Changed `==` and `!=` between `null` and a `var`, `string` or `array` to PHP's loose comparison, where `false`, `0`, `0.0`, `""` and `[]` equal `null`, reported by the new `loose-null-comparison` warning; use `===` to test for `null` [#2820](https://github.com/zephir-lang/zephir/issues/2820)
+- Changed `__METHOD__` to PHP's `Class::method`, with the namespace, the declaring trait of a trait method and the namespaced name in a function [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Changed `__FUNCTION__` and `__METHOD__` in a closure to the name PHP gives it, `Ns\{closure}` before PHP 8.4 and `{closure:Class::method():LINE}` from 8.4 [#2825](https://github.com/zephir-lang/zephir/issues/2825)
 
 ### Fixed
 - Fixed a recursive `this->m()` in a loop, and a call in a loop on a local first assigned with `new`, running the method another object's class resolved to [#2790](https://github.com/zephir-lang/zephir/issues/2790)
@@ -28,6 +30,28 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `null` compared with an `array` local or a string or array literal failing to compile [#2820](https://github.com/zephir-lang/zephir/issues/2820)
 - Fixed an explicit `null` passed to a nullable `array` or `string` parameter becoming `[]` or `""` [#2820](https://github.com/zephir-lang/zephir/issues/2820)
 - Fixed `fetch` and `empty` on an empty array element writing into the source array, corrupting OPcache shared memory and Zephir array constants [#2826](https://github.com/zephir-lang/zephir/issues/2826)
+- Fixed `X::class` of a global class, such as `DateTime::class`, and `parent::class` of a global parent starting with a backslash [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed `X::class` failing to compile for a class unknown at compile time, and not keeping the case it is written in [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed a `use` alias written in another case, such as `datetime` after `use DateTime`, not naming the imported class [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed `self::class`, `X::class`, `__CLASS__`, `__NAMESPACE__` and `__METHOD__` corrupting a namespace segment that starts like a C escape, such as `\nested` [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed `__METHOD__`, `__CLASS__` and `__NAMESPACE__` in a function crashing the compiler, and `__TRAIT__` being unsupported [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed names in a method, property or constant merged from a trait resolving against the using class's file instead of the trait's [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed `self`, `parent` and `static` in a closure resolving against the closure class instead of the class it is written in and its called class [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed `self`, `parent` and `static` in a closure written in a function not throwing PHP's Error [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed `let this->prop[] = value` in a closure failing to compile [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed `new parent()` and `instanceof parent` with a namespaced PHP parent class failing to compile [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed a class redefining a constant of its parent failing at module startup [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed `self::method()` of a non-static method from a static context crashing instead of throwing PHP's Error [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed a class constant, `X::class` or PHP constant as an array constant element or key, or as a typed or trait property default, failing to compile [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed a property default reading a single-quoted string constant being `null` [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed `\Attribute::TARGET_*` as an array constant key becoming `0` [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed `static::` in a class constant being accepted, where PHP refuses it [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed a class constant read from another class resolving `self::` against the reading class [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed a PHP string constant with a control character, such as `PHP_EOL`, in a declaration producing invalid C [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed `X::class`, and a class constant or `X::class` as an array key, failing to parse as a parameter default [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed a non-empty array parameter default being empty, or failing to compile on an untyped parameter [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed Reflection reporting no default for an untyped parameter and the wrong default for an array, a union-typed or an escaped string parameter [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed IDE stubs escaping a string constant twice, such as `'Stub\\\\Constants'` [#2825](https://github.com/zephir-lang/zephir/issues/2825)
 
 ## [1.7.0] - 2026-10-30
 

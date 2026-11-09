@@ -31,7 +31,8 @@ use function strtolower;
  *
  * Members are re-instantiated from the trait's raw AST into the using
  * definition, so `self::`, `static::` and `this->` compile in the using
- * class's context, exactly like PHP's scope rebinding. Merge rules follow
+ * class's context, exactly like PHP's scope rebinding, while names resolve
+ * against the namespace and `use` aliases of the trait's own file. Merge rules follow
  * PHP: the using class's own members win over trait members; trait members
  * override inherited ones (they land in the class's own method table); two
  * traits contributing the same concrete method is a compile error.
@@ -188,15 +189,17 @@ final class TraitMerger
 
         /**
          * Run the per-method optimization pre-passes the merged methods missed
-         * (their file's preCompile round ran before the merge). Trait method
-         * bodies resolve imports against the USING file's aliases — prefer
-         * fully-qualified names inside trait methods.
+         * (their file's preCompile round ran before the merge). A merged
+         * member resolves names in its trait's file, as PHP does (#2825).
          */
         $this->context->classDefinition = $definition;
         $this->context->aliasManager    = $definition->getAliasManager();
         foreach ($definition->getMethods() as $methodKey => $method) {
             if (!isset($methodsBeforeRegistration[$methodKey]) && !$method->isAbstract()) {
-                $method->preCompile($this->context);
+                $this->context->inDeclaringScope(
+                    $method->getDeclaringTrait(),
+                    fn () => $method->preCompile($this->context)
+                );
             }
         }
 
@@ -219,10 +222,24 @@ final class TraitMerger
 
         $own = $definition->getOriginalNode()['definition'] ?? [];
 
+        /**
+         * A member remembers the trait it is written in: PHP resolves its names
+         * in that trait's file and folds `__METHOD__` and `__TRAIT__` there,
+         * whichever class uses it.
+         */
+        $members = [];
+        foreach (['methods', 'properties', 'constants'] as $kind) {
+            $members[$kind] = $own[$kind] ?? [];
+            foreach ($members[$kind] as &$member) {
+                $member['declaring-trait'] ??= $definition->getCompleteName();
+            }
+            unset($member);
+        }
+
         $this->effectiveMembers[strtolower($definition->getCompleteName())] = [
-            'methods'    => array_merge($own['methods'] ?? [], $mergedBuckets['methods'] ?? []),
-            'properties' => array_merge($own['properties'] ?? [], $mergedBuckets['properties'] ?? []),
-            'constants'  => array_merge($own['constants'] ?? [], $mergedBuckets['constants'] ?? []),
+            'methods'    => array_merge($members['methods'], $mergedBuckets['methods'] ?? []),
+            'properties' => array_merge($members['properties'], $mergedBuckets['properties'] ?? []),
+            'constants'  => array_merge($members['constants'], $mergedBuckets['constants'] ?? []),
         ];
     }
 
@@ -341,7 +358,7 @@ final class TraitMerger
      */
     private function normalize(array $node): array
     {
-        unset($node['file'], $node['line'], $node['char']);
+        unset($node['file'], $node['line'], $node['char'], $node['declaring-trait']);
 
         foreach ($node as $key => $value) {
             if (is_array($value)) {

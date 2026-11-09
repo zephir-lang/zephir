@@ -281,7 +281,7 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 	}
 
 	fcic->called_scope = called_scope;
-	calling_scope = zend_get_called_scope(EG(current_execute_data));
+	calling_scope = zephir_get_called_scope(EG(current_execute_data));
 	fcic->object = this_ptr ? Z_OBJ_P(this_ptr) : NULL;
 	switch (type) {
 		case zephir_fcall_parent:
@@ -653,6 +653,33 @@ static int zephir_invoke(zend_fcall_info *fci, zend_fcall_info_cache *fcic, uint
 	zval p[param_count];
 #endif
 
+	/**
+	 * zend_call_function() leaves this check to zend_is_callable(), which a
+	 * resolved handler skips, and would run a non-static method without an
+	 * object. PHP throws instead, e.g. for `self::m()` in a static method.
+	 *
+	 * @see https://github.com/zephir-lang/zephir/issues/2825
+	 */
+	if (
+		fcic->function_handler
+		&& !fcic->object
+		&& fcic->function_handler->common.scope
+		&& !(fcic->function_handler->common.fn_flags & (ZEND_ACC_STATIC | ZEND_ACC_CLOSURE))
+	) {
+		zend_throw_error(
+			NULL,
+			"Non-static method %s::%s() cannot be called statically",
+			ZSTR_VAL(fcic->function_handler->common.scope->name),
+			ZSTR_VAL(fcic->function_handler->common.function_name)
+		);
+
+#ifdef _MSC_VER
+		efree(p);
+#endif
+
+		return FAILURE;
+	}
+
 	for (i = 0; i < param_count; ++i) {
 		ZVAL_COPY_VALUE(&p[i], params[i]);
 	}
@@ -714,7 +741,7 @@ static int zephir_call_user_function(
 	zend_function *raw_handler;
 	bool raw_is_trampoline;
 	zval callable;
-	zend_class_entry* called_scope = zend_get_called_scope(EG(current_execute_data));
+	zend_class_entry* called_scope = zephir_get_called_scope(EG(current_execute_data));
 
 	assert(obj_ce || !object_pp);
 	ZVAL_UNDEF(&callable);
@@ -949,13 +976,13 @@ static int zephir_call_cached_method(
 	switch (type) {
 		case zephir_fcall_parent:
 			fcic.calling_scope = ce->parent;
-			fcic.called_scope  = zend_get_called_scope(EG(current_execute_data));
+			fcic.called_scope  = zephir_get_called_scope(EG(current_execute_data));
 			break;
 
 		case zephir_fcall_self:
 		case zephir_fcall_static:
 			fcic.calling_scope = ce;
-			fcic.called_scope  = zend_get_called_scope(EG(current_execute_data));
+			fcic.called_scope  = zephir_get_called_scope(EG(current_execute_data));
 			break;
 
 		default:
@@ -1215,7 +1242,7 @@ static int zephir_call_class_method_site(
 				break;
 
 			case zephir_fcall_static:
-				scope = zend_get_called_scope(EG(current_execute_data));
+				scope = zephir_get_called_scope(EG(current_execute_data));
 				if (!scope) {
 					scope = ce;
 				}

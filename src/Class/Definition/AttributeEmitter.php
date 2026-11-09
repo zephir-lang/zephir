@@ -141,46 +141,62 @@ final class AttributeEmitter
              */
             $lcName = strtolower($method->getName());
 
-            foreach ($method->getAttributes() as $attribute) {
-                $name = $this->emit(
-                    sprintf('zephir_add_method_attribute(%s, SL("%s")', $entry, $lcName),
-                    $attribute
-                );
-                $this->checkOverride($definition, $name, 'method', $method->getName(), $attribute);
-                $this->checkNoDiscard($definition, $name, $method, $attribute);
-                $this->emitFlag(
-                    'method',
-                    $name,
-                    sprintf('zephir_mark_method_flags(%s, SL("%s")', $entry, $lcName)
-                );
-                $printed = true;
-            }
-
-            $parameters = $method->getParameters();
-            if (null === $parameters) {
-                continue;
-            }
-
-            /**
-             * The index is the declared position, which is the order arg_info
-             * is rendered in and therefore the offset ReflectionParameter
-             * matches on. zend_add_parameter_attribute() applies the engine's
-             * `+ 1` itself.
-             */
-            foreach ($parameters->getParameters() as $offset => $parameter) {
-                foreach (Attribute::listFromNode($parameter) as $attribute) {
-                    $this->emit(
-                        sprintf('zephir_add_parameter_attribute(%s, SL("%s"), %d', $entry, $lcName, $offset),
-                        $attribute
-                    );
-                    $printed = true;
-                }
-            }
+            $printed = $this->context->inDeclaringScope(
+                $method->getDeclaringTrait(),
+                fn () => $this->emitMethod($definition, $entry, $lcName, $method)
+            ) || $printed;
         }
 
         if ($printed) {
             $this->context->codePrinter->outputBlankLine();
         }
+    }
+
+    /**
+     * A method's attributes and its parameters', which resolve names where
+     * the method is written. Returns whether anything was emitted.
+     */
+    private function emitMethod(Definition $definition, string $entry, string $lcName, Method $method): bool
+    {
+        $printed = false;
+
+        foreach ($method->getAttributes() as $attribute) {
+            $name = $this->emit(
+                sprintf('zephir_add_method_attribute(%s, SL("%s")', $entry, $lcName),
+                $attribute
+            );
+            $this->checkOverride($definition, $name, 'method', $method->getName(), $attribute);
+            $this->checkNoDiscard($definition, $name, $method, $attribute);
+            $this->emitFlag(
+                'method',
+                $name,
+                sprintf('zephir_mark_method_flags(%s, SL("%s")', $entry, $lcName)
+            );
+            $printed = true;
+        }
+
+        $parameters = $method->getParameters();
+        if (null === $parameters) {
+            return $printed;
+        }
+
+        /**
+         * The index is the declared position, which is the order arg_info
+         * is rendered in and therefore the offset ReflectionParameter
+         * matches on. zend_add_parameter_attribute() applies the engine's
+         * `+ 1` itself.
+         */
+        foreach ($parameters->getParameters() as $offset => $parameter) {
+            foreach (Attribute::listFromNode($parameter) as $attribute) {
+                $this->emit(
+                    sprintf('zephir_add_parameter_attribute(%s, SL("%s"), %d', $entry, $lcName, $offset),
+                    $attribute
+                );
+                $printed = true;
+            }
+        }
+
+        return $printed;
     }
 
     /**
@@ -397,8 +413,10 @@ final class AttributeEmitter
     {
         return Name::fetchFQN(
             $name,
-            $namespace ?? $this->context->classDefinition->getNamespace(),
-            $this->context->aliasManager
+            $namespace
+                ?? $this->context->declaringTraitDefinition()?->getNamespace()
+                ?? $this->context->classDefinition->getNamespace(),
+            $this->context->currentAliasManager()
         );
     }
 

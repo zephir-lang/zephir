@@ -59,7 +59,8 @@ class ObjectPropertyAppend
          * Check if the variable to update is defined
          */
         if ('this' == $symbolVariable->getRealName()) {
-            $classDefinition = $compilationContext->classDefinition;
+            // In a closure `this` is the object of the class it is written in.
+            $classDefinition = $compilationContext->lexicalClassDefinition();
             $this->checkClassHasProperty(
                 $classDefinition,
                 $property,

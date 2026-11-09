@@ -15,11 +15,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_spropertyaccess___construct, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_spropertyaccess_testargumentwithunderscore, 0, 0, 0)
-	ZEND_ARG_INFO(0, delimiter)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, delimiter, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_spropertyaccess_testargument, 0, 0, 0)
-	ZEND_ARG_INFO(0, delimiter)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, delimiter, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_spropertyaccess_mutatestringvarinsidecycle, 0, 0, IS_STRING, 0)

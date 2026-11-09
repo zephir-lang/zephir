@@ -157,7 +157,8 @@
                             ],
                             "file": "phpt__statements_yield_yield_closure.zep",
                             "line": 10,
-                            "char": 6
+                            "char": 6,
+                            "start-line": 4
                         },
                         "file": "phpt__statements_yield_yield_closure.zep",
                         "line": 10,

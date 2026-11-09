@@ -18,6 +18,7 @@ use function array_keys;
 use function count;
 use function explode;
 use function in_array;
+use function strtolower;
 use function trim;
 
 /**
@@ -28,6 +29,13 @@ final class AliasManager
     protected array $aliases = [];
 
     /**
+     * The declared alias of each alias, keyed in lower case.
+     *
+     * @var array<string, string>
+     */
+    private array $declaredAliases = [];
+
+    /**
      * Adds a renaming in a "use" to the alias manager.
      */
     public function add(array $useStatement): void
@@ -35,16 +43,20 @@ final class AliasManager
         foreach ($useStatement['aliases'] as $alias) {
             $implicitAlias = $alias['alias'] ?? $this->implicitAlias($alias['name']);
 
-            $this->aliases[$implicitAlias] = $alias['name'];
+            $this->aliases[$implicitAlias]                     = $alias['name'];
+            $this->declaredAliases[strtolower($implicitAlias)] = $implicitAlias;
         }
     }
 
     /**
      * Returns the class name according to an existing alias.
+     *
+     * Like PHP, an alias matches whatever its case: `use DateTime` makes
+     * `datetime` name `DateTime` too.
      */
     public function getAlias(string $alias): string
     {
-        return $this->aliases[$alias];
+        return $this->aliases[$this->declaredAliases[strtolower($alias)]];
     }
 
     /**
@@ -76,7 +88,7 @@ final class AliasManager
      */
     public function isAlias(string $alias): bool
     {
-        return isset($this->aliases[$alias]);
+        return isset($this->declaredAliases[strtolower($alias)]);
     }
 
     /**

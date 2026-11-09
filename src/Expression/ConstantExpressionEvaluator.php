@@ -163,11 +163,11 @@ final class ConstantExpressionEvaluator
      * and a `static-constant-access` — including when either sits *inside* an
      * array literal.
      *
-     * `fold()` leaves those alone because every one of its callers resolves
-     * them itself (see {@see \Zephir\Class\Constant::processValue()}). An
-     * attribute argument has no such caller, and it may be an array whose
-     * elements are `self::FOO` or `PHP_INT_MAX`, so the resolution has to
-     * recurse here.
+     * `fold()` leaves those alone because a caller resolves a lone one
+     * itself. An attribute argument, an array class constant and a property
+     * default the engine takes as a literal may be an array whose elements or
+     * keys are `self::FOO`, `Foo::class` or `PHP_INT_MAX`, so the resolution
+     * has to recurse here (#2825).
      *
      * PHP evaluates an attribute argument lazily, at reflection time, from a
      * stored constant AST. An extension has to hand the engine a zval at MINIT
@@ -202,6 +202,17 @@ final class ConstantExpressionEvaluator
 
         if ('empty-array' === $node['type']) {
             return $node;
+        }
+
+        /**
+         * A Zephir array constant (`self::LIST`) is taken in place, its own
+         * elements resolved too. See #2825.
+         */
+        if ('static-constant-access' === $node['type']) {
+            $array = (new StaticConstantAccess())->arrayConstantValue($node, $compilationContext);
+            if (null !== $array) {
+                return $this->reduce($array, $compilationContext);
+            }
         }
 
         if ('constant' === $node['type'] || 'static-constant-access' === $node['type']) {

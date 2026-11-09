@@ -69,8 +69,12 @@ class StaticPropertyAccess
                 }
             }
         } else {
+            if (null === $compilationContext->classScope($className, $expression)) {
+                return new CompiledExpression('null', null, $expression);
+            }
+
             if (in_array($className, ['self', 'static'])) {
-                $classDefinition = $compilationContext->classDefinition;
+                $classDefinition = $compilationContext->lexicalClassDefinition();
             } else {
                 if ('parent' === $className) {
                     $classDefinition = $compilationContext->parentClassDefinition(

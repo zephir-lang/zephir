@@ -280,7 +280,7 @@ final class Issue2714Test extends TestCase
         $this->assertSame(0, $result['exitCode'], $result['stdout'] . $result['stderr']);
         $generated = (string) file_get_contents($this->projectDir . '/ext/stub/probe.zep.c');
         $this->assertStringNotContainsString('Stub\\\\static', $generated);
-        $this->assertStringContainsString('zephir_instance_of_ev(o, zend_get_called_scope(execute_data))', $generated);
+        $this->assertStringContainsString('zephir_instance_of_ev(o, zephir_get_called_scope(execute_data))', $generated);
     }
 
     public function testNewParentOnUnresolvedParentIsLookedUpAtRuntime(): void

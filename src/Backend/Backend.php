@@ -974,7 +974,13 @@ class Backend
     ): void {
         $symbol     = $this->getVariableCode($variable);
         $classEntry = $classDefinition->getClassEntry();
-        $thisArg    = $bindThis ? 'this_ptr' : 'NULL';
+
+        /**
+         * Inside a capturing closure with no enclosing object, `this_ptr` is
+         * that closure's capture carrier, which a nested closure must not
+         * take for its $this.
+         */
+        $thisArg = $bindThis && 'NULL' !== $context->enclosingObjectCode() ? 'this_ptr' : 'NULL';
 
         /*
          * Without captures the closure needs no state of its own, so the
@@ -1440,6 +1446,14 @@ class Backend
 
         if ($key === null) {
             return sprintf('add_next_index_%s(&%s%s);', $func, $var, $tail);
+        }
+
+        /**
+         * A constant whose value depends on the PHP that compiles the C keeps
+         * its macro as a key too, where folding the node gave 0. See #2825.
+         */
+        if (isset($key['native'])) {
+            return sprintf('add_index_%s(&%s, (zend_long) (%s)%s);', $func, $var, $key['value'], $tail);
         }
 
         $keyValue = $this->constantArrayKey($key);

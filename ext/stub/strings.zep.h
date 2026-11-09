@@ -46,12 +46,12 @@ PHP_METHOD(Stub_Strings, issue2299NullableStringCondition);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_camelize, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-	ZEND_ARG_INFO(0, delimiter)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, delimiter, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_uncamelize, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-	ZEND_ARG_INFO(0, delimiter)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, delimiter, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testtrim, 0, 0, 1)

@@ -136,7 +136,8 @@
                                 ],
                                 "file": "phpt__functions_closures_empty_closure_with_body.zep",
                                 "line": 16,
-                                "char": 10
+                                "char": 10,
+                                "start-line": 9
                             },
                             "file": "phpt__functions_closures_empty_closure_with_body.zep",
                             "line": 17,

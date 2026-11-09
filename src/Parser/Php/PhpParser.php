@@ -2433,6 +2433,10 @@ final class PhpParser
 
     private function parseClosureArrow(array $left): array
     {
+        // The line the closure starts on, its parameter's, which PHP names a
+        // closure after (#2825).
+        $startLine = $this->tokens[$this->pos - 1]->line;
+
         $this->expect(TokenType::T_DOUBLEARROW);
         $right = $this->parseExpr(39);
 
@@ -2447,7 +2451,10 @@ final class PhpParser
             'char'  => $this->char(),
         ];
 
-        return $this->expr('closure-arrow', $leftLit, $right, null);
+        $node               = $this->expr('closure-arrow', $leftLit, $right, null);
+        $node['start-line'] = $startLine;
+
+        return $node;
     }
 
     private function parseTernary(array $left): array
@@ -2610,7 +2617,7 @@ final class PhpParser
      */
     private function parseClosure(): array
     {
-        $this->expect(TokenType::T_FUNCTION);
+        $function = $this->expect(TokenType::T_FUNCTION);
         $params = $this->parseParameterParens();
 
         $use = null;
@@ -2646,6 +2653,8 @@ final class PhpParser
         $node['file'] = $this->file;
         $node['line'] = $this->line();
         $node['char'] = $this->char();
+        // The line of the `function` keyword, which PHP names a closure after (#2825).
+        $node['start-line'] = $function->line;
 
         return $node;
     }
@@ -3125,6 +3134,18 @@ final class PhpParser
                 $tok = $this->advance();
                 if ($this->check(TokenType::T_DOUBLECOLON)) {
                     $this->advance();
+
+                    // `X::class` as a parameter default (#2825). `static::class`
+                    // stays a syntax error, as PHP rejects it there.
+                    if ($this->accept(TokenType::T_CLASS)) {
+                        return $this->expr(
+                            'static-constant-access',
+                            $this->literalFromToken(TokenType::T_IDENTIFIER, $tok),
+                            $this->literalFromToken(TokenType::T_IDENTIFIER, $this->syntheticToken('class')),
+                            null
+                        );
+                    }
+
                     $member = $this->expect(TokenType::T_CONSTANT);
 
                     return $this->expr(
@@ -3165,15 +3186,8 @@ final class PhpParser
 
     private function parseLiteralArrayItem(): array
     {
-        // literal_array_key : IDENTIFIER | STRING | INTEGER ; followed by ':'
-        $type = $this->peekType();
-        if (
-            ($type === TokenType::T_IDENTIFIER || $type === TokenType::T_STRING || $type === TokenType::T_INTEGER)
-            && $this->laType(1) === TokenType::T_COLON
-        ) {
-            $keyTok  = $this->advance();
-            $keyType = $type === TokenType::T_IDENTIFIER ? TokenType::T_IDENTIFIER : $type;
-            $key     = $this->literalFromToken($keyType, $keyTok);
+        $key = $this->parseLiteralArrayKey();
+        if (null !== $key) {
             $this->expect(TokenType::T_COLON);
             $value = $this->parseLiteralExpr();
 
@@ -3194,6 +3208,36 @@ final class PhpParser
             'line'  => $this->line(),
             'char'  => $this->char(),
         ];
+    }
+
+    /**
+     * literal_array_key : IDENTIFIER | STRING | INTEGER | CONSTANT
+     *                   | (IDENTIFIER | CONSTANT) '::' (CONSTANT | CLASS) ; followed by ':'
+     *
+     * Null, consuming nothing, when no key starts here. A class constant,
+     * `::class` or a constant is a key PHP allows too (#2825).
+     */
+    private function parseLiteralArrayKey(): ?array
+    {
+        $type = $this->peekType();
+
+        if (
+            in_array($type, [TokenType::T_IDENTIFIER, TokenType::T_STRING, TokenType::T_INTEGER, TokenType::T_CONSTANT], true)
+            && $this->laType(1) === TokenType::T_COLON
+        ) {
+            return $this->literalFromToken($type, $this->advance());
+        }
+
+        if (
+            ($type === TokenType::T_IDENTIFIER || $type === TokenType::T_CONSTANT)
+            && $this->laType(1) === TokenType::T_DOUBLECOLON
+            && in_array($this->laType(2), [TokenType::T_CONSTANT, TokenType::T_CLASS], true)
+            && $this->laType(3) === TokenType::T_COLON
+        ) {
+            return $this->parseLiteralExpr();
+        }
+
+        return null;
     }
 
     /* ===================================================================== *

@@ -22,7 +22,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Expression\ConstantExpressionEvaluator;
-use Zephir\Expression\StaticConstantAccess;
 use Zephir\Name;
 use Zephir\StatementsBlock;
 use Zephir\Types\Types;
@@ -137,10 +136,18 @@ class Property
          * `Attribute::*` flag, alone or inside an array, keeps its C macro
          * [#2738]. Anything else comes back untouched.
          */
-        $this->defaultValue = (new ConstantExpressionEvaluator())->fold(
-            $this->defaultValue,
-            $compilationContext
-        );
+        $evaluator          = new ConstantExpressionEvaluator();
+        $this->defaultValue = $evaluator->fold($this->defaultValue, $compilationContext);
+
+        /**
+         * A default handed to the engine as it is has to be a literal all the
+         * way down, constants in it resolved as PHP resolves them: a typed
+         * property's, a trait's array and a constant read on its own. An
+         * untyped array is built from the source when the object is. #2825.
+         */
+        if ($this->needsLiteralDefault()) {
+            $this->defaultValue = $evaluator->reduce($this->defaultValue, $compilationContext);
+        }
 
         if ($this->dataTypes !== null && $this->emitTypedUnion($compilationContext)) {
             return;
@@ -184,21 +191,25 @@ class Property
                 $this->declareProperty($compilationContext, $this->defaultValue['type'], null);
                 break;
 
-            case 'static-constant-access':
-                $access = new StaticConstantAccess();
-                $access->setAlwaysFold(true);
-                $compiledExpression = $access->compile($this->defaultValue, $compilationContext);
-
-                $this->declareProperty(
-                    $compilationContext,
-                    $compiledExpression->getType(),
-                    $compiledExpression->getCode()
-                );
-                break;
-
             default:
                 throw new CompilerException('Unknown default type: ' . $this->defaultValue['type'], $this->original);
         }
+    }
+
+    /**
+     * Whether the default goes to the engine as a literal rather than being
+     * built when the object is.
+     */
+    private function needsLiteralDefault(): bool
+    {
+        $type = $this->defaultValue['type'];
+
+        return null !== $this->dataTypes
+            || null !== $this->dataType
+            || null !== $this->cast
+            || 'constant' === $type
+            || 'static-constant-access' === $type
+            || ('array' === $type && $this->classDefinition->isTrait() && !$this->isStatic());
     }
 
     /**
@@ -385,6 +396,15 @@ class Property
     public function getOriginal(): ?array
     {
         return $this->original;
+    }
+
+    /**
+     * The trait this member was merged from, or null when the class declares
+     * it itself.
+     */
+    public function getDeclaringTrait(): ?string
+    {
+        return $this->original['declaring-trait'] ?? null;
     }
 
     /**

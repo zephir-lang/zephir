@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Class;
 
 use ReflectionException;
+use Zephir\Class\Definition\Definition;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
@@ -34,6 +35,9 @@ class Constant
 
     private ?array $attributes = null;
 
+    /** The class the constant belongs to, whose scope its value is read in. */
+    private ?Definition $definition = null;
+
     public function __construct(
         protected string $name,
         protected array $value,
@@ -49,6 +53,20 @@ class Constant
     public function getOriginal(): ?array
     {
         return $this->original;
+    }
+
+    /**
+     * The trait this member was merged from, or null when the class declares
+     * it itself.
+     */
+    public function getDeclaringTrait(): ?string
+    {
+        return $this->original['declaring-trait'] ?? null;
+    }
+
+    public function setDefinition(Definition $definition): void
+    {
+        $this->definition = $definition;
     }
 
     /**
@@ -144,20 +162,32 @@ class Constant
      */
     public function processValue(CompilationContext $compilationContext): void
     {
+        $context = $this->declarationContext($compilationContext);
+
         /**
          * Every value goes through the evaluator, even one that needs no
          * folding, so an `Attribute::*` flag, alone or inside an array, keeps
          * its C macro instead of the value of the PHP running Zephir [#2738].
          * Anything else comes back untouched.
          */
-        $this->foldValue($compilationContext);
+        $this->foldValue($context);
 
         if (isset($this->value['native'])) {
             return;
         }
 
+        /**
+         * An array element or key may name a constant too, which PHP resolves
+         * as it compiles the declaration. See #2825.
+         */
+        if ('array' === $this->value['type']) {
+            $this->value = (new ConstantExpressionEvaluator())->reduce($this->value, $context);
+
+            return;
+        }
+
         if ('constant' === $this->value['type']) {
-            $compiledExpression = (new Constants())->compile($this->value, $compilationContext);
+            $compiledExpression = (new Constants())->compile($this->value, $context);
 
             $this->value = [
                 'type'  => $compiledExpression->getType(),
@@ -168,15 +198,44 @@ class Constant
         }
 
         if ('static-constant-access' === $this->value['type']) {
+            $array = (new StaticConstantAccess())->arrayConstantValue($this->value, $context);
+            if (null !== $array) {
+                $this->value = $array;
+
+                return;
+            }
+
             $access = new StaticConstantAccess();
             $access->setAlwaysFold(true);
-            $compiledExpression = $access->compile($this->value, $compilationContext);
+            $compiledExpression = $access->compile($this->value, $context);
 
             $this->value = [
                 'type'  => $compiledExpression->getType(),
                 'value' => $compiledExpression->getCode(),
             ];
         }
+    }
+
+    /**
+     * The scope a constant's value is read in: the class it belongs to, with
+     * the names of the file it is written in, outside any function. It is
+     * read wherever it is first used, which may be another class's method.
+     * See #2825.
+     */
+    private function declarationContext(CompilationContext $compilationContext): CompilationContext
+    {
+        if (null === $this->definition) {
+            return $compilationContext;
+        }
+
+        $context                  = clone $compilationContext;
+        $context->classDefinition = $this->definition;
+        $context->aliasManager    = $this->definition->getAliasManager() ?? $compilationContext->aliasManager;
+        $context->declaringTrait  = $this->getDeclaringTrait();
+        $context->currentMethod   = null;
+        $context->symbolTable     = null;
+
+        return $context;
     }
 
     /**

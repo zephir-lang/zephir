@@ -18,6 +18,7 @@
 #include "kernel/operators.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
+#include "kernel/array.h"
 
 
 /**
@@ -304,10 +305,12 @@ PHP_METHOD(Stub_Oo_OoParams, setEnabledDefault)
 PHP_METHOD(Stub_Oo_OoParams, setListDefault)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *someList_param = NULL;
+	zval *someList_param = NULL, _0, _1;
 	zval someList;
 
 	ZVAL_UNDEF(&someList);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		ZEPHIR_Z_PARAM_ARRAY(someList, someList_param)
@@ -316,8 +319,18 @@ PHP_METHOD(Stub_Oo_OoParams, setListDefault)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &someList_param);
 	if (!someList_param) {
-		ZEPHIR_INIT_VAR(&someList);
-		array_init(&someList);
+		ZEPHIR_INIT_VAR(&_0);
+		zephir_create_array(&_0, 3, 0);
+		ZEPHIR_INIT_VAR(&_1);
+		ZVAL_LONG(&_1, 1);
+		zephir_array_fast_append(&_0, &_1);
+		ZEPHIR_INIT_NVAR(&_1);
+		ZVAL_LONG(&_1, 2);
+		zephir_array_fast_append(&_0, &_1);
+		ZEPHIR_INIT_NVAR(&_1);
+		ZVAL_LONG(&_1, 3);
+		zephir_array_fast_append(&_0, &_1);
+		ZEPHIR_CPY_WRT(&someList, &_0);
 	} else {
 		zephir_get_arrval(&someList, someList_param);
 	}

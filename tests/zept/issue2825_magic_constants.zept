@@ -1,0 +1,78 @@
+--TEST--
+Magic constants fold to PHP's values in functions, traits, a lowercase namespace segment and declarations (issue #2825)
+--FILE--
+namespace Stub\nested;
+
+trait Tr
+{
+	public function method() -> string
+	{
+		return __METHOD__;
+	}
+
+	public function cls() -> string
+	{
+		return __CLASS__;
+	}
+
+	public function traitName() -> string
+	{
+		return __TRAIT__;
+	}
+
+	public function func() -> string
+	{
+		return __FUNCTION__;
+	}
+}
+--FILE--
+namespace Stub\nested;
+
+function nestedFunction() -> string
+{
+	return __FUNCTION__ . "|" . __METHOD__ . "|" . __NAMESPACE__ . "|" . __CLASS__;
+}
+
+class User
+{
+	use Tr;
+
+	const CLS = __CLASS__;
+
+	const METHOD = __METHOD__;
+
+	const FUNC = __FUNCTION__;
+
+	const EOL = PHP_EOL;
+
+	public function own() -> string
+	{
+		return __METHOD__ . "|" . __FUNCTION__ . "|" . __TRAIT__;
+	}
+
+	public function selfName() -> string
+	{
+		return self::class;
+	}
+
+	public function ns() -> string
+	{
+		return __NAMESPACE__;
+	}
+}
+--USAGE--
+$u = new \Stub\nested\User();
+echo \Stub\nested\nestedFunction(), "\n";
+echo $u->method(), "\n", $u->cls(), "\n", $u->traitName(), "\n", $u->func(), "\n";
+echo var_export(\Stub\nested\User::CLS, true), "|", var_export(\Stub\nested\User::METHOD, true), "|", var_export(\Stub\nested\User::FUNC, true), "|", var_export(\Stub\nested\User::EOL === PHP_EOL, true), "\n";
+echo $u->own(), "\n", $u->selfName(), "\n", $u->ns(), "\n";
+--EXPECT--
+Stub\nested\nestedFunction|Stub\nested\nestedFunction|Stub\nested|
+Stub\nested\Tr::method
+Stub\nested\User
+Stub\nested\Tr
+func
+'Stub\\nested\\User'|''|''|true
+Stub\nested\User::own|own|
+Stub\nested\User
+Stub\nested

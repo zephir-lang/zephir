@@ -148,7 +148,10 @@ class StaticCall extends Call
                     }
                 }
             } else {
-                $classDefinition = $compilationContext->classDefinition;
+                $classDefinition = $compilationContext->classScope($className, $expression);
+                if (null === $classDefinition) {
+                    return new CompiledExpression('null', null, $expression);
+                }
 
                 if ('parent' === $className) {
                     $currentClassDefinition = $classDefinition;
@@ -264,7 +267,7 @@ class StaticCall extends Call
                         $method = $classDefinition->getMethod('__callStatic');
                         if (
                             $method->isPrivate() &&
-                            $method->getClassDefinition() !== $compilationContext->classDefinition
+                            $method->getClassDefinition() !== $compilationContext->lexicalClassDefinition()
                         ) {
                             throw new CompilerException(
                                 "Cannot call private magic method '__call' out of its scope",
@@ -293,7 +296,7 @@ class StaticCall extends Call
             } else {
                 if (
                     in_array($className, ['self', 'static']) ||
-                    $classDefinition === $compilationContext->classDefinition
+                    $classDefinition === $compilationContext->lexicalClassDefinition()
                 ) {
                     $this->call(
                         strtoupper($className),
@@ -408,9 +411,12 @@ class StaticCall extends Call
         }
 
         /**
-         * Do not optimize static:: calls, to allow late static binding
+         * Do not optimize static:: calls, to allow late static binding. A
+         * closure calls the method itself: the internal call would hand it
+         * the closure's own $this.
          */
-        if ('SELF' === $context) {
+        $insideClosure = true === $compilationContext->classDefinition?->isClosure();
+        if ('SELF' === $context && !$insideClosure) {
             $method = $method->getOptimizedMethod();
         }
 
@@ -446,19 +452,26 @@ class StaticCall extends Call
              */
             $cachePointer = $compilationContext->cacheManager->getMethodCache()->get($compilationContext);
 
+            /**
+             * A closure passes on the object it was created with, which its
+             * own $this is not when that is its capture carrier (#2825).
+             */
+            $macro  = $context . ($insideClosure ? '_THIS' : '') . '_CACHED';
+            $object = $insideClosure ? $compilationContext->enclosingObjectCode() . ', ' : '';
+
             if ($isExpecting) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output(
-                        'ZEPHIR_RETURN_CALL_' . $context . '_CACHED("' . $callName . '", ' . $cachePointer . $paramsStr . ');'
+                        'ZEPHIR_RETURN_CALL_' . $macro . '(' . $object . '"' . $callName . '", ' . $cachePointer . $paramsStr . ');'
                     );
                 } else {
                     $codePrinter->output(
-                        'ZEPHIR_CALL_' . $context . '_CACHED(' . $symbol . ', "' . $callName . '", ' . $cachePointer . $paramsStr . ');'
+                        'ZEPHIR_CALL_' . $macro . '(' . $symbol . ', ' . $object . '"' . $callName . '", ' . $cachePointer . $paramsStr . ');'
                     );
                 }
             } else {
                 $codePrinter->output(
-                    'ZEPHIR_CALL_' . $context . '_CACHED(NULL, "' . $callName . '", ' . $cachePointer . $paramsStr . ');'
+                    'ZEPHIR_CALL_' . $macro . '(NULL, ' . $object . '"' . $callName . '", ' . $cachePointer . $paramsStr . ');'
                 );
             }
         } else {
@@ -661,13 +674,6 @@ class StaticCall extends Call
         bool $isExpecting,
         CompilationContext $compilationContext
     ): void {
-        if (in_array($className, ['self', 'static'], true) && $compilationContext->classDefinition->isClosure()) {
-            throw new CompilerException(
-                sprintf('Cannot call %s::{%s}() inside a closure', $className, $expression['name']),
-                $expression
-            );
-        }
-
         $compilationContext->symbolTable->mustGrownStack(true);
 
         if ($mustInit) {
@@ -677,20 +683,29 @@ class StaticCall extends Call
 
         $methodNameVariable = $this->methodNameVariable($expression, $compilationContext);
 
+        /**
+         * A closure passes on the object it was created with, which its own
+         * $this is not when that is its capture carrier (#2825).
+         */
+        $insideClosure = true === $compilationContext->classDefinition?->isClosure();
+        $object        = $compilationContext->enclosingObjectCode();
+
         switch ($className) {
             case 'self':
-                $macro            = 'SELF_ZVAL';
-                $leadingArguments = [$classDefinition->getClassEntry($compilationContext)];
+                $macro            = $insideClosure ? 'SELF_THIS_ZVAL' : 'SELF_ZVAL';
+                $leadingArguments = $insideClosure
+                    ? [$classDefinition->getClassEntry($compilationContext), $object]
+                    : [$classDefinition->getClassEntry($compilationContext)];
                 break;
 
             case 'parent':
                 $macro            = 'PARENT_ZVAL';
-                $leadingArguments = [$currentClassDefinition->getClassEntry($compilationContext), 'getThis()'];
+                $leadingArguments = [$currentClassDefinition->getClassEntry($compilationContext), $object];
                 break;
 
             case 'static':
-                $macro            = 'STATIC_ZVAL';
-                $leadingArguments = [];
+                $macro            = $insideClosure ? 'STATIC_THIS_ZVAL' : 'STATIC_ZVAL';
+                $leadingArguments = $insideClosure ? [$object] : [];
                 break;
 
             default:
@@ -841,7 +856,8 @@ class StaticCall extends Call
 
         $paramsStr    = count($params) ? ', ' . implode(', ', $params) : '';
         $cachePointer = $compilationContext->cacheManager->getMethodCache()->get($compilationContext);
-        $target       = $classCe . ', getThis(), "' . $callName . '", ' . $cachePointer . $paramsStr;
+        $target       = $classCe . ', ' . $compilationContext->enclosingObjectCode() . ', "' . $callName . '", '
+            . $cachePointer . $paramsStr;
 
         if (!$isExpecting) {
             $codePrinter->output('ZEPHIR_CALL_PARENT_CACHED(NULL, ' . $target . ');');

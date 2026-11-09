@@ -13,11 +13,14 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use function addcslashes;
 use function ctype_xdigit;
 use function hexdec;
 use function in_array;
 use function is_numeric;
+use function ltrim;
 use function sprintf;
+use function stripcslashes;
 use function str_replace;
 use function strlen;
 use function strpos;
@@ -165,6 +168,30 @@ final class Name
     }
 
     /**
+     * Spells a raw runtime value, such as a PHP constant's, in the escaped
+     * form a string literal has in Zephir source, which is what a `string`
+     * compiled expression carries: addSlashes() turns it into the C literal
+     * of exactly that value.
+     *
+     * A control byte or a backslash left raw would otherwise reach C as a
+     * line break inside the literal or as the start of an escape.
+     */
+    public static function encodeSource(string $value): string
+    {
+        return addcslashes($value, "\0..\37\\\177");
+    }
+
+    /**
+     * The runtime value of a string written in Zephir source form, the
+     * inverse of encodeSource(): addSlashes() only emits escapes C and
+     * stripcslashes() read the same way.
+     */
+    public static function decodeSource(string $source): string
+    {
+        return stripcslashes(self::addSlashes($source));
+    }
+
+    /**
      * Encodes a Unicode codepoint as UTF-8 and returns the bytes as a sequence
      * of fixed-width octal C escapes (e.g. U+1F600 => "\360\237\230\200").
      */
@@ -226,16 +253,17 @@ final class Name
 
         /**
          * If class/interface name not begin with \
-         * maybe an alias or a sub-namespace
+         * maybe an alias or a sub-namespace. An imported name drops the
+         * leading backslash `use \Foo` gives it, as PHP does.
          */
         $firstSepPos = strpos($class, '\\');
         if (false !== $firstSepPos) {
             $baseName = substr($class, 0, $firstSepPos);
             if ($aliasManager && $aliasManager->isAlias($baseName)) {
-                return $aliasManager->getAlias($baseName) . '\\' . substr($class, $firstSepPos + 1);
+                return ltrim($aliasManager->getAlias($baseName), '\\') . '\\' . substr($class, $firstSepPos + 1);
             }
         } elseif ($aliasManager && $aliasManager->isAlias($class)) {
-            return $aliasManager->getAlias($class);
+            return ltrim($aliasManager->getAlias($class), '\\');
         }
 
         return $namespace ? $namespace . '\\' . $class : $class;

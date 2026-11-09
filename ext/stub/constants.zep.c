@@ -28,8 +28,8 @@ ZEPHIR_INIT_CLASS(Stub_Constants)
 	zend_declare_property_long(stub_constants_ce, SL("propertyC4"), 10, ZEND_ACC_PROTECTED);
 	zend_declare_property_double(stub_constants_ce, SL("propertyC5"), 10.25, ZEND_ACC_PROTECTED);
 	zend_declare_property_string(stub_constants_ce, SL("propertyC6"), "test", ZEND_ACC_PROTECTED);
-	zend_declare_property_null(stub_constants_ce, SL("propertyC7"), ZEND_ACC_PROTECTED);
-	zend_declare_property_null(stub_constants_ce, SL("propertyC8"), ZEND_ACC_PROTECTED);
+	zend_declare_property_string(stub_constants_ce, SL("propertyC7"), "/@(\\w+)(?:\\s*(?:\\(\\s*)?(.*?)(?:\\s*\\))?)??\\s*(?:\n|\\*\\/)/", ZEND_ACC_PROTECTED);
+	zend_declare_property_string(stub_constants_ce, SL("propertyC8"), "/(\\w+)\\s*=\\s*(\\[[^\\]]*\\]|\"[^\"]*\"|[^,)]*)\\s*(?:,|$)/", ZEND_ACC_PROTECTED);
 	/**
 	 * @var \Phalcon\Cache\FrontendInterface
 	 */
@@ -171,7 +171,7 @@ PHP_METHOD(Stub_Constants, testClassMagicConstant)
 PHP_METHOD(Stub_Constants, testMethodMagicConstant)
 {
 
-	RETURN_STRING("Constants:testMethodMagicConstant");
+	RETURN_STRING("Stub\\Constants::testMethodMagicConstant");
 }
 
 PHP_METHOD(Stub_Constants, testFunctionMagicConstant)

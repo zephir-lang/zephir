@@ -327,7 +327,8 @@
                                                     ],
                                                     "file": "phpt__functions_closures_preg_replace_callback.zep",
                                                     "line": 20,
-                                                    "char": 14
+                                                    "char": 14,
+                                                    "start-line": 12
                                                 },
                                                 "file": "phpt__functions_closures_preg_replace_callback.zep",
                                                 "line": 20,

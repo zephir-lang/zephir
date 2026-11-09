@@ -45,6 +45,6 @@ PHP_METHOD(Stub_Mcall_Caller, start)
 PHP_METHOD(Stub_Mcall_Caller, perform)
 {
 
-	RETURN_STRING("Caller:perform");
+	RETURN_STRING("Stub\\Mcall\\Caller::perform");
 }
 

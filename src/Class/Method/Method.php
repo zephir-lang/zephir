@@ -30,7 +30,9 @@ use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
+use Zephir\Expression;
 use Zephir\Expression\Closure;
+use Zephir\Expression\ConstantExpressionEvaluator;
 use Zephir\Expression\StaticConstantAccess;
 use Zephir\Name;
 use Zephir\Passes\CallGathererPass;
@@ -649,9 +651,12 @@ class Method
                         break;
 
                     case 'empty-array':
-                    case 'array':
                         $compilationContext->backend->initVar($paramVariable, $compilationContext);
                         $compilationContext->backend->initArray($paramVariable, $compilationContext);
+                        break;
+
+                    case 'array':
+                        $this->compileArrayDefault($parameter['default'], $paramVariable, $compilationContext);
                         break;
 
                     default:
@@ -781,6 +786,10 @@ class Method
                         $compilationContext->headersManager->add('kernel/memory');
                         $compilationContext->backend->initVar($symbolVariable, $compilationContext);
                         $compilationContext->backend->initArray($symbolVariable, $compilationContext);
+                        break;
+
+                    case 'array':
+                        $this->compileArrayDefault($parameter['default'], $symbolVariable, $compilationContext);
                         break;
 
                     default:
@@ -3247,6 +3256,15 @@ class Method
     }
 
     /**
+     * The trait this member was merged from, or null when the class declares
+     * it itself.
+     */
+    public function getDeclaringTrait(): ?string
+    {
+        return $this->expression['declaring-trait'] ?? null;
+    }
+
+    /**
      * The `#[...]` attributes written on this method. Parameter attributes are
      * read straight off the raw parameter nodes, which Parameters keeps as-is.
      *
@@ -4371,6 +4389,40 @@ class Method
     private function getParamDataType(array $parameter): string
     {
         return $parameter['data-type'] ?? 'variable';
+    }
+
+    /**
+     * Builds an array literal default when the argument is left out, with the
+     * class constants, `::class` names and constants in it resolved as PHP
+     * resolves a constant expression. It used to be an empty array. #2825.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function compileArrayDefault(
+        array $default,
+        Variable $variable,
+        CompilationContext $compilationContext
+    ): void {
+        $declarationContext              = clone $compilationContext;
+        $declarationContext->symbolTable = null;
+        $literal = (new ConstantExpressionEvaluator())->reduce($default, $declarationContext);
+
+        $compilationContext->symbolTable->mustGrownStack(true);
+        $compilationContext->headersManager->add('kernel/memory');
+
+        $expression = new Expression($literal);
+        $expression->setExpectReturn(true, $variable);
+        $compiled = $expression->compile($compilationContext);
+
+        // The array may be built in a temporary, as for a `let`.
+        if ($compiled->getCode() !== $variable->getName()) {
+            $compilationContext->backend->copyOnWrite(
+                $variable,
+                $compilationContext->symbolTable->getVariableForRead($compiled->getCode(), $compilationContext),
+                $compilationContext
+            );
+        }
     }
 
     /**

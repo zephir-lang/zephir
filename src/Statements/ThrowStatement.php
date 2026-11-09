@@ -57,7 +57,7 @@ class ThrowStatement extends StatementAbstract
                 $className = Name::fetchFQN(
                     $expr['class'],
                     $compilationContext->currentNamespace(),
-                    $compilationContext->aliasManager
+                    $compilationContext->currentAliasManager()
                 );
 
                 if ($compilationContext->compiler->isClass($className)) {

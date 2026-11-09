@@ -36,12 +36,12 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getHtmlSpecialChars);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_builtin_stringmethods_camelize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-	ZEND_ARG_INFO(0, delimiter)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, delimiter, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_builtin_stringmethods_uncamelize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-	ZEND_ARG_INFO(0, delimiter)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, delimiter, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getlength1, 0, 0, 0)

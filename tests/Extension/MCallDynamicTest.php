@@ -32,6 +32,6 @@ final class MCallDynamicTest extends TestCase
     {
         $test = new McallDynamic();
 
-        $this->assertSame('Caller:perform', $test->testCallAnonymousFunctionWithContext());
+        $this->assertSame('Stub\Mcall\Caller::perform', $test->testCallAnonymousFunctionWithContext());
     }
 }

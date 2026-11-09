@@ -67,12 +67,10 @@ final class CompilerFileAnonymous implements FileInterface
         /**
          * Compilation context stores common objects required by compilation entities.
          */
-        $compilationContext = new CompilationContext();
-        if ($this->context) {
-            $compilationContext->aliasManager = $this->context->aliasManager;
-        } else {
-            $compilationContext->aliasManager = new AliasManager();
-        }
+        $compilationContext               = new CompilationContext();
+        $compilationContext->aliasManager = $this->classDefinition->getAliasManager()
+            ?? $this->context?->aliasManager
+            ?? new AliasManager();
 
         $compilationContext->compiler       = $compiler;
         $compilationContext->config         = $this->config;
