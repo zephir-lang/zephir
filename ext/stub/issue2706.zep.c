@@ -2742,6 +2742,7 @@ PHP_METHOD(Stub_Issue2706, keyDoubleStaticWrite)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[3];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_DOUBLE(k)
 	ZEND_PARSE_PARAMETERS_END();
@@ -2750,17 +2751,25 @@ PHP_METHOD(Stub_Issue2706, keyDoubleStaticWrite)
 	zephir_fetch_params(1, 1, 0, &k_param);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_static_property_ce(stub_issue2706_ce, ZEND_STRL("shared"), &_0);
-	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_LONG(&_1, 1);
-	ZEPHIR_INIT_VAR(&_2);
-	ZVAL_DOUBLE(&_2, k);
-	zephir_update_static_property_array_multi_ce(stub_issue2706_ce, SL("shared"), &_1, SL("z"), 1, &_2);
+	zephir_update_static_property_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[0], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_static_property_ce(&_3, stub_issue2706_ce, SL("shared"), PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 1);
+	ZEPHIR_INIT_VAR(&_2);
+	ZVAL_DOUBLE(&_2, k);
+	zephir_update_static_property_array_multi_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[1], &_1, SL("z"), 1, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	zephir_read_static_property_cached(&_3, stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[2], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_3);
 }
 
@@ -2774,6 +2783,7 @@ PHP_METHOD(Stub_Issue2706, keyBoolStaticWrite)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[3];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_BOOL(k)
 	ZEND_PARSE_PARAMETERS_END();
@@ -2782,17 +2792,25 @@ PHP_METHOD(Stub_Issue2706, keyBoolStaticWrite)
 	zephir_fetch_params(1, 1, 0, &k_param);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_static_property_ce(stub_issue2706_ce, ZEND_STRL("shared"), &_0);
-	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_LONG(&_1, 1);
-	ZEPHIR_INIT_VAR(&_2);
-	ZVAL_BOOL(&_2, k);
-	zephir_update_static_property_array_multi_ce(stub_issue2706_ce, SL("shared"), &_1, SL("z"), 1, &_2);
+	zephir_update_static_property_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[0], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_static_property_ce(&_3, stub_issue2706_ce, SL("shared"), PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 1);
+	ZEPHIR_INIT_VAR(&_2);
+	ZVAL_BOOL(&_2, k);
+	zephir_update_static_property_array_multi_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[1], &_1, SL("z"), 1, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	zephir_read_static_property_cached(&_3, stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[2], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_3);
 }
 
@@ -2805,22 +2823,31 @@ PHP_METHOD(Stub_Issue2706, keyLiteralDoubleStaticWrite)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[3];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_static_property_ce(stub_issue2706_ce, ZEND_STRL("shared"), &_0);
-	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_LONG(&_1, 1);
-	ZEPHIR_INIT_VAR(&_2);
-	ZVAL_DOUBLE(&_2, 1.5);
-	zephir_update_static_property_array_multi_ce(stub_issue2706_ce, SL("shared"), &_1, SL("z"), 1, &_2);
+	zephir_update_static_property_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[0], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_static_property_ce(&_3, stub_issue2706_ce, SL("shared"), PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 1);
+	ZEPHIR_INIT_VAR(&_2);
+	ZVAL_DOUBLE(&_2, 1.5);
+	zephir_update_static_property_array_multi_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[1], &_1, SL("z"), 1, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	zephir_read_static_property_cached(&_3, stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[2], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_3);
 }
 
@@ -2833,22 +2860,31 @@ PHP_METHOD(Stub_Issue2706, keyLiteralTrueStaticWrite)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[3];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_static_property_ce(stub_issue2706_ce, ZEND_STRL("shared"), &_0);
-	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_LONG(&_1, 1);
-	ZEPHIR_INIT_VAR(&_2);
-	ZVAL_BOOL(&_2, 1);
-	zephir_update_static_property_array_multi_ce(stub_issue2706_ce, SL("shared"), &_1, SL("z"), 1, &_2);
+	zephir_update_static_property_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[0], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_static_property_ce(&_3, stub_issue2706_ce, SL("shared"), PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 1);
+	ZEPHIR_INIT_VAR(&_2);
+	ZVAL_BOOL(&_2, 1);
+	zephir_update_static_property_array_multi_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[1], &_1, SL("z"), 1, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	zephir_read_static_property_cached(&_3, stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[2], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_3);
 }
 
@@ -3263,22 +3299,31 @@ PHP_METHOD(Stub_Issue2706, keyLiteralNullStaticWrite)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[3];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_static_property_ce(stub_issue2706_ce, ZEND_STRL("shared"), &_0);
-	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_LONG(&_1, 1);
-	ZEPHIR_INIT_VAR(&_2);
-	ZVAL_NULL(&_2);
-	zephir_update_static_property_array_multi_ce(stub_issue2706_ce, SL("shared"), &_1, SL("z"), 1, &_2);
+	zephir_update_static_property_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[0], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_static_property_ce(&_3, stub_issue2706_ce, SL("shared"), PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 1);
+	ZEPHIR_INIT_VAR(&_2);
+	ZVAL_NULL(&_2);
+	zephir_update_static_property_array_multi_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[1], &_1, SL("z"), 1, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	zephir_read_static_property_cached(&_3, stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[2], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_3);
 }
 
@@ -4570,6 +4615,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedStaticWrite)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[3];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(k)
 	ZEND_PARSE_PARAMETERS_END();
@@ -4578,15 +4624,23 @@ PHP_METHOD(Stub_Issue2706, keyMixedStaticWrite)
 	zephir_fetch_params(1, 1, 0, &k);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_static_property_ce(stub_issue2706_ce, ZEND_STRL("shared"), &_0);
-	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_LONG(&_1, 1);
-	zephir_update_static_property_array_multi_ce(stub_issue2706_ce, SL("shared"), &_1, SL("z"), 1, k);
+	zephir_update_static_property_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[0], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_static_property_ce(&_2, stub_issue2706_ce, SL("shared"), PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 1);
+	zephir_update_static_property_array_multi_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[1], &_1, SL("z"), 1, k);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	zephir_read_static_property_cached(&_2, stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[2], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_2);
 }
 
@@ -4599,6 +4653,7 @@ PHP_METHOD(Stub_Issue2706, keyUintStaticWrite)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[3];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(k)
 	ZEND_PARSE_PARAMETERS_END();
@@ -4607,15 +4662,23 @@ PHP_METHOD(Stub_Issue2706, keyUintStaticWrite)
 	zephir_fetch_params(1, 1, 0, &k_param);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_static_property_ce(stub_issue2706_ce, ZEND_STRL("shared"), &_0);
-	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_LONG(&_1, 1);
-	zephir_update_static_property_array_multi_ce(stub_issue2706_ce, SL("shared"), &_1, SL("l"), 1, (zend_long) k);
+	zephir_update_static_property_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[0], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_static_property_ce(&_2, stub_issue2706_ce, SL("shared"), PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 1);
+	zephir_update_static_property_array_multi_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[1], &_1, SL("l"), 1, (zend_long) k);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	zephir_read_static_property_cached(&_2, stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[2], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_2);
 }
 
@@ -4628,6 +4691,7 @@ PHP_METHOD(Stub_Issue2706, keyUlongStaticWrite)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[3];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(k)
 	ZEND_PARSE_PARAMETERS_END();
@@ -4636,15 +4700,23 @@ PHP_METHOD(Stub_Issue2706, keyUlongStaticWrite)
 	zephir_fetch_params(1, 1, 0, &k_param);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_static_property_ce(stub_issue2706_ce, ZEND_STRL("shared"), &_0);
-	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_LONG(&_1, 1);
-	zephir_update_static_property_array_multi_ce(stub_issue2706_ce, SL("shared"), &_1, SL("l"), 1, (zend_long) k);
+	zephir_update_static_property_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[0], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_static_property_ce(&_2, stub_issue2706_ce, SL("shared"), PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 1);
+	zephir_update_static_property_array_multi_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[1], &_1, SL("l"), 1, (zend_long) k);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	zephir_read_static_property_cached(&_2, stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[2], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_2);
 }
 
@@ -5003,12 +5075,17 @@ void zephir_init_static_properties_Stub_Issue2706()
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_static_property_ce(stub_issue2706_ce, ZEND_STRL("shared"), &_0);
+	zephir_update_static_property_cached(stub_issue2706_ce, stub_issue2706_ce, SL("shared"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

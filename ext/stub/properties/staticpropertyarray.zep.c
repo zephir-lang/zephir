@@ -43,6 +43,7 @@ void zephir_init_static_properties_Stub_Properties_StaticPropertyArray()
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[2];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -60,10 +61,18 @@ void zephir_init_static_properties_Stub_Properties_StaticPropertyArray()
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 4);
 	zephir_array_fast_append(&_0, &_1);
-	zephir_update_static_property_ce(stub_properties_staticpropertyarray_ce, ZEND_STRL("someArray"), &_0);
+	zephir_update_static_property_cached(stub_properties_staticpropertyarray_ce, stub_properties_staticpropertyarray_ce, SL("someArray"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_1);
 	array_init(&_1);
-	zephir_update_static_property_ce(stub_properties_staticpropertyarray_ce, ZEND_STRL("someEmptyArray"), &_1);
+	zephir_update_static_property_cached(stub_properties_staticpropertyarray_ce, stub_properties_staticpropertyarray_ce, SL("someEmptyArray"), &_zephir_sprop_cache[1], &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

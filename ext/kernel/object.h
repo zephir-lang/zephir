@@ -108,7 +108,23 @@ int zephir_unset_property(zval* object, const char* name);
 int zephir_unset_property_zval(zval *object, const zval *name);
 int zephir_unset_property_array(zval *object, char *property, unsigned int property_length, zval *index);
 
-/** Static properties */
+/**
+ * Static properties.
+ *
+ * The `_cached` forms take the class the code is written in, which
+ * visibility is checked against, and the cache record of the access.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2805
+ */
+int zephir_read_static_property_cached(zval *result, zend_class_entry *ce, zend_class_entry *scope, const char *property, uint32_t property_length, zephir_static_property_cache *site, int flags);
+int zephir_isset_static_property_cached(zend_class_entry *ce, zend_class_entry *scope, const char *property, uint32_t property_length, zephir_static_property_cache *site);
+int zephir_update_static_property_cached(zend_class_entry *ce, zend_class_entry *scope, const char *property, uint32_t property_length, zephir_static_property_cache *site, zval *value);
+int zephir_add_static_property_cached(zend_class_entry *ce, zend_class_entry *scope, const char *property, uint32_t property_length, zephir_static_property_cache *site, zval *value);
+int zephir_sub_static_property_cached(zend_class_entry *ce, zend_class_entry *scope, const char *property, uint32_t property_length, zephir_static_property_cache *site, zval *value);
+zval *zephir_fetch_static_property_write_cached(zend_class_entry *ce, zend_class_entry *scope, const char *property, uint32_t property_length, zephir_static_property_cache *site, zval *fallback);
+zval *zephir_fetch_static_property_rw_cached(zend_class_entry *ce, zend_class_entry *scope, const char *property, uint32_t property_length, zephir_static_property_cache *site, zval *fallback);
+int zephir_update_static_property_array_multi_cached(zend_class_entry *ce, zend_class_entry *scope, const char *property, uint32_t property_length, zephir_static_property_cache *site, zval *value, const char *types, int types_length, int types_count, ...);
+
 int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const char *property, int len, int flags);
 int zephir_update_static_property_ce(zend_class_entry *ce, const char *property, uint32_t len, zval *value);
 int zephir_add_static_property_ce(zend_class_entry *ce, const char *property, uint32_t len, zval *value);

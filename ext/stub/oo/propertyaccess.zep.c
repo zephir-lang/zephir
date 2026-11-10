@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Stub_Oo_PropertyAccess)
 PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 {
 	zval _0, _6;
-	zval test, test1, _1, _2, _3, _4, _5, _7, _8, _9, _10;
+	zval test, test1, _1, _2, _3, _4, _5, _7, _8, _9;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
@@ -44,7 +44,6 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	ZVAL_UNDEF(&_7);
 	ZVAL_UNDEF(&_8);
 	ZVAL_UNDEF(&_9);
-	ZVAL_UNDEF(&_10);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_6);
 	static zend_string *_zephir_prop_0 = NULL;
@@ -90,7 +89,8 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	ZVAL_DOUBLE(&_1, 6.00);
 	zephir_array_fast_append(&_0, &_1);
 	zephir_update_property_zval_cached(&test, _zephir_prop_0, 0, &_0);
-	zephir_read_property_cached(&_2, &test, _zephir_prop_0, 0, PH_NOISY_CC | PH_READONLY);
+	zephir_memory_observe(&_2);
+	zephir_read_property_cached(&_2, &test, _zephir_prop_0, 0, PH_NOISY_CC);
 	zephir_memory_observe(&_3);
 	zephir_array_fetch_long(&_3, &_2, 0, PH_NOISY, "stub/oo/propertyaccess.zep", 17);
 	if (UNEXPECTED(EG(exception))) {
@@ -98,7 +98,8 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 		return;
 	}
 	zephir_update_property_zval_cached(&test, _zephir_prop_1, 0, &_3);
-	zephir_read_property_cached(&_4, &test, _zephir_prop_0, 0, PH_NOISY_CC | PH_READONLY);
+	zephir_memory_observe(&_4);
+	zephir_read_property_cached(&_4, &test, _zephir_prop_0, 0, PH_NOISY_CC);
 	zephir_memory_observe(&_5);
 	zephir_array_fetch_long(&_5, &_4, 1, PH_NOISY, "stub/oo/propertyaccess.zep", 18);
 	if (UNEXPECTED(EG(exception))) {
@@ -108,7 +109,8 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	zephir_update_property_zval_cached(&test, _zephir_prop_2, 0, &_5);
 	ZEPHIR_INIT_VAR(&_6);
 	zephir_create_array(&_6, 4, 0);
-	zephir_read_property_cached(&_7, &test, _zephir_prop_0, 0, PH_NOISY_CC | PH_READONLY);
+	zephir_memory_observe(&_7);
+	zephir_read_property_cached(&_7, &test, _zephir_prop_0, 0, PH_NOISY_CC);
 	zephir_memory_observe(&_8);
 	zephir_array_fetch_long(&_8, &_7, 1, PH_NOISY, "stub/oo/propertyaccess.zep", 19);
 	if (UNEXPECTED(EG(exception))) {
@@ -128,8 +130,9 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	zephir_update_property_zval_cached(&test, _zephir_prop_2, 0, &_6);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 105, &test);
 	zephir_read_property_cached(&_9, this_ptr, _zephir_prop_3, 105, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_10, &_9, _zephir_prop_1, 0, PH_NOISY_CC | PH_READONLY);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_4, 106, &_10);
+	ZEPHIR_OBS_NVAR(&_8);
+	zephir_read_property_cached(&_8, &_9, _zephir_prop_1, 0, PH_NOISY_CC);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_4, 106, &_8);
 	zephir_memory_observe(&test1);
 	zephir_read_property_cached(&test1, this_ptr, _zephir_prop_3, 105, PH_NOISY_CC);
 	ZEPHIR_MM_RESTORE();

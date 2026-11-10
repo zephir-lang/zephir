@@ -165,6 +165,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 	ZVAL_UNDEF(&_31$$14);
 	ZVAL_UNDEF(&_33$$14);
 	ZVAL_UNDEF(&_34$$14);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ZEND_TLS zephir_method_cache _zephir_call_cache[4];
 	static zend_string *_zephir_prop_0 = NULL;
 	static zend_string *_zephir_prop_1 = NULL;
@@ -220,7 +221,11 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 		height = 0;
 	} else {
 		}
-	zephir_read_static_property_ce(&_0, stub_oo_oodestruct_ce, SL("checked"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_static_property_cached(&_0, stub_oo_oodestruct_ce, stub_oo_oodestruct_ce, SL("checked"), &_zephir_sprop_cache[0], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	if (!(zephir_is_true(&_0))) {
 		ZEPHIR_CALL_SELF_CACHED(NULL, "check", &_zephir_call_cache[0]);
 		zephir_check_call_status();
@@ -454,11 +459,16 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 	ZVAL_UNDEF(&_3$$4);
 	ZVAL_UNDEF(&_7$$5);
 	ZVAL_UNDEF(&_9$$5);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[3];
 	ZEND_TLS zephir_method_cache _zephir_call_cache[3];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_static_property_ce(&_0, stub_oo_oodestruct_ce, SL("checked"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_static_property_cached(&_0, stub_oo_oodestruct_ce, stub_oo_oodestruct_ce, SL("checked"), &_zephir_sprop_cache[0], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	if (zephir_is_true(&_0)) {
 		RETURN_MM_BOOL(1);
 	}
@@ -512,8 +522,16 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_static_property_ce(stub_oo_oodestruct_ce, ZEND_STRL("checked"), &__$true);
-	zephir_read_static_property_ce(&_10, stub_oo_oodestruct_ce, SL("checked"), PH_NOISY_CC | PH_READONLY);
+	zephir_update_static_property_cached(stub_oo_oodestruct_ce, stub_oo_oodestruct_ce, SL("checked"), &_zephir_sprop_cache[1], &__$true);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	zephir_read_static_property_cached(&_10, stub_oo_oodestruct_ce, stub_oo_oodestruct_ce, SL("checked"), &_zephir_sprop_cache[2], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CTOR(&_10);
 }
 

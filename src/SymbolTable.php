@@ -931,6 +931,18 @@ class SymbolTable
 
         if (isset($this->branchTempVariables[$branchId][$location][$type])) {
             foreach ($this->branchTempVariables[$branchId][$location][$type] as $variable) {
+                /**
+                 * An untracked temp a caller later initialized or observed is
+                 * tracked by the memory frame. Handed out as untracked again,
+                 * it would take a borrowed value the frame then releases at the
+                 * end of the method.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2805
+                 */
+                if ('non-tracked' === $location && $variable->getVariantInits() > 0) {
+                    continue;
+                }
+
                 if (!$variable->isDoublePointer() && $variable->isIdle()) {
                     $variable->setIdle(false);
 
