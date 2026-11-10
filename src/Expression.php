@@ -199,6 +199,7 @@ class Expression
 
             case 'static-property-access':
                 $compilableExpression = new StaticPropertyAccess();
+                $compilableExpression->setNoisy($this->isNoisy());
                 $compilableExpression->setWriteThrough($this->isWriteThrough());
                 break;
 

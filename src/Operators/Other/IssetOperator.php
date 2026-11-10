@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace Zephir\Operators\Other;
 
 use ReflectionException;
+use Zephir\Class\Visibility;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Expression\StaticPropertyAccess;
 use Zephir\Operators\AbstractOperator;
 use Zephir\Variable\Variable;
 
@@ -133,6 +135,7 @@ class IssetOperator extends AbstractOperator
 
 
             case 'property-access':
+            case 'property-string-access':
             case 'property-dynamic-access':
                 $compilationContext->headersManager->add('kernel/object');
 
@@ -167,7 +170,8 @@ class IssetOperator extends AbstractOperator
                 }
                 $variableCode = $compilationContext->backend->getVariableCode($variable);
 
-                if ('property-access' === $left['type']) {
+                /* A name written as a string, `this->{"x"}`, is as known as `this->x` */
+                if ('property-dynamic-access' !== $left['type']) {
                     return $compilationContext->backend->propertyIsset(
                         $variable,
                         $left['right']['value'],
@@ -223,13 +227,37 @@ class IssetOperator extends AbstractOperator
                 );
 
 
-            case 'property-string-access':
             case 'static-property-access':
-                return new CompiledExpression('bool', '(0 == 0)', $left);
+                return $this->staticPropertyIsset($left, $compilationContext);
 
             default:
                 throw new CompilerException('This expression is not valid for "isset" operator', $expression);
         }
+    }
+
+    /**
+     * `isset X::y` as PHP's ZEND_ISSET_ISEMPTY_STATIC_PROP answers it: false
+     * for a property that is not declared, not static or not visible from
+     * here, all of which are known when compiling, and otherwise whether the
+     * property holds something other than null.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2805
+     */
+    private function staticPropertyIsset(array $left, CompilationContext $compilationContext): CompiledExpression
+    {
+        $property        = $left['right']['value'];
+        $classDefinition = (new StaticPropertyAccess())->classDefinitionOf($left, $compilationContext);
+
+        if (null === $classDefinition || !$classDefinition->hasProperty($property)) {
+            return new CompiledExpression('bool', '0', $left);
+        }
+
+        $propertyDefinition = $classDefinition->getProperty($property);
+        if (!$propertyDefinition->isStatic() || !Visibility::canAccessProperty($propertyDefinition, $compilationContext)) {
+            return new CompiledExpression('bool', '0', $left);
+        }
+
+        return $compilationContext->backend->staticPropertyIsset($classDefinition, $property, $compilationContext);
     }
 
     /**

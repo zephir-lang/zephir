@@ -162,7 +162,7 @@ final class Issue2714Test extends TestCase
 
         $this->assertSame(0, $result['exitCode'], $result['stdout'] . $result['stderr']);
         $this->assertStringContainsString(
-            'zephir_update_static_property_ce(stub_base_ce, ZEND_STRL("x")',
+            'zephir_update_static_property_cached(stub_base_ce, stub_probe_ce, SL("x")',
             (string) file_get_contents($this->projectDir . '/ext/stub/probe.zep.c')
         );
     }

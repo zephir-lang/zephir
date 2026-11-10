@@ -1,0 +1,101 @@
+--TEST--
+Issue #2805: a property PHP holds by reference is read as a copy, and isset of a property named by a string asks the object
+--FILE--
+namespace Stub;
+
+class Issue2805Instance
+{
+    public arr = [1];
+    public nul = null;
+    public set = "x";
+
+    public function copyAppend()
+    {
+        var v;
+        let v = this->arr;
+        let v[] = 2;
+        return [v, this->arr];
+    }
+
+    public function copyAppendOther(var o)
+    {
+        var v;
+        let v = o->arr;
+        let v[] = 2;
+        return [v, o->arr];
+    }
+
+    public function copyDynamic(var o, string name)
+    {
+        var v;
+        let v = o->{name};
+        let v[] = 2;
+        return v;
+    }
+
+    public function issetNull()
+    {
+        return isset this->{"nul"};
+    }
+
+    public function issetMissing()
+    {
+        return isset this->{"missing"};
+    }
+
+    public function issetSet()
+    {
+        return isset this->{"set"};
+    }
+
+    public function issetOther(var o)
+    {
+        return isset o->{"magic"};
+    }
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", json_encode($result), "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+class Issue2805Magic
+{
+    private $store = ["bag" => [1]];
+    public function &__get($name) { return $this->store[$name]; }
+    public function bag() { return $this->store["bag"]; }
+}
+class Issue2805Isset
+{
+    public function __isset($name) { return "magic" === $name; }
+}
+$o = new \Stub\Issue2805Instance();
+t("copy before reference", fn() => $o->copyAppend());
+$r = &$o->arr;
+t("copy through reference", fn() => $o->copyAppend());
+$p = new \Stub\Issue2805Instance();
+$q = &$p->arr;
+t("copy of another object through reference", fn() => $o->copyAppendOther($p));
+t("copy of a dynamic name through reference", fn() => [$o->copyDynamic($p, "arr"), $p->arr]);
+$m = new Issue2805Magic();
+t("copy of a by-reference __get", fn() => [$o->copyDynamic($m, "bag"), $m->bag()]);
+t("isset null", fn() => $o->issetNull());
+t("isset missing", fn() => $o->issetMissing());
+t("isset set", fn() => $o->issetSet());
+t("isset __isset true", fn() => $o->issetOther(new Issue2805Isset()));
+t("isset of a plain object", fn() => $o->issetOther(new \stdClass()));
+--EXPECT--
+copy before reference: [[1,2],[1]]
+copy through reference: [[1,2],[1]]
+copy of another object through reference: [[1,2],[1]]
+copy of a dynamic name through reference: [[1,2],[1]]
+copy of a by-reference __get: [[1,2],[1]]
+isset null: false
+isset missing: false
+isset set: true
+isset __isset true: true
+isset of a plain object: false

@@ -188,6 +188,14 @@ class CompilationContext
      */
     public int $callCacheCounter = 0;
     /**
+     * Number of static property accesses in the method being compiled, each
+     * with its own cache record. Method::compile() declares the records at
+     * function scope and resets this on entry to each method.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2805
+     */
+    public int $staticPropertyCacheCounter = 0;
+    /**
      * Global logger.
      */
     public ?LoggerInterface $logger = null;

@@ -34,13 +34,18 @@ PHP_METHOD(Stub_Issue2409, setEmpty)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_EMPTY_STRING(&_0);
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &_0);
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -50,13 +55,18 @@ PHP_METHOD(Stub_Issue2409, setNonEmpty)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "123");
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &_0);
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -65,7 +75,11 @@ PHP_METHOD(Stub_Issue2409, setNull)
 	zval __$null;
 
 	ZVAL_NULL(&__$null);
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &__$null);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &__$null);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2409, setInt)
@@ -73,9 +87,13 @@ PHP_METHOD(Stub_Issue2409, setInt)
 	zval _0;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 42);
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &_0);
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2409, setNegativeInt)
@@ -83,9 +101,13 @@ PHP_METHOD(Stub_Issue2409, setNegativeInt)
 	zval _0;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, -7);
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &_0);
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2409, setDouble)
@@ -93,9 +115,13 @@ PHP_METHOD(Stub_Issue2409, setDouble)
 	zval _0;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ZVAL_UNDEF(&_0);
 	ZVAL_DOUBLE(&_0, 3.14);
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &_0);
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2409, setBoolTrue)
@@ -103,7 +129,11 @@ PHP_METHOD(Stub_Issue2409, setBoolTrue)
 	zval __$true;
 
 	ZVAL_BOOL(&__$true, 1);
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &__$true);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &__$true);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2409, setBoolFalse)
@@ -111,7 +141,11 @@ PHP_METHOD(Stub_Issue2409, setBoolFalse)
 	zval __$false;
 
 	ZVAL_BOOL(&__$false, 0);
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &__$false);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &__$false);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2409, setChar)
@@ -120,10 +154,14 @@ PHP_METHOD(Stub_Issue2409, setChar)
 	char ch;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ch = 'A';
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, ch);
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &_0);
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2409, setEmptyArray)
@@ -132,12 +170,17 @@ PHP_METHOD(Stub_Issue2409, setEmptyArray)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &_0);
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -149,6 +192,7 @@ PHP_METHOD(Stub_Issue2409, setArray)
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -163,7 +207,11 @@ PHP_METHOD(Stub_Issue2409, setArray)
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 3);
 	zephir_array_fast_append(&_0, &_1);
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &_0);
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -173,12 +221,17 @@ PHP_METHOD(Stub_Issue2409, setFromStringVariable)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&tmp);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&tmp);
 	ZVAL_STRING(&tmp, "hello");
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &tmp);
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &tmp);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -188,10 +241,14 @@ PHP_METHOD(Stub_Issue2409, setFromIntVariable)
 	zend_long tmp;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	tmp = 99;
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, tmp);
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &_0);
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2409, setFromDoubleVariable)
@@ -200,10 +257,14 @@ PHP_METHOD(Stub_Issue2409, setFromDoubleVariable)
 	double tmp;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	tmp =  (2.5);
 	ZVAL_UNDEF(&_0);
 	ZVAL_DOUBLE(&_0, tmp);
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &_0);
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2409, setFromBoolVariable)
@@ -212,10 +273,14 @@ PHP_METHOD(Stub_Issue2409, setFromBoolVariable)
 	zend_bool tmp;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	tmp = 1;
 	ZVAL_UNDEF(&_0);
 	ZVAL_BOOL(&_0, tmp);
-	zephir_update_static_property_ce(stub_issue2409_ce, ZEND_STRL("someVar"), &_0);
+	zephir_update_static_property_cached(stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2409, getVar)
@@ -223,7 +288,11 @@ PHP_METHOD(Stub_Issue2409, getVar)
 	zval _0;
 
 	ZVAL_UNDEF(&_0);
-	zephir_read_static_property_ce(&_0, stub_issue2409_ce, SL("someVar"), PH_NOISY_CC | PH_READONLY);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
+	zephir_read_static_property_cached(&_0, stub_issue2409_ce, stub_issue2409_ce, SL("someVar"), &_zephir_sprop_cache[0], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_CTORW(&_0);
 }
 

@@ -200,6 +200,17 @@ class PropertyAccess
         }
 
         /**
+         * A read-only read borrows the zval in the object's property table. A
+         * value __get() returns lives in no such table, and borrowed it would
+         * have no owner and leak, so only a declared property of `this` is
+         * borrowed: PHP asks __get() for a declared property only once it has
+         * been unset.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2805
+         */
+        $canBorrow = 'this' === $variableVariable->getRealName() && null !== $propertyDefinition;
+
+        /**
          * Resolves the symbol that expects the value.
          */
         $readOnly           = false;
@@ -212,7 +223,7 @@ class PropertyAccess
                  * If a variable is assigned once in the method, we try to promote it
                  * to a read only variable
                  */
-                if ('return_value' != $symbolVariable->getName()) {
+                if ($canBorrow && 'return_value' != $symbolVariable->getName()) {
                     $line = $compilationContext->symbolTable->getLastCallLine();
                     if (false === $line || ($line > 0 && $line < $expression['line'])) {
                         $numberMutations = $compilationContext->symbolTable->getExpectedMutations(
@@ -246,7 +257,7 @@ class PropertyAccess
             $makeSymbolVariable = true;
         }
 
-        $readOnly = $this->readOnly || $readOnly;
+        $readOnly = $canBorrow && ($this->readOnly || $readOnly);
 
         if ($makeSymbolVariable) {
             if ($readOnly) {

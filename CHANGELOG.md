@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Changed `==` and `!=` between `null` and a `var`, `string` or `array` to PHP's loose comparison, where `false`, `0`, `0.0`, `""` and `[]` equal `null`, reported by the new `loose-null-comparison` warning; use `===` to test for `null` [#2820](https://github.com/zephir-lang/zephir/issues/2820)
 - Changed `__METHOD__` to PHP's `Class::method`, with the namespace, the declaring trait of a trait method and the namespaced name in a function [#2825](https://github.com/zephir-lang/zephir/issues/2825)
 - Changed `__FUNCTION__` and `__METHOD__` in a closure to the name PHP gives it, `Ns\{closure}` before PHP 8.4 and `{closure:Class::method():LINE}` from 8.4 [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Added a cache record to each static property access, so a repeated read or write of `self::x`, `parent::x` or `X::x` skips the property lookup [#2805](https://github.com/zephir-lang/zephir/issues/2805)
 
 ### Fixed
 - Fixed a recursive `this->m()` in a loop, and a call in a loop on a local first assigned with `new`, running the method another object's class resolved to [#2790](https://github.com/zephir-lang/zephir/issues/2790)
@@ -52,6 +53,12 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed a non-empty array parameter default being empty, or failing to compile on an untyped parameter [#2825](https://github.com/zephir-lang/zephir/issues/2825)
 - Fixed Reflection reporting no default for an untyped parameter and the wrong default for an array, a union-typed or an escaped string parameter [#2825](https://github.com/zephir-lang/zephir/issues/2825)
 - Fixed IDE stubs escaping a string constant twice, such as `'Stub\\\\Constants'` [#2825](https://github.com/zephir-lang/zephir/issues/2825)
+- Fixed reading an uninitialized typed static property, alone or in `+=`, `-=`, `*=` or `.=`, not throwing PHP's Error [#2805](https://github.com/zephir-lang/zephir/issues/2805)
+- Fixed `isset` of a static property, and of a property named by a string such as `this->{"x"}`, always being true [#2805](https://github.com/zephir-lang/zephir/issues/2805)
+- Fixed a copy read from a property or static property that PHP code holds by reference changing the property [#2805](https://github.com/zephir-lang/zephir/issues/2805)
+- Fixed code after a static property assignment that throws, such as a TypeError, still running [#2805](https://github.com/zephir-lang/zephir/issues/2805)
+- Fixed a property read answered by `__get()`, such as `o->x`, leaking the value it returned [#2805](https://github.com/zephir-lang/zephir/issues/2805)
+- Fixed a static property read in some methods freeing the property's value at the end of the method [#2805](https://github.com/zephir-lang/zephir/issues/2805)
 
 ## [1.7.0] - 2026-10-30
 

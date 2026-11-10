@@ -29,6 +29,7 @@ use Zephir\Name;
 use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
 
+use function array_filter;
 use function array_key_first;
 use function array_reverse;
 use function count;
@@ -201,13 +202,14 @@ class Backend
     {
         $value = $this->resolveValue($value, $context);
         $context->codePrinter->output(
-            'zephir_add_static_property_ce('
-            . $classEntry
-            . ', ZEND_STRL("'
-            . $property
-            . '"), '
-            . $value
-            . ');'
+            sprintf(
+                'zephir_add_static_property_cached(%s, %s, SL("%s"), %s, %s);',
+                $classEntry,
+                $this->staticPropertyScope($context),
+                $property,
+                $this->staticPropertyCacheSite($context),
+                $value
+            )
         );
         $context->emitExceptionCheck();
     }
@@ -693,9 +695,11 @@ class Backend
         $offsetStr = $offsetItems ? ', ' . implode(', ', $offsetItems) : '';
         $compilationContext->codePrinter->output(
             sprintf(
-                'zephir_update_static_property_array_multi_ce(%s, SL("%s"), %s, SL("%s"), %d%s);',
+                'zephir_update_static_property_array_multi_cached(%s, %s, SL("%s"), %s, %s, SL("%s"), %d%s);',
                 $classEntry,
+                $this->staticPropertyScope($compilationContext),
                 $propertyName,
+                $this->staticPropertyCacheSite($compilationContext),
                 $valueVariable,
                 $keys,
                 $numberParams,
@@ -1725,14 +1729,61 @@ class Backend
     ): void {
         $context->codePrinter->output(
             sprintf(
-                '%s = %s(%s, SL("%s"), %s);',
+                '%s = %s(%s, %s, SL("%s"), %s, %s);',
                 $this->getVariableCode($slot),
-                $readWrite ? 'zephir_fetch_static_property_rw_ce' : 'zephir_fetch_static_property_write_ce',
-                $classDefinition->getClassEntry(),
+                $readWrite ? 'zephir_fetch_static_property_rw_cached' : 'zephir_fetch_static_property_write_cached',
+                $classDefinition->getClassEntry($context),
+                $this->staticPropertyScope($context),
                 $property,
+                $this->staticPropertyCacheSite($context),
                 $this->getVariableCode($fallback)
             )
         );
+        $context->emitExceptionCheck();
+    }
+
+    /**
+     * `isset X::y`, for a property the code can see.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2805
+     */
+    public function staticPropertyIsset($classDefinition, string $property, CompilationContext $context): CompiledExpression
+    {
+        $context->headersManager->add('kernel/object');
+
+        return new CompiledExpression(
+            'bool',
+            $context->emitCheckedBool(
+                sprintf(
+                    'zephir_isset_static_property_cached(%s, %s, SL("%s"), %s)',
+                    $classDefinition->getClassEntry($context),
+                    $this->staticPropertyScope($context),
+                    $property,
+                    $this->staticPropertyCacheSite($context)
+                )
+            ),
+            null
+        );
+    }
+
+    /**
+     * The cache record of one more static property access in the function
+     * being compiled, which Method::compile() declares.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2805
+     */
+    private function staticPropertyCacheSite(CompilationContext $context): string
+    {
+        return '&_zephir_sprop_cache[' . $context->staticPropertyCacheCounter++ . ']';
+    }
+
+    /**
+     * The class a static property access checks visibility against: the class
+     * the code is written in, as PHP checks it, or none in a function.
+     */
+    private function staticPropertyScope(CompilationContext $context): string
+    {
+        return $context->lexicalClassDefinition()?->getClassEntry($context) ?? 'NULL';
     }
 
     /**
@@ -1784,12 +1835,14 @@ class Backend
         $classDefinition,
         $property,
         $readOnly,
-        CompilationContext $context
+        CompilationContext $context,
+        bool $noisy = true
     ): void {
-        // TODO: maybe optimizations as well as above
+        $flags = array_filter([$noisy ? 'PH_NOISY_CC' : '', $readOnly ? 'PH_READONLY' : '']);
+
         $context->codePrinter->output(
             sprintf(
-                'zephir_read_static_property_ce(%s, %s, SL("%s"), PH_NOISY_CC%s);',
+                'zephir_read_static_property_cached(%s, %s, %s, SL("%s"), %s, %s);',
                 /**
                  * Resolved rather than spelled out: hand-building `&` + name
                  * wrote over the `zend_reference` of a `use (&x)` capture
@@ -1798,11 +1851,14 @@ class Backend
                  * @see https://github.com/zephir-lang/zephir/issues/2668
                  */
                 $this->getVariableCode($symbolVariable),
-                $classDefinition->getClassEntry(),
+                $classDefinition->getClassEntry($context),
+                $this->staticPropertyScope($context),
                 $property,
-                $readOnly ? ' | PH_READONLY' : ''
+                $this->staticPropertyCacheSite($context),
+                [] === $flags ? '0' : implode(' | ', $flags)
             )
         );
+        $context->emitExceptionCheck();
     }
 
     public function forStatement(
@@ -2815,7 +2871,14 @@ class Backend
     {
         $value = $this->resolveValue($value, $context);
         $context->codePrinter->output(
-            'zephir_sub_static_property_ce(' . $classEntry . ', ZEND_STRL("' . $property . '"), ' . $value . ');'
+            sprintf(
+                'zephir_sub_static_property_cached(%s, %s, SL("%s"), %s, %s);',
+                $classEntry,
+                $this->staticPropertyScope($context),
+                $property,
+                $this->staticPropertyCacheSite($context),
+                $value
+            )
         );
         $context->emitExceptionCheck();
     }
@@ -3086,11 +3149,18 @@ class Backend
 
     public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context): void
     {
-        // TODO(serghei): Sort out as well as above
         $value = $this->resolveValue($value, $context);
         $context->codePrinter->output(
-            'zephir_update_static_property_ce(' . $classEntry . ', ZEND_STRL("' . $property . '"), ' . $value . ');'
+            sprintf(
+                'zephir_update_static_property_cached(%s, %s, SL("%s"), %s, %s);',
+                $classEntry,
+                $this->staticPropertyScope($context),
+                $property,
+                $this->staticPropertyCacheSite($context),
+                $value
+            )
         );
+        $context->emitExceptionCheck();
     }
 
     public function zvalOperator(

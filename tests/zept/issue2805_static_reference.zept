@@ -1,0 +1,97 @@
+--TEST--
+Issue #2805: a static property PHP holds by reference is read as a copy and written through the reference, before and after the site caches it
+--FILE--
+namespace Stub;
+
+class Issue2805Reference
+{
+    public static arr = [1];
+    public static val = "v";
+    public static num = 1;
+
+    public static function copyAppend()
+    {
+        var v;
+        let v = self::arr;
+        let v[] = 2;
+        return [v, self::arr];
+    }
+
+    public static function read()
+    {
+        return self::val;
+    }
+
+    public static function write(var v)
+    {
+        let self::val = v;
+        return self::val;
+    }
+
+    public static function append(var v)
+    {
+        let self::arr[] = v;
+        return self::arr;
+    }
+
+    public static function index(var k, var v)
+    {
+        let self::arr[k] = v;
+        return self::arr;
+    }
+
+    public static function add(var v)
+    {
+        let self::num += v;
+        return self::num;
+    }
+
+    public static function concat(var v)
+    {
+        let self::val .= v;
+        return self::val;
+    }
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", json_encode($result), "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+t("copy before reference", fn() => \Stub\Issue2805Reference::copyAppend());
+t("read before reference", fn() => \Stub\Issue2805Reference::read());
+$arr = &\Stub\Issue2805Reference::$arr;
+$val = &\Stub\Issue2805Reference::$val;
+$num = &\Stub\Issue2805Reference::$num;
+t("copy through reference", fn() => \Stub\Issue2805Reference::copyAppend());
+t("append through reference", fn() => \Stub\Issue2805Reference::append(3));
+t("reference after append", fn() => $arr);
+t("index through reference", fn() => \Stub\Issue2805Reference::index("k", 4));
+t("reference after index", fn() => $arr);
+t("write through reference", fn() => \Stub\Issue2805Reference::write("w"));
+t("reference after write", fn() => $val);
+t("concat through reference", fn() => \Stub\Issue2805Reference::concat("c"));
+t("reference after concat", fn() => $val);
+t("add through reference", fn() => \Stub\Issue2805Reference::add(2));
+t("reference after add", fn() => $num);
+$val = "z";
+t("read after a write to the reference", fn() => \Stub\Issue2805Reference::read());
+--EXPECT--
+copy before reference: [[1,2],[1]]
+read before reference: "v"
+copy through reference: [[1,2],[1]]
+append through reference: [1,3]
+reference after append: [1,3]
+index through reference: {"0":1,"1":3,"k":4}
+reference after index: {"0":1,"1":3,"k":4}
+write through reference: "w"
+reference after write: "w"
+concat through reference: "wc"
+reference after concat: "wc"
+add through reference: 3
+reference after add: 3
+read after a write to the reference: "z"

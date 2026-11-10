@@ -168,7 +168,11 @@ PHP_METHOD(Stub_IssetTest, testIssetProperty3)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	RETURN_BOOL((0 == 0));
+	static zend_string *_zephir_isset_0 = NULL;
+	if (UNEXPECTED(!_zephir_isset_0)) {
+		_zephir_isset_0 = zend_string_init("b", 1, 1);
+	}
+	RETURN_BOOL(zephir_isset_property_value_fast(a, _zephir_isset_0));
 }
 
 PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty1)

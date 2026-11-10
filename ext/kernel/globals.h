@@ -51,6 +51,23 @@ typedef struct _zephir_method_cache {
 	uint64_t request;
 } zephir_method_cache;
 
+/**
+ * The cache record of one static property access: the zval the property of
+ * a class lives in, as ZEND_FETCH_STATIC_PROP_* keeps it in a run-time cache
+ * slot. Each record is declared in the C function holding the access.
+ *
+ * The static members of a class are allocated again in every request, so a
+ * record is only good for the request that filled it.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2805
+ */
+typedef struct _zephir_static_property_cache {
+	zend_class_entry *ce;
+	zval *slot;
+	zend_property_info *info;
+	uint64_t request;
+} zephir_static_property_cache;
+
 #define ZEPHIR_INIT_FUNCS(class_functions) static const zend_function_entry class_functions[] =
 
 /** Define FASTCALL */

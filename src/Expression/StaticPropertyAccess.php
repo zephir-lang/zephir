@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Expression;
 
 use ReflectionException;
+use Zephir\Class\Definition\Definition;
 use Zephir\Class\Property;
 use Zephir\Class\Visibility;
 use Zephir\CompilationContext;
@@ -40,6 +41,7 @@ class StaticPropertyAccess
     protected bool      $readOnly          = false;
     protected bool      $writeThrough      = false;
     protected bool      $readWrite         = false;
+    protected bool      $noisy             = true;
 
     /**
      * Access a static property.
@@ -49,40 +51,10 @@ class StaticPropertyAccess
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
-        $className = $expression['left']['value'];
-        $compiler  = $compilationContext->compiler;
-        $property  = $expression['right']['value'];
-
-        /**
-         * Fetch the class definition according to the class where the constant
-         * is supposed to be declared
-         */
-        if (!in_array($className, ['self', 'static', 'parent'])) {
-            $className = $compilationContext->getFullName($className);
-            if ($compiler->isClass($className)) {
-                $classDefinition = $compiler->getClassDefinition($className);
-            } else {
-                if ($compiler->isBundledClass($className)) {
-                    $classDefinition = $compiler->getInternalClassDefinition($className);
-                } else {
-                    throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
-                }
-            }
-        } else {
-            if (null === $compilationContext->classScope($className, $expression)) {
-                return new CompiledExpression('null', null, $expression);
-            }
-
-            if (in_array($className, ['self', 'static'])) {
-                $classDefinition = $compilationContext->lexicalClassDefinition();
-            } else {
-                if ('parent' === $className) {
-                    $classDefinition = $compilationContext->parentClassDefinition(
-                        'access static property "' . $property . '"',
-                        $expression
-                    );
-                }
-            }
+        $property        = $expression['right']['value'];
+        $classDefinition = $this->classDefinitionOf($expression, $compilationContext);
+        if (null === $classDefinition) {
+            return new CompiledExpression('null', null, $expression);
         }
 
         $this->checkClassHasProperty(
@@ -140,28 +112,24 @@ class StaticPropertyAccess
         }
 
         /**
-         * Resolves the symbol that expects the value
+         * Resolves the symbol that expects the value.
+         *
+         * A borrowed read (PH_READONLY) only goes to a temp nothing releases,
+         * and an owned one to a temp the memory frame tracks. Taking the
+         * owned temp from the untracked pool and observing it there handed it
+         * back to that pool tracked, and the next borrowed read into it was
+         * released at the end of the method: a use after free of the property.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2805
          */
-        if ($this->expecting) {
-            if ($this->expectingVariable) {
-                $symbolVariable = $this->expectingVariable;
-                if ('return_value' === $symbolVariable->getName()) {
-                    $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
-                        'variable',
-                        $compilationContext
-                    );
-                }
-            } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
-                    'variable',
-                    $compilationContext
-                );
-            }
+        $readOnly = $this->readOnly;
+        if ($this->expecting && $this->expectingVariable && 'return_value' !== $this->expectingVariable->getName()) {
+            $symbolVariable = $this->expectingVariable;
+            $readOnly       = false;
+        } elseif ($readOnly) {
+            $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
         } else {
-            $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
-                'variable',
-                $compilationContext
-            );
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
         }
 
         /**
@@ -177,7 +145,7 @@ class StaticPropertyAccess
         $symbolVariable->setDynamicTypes('undefined');
         $compilationContext->headersManager->add('kernel/object');
 
-        if (!$this->readOnly && 'return_value' != $symbolVariable->getName()) {
+        if ($symbolVariable === $this->expectingVariable) {
             $symbolVariable->observeVariant($compilationContext);
         }
 
@@ -185,11 +153,59 @@ class StaticPropertyAccess
             $symbolVariable,
             $classDefinition,
             $property,
-            $this->readOnly,
-            $compilationContext
+            $readOnly,
+            $compilationContext,
+            $this->noisy
         );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * The class an `X::y` access names, or null when `self` or `parent` has no
+     * class here and the code already throws PHP's Error where it is used.
+     *
+     * @throws CompilerException
+     */
+    public function classDefinitionOf(array $expression, CompilationContext $compilationContext): ?Definition
+    {
+        $className = $expression['left']['value'];
+        $compiler  = $compilationContext->compiler;
+
+        if (!in_array($className, ['self', 'static', 'parent'])) {
+            $className = $compilationContext->getFullName($className);
+            if ($compiler->isClass($className)) {
+                return $compiler->getClassDefinition($className);
+            }
+
+            if ($compiler->isBundledClass($className)) {
+                return $compiler->getInternalClassDefinition($className);
+            }
+
+            throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
+        }
+
+        if (null === $compilationContext->classScope($className, $expression)) {
+            return null;
+        }
+
+        if ('parent' === $className) {
+            return $compilationContext->parentClassDefinition(
+                'access static property "' . $expression['right']['value'] . '"',
+                $expression
+            );
+        }
+
+        return $compilationContext->lexicalClassDefinition();
+    }
+
+    /**
+     * Sets whether a read that fails reports it, as a read does, or stays
+     * silent, as `isset` and `empty` ask.
+     */
+    public function setNoisy(bool $noisy): void
+    {
+        $this->noisy = $noisy;
     }
 
     /**

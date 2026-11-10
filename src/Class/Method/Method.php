@@ -1239,6 +1239,11 @@ class Method
          */
         $compilationContext->callCacheCounter = 0;
 
+        /**
+         * Reset per-method static property access caches.
+         */
+        $compilationContext->staticPropertyCacheCounter = 0;
+
         if ($this->parameters instanceof Parameters) {
             /**
              * Round 1. Create variables in parameters in the symbol table.
@@ -2285,6 +2290,18 @@ class Method
             $codePrinter->preOutput(
                 "\t" . 'ZEND_TLS zephir_method_cache _zephir_call_cache['
                 . $compilationContext->callCacheCounter . '];'
+            );
+        }
+
+        /**
+         * The same for the cache records of the static property accesses.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2805
+         */
+        if ($compilationContext->staticPropertyCacheCounter > 0) {
+            $codePrinter->preOutput(
+                "\t" . 'ZEND_TLS zephir_static_property_cache _zephir_sprop_cache['
+                . $compilationContext->staticPropertyCacheCounter . '];'
             );
         }
 

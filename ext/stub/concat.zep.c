@@ -34,7 +34,11 @@ PHP_METHOD(Stub_Concat, getTestProperty)
 	zval _0;
 
 	ZVAL_UNDEF(&_0);
-	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("testProperty"), PH_NOISY_CC | PH_READONLY);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
+	zephir_read_static_property_cached(&_0, stub_concat_ce, stub_concat_ce, SL("testProperty"), &_zephir_sprop_cache[0], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_CTORW(&_0);
 }
 
@@ -46,6 +50,7 @@ PHP_METHOD(Stub_Concat, testConcatBySelfProperty)
 
 	ZVAL_UNDEF(&title_zv);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[2];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(title)
 	ZEND_PARSE_PARAMETERS_END();
@@ -54,13 +59,21 @@ PHP_METHOD(Stub_Concat, testConcatBySelfProperty)
 	zephir_memory_observe(&title_zv);
 	ZVAL_STR_COPY(&title_zv, title);
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("testProperty"), PH_NOISY_CC);
+	zephir_read_static_property_cached(&_0, stub_concat_ce, stub_concat_ce, SL("testProperty"), &_zephir_sprop_cache[0], PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_concat_self(&_0, &title_zv);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("testProperty"), &_0);
+	zephir_update_static_property_cached(stub_concat_ce, stub_concat_ce, SL("testProperty"), &_zephir_sprop_cache[1], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -1120,7 +1133,11 @@ PHP_METHOD(Stub_Concat, getAppended)
 	zval _0;
 
 	ZVAL_UNDEF(&_0);
-	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC | PH_READONLY);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
+	zephir_read_static_property_cached(&_0, stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[0], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_CTORW(&_0);
 }
 
@@ -1130,13 +1147,18 @@ PHP_METHOD(Stub_Concat, resetAppended)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_EMPTY_STRING(&_0);
-	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
+	zephir_update_static_property_cached(stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -1149,49 +1171,90 @@ PHP_METHOD(Stub_Concat, appendStaticLiterals)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[10];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
+	zephir_read_static_property_cached(&_0, stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[0], PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_concat_self_str(&_0, SL("s"));
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
+	zephir_update_static_property_cached(stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[1], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
+	zephir_read_static_property_cached(&_0, stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[2], PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_concat_self_long(&_0, 5);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
+	zephir_update_static_property_cached(stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[3], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
+	zephir_read_static_property_cached(&_0, stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[4], PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_concat_self_double(&_0, 1.5);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
+	zephir_update_static_property_cached(stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[5], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
+	zephir_read_static_property_cached(&_0, stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[6], PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_concat_self_bool(&_0, 1);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
+	zephir_update_static_property_cached(stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[7], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
+	zephir_read_static_property_cached(&_0, stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[8], PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_concat_self_bool(&_0, 0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
+	zephir_update_static_property_cached(stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[9], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -1207,6 +1270,7 @@ PHP_METHOD(Stub_Concat, appendStaticVariables)
 	zend_long number;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[6];
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(number)
 		Z_PARAM_DOUBLE(fraction)
@@ -1216,29 +1280,53 @@ PHP_METHOD(Stub_Concat, appendStaticVariables)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 3, 0, &number_param, &fraction_param, &flag_param);
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
+	zephir_read_static_property_cached(&_0, stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[0], PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_concat_self_long(&_0, number);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
+	zephir_update_static_property_cached(stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[1], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
+	zephir_read_static_property_cached(&_0, stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[2], PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_concat_self_double(&_0, fraction);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
+	zephir_update_static_property_cached(stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[3], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("appended"), PH_NOISY_CC);
+	zephir_read_static_property_cached(&_0, stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[4], PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_concat_self_bool(&_0, flag);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("appended"), &_0);
+	zephir_update_static_property_cached(stub_concat_ce, stub_concat_ce, SL("appended"), &_zephir_sprop_cache[5], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
