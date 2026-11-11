@@ -64,7 +64,7 @@ PHP_METHOD(Stub_Issue2656, setContainer)
 		Z_PARAM_ZVAL(container)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &container);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 67, container);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 68, container);
 }
 
 /**
@@ -290,7 +290,11 @@ PHP_METHOD(Stub_Issue2656, fetchThroughProperty)
 	ZEPHIR_INIT_VAR(&value);
 	ZVAL_NULL(&value);
 	ZEPHIR_OBS_NVAR(&value);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 67, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 68, PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	_1 = zephir_array_isset_string_fetch(&value, &_0, SL("cache.key"), 0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();

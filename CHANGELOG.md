@@ -59,6 +59,15 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed code after a static property assignment that throws, such as a TypeError, still running [#2805](https://github.com/zephir-lang/zephir/issues/2805)
 - Fixed a property read answered by `__get()`, such as `o->x`, leaking the value it returned [#2805](https://github.com/zephir-lang/zephir/issues/2805)
 - Fixed a static property read in some methods freeing the property's value at the end of the method [#2805](https://github.com/zephir-lang/zephir/issues/2805)
+- Fixed a property read such as `o->x` calling `__isset()` before `__get()`, and reading `null` when `__isset()` returned false [#2831](https://github.com/zephir-lang/zephir/issues/2831)
+- Fixed reading a protected or private property from outside its class giving `null` instead of throwing PHP's Error [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed reading an undefined property, or a property of a non-object, not raising PHP's warning [#2808](https://github.com/zephir-lang/zephir/issues/2808)
+- Fixed reading an uninitialized typed property giving `null` instead of throwing PHP's Error [#2831](https://github.com/zephir-lang/zephir/issues/2831)
+- Fixed `empty o->x` calling `__get()` on an object without `__isset()`, where PHP treats the property as empty [#2831](https://github.com/zephir-lang/zephir/issues/2831)
+- Fixed `isset o->x->y` and `empty o->x->y` raising a notice when `o` or `o->x` is not an object [#2831](https://github.com/zephir-lang/zephir/issues/2831)
+- Fixed `o->{n}` with a non-string `n`, such as an `int`, always reading `null` and failing `isset` instead of converting the name as PHP does [#2831](https://github.com/zephir-lang/zephir/issues/2831)
+- Fixed code after a property read, `isset` or `empty` that throws still running [#2831](https://github.com/zephir-lang/zephir/issues/2831)
+- Fixed `isset` of a property in one block of a method and of the same property after that block generating C that does not compile [#2831](https://github.com/zephir-lang/zephir/issues/2831)
 
 ## [1.7.0] - 2026-10-30
 

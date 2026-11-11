@@ -68,6 +68,10 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyObj)
 	zephir_update_property_zval_zval(obj, &property_zv, value);
 	zephir_memory_observe(&_0);
 	zephir_read_property_zval(&_0, obj, &property_zv, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 

@@ -52,7 +52,7 @@ PHP_METHOD(Stub_Properties_App, __construct)
 
 	ZEPHIR_CALL_CE_STATIC_CACHED(&_0, stub_properties_staticprivateproperties_ce, "getInstance", &_zephir_call_cache[0]);
 	zephir_check_call_status();
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 109, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 110, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 

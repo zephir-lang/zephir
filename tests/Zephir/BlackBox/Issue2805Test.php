@@ -196,7 +196,7 @@ final class Issue2805Test extends TestCase
         $body = $this->functionBody($this->generate(), 'instanceIsset');
 
         $this->assertStringNotContainsString('(0 == 0)', $body);
-        $this->assertMatchesRegularExpression('/zephir_isset_property_value_fast\(this_ptr, _zephir_isset_\d+\)/', $body);
+        $this->assertMatchesRegularExpression('/zephir_isset_property_value_fast\(this_ptr, _zephir_prop_\d+\)/', $body);
     }
 
     /**

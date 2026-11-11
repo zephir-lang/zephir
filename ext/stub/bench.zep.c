@@ -371,6 +371,10 @@ PHP_METHOD(Stub_Bench, propertyReadLoop)
 		}
 		ZEPHIR_OBS_NVAR(&_0$$3);
 		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 1, PH_NOISY_CC);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		sum += zephir_get_intval(&_0$$3);
 		i++;
 	}

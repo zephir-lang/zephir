@@ -62,14 +62,22 @@ PHP_METHOD(Stub_PropertyCacheMagic, __get)
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 122, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 123, PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	_2 = zephir_array_isset_value(&_1, &name_zv);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
 	if (_2) {
-		zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 122, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 123, PH_NOISY_CC | PH_READONLY);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_OBS_NVAR(&_0);
 		zephir_array_fetch(&_0, &_3, &name_zv, PH_NOISY, "stub/propertycachemagic.zep", 20);
 		if (UNEXPECTED(EG(exception))) {
@@ -121,7 +129,10 @@ PHP_METHOD(Stub_PropertyCacheMagic, __isset)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 122, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 123, PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	_1 = zephir_array_isset_value(&_0, &name_zv);
 	if (UNEXPECTED(EG(exception))) {
 		return;
@@ -164,6 +175,10 @@ PHP_METHOD(Stub_PropertyCacheMagic, readVirtual)
 	ZVAL_STR_COPY(&name_zv, name);
 	zephir_memory_observe(&_0);
 	zephir_read_property_zval(&_0, this_ptr, &name_zv, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 

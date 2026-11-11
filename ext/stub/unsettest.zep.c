@@ -52,7 +52,10 @@ PHP_METHOD(Stub_Unsettest, has)
 		Z_PARAM_ZVAL(key)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &key);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 162, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 163, PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	_1 = zephir_array_isset_value(&_0, key);
 	if (UNEXPECTED(EG(exception))) {
 		return;
