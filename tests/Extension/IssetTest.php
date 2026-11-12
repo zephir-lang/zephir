@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 final class IssetTest extends TestCase
 {
+    use AssertsPhpParity;
+
     public string $b = 'a';
     private \Stub\IssetTest $test;
 
@@ -61,7 +63,15 @@ final class IssetTest extends TestCase
         }
 
         $this->assertTrue($this->test->testIssetDynamicProperty1());
-        $this->assertTrue(!$this->test->testIssetDynamicProperty2($this));
+        // `s` does not exist yet: the read warns as PHP's does
+        $this->assertMatchesPhp(
+            fn () => $this->test->testIssetDynamicProperty2($this),
+            function () {
+                $g = $this->{'s'};
+
+                return isset($g['a']);
+            }
+        );
         $this->s = ['a' => 'true'];
         $this->assertTrue($this->test->testIssetDynamicProperty2($this));
     }

@@ -121,6 +121,7 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetSelective)
  */
 PHP_METHOD(Stub_Issue808, testDynamicUnsetStringKey)
 {
+	zend_bool _1;
 	zval obj, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
@@ -144,11 +145,12 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetStringKey)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	static zend_string *_zephir_isset_0 = NULL;
-	if (UNEXPECTED(!_zephir_isset_0)) {
-		_zephir_isset_0 = zend_string_init("name", 4, 1);
+	_1 = zephir_isset_property_value_fast(&obj, _zephir_prop_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
 	}
-	RETURN_MM_BOOL(zephir_isset_property_value_fast(&obj, _zephir_isset_0));
+	RETURN_MM_BOOL(_1);
 }
 
 /**

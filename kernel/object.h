@@ -66,11 +66,18 @@ int zephir_isset_property_value_zval(zval *object, const zval *property);
  */
 int zephir_isset_property_value_fast(zval *object, zend_string *property_name);
 
+/**
+ * empty() of a property, PHP's ZEND_ISSET_ISEMPTY_PROP_OBJ: true for a
+ * non-object, a property that is not set, and an empty value.
+ */
+int zephir_isempty_property_fast(zval *object, zend_string *property_name);
+int zephir_isempty_property_zval(zval *object, const zval *property);
+
 /** Reading properties */
-int zephir_read_property_ex(zval *result, zval *object, const char *property_name, uint32_t property_length, int silent);
-int zephir_read_property(zval *result, zval *object, const char *property_name, uint32_t property_length, int silent);
+int zephir_read_property_ex(zval *result, zval *object, const char *property_name, uint32_t property_length, int flags);
+int zephir_read_property(zval *result, zval *object, const char *property_name, uint32_t property_length, int flags);
 int zephir_read_property_cached(zval *result, zval *object, zend_string *name, zend_ulong cache_slot, int flags);
-int zephir_read_property_zval(zval *result, zval *object, zval *property, int silent);
+int zephir_read_property_zval(zval *result, zval *object, zval *property, int flags);
 int zephir_return_property(zval *return_value, zval *object, char *property_name, unsigned int property_length);
 int zephir_fetch_property(zval *result, zval *object, const char *property_name, uint32_t property_length, int silent);
 int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int silent);

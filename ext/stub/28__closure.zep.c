@@ -43,6 +43,10 @@ PHP_METHOD(stub_28__closure, __invoke)
 
 	zephir_memory_observe(&_0);
 	zephir_read_property_cached(&_0, &box, _zephir_prop_0, 0, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 

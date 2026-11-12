@@ -151,7 +151,8 @@ class PropertyDynamicAccess
             $variableVariable,
             $property,
             false,
-            $compilationContext
+            $compilationContext,
+            $this->noisy
         );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

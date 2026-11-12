@@ -126,18 +126,24 @@ PHP_METHOD(Stub_IssetTest, testIssetArray5)
 
 PHP_METHOD(Stub_IssetTest, testIssetProperty1)
 {
+	zend_bool _0;
 	zval *a, a_sub;
 
 	ZVAL_UNDEF(&a_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("b", 1, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	static zend_string *_zephir_isset_0 = NULL;
-	if (UNEXPECTED(!_zephir_isset_0)) {
-		_zephir_isset_0 = zend_string_init("b", 1, 1);
+	_0 = zephir_isset_property_value_fast(a, _zephir_prop_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
 	}
-	RETURN_BOOL(zephir_isset_property_value_fast(a, _zephir_isset_0));
+	RETURN_BOOL(_0);
 }
 
 PHP_METHOD(Stub_IssetTest, testIssetProperty2)
@@ -161,18 +167,24 @@ PHP_METHOD(Stub_IssetTest, testIssetProperty2)
 
 PHP_METHOD(Stub_IssetTest, testIssetProperty3)
 {
+	zend_bool _0;
 	zval *a, a_sub;
 
 	ZVAL_UNDEF(&a_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("b", 1, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	static zend_string *_zephir_isset_0 = NULL;
-	if (UNEXPECTED(!_zephir_isset_0)) {
-		_zephir_isset_0 = zend_string_init("b", 1, 1);
+	_0 = zephir_isset_property_value_fast(a, _zephir_prop_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
 	}
-	RETURN_BOOL(zephir_isset_property_value_fast(a, _zephir_isset_0));
+	RETURN_BOOL(_0);
 }
 
 PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty1)
@@ -191,7 +203,11 @@ PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty1)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_memory_observe(&g);
-	zephir_read_property_cached(&g, this_ptr, _zephir_prop_0, 50, PH_NOISY_CC);
+	zephir_read_property_cached(&g, this_ptr, _zephir_prop_0, 51, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	_0 = zephir_array_isset_value_string(&g, SL("a"));
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
@@ -224,6 +240,10 @@ PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty2)
 	zephir_fetch_params(1, 1, 0, &inp);
 	zephir_memory_observe(&g);
 	zephir_read_property_cached(&g, inp, _zephir_prop_0, 0, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	_0 = zephir_array_isset_value_string(&g, SL("a"));
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();

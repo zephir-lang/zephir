@@ -1606,17 +1606,25 @@ class Backend
         return $output;
     }
 
+    /**
+     * Reads a property. A noisy read is PHP's `$o->x`: `__get()` without
+     * asking `__isset()` first, a warning for an undefined property and an
+     * Error for an inaccessible or uninitialized one. A read that is not
+     * noisy is the silent fetch of the object in `isset o->x[k]`. Either may
+     * throw, and the method stops there as PHP does.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2831
+     */
     public function fetchProperty(
         Variable $symbolVariable,
         Variable $variableVariable,
         $property,
         $readOnly,
-        CompilationContext $context
+        CompilationContext $context,
+        bool $noisy = true
     ): void {
-        $flags = 'PH_NOISY_CC';
-        if ($readOnly) {
-            $flags .= ' | PH_READONLY';
-        }
+        $flags = array_filter([$noisy ? 'PH_NOISY_CC' : '', $readOnly ? 'PH_READONLY' : '']);
+        $flags = [] === $flags ? '0' : implode(' | ', $flags);
 
         $variableCode = $this->getVariableCode($variableVariable);
         $symbol       = $this->getVariableCode($symbolVariable);
@@ -1631,29 +1639,31 @@ class Backend
                     $flags
                 )
             );
-
-            return;
-        }
-
-        /* Are we going to init default object property value? */
-        if ($context->currentMethod && $context->currentMethod->isInitializer()) {
+        } elseif ($context->currentMethod && $context->currentMethod->isInitializer()) {
+            /* Are we going to init default object property value? */
             $context->codePrinter->output(
                 sprintf('zephir_read_property_ex(%s, %s, ZEND_STRL("%s"), %s);', $symbol, $variableCode, $property, $flags)
             );
-
-            return;
+        } else {
+            /*
+             * Cached read: pass a method-scope interned zend_string for the name
+             * (no per-call alloc) and the site's inline cache slot.
+             */
+            $nameSlot  = $this->internedPropertyName((string) $property, $context);
+            $cacheSlot = $this->propertyCacheSlot($variableVariable, (string) $property, $context);
+            $context->codePrinter->output(
+                sprintf(
+                    'zephir_read_property_cached(%s, %s, %s, %d, %s);',
+                    $symbol,
+                    $variableCode,
+                    $nameSlot,
+                    $cacheSlot,
+                    $flags
+                )
+            );
         }
 
-        /*
-         * Cached read: pass a method-scope interned zend_string for the name
-         * (no per-call alloc). cache_slot 0 = uncached in Stage 1; Stage 2
-         * threads a real inline-cache slot here.
-         */
-        $nameSlot  = $this->internedPropertyName((string) $property, $context);
-        $cacheSlot = $this->propertyCacheSlot($variableVariable, (string) $property, $context);
-        $context->codePrinter->output(
-            sprintf('zephir_read_property_cached(%s, %s, %s, %d, %s);', $symbol, $variableCode, $nameSlot, $cacheSlot, $flags)
-        );
+        $context->emitExceptionCheck();
     }
 
     /**
@@ -1791,8 +1801,8 @@ class Backend
      * zend_string slot for a compile-time-known object-property name and
      * returns its C variable. The `static` declaration and lazy init are
      * emitted at function scope by Method::compile() so the reference is valid
-     * from any nested block. Mirrors the isset `_fast` slot, hoisted to
-     * function scope. See property-access optimization (issue #1884 follow-up).
+     * from any nested block. The `isset` and `empty` `_fast` helpers share
+     * it. See property-access optimization (issue #1884 follow-up).
      */
     private function internedPropertyName(string $key, CompilationContext $context): string
     {
@@ -2763,39 +2773,35 @@ class Backend
         return '';
     }
 
-    public function propertyIsset(Variable $var, $key, ?CompilationContext $context = null): CompiledExpression
-    {
+    /**
+     * `isset o->x`, or `empty o->x` with `$empty`, through the object's
+     * has_property handler.
+     */
+    public function propertyIsset(
+        Variable $var,
+        $key,
+        ?CompilationContext $context = null,
+        bool $empty = false
+    ): CompiledExpression {
         /*
          * PHP isset() semantics — see https://github.com/zephir-lang/zephir/issues/2385.
          *
          * Static-name property isset goes through has_property, which needs
-         * a zend_string. Allocating one per call would mean a heap alloc per
-         * isset; instead emit a method-static zend_string * slot that the
-         * generated method initializes lazily on first call and reuses for
-         * the lifetime of the worker. Repeated isset() of the same property
-         * within a method shares one slot.
+         * a zend_string. The method-scope interned slot of a cached read is
+         * reused, declared at function scope so an `isset` or `empty` in any
+         * block reaches it.
          */
         if ($context !== null) {
-            if (!isset($context->issetPropertyCache[$key])) {
-                $cacheVar = '_zephir_isset_' . $context->issetPropertyCacheCounter++;
-                $context->issetPropertyCache[$key] = $cacheVar;
-
-                $escapedKey = addslashes($key);
-                $context->codePrinter->output('static zend_string *' . $cacheVar . ' = NULL;');
-                $context->codePrinter->output('if (UNEXPECTED(!' . $cacheVar . ')) {');
-                $context->codePrinter->output(
-                    "\t" . $cacheVar . ' = zend_string_init("' . $escapedKey . '", '
-                    . strlen($key) . ', 1);'
-                );
-                $context->codePrinter->output('}');
-            }
-
             return new CompiledExpression(
                 'bool',
-                'zephir_isset_property_value_fast(' . $this->getVariableCode($var) . ', '
-                . $context->issetPropertyCache[$key] . ')',
+                ($empty ? 'zephir_isempty_property_fast(' : 'zephir_isset_property_value_fast(')
+                . $this->getVariableCode($var) . ', ' . $this->internedPropertyName((string) $key, $context) . ')',
                 null
             );
+        }
+
+        if ($empty) {
+            throw new CompilerException('empty() of a property needs a compilation context');
         }
 
         /* Fallback for callers that don't pass a CompilationContext. */

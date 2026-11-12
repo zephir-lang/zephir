@@ -456,58 +456,88 @@ int zephir_isset_property_zval(zval *object, const zval *property)
 	return 0;
 }
 
-/*
- * PHP isset() semantics for object properties: the property exists AND its
- * value is not IS_NULL. Delegates to the object's has_property handler with
- * ZEND_PROPERTY_ISSET (mode 0), which is the same path the engine takes for
- * the ZEND_ISSET_ISEMPTY_PROP_OBJ opcode — this gives correct behaviour for
- * std objects, __isset magic, typed-uninitialized properties, etc.
- * See https://github.com/zephir-lang/zephir/issues/2385.
+/**
+ * PHP's `ZEND_ISSET_ISEMPTY_PROP_OBJ`: `check` is ZEND_PROPERTY_ISSET for
+ * isset(), which is true when the property exists and is not null, and
+ * ZEND_PROPERTY_NOT_EMPTY for empty(), which answers the negation. The
+ * object's has_property handler decides, so `__isset()` is asked first and
+ * `__get()` only for empty() once `__isset()` said yes, and an inaccessible
+ * or uninitialized property is not set. A non-object is not set and empty.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2385
+ * @see https://github.com/zephir-lang/zephir/issues/2831
  */
+static int zephir_property_isset_isempty(zval *object, zend_string *name, int check)
+{
+	int empty = check == ZEND_PROPERTY_NOT_EMPTY;
+
+	if (Z_TYPE_P(object) != IS_OBJECT || !Z_OBJ_HT_P(object)->has_property) {
+		return empty;
+	}
+
+	return empty ^ Z_OBJ_HT_P(object)->has_property(Z_OBJ_P(object), name, check, NULL);
+}
+
+/**
+ * The same for a property named at runtime, `o->{name}`. The name is turned
+ * into a string the way PHP does it there, and a name that does not convert
+ * answers false for both, with the Error pending.
+ */
+static int zephir_property_isset_isempty_zval(zval *object, const zval *property, int check)
+{
+	zend_string *tmp_name;
+	zend_string *name;
+	int result;
+
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		return check == ZEND_PROPERTY_NOT_EMPTY;
+	}
+
+	name = zval_try_get_tmp_string((zval *) property, &tmp_name);
+	if (UNEXPECTED(name == NULL)) {
+		return 0;
+	}
+
+	result = zephir_property_isset_isempty(object, name, check);
+	zend_tmp_string_release(tmp_name);
+
+	return result;
+}
+
 int zephir_isset_property_value(zval *object, const char *property_name, unsigned int property_length)
 {
-	zend_string *member;
+	zend_string *name;
 	int result;
 
 	if (Z_TYPE_P(object) != IS_OBJECT) {
 		return 0;
 	}
 
-	if (!Z_OBJ_HT_P(object)->has_property) {
-		return 0;
-	}
-
-	member = zend_string_init(property_name, property_length, 0);
-	result = Z_OBJ_HT_P(object)->has_property(Z_OBJ_P(object), member, 0, NULL);
-	zend_string_release(member);
+	name   = zend_string_init(property_name, property_length, 0);
+	result = zephir_property_isset_isempty(object, name, ZEND_PROPERTY_ISSET);
+	zend_string_release(name);
 
 	return result;
 }
 
 int zephir_isset_property_value_zval(zval *object, const zval *property)
 {
-	if (Z_TYPE_P(object) != IS_OBJECT || Z_TYPE_P(property) != IS_STRING) {
-		return 0;
-	}
-
-	if (!Z_OBJ_HT_P(object)->has_property) {
-		return 0;
-	}
-
-	return Z_OBJ_HT_P(object)->has_property(Z_OBJ_P(object), Z_STR_P(property), 0, NULL);
+	return zephir_property_isset_isempty_zval(object, property, ZEND_PROPERTY_ISSET);
 }
 
 int zephir_isset_property_value_fast(zval *object, zend_string *property_name)
 {
-	if (Z_TYPE_P(object) != IS_OBJECT) {
-		return 0;
-	}
+	return zephir_property_isset_isempty(object, property_name, ZEND_PROPERTY_ISSET);
+}
 
-	if (!Z_OBJ_HT_P(object)->has_property) {
-		return 0;
-	}
+int zephir_isempty_property_fast(zval *object, zend_string *property_name)
+{
+	return zephir_property_isset_isempty(object, property_name, ZEND_PROPERTY_NOT_EMPTY);
+}
 
-	return Z_OBJ_HT_P(object)->has_property(Z_OBJ_P(object), property_name, 0, NULL);
+int zephir_isempty_property_zval(zval *object, const zval *property)
+{
+	return zephir_property_isset_isempty_zval(object, property, ZEND_PROPERTY_NOT_EMPTY);
 }
 
 /**
@@ -550,6 +580,31 @@ static inline zend_class_entry *zephir_lookup_class_ce(
 	zephir_set_scope(scope);
 
 	return original_ce;
+}
+
+/**
+ * The fetch a property read runs as. PH_NOISY is PHP's `$o->x`, BP_VAR_R:
+ * `__get()` is called without asking `__isset()`, an undefined property warns
+ * and an inaccessible or uninitialized one throws. Without it the read is
+ * BP_VAR_IS, the silent fetch of the object in `isset($o->x[k])`.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2831
+ */
+static int zephir_property_read_type(int flags)
+{
+	return (flags & PH_NOISY) == PH_NOISY ? BP_VAR_R : BP_VAR_IS;
+}
+
+/**
+ * PHP's `zend_wrong_property_read()`, a property read from a non-object.
+ */
+static void zephir_wrong_property_read(const zval *object, const char *name)
+{
+#if PHP_VERSION_ID >= 80300
+	zend_error(E_WARNING, "Attempt to read property \"%s\" on %s", name, zend_zval_value_name(object));
+#else
+	zend_error(E_WARNING, "Attempt to read property \"%s\" on %s", name, zend_zval_type_name(object));
+#endif
 }
 
 /**
@@ -645,7 +700,7 @@ int zephir_read_property(
 
 	if (Z_TYPE_P(object) != IS_OBJECT) {
 		if ((flags & PH_NOISY) == PH_NOISY) {
-			php_error_docref(NULL, E_NOTICE, "Trying to get property '%s' of non-object", property_name);
+			zephir_wrong_property_read(object, property_name);
 		}
 
 		ZVAL_NULL(result);
@@ -658,7 +713,7 @@ int zephir_read_property(
 
 	ZVAL_STRINGL(&property, property_name, property_length);
 	res = Z_OBJ_HT_P(object)->read_property(Z_OBJ_P(object), Z_STR(property),
-											flags ? BP_VAR_IS : BP_VAR_R,
+											zephir_property_read_type(flags),
 											NULL, &tmp);
 
 	zephir_property_read_result(result, res, &tmp, flags, 0);
@@ -704,7 +759,7 @@ int zephir_read_property_cached(
 
 	if (Z_TYPE_P(object) != IS_OBJECT) {
 		if ((flags & PH_NOISY) == PH_NOISY) {
-			php_error_docref(NULL, E_NOTICE, "Trying to get property '%s' of non-object", ZSTR_VAL(name));
+			zephir_wrong_property_read(object, ZSTR_VAL(name));
 		}
 
 		ZVAL_NULL(result);
@@ -716,7 +771,7 @@ int zephir_read_property_cached(
 	}
 
 	res = Z_OBJ_HT_P(object)->read_property(Z_OBJ_P(object), name,
-											flags ? BP_VAR_IS : BP_VAR_R,
+											zephir_property_read_type(flags),
 											slot, &tmp);
 
 	zephir_property_read_result(result, res, &tmp, flags, 1);
@@ -931,7 +986,7 @@ static int zephir_read_property_value(zval *result, zval *object, const char *pr
 int zephir_fetch_property(zval *result, zval *object, const char *property_name, uint32_t property_length, int silent)
 {
 	if (zephir_isset_property(object, property_name, property_length)) {
-		zephir_read_property_value(result, object, property_name, property_length, 0);
+		zephir_read_property_value(result, object, property_name, property_length, PH_NOISY);
 		return 1;
 	}
 
@@ -950,7 +1005,7 @@ int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int s
 	}
 
 	if (zephir_isset_property(object, Z_STRVAL_P(property), Z_STRLEN_P(property))) {
-		zephir_read_property_cached(result, object, Z_STR_P(property), 0, 0);
+		zephir_read_property_cached(result, object, Z_STR_P(property), 0, PH_NOISY);
 		return 1;
 	}
 
@@ -961,24 +1016,44 @@ int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int s
 int zephir_return_property(zval *return_value, zval *object, char *property_name, unsigned int property_length)
 {
 	ZVAL_NULL(return_value);
-	return zephir_read_property_value(return_value, object, property_name, property_length, 0);
+	return zephir_read_property_value(return_value, object, property_name, property_length, PH_NOISY);
 }
 
 /**
- * Reads a property from an object
+ * Reads a property named at runtime, `o->{name}`, as PHP's `ZEND_FETCH_OBJ_R`
+ * (`_IS` without PH_NOISY) does: a non-object is reported before the name is
+ * looked at, and the name is then turned into a string, which may warn or
+ * throw. A name that does not convert reads null.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2831
  */
 int zephir_read_property_zval(zval *result, zval *object, zval *property, int flags)
 {
-	if (UNEXPECTED(Z_TYPE_P(property) != IS_STRING)) {
+	zend_string *tmp_name;
+	zend_string *name;
+	int status;
+
+	if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if ((flags & PH_NOISY) == PH_NOISY) {
-			php_error_docref(NULL, E_NOTICE, "Cannot access empty property %d", Z_TYPE_P(property));
+			name = zval_get_tmp_string(property, &tmp_name);
+			zephir_wrong_property_read(object, ZSTR_VAL(name));
+			zend_tmp_string_release(tmp_name);
 		}
 
 		ZVAL_NULL(result);
 		return FAILURE;
 	}
 
-	return zephir_read_property_cached(result, object, Z_STR_P(property), 0, flags);
+	name = zval_try_get_tmp_string(property, &tmp_name);
+	if (UNEXPECTED(name == NULL)) {
+		ZVAL_NULL(result);
+		return FAILURE;
+	}
+
+	status = zephir_read_property_cached(result, object, name, 0, flags);
+	zend_tmp_string_release(tmp_name);
+
+	return status;
 }
 
 /**
@@ -1250,7 +1325,8 @@ int zephir_unset_property_array(zval *object, char *property, unsigned int prope
 	int separated = 0;
 
 	if (Z_TYPE_P(object) == IS_OBJECT) {
-		zephir_read_property(&tmp, object, property, property_length, PH_NOISY_CC);
+		/* The silent fetch this has always made: PHP's unset() reports nothing. */
+		zephir_read_property(&tmp, object, property, property_length, 0);
 		Z_TRY_DELREF(tmp);
 
 		/** Separation only when refcount > 1 */
@@ -1781,7 +1857,8 @@ int zephir_property_incr_decr(zval *object, char *property_name, unsigned int pr
 		ce = zephir_lookup_class_ce(ce, property_name, property_length);
 	}
 
-	zephir_read_property(&tmp, object, property_name, property_length, 0);
+	/* `o->x++` reads as PHP's PRE_INC_OBJ does: __get(), then __set(). */
+	zephir_read_property(&tmp, object, property_name, property_length, PH_NOISY);
 	if (Z_TYPE(tmp) > IS_UNDEF) {
 		Z_TRY_DELREF(tmp);
 

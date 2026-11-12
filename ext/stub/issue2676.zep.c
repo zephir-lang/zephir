@@ -599,6 +599,10 @@ PHP_METHOD(Stub_Issue2676, modAssignProperty)
 	ZEPHIR_SEPARATE_PARAM(obj);
 	zephir_memory_observe(&_0);
 	zephir_read_property_cached(&_0, obj, _zephir_prop_0, 0, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_mod_zval_long(&_1, &_0, b);
 	if (UNEXPECTED(EG(exception))) {
@@ -608,6 +612,10 @@ PHP_METHOD(Stub_Issue2676, modAssignProperty)
 	zephir_update_property_zval_cached(obj, _zephir_prop_0, 0, &_1);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, obj, _zephir_prop_0, 0, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 
@@ -635,6 +643,10 @@ PHP_METHOD(Stub_Issue2676, modAssignPropertyVar)
 	ZEPHIR_SEPARATE_PARAM(obj);
 	zephir_memory_observe(&_0);
 	zephir_read_property_cached(&_0, obj, _zephir_prop_0, 0, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	mod_function(&_1, &_0, b);
 	if (UNEXPECTED(EG(exception))) {
@@ -644,6 +656,10 @@ PHP_METHOD(Stub_Issue2676, modAssignPropertyVar)
 	zephir_update_property_zval_cached(obj, _zephir_prop_0, 0, &_1);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, obj, _zephir_prop_0, 0, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 
@@ -669,6 +685,10 @@ PHP_METHOD(Stub_Issue2676, modAssignPropertyLiteral)
 	ZEPHIR_SEPARATE_PARAM(obj);
 	zephir_memory_observe(&_0);
 	zephir_read_property_cached(&_0, obj, _zephir_prop_0, 0, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_mod_zval_long(&_1, &_0, 4);
 	if (UNEXPECTED(EG(exception))) {
@@ -678,6 +698,10 @@ PHP_METHOD(Stub_Issue2676, modAssignPropertyLiteral)
 	zephir_update_property_zval_cached(obj, _zephir_prop_0, 0, &_1);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, obj, _zephir_prop_0, 0, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 

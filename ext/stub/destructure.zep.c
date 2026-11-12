@@ -210,7 +210,11 @@ PHP_METHOD(Stub_Destructure, pair)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 37, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 38, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	ZEPHIR_INIT_VAR(&_2);
@@ -219,7 +223,7 @@ PHP_METHOD(Stub_Destructure, pair)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 37, &_2);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 38, &_2);
 	zephir_create_array(return_value, 2, 0);
 	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_LONG(&_3, 10);
@@ -267,7 +271,11 @@ PHP_METHOD(Stub_Destructure, fromCall)
 	zephir_array_fast_append(return_value, &a);
 	zephir_array_fast_append(return_value, &b);
 	zephir_memory_observe(&_1);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 37, PH_NOISY_CC);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 38, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_fast_append(return_value, &_1);
 	RETURN_MM();
 }
@@ -671,7 +679,11 @@ PHP_METHOD(Stub_Destructure, fromProperty)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 38, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 39, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&a);
 	zephir_array_fetch_long(&a, &_0, 0, PH_NOISY, "stub/destructure.zep", 155);
 	if (UNEXPECTED(EG(exception))) {

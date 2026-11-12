@@ -52,6 +52,17 @@ class EmptyOperator extends AbstractOperator
             return $this->compileDimension($operand, $compilationContext);
         }
 
+        /**
+         * Nor is a property operand: PHP asks has_property, which calls
+         * `__isset()` first and `__get()` only once it said yes, where a read
+         * would call `__get()` alone.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2831
+         */
+        if (in_array($operand['type'], ['property-access', 'property-string-access', 'property-dynamic-access'], true)) {
+            return (new IssetOperator())->propertyIssetOrEmpty($operand, $compilationContext, true);
+        }
+
         $leftExpr = new Expression($expression['left']);
         $leftExpr->setReadOnly(true);
         $leftExpr->setNoisy(false);

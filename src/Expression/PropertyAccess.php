@@ -295,7 +295,8 @@ class PropertyAccess
             $variableVariable,
             $property,
             $readOnly,
-            $compilationContext
+            $compilationContext,
+            $this->noisy
         );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

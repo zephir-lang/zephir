@@ -1562,8 +1562,8 @@ class Name
 
 $values = [3, 'abc', 0, 2.5, 'x', null];
 // Names of an existing property, one of them converted once. A name that
-// creates a property differs: PHP's ASSIGN_OBJ_OP creates it and warns
-// "Undefined property" before the operator, where Zephir reads it silently.
+// creates a property is left out: its "Undefined property" warning names the
+// class, which is not the same on the two sides (Issue2831Test covers it).
 $names  = ['p', new Name()];
 
 $cases = 0;

@@ -374,7 +374,11 @@ PHP_METHOD(Stub_Issue2702, snapshotAroundLiteralUnset)
 
 	ZEPHIR_INIT_VAR(&ret);
 	array_init(&ret);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 73, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 74, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/issue2702.zep", 144);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
@@ -387,7 +391,11 @@ PHP_METHOD(Stub_Issue2702, snapshotAroundLiteralUnset)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 73, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 74, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_array_append(&ret, &_2, PH_SEPARATE, "stub/issue2702.zep", 146);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();

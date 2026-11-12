@@ -104,6 +104,10 @@ PHP_METHOD(Stub_Issue2682, fetchReleasedEarly)
 		ZVAL_NULL(&copy);
 		zephir_memory_observe(&_1$$4);
 		zephir_read_property_cached(&_1$$4, container, _zephir_prop_0, 0, PH_NOISY_CC);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		RETURN_CCTOR(&_1$$4);
 	}
 	RETURN_MM_BOOL(1);
@@ -181,6 +185,10 @@ PHP_METHOD(Stub_Issue2682, readReleasedEarly)
 	ZVAL_NULL(&copy);
 	zephir_memory_observe(&_0);
 	zephir_read_property_cached(&_0, container, _zephir_prop_0, 0, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_CCTOR(&_0);
 }
 
@@ -394,7 +402,7 @@ PHP_METHOD(Stub_Issue2682, pushShared)
 	ZVAL_STR_COPY(&value_zv, value);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 68, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 69, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	array_init(&_1);
 	zephir_update_property_array(this_ptr, SL("shelf"), &key_zv, &_1);
@@ -402,7 +410,11 @@ PHP_METHOD(Stub_Issue2682, pushShared)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 68, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&alias);
 	zephir_array_fetch(&alias, &_2, &key_zv, PH_NOISY, "stub/issue2682.zep", 200);
 	if (UNEXPECTED(EG(exception))) {
@@ -421,7 +433,11 @@ PHP_METHOD(Stub_Issue2682, pushShared)
 	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 45, &_5, &value_zv);
 	zephir_check_call_status();
 	zephir_create_array(return_value, 2, 0);
-	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_0, 68, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_0, 69, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&_7);
 	zephir_array_fetch(&_7, &_6, &key_zv, PH_NOISY, "stub/issue2682.zep", 204);
 	if (UNEXPECTED(EG(exception))) {

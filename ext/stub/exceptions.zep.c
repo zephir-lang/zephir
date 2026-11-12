@@ -311,9 +311,17 @@ PHP_METHOD(Stub_Exceptions, testMultiException)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &returnValue, &exception);
 	zephir_memory_observe(&iexc);
-	zephir_read_property_cached(&iexc, this_ptr, _zephir_prop_0, 40, PH_NOISY_CC);
+	zephir_read_property_cached(&iexc, this_ptr, _zephir_prop_0, 41, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&exc);
-	zephir_read_property_cached(&exc, this_ptr, _zephir_prop_1, 41, PH_NOISY_CC);
+	zephir_read_property_cached(&exc, this_ptr, _zephir_prop_1, 42, PH_NOISY_CC);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 
 	/* try_start_1: */
 

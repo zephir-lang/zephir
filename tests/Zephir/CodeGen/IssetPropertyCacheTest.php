@@ -111,6 +111,38 @@ ZEP;
         );
     }
 
+    /**
+     * The slot is declared at function scope, so `isset` in one block and
+     * `empty` after it share it without the second use falling out of scope.
+     */
+    public function testSlotIsDeclaredOutsideTheBlockThatFirstUsesIt(): void
+    {
+        $zep = <<<'ZEP'
+namespace Stub\Issue2385;
+
+class CacheBlocks
+{
+    public foo;
+
+    public function either(bool first) -> bool
+    {
+        if first {
+            return isset this->foo;
+        }
+
+        return empty this->foo;
+    }
+}
+ZEP;
+        $c = $this->compileZep('Stub\\Issue2385\\CacheBlocks', 'stub/issue2385/cacheblocks.zep', $zep);
+
+        $body = $this->methodBody($c, 'PHP_METHOD(Stub_Issue2385_CacheBlocks, either)');
+        $this->assertNotSame('', $body, 'Could not locate either() body.');
+
+        $this->assertSame(1, preg_match_all('/static\s+zend_string\s*\*/', $body), $body);
+        $this->assertLessThan(strpos($body, 'if (first)'), strpos($body, 'static zend_string *'), $body);
+    }
+
     private function compileZep(string $className, string $relPath, string $zep): string
     {
         $this->compileSource($className, $relPath, $zep);

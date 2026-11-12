@@ -1223,12 +1223,6 @@ class Method
         $compilationContext->tryCatchLabelId = 0;
 
         /**
-         * Reset per-method isset() interned-string cache.
-         */
-        $compilationContext->issetPropertyCache        = [];
-        $compilationContext->issetPropertyCacheCounter = 0;
-
-        /**
          * Reset per-method cached-property-access interned-string cache.
          */
         $compilationContext->propertyNameCache        = [];

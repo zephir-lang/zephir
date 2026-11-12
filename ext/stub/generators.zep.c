@@ -331,7 +331,11 @@ void zep_Stub_Generators_zephir_gen_step_countTo(int ht, zend_execute_data *exec
 		default: break;
 	}
 	i = 1;
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 43, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 44, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	ZEPHIR_INIT_NVAR(&_2);
@@ -340,7 +344,7 @@ void zep_Stub_Generators_zephir_gen_step_countTo(int ht, zend_execute_data *exec
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 43, &_2);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 44, &_2);
 	while (1) {
 		if (!(i <= n)) {
 			break;
@@ -937,7 +941,11 @@ void zep_Stub_Generators_zephir_gen_step_overItems(int ht, zend_execute_data *ex
 		case 2: goto zephir_yield_resume_2;
 		default: break;
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 44, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 45, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_is_iterable(&_0, 0, "stub/generators.zep", 103);
 	if (Z_TYPE_P(&_0) == IS_ARRAY) {
 		ZEPHIR_INIT_NVAR(&_1);

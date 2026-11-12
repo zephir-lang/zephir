@@ -2156,7 +2156,11 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 	ZVAL_STR_COPY(&prefix_zv, prefix);
 	zephir_memory_observe(&baseDir_zv);
 	ZVAL_STR_COPY(&baseDir_zv, baseDir);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 92, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 93, PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	_1 = zephir_array_isset_value(&_0, &prefix_zv);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();

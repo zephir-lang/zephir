@@ -305,13 +305,25 @@ PHP_METHOD(Stub_Issue2805, readMagic)
 		}
 		ZEPHIR_OBS_NVAR(&v);
 		zephir_read_property_cached(&v, o, _zephir_prop_0, 0, PH_NOISY_CC);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_OBS_NVAR(&_0$$3);
 		zephir_read_property_cached(&_0$$3, o, _zephir_prop_0, 0, PH_NOISY_CC);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		if (zephir_is_true(&_0$$3)) {
 			c++;
 		}
 		ZEPHIR_OBS_NVAR(&_1$$3);
 		zephir_read_property_cached(&_1$$3, o, _zephir_prop_0, 0, PH_NOISY_CC);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		c += zephir_fast_count_int(&_1$$3);
 		i++;
 	}

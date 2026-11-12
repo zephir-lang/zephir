@@ -266,13 +266,13 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 		ZEPHIR_INIT_NVAR(&rowA);
 		ZEPHIR_INIT_NVAR(&i);
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 56, &a);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 57, &a);
 	ZVAL_UNDEF(&_29);
 	ZVAL_LONG(&_29, m);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 57, &_29);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 58, &_29);
 	ZVAL_UNDEF(&_29);
 	ZVAL_LONG(&_29, n);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 58, &_29);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 59, &_29);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -459,8 +459,16 @@ PHP_METHOD(Stub_Issue2165_Issue, reciprocal)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 57, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 58, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 58, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 59, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CALL_SELF_CACHED(&_0, "ones", &_zephir_call_cache[0], &_1, &_2);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_METHOD_CACHED(&_0, "divideMatrix", &_zephir_call_cache[1], this_ptr);
