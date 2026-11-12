@@ -18,7 +18,6 @@ use PHPUnit\Framework\TestCase;
 use function file_get_contents;
 use function glob;
 use function implode;
-use function putenv;
 
 /**
  * A closure resolves `self`, `parent` and `static` as the code it is written
@@ -38,18 +37,11 @@ final class Issue2825ClosureTest extends TestCase
 
     protected function tearDown(): void
     {
-        putenv('ZEPHIR_FORCE_PHP_PARSER');
         $this->tearDownZephirRunner();
     }
 
-    /**
-     * The start line comes from the parser; zephir_parser 2.10.0 does not
-     * record it yet, so the pure-PHP parser is used.
-     */
     public function testFunctionInClosureIsTheNamePhpGivesIt(): void
     {
-        putenv('ZEPHIR_FORCE_PHP_PARSER=1');
-
         $this->generateOk('names.zep', <<<'ZEP'
             namespace Stub;
 

@@ -6,12 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-11-12
+
 ### Changed
 - Added an inline cache to each method and static call site, so a call on the same class from the same class runs the method it resolved before without looking it up again [#2790](https://github.com/zephir-lang/zephir/issues/2790)
 - Changed `==` and `!=` between `null` and a `var`, `string` or `array` to PHP's loose comparison, where `false`, `0`, `0.0`, `""` and `[]` equal `null`, reported by the new `loose-null-comparison` warning; use `===` to test for `null` [#2820](https://github.com/zephir-lang/zephir/issues/2820)
 - Changed `__METHOD__` to PHP's `Class::method`, with the namespace, the declaring trait of a trait method and the namespaced name in a function [#2825](https://github.com/zephir-lang/zephir/issues/2825)
 - Changed `__FUNCTION__` and `__METHOD__` in a closure to the name PHP gives it, `Ns\{closure}` before PHP 8.4 and `{closure:Class::method():LINE}` from 8.4 [#2825](https://github.com/zephir-lang/zephir/issues/2825)
 - Added a cache record to each static property access, so a repeated read or write of `self::x`, `parent::x` or `X::x` skips the property lookup [#2805](https://github.com/zephir-lang/zephir/issues/2805)
+- Raised the minimum `ext-zephir_parser` to 2.11.0 for the `X::class` parameter default grammar and the closure start line PHP 8.4 names a closure after [#2825](https://github.com/zephir-lang/zephir/issues/2825)
 
 ### Fixed
 - Fixed a recursive `this->m()` in a loop, and a call in a loop on a local first assigned with `new`, running the method another object's class resolved to [#2790](https://github.com/zephir-lang/zephir/issues/2790)
