@@ -57,6 +57,12 @@ class NativeArrayAccess
         $expr = new Expression($expression['left']);
         $expr->setReadOnly(!$this->writeThrough);
         $expr->setWriteThrough($this->writeThrough);
+        /*
+         * The container is fetched as quietly as this access: in an `isset`,
+         * `empty` or `fetch` chain PHP fetches every container with BP_VAR_IS.
+         * See https://github.com/zephir-lang/zephir/issues/2832.
+         */
+        $expr->setNoisy($this->noisy);
         $exprVariable = $expr->compile($compilationContext);
 
         /**

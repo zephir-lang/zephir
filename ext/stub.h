@@ -194,6 +194,8 @@
 #include "stub/issue2826.zep.h"
 #include "stub/issue2831.zep.h"
 #include "stub/issue2831child.zep.h"
+#include "stub/issue2832.zep.h"
+#include "stub/issue2832base.zep.h"
 #include "stub/issue663.zep.h"
 #include "stub/issue760.zep.h"
 #include "stub/issue808.zep.h"

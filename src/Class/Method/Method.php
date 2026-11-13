@@ -2263,10 +2263,18 @@ class Method
                 $slotPrinter->output("\t" . 'static zend_string *' . $slotVar . ' = NULL;');
             }
             foreach ($compilationContext->propertyNameCache as $slotName => $slotVar) {
+                /**
+                 * The name is already a C string body: `o->{"a\"b"}` keeps
+                 * its escapes, so the C compiler measures a name that has one.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2832
+                 */
+                $slotLength = str_contains($slotName, '\\')
+                    ? 'sizeof("' . $slotName . '") - 1'
+                    : (string) strlen($slotName);
                 $slotPrinter->output("\t" . 'if (UNEXPECTED(!' . $slotVar . ')) {');
                 $slotPrinter->output(
-                    "\t\t" . $slotVar . ' = zend_string_init("' . addslashes($slotName) . '", '
-                    . strlen($slotName) . ', 1);'
+                    "\t\t" . $slotVar . ' = zend_string_init("' . $slotName . '", ' . $slotLength . ', 1);'
                 );
                 $slotPrinter->output("\t" . '}');
             }

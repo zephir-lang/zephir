@@ -135,9 +135,9 @@ class EmptyOperator extends AbstractOperator
 
         $containerCode = $compilationContext->backend->getVariableCode($containerVariable);
 
+        // The key is an ordinary read, as in PHP: only the container is fetched silently (#2832)
         $offsetExpr = new Expression($arrayAccess['right']);
         $offsetExpr->setReadOnly(true);
-        $offsetExpr->setNoisy(false);
         $offset = $offsetExpr->compile($compilationContext);
         $offset = $compilationContext->backend->boxArrayKey($offset, $compilationContext);
 

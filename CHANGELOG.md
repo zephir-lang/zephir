@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+- Fixed `fetch` of a property skipping `__isset()`, visibility and initialization, and missing a property named by a non-string such as `1` [#2832](https://github.com/zephir-lang/zephir/issues/2832)
+- Fixed an exception from `__isset()`, `__get()` or the property name during `fetch` not stopping the method [#2832](https://github.com/zephir-lang/zephir/issues/2832)
+- Fixed `fetch` of `o->{"x"}` or of a property named by an `int` failing to compile [#2832](https://github.com/zephir-lang/zephir/issues/2832)
+- Fixed `fetch a, a[k]` and `fetch k, a[k]` releasing the array or the key before reading it [#2832](https://github.com/zephir-lang/zephir/issues/2832)
+- Fixed `isset`, `empty` and `fetch` reading the key silently and a container below the last one noisily, unlike PHP [#2832](https://github.com/zephir-lang/zephir/issues/2832)
+- Fixed a property name with an escape such as `o->{"a\"b"}` being read, written and tested with its backslashes kept [#2832](https://github.com/zephir-lang/zephir/issues/2832)
+
 ## [1.8.0] - 2026-11-12
 
 ### Changed
