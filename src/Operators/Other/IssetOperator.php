@@ -92,9 +92,9 @@ class IssetOperator extends AbstractOperator
                     }
                 }
 
+                // The key is an ordinary read, as in PHP: only the container is fetched silently (#2832)
                 $expr = new Expression($left['right']);
                 $expr->setReadOnly(true);
-                $expr->setNoisy(false);
                 $resolvedExpr = $expr->compile($compilationContext);
                 $resolvedExpr = $compilationContext->backend->boxArrayKey($resolvedExpr, $compilationContext);
 
@@ -210,9 +210,32 @@ class IssetOperator extends AbstractOperator
             return new CompiledExpression('bool', $compilationContext->emitCheckedBool($isset->getCode()), $left);
         }
 
+        $indexVariable = $this->propertyNameVariable($left, $compilationContext);
+
+        $function = $empty ? 'zephir_isempty_property_zval' : 'zephir_isset_property_value_zval';
+
+        return new CompiledExpression(
+            'bool',
+            $compilationContext->emitCheckedBool(
+                $function . '(' . $variableCode . ', '
+                . $compilationContext->backend->getVariableCode($indexVariable) . ')'
+            ),
+            $left['right']
+        );
+    }
+
+    /**
+     * The variable holding the name of `o->{name}`, an integer boxed, for the
+     * kernel helpers that turn it into a string as PHP does. `fetch` names its
+     * property the same way.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    public function propertyNameVariable(array $left, CompilationContext $compilationContext): Variable
+    {
         $expr = new Expression($left['right']);
         $expr->setReadOnly(true);
-        $expr->setNoisy(false);
         $resolvedExpr = $expr->compile($compilationContext);
         $resolvedExpr = $compilationContext->backend->boxArrayKey($resolvedExpr, $compilationContext);
 
@@ -243,16 +266,7 @@ class IssetOperator extends AbstractOperator
             throw new CompilerException('[' . $indexVariable->getType() . ']', $left);
         }
 
-        $function = $empty ? 'zephir_isempty_property_zval' : 'zephir_isset_property_value_zval';
-
-        return new CompiledExpression(
-            'bool',
-            $compilationContext->emitCheckedBool(
-                $function . '(' . $variableCode . ', '
-                . $compilationContext->backend->getVariableCode($indexVariable) . ')'
-            ),
-            $left['right']
-        );
+        return $indexVariable;
     }
 
     /**

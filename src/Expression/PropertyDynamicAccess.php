@@ -42,7 +42,15 @@ class PropertyDynamicAccess
     {
         $propertyAccess = $expression;
 
-        $expr         = new Expression($propertyAccess['left']);
+        /**
+         * The container is fetched as quietly as this access: in an `isset`,
+         * `empty` or `fetch` chain PHP fetches every container with BP_VAR_IS,
+         * not only the last one.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2832
+         */
+        $expr = new Expression($propertyAccess['left']);
+        $expr->setNoisy($this->noisy);
         $exprVariable = $expr->compile($compilationContext);
 
         switch ($exprVariable->getType()) {

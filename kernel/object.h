@@ -45,10 +45,6 @@ int zephir_zval_is_traversable(zval *object);
 /** Method exists */
 int zephir_method_exists(zval *object, const zval *method_name);
 
-/** Isset properties (key/property existence only) */
-int zephir_isset_property(zval *object, const char *property_name, unsigned int property_length);
-int zephir_isset_property_zval(zval *object, const zval *property);
-
 /**
  * PHP isset() semantics for object properties: property exists AND the
  * stored value is not IS_NULL. Used by the user-facing isset() codegen path.
@@ -79,6 +75,13 @@ int zephir_read_property(zval *result, zval *object, const char *property_name, 
 int zephir_read_property_cached(zval *result, zval *object, zend_string *name, zend_ulong cache_slot, int flags);
 int zephir_read_property_zval(zval *result, zval *object, zval *property, int flags);
 int zephir_return_property(zval *return_value, zval *object, char *property_name, unsigned int property_length);
+
+/**
+ * `fetch value, o->x`: PHP's isset($o->x) followed by a read of $o->x, except
+ * that a property which exists and holds null is found.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2832
+ */
 int zephir_fetch_property(zval *result, zval *object, const char *property_name, uint32_t property_length, int silent);
 int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int silent);
 

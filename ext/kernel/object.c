@@ -415,48 +415,6 @@ int zephir_clone(zval *destination, zval *obj)
 }
 
 /**
- * Checks if property exists on object
- */
-int zephir_isset_property(zval *object, const char *property_name, unsigned int property_length)
-{
-	if (Z_TYPE_P(object) == IS_OBJECT) {
-		if (EXPECTED(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, property_name, property_length))) {
-			return 1;
-		}
-
-		return zend_hash_str_exists(
-			Z_OBJ_HT_P(object)->get_properties(Z_OBJ_P(object)),
-			property_name,
-			property_length
-		);
-	}
-
-	return 0;
-}
-
-/**
- * Checks if string property exists on object
- */
-int zephir_isset_property_zval(zval *object, const zval *property)
-{
-	if (Z_TYPE_P(object) == IS_OBJECT) {
-		if (Z_TYPE_P(property) == IS_STRING) {
-			if (EXPECTED(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, Z_STRVAL_P(property), Z_STRLEN_P(property)))) {
-				return 1;
-			} else {
-				return zend_hash_str_exists(
-					Z_OBJ_HT_P(object)->get_properties(Z_OBJ_P(object)),
-					Z_STRVAL_P(property),
-					Z_STRLEN_P(property)
-				);
-			}
-		}
-	}
-
-	return 0;
-}
-
-/**
  * PHP's `ZEND_ISSET_ISEMPTY_PROP_OBJ`: `check` is ZEND_PROPERTY_ISSET for
  * isset(), which is true when the property exists and is not null, and
  * ZEND_PROPERTY_NOT_EMPTY for empty(), which answers the negation. The
@@ -981,36 +939,81 @@ static int zephir_read_property_value(zval *result, zval *object, const char *pr
 }
 
 /**
- * Fetches a property using a const char
+ * `fetch value, o->x` is PHP's `isset($o->x)` followed by a read of `$o->x`,
+ * except that a property which exists and holds null is found, as `fetch` of
+ * an array key holding null is. has_property is asked ZEND_PROPERTY_ISSET
+ * first, so whenever isset() is true the same handlers run in the same order
+ * as in PHP. Only when it is false, and nothing threw, is it asked
+ * ZEND_PROPERTY_EXISTS, which never calls `__isset()`. The read is PHP's
+ * BP_VAR_R one. `result` may be the object or the name itself, so it is
+ * written last.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2832
  */
-int zephir_fetch_property(zval *result, zval *object, const char *property_name, uint32_t property_length, int silent)
+static int zephir_fetch_property_named(zval *result, zval *object, zend_string *name)
 {
-	if (zephir_isset_property(object, property_name, property_length)) {
-		zephir_read_property_value(result, object, property_name, property_length, PH_NOISY);
-		return 1;
-	}
+	zend_object *zobj = Z_OBJ_P(object);
 
-	ZVAL_NULL(result);
-	return 0;
-}
-
-/**
- * Fetches a property using a zval property
- */
-int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int silent)
-{
-	if (UNEXPECTED(Z_TYPE_P(property) != IS_STRING)) {
+	if (!zobj->handlers->has_property(zobj, name, ZEND_PROPERTY_ISSET, NULL)
+		&& (EG(exception) || !zobj->handlers->has_property(zobj, name, ZEND_PROPERTY_EXISTS, NULL))
+	) {
 		ZVAL_NULL(result);
 		return 0;
 	}
 
-	if (zephir_isset_property(object, Z_STRVAL_P(property), Z_STRLEN_P(property))) {
-		zephir_read_property_cached(result, object, Z_STR_P(property), 0, PH_NOISY);
-		return 1;
+	zephir_read_property_cached(result, object, name, 0, PH_NOISY);
+
+	return 1;
+}
+
+/**
+ * Fetches a property named in the code, `fetch value, o->x`. A non-object
+ * has no property.
+ */
+int zephir_fetch_property(zval *result, zval *object, const char *property_name, uint32_t property_length, int silent)
+{
+	zend_string *name;
+	int found;
+
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		ZVAL_NULL(result);
+		return 0;
 	}
 
-	ZVAL_NULL(result);
-	return 0;
+	name  = zend_string_init(property_name, property_length, 0);
+	found = zephir_fetch_property_named(result, object, name);
+	zend_string_release(name);
+
+	return found;
+}
+
+/**
+ * Fetches a property named at runtime, `fetch value, o->{name}`. As in PHP's
+ * isset(), a non-object has no property before the name is looked at, and
+ * the name is then turned into a string, which may warn or throw. A name
+ * that does not convert is not found, with the Error pending.
+ */
+int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int silent)
+{
+	zend_string *tmp_name;
+	zend_string *name;
+	int found;
+
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		ZVAL_NULL(result);
+		return 0;
+	}
+
+	name = zval_try_get_tmp_string(property, &tmp_name);
+	if (UNEXPECTED(name == NULL)) {
+		ZVAL_NULL(result);
+		return 0;
+	}
+
+	found = zephir_fetch_property_named(result, object, name);
+	zend_tmp_string_release(tmp_name);
+
+	return found;
 }
 
 int zephir_return_property(zval *return_value, zval *object, char *property_name, unsigned int property_length)

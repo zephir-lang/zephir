@@ -153,7 +153,7 @@ PHP_METHOD(Stub_ArrayIterator, valid)
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 19, PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 19, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}

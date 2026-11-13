@@ -204,10 +204,16 @@ class StatementsBlock
                 // Handle special cases that don't fit the factory pattern
                 switch ($statement['type']) {
                     case 'fetch':
+                        /**
+                         * The fetch and its exception check are emitted while
+                         * compiling; the result left over is the bool temp
+                         * holding "found", unused by a statement.
+                         *
+                         * @see https://github.com/zephir-lang/zephir/issues/2832
+                         */
                         $expr = new Expression($statement['expr']);
                         $expr->setExpectReturn(false);
-                        $compiledExpression = $expr->compile($compilationContext);
-                        $compilationContext->codePrinter->output($compiledExpression->getCode() . ';');
+                        $expr->compile($compilationContext);
                         break;
 
                     case 'mcall':

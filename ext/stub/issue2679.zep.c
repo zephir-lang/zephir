@@ -177,7 +177,6 @@ PHP_METHOD(Stub_Issue2679, fetchStatement)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	_0;
 	RETURN_CCTOR(&v);
 }
 
