@@ -23,12 +23,12 @@ jobs:
     name: Static Code Analysis
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         env:
           PHP_CS_FIXER_VERSION: 3.37.0
         with:
@@ -77,12 +77,12 @@ jobs:
           #- { php: '8.2', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '' }
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 5
 
       - name: Install PHP ${{ matrix.php }}
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: '${{ matrix.php }}'
           # Xdebug is pinned on Linux ONLY. `coverage: xdebug` installs the
@@ -201,7 +201,7 @@ jobs:
           ZEPHIR_FORCE_PHP_PARSER: '1'
 
       - name: "Upload coverage file artifact"
-        uses: "actions/upload-artifact@v7"
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
           path: "tests/output/clover.xml"
@@ -259,12 +259,12 @@ jobs:
         php: [ '8.0', '8.6' ]
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 5
 
       - name: Install PHP ${{ matrix.php }} (without zephir_parser)
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: '${{ matrix.php }}'
           extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli
@@ -334,7 +334,7 @@ jobs:
       - "build-and-test"
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 2
 
@@ -359,7 +359,7 @@ jobs:
           mkdir -p reports
 
       - name: "Download coverage files"
-        uses: "actions/download-artifact@v8"
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           path: "reports"
 
@@ -368,7 +368,7 @@ jobs:
         working-directory: reports
 
       - name: "Upload to Codecov"
-        uses: "codecov/codecov-action@v7"
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: reports
@@ -378,7 +378,7 @@ jobs:
 
       - name: Upload build artifacts after Failure
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: debug-PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}-${{ matrix.arch }}
           path: |
@@ -414,7 +414,7 @@ jobs:
 
     steps:
       - name: Checkout head
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Need full history so we can switch to the base branch in-place.
           fetch-depth: 0
@@ -447,7 +447,7 @@ jobs:
           fi
 
       - name: Setup PHP ${{ env.PHP_VERSION }}
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: '${{ env.PHP_VERSION }}'
           extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
@@ -552,7 +552,7 @@ jobs:
 
       - name: Upload benchmark artifacts
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: benchmark-report-${{ steps.pr.outputs.branch_slug }}
           path: |
@@ -562,7 +562,7 @@ jobs:
 
       - name: Post or update PR comment
         if: always() && steps.pr.outputs.has_pr == 'true'
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           PR_NUMBER: ${{ steps.pr.outputs.number }}
         with:
