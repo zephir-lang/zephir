@@ -90,8 +90,14 @@ final class Name
                         // Reject anything that is not a valid Unicode codepoint
                         // (PHP rejects > U+10FFFF). Out-of-range/invalid values
                         // fall through and are emitted literally, never as
-                        // malformed octal that could leak bytes.
-                        if (ctype_xdigit($hex) && hexdec($hex) <= 0x10FFFF) {
+                        // malformed octal that could leak bytes. Past six
+                        // significant digits it is out of range, and hexdec()
+                        // would lose precision (a notice since PHP 8.6).
+                        if (
+                            ctype_xdigit($hex)
+                            && strlen(ltrim($hex, '0')) <= 6
+                            && hexdec($hex) <= 0x10FFFF
+                        ) {
                             $new .= self::encodeCodepointToOctal((int) hexdec($hex));
                             $i    = $close;
                             $next = $close + 1;

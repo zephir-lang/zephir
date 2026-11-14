@@ -6,7 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+- Added PHP 8.6 support [#2670](https://github.com/zephir-lang/zephir/issues/2670)
+
+### Changed
+- Changed `doubleval()` to call PHP's function instead of inlining it, so PHP 8.6 reports its deprecation [#2670](https://github.com/zephir-lang/zephir/issues/2670)
+
 ### Fixed
+- Fixed a method using `func_get_arg()` throwing when called through a callable such as `call_user_func()` [#2670](https://github.com/zephir-lang/zephir/issues/2670)
+- Fixed `unique_key()` leaking a string for every number it converts [#2670](https://github.com/zephir-lang/zephir/issues/2670)
 - Fixed `fetch` of a property skipping `__isset()`, visibility and initialization, and missing a property named by a non-string such as `1` [#2832](https://github.com/zephir-lang/zephir/issues/2832)
 - Fixed an exception from `__isset()`, `__get()` or the property name during `fetch` not stopping the method [#2832](https://github.com/zephir-lang/zephir/issues/2832)
 - Fixed `fetch` of `o->{"x"}` or of a property named by an `int` failing to compile [#2832](https://github.com/zephir-lang/zephir/issues/2832)

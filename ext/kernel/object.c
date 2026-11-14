@@ -1973,7 +1973,6 @@ void zephir_make_local_reference(zval *var)
  *
  * @see https://github.com/zephir-lang/zephir/issues/2667
  */
-#if PHP_VERSION_ID < 80600
 
 /** Carries the enclosing `$this` on a carrier whose body reads it. */
 #define ZEPHIR_CLOSURE_BOUND_THIS "__$zephir_this"
@@ -1991,6 +1990,21 @@ static zend_function *zephir_closure_bind_to_fn = NULL;
 static zif_handler zephir_closure_std_bind_to = NULL;
 static zif_handler zephir_closure_std_bind    = NULL;
 static zif_handler zephir_closure_std_call    = NULL;
+
+/**
+ * The object a closure is bound to, or NULL. zend_get_closure_this_ptr()
+ * returns the `$this` slot before PHP 8.6 and the object from 8.6 on.
+ */
+static zend_object *zephir_closure_bound_object(zval *closure)
+{
+#if PHP_VERSION_ID >= 80600
+	return zend_get_closure_this_ptr(closure);
+#else
+	zval *bound = zend_get_closure_this_ptr(closure);
+
+	return bound != NULL && Z_TYPE_P(bound) == IS_OBJECT ? Z_OBJ_P(bound) : NULL;
+#endif
+}
 
 static int zephir_closure_is_ours(zval *closure)
 {
@@ -2047,10 +2061,10 @@ static HashTable *zephir_closure_get_debug_info(zend_object *object, int *is_tem
 {
 	const zend_function *func;
 	zend_object *carrier = NULL;
+	zend_object *bound;
 	zend_string *name;
 	zend_property_info *info;
 	zval closure_zv, captures, value;
-	zval *bound;
 	HashTable *debug_info;
 
 	*is_temp   = 1;
@@ -2061,13 +2075,13 @@ static HashTable *zephir_closure_get_debug_info(zend_object *object, int *is_tem
 	zend_hash_str_update(debug_info, ZEND_STRL("name"), &value);
 
 	ZVAL_OBJ(&closure_zv, object);
-	bound = zend_get_closure_this_ptr(&closure_zv);
+	bound = zephir_closure_bound_object(&closure_zv);
 
-	if (bound != NULL && Z_TYPE_P(bound) == IS_OBJECT) {
+	if (bound != NULL) {
 		if (object->handlers == &zephir_closure_carrier_handlers) {
-			carrier = Z_OBJ_P(bound);
+			carrier = bound;
 		} else {
-			ZVAL_COPY(&value, bound);
+			ZVAL_OBJ_COPY(&value, bound);
 			zend_hash_str_update(debug_info, ZEND_STRL("this"), &value);
 		}
 	}
@@ -2171,10 +2185,44 @@ static zend_object *zephir_closure_copy_carrier(zend_object *carrier, zval *new_
  */
 static void zephir_closure_adopt_carrier(zval *rebound, zval *source, zval *new_this)
 {
-	zval *bound = zend_get_closure_this_ptr(source);
+	zend_object *carrier = zephir_closure_bound_object(source);
+#if PHP_VERSION_ID >= 80600
+	zend_class_entry *called_scope;
+	zend_function *rebound_func;
+	zend_function *invoke;
+	zend_object *rebound_this;
+	zend_object *copy;
+	zval fresh;
+
+	if (carrier == NULL) {
+		return;
+	}
+
+	/**
+	 * PHP 8.6 no longer hands out the `$this` slot, so the closure is built
+	 * again around the copy, with the scope and called scope the engine just
+	 * resolved. It is built from the carrier class's own `__invoke`, as at
+	 * creation: the engine drops `$this` from a closure over a function that
+	 * has no scope, and an unbound scope is exactly what the rebound
+	 * function may now carry.
+	 */
+	invoke = zend_hash_str_find_ptr(&carrier->ce->function_table, ZEND_STRL(ZEND_INVOKE_FUNC_NAME));
+
+	if (invoke == NULL
+		|| Z_OBJ_HT_P(rebound)->get_closure(Z_OBJ_P(rebound), &called_scope, &rebound_func, &rebound_this, 1) == FAILURE) {
+		return;
+	}
+
+	copy = zephir_closure_copy_carrier(carrier, new_this);
+	zend_create_closure(&fresh, invoke, rebound_func->common.scope, called_scope, copy);
+	OBJ_RELEASE(copy);
+
+	zval_ptr_dtor(rebound);
+	ZVAL_COPY_VALUE(rebound, &fresh);
+#else
 	zval *slot;
 
-	if (bound == NULL || Z_TYPE_P(bound) != IS_OBJECT) {
+	if (carrier == NULL) {
 		return;
 	}
 
@@ -2186,7 +2234,8 @@ static void zephir_closure_adopt_carrier(zval *rebound, zval *source, zval *new_
 
 	/* Releases the `$this` the engine bound; safe on the IS_UNDEF an unbind leaves. */
 	zval_ptr_dtor(slot);
-	ZVAL_OBJ(slot, zephir_closure_copy_carrier(Z_OBJ_P(bound), new_this));
+	ZVAL_OBJ(slot, zephir_closure_copy_carrier(carrier, new_this));
+#endif
 
 	Z_OBJ_P(rebound)->handlers = &zephir_closure_carrier_handlers;
 }
@@ -2200,17 +2249,16 @@ static void zephir_closure_adopt_carrier(zval *rebound, zval *source, zval *new_
  */
 static int zephir_closure_refuse_unbind(zval *closure, zval *new_this)
 {
-	zval *bound;
+	zend_object *bound;
 
 	if (new_this != NULL && Z_TYPE_P(new_this) == IS_OBJECT) {
 		return 0;
 	}
 
-	bound = zend_get_closure_this_ptr(closure);
+	bound = zephir_closure_bound_object(closure);
 
 	if (bound == NULL
-		|| Z_TYPE_P(bound) != IS_OBJECT
-		|| !zend_hash_str_exists(&Z_OBJCE_P(bound)->properties_info, ZEND_STRL(ZEPHIR_CLOSURE_BOUND_THIS))) {
+		|| !zend_hash_str_exists(&bound->ce->properties_info, ZEND_STRL(ZEPHIR_CLOSURE_BOUND_THIS))) {
 		return 0;
 	}
 
@@ -2446,13 +2494,6 @@ void zephir_closure_module_shutdown(void)
 	zephir_closure_bind_to_fn  = NULL;
 }
 
-#else
-
-void zephir_closure_module_init(void) {}
-void zephir_closure_module_shutdown(void) {}
-
-#endif /* PHP_VERSION_ID < 80600 */
-
 /**
  * Creates a closure bound to `bound_this`, scoped by `scope_this`.
  *
@@ -2504,12 +2545,20 @@ static int zephir_create_closure_impl(zval *return_value, zval *bound_this, zval
 	 * invocation leaked one reference and the closure - with everything it
 	 * held - was never freed.
 	 */
+#if PHP_VERSION_ID >= 80600
+	zend_create_closure(
+		return_value,
+		function_ptr,
+		scope_ce,
+		called_ce,
+		bound_this && Z_TYPE_P(bound_this) == IS_OBJECT ? Z_OBJ_P(bound_this) : NULL
+	);
+#else
 	zend_create_closure(return_value, function_ptr, scope_ce, called_ce, bound_this);
+#endif
 
-#if PHP_VERSION_ID < 80600
 	/* Marks the closure as ours, so a rebind can find its carrier. */
 	zephir_closure_tag(return_value, has_carrier);
-#endif
 
 	return SUCCESS;
 }

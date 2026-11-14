@@ -81,7 +81,7 @@ int zephir_set_symbol_str_op(const char *key_name, size_t key_length, zval *valu
 			if (Z_REFCOUNT_P(z) > 1) { \
 				Z_DELREF_P(z); \
 			} else { \
-				zval_dtor(z); \
+				zval_ptr_dtor_nogc(z); \
 			} \
 		} \
 		ZVAL_NULL(z); \

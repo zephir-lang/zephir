@@ -686,6 +686,10 @@ static int zephir_invoke(zend_fcall_info *fci, zend_fcall_info_cache *fcic, uint
 
 	fci->param_count = param_count;
 	fci->params      = p;
+#if PHP_VERSION_ID >= 80600
+	/* Every argument is copied; a set bit would move it out of `p` unreferenced. */
+	fci->consumed_args = 0;
+#endif
 
 	status = zend_call_function(fci, fcic);
 
@@ -1419,6 +1423,9 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 	ZVAL_UNDEF(&fci.function_name);
 	fci.param_count = 0;
 	fci.params = NULL;
+#if PHP_VERSION_ID >= 80600
+	fci.consumed_args = 0;
+#endif
 	fci.retval = return_value;
 	if (params) {
 		fci.named_params = Z_ARRVAL_P(params);

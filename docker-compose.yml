@@ -60,3 +60,13 @@ services:
       - "USER=Zephir"
     volumes:
       - .:/srv
+
+  zephir-8.6:
+    container_name: zephir-8.6
+    hostname: zephir-86
+    build: .docker/8.6
+    working_dir: /srv
+    environment:
+      - "USER=Zephir"
+    volumes:
+      - .:/srv

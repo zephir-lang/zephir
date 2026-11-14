@@ -52,7 +52,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '8.0', '8.1', '8.2', '8.3', '8.4', '8.5' ]
+        php: [ '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
         ts: [ 'ts', 'nts' ]
         arch: [ 'x64' ]
 
@@ -102,9 +102,12 @@ jobs:
           # every test asserting exact command output. Linux escapes it because
           # the distro package's mods-available/xdebug.ini already carries the
           # correct prefix and enable_extension() reuses it.
-          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}${{ runner.os == 'Linux' && format(', xdebug-{0}', env.XDEBUG_VERSION) || '' }}
+          #
+          # PHP 8.6 runs without coverage: no released Xdebug supports it yet
+          # (3.5.3 stops at 8.5.99).
+          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}${{ runner.os == 'Linux' && matrix.php != '8.6' && format(', xdebug-{0}', env.XDEBUG_VERSION) || '' }}
           tools: pecl, phpize, php-config
-          coverage: xdebug
+          coverage: ${{ matrix.php == '8.6' && 'none' || 'xdebug' }}
           # variables_order: https://github.com/zephir-lang/zephir/pull/1537
           # enable_dl:       https://github.com/zephir-lang/zephir/pull/1654
           # allow_url_fopen: https://github.com/zephir-lang/zephir/issues/1713
@@ -253,7 +256,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '8.0', '8.5' ]
+        php: [ '8.0', '8.6' ]
 
     steps:
       - uses: actions/checkout@v7
