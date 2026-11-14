@@ -171,6 +171,9 @@ PHP_METHOD(Stub_Closures, issue1036SetArgument)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &argument);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 31, argument);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Closures, issue1036SetFunction)
@@ -189,6 +192,9 @@ PHP_METHOD(Stub_Closures, issue1036SetFunction)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &func);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 32, func);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 /**
@@ -291,6 +297,9 @@ PHP_METHOD(Stub_Closures, issue2497SetName)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 33, &name_zv);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 /**

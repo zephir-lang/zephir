@@ -267,12 +267,24 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 		ZEPHIR_INIT_NVAR(&i);
 	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 57, &a);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZVAL_UNDEF(&_29);
 	ZVAL_LONG(&_29, m);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 58, &_29);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZVAL_UNDEF(&_29);
 	ZVAL_LONG(&_29, n);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 59, &_29);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

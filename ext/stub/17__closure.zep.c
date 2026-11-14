@@ -44,7 +44,11 @@ PHP_METHOD(stub_17__closure, __invoke)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &value_param);
 	zephir_get_strval(&value, value_param);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 166, &value);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 169, &value);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

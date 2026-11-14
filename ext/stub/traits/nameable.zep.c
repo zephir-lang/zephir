@@ -64,7 +64,10 @@ PHP_METHOD(Stub_Traits_Nameable, setName)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 161, &name_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 164, &name_zv);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Traits_Nameable, getName)

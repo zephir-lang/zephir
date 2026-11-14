@@ -152,9 +152,13 @@ PHP_METHOD(Stub_Typeoff, testClassPropertyAccess)
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "test string");
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 162, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 165, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&_1);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 162, PH_NOISY_CC);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 165, PH_NOISY_CC);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;

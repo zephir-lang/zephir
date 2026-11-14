@@ -224,6 +224,10 @@ PHP_METHOD(Stub_Destructure, pair)
 		return;
 	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 38, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_create_array(return_value, 2, 0);
 	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_LONG(&_3, 10);

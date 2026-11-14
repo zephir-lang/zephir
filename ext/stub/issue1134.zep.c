@@ -56,6 +56,10 @@ PHP_METHOD(Stub_Issue1134, __construct)
 		zephir_get_arrval(&config, config_param);
 	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 52, &config);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

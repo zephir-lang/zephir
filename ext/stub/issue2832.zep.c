@@ -263,6 +263,10 @@ PHP_METHOD(Stub_Issue2832, writeEscaped)
 	zephir_fetch_params(1, 2, 0, &o, &value);
 	ZEPHIR_SEPARATE_PARAM(o);
 	zephir_update_property_zval_cached(o, _zephir_prop_0, 0, value);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -365,15 +369,31 @@ PHP_METHOD(Stub_Issue2832, fetchThenMark)
 	if (_0) {
 		if (1) {
 			zephir_update_property_zval_cached(target, _zephir_prop_0, 0, &__$true);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		} else {
 			zephir_update_property_zval_cached(target, _zephir_prop_0, 0, &__$false);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
 		}
 		RETURN_CCTOR(&c);
 	}
 	if (1) {
 		zephir_update_property_zval_cached(target, _zephir_prop_0, 0, &__$true);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	} else {
 		zephir_update_property_zval_cached(target, _zephir_prop_0, 0, &__$false);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	}
 	RETURN_MM_NULL();
 }

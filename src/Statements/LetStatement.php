@@ -23,6 +23,7 @@ use Zephir\Expression\Builder\Operators\AssignVariableOperator;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Statements\Let\ArrayIndexOperator;
 use Zephir\Statements\Let\AssignmentFactory;
+use Zephir\Statements\Let\PropertyOperator;
 use Zephir\Variable\Variable;
 
 /**
@@ -240,23 +241,26 @@ class LetStatement extends StatementAbstract
     }
 
     /**
-     * Rewrites a compound assignment to a property, `this->p op= e`,
-     * `self::p op= e`, `this->{n} op= e` or `this->{"p"} op= e`, as a read, the
-     * operator and a write back, which is what PHP's ASSIGN_OBJ_OP and
-     * ASSIGN_STATIC_PROP_OP do.
+     * Prepares a compound assignment to a property, `this->p op= e`,
+     * `self::p op= e`, `this->{n} op= e` or `this->{"p"} op= e`.
      *
-     * PHP evaluates `e` before it reads the property, so an `e` that runs code,
-     * such as a call that changes the property, is evaluated first. It also
-     * converts a dynamic property name once, so a name that is not a `string`
-     * is converted once into a temporary that the read and the write share.
+     * PHP evaluates `e` before it fetches the property, so an `e` that runs
+     * code, such as a call that changes the property, is evaluated first, into
+     * a value of its own. A dynamic name held by a native local is converted
+     * once into a string temporary; any other name is converted by the kernel,
+     * as PHP converts it.
      *
-     * `self::p += e`, `self::p -= e` and `.=` on an object or static property
-     * already read and write in place.
+     * An object property keeps its operator: PropertyOperator applies it the
+     * way PHP's ASSIGN_OBJ_OP does, in place. A static property becomes a
+     * read, the operator and a write back, which is what ASSIGN_STATIC_PROP_OP
+     * does; `self::p += e`, `self::p -= e` and `self::p .= e` already read and
+     * write in place.
      *
      * @throws Exception
      * @throws ReflectionException
      *
      * @see https://github.com/zephir-lang/zephir/issues/2753
+     * @see https://github.com/zephir-lang/zephir/issues/2808
      */
     protected function replacePropertyCompoundAssign(array $assignment, CompilationContext $compilationContext): array
     {
@@ -265,17 +269,17 @@ class LetStatement extends StatementAbstract
             return $assignment;
         }
 
-        $inPlace = match ($assignment['operator']) {
-            AssignVariableOperator::OPERATOR_ADD,
-            AssignVariableOperator::OPERATOR_SUB    => 'static-property' === $assignment['assign-type'],
-            AssignVariableOperator::OPERATOR_CONCAT => in_array(
-                $assignment['assign-type'],
-                ['object-property', 'static-property'],
-                true
-            ),
-            default                                 => false,
-        };
-        if ($inPlace) {
+        $isStatic = 'static-property' === $assignment['assign-type'];
+        $inPlace  = in_array(
+            $assignment['operator'],
+            [
+                AssignVariableOperator::OPERATOR_ADD,
+                AssignVariableOperator::OPERATOR_SUB,
+                AssignVariableOperator::OPERATOR_CONCAT,
+            ],
+            true
+        );
+        if ($isStatic && $inPlace) {
             return $assignment;
         }
 
@@ -287,20 +291,14 @@ class LetStatement extends StatementAbstract
             $assignment['property'] = $this->propertyNameOnce($assignment, $compilationContext);
         }
 
-        $object   = $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']]);
-        $property = $this->astNode($assignment, [
-            'type'  => 'string-dynamic-object-property' === $assignment['assign-type'] ? 'string' : 'variable',
-            'value' => $assignment['property'],
-        ]);
-        $target   = $this->astNode($assignment, [
-            'type'  => match ($assignment['assign-type']) {
-                'object-property'                  => 'property-access',
-                'static-property'                  => 'static-property-access',
-                'variable-dynamic-object-property' => 'property-dynamic-access',
-                'string-dynamic-object-property'   => 'property-string-access',
-            },
-            'left'  => $object,
-            'right' => $property,
+        if (!$isStatic) {
+            return $assignment;
+        }
+
+        $target = $this->astNode($assignment, [
+            'type'  => 'static-property-access',
+            'left'  => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['variable']]),
+            'right' => $this->astNode($assignment, ['type' => 'variable', 'value' => $assignment['property']]),
         ]);
 
         $assignment['expr']     = $this->astNode($assignment, [
@@ -315,8 +313,9 @@ class LetStatement extends StatementAbstract
     }
 
     /**
-     * The name of `this->{name}` as a string the read and the write of a
-     * compound assignment share, converted once as PHP converts it.
+     * The name of `this->{name}` as a value the kernel can convert: a `var`,
+     * `mixed` or `string` local as it is, a native one converted once into a
+     * string temporary.
      *
      * @throws Exception
      * @throws ReflectionException
@@ -328,7 +327,7 @@ class LetStatement extends StatementAbstract
             $compilationContext,
             $assignment
         );
-        if ('string' === $name->getType()) {
+        if (in_array($name->getType(), ['variable', 'mixed', 'string'], true)) {
             return $assignment['property'];
         }
 
@@ -527,6 +526,15 @@ class LetStatement extends StatementAbstract
         }
 
         /**
+         * And a property, as PHP's ASSIGN_OBJ_OP.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2808
+         */
+        if (PropertyOperator::handles($assignment)) {
+            return $assignment;
+        }
+
+        /**
          * So is a dynamic variable, `let {name} <<= 2`.
          *
          * @see https://github.com/zephir-lang/zephir/issues/2710
@@ -536,7 +544,7 @@ class LetStatement extends StatementAbstract
         }
 
         /**
-         * A property was rewritten by replacePropertyCompoundAssign().
+         * A static property was rewritten by replacePropertyCompoundAssign().
          */
         if ('variable' !== $assignment['assign-type']) {
             throw new CompilerException(

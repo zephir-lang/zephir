@@ -98,6 +98,23 @@ class ObjectDynamicProperty
 
         $propertyVariableName = $compilationContext->symbolTable->getVariable($propertyName);
 
+        /**
+         * A compound assignment is PHP's ASSIGN_OBJ_OP.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2808
+         */
+        if (PropertyOperator::handles($statement)) {
+            (new PropertyOperator())->assign(
+                $symbolVariable,
+                $propertyVariableName,
+                $resolvedExpr,
+                $compilationContext,
+                $statement
+            );
+
+            return;
+        }
+
         switch ($resolvedExpr->getType()) {
             case 'null':
                 $compilationContext->backend->updateProperty(

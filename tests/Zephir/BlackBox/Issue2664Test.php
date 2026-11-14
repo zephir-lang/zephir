@@ -269,16 +269,24 @@ final class Issue2664Test extends TestCase
                 ZEP,
         );
 
-        $this->assertMethodEmits($generated, 'Catprop_Appends', 'intLiteral', 'zephir_concat_self_long(&_0, 5);');
-        $this->assertMethodEmits($generated, 'Catprop_Appends', 'doubleLiteral', 'zephir_concat_self_double(&_0, 1.5);');
-        $this->assertMethodEmits($generated, 'Catprop_Appends', 'boolLiteral', 'zephir_concat_self_bool(&_0, 1);');
-        $this->assertMethodEmits($generated, 'Catprop_Appends', 'stringLiteral', 'zephir_concat_self_str(&_0, SL("x"));');
-        $this->assertMethodEmits($generated, 'Catprop_Appends', 'nullLiteral', 'zephir_concat_self_str(&_0, SL(""));');
-        $this->assertMethodEmits($generated, 'Catprop_Appends', 'intVar', 'zephir_concat_self_long(&_0, n);');
-        $this->assertMethodEmits($generated, 'Catprop_Appends', 'doubleVar', 'zephir_concat_self_double(&_0, d);');
-        $this->assertMethodEmits($generated, 'Catprop_Appends', 'boolVar', 'zephir_concat_self_bool(&_0, b);');
-        $this->assertMethodEmits($generated, 'Catprop_Appends', 'charVar', 'zephir_concat_self_char(&_0, c);');
-        $this->assertMethodEmits($generated, 'Catprop_Appends', 'stringVar', 'zephir_concat_self(&_0, &s_zv);');
+        /*
+         * `.=` is PHP's ASSIGN_OBJ_OP on the property, the operand boxed the way
+         * a local's `.=` reads it: a `char` is the character it holds (#2808).
+         */
+        $append = static fn (string $value): string => sprintf(', %s, concat_function);', $value);
+
+        $this->assertMethodEmits($generated, 'Catprop_Appends', 'intLiteral', 'ZVAL_LONG(&_0, 5);');
+        $this->assertMethodEmits($generated, 'Catprop_Appends', 'intLiteral', $append('&_0'));
+        $this->assertMethodEmits($generated, 'Catprop_Appends', 'doubleLiteral', 'ZVAL_DOUBLE(&_0, 1.5);');
+        $this->assertMethodEmits($generated, 'Catprop_Appends', 'boolLiteral', $append('&__$true'));
+        $this->assertMethodEmits($generated, 'Catprop_Appends', 'stringLiteral', 'ZVAL_STRING(&_0, "x");');
+        $this->assertMethodEmits($generated, 'Catprop_Appends', 'nullLiteral', $append('&__$null'));
+        $this->assertMethodEmits($generated, 'Catprop_Appends', 'intVar', 'ZVAL_LONG(&_0, n);');
+        $this->assertMethodEmits($generated, 'Catprop_Appends', 'doubleVar', 'ZVAL_DOUBLE(&_0, d);');
+        $this->assertMethodEmits($generated, 'Catprop_Appends', 'boolVar', 'ZVAL_BOOL(&_0, b);');
+        $this->assertMethodEmits($generated, 'Catprop_Appends', 'charVar', 'ZVAL_STRINGL(&_0, &c, 1);');
+        $this->assertMethodEmits($generated, 'Catprop_Appends', 'charVar', $append('&_0'));
+        $this->assertMethodEmits($generated, 'Catprop_Appends', 'stringVar', $append('&s_zv'));
     }
 
     public function testStaticPropertyConcatAssignAppendsEveryOperandType(): void

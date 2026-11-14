@@ -93,7 +93,13 @@ final class OperatorExceptionCheckTest extends TestCase
         );
     }
 
-    public function testPropertyIsNotWrittenBackAfterAFailedOperator(): void
+    /**
+     * A compound assignment of a property is one kernel call, PHP's
+     * ASSIGN_OBJ_OP, which writes nothing back when the operator fails.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2808
+     */
+    public function testPropertyCompoundAssignmentIsFollowedByACheck(): void
     {
         $generated = $this->generateOk(
             'oeprop',
@@ -101,7 +107,25 @@ final class OperatorExceptionCheckTest extends TestCase
         );
 
         $this->assertMatchesRegularExpression(
-            '/zephir_add_function\([^;]+\);\s*if \(UNEXPECTED\(EG\(exception\)\)\) \{\s*(?:ZEPHIR_MM_RESTORE\(\);\s*)?return;\s*\}\s*zephir_update_property/',
+            '/zephir_property_assign_op\(this_ptr, _zephir_prop_\d+, \d+, v, add_function\);\s*if \(UNEXPECTED\(EG\(exception\)\)\) \{\s*(?:ZEPHIR_MM_RESTORE\(\);\s*)?return;\s*\}/',
+            $generated
+        );
+    }
+
+    /**
+     * A property assignment may throw, and the method stops there.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2808
+     */
+    public function testPropertyAssignmentIsFollowedByACheck(): void
+    {
+        $generated = $this->generateOk(
+            'oeassign',
+            "    protected p;\n\n    public function run(v)\n    {\n        let this->p = v;\n    }"
+        );
+
+        $this->assertMatchesRegularExpression(
+            '/zephir_update_property_zval_cached\(this_ptr, _zephir_prop_\d+, \d+, v\);\s*if \(UNEXPECTED\(EG\(exception\)\)\) \{\s*(?:ZEPHIR_MM_RESTORE\(\);\s*)?return;\s*\}/',
             $generated
         );
     }

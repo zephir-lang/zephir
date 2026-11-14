@@ -402,6 +402,21 @@ static inline void zephir_throw_variable_type_error(zval *value, const char *nam
     RETURN_MM(); \
   } while (0)
 
+/**
+ * A class or type name in a message, as PHP formats it. PHP 8.6 prints it by
+ * its length (GH-25352), so an anonymous class keeps the part of its name
+ * after the NUL byte, which earlier versions cut off.
+ *
+ *   zend_error(E_NOTICE, "... of " ZEPHIR_ZSTR_FMT " ...", ZEPHIR_ZSTR_ARG(ce->name));
+ */
+#if PHP_VERSION_ID >= 80600
+# define ZEPHIR_ZSTR_FMT "%pS"
+# define ZEPHIR_ZSTR_ARG(str) (str)
+#else
+# define ZEPHIR_ZSTR_FMT "%s"
+# define ZEPHIR_ZSTR_ARG(str) ZSTR_VAL(str)
+#endif
+
 #define RETURN_ON_FAILURE(what) \
 	do { \
 		if (what == FAILURE) { \

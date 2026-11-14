@@ -39,5 +39,8 @@ PHP_METHOD(Stub_Invokes_InvokeProtectedComplex, __construct)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&text_zv, text);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 50, &text_zv);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 

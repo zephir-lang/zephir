@@ -106,8 +106,8 @@ final class Issue2736Test extends TestCase
         );
 
         $code = $this->classCode();
-        $this->assertStringContainsString('zephir_property_incr(&box, SL("count"))', $code);
-        $this->assertStringContainsString('zephir_property_decr(&box, SL("count"))', $code);
+        $this->assertMatchesRegularExpression('/zephir_property_incdec\(&box, _zephir_prop_\d+, 0, 1\)/', $code);
+        $this->assertMatchesRegularExpression('/zephir_property_incdec\(&box, _zephir_prop_\d+, 0, 0\)/', $code);
     }
 
     public function testPropertyIncrementOnACapturePassesAPointer(): void
@@ -118,8 +118,11 @@ final class Issue2736Test extends TestCase
         );
 
         $code = $this->closureCode();
-        $this->assertStringContainsString('zephir_property_incr(&box, SL("count"))', $code);
-        $this->assertStringContainsString('zephir_property_decr(Z_REFVAL_P(&shared), SL("count"))', $code);
+        $this->assertMatchesRegularExpression('/zephir_property_incdec\(&box, _zephir_prop_\d+, 0, 1\)/', $code);
+        $this->assertMatchesRegularExpression(
+            '/zephir_property_incdec\(Z_REFVAL_P\(&shared\), _zephir_prop_\d+, 0, 0\)/',
+            $code
+        );
     }
 
     /**

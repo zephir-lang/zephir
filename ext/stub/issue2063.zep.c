@@ -13,9 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/memory.h"
-#include "kernel/operators.h"
 #include "kernel/concat.h"
+#include "kernel/memory.h"
 
 
 /**
@@ -31,13 +30,11 @@ ZEPHIR_INIT_CLASS(Stub_Issue2063)
 
 PHP_METHOD(Stub_Issue2063, add)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval value_zv, _0;
+	zval value_zv;
 	zend_string *value = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&value_zv);
-	ZVAL_UNDEF(&_0);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("store", 5, 1);
@@ -46,23 +43,11 @@ PHP_METHOD(Stub_Issue2063, add)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(value)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_memory_observe(&value_zv);
-	ZVAL_STR_COPY(&value_zv, value);
-	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 56, PH_NOISY_CC);
+	ZVAL_STR(&value_zv, value);
+	zephir_property_assign_op(this_ptr, _zephir_prop_0, 56, &value_zv, concat_function);
 	if (UNEXPECTED(EG(exception))) {
-		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_concat_self(&_0, &value_zv);
-	if (UNEXPECTED(EG(exception))) {
-		ZEPHIR_MM_RESTORE();
-		return;
-	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 56, &_0);
-	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Issue2063, add2)
@@ -99,6 +84,10 @@ PHP_METHOD(Stub_Issue2063, add2)
 		return;
 	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 56, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -116,30 +105,20 @@ PHP_METHOD(Stub_Issue2063, addLiteral)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 56, PH_NOISY_CC);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_STRING(&_0, "ab");
+	zephir_property_assign_op(this_ptr, _zephir_prop_0, 56, &_0, concat_function);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_concat_self_str(&_0, SL("ab"));
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_STRING(&_0, "cd");
+	zephir_property_assign_op(this_ptr, _zephir_prop_0, 56, &_0, concat_function);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 56, &_0);
-	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 56, PH_NOISY_CC);
-	if (UNEXPECTED(EG(exception))) {
-		ZEPHIR_MM_RESTORE();
-		return;
-	}
-	zephir_concat_self_str(&_0, SL("cd"));
-	if (UNEXPECTED(EG(exception))) {
-		ZEPHIR_MM_RESTORE();
-		return;
-	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 56, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 

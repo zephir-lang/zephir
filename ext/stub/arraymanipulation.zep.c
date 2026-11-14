@@ -56,6 +56,10 @@ PHP_METHOD(Stub_ArrayManipulation, arrayFillMany)
 	ZEPHIR_CALL_FUNCTION(&_3, "array_fill", NULL, 4, &_0, &_1, &_2);
 	zephir_check_call_status();
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 20, &_3);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM_MEMBER_TYPED(getThis(), "arrayFillQueue", IS_ARRAY);
 }
 
@@ -88,9 +92,17 @@ PHP_METHOD(Stub_ArrayManipulation, issue774)
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 0);
 	zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_update_property_zval_cached(&obj, _zephir_prop_1, 0, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&_1, &obj);
 	zephir_get_arrval(&_2, &_1);
 	ZEPHIR_CPY_WRT(&obj, &_2);

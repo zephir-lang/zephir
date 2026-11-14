@@ -80,6 +80,10 @@ PHP_METHOD(Stub_Issue2691, __construct)
 	zephir_array_fast_append(&_1, &_2);
 	zephir_array_update_string(&_0, SL("a"), &_1, PH_COPY | PH_SEPARATE);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 70, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -832,6 +836,9 @@ PHP_METHOD(Stub_Issue2691, setRows)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &rows);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 72, rows);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2691, getRows)
@@ -856,6 +863,9 @@ PHP_METHOD(Stub_Issue2691, setValue)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 73, value);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Issue2691, getValue)
@@ -921,6 +931,10 @@ PHP_METHOD(Stub_Issue2691, writeLeakProbe)
 		ZVAL_STRING(&_2$$3, "next");
 		zephir_array_fast_append(&_1$$3, &_2$$3);
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 72, &_1$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CALL_METHOD_CACHED(&sink, this_ptr, "shiftRows", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 		i++;

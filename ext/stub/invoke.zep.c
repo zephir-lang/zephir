@@ -43,6 +43,10 @@ PHP_METHOD(Stub_Invoke, __construct)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "aaa");
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 48, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
