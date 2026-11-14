@@ -209,12 +209,12 @@ class StringsManager extends BaseStringsManager
 
             foreach ($zvars as $zvar) {
                 $code .= "\t" . 'if (use_copy' . $zvar . ') {' . PHP_EOL;
-                $code .= "\t" . '   zval_dtor(op' . $zvar . ');' . PHP_EOL;
+                $code .= "\t" . '   zval_ptr_dtor_nogc(op' . $zvar . ');' . PHP_EOL;
                 $code .= "\t" . '}' . PHP_EOL . PHP_EOL;
             }
 
             $code .= "\t" . 'if (use_copy) {' . PHP_EOL;
-            $code .= "\t" . '   zval_dtor(&result_copy);' . PHP_EOL;
+            $code .= "\t" . '   zval_ptr_dtor_nogc(&result_copy);' . PHP_EOL;
             $code .= "\t" . '}' . PHP_EOL . PHP_EOL;
 
             $code .= '}' . PHP_EOL . PHP_EOL;
@@ -242,7 +242,7 @@ class StringsManager extends BaseStringsManager
 
             	concat_function(result, op1, op2);
             	assert(!Z_REFCOUNTED(tmp) || 1 == Z_REFCOUNT(tmp));
-            	zval_dtor(&tmp);
+            	zval_ptr_dtor_nogc(&tmp);
             }
             EOF;
 

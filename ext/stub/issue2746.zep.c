@@ -15,6 +15,7 @@
 #include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
+#include "kernel/fcall.h"
 
 
 /**
@@ -99,14 +100,20 @@ PHP_METHOD(Stub_Issue2746, castDouble)
 
 PHP_METHOD(Stub_Issue2746, doublevalOf)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a, a_sub;
 
 	ZVAL_UNDEF(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	RETURN_DOUBLE(zephir_get_doubleval(a));
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &a);
+	ZEPHIR_RETURN_CALL_FUNCTION("doubleval", NULL, 48, a);
+	zephir_check_call_status();
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Issue2746, doubleParam)

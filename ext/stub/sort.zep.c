@@ -118,7 +118,7 @@ PHP_METHOD(Stub_Sort, quick)
 	zephir_array_fast_append(&_8, &_9);
 	ZEPHIR_CALL_METHOD_CACHED(&_10, this_ptr, "quick", &_zephir_call_cache[1], &right);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_FUNCTION("array_merge", NULL, 66, &_7, &_8, &_10);
+	ZEPHIR_RETURN_CALL_FUNCTION("array_merge", NULL, 67, &_7, &_8, &_10);
 	zephir_check_call_status();
 	RETURN_MM();
 }

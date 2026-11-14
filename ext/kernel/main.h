@@ -92,6 +92,63 @@ extern zend_string* i_self;
 #include <Zend/zend_constants.h>
 #include "kernel/exception.h"
 
+/**
+ * The engine's weak-mode scalar parsers under one signature: true with the
+ * value in `dest`, false when the value does not convert (an exception may be
+ * pending). PHP 8.1 added `arg_num`, the argument a null deprecation names,
+ * and PHP 8.6 returns the value instead of writing it through `dest`.
+ */
+static zend_always_inline bool zephir_parse_arg_long_weak(zval *arg, zend_long *dest, uint32_t arg_num)
+{
+#if PHP_VERSION_ID >= 80100
+	return zend_parse_arg_long_weak(arg, dest, arg_num);
+#else
+	(void) arg_num;
+	return zend_parse_arg_long_weak(arg, dest);
+#endif
+}
+
+static zend_always_inline bool zephir_parse_arg_double_weak(zval *arg, double *dest, uint32_t arg_num)
+{
+#if PHP_VERSION_ID >= 80600
+	*dest = zend_parse_arg_double_weak(arg, arg_num);
+	return !zend_isnan(*dest);
+#elif PHP_VERSION_ID >= 80100
+	return zend_parse_arg_double_weak(arg, dest, arg_num);
+#else
+	(void) arg_num;
+	return zend_parse_arg_double_weak(arg, dest);
+#endif
+}
+
+static zend_always_inline bool zephir_parse_arg_str_weak(zval *arg, zend_string **dest, uint32_t arg_num)
+{
+#if PHP_VERSION_ID >= 80600
+	*dest = zend_parse_arg_str_weak(arg, arg_num);
+	return *dest != NULL;
+#elif PHP_VERSION_ID >= 80100
+	return zend_parse_arg_str_weak(arg, dest, arg_num);
+#else
+	(void) arg_num;
+	return zend_parse_arg_str_weak(arg, dest);
+#endif
+}
+
+static zend_always_inline bool zephir_parse_arg_bool_weak(zval *arg, bool *dest, uint32_t arg_num)
+{
+#if PHP_VERSION_ID >= 80600
+	zpp_parse_bool_status status = zend_parse_arg_bool_weak(arg, arg_num);
+
+	*dest = status == ZPP_PARSE_BOOL_STATUS_TRUE;
+	return status != ZPP_PARSE_BOOL_STATUS_ERROR;
+#elif PHP_VERSION_ID >= 80100
+	return zend_parse_arg_bool_weak(arg, dest, arg_num);
+#else
+	(void) arg_num;
+	return zend_parse_arg_bool_weak(arg, dest);
+#endif
+}
+
 /* class/interface registering */
 #define ZEPHIR_REGISTER_CLASS(ns, class_name, lower_ns, name, methods, flags)		\
 	{																				\
@@ -385,7 +442,7 @@ void zephir_gettype(zval *return_value, zval *arg);
 static inline int zephir_maybe_separate_zval(zval* z)
 {
 	if (!Z_REFCOUNTED_P(z) || (Z_REFCOUNT_P(z) > 1 && !Z_ISREF_P(z))) {
-		if (!(Z_COPYABLE_P(z) && !Z_REFCOUNTED_P(z))) {
+		if (!(Z_TYPE_P(z) == IS_ARRAY && !Z_REFCOUNTED_P(z))) {
 			Z_DELREF_P(z);
 		}
 		zval_copy_ctor_func(z);

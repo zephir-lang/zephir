@@ -55,7 +55,7 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -130,7 +130,7 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -192,11 +192,11 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy3) {
-	   zval_dtor(op3);
+	   zval_ptr_dtor_nogc(op3);
 	}
 
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -263,11 +263,11 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy3) {
-	   zval_dtor(op3);
+	   zval_ptr_dtor_nogc(op3);
 	}
 
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -373,19 +373,19 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy3) {
-	   zval_dtor(op3);
+	   zval_ptr_dtor_nogc(op3);
 	}
 
 	if (use_copy5) {
-	   zval_dtor(op5);
+	   zval_ptr_dtor_nogc(op5);
 	}
 
 	if (use_copy8) {
-	   zval_dtor(op8);
+	   zval_ptr_dtor_nogc(op8);
 	}
 
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -442,11 +442,11 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy2) {
-	   zval_dtor(op2);
+	   zval_ptr_dtor_nogc(op2);
 	}
 
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -508,11 +508,11 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy2) {
-	   zval_dtor(op2);
+	   zval_ptr_dtor_nogc(op2);
 	}
 
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -586,15 +586,15 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy2) {
-	   zval_dtor(op2);
+	   zval_ptr_dtor_nogc(op2);
 	}
 
 	if (use_copy4) {
-	   zval_dtor(op4);
+	   zval_ptr_dtor_nogc(op4);
 	}
 
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -651,11 +651,11 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy1) {
-	   zval_dtor(op1);
+	   zval_ptr_dtor_nogc(op1);
 	}
 
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -724,15 +724,15 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy1) {
-	   zval_dtor(op1);
+	   zval_ptr_dtor_nogc(op1);
 	}
 
 	if (use_copy3) {
-	   zval_dtor(op3);
+	   zval_ptr_dtor_nogc(op3);
 	}
 
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -806,15 +806,15 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy1) {
-	   zval_dtor(op1);
+	   zval_ptr_dtor_nogc(op1);
 	}
 
 	if (use_copy3) {
-	   zval_dtor(op3);
+	   zval_ptr_dtor_nogc(op3);
 	}
 
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -878,15 +878,15 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy1) {
-	   zval_dtor(op1);
+	   zval_ptr_dtor_nogc(op1);
 	}
 
 	if (use_copy2) {
-	   zval_dtor(op2);
+	   zval_ptr_dtor_nogc(op2);
 	}
 
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -955,15 +955,15 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy1) {
-	   zval_dtor(op1);
+	   zval_ptr_dtor_nogc(op1);
 	}
 
 	if (use_copy2) {
-	   zval_dtor(op2);
+	   zval_ptr_dtor_nogc(op2);
 	}
 
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -1039,19 +1039,19 @@ zephir_concat_overflow:
 
 zephir_concat_cleanup:
 	if (use_copy1) {
-	   zval_dtor(op1);
+	   zval_ptr_dtor_nogc(op1);
 	}
 
 	if (use_copy2) {
-	   zval_dtor(op2);
+	   zval_ptr_dtor_nogc(op2);
 	}
 
 	if (use_copy3) {
-	   zval_dtor(op3);
+	   zval_ptr_dtor_nogc(op3);
 	}
 
 	if (use_copy) {
-	   zval_dtor(&result_copy);
+	   zval_ptr_dtor_nogc(&result_copy);
 	}
 
 }
@@ -1077,5 +1077,5 @@ void zephir_concat_function(zval *result, zval *op1, zval *op2)
 
 	concat_function(result, op1, op2);
 	assert(!Z_REFCOUNTED(tmp) || 1 == Z_REFCOUNT(tmp));
-	zval_dtor(&tmp);
+	zval_ptr_dtor_nogc(&tmp);
 }

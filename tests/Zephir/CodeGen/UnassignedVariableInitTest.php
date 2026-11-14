@@ -118,7 +118,7 @@ final class UnassignedVariableInitTest extends TestCase
     }
 
     /**
-     * zephir_preg_match() does `zval_dtor(matches); ZVAL_COPY(matches, ...)`
+     * zephir_preg_match() does `zval_ptr_dtor_nogc(matches); ZVAL_COPY(matches, ...)`
      * without observing, so `matches` has to stay undefined.
      */
     public function testPregMatchOutParameterKeepsUndef(): void
