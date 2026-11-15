@@ -1028,9 +1028,17 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableStdClass)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "v1");
 	zephir_update_property_zval_cached(&uids, _zephir_prop_0, 0, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "v2");
 	zephir_update_property_zval_cached(&uids, _zephir_prop_1, 0, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&_1, &uids);
 	zephir_get_arrval(&_2, &_1);
 	ZEPHIR_CPY_WRT(&uids, &_2);

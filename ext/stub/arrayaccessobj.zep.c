@@ -60,13 +60,29 @@ PHP_METHOD(Stub_ArrayAccessObj, __construct)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "val1");
 	zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "val2");
 	zephir_update_property_zval_cached(&obj, _zephir_prop_1, 0, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "val3");
 	zephir_update_property_zval_cached(&obj, _zephir_prop_2, 0, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 13, &obj);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -100,8 +116,16 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetSet)
 	}
 	if (!((Z_TYPE_P(offset) == IS_NULL))) {
 		zephir_update_property_zval_zval(&obj, offset, value);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 13, &obj);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -181,6 +205,10 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetUnset)
 	ZEPHIR_CPY_WRT(&_2, &obj);
 	zephir_convert_to_object(&_2);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 13, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

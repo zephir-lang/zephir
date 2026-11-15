@@ -157,9 +157,9 @@ int zephir_create_instance(zval *return_value, const zval *class_name);
 int zephir_create_instance_params(zval *return_value, const zval *class_name, zval *params);
 
 /** Increment/Decrement properties */
-#define zephir_property_incr(object, property) zephir_property_incr_decr(object, property, 1)
-#define zephir_property_decr(object, property) zephir_property_incr_decr(object, property, 0)
-int zephir_property_incr_decr(zval *object, char *property_name, unsigned int property_length, unsigned int increment);
+void zephir_property_assign_op(zval *object, zend_string *name, zend_ulong cache_slot, zval *value, binary_op_type op);
+void zephir_property_assign_op_zval(zval *object, zval *property, zval *value, binary_op_type op);
+void zephir_property_incdec(zval *object, zend_string *name, zend_ulong cache_slot, int increment);
 
 #define zephir_fetch_safe_class(destination, var) { \
 		if (Z_TYPE_P(var) == IS_STRING) { \

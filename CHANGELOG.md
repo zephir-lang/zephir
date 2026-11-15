@@ -21,6 +21,15 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `fetch a, a[k]` and `fetch k, a[k]` releasing the array or the key before reading it [#2832](https://github.com/zephir-lang/zephir/issues/2832)
 - Fixed `isset`, `empty` and `fetch` reading the key silently and a container below the last one noisily, unlike PHP [#2832](https://github.com/zephir-lang/zephir/issues/2832)
 - Fixed a property name with an escape such as `o->{"a\"b"}` being read, written and tested with its backslashes kept [#2832](https://github.com/zephir-lang/zephir/issues/2832)
+- Fixed a compound assignment, `++` or `--` on an undefined property warning before the dynamic property deprecation, calling `__set()`, and leaving no property when an error handler throws, unlike PHP [#2808](https://github.com/zephir-lang/zephir/issues/2808)
+- Fixed a compound assignment, `++` or `--` on a non-object warning instead of throwing PHP's Error [#2808](https://github.com/zephir-lang/zephir/issues/2808)
+- Fixed `++` and `--` on an uninitialized typed property writing it after PHP's Error, and on a typed `int` property at its limit throwing the wrong TypeError or none [#2808](https://github.com/zephir-lang/zephir/issues/2808)
+- Fixed a compound assignment on a property holding a typed reference throwing the property's TypeError instead of the reference's [#2808](https://github.com/zephir-lang/zephir/issues/2808)
+- Fixed assigning a property of a non-object warning instead of throwing PHP's Error [#2808](https://github.com/zephir-lang/zephir/issues/2808)
+- Fixed code after a property assignment that throws still running [#2808](https://github.com/zephir-lang/zephir/issues/2808)
+- Fixed `o->{n} = v` with a non-string `n`, such as an `int`, warning instead of converting the name as PHP does [#2808](https://github.com/zephir-lang/zephir/issues/2808)
+- Fixed `o->p[k] op= v` on a typed property that does not allow an array throwing a TypeError, where PHP creates the array [#2808](https://github.com/zephir-lang/zephir/issues/2808)
+- Fixed errors naming an anonymous class cutting its name on PHP 8.6, which prints it whole [#2808](https://github.com/zephir-lang/zephir/issues/2808)
 
 ## [1.8.0] - 2026-11-12
 

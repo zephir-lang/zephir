@@ -60,9 +60,17 @@ PHP_METHOD(Stub_ArrayIterator, __construct)
 	ZVAL_STRING(&_1, "three");
 	zephir_array_fast_append(&_0, &_1);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 18, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZVAL_UNDEF(&_2);
 	ZVAL_LONG(&_2, 0);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 19, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -79,6 +87,9 @@ PHP_METHOD(Stub_ArrayIterator, rewind)
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 0);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 19, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_ArrayIterator, current)
@@ -130,7 +141,15 @@ PHP_METHOD(Stub_ArrayIterator, key)
 PHP_METHOD(Stub_ArrayIterator, next)
 {
 	zval *this_ptr = getThis();
-	RETURN_ON_FAILURE(zephir_property_incr(this_ptr, SL("position")));
+
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("position", 8, 1);
+	}
+	zephir_property_incdec(this_ptr, _zephir_prop_0, 19, 1);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_ArrayIterator, valid)

@@ -3116,6 +3116,13 @@ class Backend
         }
     }
 
+    /**
+     * Assigns a property, PHP's ASSIGN_OBJ. The write may throw, for a
+     * non-object, a typed or readonly property or a `__set()`, and the method
+     * stops there as PHP does.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2808
+     */
     public function updateProperty(Variable $variable, $property, $value, CompilationContext $context): void
     {
         $value = $this->resolveValue($value, $context);
@@ -3129,6 +3136,7 @@ class Backend
                     $value
                 )
             );
+            $context->emitExceptionCheck();
 
             return;
         }
@@ -3138,6 +3146,7 @@ class Backend
             $context->codePrinter->output(
                 sprintf('zephir_update_property_zval_ex(%s, ZEND_STRL("%s"), %s);', $this->getVariableCode($variable), $property, $value)
             );
+            $context->emitExceptionCheck();
 
             return;
         }
@@ -3151,6 +3160,72 @@ class Backend
         $context->codePrinter->output(
             sprintf('zephir_update_property_zval_cached(%s, %s, %d, %s);', $this->getVariableCode($variable), $nameSlot, $cacheSlot, $value)
         );
+        $context->emitExceptionCheck();
+    }
+
+    /**
+     * `o->x op= v`, PHP's ASSIGN_OBJ_OP: `$operatorFunction` is the engine's
+     * operator, applied by the kernel to the property in place. `$property` is
+     * the name written in the code, or the local holding a runtime name.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2808
+     */
+    public function assignPropertyOperator(
+        Variable $variable,
+        string | Variable $property,
+        Variable | string $value,
+        string $operatorFunction,
+        CompilationContext $context
+    ): void {
+        $value = $this->resolveValue($value, $context);
+
+        if ($property instanceof Variable) {
+            $context->codePrinter->output(
+                sprintf(
+                    'zephir_property_assign_op_zval(%s, %s, %s, %s);',
+                    $this->getVariableCode($variable),
+                    $this->getVariableCode($property),
+                    $value,
+                    $operatorFunction
+                )
+            );
+        } else {
+            $context->codePrinter->output(
+                sprintf(
+                    'zephir_property_assign_op(%s, %s, %d, %s, %s);',
+                    $this->getVariableCode($variable),
+                    $this->internedPropertyName($property, $context),
+                    $this->propertyCacheSlot($variable, $property, $context),
+                    $value,
+                    $operatorFunction
+                )
+            );
+        }
+
+        $context->emitExceptionCheck();
+    }
+
+    /**
+     * `o->x++` and `o->x--`, PHP's PRE_INC_OBJ and PRE_DEC_OBJ.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2808
+     */
+    public function incrementProperty(
+        Variable $variable,
+        string $property,
+        bool $increment,
+        CompilationContext $context
+    ): void {
+        $context->codePrinter->output(
+            sprintf(
+                'zephir_property_incdec(%s, %s, %d, %d);',
+                $this->getVariableCode($variable),
+                $this->internedPropertyName($property, $context),
+                $this->propertyCacheSlot($variable, $property, $context),
+                $increment ? 1 : 0
+            )
+        );
+        $context->emitExceptionCheck();
     }
 
     public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context): void

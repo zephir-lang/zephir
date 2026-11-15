@@ -45,6 +45,10 @@ PHP_METHOD(Stub_Constructors_Issue1803, Issue1803)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "Value that won't be updated on class init");
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 37, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

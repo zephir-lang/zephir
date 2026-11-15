@@ -15,15 +15,11 @@ namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext as Context;
 use Zephir\CompiledExpression as Expression;
-use Zephir\Exception as ZephirException;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\CompilerException as Exception;
-use Zephir\Expression as ZephirExpression;
-use Zephir\Traits\ConcatSelfTrait;
 use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
-use function array_intersect_key;
 use function sprintf;
 
 /**
@@ -31,7 +27,6 @@ use function sprintf;
  */
 class ObjectProperty
 {
-    use ConcatSelfTrait;
     use VariablesTrait;
 
     /**
@@ -122,18 +117,22 @@ class ObjectProperty
         $context->headersManager->add('kernel/object');
 
         /**
-         * `.=` is a read-modify-write on the property whatever the right-hand
-         * side is: read the current value, append to it, store it back. The
-         * type switch below decides how to *replace* the property, so every
-         * operand type it did not special-case used to overwrite the property
-         * instead of appending to it.
+         * A compound assignment is PHP's ASSIGN_OBJ_OP: one read-write fetch
+         * of the property, the operator applied to it in place.
          *
-         * @see https://github.com/zephir-lang/zephir/issues/2664
+         * @see https://github.com/zephir-lang/zephir/issues/2808
          */
-        if ('concat-assign' === $statement['operator']) {
-            $this->assignConcat($variable, $symbolVariable, $propertyName, $expression, $context, $statement);
+        if (PropertyOperator::handles($statement)) {
+            (new PropertyOperator())->assign($symbolVariable, $propertyName, $expression, $context, $statement);
 
             return;
+        }
+
+        if ('assign' !== $statement['operator']) {
+            throw new Exception(
+                "Operator '" . $statement['operator'] . "' is not supported for object property",
+                $statement
+            );
         }
 
         switch ($expression->getType()) {
@@ -145,54 +144,8 @@ class ObjectProperty
             case 'long':
             case 'uint':
                 $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context);
-                switch ($statement['operator']) {
-                    case 'mul-assign':
-                    case 'sub-assign':
-                    case 'add-assign':
-                        switch ($statement['operator']) {
-                            case 'mul-assign':
-                                $functionName = 'ZEPHIR_MUL_ASSIGN';
-                                break;
-                            case 'sub-assign':
-                                $functionName = 'ZEPHIR_SUB_ASSIGN';
-                                break;
-                            case 'add-assign':
-                                $functionName = 'ZEPHIR_ADD_ASSIGN';
-                                break;
-                        }
-
-                        $resolvedVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
-                        $context->backend->assignLong($resolvedVariable, $expression->getBooleanCode(), $context);
-                        $context->backend->fetchProperty(
-                            $tempVariable,
-                            $symbolVariable,
-                            $propertyName,
-                            false,
-                            $context
-                        );
-                        $codePrinter->output(
-                            $functionName . '(' . $context->backend->getVariableCode(
-                                $tempVariable
-                            ) . ', ' . $context->backend->getVariableCode($resolvedVariable) . ');'
-                        );
-                        $context->emitExceptionCheck($codePrinter);
-                        break;
-
-                    case 'assign':
-                        $tempVariable->initNonReferenced($context);
-                        $context->backend->assignLong($tempVariable, $expression->getBooleanCode(), $context);
-                        break;
-
-                    default:
-                        throw new Exception(
-                            "Operator '"
-                            . $statement['operator']
-                            . "' is not supported for object property: "
-                            . $tempVariable->getType(),
-                            $statement
-                        );
-                }
-
+                $tempVariable->initNonReferenced($context);
+                $context->backend->assignLong($tempVariable, $expression->getBooleanCode(), $context);
                 $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
                 $tempVariable->setIdle(true);
                 break;
@@ -200,103 +153,25 @@ class ObjectProperty
             case 'char':
             case 'uchar':
                 $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context);
-                switch ($statement['operator']) {
-                    case 'assign':
-                        $tempVariable->initNonReferenced($context);
-                        $context->backend->assignLong(
-                            $tempVariable,
-                            $expression->getCharCode(),
-                            $context
-                        );
-                        break;
-
-                    default:
-                        throw new Exception(
-                            "Operator '"
-                            . $statement['operator']
-                            . "' is not supported for object property: "
-                            . $tempVariable->getType(),
-                            $statement
-                        );
-                }
-
+                $tempVariable->initNonReferenced($context);
+                $context->backend->assignLong($tempVariable, $expression->getCharCode(), $context);
                 $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
                 $tempVariable->setIdle(true);
                 break;
 
             case 'double':
                 $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context);
-                switch ($statement['operator']) {
-                    case 'mul-assign':
-                    case 'sub-assign':
-                    case 'add-assign':
-                        switch ($statement['operator']) {
-                            case 'mul-assign':
-                                $functionName = 'ZEPHIR_MUL_ASSIGN';
-                                break;
-                            case 'sub-assign':
-                                $functionName = 'ZEPHIR_SUB_ASSIGN';
-                                break;
-                            case 'add-assign':
-                                $functionName = 'ZEPHIR_ADD_ASSIGN';
-                                break;
-                        }
-
-                        $resolvedVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
-                        $context->backend->assignDouble($resolvedVariable, $expression->getBooleanCode(), $context);
-                        $context->backend->fetchProperty(
-                            $tempVariable,
-                            $symbolVariable,
-                            $propertyName,
-                            false,
-                            $context
-                        );
-                        $codePrinter->output(
-                            $functionName . '(' . $context->backend->getVariableCode(
-                                $tempVariable
-                            ) . ', ' . $context->backend->getVariableCode($resolvedVariable) . ');'
-                        );
-                        $context->emitExceptionCheck($codePrinter);
-                        break;
-
-                    case 'assign':
-                        $tempVariable->initNonReferenced($context);
-                        $context->backend->assignDouble($tempVariable, $expression->getBooleanCode(), $context);
-                        break;
-
-                    default:
-                        throw new Exception(
-                            "Operator '"
-                            . $statement['operator']
-                            . "' is not supported for object property: "
-                            . $tempVariable->getType(),
-                            $statement
-                        );
-                }
-
+                $tempVariable->initNonReferenced($context);
+                $context->backend->assignDouble($tempVariable, $expression->getBooleanCode(), $context);
                 $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
                 $tempVariable->setIdle(true);
                 break;
 
             case 'string':
-                switch ($statement['operator']) {
-                    case 'assign':
-                        /* We only can use nonReferenced variables for not refcounted stuff in ZE3 */
-                        $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context, false);
-                        $tempVariable->initVariant($context);
-                        $context->backend->assignString($tempVariable, $expression->getCode(), $context);
-                        break;
-
-                    default:
-                        throw new Exception(
-                            "Operator '"
-                            . $statement['operator']
-                            . "' is not supported for object property: "
-                            . $expression->getType(),
-                            $statement
-                        );
-                }
-
+                /* We only can use nonReferenced variables for not refcounted stuff in ZE3 */
+                $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context, false);
+                $tempVariable->initVariant($context);
+                $context->backend->assignString($tempVariable, $expression->getCode(), $context);
                 $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
                 $tempVariable->setIdle(true);
                 break;
@@ -340,42 +215,14 @@ class ObjectProperty
                     case 'char':
                     case 'uchar':
                         $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context, true);
-                        if (null !== ($assignMacro = $this->arithmeticAssignMacro($statement['operator']))) {
-                            $context->headersManager->add('kernel/operators');
-                            $resolvedVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
-                            $context->backend->assignLong($resolvedVariable, $variableVariable, $context);
-                            $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
-                            $codePrinter->output(sprintf(
-                                '%s(%s, %s);',
-                                $assignMacro,
-                                $context->backend->getVariableCode($tempVariable),
-                                $context->backend->getVariableCode($resolvedVariable)
-                            ));
-                            $context->emitExceptionCheck($codePrinter);
-                        } else {
-                            $context->backend->assignLong($tempVariable, $variableVariable, $context);
-                        }
+                        $context->backend->assignLong($tempVariable, $variableVariable, $context);
                         $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
                         $tempVariable->setIdle(true);
                         break;
 
                     case 'double':
                         $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context, true);
-                        if (null !== ($assignMacro = $this->arithmeticAssignMacro($statement['operator']))) {
-                            $context->headersManager->add('kernel/operators');
-                            $resolvedVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
-                            $context->backend->assignDouble($resolvedVariable, $variableVariable, $context);
-                            $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
-                            $codePrinter->output(sprintf(
-                                '%s(%s, %s);',
-                                $assignMacro,
-                                $context->backend->getVariableCode($tempVariable),
-                                $context->backend->getVariableCode($resolvedVariable)
-                            ));
-                            $context->emitExceptionCheck($codePrinter);
-                        } else {
-                            $context->backend->assignDouble($tempVariable, $variableVariable, $context);
-                        }
+                        $context->backend->assignDouble($tempVariable, $variableVariable, $context);
                         $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
                         $tempVariable->setIdle(true);
                         break;
@@ -396,30 +243,7 @@ class ObjectProperty
                     case 'string':
                     case 'variable':
                     case 'mixed':
-                        if (null !== ($assignMacro = $this->arithmeticAssignMacro($statement['operator']))) {
-                            /**
-                             * Arithmetic compound-assign (+=, -=, *=) with a
-                             * variable operand: read the current property, apply
-                             * the operator, then write it back. Without this the
-                             * read was dropped and the property was overwritten
-                             * with the right-hand side (arithmetic sibling of the
-                             * #2063 concat-assign bug).
-                             */
-                            $context->headersManager->add('kernel/operators');
-                            $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context);
-                            $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
-                            $codePrinter->output(sprintf(
-                                '%s(%s, %s);',
-                                $assignMacro,
-                                $context->backend->getVariableCode($tempVariable),
-                                $context->backend->getVariableCode($variableVariable)
-                            ));
-                            $context->emitExceptionCheck($codePrinter);
-                            $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
-                            $tempVariable->setIdle(true);
-                        } else {
-                            $context->backend->updateProperty($symbolVariable, $propertyName, $variableVariable, $context);
-                        }
+                        $context->backend->updateProperty($symbolVariable, $propertyName, $variableVariable, $context);
                         $this->checkVariableTemporal($symbolVariable);
                         break;
 
@@ -431,81 +255,5 @@ class ObjectProperty
             default:
                 throw new Exception("Unknown type {$expression->getType()}", $statement);
         }
-    }
-
-    /**
-     * Compiles `foo->x .= {expr}` as a read-modify-write: read the current
-     * property value into a temp, append the operand onto it, write it back.
-     */
-    private function assignConcat(
-        string $variable,
-        ZephirVariable $symbolVariable,
-        string $propertyName,
-        Expression $expression,
-        Context $context,
-        array $statement
-    ): void {
-        $tempVariable = $this->fetchPropertyValue($variable, $propertyName, $context, $statement);
-
-        $this->concatSelfOntoTarget(
-            $context->backend->getVariableCode($tempVariable),
-            $expression,
-            $context,
-            $statement
-        );
-        $context->emitExceptionCheck($context->codePrinter);
-
-        $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
-        $tempVariable->setIdle(true);
-    }
-
-    /**
-     * Maps an arithmetic compound-assignment operator to its kernel macro, or
-     * null when the operator is not an arithmetic compound-assign. Shared by
-     * the variable-operand object-property assign paths so `+= $var` / `-= $var`
-     * / `*= $var` read-modify-write instead of silently overwriting the
-     * property with the right-hand side (the arithmetic equivalent of the
-     * concat-assign bug fixed in issue #2063).
-     */
-    private function arithmeticAssignMacro(string $operator): ?string
-    {
-        return match ($operator) {
-            'add-assign' => 'ZEPHIR_ADD_ASSIGN',
-            'sub-assign' => 'ZEPHIR_SUB_ASSIGN',
-            'mul-assign' => 'ZEPHIR_MUL_ASSIGN',
-            default      => null,
-        };
-    }
-
-    /**
-     * Reads the current value of an object property into a fresh temp variable
-     * (used to support read-modify-write operators such as concat-assign).
-     *
-     * The read carries the statement's position: PropertyAccess compares its
-     * line with the last call, and failed to compile without one (#2753).
-     */
-    private function fetchPropertyValue(
-        string $variable,
-        string $propertyName,
-        Context $context,
-        array $statement
-    ): ZephirVariable {
-        $tempVariable = $context->symbolTable->getTempVariableForObserveOrNullify('variable', $context);
-
-        $position   = array_intersect_key($statement, ['file' => true, 'line' => true, 'char' => true]);
-        $expression = new ZephirExpression([
-            'type'  => 'property-access',
-            'left'  => ['type' => 'variable', 'value' => $variable] + $position,
-            'right' => ['value' => $propertyName],
-        ] + $position);
-        $expression->setExpectReturn(true, $tempVariable);
-
-        try {
-            $expression->compile($context);
-        } catch (ZephirException $e) {
-            throw new CompilerException($e->getMessage(), $statement, $e->getCode(), $e);
-        }
-
-        return $tempVariable;
     }
 }

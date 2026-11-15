@@ -44,6 +44,10 @@ PHP_METHOD(Stub_Issue1521, test)
 	add_assoc_stringl_ex(&_0, SL("merchantNumber"), SL("0818217122"));
 	add_assoc_stringl_ex(&_0, SL("zero"), SL("0"));
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 53, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM_MEMBER(getThis(), "params");
 }
 

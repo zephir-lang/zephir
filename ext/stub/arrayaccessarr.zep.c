@@ -46,6 +46,10 @@ PHP_METHOD(Stub_ArrayAccessArr, __construct)
 	add_assoc_long_ex(&_0, SL("two"), 2);
 	add_assoc_long_ex(&_0, SL("three"), 3);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 12, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

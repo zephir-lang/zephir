@@ -66,10 +66,18 @@ PHP_METHOD(Stub_Bench, __construct)
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 42);
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 1, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "hello");
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 2, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

@@ -345,6 +345,10 @@ void zep_Stub_Generators_zephir_gen_step_countTo(int ht, zend_execute_data *exec
 		return;
 	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 44, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	while (1) {
 		if (!(i <= n)) {
 			break;

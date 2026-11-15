@@ -357,6 +357,10 @@ PHP_METHOD(Stub_Issue2705, unsetNestedThenAssign)
 	ZEPHIR_INIT_NVAR(&_4);
 	ZVAL_STRING(&_4, "reached");
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 75, &_4);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -386,6 +390,10 @@ PHP_METHOD(Stub_Issue2705, unsetPropertyOffsetThenAssign)
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "reached");
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 75, &_1);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -418,6 +426,10 @@ PHP_METHOD(Stub_Issue2705, unsetLocalOffsetThenAssign)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "reached");
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 75, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -449,6 +461,10 @@ PHP_METHOD(Stub_Issue2705, unsetPropertyThenAssign)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "reached");
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 75, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -482,6 +498,10 @@ PHP_METHOD(Stub_Issue2705, unsetNamedPropertyThenAssign)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "reached");
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 75, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -809,6 +829,10 @@ PHP_METHOD(Stub_Issue2705, nestedProbe)
 		add_assoc_long_ex(&_2$$3, SL("c"), 2);
 		zephir_array_update_string(&_1$$3, SL("a"), &_2$$3, PH_COPY | PH_SEPARATE);
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 75, &_1$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_NVAR(&_3$$3);
 		ZVAL_STRING(&_3$$3, "a");
 		ZEPHIR_INIT_NVAR(&_4$$3);
@@ -965,6 +989,10 @@ PHP_METHOD(Stub_Issue2705, braceNameProbe)
 		add_assoc_long_ex(&_1$$3, SL("k"), 1);
 		add_assoc_long_ex(&_1$$3, SL("j"), 2);
 		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 75, &_1$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		ZVAL_STRING(&_2$$3, "k");
 		ZEPHIR_OBS_NVAR(&_3$$3);

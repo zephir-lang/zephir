@@ -191,6 +191,8 @@
 #include "stub/issue2790.zep.h"
 #include "stub/issue2805.zep.h"
 #include "stub/issue2805request.zep.h"
+#include "stub/issue2808.zep.h"
+#include "stub/issue2808counter.zep.h"
 #include "stub/issue2825.zep.h"
 #include "stub/issue2826.zep.h"
 #include "stub/issue2831.zep.h"

@@ -592,37 +592,30 @@ PHP_METHOD(Stub_Issue2675, divAssignProperty)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &obj, &b_param);
 	ZEPHIR_SEPARATE_PARAM(obj);
-	zephir_memory_observe(&_0);
-	zephir_read_property_cached(&_0, obj, _zephir_prop_0, 0, PH_NOISY_CC);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, b);
+	zephir_property_assign_op(obj, _zephir_prop_0, 0, &_0, div_function);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_INIT_VAR(&_1);
-	zephir_div_zval_long(&_1, &_0, b);
+	zephir_memory_observe(&_1);
+	zephir_read_property_cached(&_1, obj, _zephir_prop_0, 0, PH_NOISY_CC);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_property_zval_cached(obj, _zephir_prop_0, 0, &_1);
-	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_property_cached(&_0, obj, _zephir_prop_0, 0, PH_NOISY_CC);
-	if (UNEXPECTED(EG(exception))) {
-		ZEPHIR_MM_RESTORE();
-		return;
-	}
-	RETURN_CCTOR(&_0);
+	RETURN_CCTOR(&_1);
 }
 
 PHP_METHOD(Stub_Issue2675, divAssignPropertyVar)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *obj, obj_sub, *b, b_sub, _0, _1;
+	zval *obj, obj_sub, *b, b_sub, _0;
 
 	ZVAL_UNDEF(&obj_sub);
 	ZVAL_UNDEF(&b_sub);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_1);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("value", 5, 1);
@@ -636,20 +629,12 @@ PHP_METHOD(Stub_Issue2675, divAssignPropertyVar)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &obj, &b);
 	ZEPHIR_SEPARATE_PARAM(obj);
+	zephir_property_assign_op(obj, _zephir_prop_0, 0, b, div_function);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&_0);
-	zephir_read_property_cached(&_0, obj, _zephir_prop_0, 0, PH_NOISY_CC);
-	if (UNEXPECTED(EG(exception))) {
-		ZEPHIR_MM_RESTORE();
-		return;
-	}
-	ZEPHIR_INIT_VAR(&_1);
-	div_function(&_1, &_0, b);
-	if (UNEXPECTED(EG(exception))) {
-		ZEPHIR_MM_RESTORE();
-		return;
-	}
-	zephir_update_property_zval_cached(obj, _zephir_prop_0, 0, &_1);
-	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, obj, _zephir_prop_0, 0, PH_NOISY_CC);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
@@ -678,25 +663,19 @@ PHP_METHOD(Stub_Issue2675, divAssignPropertyLiteral)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &obj);
 	ZEPHIR_SEPARATE_PARAM(obj);
-	zephir_memory_observe(&_0);
-	zephir_read_property_cached(&_0, obj, _zephir_prop_0, 0, PH_NOISY_CC);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, 2);
+	zephir_property_assign_op(obj, _zephir_prop_0, 0, &_0, div_function);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_INIT_VAR(&_1);
-	zephir_div_zval_long(&_1, &_0, 2);
+	zephir_memory_observe(&_1);
+	zephir_read_property_cached(&_1, obj, _zephir_prop_0, 0, PH_NOISY_CC);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_property_zval_cached(obj, _zephir_prop_0, 0, &_1);
-	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_property_cached(&_0, obj, _zephir_prop_0, 0, PH_NOISY_CC);
-	if (UNEXPECTED(EG(exception))) {
-		ZEPHIR_MM_RESTORE();
-		return;
-	}
-	RETURN_CCTOR(&_0);
+	RETURN_CCTOR(&_1);
 }
 

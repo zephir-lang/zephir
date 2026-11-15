@@ -27,11 +27,13 @@ class ObjectPropertyDecr
 {
     use VariablesTrait;
 
-    protected string $warningText  = 'decrement';
-    protected string $zephirMethod = 'zephir_property_decr';
+    protected string $warningText = 'decrement';
+    protected bool $increment     = false;
 
     /**
-     * Compiles obj->x++/obj->x--.
+     * Compiles obj->x++/obj->x--, PHP's PRE_INC_OBJ and PRE_DEC_OBJ.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2808
      */
     public function assign(
         string $variable,
@@ -105,10 +107,11 @@ class ObjectPropertyDecr
         }
 
         $compilationContext->headersManager->add('kernel/object');
-        $compilationContext->codePrinter->output(
-            'RETURN_ON_FAILURE(' . $this->zephirMethod . '('
-            . $compilationContext->backend->getVariableCode($symbolVariable)
-            . ', SL("' . $property . '")));'
+        $compilationContext->backend->incrementProperty(
+            $symbolVariable,
+            $property,
+            $this->increment,
+            $compilationContext
         );
     }
 }

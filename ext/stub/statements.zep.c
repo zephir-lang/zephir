@@ -68,48 +68,48 @@ PHP_METHOD(Stub_Statements, testPropertyAcccessAvoidTmpReuse)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 152, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 155, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 153, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 156, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
 	ZEPHIR_INIT_VAR(&result1);
 	zephir_fast_strpos(&result1, &_0, &_1, 0 );
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 152, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 155, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_1, 153, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_1, 156, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
 	ZEPHIR_INIT_VAR(&result2);
 	zephir_fast_strpos(&result2, &_2, &_3, 0 );
-	zephir_read_property_cached(&_4, this_ptr, _zephir_prop_0, 152, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_4, this_ptr, _zephir_prop_0, 155, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_5, this_ptr, _zephir_prop_1, 153, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_5, this_ptr, _zephir_prop_1, 156, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
 	ZEPHIR_INIT_VAR(&result3);
 	zephir_fast_strpos(&result3, &_4, &_5, 0 );
-	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_0, 152, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_0, 155, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_7, this_ptr, _zephir_prop_1, 153, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_7, this_ptr, _zephir_prop_1, 156, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
@@ -235,13 +235,13 @@ PHP_METHOD(Stub_Statements, test544Issue)
 		RETURN_MM_NULL();
 	}
 	step = Z_LVAL_P(step_param);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 154, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 157, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
 	if (ZEPHIR_GT_LONG(&_0, step)) {
-		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_1, 155, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_1, 158, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
@@ -254,7 +254,7 @@ PHP_METHOD(Stub_Statements, test544Issue)
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_0, 154, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_0, 157, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
@@ -274,7 +274,7 @@ PHP_METHOD(Stub_Statements, test544Issue)
 			return;
 		}
 		filledWidth = zephir_get_intval(&_4$$3);
-		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_1, 155, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_1, 158, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
@@ -296,7 +296,7 @@ PHP_METHOD(Stub_Statements, test544Issue)
 			return;
 		}
 		unfilledWidth = zephir_get_intval(&_7$$3);
-		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_2, 156, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_2, 159, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
@@ -304,12 +304,12 @@ PHP_METHOD(Stub_Statements, test544Issue)
 		ZVAL_LONG(&_8$$3, filledWidth);
 		ZEPHIR_CALL_FUNCTION(&_9$$3, "str_repeat", &_10, 22, &_2$$3, &_8$$3);
 		zephir_check_call_status();
-		zephir_read_property_cached(&_8$$3, this_ptr, _zephir_prop_3, 157, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_8$$3, this_ptr, _zephir_prop_3, 160, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		zephir_read_property_cached(&_11$$3, this_ptr, _zephir_prop_4, 158, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_11$$3, this_ptr, _zephir_prop_4, 161, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
@@ -324,18 +324,18 @@ PHP_METHOD(Stub_Statements, test544Issue)
 		}
 		RETURN_MM();
 	} else {
-		zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 154, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 157, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
 		if (ZEPHIR_IS_LONG_IDENTICAL(&_1, step)) {
-			zephir_read_property_cached(&_14$$4, this_ptr, _zephir_prop_2, 156, PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_14$$4, this_ptr, _zephir_prop_2, 159, PH_NOISY_CC | PH_READONLY);
 			if (UNEXPECTED(EG(exception))) {
 				ZEPHIR_MM_RESTORE();
 				return;
 			}
-			zephir_read_property_cached(&_15$$4, this_ptr, _zephir_prop_1, 155, PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_15$$4, this_ptr, _zephir_prop_1, 158, PH_NOISY_CC | PH_READONLY);
 			if (UNEXPECTED(EG(exception))) {
 				ZEPHIR_MM_RESTORE();
 				return;
@@ -344,12 +344,12 @@ PHP_METHOD(Stub_Statements, test544Issue)
 			zephir_check_call_status();
 			RETURN_MM();
 		} else {
-			zephir_read_property_cached(&_16$$5, this_ptr, _zephir_prop_4, 158, PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_16$$5, this_ptr, _zephir_prop_4, 161, PH_NOISY_CC | PH_READONLY);
 			if (UNEXPECTED(EG(exception))) {
 				ZEPHIR_MM_RESTORE();
 				return;
 			}
-			zephir_read_property_cached(&_17$$5, this_ptr, _zephir_prop_1, 155, PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_17$$5, this_ptr, _zephir_prop_1, 158, PH_NOISY_CC | PH_READONLY);
 			if (UNEXPECTED(EG(exception))) {
 				ZEPHIR_MM_RESTORE();
 				return;
@@ -417,14 +417,14 @@ PHP_METHOD(Stub_Statements, test544IssueWithVariable)
 		RETURN_MM_NULL();
 	}
 	step = Z_LVAL_P(step_param);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 154, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 157, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
 	totalSteps = zephir_get_intval(&_0);
 	if (step < totalSteps) {
-		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_1, 155, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_1, 158, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
@@ -452,7 +452,7 @@ PHP_METHOD(Stub_Statements, test544IssueWithVariable)
 			return;
 		}
 		filledWidth = zephir_get_intval(&_3$$3);
-		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_1, 155, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_1, 158, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
@@ -474,7 +474,7 @@ PHP_METHOD(Stub_Statements, test544IssueWithVariable)
 			return;
 		}
 		unfilledWidth = zephir_get_intval(&_6$$3);
-		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_2, 156, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_2, 159, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
@@ -482,12 +482,12 @@ PHP_METHOD(Stub_Statements, test544IssueWithVariable)
 		ZVAL_LONG(&_7$$3, filledWidth);
 		ZEPHIR_CALL_FUNCTION(&_8$$3, "str_repeat", &_9, 22, &_1$$3, &_7$$3);
 		zephir_check_call_status();
-		zephir_read_property_cached(&_7$$3, this_ptr, _zephir_prop_3, 157, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_7$$3, this_ptr, _zephir_prop_3, 160, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		zephir_read_property_cached(&_10$$3, this_ptr, _zephir_prop_4, 158, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_10$$3, this_ptr, _zephir_prop_4, 161, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
@@ -502,12 +502,12 @@ PHP_METHOD(Stub_Statements, test544IssueWithVariable)
 		}
 		RETURN_MM();
 	} else if (step == totalSteps) {
-		zephir_read_property_cached(&_13$$4, this_ptr, _zephir_prop_2, 156, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_13$$4, this_ptr, _zephir_prop_2, 159, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		zephir_read_property_cached(&_14$$4, this_ptr, _zephir_prop_1, 155, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_14$$4, this_ptr, _zephir_prop_1, 158, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
@@ -516,12 +516,12 @@ PHP_METHOD(Stub_Statements, test544IssueWithVariable)
 		zephir_check_call_status();
 		RETURN_MM();
 	} else {
-		zephir_read_property_cached(&_15$$5, this_ptr, _zephir_prop_4, 158, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_15$$5, this_ptr, _zephir_prop_4, 161, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		zephir_read_property_cached(&_16$$5, this_ptr, _zephir_prop_1, 155, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_16$$5, this_ptr, _zephir_prop_1, 158, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;
