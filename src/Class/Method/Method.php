@@ -2806,6 +2806,55 @@ class Method
     }
 
     /**
+     * The returned class-type hints as fully qualified names, for a call
+     * made on `$receiver` from any file.
+     *
+     * A name resolves where the method is written: through the namespace and
+     * `use` aliases of its file, or of its trait's file when the method was
+     * merged from a trait, never through those of the calling file.
+     * `self` and `static` stand for the receiver and `parent` for the class it
+     * extends, so a chained call is checked on the class the call was made on.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2824
+     * @see https://github.com/zephir-lang/zephir/issues/2505
+     *
+     * @return string[]
+     */
+    public function resolveReturnClassTypes(Definition $receiver, CompilationContext $context): array
+    {
+        $scope = $this->declaringScope($context);
+
+        $resolved = [];
+        foreach ($this->returnClassTypes as $classType) {
+            $resolved[] = match (strtolower($classType)) {
+                'self', 'static' => $receiver->getCompleteName(),
+                'parent'         => $receiver->getExtendsClass() ?: $classType,
+                default          => null === $scope?->getAliasManager()
+                    ? $context->getFullName($classType)
+                    : Name::fetchFQN($classType, $scope->getSourceNamespace(), $scope->getAliasManager()),
+            };
+        }
+
+        return $resolved;
+    }
+
+    /**
+     * The definition whose file the method is written in: its trait's when it
+     * was merged from one, or else its class's.
+     */
+    private function declaringScope(CompilationContext $context): ?Definition
+    {
+        $trait = $this->getDeclaringTrait();
+        if (null !== $trait) {
+            $definition = $context->compiler->getClassDefinition($trait);
+
+            return $definition instanceof Definition ? $definition : null;
+        }
+
+        return $this->classDefinition;
+    }
+
+    /**
      * Returned type hints by the method.
      */
     public function getReturnTypes(): array

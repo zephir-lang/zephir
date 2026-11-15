@@ -29,14 +29,14 @@ ZEPHIR_INIT_CLASS(Stub_Namespaces_A_B_Sub)
 PHP_METHOD(Stub_Namespaces_A_B_Sub, issue2686ClosureNew)
 {
 
-	zephir_create_closure_ex(return_value, NULL, stub_77__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(return_value, NULL, stub_78__closure_ce, SL("__invoke"));
 	return;
 }
 
 PHP_METHOD(Stub_Namespaces_A_B_Sub, issue2686ArrowInstanceOf)
 {
 
-	zephir_create_closure_ex(return_value, NULL, stub_78__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(return_value, NULL, stub_79__closure_ce, SL("__invoke"));
 	return;
 }
 

@@ -599,6 +599,83 @@ zephir_concat_cleanup:
 
 }
 
+void zephir_concat_svv(zval *result, const char *op1, uint32_t op1_len, zval *op2, zval *op3, int self_var){
+
+	zval result_copy, op2_copy, op3_copy;
+	int use_copy = 0, use_copy2 = 0, use_copy3 = 0;
+	size_t offset = 0, length;
+
+	if (Z_TYPE_P(op2) != IS_STRING) {
+	   use_copy2 = zend_make_printable_zval(op2, &op2_copy);
+	   if (use_copy2) {
+	       op2 = &op2_copy;
+	   }
+	}
+
+	if (Z_TYPE_P(op3) != IS_STRING) {
+	   use_copy3 = zend_make_printable_zval(op3, &op3_copy);
+	   if (use_copy3) {
+	       op3 = &op3_copy;
+	   }
+	}
+
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
+	if (self_var) {
+
+		if (Z_TYPE_P(result) != IS_STRING) {
+			use_copy = zend_make_printable_zval(result, &result_copy);
+			if (use_copy) {
+				ZEPHIR_CPY_WRT_CTOR(result, (&result_copy));
+			}
+		}
+
+		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
+		length += offset;
+		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
+
+	} else {
+		ZVAL_STR(result, zend_string_alloc(length, 0));
+	}
+
+	memcpy(Z_STRVAL_P(result) + offset, op1, op1_len);
+	memcpy(Z_STRVAL_P(result) + offset + op1_len, Z_STRVAL_P(op2), Z_STRLEN_P(op2));
+	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2), Z_STRVAL_P(op3), Z_STRLEN_P(op3));
+	Z_STRVAL_P(result)[length] = 0;
+	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
+	if (use_copy2) {
+	   zval_ptr_dtor_nogc(op2);
+	}
+
+	if (use_copy3) {
+	   zval_ptr_dtor_nogc(op3);
+	}
+
+	if (use_copy) {
+	   zval_ptr_dtor_nogc(&result_copy);
+	}
+
+}
+
 void zephir_concat_vs(zval *result, zval *op1, const char *op2, uint32_t op2_len, int self_var){
 
 	zval result_copy, op1_copy;

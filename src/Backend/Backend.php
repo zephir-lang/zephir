@@ -755,9 +755,21 @@ class Backend
         CompilationContext $context,
         $params = [],
         $cache = 'NULL',
-        $cacheSlot = 0
+        $cacheSlot = 0,
+        ?string $named = null
     ): void {
         $paramStr = null != $params ? ', ' . implode(', ', $params) : '';
+
+        /**
+         * Named arguments go to the engine with no cache (#2824).
+         */
+        if (null !== $named) {
+            $target = $this->getVariableCode($variable) . ', ' . $named . $paramStr;
+            $this->emitCall($symbolVariable, 'CALL_ZVAL_FUNCTION_NAMED', $target, $context);
+
+            return;
+        }
+
         if (!isset($symbolVariable)) {
             $context->codePrinter->output(
                 'ZEPHIR_CALL_ZVAL_FUNCTION(NULL, ' . $this->getVariableCode(
@@ -785,9 +797,31 @@ class Backend
         $methodName,
         $cachePointer,
         $params,
-        CompilationContext $context
+        CompilationContext $context,
+        ?string $named = null
     ): void {
         $paramStr = null != $params ? ', ' . implode(', ', $params) : '';
+
+        /**
+         * Named arguments go to the engine with no inline cache: which
+         * parameter each one binds to depends on the method the object has
+         * (#2824). The class comes from the object.
+         */
+        if (null !== $named) {
+            $macro = 'CALL_CLASS_METHOD_NAMED';
+            if ($methodName instanceof Variable) {
+                $macro      = 'CALL_CLASS_METHOD_ZVAL_NAMED';
+                $methodName = $this->getVariableCode($methodName);
+            } else {
+                $methodName = '"' . $methodName . '"';
+            }
+
+            $target = 'zephir_fcall_method, NULL, ' . $this->getVariableCode($variable) . ', ' . $methodName
+                . ', ' . $named . $paramStr;
+            $this->emitCall($symbolVariable, $macro, $target, $context);
+
+            return;
+        }
 
         /**
          * A name known at compile time comes with the site's own inline cache
@@ -819,6 +853,23 @@ class Backend
                 'ZEPHIR_' . $macro . '(' . $symbol . ', ' . $this->getVariableCode(
                     $variable
                 ) . ', ' . $methodName . ', ' . $cachePointer . $paramStr . ');'
+            );
+        }
+    }
+
+    /**
+     * Emits `ZEPHIR_[RETURN_]<macro>(...)`: the result goes to the symbol
+     * variable, to `return_value` through the RETURN form, or nowhere.
+     */
+    public function emitCall(?Variable $symbolVariable, string $macro, string $target, CompilationContext $context): void
+    {
+        if (null === $symbolVariable) {
+            $context->codePrinter->output('ZEPHIR_' . $macro . '(NULL, ' . $target . ');');
+        } elseif ('return_value' === $symbolVariable->getName()) {
+            $context->codePrinter->output('ZEPHIR_RETURN_' . $macro . '(' . $target . ');');
+        } else {
+            $context->codePrinter->output(
+                'ZEPHIR_' . $macro . '(' . $this->getVariableCode($symbolVariable) . ', ' . $target . ');'
             );
         }
     }

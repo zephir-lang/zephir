@@ -70,7 +70,7 @@ PHP_METHOD(Stub_Fcall, testCall2)
 	while (1) {
 		ZVAL_LONG(&_0$$3, 0);
 		ZVAL_LONG(&_1$$3, 100);
-		ZEPHIR_RETURN_CALL_FUNCTION("mt_rand", &_2, 32, &_0$$3, &_1$$3);
+		ZEPHIR_RETURN_CALL_FUNCTION("mt_rand", &_2, 31, &_0$$3, &_1$$3);
 		zephir_check_call_status();
 		RETURN_MM();
 	}
@@ -96,18 +96,18 @@ PHP_METHOD(Stub_Fcall, testCall3)
 	ZVAL_STRING(&_0, "inputfile.txt");
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "r");
-	ZEPHIR_CALL_FUNCTION(&handle, "fopen", &_2, 33, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&handle, "fopen", &_2, 32, &_0, &_1);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "outputfile.txt");
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "w");
-	ZEPHIR_CALL_FUNCTION(&handle2, "fopen", &_2, 33, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&handle2, "fopen", &_2, 32, &_0, &_1);
 	zephir_check_call_status();
 	if (zephir_is_true(&handle)) {
 		while (1) {
 			ZVAL_LONG(&_3$$4, 4096);
-			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", &_4, 34, &handle, &_3$$4);
+			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", &_4, 33, &handle, &_3$$4);
 			zephir_check_call_status();
 			if (ZEPHIR_IS_FALSE_IDENTICAL(&buffer)) {
 				break;
@@ -122,17 +122,18 @@ PHP_METHOD(Stub_Fcall, testCall3)
 
 PHP_METHOD(Stub_Fcall, testCall4)
 {
-	zval handle, handle2, buffer, _0, _1, _3$$4;
+	zval handle, handle2, buffer, _0, _1, _2, _4$$4;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_2 = NULL, *_4 = NULL;
+	zephir_fcall_cache_entry *_3 = NULL, *_5 = NULL;
 
 	ZVAL_UNDEF(&handle);
 	ZVAL_UNDEF(&handle2);
 	ZVAL_UNDEF(&buffer);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_3$$4);
+	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_4$$4);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -140,18 +141,28 @@ PHP_METHOD(Stub_Fcall, testCall4)
 	ZVAL_STRING(&_0, "r");
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "inputfile.txt");
-	ZEPHIR_CALL_FUNCTION(&handle, "fopen", &_2, 33, &_0, &_1);
+	ZEPHIR_INIT_VAR(&_2);
+	zephir_create_array(&_2, 2, 0);
+	zephir_array_update_string(&_2, SL("mode"), &_0, PH_COPY);
+	zephir_array_update_string(&_2, SL("filename"), &_1, PH_COPY);
+	ZEPHIR_CALL_FUNCTION_NAMED(&handle, "fopen", Z_ARRVAL_P(&_2));
+	ZEPHIR_INIT_NVAR(&_2);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "outputfile.txt");
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "w");
-	ZEPHIR_CALL_FUNCTION(&handle2, "fopen", &_2, 33, &_0, &_1);
+	ZEPHIR_INIT_NVAR(&_2);
+	zephir_create_array(&_2, 2, 0);
+	zephir_array_update_string(&_2, SL("filename"), &_0, PH_COPY);
+	zephir_array_update_string(&_2, SL("mode"), &_1, PH_COPY);
+	ZEPHIR_CALL_FUNCTION_NAMED(&handle2, "fopen", Z_ARRVAL_P(&_2));
+	ZEPHIR_INIT_NVAR(&_2);
 	zephir_check_call_status();
 	if (zephir_is_true(&handle)) {
 		while (1) {
-			ZVAL_LONG(&_3$$4, 4096);
-			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", &_4, 34, &handle, &_3$$4);
+			ZVAL_LONG(&_4$$4, 4096);
+			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", &_5, 33, &handle, &_4$$4);
 			zephir_check_call_status();
 			if (ZEPHIR_IS_FALSE_IDENTICAL(&buffer)) {
 				break;
@@ -191,7 +202,7 @@ PHP_METHOD(Stub_Fcall, testCall6)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_FUNCTION("rand", NULL, 35);
+	ZEPHIR_RETURN_CALL_FUNCTION("rand", NULL, 34);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -203,7 +214,7 @@ PHP_METHOD(Stub_Fcall, testCall7)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_FUNCTION(NULL, "memory_get_usage", NULL, 36);
+	ZEPHIR_CALL_FUNCTION(NULL, "memory_get_usage", NULL, 35);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 }
@@ -301,7 +312,7 @@ PHP_METHOD(Stub_Fcall, testStrtokVarBySlash)
 	zephir_fetch_params(1, 1, 0, &value);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "/");
-	ZEPHIR_RETURN_CALL_FUNCTION("strtok", NULL, 37, value, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("strtok", NULL, 36, value, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

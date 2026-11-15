@@ -10,6 +10,7 @@
 #include "stub/oo/extend/exception.zep.h"
 #include "stub/issue2165/issueextendinterface.zep.h"
 #include "stub/issue2635/outer.zep.h"
+#include "stub/issue2824pair.zep.h"
 #include "stub/oo/extend/db/exception.zep.h"
 #include "stub/scallparent.zep.h"
 #include "stub/bench.zep.h"
@@ -193,6 +194,11 @@
 #include "stub/issue2805request.zep.h"
 #include "stub/issue2808.zep.h"
 #include "stub/issue2808counter.zep.h"
+#include "stub/issue2824.zep.h"
+#include "stub/issue2824callbacks.zep.h"
+#include "stub/issue2824child.zep.h"
+#include "stub/issue2824ctor.zep.h"
+#include "stub/issue2824renamed.zep.h"
 #include "stub/issue2825.zep.h"
 #include "stub/issue2826.zep.h"
 #include "stub/issue2831.zep.h"
@@ -415,5 +421,6 @@
 #include "stub/76__closure.zep.h"
 #include "stub/77__closure.zep.h"
 #include "stub/78__closure.zep.h"
+#include "stub/79__closure.zep.h"
 
 #endif

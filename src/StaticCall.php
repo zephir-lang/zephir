@@ -191,7 +191,8 @@ class StaticCall extends Call
                     );
                 }
             } else {
-                $method = $classDefinition->getMethod($methodName);
+                $method           = $classDefinition->getMethod($methodName);
+                $this->reflection = $method;
 
                 /**
                  * PHP checks the method against the class the call is written
@@ -366,10 +367,14 @@ class StaticCall extends Call
          * Transfer the return type-hint to the returned variable
          */
         if ($isExpecting && isset($method) && $method instanceof Method) {
+            /*
+             * `parent::` forwards the called class, so `static` and `self`
+             * stand for the class the call is written in there.
+             */
             $symbolVariable->setDynamicTypes('object');
-            foreach ($method->getReturnClassTypes() as $classType) {
-                $symbolVariable->setClassTypes($compilationContext->getFullName($classType));
-            }
+            $symbolVariable->setClassTypes(
+                $method->resolveReturnClassTypes($currentClassDefinition ?? $classDefinition, $compilationContext)
+            );
 
             foreach ($method->getReturnTypes() as $dataType => $returnType) {
                 $symbolVariable->setDynamicTypes($dataType);
@@ -416,7 +421,8 @@ class StaticCall extends Call
          * the closure's own $this.
          */
         $insideClosure = true === $compilationContext->classDefinition?->isClosure();
-        if ('SELF' === $context && !$insideClosure) {
+        $named         = FunctionCall::hasNamedArgument($expression);
+        if ('SELF' === $context && !$insideClosure && !$named) {
             $method = $method->getOptimizedMethod();
         }
 
@@ -437,6 +443,8 @@ class StaticCall extends Call
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         }
 
+        [$params, $named] = $this->splitNamedArguments($params, $compilationContext);
+
         if ($symbolVariable) {
             $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
         }
@@ -445,7 +453,18 @@ class StaticCall extends Call
         $paramsStr  = $paramCount ? ', ' . implode(', ', $params) : '';
 
         $isInternal = isset($method) && $method->isInternal();
-        if (!$isInternal) {
+        $this->assertNamedArgumentsReachEngine($named, $isInternal, $expression);
+        if (null !== $named) {
+            $macro   = $context . ($insideClosure ? '_THIS' : '') . '_CACHED';
+            $leading = $insideClosure ? [$compilationContext->enclosingObjectCode()] : [];
+            $compilationContext->backend->emitCall(
+                $isExpecting ? $symbolVariable : null,
+                'CALL_CLASS_METHOD_NAMED',
+                $this->namedCallScope($macro, $leading) . ', "' . $callName . '", ' . $named . $paramsStr,
+                $compilationContext
+            );
+            $this->releaseNamedArguments($compilationContext);
+        } elseif (!$isInternal) {
             /**
              * The site's own inline cache, keyed by the class the call resolves
              * against, which for `static::` is the called class (#2790).
@@ -546,7 +565,7 @@ class StaticCall extends Call
          *
          * @see https://github.com/zephir-lang/zephir/issues/2734
          */
-        if (Visibility::canCallMethod($method, $compilationContext)) {
+        if (Visibility::canCallMethod($method, $compilationContext) && !FunctionCall::hasNamedArgument($expression)) {
             $method = $method->getOptimizedMethod();
         }
 
@@ -555,6 +574,8 @@ class StaticCall extends Call
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         }
 
+        [$params, $named] = $this->splitNamedArguments($params, $compilationContext);
+
         if ($symbolVariable) {
             $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
         }
@@ -562,7 +583,8 @@ class StaticCall extends Call
         $paramCount = count($params);
         $paramsStr  = $paramCount ? ', ' . implode(', ', $params) : '';
 
-        if ($method->isInternal()) {
+        $this->assertNamedArgumentsReachEngine($named, $method->isInternal(), $expression);
+        if (null === $named && $method->isInternal()) {
             $ce = $method->getClassDefinition()->getClassEntry($compilationContext)
                 . ', ' . $classDefinition->getClassEntry($compilationContext);
             if ($isExpecting) {
@@ -580,7 +602,7 @@ class StaticCall extends Call
                 $codePrinter->output($macro . '(' . $ce . ', ' . $method->getInternalName() . $paramsStr . ');');
             }
         } else {
-            $this->emitClassCall($symbolVariable, $isExpecting, $classEntry, $callName, $paramsStr, $compilationContext);
+            $this->emitClassCall($symbolVariable, $isExpecting, $classEntry, $callName, $paramsStr, $compilationContext, $named);
         }
 
         /**
@@ -612,10 +634,11 @@ class StaticCall extends Call
         CompilationContext $compilationContext
     ): void {
         [$params, $classEntry] = $this->fetchClassParams($expression, $compilationContext, $symbolVariable, $mustInit);
+        [$params, $named]      = $this->splitNamedArguments($params, $compilationContext);
 
         $paramsStr = count($params) ? ', ' . implode(', ', $params) : '';
 
-        $this->emitClassCall($symbolVariable, $isExpecting, $classEntry, $callName, $paramsStr, $compilationContext);
+        $this->emitClassCall($symbolVariable, $isExpecting, $classEntry, $callName, $paramsStr, $compilationContext, $named);
 
         /**
          * Temporary variables must be copied if they have more than one reference
@@ -644,6 +667,7 @@ class StaticCall extends Call
         CompilationContext $compilationContext
     ): void {
         [$params, $classEntry] = $this->fetchClassParams($expression, $compilationContext, $symbolVariable, $mustInit);
+        [$params, $named]      = $this->splitNamedArguments($params, $compilationContext);
 
         $this->emitDynamicMethodCall(
             'CE_STATIC_ZVAL',
@@ -652,7 +676,8 @@ class StaticCall extends Call
             $params,
             $symbolVariable,
             $isExpecting,
-            $compilationContext
+            $compilationContext,
+            $named
         );
     }
 
@@ -719,6 +744,8 @@ class StaticCall extends Call
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         }
 
+        [$params, $named] = $this->splitNamedArguments($params, $compilationContext);
+
         $this->emitDynamicMethodCall(
             $macro,
             $leadingArguments,
@@ -726,7 +753,8 @@ class StaticCall extends Call
             $params,
             $symbolVariable,
             $isExpecting,
-            $compilationContext
+            $compilationContext,
+            $named
         );
     }
 
@@ -745,9 +773,32 @@ class StaticCall extends Call
         array $params,
         ?Variable $symbolVariable,
         bool $isExpecting,
-        CompilationContext $compilationContext
+        CompilationContext $compilationContext,
+        ?string $named = null
     ): void {
-        $backend   = $compilationContext->backend;
+        $backend = $compilationContext->backend;
+
+        if (null !== $named) {
+            $backend->emitCall(
+                $isExpecting ? $symbolVariable : null,
+                'CALL_CLASS_METHOD_ZVAL_NAMED',
+                implode(', ', array_merge(
+                    [$this->namedCallScope($macro, $leadingArguments), $backend->getVariableCode($methodNameVariable), $named],
+                    $params
+                )),
+                $compilationContext
+            );
+            $this->releaseNamedArguments($compilationContext);
+
+            foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
+                $compilationContext->codePrinter->output('zephir_check_temp_parameter(' . $checkVariable . ');');
+            }
+
+            $this->addCallStatusOrJump($compilationContext);
+
+            return;
+        }
+
         $arguments = array_merge(
             $leadingArguments,
             [$backend->getVariableCode($methodNameVariable), 'NULL', '0'],
@@ -854,7 +905,28 @@ class StaticCall extends Call
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         }
 
-        $paramsStr    = count($params) ? ', ' . implode(', ', $params) : '';
+        [$params, $named] = $this->splitNamedArguments($params, $compilationContext);
+
+        $paramsStr = count($params) ? ', ' . implode(', ', $params) : '';
+        if (null !== $named) {
+            $compilationContext->backend->emitCall(
+                $isExpecting ? $symbolVariable : null,
+                'CALL_CLASS_METHOD_NAMED',
+                $this->namedCallScope('PARENT_CACHED', [$classCe, $compilationContext->enclosingObjectCode()])
+                . ', "' . $callName . '", ' . $named . $paramsStr,
+                $compilationContext
+            );
+            $this->releaseNamedArguments($compilationContext);
+
+            foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
+                $codePrinter->output('zephir_check_temp_parameter(' . $checkVariable . ');');
+            }
+
+            $this->addCallStatusOrJump($compilationContext);
+
+            return;
+        }
+
         $cachePointer = $compilationContext->cacheManager->getMethodCache()->get($compilationContext);
         $target       = $classCe . ', ' . $compilationContext->enclosingObjectCode() . ', "' . $callName . '", '
             . $cachePointer . $paramsStr;
@@ -890,8 +962,21 @@ class StaticCall extends Call
         string $classEntry,
         string $callName,
         string $paramsStr,
-        CompilationContext $compilationContext
+        CompilationContext $compilationContext,
+        ?string $named = null
     ): void {
+        if (null !== $named) {
+            $compilationContext->backend->emitCall(
+                $isExpecting ? $symbolVariable : null,
+                'CALL_CLASS_METHOD_NAMED',
+                $this->namedCallScope('CE_STATIC_CACHED', [$classEntry]) . ', "' . $callName . '", ' . $named . $paramsStr,
+                $compilationContext
+            );
+            $this->releaseNamedArguments($compilationContext);
+
+            return;
+        }
+
         $cachePointer = $compilationContext->cacheManager->getMethodCache()->get($compilationContext);
         $target       = $classEntry . ', "' . $callName . '", ' . $cachePointer . $paramsStr;
 
@@ -916,6 +1001,48 @@ class StaticCall extends Call
      *
      * @see https://github.com/zephir-lang/zephir/issues/2723
      */
+    /**
+     * The `type, class entry, object` a call with named arguments passes for
+     * each static call macro, from the leading arguments that macro takes: the
+     * same class and object the macro would call with (#2824).
+     *
+     * @param list<string> $leading
+     */
+    private function namedCallScope(string $macro, array $leading): string
+    {
+        $calling = 'zephir_get_calling_scope()';
+        $called  = 'zephir_get_called_scope(EG(current_execute_data))';
+
+        return implode(', ', match ($macro) {
+            'SELF_CACHED'        => ['zephir_fcall_self', $calling, 'getThis()'],
+            'SELF_THIS_CACHED'   => ['zephir_fcall_self', $calling, $leading[0]],
+            'STATIC_CACHED'      => ['zephir_fcall_static', $called, 'getThis()'],
+            'STATIC_THIS_CACHED' => ['zephir_fcall_static', $called, $leading[0]],
+            'PARENT_CACHED'      => ['zephir_fcall_parent', $leading[0], $leading[1]],
+            'CE_STATIC_CACHED'   => ['zephir_fcall_ce', $leading[0], 'NULL'],
+            'SELF_ZVAL'          => ['zephir_fcall_self', $leading[0], 'getThis()'],
+            'SELF_THIS_ZVAL'     => ['zephir_fcall_self', $leading[0], $leading[1]],
+            'PARENT_ZVAL'        => ['zephir_fcall_parent', $leading[0], $leading[1]],
+            'STATIC_ZVAL'        => ['zephir_fcall_static', $called, 'getThis()'],
+            'STATIC_THIS_ZVAL'   => ['zephir_fcall_static', $called, $leading[0]],
+            'CE_STATIC_ZVAL'     => ['zephir_fcall_ce', $leading[0], 'getThis()'],
+        });
+    }
+
+    /**
+     * Named arguments are bound by the engine, which the direct C call to an
+     * internal method skips (#2824).
+     */
+    private function assertNamedArgumentsReachEngine(?string $named, bool $isInternal, array $expression): void
+    {
+        if (null !== $named && $isInternal) {
+            throw new CompilerException(
+                "Named arguments cannot be passed to the internal method '" . $expression['name'] . "'",
+                $expression
+            );
+        }
+    }
+
     private function fetchClassParams(
         array $expression,
         CompilationContext $compilationContext,

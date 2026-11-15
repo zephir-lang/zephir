@@ -1327,6 +1327,23 @@ void zephir_get_args_from(zval *return_value, uint32_t skip)
 			++i;
 		}
 	}
+
+	/**
+	 * Named arguments the method has no parameter for are collected by its
+	 * variadic parameter, under their names, as `...$args` collects them.
+	 *
+	 * @see https://github.com/zephir-lang/zephir/issues/2824
+	 */
+	if (ZEND_CALL_INFO(ex) & ZEND_CALL_HAS_EXTRA_NAMED_PARAMS) {
+		zend_string *name;
+		zval *value;
+
+		ZEND_HASH_FOREACH_STR_KEY_VAL(ex->extra_named_params, name, value) {
+			ZVAL_DEREF(value);
+			Z_TRY_ADDREF_P(value);
+			zend_hash_add_new(Z_ARRVAL_P(return_value), name, value);
+		} ZEND_HASH_FOREACH_END();
+	}
 }
 
 void zephir_get_arg(zval *return_value, zend_long idx)

@@ -45,7 +45,16 @@ class ForStatement extends StatementAbstract
         /*
          * TODO: implement optimizers here
          */
-        if ('fcall' === $exprRaw['type']) {
+        /**
+         * `range()` with named arguments is left to the engine, which binds
+         * them; `iterator()` only exists in Zephir and has no names (#2824).
+         */
+        $named = 'fcall' === $exprRaw['type'] && FunctionCall::hasNamedArgument($exprRaw);
+        if ($named && 'iterator' === $exprRaw['name']) {
+            throw new CompilerException('Named arguments cannot be passed to the built-in function iterator()', $exprRaw);
+        }
+
+        if ('fcall' === $exprRaw['type'] && !$named) {
             if ('range' === $exprRaw['name']) {
                 $status = $this->compileRange($exprRaw, $compilationContext);
                 if (false !== $status) {
