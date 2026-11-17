@@ -15,6 +15,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/oo/extend/exception.zep.c
 	stub/issue2165/issueextendinterface.zep.c
 	stub/issue2635/outer.zep.c
+	stub/issue2824pair.zep.c
 	stub/oo/extend/db/exception.zep.c
 	stub/scallparent.zep.c
 	stub/bench.zep.c
@@ -198,6 +199,11 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2805request.zep.c
 	stub/issue2808.zep.c
 	stub/issue2808counter.zep.c
+	stub/issue2824.zep.c
+	stub/issue2824callbacks.zep.c
+	stub/issue2824child.zep.c
+	stub/issue2824ctor.zep.c
+	stub/issue2824renamed.zep.c
 	stub/issue2825.zep.c
 	stub/issue2826.zep.c
 	stub/issue2831.zep.c
@@ -419,7 +425,8 @@ if test "$PHP_STUB" = "yes"; then
 	stub/75__closure.zep.c
 	stub/76__closure.zep.c
 	stub/77__closure.zep.c
-	stub/78__closure.zep.c "
+	stub/78__closure.zep.c
+	stub/79__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
 	for dir in "stub stub/args/single stub/attributes stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/issue2635 stub/issue2761 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/traits stub/typehinting stub/types"; do

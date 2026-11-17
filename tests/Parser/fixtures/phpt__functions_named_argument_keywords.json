@@ -1,0 +1,118 @@
+[
+    {
+        "type": "function",
+        "name": "f",
+        "statements": [
+            {
+                "type": "return",
+                "expr": {
+                    "type": "fcall",
+                    "name": "g",
+                    "call-type": 1,
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "parameter": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__functions_named_argument_keywords.zep",
+                                "line": 3,
+                                "char": 18
+                            },
+                            "file": "phpt__functions_named_argument_keywords.zep",
+                            "line": 3,
+                            "char": 18
+                        },
+                        {
+                            "name": "string",
+                            "parameter": {
+                                "type": "int",
+                                "value": "2",
+                                "file": "phpt__functions_named_argument_keywords.zep",
+                                "line": 3,
+                                "char": 29
+                            },
+                            "file": "phpt__functions_named_argument_keywords.zep",
+                            "line": 3,
+                            "char": 29
+                        },
+                        {
+                            "name": "array",
+                            "parameter": {
+                                "type": "int",
+                                "value": "3",
+                                "file": "phpt__functions_named_argument_keywords.zep",
+                                "line": 3,
+                                "char": 39
+                            },
+                            "file": "phpt__functions_named_argument_keywords.zep",
+                            "line": 3,
+                            "char": 39
+                        },
+                        {
+                            "name": "class",
+                            "parameter": {
+                                "type": "int",
+                                "value": "4",
+                                "file": "phpt__functions_named_argument_keywords.zep",
+                                "line": 3,
+                                "char": 49
+                            },
+                            "file": "phpt__functions_named_argument_keywords.zep",
+                            "line": 3,
+                            "char": 49
+                        },
+                        {
+                            "name": "NAME",
+                            "parameter": {
+                                "type": "int",
+                                "value": "5",
+                                "file": "phpt__functions_named_argument_keywords.zep",
+                                "line": 3,
+                                "char": 58
+                            },
+                            "file": "phpt__functions_named_argument_keywords.zep",
+                            "line": 3,
+                            "char": 58
+                        },
+                        {
+                            "name": "default",
+                            "parameter": {
+                                "type": "int",
+                                "value": "6",
+                                "file": "phpt__functions_named_argument_keywords.zep",
+                                "line": 3,
+                                "char": 70
+                            },
+                            "file": "phpt__functions_named_argument_keywords.zep",
+                            "line": 3,
+                            "char": 70
+                        },
+                        {
+                            "name": "null",
+                            "parameter": {
+                                "type": "int",
+                                "value": "7",
+                                "file": "phpt__functions_named_argument_keywords.zep",
+                                "line": 3,
+                                "char": 79
+                            },
+                            "file": "phpt__functions_named_argument_keywords.zep",
+                            "line": 3,
+                            "char": 79
+                        }
+                    ],
+                    "file": "phpt__functions_named_argument_keywords.zep",
+                    "line": 3,
+                    "char": 80
+                },
+                "file": "phpt__functions_named_argument_keywords.zep",
+                "line": 4,
+                "char": 1
+            }
+        ],
+        "file": "phpt__functions_named_argument_keywords.zep",
+        "line": 1,
+        "char": 9
+    }
+]

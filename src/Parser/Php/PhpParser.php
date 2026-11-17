@@ -1340,7 +1340,7 @@ final class PhpParser
             return [$node, false];
         }
 
-        $ident      = $this->expect(TokenType::T_IDENTIFIER);
+        $ident      = $this->expectNameToken();
         $collection = false;
         if ($this->accept(TokenType::T_SBRACKET_OPEN)) {
             $this->expect(TokenType::T_SBRACKET_CLOSE);
@@ -1921,9 +1921,9 @@ final class PhpParser
     {
         $this->expect(TokenType::T_CATCH);
 
-        $classes = [$this->literalFromToken(TokenType::T_IDENTIFIER, $this->expect(TokenType::T_IDENTIFIER))];
+        $classes = [$this->literalFromToken(TokenType::T_IDENTIFIER, $this->expectNameToken())];
         while ($this->accept(TokenType::T_BITWISE_OR)) {
-            $classes[] = $this->literalFromToken(TokenType::T_IDENTIFIER, $this->expect(TokenType::T_IDENTIFIER));
+            $classes[] = $this->literalFromToken(TokenType::T_IDENTIFIER, $this->expectNameToken());
         }
 
         $variableTok = null;
@@ -2840,12 +2840,18 @@ final class PhpParser
 
     private function parseTypeHint(): array
     {
-        // < IDENTIFIER > expr
-        if ($this->laType(1) === TokenType::T_IDENTIFIER && $this->laType(2) === TokenType::T_GREATER) {
+        // < IDENTIFIER|CONSTANT > expr
+        $name = $this->laType(1);
+        if (
+            ($name === TokenType::T_IDENTIFIER || $name === TokenType::T_CONSTANT)
+            && $this->laType(2) === TokenType::T_GREATER
+        ) {
             $this->advance(); // <
             $ident = $this->advance();
             $this->expect(TokenType::T_GREATER);
-            $operand = $this->parseExpr(0);
+            // The C rule takes GREATER's precedence, so the operand only takes
+            // operators binding tighter: `<A> a == b` is `(<A> a) == b`.
+            $operand = $this->parseExpr(self::INFIX[TokenType::T_GREATER][0]);
 
             return $this->expr('type-hint', $this->literalFromToken(TokenType::T_IDENTIFIER, $ident), $operand, null);
         }
@@ -3081,16 +3087,15 @@ final class PhpParser
     private function parseCallArgument(): array
     {
         $name = null;
-        if ($this->check(TokenType::T_IDENTIFIER) && $this->laType(1) === TokenType::T_COLON) {
-            $name = $this->advance();
-            $this->expect(TokenType::T_COLON);
+        if ($this->laType(1) === TokenType::T_COLON) {
+            $name = $this->callArgumentName();
         }
 
         $expr = $this->parseExpr(0);
 
         $node = [];
         if ($name !== null) {
-            $node['name'] = $this->remap((string) $name->value);
+            $node['name'] = $name;
         }
         $node['parameter'] = $expr;
         $node['file']      = $this->file;
@@ -3098,6 +3103,27 @@ final class PhpParser
         $node['char']      = $this->char();
 
         return $node;
+    }
+
+    /**
+     * The name of a named argument, consumed with its colon, or null when the
+     * current token cannot be one. PHP takes any word, reserved or not, so a
+     * keyword is named by its spelling, as `xx_call_parameter_name` does.
+     */
+    private function callArgumentName(): ?string
+    {
+        $token = $this->peek();
+        $name  = match ($token->opcode) {
+            TokenType::T_IDENTIFIER, TokenType::T_CONSTANT => $this->remap((string) $token->value),
+            default => Lexer::keywordSpelling($token->opcode),
+        };
+
+        if (null !== $name) {
+            $this->advance();
+            $this->expect(TokenType::T_COLON);
+        }
+
+        return $name;
     }
 
     /* ----- literal-expr (parameter defaults, literal array values) ------- */

@@ -347,13 +347,23 @@ class ArgInfoDefinition
                 continue;
             }
             if (!isset($mayBe[$dataType])) {
-                // Not PHP-expressible as a mask bit: emit an untyped arg.
+                /**
+                 * Not PHP-expressible as a mask bit: emit an untyped arg, with
+                 * its default, which a named call skipping it binds (#2824).
+                 */
                 $this->codePrinter->output(
-                    sprintf(
-                        "\tZEND_ARG_INFO(%d, %s)",
-                        $this->passByReference($parameter),
-                        $parameter['name']
-                    )
+                    isset($parameter['default'])
+                        ? sprintf(
+                            "\tZEND_ARG_INFO_WITH_DEFAULT_VALUE(%d, %s, \"%s\")",
+                            $this->passByReference($parameter),
+                            $parameter['name'],
+                            $this->defaultValueSource($parameter['default'])
+                        )
+                        : sprintf(
+                            "\tZEND_ARG_INFO(%d, %s)",
+                            $this->passByReference($parameter),
+                            $parameter['name']
+                        )
                 );
 
                 return;

@@ -112,7 +112,7 @@ PHP_METHOD(Stub_Traits_Counter, tagged)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CALL_FUNCTION(&_2, "strval", NULL, 42, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "strval", NULL, 41, &_1);
 	zephir_check_call_status();
 	ZEPHIR_CONCAT_VSV(return_value, &_0, ":", &_2);
 	if (UNEXPECTED(EG(exception))) {

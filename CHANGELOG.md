@@ -30,6 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `o->{n} = v` with a non-string `n`, such as an `int`, warning instead of converting the name as PHP does [#2808](https://github.com/zephir-lang/zephir/issues/2808)
 - Fixed `o->p[k] op= v` on a typed property that does not allow an array throwing a TypeError, where PHP creates the array [#2808](https://github.com/zephir-lang/zephir/issues/2808)
 - Fixed errors naming an anonymous class cutting its name on PHP 8.6, which prints it whole [#2808](https://github.com/zephir-lang/zephir/issues/2808)
+- Fixed a method's return type being resolved in the calling file, so a chained call warned about or was checked against a wrong class [#2824](https://github.com/zephir-lang/zephir/issues/2824)
+- Fixed an all-caps class name such as `PDO` failing to parse in a cast, a type hint or `catch`, and `instanceof PDO` reading a constant [#2824](https://github.com/zephir-lang/zephir/issues/2824)
+- Fixed named arguments being passed in the order written, and a skipped optional parameter getting `null` instead of its default [#2824](https://github.com/zephir-lang/zephir/issues/2824)
+- Fixed a named argument failing to compile after a positional one or with a keyword as its name, such as `strlen(string: s)` [#2824](https://github.com/zephir-lang/zephir/issues/2824)
+- Fixed a variadic parameter dropping the named arguments it has no parameter for [#2824](https://github.com/zephir-lang/zephir/issues/2824)
+- Fixed `call_user_func()` and `call_user_func_array()` rejecting a private callback of the class and warning instead of throwing PHP's TypeError [#2824](https://github.com/zephir-lang/zephir/issues/2824)
+- Fixed a variable first assigned by a by-reference parameter, as in `parse_str(s, result)`, leaking what the callee stored in it [#2824](https://github.com/zephir-lang/zephir/issues/2824)
 
 ## [1.8.0] - 2026-11-12
 

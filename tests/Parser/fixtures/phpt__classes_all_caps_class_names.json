@@ -1,0 +1,366 @@
+[
+    {
+        "type": "class",
+        "name": "User",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "held",
+                    "cast": {
+                        "type": "variable",
+                        "value": "PDO",
+                        "file": "phpt__classes_all_caps_class_names.zep",
+                        "line": 3,
+                        "char": 21
+                    },
+                    "file": "phpt__classes_all_caps_class_names.zep",
+                    "line": 5,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "param",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "PDO",
+                                "file": "phpt__classes_all_caps_class_names.zep",
+                                "line": 5,
+                                "char": 30
+                            },
+                            "reference": 0,
+                            "file": "phpt__classes_all_caps_class_names.zep",
+                            "line": 5,
+                            "char": 31
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "DB",
+                                "file": "phpt__classes_all_caps_class_names.zep",
+                                "line": 5,
+                                "char": 38
+                            },
+                            "default": {
+                                "type": "null",
+                                "file": "phpt__classes_all_caps_class_names.zep",
+                                "line": 5,
+                                "char": 46
+                            },
+                            "reference": 0,
+                            "file": "phpt__classes_all_caps_class_names.zep",
+                            "line": 5,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "e",
+                                    "file": "phpt__classes_all_caps_class_names.zep",
+                                    "line": 7,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "phpt__classes_all_caps_class_names.zep",
+                            "line": 9,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "type-hint",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "PDO",
+                                            "file": "phpt__classes_all_caps_class_names.zep",
+                                            "line": 9,
+                                            "char": 18
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "phpt__classes_all_caps_class_names.zep",
+                                            "line": 9,
+                                            "char": 18
+                                        },
+                                        "file": "phpt__classes_all_caps_class_names.zep",
+                                        "line": 9,
+                                        "char": 18
+                                    },
+                                    "file": "phpt__classes_all_caps_class_names.zep",
+                                    "line": 9,
+                                    "char": 18
+                                }
+                            ],
+                            "file": "phpt__classes_all_caps_class_names.zep",
+                            "line": 11,
+                            "char": 5
+                        },
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "a",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "phpt__classes_all_caps_class_names.zep",
+                                                "line": 12,
+                                                "char": 13
+                                            },
+                                            "file": "phpt__classes_all_caps_class_names.zep",
+                                            "line": 12,
+                                            "char": 13
+                                        }
+                                    ],
+                                    "file": "phpt__classes_all_caps_class_names.zep",
+                                    "line": 13,
+                                    "char": 3
+                                }
+                            ],
+                            "catches": [
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "PDO",
+                                            "file": "phpt__classes_all_caps_class_names.zep",
+                                            "line": 13,
+                                            "char": 15
+                                        },
+                                        {
+                                            "type": "variable",
+                                            "value": "DB",
+                                            "file": "phpt__classes_all_caps_class_names.zep",
+                                            "line": 13,
+                                            "char": 19
+                                        }
+                                    ],
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "e",
+                                        "file": "phpt__classes_all_caps_class_names.zep",
+                                        "line": 16,
+                                        "char": 8
+                                    },
+                                    "file": "phpt__classes_all_caps_class_names.zep",
+                                    "line": 16,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "phpt__classes_all_caps_class_names.zep",
+                            "line": 16,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "closure",
+                                "left": [
+                                    {
+                                        "type": "parameter",
+                                        "name": "c",
+                                        "const": 0,
+                                        "data-type": "variable",
+                                        "mandatory": 0,
+                                        "cast": {
+                                            "type": "variable",
+                                            "value": "PDO",
+                                            "file": "phpt__classes_all_caps_class_names.zep",
+                                            "line": 16,
+                                            "char": 26
+                                        },
+                                        "reference": 0,
+                                        "file": "phpt__classes_all_caps_class_names.zep",
+                                        "line": 16,
+                                        "char": 27
+                                    }
+                                ],
+                                "return-type": {
+                                    "type": "return-type",
+                                    "list": [
+                                        {
+                                            "type": "return-type-parameter",
+                                            "cast": {
+                                                "type": "variable",
+                                                "value": "PDO",
+                                                "file": "phpt__classes_all_caps_class_names.zep",
+                                                "line": 16,
+                                                "char": 40
+                                            },
+                                            "collection": 1,
+                                            "file": "phpt__classes_all_caps_class_names.zep",
+                                            "line": 16,
+                                            "char": 40
+                                        }
+                                    ],
+                                    "void": 0,
+                                    "file": "phpt__classes_all_caps_class_names.zep",
+                                    "line": 16,
+                                    "char": 40
+                                },
+                                "file": "phpt__classes_all_caps_class_names.zep",
+                                "line": 16,
+                                "char": 43,
+                                "start-line": 16
+                            },
+                            "file": "phpt__classes_all_caps_class_names.zep",
+                            "line": 17,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "PDO",
+                                    "file": "phpt__classes_all_caps_class_names.zep",
+                                    "line": 6,
+                                    "char": 2
+                                },
+                                "collection": 0,
+                                "file": "phpt__classes_all_caps_class_names.zep",
+                                "line": 6,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "phpt__classes_all_caps_class_names.zep",
+                        "line": 6,
+                        "char": 2
+                    },
+                    "file": "phpt__classes_all_caps_class_names.zep",
+                    "line": 16,
+                    "last-line": 19,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "union",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "data-types": [
+                                {
+                                    "cast": {
+                                        "type": "variable",
+                                        "value": "PDO",
+                                        "file": "phpt__classes_all_caps_class_names.zep",
+                                        "line": 19,
+                                        "char": 30
+                                    }
+                                },
+                                {
+                                    "cast": {
+                                        "type": "variable",
+                                        "value": "DB",
+                                        "file": "phpt__classes_all_caps_class_names.zep",
+                                        "line": 19,
+                                        "char": 41
+                                    }
+                                }
+                            ],
+                            "reference": 0,
+                            "file": "phpt__classes_all_caps_class_names.zep",
+                            "line": 19,
+                            "char": 42
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "PDO",
+                                    "file": "phpt__classes_all_caps_class_names.zep",
+                                    "line": 19,
+                                    "char": 53
+                                },
+                                "collection": 0,
+                                "file": "phpt__classes_all_caps_class_names.zep",
+                                "line": 19,
+                                "char": 53
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "DB",
+                                    "file": "phpt__classes_all_caps_class_names.zep",
+                                    "line": 20,
+                                    "char": 2
+                                },
+                                "collection": 0,
+                                "file": "phpt__classes_all_caps_class_names.zep",
+                                "line": 20,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "phpt__classes_all_caps_class_names.zep",
+                        "line": 20,
+                        "char": 2
+                    },
+                    "file": "phpt__classes_all_caps_class_names.zep",
+                    "line": 19,
+                    "last-line": 22,
+                    "char": 16
+                }
+            ],
+            "file": "phpt__classes_all_caps_class_names.zep",
+            "line": 1,
+            "char": 6
+        },
+        "file": "phpt__classes_all_caps_class_names.zep",
+        "line": 1,
+        "char": 6
+    }
+]

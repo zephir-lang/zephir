@@ -16,9 +16,9 @@
 #include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
+#include "kernel/array.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
-#include "kernel/array.h"
 
 
 /**
@@ -429,11 +429,12 @@ PHP_METHOD(Stub_Mcall, testCall16)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *c, c_sub, *d, d_sub;
+	zval *c, c_sub, *d, d_sub, _0;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&c_sub);
 	ZVAL_UNDEF(&d_sub);
+	ZVAL_UNDEF(&_0);
 	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(c)
@@ -442,7 +443,12 @@ PHP_METHOD(Stub_Mcall, testCall16)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &c, &d);
-	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "testMethod4", &_zephir_call_cache[0], c, d);
+	ZEPHIR_INIT_VAR(&_0);
+	zephir_create_array(&_0, 2, 0);
+	zephir_array_update_string(&_0, SL("a"), c, PH_COPY);
+	zephir_array_update_string(&_0, SL("b"), d, PH_COPY);
+	ZEPHIR_RETURN_CALL_CLASS_METHOD_NAMED(zephir_fcall_method, NULL, this_ptr, "testMethod4", Z_ARRVAL_P(&_0));
+	ZEPHIR_INIT_NVAR(&_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -451,11 +457,12 @@ PHP_METHOD(Stub_Mcall, testCall17)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *c, c_sub, *d, d_sub;
+	zval *c, c_sub, *d, d_sub, _0;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&c_sub);
 	ZVAL_UNDEF(&d_sub);
+	ZVAL_UNDEF(&_0);
 	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(c)
@@ -464,7 +471,12 @@ PHP_METHOD(Stub_Mcall, testCall17)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &c, &d);
-	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "testMethod4", &_zephir_call_cache[0], c, d);
+	ZEPHIR_INIT_VAR(&_0);
+	zephir_create_array(&_0, 2, 0);
+	zephir_array_update_string(&_0, SL("b"), c, PH_COPY);
+	zephir_array_update_string(&_0, SL("a"), d, PH_COPY);
+	ZEPHIR_RETURN_CALL_CLASS_METHOD_NAMED(zephir_fcall_method, NULL, this_ptr, "testMethod4", Z_ARRVAL_P(&_0));
+	ZEPHIR_INIT_NVAR(&_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -892,7 +904,7 @@ PHP_METHOD(Stub_Mcall, testCallablePass)
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_closure_ex(&_0, NULL, stub_75__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&_0, NULL, stub_76__closure_ce, SL("__invoke"));
 	ZEPHIR_RETURN_CALL_METHOD_CACHED(&a, "setCallable", &_zephir_call_cache[1], &_0);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -978,7 +990,7 @@ PHP_METHOD(Stub_Mcall, issue1136)
 	ZVAL_STRING(&_1, "8.0.0");
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, ">=");
-	ZEPHIR_CALL_FUNCTION(&_3, "version_compare", NULL, 49, &_0, &_1, &_2);
+	ZEPHIR_CALL_FUNCTION(&_3, "version_compare", NULL, 56, &_0, &_1, &_2);
 	zephir_check_call_status();
 	if (zephir_is_true(&_3)) {
 		ZEPHIR_INIT_VAR(&_finfo);
@@ -986,7 +998,7 @@ PHP_METHOD(Stub_Mcall, issue1136)
 		ZEPHIR_CALL_METHOD_CACHED(NULL, &_finfo, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 	} else {
-		ZEPHIR_CALL_FUNCTION(&_finfo, "finfo_open", NULL, 50);
+		ZEPHIR_CALL_FUNCTION(&_finfo, "finfo_open", NULL, 57);
 		zephir_check_call_status();
 	}
 	RETURN_CCTOR(&_finfo);

@@ -52,6 +52,7 @@ class ThrowStatement extends StatementAbstract
                 isset($expr['class']) &&
                 isset($expr['parameters']) &&
                 1 == count($expr['parameters']) &&
+                !isset($expr['parameters'][0]['name']) &&
                 'string' == $expr['parameters'][0]['parameter']['type']
             ) {
                 $className = Name::fetchFQN(

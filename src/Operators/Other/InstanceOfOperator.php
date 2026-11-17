@@ -45,7 +45,18 @@ class InstanceOfOperator extends AbstractOperator
             throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
         }
 
-        $right            = new Expression($expression['right']);
+        /**
+         * PHP reads a name on the right of `instanceof` as a class name, never
+         * as a constant, and an all-caps one such as `PDO` lexes as a constant.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2824
+         */
+        $rightNode = $expression['right'];
+        if ('constant' === $rightNode['type']) {
+            $rightNode['type'] = 'variable';
+        }
+
+        $right            = new Expression($rightNode);
         $resolved         = $right->compile($context);
         $resolvedVariable = $resolved->getCode();
 

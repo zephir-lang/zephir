@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir\Parser\Php;
 
+use function array_keys;
+use function count;
 use function preg_match;
 use function strlen;
 use function strspn;
@@ -530,6 +532,18 @@ final class Lexer
         $this->tOpcode = $this->classifyIdentifier($value);
 
         return 0;
+    }
+
+    /**
+     * The one spelling of a keyword token, or null for a token two spellings
+     * share (`double`/`float`, `bool`/`boolean`, `function`/`fn`) and for any
+     * other token. Mirrors the `xx_call_parameter_name ::= <KEYWORD>` rules.
+     */
+    public static function keywordSpelling(int $opcode): ?string
+    {
+        $spellings = array_keys(self::KEYWORDS, $opcode, true);
+
+        return 1 === count($spellings) ? $spellings[0] : null;
     }
 
     /** Emit a keyword token, saving the class/method position for `class`/`function`. */
