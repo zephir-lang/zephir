@@ -789,6 +789,8 @@ class Call
         $this->resolvedTypes        = array_slice($this->resolvedTypes, 0, count($positional));
         $this->resolvedDynamicTypes = array_slice($this->resolvedDynamicTypes, 0, count($positional));
 
+        $compilationContext->headersManager->add('kernel/array');
+
         $backend = $compilationContext->backend;
         $array   = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
         $backend->initArray($array, $compilationContext, count($named));

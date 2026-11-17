@@ -100,6 +100,8 @@ class CallUserFuncOptimizer extends OptimizerAbstract
             return 'ZEPHIR_CALL_USER_FUNC(' . $symbol . ', ' . $resolvedParams[0] . ');';
         }
 
+        $context->headersManager->add('kernel/array');
+
         $arguments = $context->symbolTable->getTempVariableForWrite('variable', $context);
         $context->backend->initArray($arguments, $context, count($resolvedParams) - 1);
 

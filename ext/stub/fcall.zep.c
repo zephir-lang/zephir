@@ -18,8 +18,8 @@
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
 #include "kernel/file.h"
-#include "kernel/main.h"
 #include "kernel/array.h"
+#include "kernel/main.h"
 
 
 /**
