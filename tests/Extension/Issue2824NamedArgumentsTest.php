@@ -182,7 +182,7 @@ final class Issue2824NamedArgumentsTest extends TestCase
 
             $probe = new stdClass();
             $weak  = WeakReference::create($probe);
-            gettype(value: $probe);
+            $this->assertSame('object', gettype(value: $probe));
             $probe      = null;
             $released[] = null === $weak->get();
 
