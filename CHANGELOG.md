@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed a variadic parameter dropping the named arguments it has no parameter for [#2824](https://github.com/zephir-lang/zephir/issues/2824)
 - Fixed `call_user_func()` and `call_user_func_array()` rejecting a private callback of the class and warning instead of throwing PHP's TypeError [#2824](https://github.com/zephir-lang/zephir/issues/2824)
 - Fixed a variable first assigned by a by-reference parameter, as in `parse_str(s, result)`, leaking what the callee stored in it [#2824](https://github.com/zephir-lang/zephir/issues/2824)
+- Fixed `create_instance_params()` crashing when given arguments for a class without a constructor [#2839](https://github.com/zephir-lang/zephir/issues/2839)
 
 ## [1.8.0] - 2026-11-12
 

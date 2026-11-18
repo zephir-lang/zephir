@@ -2933,7 +2933,8 @@ int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entr
 }
 
 /**
- * Copied from php-src source tree for PHP 8.4
+ * Copied from php-src source tree for PHP 8.4, with its fix for positional
+ * parameters in named_params (6d7cc61e048)
  */
 #if PHP_VERSION_ID < 80400
 static zend_result object_init_with_constructor(zval *arg, zend_class_entry *class_type, uint32_t param_count, zval *params, HashTable *named_params)
@@ -2963,19 +2964,22 @@ static zend_result object_init_with_constructor(zval *arg, zend_class_entry *cla
 		 * However, if there are named arguments (and it is not empty),
 		 * an Error must be thrown to be consistent with new ClassName() */
 		if (UNEXPECTED(named_params != NULL && zend_hash_num_elements(named_params) != 0)) {
-			/* Throw standard Error */
-			zend_string *arg_name = NULL;
-			zend_hash_get_current_key(named_params, &arg_name, /* num_index */ NULL);
-			ZEND_ASSERT(arg_name != NULL);
-			zend_throw_error(NULL, "Unknown named parameter $%s", ZSTR_VAL(arg_name));
-			/* Do not call destructor, free object, and set arg to IS_UNDEF */
-			zend_object_store_ctor_failed(obj);
-			zval_ptr_dtor(arg);
-			ZVAL_UNDEF(arg);
-			return FAILURE;
-		} else {
-			return SUCCESS;
+			/* As named_arguments may contain positional args we need to check there is actually a string key */
+			zend_string *arg_name;
+			ZEND_HASH_FOREACH_STR_KEY(named_params, arg_name) {
+				if (arg_name == NULL) {
+					continue;
+				}
+				/* Throw standard Error */
+				zend_throw_error(NULL, "Unknown named parameter $%s", ZSTR_VAL(arg_name));
+				/* Do not call destructor, free object, and set arg to IS_UNDEF */
+				zend_object_store_ctor_failed(obj);
+				zval_ptr_dtor(arg);
+				ZVAL_UNDEF(arg);
+				return FAILURE;
+			} ZEND_HASH_FOREACH_END();
 		}
+		return SUCCESS;
 	}
 	/* A constructor should not return a value, however if an exception is thrown
 	 * zend_call_known_function() will set the retval to IS_UNDEF */
@@ -3030,6 +3034,11 @@ int zephir_create_instance(zval *return_value, const zval *class_name)
 int zephir_create_instance_params(zval *return_value, const zval *class_name, zval *params)
 {
 	zend_class_entry *ce;
+	HashTable *named_params = NULL;
+	zend_string *key;
+	zval *args = NULL, *value;
+	uint32_t param_count = 0, size;
+	int status;
 
 	if (Z_TYPE_P(class_name) != IS_STRING) {
 		zephir_throw_exception_string(spl_ce_RuntimeException, SL("Invalid class name"));
@@ -3047,5 +3056,48 @@ int zephir_create_instance_params(zval *return_value, const zval *class_name, zv
 		return FAILURE;
 	}
 
-	return object_init_with_constructor(return_value, ce, 0, NULL, Z_ARRVAL_P(params));
+	/**
+	 * Send the integer keys before the first string key as positional
+	 * parameters and all other keys as named parameters, as
+	 * new ClassName(...params) does. The first named key is then always a
+	 * string, which object_init_with_constructor() needs to report an unknown
+	 * named parameter for a class without a constructor (before php-src
+	 * 6d7cc61e048 it read a NULL name).
+	 */
+	size = zend_hash_num_elements(Z_ARRVAL_P(params));
+	if (size > 0) {
+		args = safe_emalloc(size, sizeof(zval), 0);
+	}
+
+	ZEND_HASH_FOREACH_STR_KEY_VAL(Z_ARRVAL_P(params), key, value) {
+		if (key == NULL && named_params == NULL) {
+			/* Borrowed: the call copies its arguments before running */
+			ZVAL_COPY_VALUE(&args[param_count++], value);
+			continue;
+		}
+
+		if (named_params == NULL) {
+			named_params = zend_new_array(size - param_count);
+		}
+
+		Z_TRY_ADDREF_P(value);
+		if (key != NULL) {
+			zend_hash_add_new(named_params, key, value);
+		} else {
+			/* A positional argument after a named one: the call rejects it */
+			zend_hash_next_index_insert_new(named_params, value);
+		}
+	} ZEND_HASH_FOREACH_END();
+
+	status = object_init_with_constructor(return_value, ce, param_count, args, named_params);
+
+	if (named_params != NULL) {
+		zend_array_destroy(named_params);
+	}
+
+	if (args != NULL) {
+		efree(args);
+	}
+
+	return status;
 }
