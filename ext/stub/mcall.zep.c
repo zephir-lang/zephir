@@ -990,7 +990,7 @@ PHP_METHOD(Stub_Mcall, issue1136)
 	ZVAL_STRING(&_1, "8.0.0");
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, ">=");
-	ZEPHIR_CALL_FUNCTION(&_3, "version_compare", NULL, 56, &_0, &_1, &_2);
+	ZEPHIR_CALL_FUNCTION(&_3, "version_compare", NULL, 57, &_0, &_1, &_2);
 	zephir_check_call_status();
 	if (zephir_is_true(&_3)) {
 		ZEPHIR_INIT_VAR(&_finfo);
@@ -998,7 +998,7 @@ PHP_METHOD(Stub_Mcall, issue1136)
 		ZEPHIR_CALL_METHOD_CACHED(NULL, &_finfo, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 	} else {
-		ZEPHIR_CALL_FUNCTION(&_finfo, "finfo_open", NULL, 57);
+		ZEPHIR_CALL_FUNCTION(&_finfo, "finfo_open", NULL, 58);
 		zephir_check_call_status();
 	}
 	RETURN_CCTOR(&_finfo);

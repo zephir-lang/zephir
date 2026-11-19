@@ -75,6 +75,12 @@ final class VarsTest extends TestCase
         $test->testVarDump3param(3.1, true, [1, 2, 3]);
     }
 
+    /**
+     * Without its `return` argument var_export() prints, also when its result
+     * is used, and gives null as PHP does.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2774
+     */
     public function testVarExport(): void
     {
         $this->setOutputCallback(
@@ -82,11 +88,11 @@ final class VarsTest extends TestCase
         );
 
         $this->expectOutputString(
-            "array(0=>1,1=>'world',2=>false,)'hello'"
+            "array(0=>1,1=>'world',2=>false,)array(0=>1,1=>'world',2=>false,)'hello''hello'"
         );
 
         $test = new Vars();
-        $this->assertSame($test->testVarExport(), "'hello'");
+        $this->assertNull($test->testVarExport());
     }
 
     public function test88Issue(): void

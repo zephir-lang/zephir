@@ -189,6 +189,7 @@
 #include "stub/issue2747.zep.h"
 #include "stub/issue2761/accessors.zep.h"
 #include "stub/issue2761/collaborator.zep.h"
+#include "stub/issue2774.zep.h"
 #include "stub/issue2790.zep.h"
 #include "stub/issue2805.zep.h"
 #include "stub/issue2805request.zep.h"
