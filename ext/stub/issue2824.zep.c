@@ -669,7 +669,7 @@ PHP_METHOD(Stub_Issue2824, positionalByReference)
 	ZVAL_STRING(&_0, "a=1");
 	ZEPHIR_OBSERVE_IF_UNDEF(&result);
 	ZEPHIR_MAKE_REF(&result);
-	ZEPHIR_CALL_FUNCTION(NULL, "parse_str", NULL, 53, &_0, &result);
+	ZEPHIR_CALL_FUNCTION(NULL, "parse_str", NULL, 54, &_0, &result);
 	ZEPHIR_UNREF(&result);
 	zephir_check_call_status();
 	RETURN_CCTOR(&result);
@@ -764,7 +764,7 @@ PHP_METHOD(Stub_Issue2824, byReferenceLeftUnassigned)
 	ZVAL_STRING(&_1, "%s");
 	ZEPHIR_OBSERVE_IF_UNDEF(&word);
 	ZEPHIR_MAKE_REF(&word);
-	ZEPHIR_CALL_FUNCTION(NULL, "sscanf", &_2, 55, &_0, &_1, &word);
+	ZEPHIR_CALL_FUNCTION(NULL, "sscanf", &_2, 56, &_0, &_1, &word);
 	ZEPHIR_UNREF(&word);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(&_0);
@@ -773,7 +773,7 @@ PHP_METHOD(Stub_Issue2824, byReferenceLeftUnassigned)
 	ZVAL_STRING(&_1, "%s");
 	ZEPHIR_OBSERVE_IF_UNDEF(&word);
 	ZEPHIR_MAKE_REF(&word);
-	ZEPHIR_CALL_FUNCTION(NULL, "sscanf", &_2, 55, &_0, &_1, &word);
+	ZEPHIR_CALL_FUNCTION(NULL, "sscanf", &_2, 56, &_0, &_1, &word);
 	ZEPHIR_UNREF(&word);
 	zephir_check_call_status();
 	RETURN_CCTOR(&word);

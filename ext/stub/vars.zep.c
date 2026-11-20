@@ -81,7 +81,7 @@ PHP_METHOD(Stub_Vars, testParam)
 			}
 			ZEPHIR_INIT_NVAR(&v);
 			ZVAL_COPY(&v, _3);
-			ZEPHIR_CALL_FUNCTION(&_6$$3, "realpath", &_7, 59, &v);
+			ZEPHIR_CALL_FUNCTION(&_6$$3, "realpath", &_7, 60, &v);
 			zephir_check_call_status();
 			zephir_array_update_multi(&config, &_6$$3, SL("sz"), 3, SL("dir"), &k);
 			if (UNEXPECTED(EG(exception))) {
@@ -109,7 +109,7 @@ PHP_METHOD(Stub_Vars, testParam)
 			zephir_check_call_status();
 			ZEPHIR_CALL_METHOD_CACHED(&v, _1, "current", &_zephir_call_cache[4]);
 			zephir_check_call_status();
-				ZEPHIR_CALL_FUNCTION(&_10$$4, "realpath", &_7, 59, &v);
+				ZEPHIR_CALL_FUNCTION(&_10$$4, "realpath", &_7, 60, &v);
 				zephir_check_call_status();
 				zephir_array_update_multi(&config, &_10$$4, SL("sz"), 3, SL("dir"), &k);
 				if (UNEXPECTED(EG(exception))) {
@@ -174,15 +174,13 @@ PHP_METHOD(Stub_Vars, testVarDump2)
 PHP_METHOD(Stub_Vars, testVarExport)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval __$false, a, ar, ret, _0, _1, _2;
+	zval __$false, a, ar, ret, _0;
 
 	ZVAL_BOOL(&__$false, 0);
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&ar);
 	ZVAL_UNDEF(&ret);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_2);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -197,31 +195,27 @@ PHP_METHOD(Stub_Vars, testVarExport)
 	ZVAL_STRING(&_0, "world");
 	zephir_array_fast_append(&ar, &_0);
 	zephir_array_fast_append(&ar, &__$false);
-	ZEPHIR_INIT_VAR(&_1);
-	ZEPHIR_CPY_WRT(&_1, &ar);
-	zephir_var_export(&_1);
+	zephir_var_export(&ar);
+	zephir_var_export(&ar);
 	ZEPHIR_INIT_VAR(&ret);
-	zephir_var_export_ex(&ret, &ar);
-	ZEPHIR_INIT_VAR(&_2);
-	ZEPHIR_CPY_WRT(&_2, &a);
-	zephir_var_export(&_2);
+	ZVAL_NULL(&ret);
+	zephir_var_export(&a);
+	zephir_var_export(&a);
 	ZEPHIR_INIT_NVAR(&ret);
-	zephir_var_export_ex(&ret, &a);
+	ZVAL_NULL(&ret);
 	RETURN_CCTOR(&ret);
 }
 
 PHP_METHOD(Stub_Vars, test88Issue)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval param1_zv, param2_zv, _0, _1, _2, _3;
+	zval param1_zv, param2_zv, _0, _1;
 	zend_string *param1 = NULL, *param2 = NULL;
 
 	ZVAL_UNDEF(&param1_zv);
 	ZVAL_UNDEF(&param2_zv);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_2);
-	ZVAL_UNDEF(&_3);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(param1)
@@ -244,24 +238,19 @@ PHP_METHOD(Stub_Vars, test88Issue)
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CPY_WRT(&_1, &param2_zv);
 	zephir_var_dump(&_1);
-	ZEPHIR_INIT_VAR(&_2);
-	ZEPHIR_CPY_WRT(&_2, &param1_zv);
-	zephir_var_export(&_2);
-	ZEPHIR_INIT_VAR(&_3);
-	ZEPHIR_CPY_WRT(&_3, &param2_zv);
-	zephir_var_export(&_3);
+	zephir_var_export(&param1_zv);
+	zephir_var_export(&param2_zv);
 	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Vars, test88IssueParam2InitString)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval param1_zv, param2_zv, _0;
+	zval param1_zv, param2_zv;
 	zend_string *param1 = NULL, *param2 = NULL;
 
 	ZVAL_UNDEF(&param1_zv);
 	ZVAL_UNDEF(&param2_zv);
-	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(param1)
 		Z_PARAM_OPTIONAL
@@ -279,9 +268,7 @@ PHP_METHOD(Stub_Vars, test88IssueParam2InitString)
 		zephir_memory_observe(&param2_zv);
 	ZVAL_STR_COPY(&param2_zv, param2);
 	}
-	ZEPHIR_INIT_VAR(&_0);
-	ZEPHIR_CPY_WRT(&_0, &param2_zv);
-	zephir_var_export(&_0);
+	zephir_var_export(&param2_zv);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -346,12 +333,11 @@ PHP_METHOD(Stub_Vars, testCountOptimizerVarDumpAndExport)
 PHP_METHOD(Stub_Vars, testArrayTypeVarDumpAndExport)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *testVar_param = NULL, _0, _1;
+	zval *testVar_param = NULL, _0;
 	zval testVar;
 
 	ZVAL_UNDEF(&testVar);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		ZEPHIR_Z_PARAM_ARRAY(testVar, testVar_param)
@@ -368,9 +354,7 @@ PHP_METHOD(Stub_Vars, testArrayTypeVarDumpAndExport)
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CPY_WRT(&_0, &testVar);
 	zephir_var_dump(&_0);
-	ZEPHIR_INIT_VAR(&_1);
-	ZEPHIR_CPY_WRT(&_1, &testVar);
-	zephir_var_export(&_1);
+	zephir_var_export(&testVar);
 	ZEPHIR_MM_RESTORE();
 }
 

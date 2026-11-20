@@ -38,6 +38,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `call_user_func()` and `call_user_func_array()` rejecting a private callback of the class and warning instead of throwing PHP's TypeError [#2824](https://github.com/zephir-lang/zephir/issues/2824)
 - Fixed a variable first assigned by a by-reference parameter, as in `parse_str(s, result)`, leaking what the callee stored in it [#2824](https://github.com/zephir-lang/zephir/issues/2824)
 - Fixed `create_instance_params()` crashing when given arguments for a class without a constructor [#2839](https://github.com/zephir-lang/zephir/issues/2839)
+- Fixed `var_export(x, true)` failing to compile when `x` is a cast, a native variable, a literal or another expression [#2774](https://github.com/zephir-lang/zephir/issues/2774)
+- Fixed `var_export()` ignoring its `return` argument, so `var_export(x, true)` printed and `var_export(x)` returned the string without printing [#2774](https://github.com/zephir-lang/zephir/issues/2774)
+- Fixed `var_export(x, true)` giving a partial string when an exception such as from a property hook stops the export [#2774](https://github.com/zephir-lang/zephir/issues/2774)
+- Fixed `var_export()` and `var_dump()` of a string literal reading the variable of that name instead [#2774](https://github.com/zephir-lang/zephir/issues/2774)
 
 ## [1.8.0] - 2026-11-12
 

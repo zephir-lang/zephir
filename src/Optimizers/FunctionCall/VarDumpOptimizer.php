@@ -20,6 +20,8 @@ use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Statements\LetStatement;
 use Zephir\Types\Types;
 
+use function in_array;
+
 /**
  * VarDumpOptimizer.
  *
@@ -44,7 +46,13 @@ class VarDumpOptimizer extends OptimizerAbstract
         $resolvedParams = $call->getResolvedParamsAsExpr($expression['parameters'], $context, $expression);
 
         foreach ($resolvedParams as $resolvedParam) {
-            $variable = $context->symbolTable->getVariable($resolvedParam->getCode());
+            /**
+             * Only a `variable` or `array` result names a symbol: the code of
+             * a string literal is its text, which may equal a variable's name.
+             */
+            $variable = in_array($resolvedParam->getType(), [Types::T_VARIABLE, Types::T_ARRAY], true)
+                ? $context->symbolTable->getVariable($resolvedParam->getCode())
+                : null;
             if (!$variable || !$variable->isVariable()) {
                 /*
                  * Complex expressions require a temporary variable
