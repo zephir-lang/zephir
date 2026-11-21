@@ -30,7 +30,9 @@ use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
+use Zephir\Expression;
 use Zephir\Expression\Closure;
+use Zephir\Expression\ConstantExpressionEvaluator;
 use Zephir\Expression\StaticConstantAccess;
 use Zephir\Name;
 use Zephir\Passes\CallGathererPass;
@@ -649,9 +651,12 @@ class Method
                         break;
 
                     case 'empty-array':
-                    case 'array':
                         $compilationContext->backend->initVar($paramVariable, $compilationContext);
                         $compilationContext->backend->initArray($paramVariable, $compilationContext);
+                        break;
+
+                    case 'array':
+                        $this->compileArrayDefault($parameter['default'], $paramVariable, $compilationContext);
                         break;
 
                     default:
@@ -781,6 +786,10 @@ class Method
                         $compilationContext->headersManager->add('kernel/memory');
                         $compilationContext->backend->initVar($symbolVariable, $compilationContext);
                         $compilationContext->backend->initArray($symbolVariable, $compilationContext);
+                        break;
+
+                    case 'array':
+                        $this->compileArrayDefault($parameter['default'], $symbolVariable, $compilationContext);
                         break;
 
                     default:
@@ -1214,16 +1223,20 @@ class Method
         $compilationContext->tryCatchLabelId = 0;
 
         /**
-         * Reset per-method isset() interned-string cache.
-         */
-        $compilationContext->issetPropertyCache        = [];
-        $compilationContext->issetPropertyCacheCounter = 0;
-
-        /**
          * Reset per-method cached-property-access interned-string cache.
          */
         $compilationContext->propertyNameCache        = [];
         $compilationContext->propertyNameCacheCounter = 0;
+
+        /**
+         * Reset per-method call site inline caches.
+         */
+        $compilationContext->callCacheCounter = 0;
+
+        /**
+         * Reset per-method static property access caches.
+         */
+        $compilationContext->staticPropertyCacheCounter = 0;
 
         if ($this->parameters instanceof Parameters) {
             /**
@@ -1795,12 +1808,16 @@ class Method
                  * Assign the default value according to the variable's type.
                  */
                 $targetVar = $compilationContext->symbolTable->getVariableForWrite($name, $compilationContext);
-                $initCode  .= "\t" . $compilationContext->backend->ifVariableValueUndefined(
+                $condition = $compilationContext->backend->ifVariableValueUndefined(
                     $targetVar,
                     $compilationContext,
-                    false,
+                    true,
                     false
-                ) . PHP_EOL;
+                );
+                if ($this->convertsNullArgument($parameter, $dataType, $targetVar)) {
+                    $condition .= ' || Z_TYPE_P(' . $targetVar->getName() . ') == IS_NULL';
+                }
+                $initCode .= "\t" . 'if (' . $condition . ') {' . PHP_EOL;
 
                 if ($targetVar->isDoublePointer() && isset($substituteVars[$parameter['name']])) {
                     $substituteVar = $substituteVars[$parameter['name']];
@@ -2246,14 +2263,48 @@ class Method
                 $slotPrinter->output("\t" . 'static zend_string *' . $slotVar . ' = NULL;');
             }
             foreach ($compilationContext->propertyNameCache as $slotName => $slotVar) {
+                /**
+                 * The name is already a C string body: `o->{"a\"b"}` keeps
+                 * its escapes, so the C compiler measures a name that has one.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2832
+                 */
+                $slotLength = str_contains($slotName, '\\')
+                    ? 'sizeof("' . $slotName . '") - 1'
+                    : (string) strlen($slotName);
                 $slotPrinter->output("\t" . 'if (UNEXPECTED(!' . $slotVar . ')) {');
                 $slotPrinter->output(
-                    "\t\t" . $slotVar . ' = zend_string_init("' . addslashes($slotName) . '", '
-                    . strlen($slotName) . ', 1);'
+                    "\t\t" . $slotVar . ' = zend_string_init("' . $slotName . '", ' . $slotLength . ', 1);'
                 );
                 $slotPrinter->output("\t" . '}');
             }
             $codePrinter->preOutput($slotPrinter->getOutput());
+        }
+
+        /**
+         * Declare the inline cache records of the call sites in this function,
+         * at function scope so every nested block reaches them. `ZEND_TLS` is
+         * `static`, and thread local under ZTS.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2790
+         */
+        if ($compilationContext->callCacheCounter > 0) {
+            $codePrinter->preOutput(
+                "\t" . 'ZEND_TLS zephir_method_cache _zephir_call_cache['
+                . $compilationContext->callCacheCounter . '];'
+            );
+        }
+
+        /**
+         * The same for the cache records of the static property accesses.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2805
+         */
+        if ($compilationContext->staticPropertyCacheCounter > 0) {
+            $codePrinter->preOutput(
+                "\t" . 'ZEND_TLS zephir_static_property_cache _zephir_sprop_cache['
+                . $compilationContext->staticPropertyCacheCounter . '];'
+            );
         }
 
         /**
@@ -2755,6 +2806,55 @@ class Method
     }
 
     /**
+     * The returned class-type hints as fully qualified names, for a call
+     * made on `$receiver` from any file.
+     *
+     * A name resolves where the method is written: through the namespace and
+     * `use` aliases of its file, or of its trait's file when the method was
+     * merged from a trait, never through those of the calling file.
+     * `self` and `static` stand for the receiver and `parent` for the class it
+     * extends, so a chained call is checked on the class the call was made on.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2824
+     * @see https://github.com/zephir-lang/zephir/issues/2505
+     *
+     * @return string[]
+     */
+    public function resolveReturnClassTypes(Definition $receiver, CompilationContext $context): array
+    {
+        $scope = $this->declaringScope($context);
+
+        $resolved = [];
+        foreach ($this->returnClassTypes as $classType) {
+            $resolved[] = match (strtolower($classType)) {
+                'self', 'static' => $receiver->getCompleteName(),
+                'parent'         => $receiver->getExtendsClass() ?: $classType,
+                default          => null === $scope?->getAliasManager()
+                    ? $context->getFullName($classType)
+                    : Name::fetchFQN($classType, $scope->getSourceNamespace(), $scope->getAliasManager()),
+            };
+        }
+
+        return $resolved;
+    }
+
+    /**
+     * The definition whose file the method is written in: its trait's when it
+     * was merged from one, or else its class's.
+     */
+    private function declaringScope(CompilationContext $context): ?Definition
+    {
+        $trait = $this->getDeclaringTrait();
+        if (null !== $trait) {
+            $definition = $context->compiler->getClassDefinition($trait);
+
+            return $definition instanceof Definition ? $definition : null;
+        }
+
+        return $this->classDefinition;
+    }
+
+    /**
      * Returned type hints by the method.
      */
     public function getReturnTypes(): array
@@ -2789,6 +2889,18 @@ class Method
     public function getVisibility(): array
     {
         return $this->visibility;
+    }
+
+    /**
+     * A nullable `array` or `string` parameter held in a zval is converted by
+     * zephir_get_arrval() or zephir_get_strval(), which turn an explicit null
+     * into [] or "". Such a null takes the default branch, as PHP keeps it.
+     */
+    private function convertsNullArgument(array $parameter, string $dataType, Variable $targetVar): bool
+    {
+        return in_array($dataType, ['array', 'string'], true)
+            && !$targetVar->isNativeString()
+            && 'null' === ($parameter['default']['type'] ?? null);
     }
 
     /**
@@ -3209,6 +3321,15 @@ class Method
     public function getExpression(): array
     {
         return $this->expression ?: [];
+    }
+
+    /**
+     * The trait this member was merged from, or null when the class declares
+     * it itself.
+     */
+    public function getDeclaringTrait(): ?string
+    {
+        return $this->expression['declaring-trait'] ?? null;
     }
 
     /**
@@ -4336,6 +4457,40 @@ class Method
     private function getParamDataType(array $parameter): string
     {
         return $parameter['data-type'] ?? 'variable';
+    }
+
+    /**
+     * Builds an array literal default when the argument is left out, with the
+     * class constants, `::class` names and constants in it resolved as PHP
+     * resolves a constant expression. It used to be an empty array. #2825.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function compileArrayDefault(
+        array $default,
+        Variable $variable,
+        CompilationContext $compilationContext
+    ): void {
+        $declarationContext              = clone $compilationContext;
+        $declarationContext->symbolTable = null;
+        $literal = (new ConstantExpressionEvaluator())->reduce($default, $declarationContext);
+
+        $compilationContext->symbolTable->mustGrownStack(true);
+        $compilationContext->headersManager->add('kernel/memory');
+
+        $expression = new Expression($literal);
+        $expression->setExpectReturn(true, $variable);
+        $compiled = $expression->compile($compilationContext);
+
+        // The array may be built in a temporary, as for a `let`.
+        if ($compiled->getCode() !== $variable->getName()) {
+            $compilationContext->backend->copyOnWrite(
+                $variable,
+                $compilationContext->symbolTable->getVariableForRead($compiled->getCode(), $compilationContext),
+                $compilationContext
+            );
+        }
     }
 
     /**

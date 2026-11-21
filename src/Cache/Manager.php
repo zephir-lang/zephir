@@ -28,8 +28,6 @@ class Manager
 
     protected ?MethodCache $methodCache = null;
 
-    protected ?StaticMethodCache $staticMethodCache = null;
-
     /**
      * Creates or returns an existing class entry cache.
      */
@@ -55,27 +53,15 @@ class Manager
     }
 
     /**
-     * Creates or returns an existing method cache.
+     * Creates or returns the allocator of method and static call site caches.
      */
-    public function getMethodCache(): ?MethodCache
+    public function getMethodCache(): MethodCache
     {
         if (!$this->methodCache) {
-            $this->methodCache = new MethodCache($this->gatherer);
+            $this->methodCache = new MethodCache();
         }
 
         return $this->methodCache;
-    }
-
-    /**
-     * Creates or returns an existing method cache.
-     */
-    public function getStaticMethodCache(): ?StaticMethodCache
-    {
-        if (!$this->staticMethodCache) {
-            $this->staticMethodCache = new StaticMethodCache();
-        }
-
-        return $this->staticMethodCache;
     }
 
     /**

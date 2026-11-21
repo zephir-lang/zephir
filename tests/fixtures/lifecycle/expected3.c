@@ -105,6 +105,8 @@ static void php_zephir_init_globals(zend_lifecycle_globals *lifecycle_globals)
  */
 static void php_zephir_init_module_globals(zend_lifecycle_globals *lifecycle_globals)
 {
+	/* No request yet: a call site's inline cache starts zeroed, so it never matches */
+	lifecycle_globals->request_number = 0;
 	
 }
 
@@ -114,6 +116,7 @@ static PHP_RINIT_FUNCTION(lifecycle)
 	lifecycle_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(lifecycle_globals_ptr);
+	lifecycle_globals_ptr->request_number++;
 	zephir_ini_activate_globals(zephir_request_ini_entries);
 	zephir_initialize_memory(lifecycle_globals_ptr);
 

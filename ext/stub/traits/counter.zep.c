@@ -56,7 +56,11 @@ PHP_METHOD(Stub_Traits_Counter, increment)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 158, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 162, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 2);
 	ZEPHIR_INIT_VAR(&_2);
@@ -65,7 +69,11 @@ PHP_METHOD(Stub_Traits_Counter, increment)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 158, &_2);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 162, &_2);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM_MEMBER_TYPED(getThis(), "count", IS_LONG);
 }
 
@@ -89,6 +97,7 @@ PHP_METHOD(Stub_Traits_Counter, tagged)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("count", 5, 1);
@@ -96,10 +105,14 @@ PHP_METHOD(Stub_Traits_Counter, tagged)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "label", NULL, 0);
+	ZEPHIR_CALL_METHOD_CACHED(&_0, this_ptr, "label", &_zephir_call_cache[0]);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 158, PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_CALL_FUNCTION(&_2, "strval", NULL, 63, &_1);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 162, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_CALL_FUNCTION(&_2, "strval", NULL, 41, &_1);
 	zephir_check_call_status();
 	ZEPHIR_CONCAT_VSV(return_value, &_0, ":", &_2);
 	if (UNEXPECTED(EG(exception))) {

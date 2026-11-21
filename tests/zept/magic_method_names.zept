@@ -82,7 +82,7 @@ foreach ((new \Stub\Gen())->numbers() as $value) {
 --EXPECT--
 privateStep
 finalStep
-Probe:selfStep
+Stub\Probe::selfStep
 Stub\Probe|Stub
 numbers
-Gen:numbers
+Stub\Gen::numbers

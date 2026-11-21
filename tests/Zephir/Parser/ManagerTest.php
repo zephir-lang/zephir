@@ -22,9 +22,12 @@ use Zephir\Parser\Manager;
  * dropped trait `use` statements (zephir#504) and everything before 2.7.0
  * rejects an expression in a constant initializer or property default outright
  * (zephir#2061), before 2.9.0 `instanceof static` is a syntax error
- * (zephir#2714), and before 2.10.0 so are `static::CONSTANT` (zephir#2711),
- * `static::{method}()` and `CONSTANT::{method}()` (zephir#2723). The built-in
- * pure-PHP parser takes over instead.
+ * (zephir#2714), before 2.10.0 so are `static::CONSTANT` (zephir#2711),
+ * `static::{method}()` and `CONSTANT::{method}()` (zephir#2723), and before
+ * 2.11.0 so is `X::class` as a parameter default, while closures carry no
+ * start line (zephir#2825), and before 2.12.0 so are an all-caps class name in
+ * a cast, a type hint, a return type or `catch`, and a keyword as a named
+ * argument name (zephir#2824). The built-in pure-PHP parser takes over instead.
  */
 final class ManagerTest extends TestCase
 {
@@ -35,6 +38,8 @@ final class ManagerTest extends TestCase
 
     public function testOutdatedExtensionIsNotUsable(): void
     {
+        $this->assertFalse(Manager::isExtensionUsable('2.11.0'));
+        $this->assertFalse(Manager::isExtensionUsable('2.10.0'));
         $this->assertFalse(Manager::isExtensionUsable('2.9.1'));
         $this->assertFalse(Manager::isExtensionUsable('2.9.0'));
         $this->assertFalse(Manager::isExtensionUsable('2.8.0'));
@@ -47,8 +52,8 @@ final class ManagerTest extends TestCase
     public function testCurrentAndNewerExtensionsAreUsable(): void
     {
         $this->assertTrue(Manager::isExtensionUsable(Manager::MINIMUM_PARSER_VERSION));
-        $this->assertTrue(Manager::isExtensionUsable('2.10.0'));
-        $this->assertTrue(Manager::isExtensionUsable('2.11.0'));
+        $this->assertTrue(Manager::isExtensionUsable('2.12.0'));
+        $this->assertTrue(Manager::isExtensionUsable('2.13.0'));
         $this->assertTrue(Manager::isExtensionUsable('3.0.0'));
     }
 
@@ -56,6 +61,6 @@ final class ManagerTest extends TestCase
     {
         // Guards against raising a grammar feature without raising the floor:
         // the released parser that introduced it is the minimum.
-        $this->assertSame('2.10.0', Manager::MINIMUM_PARSER_VERSION);
+        $this->assertSame('2.12.0', Manager::MINIMUM_PARSER_VERSION);
     }
 }

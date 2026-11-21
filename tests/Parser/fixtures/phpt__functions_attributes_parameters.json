@@ -194,7 +194,8 @@
                                         ],
                                         "file": "phpt__functions_attributes_parameters.zep",
                                         "line": 11,
-                                        "char": 4
+                                        "char": 4,
+                                        "start-line": 9
                                     },
                                     "file": "phpt__functions_attributes_parameters.zep",
                                     "line": 11,

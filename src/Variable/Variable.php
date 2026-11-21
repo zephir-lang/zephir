@@ -542,12 +542,13 @@ class Variable implements TypeAwareInterface
                     $compilationContext->backend->initVar($this, $compilationContext, true, true);
                 } else {
                     if ($this->variantInits > 0) {
-                        if ($this->initBranch) {
-                            $compilationContext->codePrinter->output('ZEPHIR_INIT_BNVAR(' . $this->getName() . ');');
-                        } else {
-                            $this->mustInitNull = true;
-                            $compilationContext->backend->initVar($this, $compilationContext, true, true);
-                        }
+                        /**
+                         * The kernel has no ZEPHIR_INIT_BNVAR any more, so a
+                         * re-initialization at the top level of a function is
+                         * the same as anywhere else. #2825.
+                         */
+                        $this->mustInitNull = true;
+                        $compilationContext->backend->initVar($this, $compilationContext, true, true);
                     } else {
                         $compilationContext->backend->initVar($this, $compilationContext);
                     }

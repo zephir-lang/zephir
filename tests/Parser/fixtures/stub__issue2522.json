@@ -45,7 +45,8 @@
                                         ],
                                         "file": "stub__issue2522.zep",
                                         "line": 13,
-                                        "char": 10
+                                        "char": 10,
+                                        "start-line": 11
                                     },
                                     "file": "stub__issue2522.zep",
                                     "line": 13,
@@ -140,7 +141,8 @@
                                         ],
                                         "file": "stub__issue2522.zep",
                                         "line": 22,
-                                        "char": 10
+                                        "char": 10,
+                                        "start-line": 20
                                     },
                                     "file": "stub__issue2522.zep",
                                     "line": 22,
@@ -238,7 +240,8 @@
                                         ],
                                         "file": "stub__issue2522.zep",
                                         "line": 31,
-                                        "char": 10
+                                        "char": 10,
+                                        "start-line": 29
                                     },
                                     "file": "stub__issue2522.zep",
                                     "line": 31,
@@ -348,7 +351,8 @@
                                         ],
                                         "file": "stub__issue2522.zep",
                                         "line": 41,
-                                        "char": 10
+                                        "char": 10,
+                                        "start-line": 39
                                     },
                                     "file": "stub__issue2522.zep",
                                     "line": 41,

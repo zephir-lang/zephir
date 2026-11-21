@@ -282,21 +282,21 @@ PHP_METHOD(Stub_Pregmatch, testMatchAllInZep)
 {
 	zval m1, m2, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zephir_fcall_cache_entry *_1 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&m1);
 	ZVAL_UNDEF(&m2);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[2];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, 1);
-	ZEPHIR_CALL_METHOD(&m1, this_ptr, "testMatchAll", &_1, 0, &_0);
+	ZEPHIR_CALL_METHOD_CACHED(&m1, this_ptr, "testMatchAll", &_zephir_call_cache[0], &_0);
 	zephir_check_call_status();
 	ZVAL_LONG(&_0, 2);
-	ZEPHIR_CALL_METHOD(&m2, this_ptr, "testMatchAll", &_1, 0, &_0);
+	ZEPHIR_CALL_METHOD_CACHED(&m2, this_ptr, "testMatchAll", &_zephir_call_cache[1], &_0);
 	zephir_check_call_status();
 	zephir_create_array(return_value, 2, 0);
 	zephir_array_fast_append(return_value, &m1);

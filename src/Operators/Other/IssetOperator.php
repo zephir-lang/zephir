@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace Zephir\Operators\Other;
 
 use ReflectionException;
+use Zephir\Class\Visibility;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Expression\StaticPropertyAccess;
 use Zephir\Operators\AbstractOperator;
 use Zephir\Variable\Variable;
 
@@ -90,9 +92,9 @@ class IssetOperator extends AbstractOperator
                     }
                 }
 
+                // The key is an ordinary read, as in PHP: only the container is fetched silently (#2832)
                 $expr = new Expression($left['right']);
                 $expr->setReadOnly(true);
-                $expr->setNoisy(false);
                 $resolvedExpr = $expr->compile($compilationContext);
                 $resolvedExpr = $compilationContext->backend->boxArrayKey($resolvedExpr, $compilationContext);
 
@@ -133,103 +135,163 @@ class IssetOperator extends AbstractOperator
 
 
             case 'property-access':
-            case 'property-dynamic-access':
-                $compilationContext->headersManager->add('kernel/object');
-
-                $exprVariable = new Expression($left['left']);
-                $exprVariable->setReadOnly(true);
-
-                $exprCompiledVariable = $exprVariable->compile($compilationContext);
-                if ('variable' !== $exprCompiledVariable->getType()) {
-                    throw new CompilerException(
-                        'Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as object',
-                        $left['left']
-                    );
-                }
-
-                $variable = $compilationContext->symbolTable->getVariableForRead(
-                    $exprCompiledVariable->getCode(),
-                    $compilationContext,
-                    $left['left']
-                );
-                if ('variable' !== $variable->getType()) {
-                    throw new CompilerException(
-                        'Variable type: ' . $variable->getType() . ' cannot be used as object',
-                        $left['left']
-                    );
-                }
-
-                if ($variable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
-                    $compilationContext->logger->warning(
-                        'Possible attempt to use non object in isset operator',
-                        ['non-valid-isset', $expression]
-                    );
-                }
-                $variableCode = $compilationContext->backend->getVariableCode($variable);
-
-                if ('property-access' === $left['type']) {
-                    return $compilationContext->backend->propertyIsset(
-                        $variable,
-                        $left['right']['value'],
-                        $compilationContext,
-                    );
-                }
-
-                $expr = new Expression($left['right']);
-                $expr->setReadOnly(true);
-                $expr->setNoisy(false);
-                $resolvedExpr = $expr->compile($compilationContext);
-                $resolvedExpr = $compilationContext->backend->boxArrayKey($resolvedExpr, $compilationContext);
-
-                switch ($resolvedExpr->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
-                        $indexVariable = $this->boxIntegerKey($resolvedExpr->getCode(), $compilationContext);
-                        break;
-
-                    case 'variable':
-                        $indexVariable = $compilationContext->symbolTable->getVariableForRead(
-                            $resolvedExpr->getCode(),
-                            $compilationContext,
-                            $left['right']
-                        );
-                        if (in_array($indexVariable->getType(), ['int', 'uint', 'long', 'ulong'], true)) {
-                            $indexVariable = $this->boxIntegerKey($indexVariable, $compilationContext);
-                        }
-                        break;
-
-                    default:
-                        throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
-                }
-
-                if (!in_array($indexVariable->getType(), ['variable', 'mixed', 'string'], true)) {
-                    throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
-                }
-
-                $indexVariableCode = $compilationContext->backend->getVariableCode($indexVariable);
-
-                /*
-                 * PHP isset() semantics, see https://github.com/zephir-lang/zephir/issues/2385;
-                 * it throws for an illegal key or from offsetExists().
-                 */
-                return new CompiledExpression(
-                    'bool',
-                    $compilationContext->emitCheckedBool(
-                        'zephir_isset_property_value_zval(' . $variableCode . ', ' . $indexVariableCode . ')'
-                    ),
-                    $left['right']
-                );
-
-
             case 'property-string-access':
+            case 'property-dynamic-access':
+                return $this->propertyIssetOrEmpty($left, $compilationContext, false);
+
             case 'static-property-access':
-                return new CompiledExpression('bool', '(0 == 0)', $left);
+                return $this->staticPropertyIsset($left, $compilationContext);
 
             default:
                 throw new CompilerException('This expression is not valid for "isset" operator', $expression);
         }
+    }
+
+    /**
+     * `isset o->x` and, with `$empty`, `empty o->x`, as PHP's
+     * ZEND_ISSET_ISEMPTY_PROP_OBJ answers them: the object is fetched as
+     * silently as `FETCH_OBJ_IS` does, and its has_property handler decides,
+     * which asks `__isset()` first. `__isset()` and `__get()` may throw, and
+     * the method stops there.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2831
+     */
+    public function propertyIssetOrEmpty(
+        array $left,
+        CompilationContext $compilationContext,
+        bool $empty
+    ): CompiledExpression {
+        $compilationContext->headersManager->add('kernel/object');
+
+        $exprVariable = new Expression($left['left']);
+        $exprVariable->setReadOnly(true);
+        $exprVariable->setNoisy(false);
+
+        $exprCompiledVariable = $exprVariable->compile($compilationContext);
+        if ('variable' !== $exprCompiledVariable->getType()) {
+            throw new CompilerException(
+                'Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as object',
+                $left['left']
+            );
+        }
+
+        $variable = $compilationContext->symbolTable->getVariableForRead(
+            $exprCompiledVariable->getCode(),
+            $compilationContext,
+            $left['left']
+        );
+        if ('variable' !== $variable->getType()) {
+            throw new CompilerException(
+                'Variable type: ' . $variable->getType() . ' cannot be used as object',
+                $left['left']
+            );
+        }
+
+        if (!$empty && $variable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
+            $compilationContext->logger->warning(
+                'Possible attempt to use non object in isset operator',
+                ['non-valid-isset', $left]
+            );
+        }
+        $variableCode = $compilationContext->backend->getVariableCode($variable);
+
+        /* A name written as a string, `this->{"x"}`, is as known as `this->x` */
+        if ('property-dynamic-access' !== $left['type']) {
+            $isset = $compilationContext->backend->propertyIsset(
+                $variable,
+                $left['right']['value'],
+                $compilationContext,
+                $empty
+            );
+
+            return new CompiledExpression('bool', $compilationContext->emitCheckedBool($isset->getCode()), $left);
+        }
+
+        $indexVariable = $this->propertyNameVariable($left, $compilationContext);
+
+        $function = $empty ? 'zephir_isempty_property_zval' : 'zephir_isset_property_value_zval';
+
+        return new CompiledExpression(
+            'bool',
+            $compilationContext->emitCheckedBool(
+                $function . '(' . $variableCode . ', '
+                . $compilationContext->backend->getVariableCode($indexVariable) . ')'
+            ),
+            $left['right']
+        );
+    }
+
+    /**
+     * The variable holding the name of `o->{name}`, an integer boxed, for the
+     * kernel helpers that turn it into a string as PHP does. `fetch` names its
+     * property the same way.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    public function propertyNameVariable(array $left, CompilationContext $compilationContext): Variable
+    {
+        $expr = new Expression($left['right']);
+        $expr->setReadOnly(true);
+        $resolvedExpr = $expr->compile($compilationContext);
+        $resolvedExpr = $compilationContext->backend->boxArrayKey($resolvedExpr, $compilationContext);
+
+        switch ($resolvedExpr->getType()) {
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+                $indexVariable = $this->boxIntegerKey($resolvedExpr->getCode(), $compilationContext);
+                break;
+
+            case 'variable':
+                $indexVariable = $compilationContext->symbolTable->getVariableForRead(
+                    $resolvedExpr->getCode(),
+                    $compilationContext,
+                    $left['right']
+                );
+                if (in_array($indexVariable->getType(), ['int', 'uint', 'long', 'ulong'], true)) {
+                    $indexVariable = $this->boxIntegerKey($indexVariable, $compilationContext);
+                }
+                break;
+
+            default:
+                throw new CompilerException('[' . $left['right']['type'] . ']', $left);
+        }
+
+        if (!in_array($indexVariable->getType(), ['variable', 'mixed', 'string'], true)) {
+            throw new CompilerException('[' . $indexVariable->getType() . ']', $left);
+        }
+
+        return $indexVariable;
+    }
+
+    /**
+     * `isset X::y` as PHP's ZEND_ISSET_ISEMPTY_STATIC_PROP answers it: false
+     * for a property that is not declared, not static or not visible from
+     * here, all of which are known when compiling, and otherwise whether the
+     * property holds something other than null.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2805
+     */
+    private function staticPropertyIsset(array $left, CompilationContext $compilationContext): CompiledExpression
+    {
+        $property        = $left['right']['value'];
+        $classDefinition = (new StaticPropertyAccess())->classDefinitionOf($left, $compilationContext);
+
+        if (null === $classDefinition || !$classDefinition->hasProperty($property)) {
+            return new CompiledExpression('bool', '0', $left);
+        }
+
+        $propertyDefinition = $classDefinition->getProperty($property);
+        if (!$propertyDefinition->isStatic() || !Visibility::canAccessProperty($propertyDefinition, $compilationContext)) {
+            return new CompiledExpression('bool', '0', $left);
+        }
+
+        return $compilationContext->backend->staticPropertyIsset($classDefinition, $property, $compilationContext);
     }
 
     /**

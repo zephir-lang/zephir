@@ -259,7 +259,8 @@
                                             },
                                             "file": "stub__builtin_arraymethods.zep",
                                             "line": 18,
-                                            "char": 37
+                                            "char": 37,
+                                            "start-line": 18
                                         },
                                         "file": "stub__builtin_arraymethods.zep",
                                         "line": 18,

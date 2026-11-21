@@ -84,13 +84,29 @@ PHP_METHOD(Stub_Issue2564, __construct)
 		padFactory = &padFactory_sub;
 		padFactory = &__$null;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 64, &cipher_zv);
-	if (useSigning) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 65, &__$true);
-	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 65, &__$false);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 65, &cipher_zv);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 66, padFactory);
+	if (useSigning) {
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 66, &__$true);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
+	} else {
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 66, &__$false);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
+	}
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 67, padFactory);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

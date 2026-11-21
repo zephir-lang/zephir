@@ -32,6 +32,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\HeadersManager;
+use Zephir\Name;
 use Zephir\StatementsBlock;
 
 use function count;
@@ -87,6 +88,20 @@ final class Definition extends AbstractDefinition
      * Used for compile-time method/property resolution when `this` is used inside a closure.
      */
     protected ?Definition $enclosingClassDefinition = null;
+
+    /**
+     * For closure classes: the names PHP gives the closure before 8.4 and
+     * from 8.4 on, which `__FUNCTION__` reports and a closure written inside
+     * it names itself after. See #2825.
+     *
+     * @var array{0: string, 1: string}|null
+     */
+    protected ?array $closureNames = null;
+
+    /**
+     * For closure classes: the trait the closure is written in, if any.
+     */
+    protected ?string $closureTrait = null;
 
     /**
      * For closure classes: the namespace of the code the closure is written in.
@@ -185,6 +200,7 @@ final class Definition extends AbstractDefinition
             throw new CompilerException("Constant '" . $constant->getName() . "' was defined more than one time");
         }
 
+        $constant->setDefinition($this);
         $this->constants[$constant->getName()] = $constant;
     }
 
@@ -309,7 +325,12 @@ final class Definition extends AbstractDefinition
         }
 
         foreach ($class->getConstants() as $constantName => $constantValue) {
-            $type          = self::convertPhpConstantType(gettype($constantValue));
+            $type = self::convertPhpConstantType(gettype($constantValue));
+            if ('string' === $type) {
+                // A string literal node carries its Zephir source spelling (#2825).
+                $constantValue = Name::encodeSource($constantValue);
+            }
+
             $classConstant = new Constant($constantName, ['value' => $constantValue, 'type' => $type], null);
             $classDefinition->addConstant($classConstant);
         }
@@ -579,14 +600,19 @@ final class Definition extends AbstractDefinition
                 $codePrinter->outputDocBlock($docBlock);
             }
 
-            $property->compile($compilationContext);
             /**
              * A property declare is emitted without a trailing EOL, so this
              * blank line terminates it — which is why the property's
              * attributes can only be attached after it, unlike a constant's.
              */
-            $codePrinter->outputBlankLine();
-            $attributeEmitter->emitProperty($this, $property);
+            $compilationContext->inDeclaringScope(
+                $property->getDeclaringTrait(),
+                function () use ($compilationContext, $codePrinter, $attributeEmitter, $property): void {
+                    $property->compile($compilationContext);
+                    $codePrinter->outputBlankLine();
+                    $attributeEmitter->emitProperty($this, $property);
+                }
+            );
         }
 
         $initMethod = $this->getInitMethod();
@@ -607,8 +633,13 @@ final class Definition extends AbstractDefinition
                 $codePrinter->outputDocBlock($docBlock);
             }
 
-            $constant->compile($compilationContext);
-            $attributeEmitter->emitConstant($this, $constant);
+            $compilationContext->inDeclaringScope(
+                $constant->getDeclaringTrait(),
+                function () use ($compilationContext, $attributeEmitter, $constant): void {
+                    $constant->compile($compilationContext);
+                    $attributeEmitter->emitConstant($this, $constant);
+                }
+            );
             $codePrinter->outputBlankLine();
         }
 
@@ -728,7 +759,10 @@ final class Definition extends AbstractDefinition
                 $codePrinter->output('{');
 
                 if (!$method->isAbstract()) {
-                    $method->compile($compilationContext);
+                    $compilationContext->inDeclaringScope(
+                        $method->getDeclaringTrait(),
+                        fn () => $method->compile($compilationContext)
+                    );
                 }
 
                 $codePrinter->output('}');
@@ -795,7 +829,7 @@ final class Definition extends AbstractDefinition
             $argInfo->setBooleanDefinition('_IS_BOOL');
             $argInfo->setRichFormat(true);
 
-            $argInfo->render();
+            $compilationContext->inDeclaringScope($method->getDeclaringTrait(), fn () => $argInfo->render());
         }
 
         if (count($methods) > 0) {
@@ -1412,7 +1446,10 @@ final class Definition extends AbstractDefinition
          */
         foreach ($this->methods as $method) {
             if (!$this->isInterface() && !$method->isAbstract()) {
-                $method->preCompile($compilationContext);
+                $compilationContext->inDeclaringScope(
+                    $method->getDeclaringTrait(),
+                    fn () => $method->preCompile($compilationContext)
+                );
             }
         }
     }
@@ -1460,6 +1497,29 @@ final class Definition extends AbstractDefinition
     public function getEnclosingClassDefinition(): ?Definition
     {
         return $this->enclosingClassDefinition;
+    }
+
+    public function setClosureNames(string $legacyName, string $modernName): void
+    {
+        $this->closureNames = [$legacyName, $modernName];
+    }
+
+    /**
+     * @return array{0: string, 1: string}|null
+     */
+    public function getClosureNames(): ?array
+    {
+        return $this->closureNames;
+    }
+
+    public function setClosureTrait(?string $closureTrait): void
+    {
+        $this->closureTrait = $closureTrait;
+    }
+
+    public function getClosureTrait(): ?string
+    {
+        return $this->closureTrait;
     }
 
     /**

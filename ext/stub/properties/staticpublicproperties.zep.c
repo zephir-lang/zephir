@@ -58,11 +58,15 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, setSomeString)
 	zval *val, val_sub;
 
 	ZVAL_UNDEF(&val_sub);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &val);
-	zephir_update_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someString"), val);
+	zephir_update_static_property_cached(stub_properties_staticpublicproperties_ce, stub_properties_staticpublicproperties_ce, SL("someString"), &_zephir_sprop_cache[0], val);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub)
@@ -70,15 +74,16 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub)
 	zval _0;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[2];
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 1);
-	zephir_add_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
+	zephir_add_static_property_cached(stub_properties_staticpublicproperties_ce, stub_properties_staticpublicproperties_ce, SL("someAdd"), &_zephir_sprop_cache[0], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 1);
-	zephir_sub_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &_0);
+	zephir_sub_static_property_cached(stub_properties_staticpublicproperties_ce, stub_properties_staticpublicproperties_ce, SL("someSub"), &_zephir_sprop_cache[1], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
@@ -90,13 +95,14 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub2)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[2];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "2string");
-	zephir_add_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
+	zephir_add_static_property_cached(stub_properties_staticpublicproperties_ce, stub_properties_staticpublicproperties_ce, SL("someAdd"), &_zephir_sprop_cache[0], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
@@ -104,7 +110,7 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub2)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "2string");
-	zephir_sub_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &_0);
+	zephir_sub_static_property_cached(stub_properties_staticpublicproperties_ce, stub_properties_staticpublicproperties_ce, SL("someSub"), &_zephir_sprop_cache[1], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
@@ -117,15 +123,16 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub3)
 	zval _0;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[2];
 	ZVAL_UNDEF(&_0);
 	ZVAL_DOUBLE(&_0, 1.0);
-	zephir_add_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
+	zephir_add_static_property_cached(stub_properties_staticpublicproperties_ce, stub_properties_staticpublicproperties_ce, SL("someAdd"), &_zephir_sprop_cache[0], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
 	ZVAL_UNDEF(&_0);
 	ZVAL_DOUBLE(&_0, 1.0);
-	zephir_sub_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &_0);
+	zephir_sub_static_property_cached(stub_properties_staticpublicproperties_ce, stub_properties_staticpublicproperties_ce, SL("someSub"), &_zephir_sprop_cache[1], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
@@ -137,16 +144,17 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub4)
 	zend_long v = 0;
 
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[2];
 	v = 1;
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, v);
-	zephir_add_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
+	zephir_add_static_property_cached(stub_properties_staticpublicproperties_ce, stub_properties_staticpublicproperties_ce, SL("someAdd"), &_zephir_sprop_cache[0], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, v);
-	zephir_sub_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &_0);
+	zephir_sub_static_property_cached(stub_properties_staticpublicproperties_ce, stub_properties_staticpublicproperties_ce, SL("someSub"), &_zephir_sprop_cache[1], &_0);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
@@ -158,17 +166,18 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub5)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&v);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[2];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&v);
 	ZVAL_STRING(&v, "1");
-	zephir_add_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &v);
+	zephir_add_static_property_cached(stub_properties_staticpublicproperties_ce, stub_properties_staticpublicproperties_ce, SL("someAdd"), &_zephir_sprop_cache[0], &v);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_sub_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &v);
+	zephir_sub_static_property_cached(stub_properties_staticpublicproperties_ce, stub_properties_staticpublicproperties_ce, SL("someSub"), &_zephir_sprop_cache[1], &v);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;

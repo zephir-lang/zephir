@@ -44,7 +44,10 @@ PHP_METHOD(Stub_Interfaces_ImplementInt, set)
 	zephir_fetch_params_without_memory_grow(1, 0, &val_param);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, val);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 45, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 46, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 }
 
 PHP_METHOD(Stub_Interfaces_ImplementInt, get)

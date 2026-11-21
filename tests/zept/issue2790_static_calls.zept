@@ -1,0 +1,129 @@
+--TEST--
+Issue #2790: cached self::, static::, parent:: and Class:: call sites resolve for each called class and pass the current $this
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class IcStatic
+{
+    public static function who() -> string
+    {
+        return "IcStatic";
+    }
+
+    public static function lsb() -> string
+    {
+        return static::who();
+    }
+
+    public static function viaSelf() -> string
+    {
+        return self::who();
+    }
+
+    private static function spriv() -> string
+    {
+        return "IcStatic::spriv";
+    }
+
+    public static function lsbPriv() -> string
+    {
+        return static::spriv();
+    }
+
+    public static function viaClass() -> string
+    {
+        return IcStaticTwo::who();
+    }
+
+    public function name() -> string
+    {
+        return "IcStatic::name";
+    }
+
+    public function cls() -> string
+    {
+        return get_class(this);
+    }
+
+    public function selfCls() -> string
+    {
+        return self::cls();
+    }
+}
+--FILE--
+namespace Stub;
+
+class IcStaticOne extends IcStatic
+{
+    public static function who() -> string
+    {
+        return "IcStaticOne";
+    }
+
+    private static function spriv() -> string
+    {
+        return "IcStaticOne::spriv";
+    }
+
+    public function name() -> string
+    {
+        return "IcStaticOne::name/" . parent::name();
+    }
+}
+--FILE--
+namespace Stub;
+
+class IcStaticTwo extends IcStatic
+{
+    public static function who() -> string
+    {
+        return "IcStaticTwo";
+    }
+}
+--USAGE--
+class IcStaticUser extends \Stub\IcStatic
+{
+    public static function who(): string { return "IcStaticUser"; }
+}
+
+class IcStaticOneUser extends \Stub\IcStaticOne
+{
+    public function name(): string { return "IcStaticOneUser::name/" . parent::name(); }
+}
+
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+
+$order = [\Stub\IcStatic::class, \Stub\IcStaticOne::class, \Stub\IcStaticTwo::class, IcStaticUser::class, \Stub\IcStatic::class, \Stub\IcStaticOne::class];
+
+echo "static: ", implode(",", array_map(fn($c) => $c::lsb(), $order)), "\n";
+echo "self: ", implode(",", array_map(fn($c) => $c::viaSelf(), $order)), "\n";
+echo "class: ", implode(",", array_map(fn($c) => $c::viaClass(), $order)), "\n";
+
+foreach ($order as $c) {
+    t("static private " . $c, fn() => $c::lsbPriv());
+}
+
+echo "parent: ", implode(",", array_map(fn($o) => $o->name(), [new \Stub\IcStaticOne(), new IcStaticOneUser(), new \Stub\IcStaticOne()])), "\n";
+echo "self this: ", implode(",", array_map(fn($o) => $o->selfCls(), [new \Stub\IcStatic(), new \Stub\IcStaticOne(), new IcStaticUser(), new \Stub\IcStaticTwo()])), "\n";
+--EXPECT--
+static: IcStatic,IcStaticOne,IcStaticTwo,IcStaticUser,IcStatic,IcStaticOne
+self: IcStatic,IcStatic,IcStatic,IcStatic,IcStatic,IcStatic
+class: IcStaticTwo,IcStaticTwo,IcStaticTwo,IcStaticTwo,IcStaticTwo,IcStaticTwo
+static private Stub\IcStatic: IcStatic::spriv
+static private Stub\IcStaticOne: Error: Call to private method Stub\IcStaticOne::spriv() from scope Stub\IcStatic
+static private Stub\IcStaticTwo: IcStatic::spriv
+static private IcStaticUser: IcStatic::spriv
+static private Stub\IcStatic: IcStatic::spriv
+static private Stub\IcStaticOne: Error: Call to private method Stub\IcStaticOne::spriv() from scope Stub\IcStatic
+parent: IcStaticOne::name/IcStatic::name,IcStaticOneUser::name/IcStaticOne::name/IcStatic::name,IcStaticOne::name/IcStatic::name
+self this: Stub\IcStatic,Stub\IcStaticOne,IcStaticUser,Stub\IcStaticTwo

@@ -35,7 +35,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_methodargs_setresourcestrict, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_methodargs_methodoptionalvaluewithdefaultstaticconstantaccess, 0, 0, 0)
-	ZEND_ARG_INFO(0, method)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, method, "'get'")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_methodargs_methodoptionalstringvaluewithdefaultstaticconstantaccess, 0, 0, 0)

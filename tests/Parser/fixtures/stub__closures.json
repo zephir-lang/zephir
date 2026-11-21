@@ -82,7 +82,8 @@
                                 "type": "closure",
                                 "file": "stub__closures.zep",
                                 "line": 13,
-                                "char": 23
+                                "char": 23,
+                                "start-line": 13
                             },
                             "file": "stub__closures.zep",
                             "line": 14,
@@ -107,7 +108,8 @@
                                 "type": "closure",
                                 "file": "stub__closures.zep",
                                 "line": 20,
-                                "char": 4
+                                "char": 4,
+                                "start-line": 18
                             },
                             "file": "stub__closures.zep",
                             "line": 21,
@@ -145,7 +147,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 27,
-                                "char": 4
+                                "char": 4,
+                                "start-line": 25
                             },
                             "file": "stub__closures.zep",
                             "line": 28,
@@ -183,7 +186,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 34,
-                                "char": 4
+                                "char": 4,
+                                "start-line": 32
                             },
                             "file": "stub__closures.zep",
                             "line": 35,
@@ -235,7 +239,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 44,
-                                "char": 4
+                                "char": 4,
+                                "start-line": 39
                             },
                             "file": "stub__closures.zep",
                             "line": 45,
@@ -287,7 +292,8 @@
                                 },
                                 "file": "stub__closures.zep",
                                 "line": 49,
-                                "char": 22
+                                "char": 22,
+                                "start-line": 49
                             },
                             "file": "stub__closures.zep",
                             "line": 50,
@@ -377,7 +383,8 @@
                                 },
                                 "file": "stub__closures.zep",
                                 "line": 54,
-                                "char": 36
+                                "char": 36,
+                                "start-line": 54
                             },
                             "file": "stub__closures.zep",
                             "line": 55,
@@ -465,7 +472,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 62,
-                                "char": 4
+                                "char": 4,
+                                "start-line": 60
                             },
                             "file": "stub__closures.zep",
                             "line": 63,
@@ -544,7 +552,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 69,
-                                "char": 4
+                                "char": 4,
+                                "start-line": 67
                             },
                             "file": "stub__closures.zep",
                             "line": 70,
@@ -647,7 +656,8 @@
                                         ],
                                         "file": "stub__closures.zep",
                                         "line": 80,
-                                        "char": 58
+                                        "char": 58,
+                                        "start-line": 80
                                     },
                                     "file": "stub__closures.zep",
                                     "line": 80,
@@ -978,7 +988,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 116,
-                                "char": 10
+                                "char": 10,
+                                "start-line": 114
                             },
                             "file": "stub__closures.zep",
                             "line": 117,
@@ -1101,7 +1112,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 123,
-                                "char": 10
+                                "char": 10,
+                                "start-line": 121
                             },
                             "file": "stub__closures.zep",
                             "line": 124,
@@ -1177,7 +1189,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 130,
-                                "char": 10
+                                "char": 10,
+                                "start-line": 128
                             },
                             "file": "stub__closures.zep",
                             "line": 131,
@@ -1310,7 +1323,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 151,
-                                "char": 10
+                                "char": 10,
+                                "start-line": 149
                             },
                             "file": "stub__closures.zep",
                             "line": 152,
@@ -1387,7 +1401,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 164,
-                                "char": 10
+                                "char": 10,
+                                "start-line": 162
                             },
                             "file": "stub__closures.zep",
                             "line": 165,
@@ -1503,7 +1518,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 177,
-                                "char": 10
+                                "char": 10,
+                                "start-line": 175
                             },
                             "file": "stub__closures.zep",
                             "line": 178,
@@ -1591,7 +1607,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 190,
-                                "char": 10
+                                "char": 10,
+                                "start-line": 188
                             },
                             "file": "stub__closures.zep",
                             "line": 191,
@@ -1720,7 +1737,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 206,
-                                "char": 10
+                                "char": 10,
+                                "start-line": 204
                             },
                             "file": "stub__closures.zep",
                             "line": 207,
@@ -1844,7 +1862,8 @@
                                 ],
                                 "file": "stub__closures.zep",
                                 "line": 220,
-                                "char": 10
+                                "char": 10,
+                                "start-line": 218
                             },
                             "file": "stub__closures.zep",
                             "line": 221,
@@ -2053,7 +2072,8 @@
                                             ],
                                             "file": "stub__closures.zep",
                                             "line": 252,
-                                            "char": 14
+                                            "char": 14,
+                                            "start-line": 250
                                         },
                                         "file": "stub__closures.zep",
                                         "line": 252,
@@ -2281,7 +2301,8 @@
                                             ],
                                             "file": "stub__closures.zep",
                                             "line": 275,
-                                            "char": 14
+                                            "char": 14,
+                                            "start-line": 273
                                         },
                                         "file": "stub__closures.zep",
                                         "line": 275,
@@ -2498,7 +2519,8 @@
                                             ],
                                             "file": "stub__closures.zep",
                                             "line": 296,
-                                            "char": 14
+                                            "char": 14,
+                                            "start-line": 294
                                         },
                                         "file": "stub__closures.zep",
                                         "line": 296,

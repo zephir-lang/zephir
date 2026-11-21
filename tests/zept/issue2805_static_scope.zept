@@ -1,0 +1,119 @@
+--TEST--
+Issue #2805: a cached static property site keeps PHP's visibility from closures, a Zephir child and PHP subclasses
+--FILE--
+namespace Stub;
+
+class Issue2805Scope
+{
+    private static priv = "priv";
+    protected static prot = ["prot"];
+
+    public static function readPriv()
+    {
+        return self::priv;
+    }
+
+    public static function closureRead()
+    {
+        return function () {
+            return self::priv;
+        };
+    }
+
+    public static function closureWrite()
+    {
+        return function (var v) {
+            let self::priv = v;
+            return self::priv;
+        };
+    }
+
+    public static function closureAppend()
+    {
+        return function (var v) {
+            let self::prot[] = v;
+            return self::prot;
+        };
+    }
+
+    public static function closureConcat()
+    {
+        return function (var v) {
+            let self::priv .= v;
+            return self::priv;
+        };
+    }
+
+    public static function closureIsset()
+    {
+        return function () {
+            return isset self::priv;
+        };
+    }
+}
+--FILE--
+namespace Stub;
+
+class Issue2805ScopeChild extends Issue2805Scope
+{
+    public static function readParentProt()
+    {
+        return parent::prot;
+    }
+
+    public static function appendParentProt(var v)
+    {
+        let parent::prot[] = v;
+        return parent::prot;
+    }
+
+    public static function appendSelfProt(var v)
+    {
+        let self::prot[] = v;
+        return self::prot;
+    }
+
+    public static function writeParentProt(var v)
+    {
+        let parent::prot = v;
+        return parent::prot;
+    }
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", json_encode($result), "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+class Issue2805ScopeUser extends \Stub\Issue2805ScopeChild {}
+t("private", fn() => \Stub\Issue2805Scope::readPriv());
+t("private from a PHP subclass", fn() => Issue2805ScopeUser::readPriv());
+t("closure read", fn() => (\Stub\Issue2805Scope::closureRead())());
+t("closure write", fn() => (\Stub\Issue2805Scope::closureWrite())("cw"));
+t("closure concat", fn() => (\Stub\Issue2805Scope::closureConcat())("+"));
+t("closure isset", fn() => (\Stub\Issue2805Scope::closureIsset())());
+t("closure append", fn() => (\Stub\Issue2805Scope::closureAppend())("ca"));
+t("parent protected", fn() => \Stub\Issue2805ScopeChild::readParentProt());
+t("parent append", fn() => \Stub\Issue2805ScopeChild::appendParentProt("pa"));
+t("self append in child", fn() => \Stub\Issue2805ScopeChild::appendSelfProt("sa"));
+t("parent append from a PHP subclass", fn() => Issue2805ScopeUser::appendParentProt("ua"));
+t("parent write", fn() => \Stub\Issue2805ScopeChild::writeParentProt(["reset"]));
+t("private after all", fn() => Issue2805ScopeUser::readPriv());
+--EXPECT--
+private: "priv"
+private from a PHP subclass: "priv"
+closure read: "priv"
+closure write: "cw"
+closure concat: "cw+"
+closure isset: true
+closure append: ["prot","ca"]
+parent protected: ["prot","ca"]
+parent append: ["prot","ca","pa"]
+self append in child: ["prot","ca","pa","sa"]
+parent append from a PHP subclass: ["prot","ca","pa","sa","ua"]
+parent write: ["reset"]
+private after all: "cw+"

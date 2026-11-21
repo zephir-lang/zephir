@@ -89,7 +89,14 @@ class SwitchStatement extends StatementAbstract
             }
 
             $condition = $evalExpr->optimize(
-                ['type' => 'equals', 'left' => $left, 'right' => $clause['expr']],
+                [
+                    'type'  => 'equals',
+                    'left'  => $left,
+                    'right' => $clause['expr'],
+                    'file'  => $clause['expr']['file'] ?? null,
+                    'line'  => $clause['expr']['line'] ?? null,
+                    'char'  => $clause['expr']['char'] ?? null,
+                ],
                 $compilationContext
             );
 

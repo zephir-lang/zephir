@@ -27,7 +27,7 @@ final class ConstantsTest extends TestCase
         $expression = ['value' => 'true'];
         $result = $constants->compile($expression, $context);
 
-        $this->assertSame('boolean', $result->getType());
+        $this->assertSame('bool', $result->getType());
         $this->assertTrue($result->getBooleanCode() === '1');
     }
 
@@ -39,7 +39,7 @@ final class ConstantsTest extends TestCase
         $expression = ['value' => 'false'];
         $result = $constants->compile($expression, $context);
 
-        $this->assertSame('boolean', $result->getType());
+        $this->assertSame('bool', $result->getType());
         $this->assertTrue($result->getBooleanCode() === '0');
     }
 

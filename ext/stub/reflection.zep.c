@@ -33,12 +33,13 @@ PHP_METHOD(Stub_Reflection, getReflectionClass)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&r);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&r);
 	object_init_ex(&r, zephir_get_internal_ce(SL("reflectionclass")));
-	ZEPHIR_CALL_METHOD(NULL, &r, "__construct", NULL, 103, this_ptr);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, &r, "__construct", &_zephir_call_cache[0], this_ptr);
 	zephir_check_call_status();
 	RETURN_CCTOR(&r);
 }
@@ -51,6 +52,7 @@ PHP_METHOD(Stub_Reflection, getReflectionFunction)
 
 	ZVAL_UNDEF(&r);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -58,7 +60,7 @@ PHP_METHOD(Stub_Reflection, getReflectionFunction)
 	object_init_ex(&r, zephir_get_internal_ce(SL("reflectionfunction")));
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "abs");
-	ZEPHIR_CALL_METHOD(NULL, &r, "__construct", NULL, 104, &_0);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, &r, "__construct", &_zephir_call_cache[0], &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&r);
 }
@@ -78,7 +80,10 @@ PHP_METHOD(Stub_Reflection, setReflectionParameter)
 		Z_PARAM_OBJECT_OF_CLASS(parameter, zephir_get_internal_ce(SL("reflectionparameter")))
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &parameter);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 123, parameter);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 127, parameter);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_MEMBER(getThis(), "reflectionParameter");
 }
 

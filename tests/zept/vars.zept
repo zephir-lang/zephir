@@ -105,7 +105,8 @@ function norm(callable $fn): string {
 
 echo norm(fn() => $test->testVarDump()), "\n";
 
-// testVarExport prints its array+string and ALSO returns "'hello'".
+// Without its `return` argument var_export() prints, also when its result is
+// used, and gives null, as in PHP (#2774).
 $ret = null;
 $printed = norm(function () use ($test, &$ret) { $ret = $test->testVarExport(); });
 echo $printed, "\n";
@@ -129,8 +130,8 @@ $defined = $test->testGetDefinedVars();
 echo var_export(($defined['test'] ?? null) === $test, true), "\n";
 --EXPECT--
 array(3){[0]=>int(1)[1]=>string(5)"world"[2]=>bool(false)}string(5)"hello"
-array(0=>1,1=>'world',2=>false,)'hello'
-'\'hello\''
+array(0=>1,1=>'world',2=>false,)array(0=>1,1=>'world',2=>false,)'hello''hello'
+NULL
 float(3.1)bool(true)
 float(3.1)bool(true)array(3){[0]=>int(1)[1]=>int(2)[2]=>int(3)}
 string(3)"foo"string(3)"bar"'foo''bar'

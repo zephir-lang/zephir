@@ -1,0 +1,142 @@
+--TEST--
+Issue #2805: a typed static property read before initialization throws PHP's Error, alone or in a compound assignment, and a failed write stops the method
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class Issue2805Typed
+{
+    public static int num;
+    public static string str;
+    public static array items;
+    public static int ready = 1;
+
+    public static function read()
+    {
+        var v;
+        let v = self::num;
+        return v;
+    }
+
+    public static function add(var v)
+    {
+        let self::num += v;
+        return self::num;
+    }
+
+    public static function sub(var v)
+    {
+        let self::num -= v;
+        return self::num;
+    }
+
+    public static function mul(var v)
+    {
+        let self::num *= v;
+        return self::num;
+    }
+
+    public static function concat(var v)
+    {
+        let self::str .= v;
+        return self::str;
+    }
+
+    public static function write(var v)
+    {
+        let self::num = v;
+        return self::num;
+    }
+
+    public static function writeThenEcho(var v)
+    {
+        let self::ready = v;
+        echo "after write\n";
+        return self::ready;
+    }
+
+    public static function append(var v)
+    {
+        let self::items[] = v;
+        return self::items;
+    }
+
+    public static function isNumSet()
+    {
+        return isset self::num;
+    }
+
+    public static function isNumEmpty()
+    {
+        return empty self::num;
+    }
+
+    public static function isItemSet(var k)
+    {
+        return isset self::items[k];
+    }
+
+    public static function isItemEmpty(var k)
+    {
+        return empty self::items[k];
+    }
+
+    public static function sum(int n)
+    {
+        int i = 0;
+        var total = 0;
+        while i < n {
+            let total = total + self::num;
+            let i++;
+        }
+        return total;
+    }
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", json_encode($result), "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+t("read uninitialized", fn() => \Stub\Issue2805Typed::read());
+t("add uninitialized", fn() => \Stub\Issue2805Typed::add(1));
+t("sub uninitialized", fn() => \Stub\Issue2805Typed::sub(1));
+t("mul uninitialized", fn() => \Stub\Issue2805Typed::mul(2));
+t("concat uninitialized", fn() => \Stub\Issue2805Typed::concat("a"));
+t("isset uninitialized", fn() => \Stub\Issue2805Typed::isNumSet());
+t("empty uninitialized", fn() => \Stub\Issue2805Typed::isNumEmpty());
+t("isset element uninitialized", fn() => \Stub\Issue2805Typed::isItemSet("k"));
+t("empty element uninitialized", fn() => \Stub\Issue2805Typed::isItemEmpty("k"));
+t("append uninitialized", fn() => \Stub\Issue2805Typed::append("k"));
+t("write numeric string", fn() => \Stub\Issue2805Typed::write("5"));
+t("write non-numeric string", fn() => \Stub\Issue2805Typed::write("x"));
+t("write then echo", fn() => \Stub\Issue2805Typed::writeThenEcho("x"));
+t("read initialized", fn() => \Stub\Issue2805Typed::read());
+t("add initialized", fn() => \Stub\Issue2805Typed::add(2));
+t("sum", fn() => \Stub\Issue2805Typed::sum(3));
+t("isset initialized", fn() => \Stub\Issue2805Typed::isNumSet());
+t("concat after write", fn() => [\Stub\Issue2805Typed::$str = "s", \Stub\Issue2805Typed::concat("t")]);
+--EXPECT--
+read uninitialized: Error: Typed static property Stub\Issue2805Typed::$num must not be accessed before initialization
+add uninitialized: Error: Typed static property Stub\Issue2805Typed::$num must not be accessed before initialization
+sub uninitialized: Error: Typed static property Stub\Issue2805Typed::$num must not be accessed before initialization
+mul uninitialized: Error: Typed static property Stub\Issue2805Typed::$num must not be accessed before initialization
+concat uninitialized: Error: Typed static property Stub\Issue2805Typed::$str must not be accessed before initialization
+isset uninitialized: false
+empty uninitialized: true
+isset element uninitialized: false
+empty element uninitialized: true
+append uninitialized: ["k"]
+write numeric string: 5
+write non-numeric string: TypeError: Cannot assign string to property Stub\Issue2805Typed::$num of type int
+write then echo: TypeError: Cannot assign string to property Stub\Issue2805Typed::$ready of type int
+read initialized: 5
+add initialized: 7
+sum: 21
+isset initialized: true
+concat after write: ["s","st"]

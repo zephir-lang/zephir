@@ -1609,7 +1609,7 @@ PHP_METHOD(Stub_Arithmetic, less4)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	RETURN_BOOL(ZEPHIR_LT_LONG(a, 5.0));
+	RETURN_BOOL(ZEPHIR_LT_DOUBLE(a, 5.0));
 }
 
 PHP_METHOD(Stub_Arithmetic, greater1)
@@ -1649,7 +1649,7 @@ PHP_METHOD(Stub_Arithmetic, greater4)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	RETURN_BOOL(ZEPHIR_GT_LONG(a, 5.0));
+	RETURN_BOOL(ZEPHIR_GT_DOUBLE(a, 5.0));
 }
 
 PHP_METHOD(Stub_Arithmetic, letStatementIntMinus)
@@ -1742,7 +1742,11 @@ PHP_METHOD(Stub_Arithmetic, div2)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 8, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 11, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	ZEPHIR_INIT_VAR(&_2);

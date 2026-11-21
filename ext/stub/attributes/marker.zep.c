@@ -143,16 +143,36 @@ PHP_METHOD(Stub_Attributes_Marker, __construct)
 		number = 0;
 	} else {
 		}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 23, &text_zv);
-	if (flag) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 24, &__$true);
-	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 24, &__$false);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 26, &text_zv);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 25, &extra);
+	if (flag) {
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 27, &__$true);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
+	} else {
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 27, &__$false);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
+	}
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 28, &extra);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, number);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 26, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 29, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

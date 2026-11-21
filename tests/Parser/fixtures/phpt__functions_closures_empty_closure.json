@@ -61,7 +61,8 @@
                                 ],
                                 "file": "phpt__functions_closures_empty_closure.zep",
                                 "line": 9,
-                                "char": 41
+                                "char": 41,
+                                "start-line": 9
                             },
                             "file": "phpt__functions_closures_empty_closure.zep",
                             "line": 10,

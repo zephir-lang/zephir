@@ -20,6 +20,10 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
+use Zephir\Variable\Variable;
+
+use function in_array;
+use function is_array;
 
 /**
  * Fetch is a special operator that checks if an expression 'isset' and then obtain the value
@@ -49,14 +53,31 @@ class FetchOperator extends AbstractOperator
         }
 
         /**
-         * return_value must not be observed
+         * `fetch a, a[k]` and `fetch k, a[k]` read the variable they write.
+         * Observing it first would release the container or the key before
+         * the fetch looks at it, so the value is fetched into a temporary and
+         * copied in afterwards, as `let` does.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2832
          */
-        if ('return_value' !== $variable->getName()) {
+        $readsTarget = 'return_value' !== $variable->getName()
+            && $this->readsVariable($expression['right'], $variable->getName());
+
+        $readOnly = false;
+        $target   = $variable;
+
+        if ($readsTarget) {
+            $target = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
+            $variable->setIsInitialized(true, $compilationContext);
+            $variable->setDynamicTypes('undefined');
+            $variable->setPossibleValue(new CompiledExpression('undefined', '', $expression), $compilationContext);
+        } elseif ('return_value' !== $variable->getName()) {
             /**
+             * return_value must not be observed
+             *
              * TODO: use a read detector here
              */
-            $readOnly = false;
-            $line     = max(
+            $line = max(
                 $compilationContext->symbolTable->getLastCallLine(),
                 $compilationContext->symbolTable->getLastUnsetLine()
             );
@@ -97,180 +118,21 @@ class FetchOperator extends AbstractOperator
                 $variable->setPossibleValue(new CompiledExpression('undefined', '', $expression), $compilationContext);
             }
         } else {
-            $variable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
+            $target = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
         }
 
         $flags = $readOnly ? '1' : '0';
 
         switch ($expression['right']['type']) {
             case 'array-access':
-                $exprVariable = new Expression($expression['right']['left']);
-                $exprVariable->setReadOnly(true);
-                $exprVariable->setNoisy(false);
-
-                $exprCompiledVariable = $exprVariable->compile($compilationContext);
-                if ('variable' != $exprCompiledVariable->getType()) {
-                    throw new CompilerException(
-                        'Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as array',
-                        $expression['right']['left']
-                    );
-                }
-
-                $evalVariable = $compilationContext->symbolTable->getVariableForRead(
-                    $exprCompiledVariable->getCode(),
-                    $compilationContext,
-                    $expression['right']['left']
-                );
-                if ('variable' != $evalVariable->getType() && 'array' != $evalVariable->getType()) {
-                    throw new CompilerException(
-                        'Variable type: ' . $variable->getType() . ' cannot be used as array',
-                        $expression['right']['left']
-                    );
-                }
-
-                if ('variable' == $evalVariable->getType()) {
-                    if ($evalVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
-                        $compilationContext->logger->warning(
-                            'Possible attempt to use non array in fetch operator',
-                            ['non-valid-fetch', $expression['right']]
-                        );
-                    }
-                }
-
-                $expr = new Expression($expression['right']['right']);
-                $expr->setReadOnly(true);
-                $expr->setNoisy(false);
-                $resolvedExpr = $expr->compile($compilationContext);
-                $resolvedExpr = $compilationContext->backend->boxArrayKey($resolvedExpr, $compilationContext);
-
-                $fetched = $compilationContext->backend->arrayIssetFetch(
-                    $variable,
-                    $evalVariable,
-                    $resolvedExpr,
-                    $flags,
-                    $expression,
-                    $compilationContext
-                );
-
-                // fetch throws for an illegal key or from offsetExists()/offsetGet()
-                return new CompiledExpression(
-                    'bool',
-                    $compilationContext->emitCheckedBool($fetched->getCode()),
-                    $expression
-                );
+                $fetched = $this->arrayFetch($expression, $target, $flags, $compilationContext);
+                break;
 
             case 'property-access':
-                $exprVariable = new Expression($expression['right']['left']);
-                $exprVariable->setReadOnly(true);
-                $exprVariable->setNoisy(false);
-
-                $exprCompiledVariable = $exprVariable->compile($compilationContext);
-                if ('variable' != $exprCompiledVariable->getType()) {
-                    throw new CompilerException(
-                        'Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as object',
-                        $expression['right']['left']
-                    );
-                }
-
-                $evalVariable = $compilationContext->symbolTable->getVariableForRead(
-                    $exprCompiledVariable->getCode(),
-                    $compilationContext,
-                    $expression['right']['left']
-                );
-                if ('variable' != $evalVariable->getType()) {
-                    throw new CompilerException(
-                        'Variable type: ' . $variable->getType() . ' cannot be used as object',
-                        $expression['right']['left']
-                    );
-                }
-
-                if ($evalVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
-                    $compilationContext->logger->warning(
-                        'Possible attempt to use non object in fetch operator',
-                        ['non-valid-fetch', $expression['right']]
-                    );
-                }
-
-                $property = $expression['right']['right']['value'];
-
-                $compilationContext->headersManager->add('kernel/object');
-                $symbol     = $compilationContext->backend->getVariableCode($variable);
-                $evalSymbol = $compilationContext->backend->getVariableCode($evalVariable);
-
-                return new CompiledExpression(
-                    'bool',
-                    'zephir_fetch_property(' . $symbol . ', ' . $evalSymbol . ', SL("' . $property . '"), PH_SILENT_CC)',
-                    $expression
-                );
-
+            case 'property-string-access':
             case 'property-dynamic-access':
-                $exprVariable = new Expression($expression['right']['left']);
-                $exprVariable->setReadOnly(true);
-                $exprVariable->setNoisy(false);
-
-                $exprCompiledVariable = $exprVariable->compile($compilationContext);
-                if ('variable' != $exprCompiledVariable->getType()) {
-                    throw new CompilerException(
-                        'Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as object',
-                        $expression['right']['left']
-                    );
-                }
-
-                $evalVariable = $compilationContext->symbolTable->getVariableForRead(
-                    $exprCompiledVariable->getCode(),
-                    $compilationContext,
-                    $expression['right']['left']
-                );
-                if ('variable' != $evalVariable->getType()) {
-                    throw new CompilerException(
-                        'Variable type: ' . $evalVariable->getType() . ' cannot be used as object',
-                        $expression['right']['left']
-                    );
-                }
-
-                if ($evalVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
-                    $compilationContext->logger->warning(
-                        'Possible attempt to use non object in fetch operator',
-                        ['non-valid-fetch', $expression['right']]
-                    );
-                }
-
-                $exprVariableProperty = new Expression($expression['right']['right']);
-                $exprVariableProperty->setReadOnly(true);
-
-                $exprCompiledVariableProperty = $exprVariableProperty->compile($compilationContext);
-                if ('variable' != $exprCompiledVariableProperty->getType()) {
-                    throw new CompilerException(
-                        'Expression type: ' . $exprCompiledVariableProperty->getType(
-                        ) . ' cannot be used in property-dynamic-access',
-                        $expression['right']['right']
-                    );
-                }
-
-                $evalVariableProperty = $compilationContext->symbolTable->getVariableForRead(
-                    $exprCompiledVariableProperty->getCode(),
-                    $compilationContext,
-                    $expression['right']['right']
-                );
-                if ('variable' != $evalVariableProperty->getType() && 'string' != $evalVariableProperty->getType()) {
-                    throw new CompilerException(
-                        'Variable type: ' . $evalVariableProperty->getType(
-                        ) . ' cannot be used in property-dynamic-access',
-                        $expression['right']['right']
-                    );
-                }
-
-                $compilationContext->headersManager->add('kernel/object');
-
-                $symbol             = $compilationContext->backend->getVariableCode($variable);
-                $evalSymbol         = $compilationContext->backend->getVariableCode($evalVariable);
-                $evalPropertySymbol = $compilationContext->backend->getVariableCode($evalVariableProperty);
-
-                return new CompiledExpression(
-                    'bool',
-                    'zephir_fetch_property_zval(' . $symbol . ', ' . $evalSymbol . ', ' . $evalPropertySymbol . ', PH_SILENT_CC)',
-                    $expression
-                );
+                $fetched = $this->propertyFetch($expression['right'], $target, $compilationContext);
+                break;
 
             default:
                 throw new CompilerException(
@@ -278,5 +140,155 @@ class FetchOperator extends AbstractOperator
                     $expression
                 );
         }
+
+        // fetch throws for an illegal key, from offsetExists()/offsetGet(), from __isset()/__get() or for a name
+        $found = $compilationContext->emitCheckedBool($fetched);
+
+        if ($readsTarget) {
+            $compilationContext->backend->copyOnWrite($variable, $target, $compilationContext);
+        }
+
+        return new CompiledExpression('bool', $found, $expression);
+    }
+
+    /**
+     * `fetch value, a[key]`: the kernel call that fills `target`.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function arrayFetch(
+        array $expression,
+        Variable $target,
+        string $flags,
+        CompilationContext $compilationContext
+    ): string {
+        $exprVariable = new Expression($expression['right']['left']);
+        $exprVariable->setReadOnly(true);
+        $exprVariable->setNoisy(false);
+
+        $exprCompiledVariable = $exprVariable->compile($compilationContext);
+        if ('variable' != $exprCompiledVariable->getType()) {
+            throw new CompilerException(
+                'Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as array',
+                $expression['right']['left']
+            );
+        }
+
+        $evalVariable = $compilationContext->symbolTable->getVariableForRead(
+            $exprCompiledVariable->getCode(),
+            $compilationContext,
+            $expression['right']['left']
+        );
+        if ('variable' != $evalVariable->getType() && 'array' != $evalVariable->getType()) {
+            throw new CompilerException(
+                'Variable type: ' . $target->getType() . ' cannot be used as array',
+                $expression['right']['left']
+            );
+        }
+
+        if ('variable' == $evalVariable->getType()) {
+            if ($evalVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
+                $compilationContext->logger->warning(
+                    'Possible attempt to use non array in fetch operator',
+                    ['non-valid-fetch', $expression['right']]
+                );
+            }
+        }
+
+        // The key is an ordinary read, as in PHP: only the container is fetched silently (#2832)
+        $expr = new Expression($expression['right']['right']);
+        $expr->setReadOnly(true);
+        $resolvedExpr = $expr->compile($compilationContext);
+        $resolvedExpr = $compilationContext->backend->boxArrayKey($resolvedExpr, $compilationContext);
+
+        return $compilationContext->backend->arrayIssetFetch(
+            $target,
+            $evalVariable,
+            $resolvedExpr,
+            $flags,
+            $expression,
+            $compilationContext
+        )->getCode();
+    }
+
+    /**
+     * `fetch value, o->x`, `o->{"x"}` or `o->{name}`: the kernel call that
+     * fills `target`. The name takes every form `isset` takes.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function propertyFetch(array $right, Variable $target, CompilationContext $compilationContext): string
+    {
+        $exprVariable = new Expression($right['left']);
+        $exprVariable->setReadOnly(true);
+        $exprVariable->setNoisy(false);
+
+        $exprCompiledVariable = $exprVariable->compile($compilationContext);
+        if ('variable' != $exprCompiledVariable->getType()) {
+            throw new CompilerException(
+                'Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as object',
+                $right['left']
+            );
+        }
+
+        $evalVariable = $compilationContext->symbolTable->getVariableForRead(
+            $exprCompiledVariable->getCode(),
+            $compilationContext,
+            $right['left']
+        );
+        if ('variable' != $evalVariable->getType()) {
+            throw new CompilerException(
+                'Variable type: ' . $evalVariable->getType() . ' cannot be used as object',
+                $right['left']
+            );
+        }
+
+        if ($evalVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
+            $compilationContext->logger->warning(
+                'Possible attempt to use non object in fetch operator',
+                ['non-valid-fetch', $right]
+            );
+        }
+
+        $compilationContext->headersManager->add('kernel/object');
+
+        $symbol     = $compilationContext->backend->getVariableCode($target);
+        $evalSymbol = $compilationContext->backend->getVariableCode($evalVariable);
+
+        /* A name written as a string, `o->{"x"}`, is as known as `o->x` */
+        if ('property-dynamic-access' !== $right['type']) {
+            return 'zephir_fetch_property(' . $symbol . ', ' . $evalSymbol
+                . ', SL("' . $right['right']['value'] . '"), PH_SILENT_CC)';
+        }
+
+        $nameVariable = (new IssetOperator())->propertyNameVariable($right, $compilationContext);
+
+        return 'zephir_fetch_property_zval(' . $symbol . ', ' . $evalSymbol . ', '
+            . $compilationContext->backend->getVariableCode($nameVariable) . ', PH_SILENT_CC)';
+    }
+
+    /**
+     * Whether an expression reads the variable `name`. The name in `o->x` is
+     * not a variable.
+     */
+    private function readsVariable(array $node, string $name): bool
+    {
+        if ('variable' === ($node['type'] ?? null)) {
+            return $name === ($node['value'] ?? null);
+        }
+
+        if (in_array($node['type'] ?? null, ['property-access', 'property-string-access'], true)) {
+            return $this->readsVariable($node['left'], $name);
+        }
+
+        foreach ($node as $child) {
+            if (is_array($child) && $this->readsVariable($child, $name)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

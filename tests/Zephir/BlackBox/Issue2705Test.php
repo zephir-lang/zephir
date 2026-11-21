@@ -44,8 +44,8 @@ final class Issue2705Test extends TestCase
             'brace name'       => ['unset this->{name}[k];', 'zephir_fetch_property_write_zval(', 1],
             'nested property'  => ['unset this->p["a"][k];', 'zephir_fetch_property_write(', 2],
             'brace nested'     => ['unset this->{name}["a"]["b"]["c"];', 'zephir_fetch_property_write_zval(', 3],
-            'static'           => ['unset self::sp[k];', 'zephir_fetch_static_property_write_ce(', 1],
-            'static nested'    => ['unset self::sp["a"][k];', 'zephir_fetch_static_property_write_ce(', 2],
+            'static'           => ['unset self::sp[k];', 'zephir_fetch_static_property_write_cached(', 1],
+            'static nested'    => ['unset self::sp["a"][k];', 'zephir_fetch_static_property_write_cached(', 2],
             'local nested'     => ['unset a["a"][k];', '', 2],
         ];
     }

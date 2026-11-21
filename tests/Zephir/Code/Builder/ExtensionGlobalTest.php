@@ -403,6 +403,7 @@ final class ExtensionGlobalTest extends TestCase
             'owned prefix field'  => ['db.zephir_owned_str', 'the "zephir_owned_" prefix is reserved'],
             'kernel member'       => ['initialized', '"initialized" is a member the Zephir kernel declares'],
             'kernel member struct' => ['scache.x', '"scache" is a member the Zephir kernel declares'],
+            'request number'      => ['request_number', '"request_number" is a member the Zephir kernel declares'],
         ];
     }
 

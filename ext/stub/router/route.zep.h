@@ -26,8 +26,8 @@ PHP_METHOD(Stub_Router_Route, getConverters);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_route___construct, 0, 0, 1)
 	ZEND_ARG_INFO(0, pattern)
-	ZEND_ARG_INFO(0, paths)
-	ZEND_ARG_INFO(0, httpMethods)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, paths, "null")
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, httpMethods, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_route_compilepattern, 0, 0, 1)
@@ -44,7 +44,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_route_reconfigure, 0, 0, 1)
 	ZEND_ARG_INFO(0, pattern)
-	ZEND_ARG_INFO(0, paths)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, paths, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_route_getname, 0, 0, 0)

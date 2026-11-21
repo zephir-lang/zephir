@@ -537,38 +537,15 @@ class MethodCall extends Call
                     /*
                      * `self`, `static`, and `parent` resolve relative to the
                      * RECEIVER of the call, not the lexical class of the
-                     * call site. For `this->returnsStatic()` the two are the
-                     * same (handled at the top of this method where
-                     * `$classDefinition` was assigned from
-                     * `$compilationContext->classDefinition`). For
-                     * `other->returnsStatic()->chain()` they differ:
-                     * `$classDefinition` already carries the receiver's
-                     * class (resolved earlier from
-                     * `$variableVariable->getClassTypes()`), and that is
-                     * what `self`/`static`/`parent` must rewrite to so the
-                     * chained method lookup happens on the right class.
-                     * Using `$compilationContext->classDefinition` here
-                     * makes the chained call look up the method on the
-                     * enclosing class instead, producing a spurious
-                     * "Class '<enclosing>' does not implement method ..."
-                     * error.
-                     * See https://github.com/zephir-lang/zephir/issues/2505.
+                     * call site: `$classDefinition` already carries the
+                     * receiver's class, resolved from the variable's class
+                     * types (#2505). Every other name resolves in the file
+                     * the method is written in (#2824).
                      */
                     $receiverDefinition = $classDefinition ?? $compilationContext->classDefinition;
-                    foreach ($returnClassTypes as &$returnClassType) {
-                        $lower = strtolower($returnClassType);
-                        if ($lower === 'self' || $lower === 'static') {
-                            $returnClassType = $receiverDefinition->getCompleteName();
-                        } elseif ($lower === 'parent') {
-                            $parent = $receiverDefinition->getExtendsClass();
-                            if ($parent !== null && $parent !== '') {
-                                $returnClassType = $parent;
-                            }
-                        } else {
-                            $returnClassType = $compilationContext->getFullName($returnClassType);
-                        }
-                    }
-                    $symbolVariable->setClassTypes($returnClassTypes);
+                    $symbolVariable->setClassTypes(
+                        $method->resolveReturnClassTypes($receiverDefinition, $compilationContext)
+                    );
                 }
 
                 $returnTypes = $method->getReturnTypes();
@@ -614,12 +591,15 @@ class MethodCall extends Call
          * Mark references
          */
         $params = [];
+        $named  = null;
         if (isset($expression['parameters'])) {
             $params = $this->getResolvedParams(
                 $expression['parameters'],
                 $compilationContext,
                 $expression,
             );
+
+            [$params, $named] = $this->splitNamedArguments($params, $compilationContext);
 
             if (count($references)) {
                 foreach ($params as $position => $param) {
@@ -800,8 +780,20 @@ class MethodCall extends Call
                  * different matter: substituting it is only correct where PHP
                  * would not have dispatched virtually in the first place.
                  */
+                /**
+                 * Named arguments are bound by the engine, which a direct C
+                 * call skips (#2824).
+                 */
+                if (null !== $named && $method->isInternal()) {
+                    throw new CompilerException(
+                        "Named arguments cannot be passed to the internal method '" . $expression['name'] . "'",
+                        $expression
+                    );
+                }
+
                 if (
-                    !$method->isInternal()
+                    null === $named
+                    && !$method->isInternal()
                     && $this->isStaticallyDispatched(
                         $method,
                         $receiverDefinition,
@@ -822,14 +814,13 @@ class MethodCall extends Call
             }
 
             if (!$isInternal) {
-                // Check if the method call can have an inline cache
-                $methodCache = $compilationContext->cacheManager->getMethodCache();
-
-                $cachePointer = $methodCache->get(
-                    $compilationContext,
-                    $methodName,
-                    $variableVariable
-                );
+                /**
+                 * The site's own inline cache: the kernel keys it by the
+                 * receiver's class, so it serves any object the site sees.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2790
+                 */
+                $cachePointer = $compilationContext->cacheManager->getMethodCache()->get($compilationContext);
 
                 /**
                  * The call carries the name as it was written, not the lowered
@@ -844,7 +835,8 @@ class MethodCall extends Call
                     $expression['name'],
                     $cachePointer,
                     count($params) ? $params : null,
-                    $compilationContext
+                    $compilationContext,
+                    $named
                 );
             } else {
                 // TODO: also move to backend
@@ -899,10 +891,13 @@ class MethodCall extends Call
                     $variableMethod,
                     $cachePointer,
                     count($params) ? $params : null,
-                    $compilationContext
+                    $compilationContext,
+                    $named
                 );
             }
         }
+
+        $this->releaseNamedArguments($compilationContext);
 
         // Temporary variables must be copied if they have more than one reference
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {

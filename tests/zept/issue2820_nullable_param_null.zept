@@ -1,0 +1,57 @@
+--TEST--
+Issue #2820: an explicit null passed to a nullable `array` or `string` parameter stays null, as when the argument is omitted
+--FILE--
+namespace Stub;
+
+class NullableParams
+{
+    public function arrayDefault(array x = null)
+    {
+        return x;
+    }
+
+    public function stringWritten(string x = null)
+    {
+        if x !== null {
+            let x .= "!";
+        }
+
+        return x;
+    }
+
+    public function stringNative(string x = null)
+    {
+        return x;
+    }
+}
+--USAGE--
+$o = new \Stub\NullableParams();
+var_export([$o->arrayDefault(), $o->arrayDefault(null), $o->arrayDefault([]), $o->arrayDefault([1])]);
+echo "\n";
+var_export([$o->stringWritten(), $o->stringWritten(null), $o->stringWritten(""), $o->stringWritten("a")]);
+echo "\n";
+var_export([$o->stringNative(), $o->stringNative(null), $o->stringNative("")]);
+echo "\n";
+--EXPECT--
+array (
+  0 => NULL,
+  1 => NULL,
+  2 => 
+  array (
+  ),
+  3 => 
+  array (
+    0 => 1,
+  ),
+)
+array (
+  0 => NULL,
+  1 => NULL,
+  2 => '!',
+  3 => 'a!',
+)
+array (
+  0 => NULL,
+  1 => NULL,
+  2 => '',
+)

@@ -50,8 +50,9 @@ final class Issue2731Test extends TestCase
     ];
 
     /**
-     * Two calls to a method of the same class, outside any loop: only the
-     * call gatherer pass gives them an inline cache.
+     * Two calls to the same function, outside any loop: only the call gatherer
+     * pass gives them a shared function cache. A method call has a cache of its
+     * own at every call site whatever the pass says (#2790).
      */
     private const REPEATED_CALL = <<<'ZEP'
         namespace Stub;
@@ -60,12 +61,7 @@ final class Issue2731Test extends TestCase
         {
             public function run() -> string
             {
-                return this->name() . this->name();
-            }
-
-            protected function name() -> string
-            {
-                return "x";
+                return soundex("a") . soundex("b");
             }
         }
         ZEP;

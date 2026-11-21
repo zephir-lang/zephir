@@ -1,0 +1,206 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "if",
+                "expr": {
+                    "type": "equals",
+                    "left": {
+                        "type": "type-hint",
+                        "left": {
+                            "type": "variable",
+                            "value": "Foo",
+                            "file": "phpt__operators_type_hint_precedence.zep",
+                            "line": 2,
+                            "char": 14
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "a",
+                            "file": "phpt__operators_type_hint_precedence.zep",
+                            "line": 2,
+                            "char": 14
+                        },
+                        "file": "phpt__operators_type_hint_precedence.zep",
+                        "line": 2,
+                        "char": 14
+                    },
+                    "right": {
+                        "type": "variable",
+                        "value": "b",
+                        "file": "phpt__operators_type_hint_precedence.zep",
+                        "line": 2,
+                        "char": 18
+                    },
+                    "file": "phpt__operators_type_hint_precedence.zep",
+                    "line": 2,
+                    "char": 18
+                },
+                "file": "phpt__operators_type_hint_precedence.zep",
+                "line": 3,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "and",
+                    "left": {
+                        "type": "type-hint",
+                        "left": {
+                            "type": "variable",
+                            "value": "Foo",
+                            "file": "phpt__operators_type_hint_precedence.zep",
+                            "line": 3,
+                            "char": 14
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "a",
+                            "file": "phpt__operators_type_hint_precedence.zep",
+                            "line": 3,
+                            "char": 14
+                        },
+                        "file": "phpt__operators_type_hint_precedence.zep",
+                        "line": 3,
+                        "char": 14
+                    },
+                    "right": {
+                        "type": "variable",
+                        "value": "b",
+                        "file": "phpt__operators_type_hint_precedence.zep",
+                        "line": 3,
+                        "char": 18
+                    },
+                    "file": "phpt__operators_type_hint_precedence.zep",
+                    "line": 3,
+                    "char": 18
+                },
+                "file": "phpt__operators_type_hint_precedence.zep",
+                "line": 4,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "type-hint",
+                    "left": {
+                        "type": "variable",
+                        "value": "Foo",
+                        "file": "phpt__operators_type_hint_precedence.zep",
+                        "line": 4,
+                        "char": 17
+                    },
+                    "right": {
+                        "type": "concat",
+                        "left": {
+                            "type": "variable",
+                            "value": "a",
+                            "file": "phpt__operators_type_hint_precedence.zep",
+                            "line": 4,
+                            "char": 13
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "b",
+                            "file": "phpt__operators_type_hint_precedence.zep",
+                            "line": 4,
+                            "char": 17
+                        },
+                        "file": "phpt__operators_type_hint_precedence.zep",
+                        "line": 4,
+                        "char": 17
+                    },
+                    "file": "phpt__operators_type_hint_precedence.zep",
+                    "line": 4,
+                    "char": 17
+                },
+                "file": "phpt__operators_type_hint_precedence.zep",
+                "line": 5,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "type-hint",
+                    "left": {
+                        "type": "variable",
+                        "value": "Foo",
+                        "file": "phpt__operators_type_hint_precedence.zep",
+                        "line": 5,
+                        "char": 17
+                    },
+                    "right": {
+                        "type": "add",
+                        "left": {
+                            "type": "variable",
+                            "value": "a",
+                            "file": "phpt__operators_type_hint_precedence.zep",
+                            "line": 5,
+                            "char": 13
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "b",
+                            "file": "phpt__operators_type_hint_precedence.zep",
+                            "line": 5,
+                            "char": 17
+                        },
+                        "file": "phpt__operators_type_hint_precedence.zep",
+                        "line": 5,
+                        "char": 17
+                    },
+                    "file": "phpt__operators_type_hint_precedence.zep",
+                    "line": 5,
+                    "char": 17
+                },
+                "file": "phpt__operators_type_hint_precedence.zep",
+                "line": 6,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "type-hint",
+                    "left": {
+                        "type": "variable",
+                        "value": "FOO",
+                        "file": "phpt__operators_type_hint_precedence.zep",
+                        "line": 6,
+                        "char": 26
+                    },
+                    "right": {
+                        "type": "instanceof",
+                        "left": {
+                            "type": "variable",
+                            "value": "a",
+                            "file": "phpt__operators_type_hint_precedence.zep",
+                            "line": 6,
+                            "char": 22
+                        },
+                        "right": {
+                            "type": "constant",
+                            "value": "B",
+                            "file": "phpt__operators_type_hint_precedence.zep",
+                            "line": 6,
+                            "char": 26
+                        },
+                        "file": "phpt__operators_type_hint_precedence.zep",
+                        "line": 6,
+                        "char": 26
+                    },
+                    "file": "phpt__operators_type_hint_precedence.zep",
+                    "line": 6,
+                    "char": 26
+                },
+                "file": "phpt__operators_type_hint_precedence.zep",
+                "line": 7,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_type_hint_precedence.zep",
+        "line": 1,
+        "char": 9
+    }
+]

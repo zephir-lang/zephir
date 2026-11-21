@@ -99,12 +99,7 @@ final class Visibility
      */
     public static function scopeOf(CompilationContext $context): ?Definition
     {
-        $definition = $context->classDefinition;
-        if (null === $definition) {
-            return null;
-        }
-
-        return $definition->getEnclosingClassDefinition() ?? $definition;
+        return $context->lexicalClassDefinition();
     }
 
     /**

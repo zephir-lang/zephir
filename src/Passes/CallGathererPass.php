@@ -21,17 +21,14 @@ use const PHP_EOL;
 
 /**
  * This pass counts how many times the same function is called inside a
- * statements block. It also counts how many times a method is calling
- * trying to track the possible caller.
+ * statements block.
  *
- * This pass is used by the function/method caches to explore possible
- * optimizations by implementing inline caches.
+ * This pass is used by the function cache to explore possible optimizations
+ * by implementing inline caches.
  */
 class CallGathererPass
 {
     protected array $functionCalls = [];
-
-    protected array $methodCalls = [];
 
     public function __construct(protected CompilationContext $compilationContext)
     {
@@ -57,19 +54,6 @@ class CallGathererPass
     public function getNumberOfFunctionCalls(string $funcName): int
     {
         return $this->functionCalls[$funcName] ?? 0;
-    }
-
-    /**
-     * Returns the number of calls a function had.
-     *
-     * @param string $className
-     * @param string $methodName
-     *
-     * @return int
-     */
-    public function getNumberOfMethodCalls(string $className, string $methodName): int
-    {
-        return $this->methodCalls[$className][$methodName] ?? 0;
     }
 
     /**
@@ -171,20 +155,6 @@ class CallGathererPass
                 break;
 
             case 'mcall':
-                if (isset($expression['variable']['value'])) {
-                    if ('this' == $expression['variable']['value']) {
-                        $methodName = $expression['name'];
-                        $className  = $this->compilationContext->classDefinition->getCompleteName();
-                        if (!isset($this->methodCalls[$className][$methodName])) {
-                            $this->methodCalls[$className][$methodName] = 1;
-                        } else {
-                            ++$this->methodCalls[$className][$methodName];
-                        }
-                    }
-                }
-                $this->passCall($expression);
-                break;
-
             case 'scall':
                 $this->passCall($expression);
                 break;
@@ -248,15 +218,6 @@ class CallGathererPass
      */
     public function passNew(array $expression): void
     {
-        if (!$expression['dynamic']) {
-            $className = $this->compilationContext->getFullName($expression['class']);
-            if (!isset($this->methodCalls[$className]['__construct'])) {
-                $this->methodCalls[$className]['__construct'] = 1;
-            } else {
-                ++$this->methodCalls[$className]['__construct'];
-            }
-        }
-
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
                 $this->passExpression($parameter['parameter']);

@@ -49,9 +49,15 @@ PHP_METHOD(Stub_Issue1790, setStringProp)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
 	if (ZEPHIR_GT_LONG(value, 5)) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 54, &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 55, &__$true);
+		if (UNEXPECTED(EG(exception))) {
+			return;
+		}
 	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 54, &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 55, &__$false);
+		if (UNEXPECTED(EG(exception))) {
+			return;
+		}
 	}
 }
 
@@ -71,8 +77,14 @@ PHP_METHOD(Stub_Issue1790, setVariableProp)
 	zephir_fetch_params_without_memory_grow(2, 0, &key, &value);
 	if (ZEPHIR_GT_LONG(value, 5)) {
 		zephir_update_property_zval_zval(this_ptr, key, &__$true);
+		if (UNEXPECTED(EG(exception))) {
+			return;
+		}
 	} else {
 		zephir_update_property_zval_zval(this_ptr, key, &__$false);
+		if (UNEXPECTED(EG(exception))) {
+			return;
+		}
 	}
 }
 

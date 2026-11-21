@@ -9,7 +9,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_extendpdoclass___construct, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, dsn, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, username, IS_STRING, 1, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, password, IS_STRING, 1, "null")
-	ZEND_ARG_INFO(0, attrs)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, attrs, "[]")
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_oo_extendpdoclass_method_entry) {

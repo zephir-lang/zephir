@@ -100,6 +100,30 @@ final class FcallTest extends TestCase
         $this->assertSame([true, false], Fcall::testStaticFunctionGetArgAllExtra(true, false));
     }
 
+    /**
+     * Calling a method through a callable makes the method call dynamic, not
+     * the func_get_arg() inside it, so PHP reads the arguments as usual.
+     */
+    public function testFuncGetArgInMethodCalledThroughCallableVariable(): void
+    {
+        $callable = [$this->test, 'testFunctionGetArg'];
+
+        $this->assertSame([1, 2], $callable(1, 2));
+    }
+
+    public function testFuncGetArgInMethodCalledThroughCallUserFunc(): void
+    {
+        $this->assertSame([1, 2], call_user_func([$this->test, 'testFunctionGetArg'], 1, 2));
+    }
+
+    public function testFuncGetArgInStaticMethodCalledThroughCallUserFuncArray(): void
+    {
+        $this->assertSame(
+            [true, false],
+            call_user_func_array([Fcall::class, 'testStaticFunctionGetArgAllExtra'], [true, false])
+        );
+    }
+
     public function testArrayFill(): void
     {
         $this->assertSame(

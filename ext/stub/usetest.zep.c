@@ -43,6 +43,8 @@ PHP_METHOD(Stub_UseTest, testUseClass1)
 	zend_class_entry *_0 = NULL;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -53,7 +55,7 @@ PHP_METHOD(Stub_UseTest, testUseClass1)
 	ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(return_value);
 	zephir_check_call_status();
 	if (zephir_has_constructor(return_value)) {
-		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 	}
 
@@ -65,6 +67,8 @@ PHP_METHOD(Stub_UseTest, testUseClass2)
 	zend_class_entry *_0 = NULL;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -75,7 +79,7 @@ PHP_METHOD(Stub_UseTest, testUseClass2)
 	ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(return_value);
 	zephir_check_call_status();
 	if (zephir_has_constructor(return_value)) {
-		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 	}
 
@@ -87,6 +91,8 @@ PHP_METHOD(Stub_UseTest, testUseNamespaceAlias)
 	zend_class_entry *_0 = NULL;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -97,7 +103,7 @@ PHP_METHOD(Stub_UseTest, testUseNamespaceAlias)
 	ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(return_value);
 	zephir_check_call_status();
 	if (zephir_has_constructor(return_value)) {
-		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 0);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
 	}
 

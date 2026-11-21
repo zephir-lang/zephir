@@ -45,7 +45,18 @@ class InstanceOfOperator extends AbstractOperator
             throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
         }
 
-        $right            = new Expression($expression['right']);
+        /**
+         * PHP reads a name on the right of `instanceof` as a class name, never
+         * as a constant, and an all-caps one such as `PDO` lexes as a constant.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2824
+         */
+        $rightNode = $expression['right'];
+        if ('constant' === $rightNode['type']) {
+            $rightNode['type'] = 'variable';
+        }
+
+        $right            = new Expression($rightNode);
         $resolved         = $right->compile($context);
         $resolvedVariable = $resolved->getCode();
 
@@ -56,6 +67,13 @@ class InstanceOfOperator extends AbstractOperator
             default:
                 switch ($resolved->getType()) {
                     case 'variable':
+                        if (
+                            in_array($resolvedVariable, ['self', 'static', 'parent'], true)
+                            && null === $context->classScope($resolvedVariable, $expression)
+                        ) {
+                            return new CompiledExpression('bool', 'false', $expression);
+                        }
+
                         if ('this' === $resolvedVariable) {
                             /**
                              * TODO: It's an optimization variant, but maybe we need to get entry in runtime?
@@ -65,7 +83,7 @@ class InstanceOfOperator extends AbstractOperator
                             $classEntry = $context->lateStaticClassEntry();
                         } elseif (!$context->symbolTable->hasVariable($resolvedVariable)) {
                             $className = match ($resolvedVariable) {
-                                'self'   => $context->classDefinition->getCompleteName(),
+                                'self'   => $context->lexicalClassDefinition()->getCompleteName(),
                                 'parent' => $context->parentClassName($expression),
                                 default  => $context->getFullName($resolvedVariable),
                             };
@@ -91,7 +109,10 @@ class InstanceOfOperator extends AbstractOperator
                                     if (!class_exists($className, false)) {
                                         $code = 'SL("' . trim(Entry::escape($className), '\\') . '")';
                                     } else {
-                                        $entryName  = in_array($resolvedVariable, ['self', 'parent'], true) ? $className : $resolvedVariable;
+                                        // A resolved `self`/`parent` name is qualified, so Entry does not resolve it again.
+                                        $entryName  = in_array($resolvedVariable, ['self', 'parent'], true)
+                                            ? '\\' . ltrim($className, '\\')
+                                            : $resolvedVariable;
                                         $entry      = (new Entry($entryName, $context));
                                         $classEntry = $entry->get();
 

@@ -71,6 +71,11 @@ class GlobalsGetOptimizer extends OptimizerAbstract
             return $this->readHash($globalName, $definition, $accessor, $expression, $call, $context);
         }
 
+        if (Types::T_BOOLEAN === $type) {
+            // A "boolean" global is a bool everywhere else in the compiler (#2771).
+            return new CompiledExpression(Types::T_BOOL, $accessor, $expression);
+        }
+
         if (Types::T_STRING !== $type) {
             return new CompiledExpression($type, $accessor, $expression);
         }

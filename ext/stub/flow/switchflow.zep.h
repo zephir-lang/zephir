@@ -66,7 +66,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_flow_switchflow_testswitch13, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_flow_switchflow_testswitch14, 0, 0, 0)
-	ZEND_ARG_INFO(0, result_type)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, result_type, "1")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_flow_switchflow_testswitch15, 0, 1, IS_STRING, 0)

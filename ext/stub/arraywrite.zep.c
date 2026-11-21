@@ -283,7 +283,10 @@ PHP_METHOD(Stub_ArrayWrite, writeThis)
 		Z_PARAM_ZVAL(v)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(3, 0, &p, &k, &v);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 18, p);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 21, p);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	zephir_update_property_array(this_ptr, SL("p"), k, v);
 	if (UNEXPECTED(EG(exception))) {
 		return;
@@ -312,7 +315,10 @@ PHP_METHOD(Stub_ArrayWrite, writeThisNested)
 		Z_PARAM_ZVAL(v)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(4, 0, &p, &i, &j, &v);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 18, p);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 21, p);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	zephir_update_property_array_multi(this_ptr, SL("p"), v, SL("zz"), 2, i, j);
 	if (UNEXPECTED(EG(exception))) {
 		return;
@@ -337,7 +343,10 @@ PHP_METHOD(Stub_ArrayWrite, appendThis)
 		Z_PARAM_ZVAL(v)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &p, &v);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 18, p);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 21, p);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	zephir_update_property_array_append(this_ptr, SL("p"), v);
 	if (UNEXPECTED(EG(exception))) {
 		return;
@@ -353,18 +362,25 @@ PHP_METHOD(Stub_ArrayWrite, writeStatic)
 	ZVAL_UNDEF(&k_sub);
 	ZVAL_UNDEF(&v_sub);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[3];
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_ZVAL(p)
 		Z_PARAM_ZVAL(k)
 		Z_PARAM_ZVAL(v)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(3, 0, &p, &k, &v);
-	zephir_update_static_property_ce(stub_arraywrite_ce, ZEND_STRL("sp"), p);
-	zephir_update_static_property_array_multi_ce(stub_arraywrite_ce, SL("sp"), v, SL("z"), 1, k);
+	zephir_update_static_property_cached(stub_arraywrite_ce, stub_arraywrite_ce, SL("sp"), &_zephir_sprop_cache[0], p);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
-	zephir_read_static_property_ce(&_0, stub_arraywrite_ce, SL("sp"), PH_NOISY_CC | PH_READONLY);
+	zephir_update_static_property_array_multi_cached(stub_arraywrite_ce, stub_arraywrite_ce, SL("sp"), &_zephir_sprop_cache[1], v, SL("z"), 1, k);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	zephir_read_static_property_cached(&_0, stub_arraywrite_ce, stub_arraywrite_ce, SL("sp"), &_zephir_sprop_cache[2], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_CTORW(&_0);
 }
 
@@ -375,17 +391,24 @@ PHP_METHOD(Stub_ArrayWrite, appendStatic)
 	ZVAL_UNDEF(&p_sub);
 	ZVAL_UNDEF(&v_sub);
 	ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[3];
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(p)
 		Z_PARAM_ZVAL(v)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &p, &v);
-	zephir_update_static_property_ce(stub_arraywrite_ce, ZEND_STRL("sp"), p);
-	zephir_update_static_property_array_multi_ce(stub_arraywrite_ce, SL("sp"), v, SL("a"), 1);
+	zephir_update_static_property_cached(stub_arraywrite_ce, stub_arraywrite_ce, SL("sp"), &_zephir_sprop_cache[0], p);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
-	zephir_read_static_property_ce(&_0, stub_arraywrite_ce, SL("sp"), PH_NOISY_CC | PH_READONLY);
+	zephir_update_static_property_array_multi_cached(stub_arraywrite_ce, stub_arraywrite_ce, SL("sp"), &_zephir_sprop_cache[1], v, SL("a"), 1);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	zephir_read_static_property_cached(&_0, stub_arraywrite_ce, stub_arraywrite_ce, SL("sp"), &_zephir_sprop_cache[2], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_CTORW(&_0);
 }
 

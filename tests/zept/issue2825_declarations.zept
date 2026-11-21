@@ -1,0 +1,66 @@
+--TEST--
+Class constants, ::class and PHP constants resolve in array constants, typed, static and trait property defaults (issue #2825)
+--FILE--
+namespace Stub;
+
+class DeclBase
+{
+	const A = 1;
+
+	const NAME = DeclBase::class;
+}
+--FILE--
+namespace Stub;
+
+class Decl extends DeclBase
+{
+	const A = 7;
+
+	const BASE = [1, 2];
+
+	const LIST = [self::A, self::class, parent::A, parent::class, \ArrayObject::STD_PROP_LIST, [self::A]];
+
+	const MAP = [self::class: 1, self::A: "one", \Attribute::TARGET_CLASS: "class"];
+
+	const NESTED = [self::BASE, 3];
+
+	const PATTERN = '[a-z]+';
+
+	public int number = self::A;
+
+	public string name = Decl::class;
+
+	public array list = [self::A, Decl::class];
+
+	public eol = PHP_EOL;
+
+	public pattern = self::PATTERN;
+
+	public static staticList = [self::A, parent::NAME];
+}
+--FILE--
+namespace Stub;
+
+trait DeclTrait
+{
+	public list = [Decl::A, Decl::class];
+}
+--FILE--
+namespace Stub;
+
+class DeclUser
+{
+	use DeclTrait;
+}
+--USAGE--
+$d = new \Stub\Decl();
+echo json_encode([\Stub\Decl::LIST, \Stub\Decl::MAP, \Stub\Decl::NESTED, \Stub\DeclBase::A, \Stub\Decl::A]), "\n";
+echo json_encode([$d->number, $d->name, $d->list, $d->eol === PHP_EOL, $d->pattern, \Stub\Decl::$staticList]), "\n";
+echo json_encode((new \Stub\DeclUser())->list), "\n";
+$r = new \ReflectionClass(\Stub\Decl::class);
+echo json_encode([$r->getDefaultProperties()['number'], $r->getDefaultProperties()['name'], $r->getDefaultProperties()['list']]), "\n";
+--EXPECT--
+[[7,"Stub\\Decl",1,"Stub\\DeclBase",1,[7]],{"Stub\\Decl":1,"7":"one","1":"class"},[[1,2],3],1,7]
+[7,"Stub\\Decl",[7,"Stub\\Decl"],true,"[a-z]+",[7,"Stub\\DeclBase"]]
+[7,"Stub\\Decl"]
+[7,"Stub\\Decl",[7,"Stub\\Decl"]]

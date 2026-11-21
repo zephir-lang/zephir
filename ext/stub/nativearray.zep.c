@@ -2106,7 +2106,7 @@ PHP_METHOD(Stub_NativeArray, issue709)
 			ZVAL_LONG(&_3$$3, 2);
 			zephir_array_fast_append(&arr, &_3$$3);
 			ZEPHIR_OBS_NVAR(&_4$$3);
-			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 87, &arr);
+			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 59, &arr);
 			zephir_check_call_status();
 			zephir_array_fetch(&_4$$3, &arr, &_5$$3, PH_NOISY, "stub/nativearray.zep", 626);
 			if (UNEXPECTED(EG(exception))) {
@@ -2156,7 +2156,11 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 	ZVAL_STR_COPY(&prefix_zv, prefix);
 	zephir_memory_observe(&baseDir_zv);
 	ZVAL_STR_COPY(&baseDir_zv, baseDir);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 92, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 96, PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	_1 = zephir_array_isset_value(&_0, &prefix_zv);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
@@ -2180,7 +2184,7 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 		return;
 	}
 	ZEPHIR_MAKE_WRITE_REF(&_5);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 69, &_5, &baseDir_zv);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 44, &_5, &baseDir_zv);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER(getThis(), "prefixes");
 }

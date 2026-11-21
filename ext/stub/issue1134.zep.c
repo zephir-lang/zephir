@@ -15,6 +15,7 @@
 #include "kernel/object.h"
 #include "kernel/memory.h"
 #include "kernel/operators.h"
+#include "kernel/array.h"
 
 
 /**
@@ -54,17 +55,22 @@ PHP_METHOD(Stub_Issue1134, __construct)
 	} else {
 		zephir_get_arrval(&config, config_param);
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 51, &config);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 52, &config);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Issue1134, arrayWithFilledDefaultValue)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *someDefaultData_param = NULL;
+	zval *someDefaultData_param = NULL, _0;
 	zval someDefaultData;
 
 	ZVAL_UNDEF(&someDefaultData);
+	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		ZEPHIR_Z_PARAM_ARRAY(someDefaultData, someDefaultData_param)
@@ -73,8 +79,10 @@ PHP_METHOD(Stub_Issue1134, arrayWithFilledDefaultValue)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &someDefaultData_param);
 	if (!someDefaultData_param) {
-		ZEPHIR_INIT_VAR(&someDefaultData);
-		array_init(&someDefaultData);
+		ZEPHIR_INIT_VAR(&_0);
+		zephir_create_array(&_0, 1, 0);
+		add_assoc_stringl_ex(&_0, SL("key"), SL("val"));
+		ZEPHIR_CPY_WRT(&someDefaultData, &_0);
 	} else {
 		zephir_get_arrval(&someDefaultData, someDefaultData_param);
 	}

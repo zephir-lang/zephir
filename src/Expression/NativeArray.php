@@ -28,8 +28,10 @@ use function count;
 use function function_exists;
 use function gmp_nextprime;
 use function gmp_strval;
-use function in_array;
+use function is_float;
 use function is_int;
+use function is_numeric;
+use function var_export;
 
 /**
  * Resolves expressions that create arrays
@@ -164,27 +166,6 @@ class NativeArray
                             );
                             break;
 
-                        case Types::T_BOOL:
-                            $compilationContext->headersManager->add('kernel/array');
-                            if ('true' == $resolvedExpr->getCode()) {
-                                $compilationContext->backend->updateArray(
-                                    $symbolVariable,
-                                    $resolvedExprKey,
-                                    'true',
-                                    $compilationContext,
-                                    'PH_COPY | PH_SEPARATE'
-                                );
-                            } else {
-                                $compilationContext->backend->updateArray(
-                                    $symbolVariable,
-                                    $resolvedExprKey,
-                                    'false',
-                                    $compilationContext,
-                                    'PH_COPY | PH_SEPARATE'
-                                );
-                            }
-                            break;
-
                         case Types::T_NULL:
                             $compilationContext->backend->updateArray(
                                 $symbolVariable,
@@ -200,6 +181,8 @@ class NativeArray
                         // A char is boxed by getArrayValue(); see #1629.
                         case Types::T_CHAR:
                         case Types::T_UCHAR:
+                        // A bool may be any C condition, not only `true` or `false`; see #2771.
+                        case Types::T_BOOL:
                             $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                             $compilationContext->backend->updateArray(
                                 $symbolVariable,
@@ -240,26 +223,6 @@ class NativeArray
                             );
                             break;
 
-                        case Types::T_BOOL:
-                            if ('true' == $resolvedExpr->getCode()) {
-                                $compilationContext->backend->updateArray(
-                                    $symbolVariable,
-                                    $resolvedExprKey,
-                                    'true',
-                                    $compilationContext,
-                                    'PH_COPY'
-                                );
-                            } else {
-                                $compilationContext->backend->updateArray(
-                                    $symbolVariable,
-                                    $resolvedExprKey,
-                                    'false',
-                                    $compilationContext,
-                                    'PH_COPY'
-                                );
-                            }
-                            break;
-
                         case Types::T_NULL:
                             $compilationContext->backend->updateArray(
                                 $symbolVariable,
@@ -275,6 +238,8 @@ class NativeArray
                         // A char is boxed by getArrayValue(); see #1629.
                         case Types::T_CHAR:
                         case Types::T_UCHAR:
+                        // A bool may be any C condition, not only `true` or `false`; see #2771.
+                        case Types::T_BOOL:
                             $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                             $compilationContext->backend->updateArray(
                                 $symbolVariable,
@@ -382,9 +347,11 @@ class NativeArray
     /**
      * A property default is built by an initializer, which runs on every
      * `new` (or once at startup for a static one), while PHP converts a
-     * declaration's keys once. A literal float, bool or null key is therefore
+     * declaration's keys once. A float, bool or null key whose value is known
+     * at compile time, written as a literal or a constant, is therefore
      * folded here into the key PHP gives it, instead of being converted, and
-     * deprecated, at run time. Returns null for any other key.
+     * deprecated, at run time. Returns null for any other key, which
+     * boxArrayKey() then converts at run time.
      */
     private function resolveDeclarationKey(
         CompiledExpression $resolvedKey,
@@ -396,16 +363,53 @@ class NativeArray
             return null;
         }
 
-        if (!in_array($resolvedKey->getType(), [Types::T_DOUBLE, Types::T_BOOL, Types::T_NULL], true)) {
+        $literalKey = $this->literalKeyNode($resolvedKey, $keyAst);
+        if (null === $literalKey) {
             return null;
         }
 
-        $compilationContext->backend->warnLossyFloatKey($keyAst, $compilationContext);
-        $key = $compilationContext->backend->constantArrayKey($keyAst);
+        $compilationContext->backend->warnLossyFloatKey($literalKey, $compilationContext);
+        $key = $compilationContext->backend->constantArrayKey($literalKey);
 
         return is_int($key)
             ? new CompiledExpression(Types::T_INT, (string) $key, $keyAst)
             : new CompiledExpression(Types::T_STRING, $key, $keyAst);
+    }
+
+    /**
+     * The literal node of a compiled float, bool or null key, so a constant
+     * such as `self::ON` folds like the literal it stands for. Returns null
+     * when the key is C code, such as `1.5 + n` or a comparison, whose value
+     * only exists at run time (#2771).
+     */
+    private function literalKeyNode(CompiledExpression $resolvedKey, array $keyAst): ?array
+    {
+        switch ($resolvedKey->getType()) {
+            case Types::T_NULL:
+                return ['type' => 'null', 'value' => null] + $keyAst;
+
+            case Types::T_BOOL:
+                $code = $resolvedKey->getBooleanCode();
+                if ('1' !== $code && '0' !== $code) {
+                    return null;
+                }
+
+                return ['type' => 'bool', 'value' => '1' === $code ? 'true' : 'false'] + $keyAst;
+
+            case Types::T_DOUBLE:
+                $code = $resolvedKey->getCode();
+                if (!is_numeric($code)) {
+                    return null;
+                }
+
+                // A PHP constant holds a float; var_export() keeps all its digits.
+                $value = is_float($code) ? var_export($code, true) : (string) $code;
+
+                return ['type' => 'double', 'value' => $value] + $keyAst;
+
+            default:
+                return null;
+        }
     }
 
     /**

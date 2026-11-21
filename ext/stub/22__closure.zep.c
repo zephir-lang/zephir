@@ -32,13 +32,14 @@ PHP_METHOD(stub_22__closure, __invoke)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_sub);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &val);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2321Doubled", NULL, 0, val);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "issue2321Doubled", &_zephir_call_cache[0], val);
 	zephir_check_call_status();
 	RETURN_MM();
 }

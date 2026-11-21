@@ -1,0 +1,80 @@
+--TEST--
+Parameter defaults: ::class, constants and array literals reach the method and Reflection as in PHP (issue #2825)
+--FILE--
+namespace Stub;
+
+class ParamDefaultsBase
+{
+}
+--FILE--
+namespace Stub;
+
+use DateTime;
+use ArrayObject as Ao;
+
+class ParamDefaults extends ParamDefaultsBase
+{
+	const A = 7;
+
+	public static function cls(string c = DateTime::class) -> string
+	{
+		return c;
+	}
+
+	public static function aliased(c = Ao::class)
+	{
+		return c;
+	}
+
+	public static function unknown(string c = \Foo\bar::class) -> string
+	{
+		return c;
+	}
+
+	public static function own(string c = self::class) -> string
+	{
+		return c;
+	}
+
+	public function parentName(string c = parent::class) -> string
+	{
+		return c;
+	}
+
+	public static function nullable(string|null c = self::class)
+	{
+		return c;
+	}
+
+	public static function numbers(array x = [1, 2]) -> array
+	{
+		return x;
+	}
+
+	public static function nested(x = ["a": self::A, DateTime::class: [Ao::class]])
+	{
+		return x;
+	}
+
+	public static function escaped(string s = "a\nb\\c'd") -> string
+	{
+		return s;
+	}
+}
+--USAGE--
+$o = new \Stub\ParamDefaults();
+foreach (['cls', 'aliased', 'unknown', 'own', 'parentName', 'nullable', 'numbers', 'nested', 'escaped'] as $m) {
+    $p = (new \ReflectionMethod(\Stub\ParamDefaults::class, $m))->getParameters()[0];
+    $runtime = $o->$m();
+    echo $m, ' ', json_encode($runtime), ' ', var_export($p->isDefaultValueAvailable() && $p->getDefaultValue() === $runtime, true), "\n";
+}
+--EXPECT--
+cls "DateTime" true
+aliased "ArrayObject" true
+unknown "Foo\\bar" true
+own "Stub\\ParamDefaults" true
+parentName "Stub\\ParamDefaultsBase" true
+nullable "Stub\\ParamDefaults" true
+numbers [1,2] true
+nested {"a":7,"DateTime":["ArrayObject"]} true
+escaped "a\nb\\c'd" true

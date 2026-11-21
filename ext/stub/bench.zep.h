@@ -45,6 +45,14 @@ PHP_METHOD(Stub_Bench, definiteLocalStep);
 PHP_METHOD(Stub_Bench, bufferSumLoop);
 PHP_METHOD(Stub_Bench, bufferSumOverArray);
 PHP_METHOD(Stub_Bench, bufferWriteLoop);
+PHP_METHOD(Stub_Bench, siteMethodLoop);
+PHP_METHOD(Stub_Bench, siteMethodOnce);
+PHP_METHOD(Stub_Bench, siteOtherLoop);
+PHP_METHOD(Stub_Bench, siteOtherOnce);
+PHP_METHOD(Stub_Bench, siteStaticLoop);
+PHP_METHOD(Stub_Bench, siteStaticOnce);
+PHP_METHOD(Stub_Bench, siteIteratorLoop);
+PHP_METHOD(Stub_Bench, siteIteratorOnce);
 void zep_Stub_Bench_zephir_gen_step_generatorRange(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext );
 void zep_Stub_Bench_zephir_gen_step_generatorOverArray(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext );
 
@@ -226,6 +234,38 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_bufferwriteloop, 0, 2
 	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_sitemethodloop, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_sitemethodonce, 0, 0, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_siteotherloop, 0, 2, IS_LONG, 0)
+	ZEND_ARG_INFO(0, other)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_siteotheronce, 0, 1, IS_LONG, 0)
+	ZEND_ARG_INFO(0, other)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_sitestaticloop, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_sitestaticonce, 0, 0, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_siteiteratorloop, 0, 2, IS_LONG, 0)
+	ZEND_ARG_INFO(0, it)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_siteiteratoronce, 0, 1, IS_LONG, 0)
+	ZEND_ARG_INFO(0, it)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bench_zephir_gen_step_generatorrange, 0, 0, 1)
 	ZEND_ARG_INFO(0, zephir_gen)
 ZEND_END_ARG_INFO()
@@ -277,5 +317,13 @@ PHP_ME(Stub_Bench, __construct, arginfo_stub_bench___construct, ZEND_ACC_PUBLIC|
 	PHP_ME(Stub_Bench, bufferSumLoop, arginfo_stub_bench_buffersumloop, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, bufferSumOverArray, arginfo_stub_bench_buffersumoverarray, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, bufferWriteLoop, arginfo_stub_bench_bufferwriteloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, siteMethodLoop, arginfo_stub_bench_sitemethodloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, siteMethodOnce, arginfo_stub_bench_sitemethodonce, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, siteOtherLoop, arginfo_stub_bench_siteotherloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, siteOtherOnce, arginfo_stub_bench_siteotheronce, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, siteStaticLoop, arginfo_stub_bench_sitestaticloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, siteStaticOnce, arginfo_stub_bench_sitestaticonce, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, siteIteratorLoop, arginfo_stub_bench_siteiteratorloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, siteIteratorOnce, arginfo_stub_bench_siteiteratoronce, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

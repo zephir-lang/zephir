@@ -1,0 +1,43 @@
+--TEST--
+Issue #2771: `null === n` on a native parameter that defaults to null still tests for the default, since a native local cannot hold null and a null argument becomes its zero
+--FILE--
+namespace Stub;
+
+class NullNativeDefault
+{
+    public function intLeft(int length = null) -> string
+    {
+        if null === length {
+            return "default";
+        }
+
+        return "given " . length;
+    }
+
+    public function intRight(int length = null) -> string
+    {
+        if length !== null {
+            return "given " . length;
+        }
+
+        return "default";
+    }
+
+    public function boolRight(bool flag = null) -> string
+    {
+        if flag === null {
+            return "default";
+        }
+
+        return "given";
+    }
+}
+--USAGE--
+$o = new \Stub\NullNativeDefault();
+echo $o->intLeft(), " | ", $o->intLeft(null), " | ", $o->intLeft(0), " | ", $o->intLeft(5), "\n";
+echo $o->intRight(), " | ", $o->intRight(null), " | ", $o->intRight(0), " | ", $o->intRight(-1), "\n";
+echo $o->boolRight(), " | ", $o->boolRight(null), " | ", $o->boolRight(false), " | ", $o->boolRight(true), "\n";
+--EXPECT--
+default | default | default | given 5
+default | default | default | given -1
+default | default | default | given

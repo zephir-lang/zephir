@@ -31,7 +31,8 @@
                             },
                             "file": "phpt__functions_closures_closure_return_type.zep",
                             "line": 2,
-                            "char": 32
+                            "char": 32,
+                            "start-line": 2
                         },
                         "file": "phpt__functions_closures_closure_return_type.zep",
                         "line": 2,
@@ -83,7 +84,8 @@
                             },
                             "file": "phpt__functions_closures_closure_return_type.zep",
                             "line": 3,
-                            "char": 43
+                            "char": 43,
+                            "start-line": 3
                         },
                         "file": "phpt__functions_closures_closure_return_type.zep",
                         "line": 3,
@@ -120,7 +122,8 @@
                             },
                             "file": "phpt__functions_closures_closure_return_type.zep",
                             "line": 4,
-                            "char": 41
+                            "char": 41,
+                            "start-line": 4
                         },
                         "file": "phpt__functions_closures_closure_return_type.zep",
                         "line": 4,
@@ -186,7 +189,8 @@
                             },
                             "file": "phpt__functions_closures_closure_return_type.zep",
                             "line": 5,
-                            "char": 53
+                            "char": 53,
+                            "start-line": 5
                         },
                         "file": "phpt__functions_closures_closure_return_type.zep",
                         "line": 5,
@@ -238,7 +242,8 @@
                             },
                             "file": "phpt__functions_closures_closure_return_type.zep",
                             "line": 6,
-                            "char": 34
+                            "char": 34,
+                            "start-line": 6
                         },
                         "file": "phpt__functions_closures_closure_return_type.zep",
                         "line": 6,
@@ -303,7 +308,8 @@
                             },
                             "file": "phpt__functions_closures_closure_return_type.zep",
                             "line": 7,
-                            "char": 44
+                            "char": 44,
+                            "start-line": 7
                         },
                         "file": "phpt__functions_closures_closure_return_type.zep",
                         "line": 7,
@@ -378,7 +384,8 @@
                             },
                             "file": "phpt__functions_closures_closure_return_type.zep",
                             "line": 8,
-                            "char": 50
+                            "char": 50,
+                            "start-line": 8
                         },
                         "file": "phpt__functions_closures_closure_return_type.zep",
                         "line": 8,
@@ -463,7 +470,8 @@
                             },
                             "file": "phpt__functions_closures_closure_return_type.zep",
                             "line": 9,
-                            "char": 65
+                            "char": 65,
+                            "start-line": 9
                         },
                         "file": "phpt__functions_closures_closure_return_type.zep",
                         "line": 9,

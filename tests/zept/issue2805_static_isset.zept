@@ -1,0 +1,200 @@
+--TEST--
+Issue #2805: isset of a static property is false for null, an uninitialized or missing property and one the code cannot see, as in PHP
+--FILE--
+namespace Stub;
+
+class Issue2805Isset
+{
+    public static nul = null;
+    public static fls = false;
+    public static zero = 0;
+    public static emptyString = "";
+    public static set = "x";
+    public static arr = ["k": null, "j": 1, "n": ["m": 2]];
+    protected static prot = 1;
+    private static priv = 1;
+
+    public static function nul()
+    {
+        return isset self::nul;
+    }
+
+    public static function fls()
+    {
+        return isset self::fls;
+    }
+
+    public static function zero()
+    {
+        return isset self::zero;
+    }
+
+    public static function emptyString()
+    {
+        return isset self::emptyString;
+    }
+
+    public static function set()
+    {
+        return isset self::set;
+    }
+
+    public static function prot()
+    {
+        return isset self::prot;
+    }
+
+    public static function priv()
+    {
+        return isset self::priv;
+    }
+
+    public static function elementNull()
+    {
+        return isset self::arr["k"];
+    }
+
+    public static function elementSet()
+    {
+        return isset self::arr["j"];
+    }
+
+    public static function elementMissing()
+    {
+        return isset self::arr["z"];
+    }
+
+    public static function nested()
+    {
+        return isset self::arr["n"]["m"];
+    }
+
+    public static function nestedMissing()
+    {
+        return isset self::arr["z"]["m"];
+    }
+
+    public static function clearSet()
+    {
+        let self::set = null;
+        return isset self::set;
+    }
+
+    public static function restoreSet()
+    {
+        let self::set = "y";
+        return isset self::set;
+    }
+
+    public static function countSet(int n)
+    {
+        int i = 0, count = 0;
+        while i < n {
+            if (isset self::zero) {
+                let count++;
+            }
+            let i++;
+        }
+        return count;
+    }
+}
+--FILE--
+namespace Stub;
+
+class Issue2805IssetChild extends Issue2805Isset
+{
+    public static function parentProt()
+    {
+        return isset parent::prot;
+    }
+
+    public static function parentNul()
+    {
+        return isset parent::nul;
+    }
+}
+--FILE--
+namespace Stub;
+
+class Issue2805IssetOther
+{
+    public static function pub()
+    {
+        return isset Issue2805Isset::set;
+    }
+
+    public static function prot()
+    {
+        return isset Issue2805Isset::prot;
+    }
+
+    public static function priv()
+    {
+        return isset Issue2805Isset::priv;
+    }
+
+    public static function missing()
+    {
+        return isset Issue2805Isset::missing;
+    }
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", json_encode($result), "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+t("null", fn() => \Stub\Issue2805Isset::nul());
+t("false", fn() => \Stub\Issue2805Isset::fls());
+t("zero", fn() => \Stub\Issue2805Isset::zero());
+t("empty string", fn() => \Stub\Issue2805Isset::emptyString());
+t("set", fn() => \Stub\Issue2805Isset::set());
+t("protected", fn() => \Stub\Issue2805Isset::prot());
+t("private", fn() => \Stub\Issue2805Isset::priv());
+t("element null", fn() => \Stub\Issue2805Isset::elementNull());
+t("element set", fn() => \Stub\Issue2805Isset::elementSet());
+t("element missing", fn() => \Stub\Issue2805Isset::elementMissing());
+t("nested", fn() => \Stub\Issue2805Isset::nested());
+t("nested missing", fn() => \Stub\Issue2805Isset::nestedMissing());
+t("cleared", fn() => \Stub\Issue2805Isset::clearSet());
+t("restored", fn() => \Stub\Issue2805Isset::restoreSet());
+t("count set", fn() => \Stub\Issue2805Isset::countSet(3));
+t("parent protected", fn() => \Stub\Issue2805IssetChild::parentProt());
+t("parent null", fn() => \Stub\Issue2805IssetChild::parentNul());
+t("other public", fn() => \Stub\Issue2805IssetOther::pub());
+t("other protected", fn() => \Stub\Issue2805IssetOther::prot());
+t("other private", fn() => \Stub\Issue2805IssetOther::priv());
+t("other missing", fn() => \Stub\Issue2805IssetOther::missing());
+$r = &\Stub\Issue2805Isset::$zero;
+$r = null;
+t("reference to null", fn() => \Stub\Issue2805Isset::zero());
+$r = 0;
+t("reference to zero", fn() => \Stub\Issue2805Isset::zero());
+--EXPECT--
+null: false
+false: true
+zero: true
+empty string: true
+set: true
+protected: true
+private: true
+element null: false
+element set: true
+element missing: false
+nested: true
+nested missing: false
+cleared: false
+restored: true
+count set: 3
+parent protected: true
+parent null: false
+other public: true
+other protected: false
+other private: false
+other missing: false
+reference to null: false
+reference to zero: true

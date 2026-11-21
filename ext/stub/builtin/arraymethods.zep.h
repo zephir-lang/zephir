@@ -22,7 +22,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_builtin_arraymethods_issue733builtinjoinspecialchars, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, a, IS_STRING, 0)
-	ZEND_ARG_INFO(0, b)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, b, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_builtin_arraymethods_issue733joinonvar, 0, 1, IS_STRING, 0)

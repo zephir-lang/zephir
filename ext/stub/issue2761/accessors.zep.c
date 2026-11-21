@@ -95,7 +95,10 @@ PHP_METHOD(Stub_Issue2761_Accessors, setName)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 81, &name_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 82, &name_zv);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_THISW();
 }
 
@@ -120,7 +123,10 @@ PHP_METHOD(Stub_Issue2761_Accessors, setThing)
 		Z_PARAM_OBJECT_OF_CLASS(thing, stub_issue2761_collaborator_ce)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &thing);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 82, thing);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 83, thing);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_THISW();
 }
 
@@ -148,7 +154,10 @@ PHP_METHOD(Stub_Issue2761_Accessors, setMaybe)
 		RETURN_THROWS();
 	}
 	zephir_fetch_params_without_memory_grow(1, 0, &maybe);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 83, maybe);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 84, maybe);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_THISW();
 }
 
@@ -176,7 +185,10 @@ PHP_METHOD(Stub_Issue2761_Accessors, setCount)
 		RETURN_THROWS();
 	}
 	zephir_fetch_params_without_memory_grow(1, 0, &count);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 84, count);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 85, count);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_THISW();
 }
 
@@ -211,7 +223,10 @@ PHP_METHOD(Stub_Issue2761_Accessors, setDocQualified)
 		Z_PARAM_OBJECT_OF_CLASS(docQualified, stub_issue2761_collaborator_ce)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &docQualified);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 85, docQualified);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 86, docQualified);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_THISW();
 }
 
@@ -248,7 +263,10 @@ PHP_METHOD(Stub_Issue2761_Accessors, setDocNullable)
 		Z_PARAM_ZVAL(docNullable)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &docNullable);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 86, docNullable);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 87, docNullable);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_THISW();
 }
 
@@ -280,7 +298,10 @@ PHP_METHOD(Stub_Issue2761_Accessors, setDeclaredWins)
 	zephir_fetch_params_without_memory_grow(1, 0, &declaredWins_param);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, declaredWins);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 87, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 88, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_THISW();
 }
 

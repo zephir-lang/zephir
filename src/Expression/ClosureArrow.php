@@ -74,7 +74,12 @@ class ClosureArrow extends Closure
         /**
          * Detect if the arrow function's expression references `this`.
          */
-        $bindThis = self::astReferencesThis($expression['right']);
+        $bindThis = self::astReferencesThis($expression['right'])
+            || (
+                !$compilationContext->staticContext
+                && null !== $compilationContext->lexicalClassDefinition()
+                && self::astCallsClassScope($expression['right'])
+            );
         if ($bindThis) {
             // Ensure this_ptr is declared and not stripped in the enclosing method
             if ($compilationContext->symbolTable->hasVariable('this')) {

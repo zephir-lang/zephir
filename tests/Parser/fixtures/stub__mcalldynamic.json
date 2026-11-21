@@ -283,7 +283,8 @@
                                                     ],
                                                     "file": "stub__mcalldynamic.zep",
                                                     "line": 39,
-                                                    "char": 4
+                                                    "char": 4,
+                                                    "start-line": 37
                                                 },
                                                 "file": "stub__mcalldynamic.zep",
                                                 "line": 39,

@@ -1,0 +1,319 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "issue2825__class_name_grammar.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ClassNameGrammar",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "defaults",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "issue2825__class_name_grammar.zep",
+                                    "line": 5,
+                                    "char": 52
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "class",
+                                    "file": "issue2825__class_name_grammar.zep",
+                                    "line": 5,
+                                    "char": 52
+                                },
+                                "file": "issue2825__class_name_grammar.zep",
+                                "line": 5,
+                                "char": 52
+                            },
+                            "reference": 0,
+                            "file": "issue2825__class_name_grammar.zep",
+                            "line": 5,
+                            "char": 52
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "\\DateTime",
+                                    "file": "issue2825__class_name_grammar.zep",
+                                    "line": 5,
+                                    "char": 74
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "class",
+                                    "file": "issue2825__class_name_grammar.zep",
+                                    "line": 5,
+                                    "char": 74
+                                },
+                                "file": "issue2825__class_name_grammar.zep",
+                                "line": 5,
+                                "char": 74
+                            },
+                            "reference": 0,
+                            "file": "issue2825__class_name_grammar.zep",
+                            "line": 5,
+                            "char": 74
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "c",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "RBF",
+                                    "file": "issue2825__class_name_grammar.zep",
+                                    "line": 5,
+                                    "char": 90
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "class",
+                                    "file": "issue2825__class_name_grammar.zep",
+                                    "line": 5,
+                                    "char": 90
+                                },
+                                "file": "issue2825__class_name_grammar.zep",
+                                "line": 5,
+                                "char": 90
+                            },
+                            "reference": 0,
+                            "file": "issue2825__class_name_grammar.zep",
+                            "line": 5,
+                            "char": 90
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "d",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "array",
+                                "left": [
+                                    {
+                                        "value": {
+                                            "type": "static-constant-access",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "ClassNameGrammar",
+                                                "file": "issue2825__class_name_grammar.zep",
+                                                "line": 5,
+                                                "char": 126
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "class",
+                                                "file": "issue2825__class_name_grammar.zep",
+                                                "line": 5,
+                                                "char": 126
+                                            },
+                                            "file": "issue2825__class_name_grammar.zep",
+                                            "line": 5,
+                                            "char": 126
+                                        },
+                                        "file": "issue2825__class_name_grammar.zep",
+                                        "line": 5,
+                                        "char": 126
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "issue2825__class_name_grammar.zep",
+                                            "line": 5,
+                                            "char": 129
+                                        },
+                                        "file": "issue2825__class_name_grammar.zep",
+                                        "line": 5,
+                                        "char": 129
+                                    }
+                                ],
+                                "file": "issue2825__class_name_grammar.zep",
+                                "line": 5,
+                                "char": 130
+                            },
+                            "reference": 0,
+                            "file": "issue2825__class_name_grammar.zep",
+                            "line": 5,
+                            "char": 130
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "closure",
+                                "left": [
+                                    {
+                                        "type": "parameter",
+                                        "name": "x",
+                                        "const": 0,
+                                        "data-type": "variable",
+                                        "mandatory": 0,
+                                        "reference": 0,
+                                        "file": "issue2825__class_name_grammar.zep",
+                                        "line": 7,
+                                        "char": 27
+                                    },
+                                    {
+                                        "type": "parameter",
+                                        "name": "y",
+                                        "const": 0,
+                                        "data-type": "variable",
+                                        "mandatory": 0,
+                                        "reference": 0,
+                                        "file": "issue2825__class_name_grammar.zep",
+                                        "line": 8,
+                                        "char": 14
+                                    }
+                                ],
+                                "right": [
+                                    {
+                                        "type": "declare",
+                                        "data-type": "variable",
+                                        "variables": [
+                                            {
+                                                "variable": "inner",
+                                                "file": "issue2825__class_name_grammar.zep",
+                                                "line": 9,
+                                                "char": 22
+                                            }
+                                        ],
+                                        "file": "issue2825__class_name_grammar.zep",
+                                        "line": 10,
+                                        "char": 15
+                                    },
+                                    {
+                                        "type": "let",
+                                        "assignments": [
+                                            {
+                                                "assign-type": "variable",
+                                                "operator": "assign",
+                                                "variable": "inner",
+                                                "expr": {
+                                                    "type": "closure-arrow",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "n",
+                                                        "file": "issue2825__class_name_grammar.zep",
+                                                        "line": 11,
+                                                        "char": 22
+                                                    },
+                                                    "right": {
+                                                        "type": "concat",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "n",
+                                                            "file": "issue2825__class_name_grammar.zep",
+                                                            "line": 11,
+                                                            "char": 19
+                                                        },
+                                                        "right": {
+                                                            "type": "variable",
+                                                            "value": "a",
+                                                            "file": "issue2825__class_name_grammar.zep",
+                                                            "line": 11,
+                                                            "char": 22
+                                                        },
+                                                        "file": "issue2825__class_name_grammar.zep",
+                                                        "line": 11,
+                                                        "char": 22
+                                                    },
+                                                    "file": "issue2825__class_name_grammar.zep",
+                                                    "line": 11,
+                                                    "char": 22,
+                                                    "start-line": 10
+                                                },
+                                                "file": "issue2825__class_name_grammar.zep",
+                                                "line": 11,
+                                                "char": 22
+                                            }
+                                        ],
+                                        "file": "issue2825__class_name_grammar.zep",
+                                        "line": 12,
+                                        "char": 18
+                                    },
+                                    {
+                                        "type": "return",
+                                        "expr": {
+                                            "type": "variable",
+                                            "value": "inner",
+                                            "file": "issue2825__class_name_grammar.zep",
+                                            "line": 12,
+                                            "char": 25
+                                        },
+                                        "file": "issue2825__class_name_grammar.zep",
+                                        "line": 13,
+                                        "char": 9
+                                    }
+                                ],
+                                "use": [
+                                    {
+                                        "type": "parameter",
+                                        "name": "a",
+                                        "const": 0,
+                                        "data-type": "variable",
+                                        "mandatory": 0,
+                                        "reference": 0,
+                                        "file": "issue2825__class_name_grammar.zep",
+                                        "line": 8,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "issue2825__class_name_grammar.zep",
+                                "line": 13,
+                                "char": 10,
+                                "start-line": 7
+                            },
+                            "file": "issue2825__class_name_grammar.zep",
+                            "line": 14,
+                            "char": 5
+                        }
+                    ],
+                    "file": "issue2825__class_name_grammar.zep",
+                    "line": 7,
+                    "last-line": 15,
+                    "char": 23
+                }
+            ],
+            "file": "issue2825__class_name_grammar.zep",
+            "line": 5,
+            "char": 125
+        },
+        "file": "issue2825__class_name_grammar.zep",
+        "line": 5,
+        "char": 125
+    }
+]

@@ -43,10 +43,12 @@ PHP_METHOD(Stub_ScallParent, testCallStatic)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_STATIC("testMethodStatic", NULL, 0);
+	ZEPHIR_RETURN_CALL_STATIC_CACHED("testMethodStatic", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }

@@ -22,8 +22,9 @@ use Zephir\Class\Method\Parameters;
 use Zephir\Class\Property;
 use Zephir\CompilerFile;
 use Zephir\Exception;
+use Zephir\Name;
 
-use function addslashes;
+use function addcslashes;
 use function array_diff;
 use function array_key_exists;
 use function array_map;
@@ -33,11 +34,13 @@ use function in_array;
 use function is_dir;
 use function key;
 use function mkdir;
+use function ord;
 use function preg_match;
 use function realpath;
 use function sprintf;
 use function str_ireplace;
 use function str_replace;
+use function str_split;
 use function strtolower;
 use function trim;
 use function ucfirst;
@@ -557,6 +560,32 @@ class Generator
     }
 
     /**
+     * PHP source of a string value: single-quoted, or double-quoted with
+     * escapes when it holds a control byte a single-quoted string cannot
+     * spell. The value is the runtime one, not Zephir's spelling of it, which
+     * used to be escaped a second time. See #2825.
+     */
+    private function phpStringLiteral(string $value): string
+    {
+        if (1 !== preg_match('/[\x00-\x1F\x7F]/', $value)) {
+            return "'" . addcslashes($value, "'\\") . "'";
+        }
+
+        $escapes = ["\n" => '\n', "\r" => '\r', "\t" => '\t', "\v" => '\v', "\f" => '\f', "\e" => '\e'];
+        $literal = '';
+        foreach (str_split($value) as $byte) {
+            $literal .= match (true) {
+                isset($escapes[$byte])                   => $escapes[$byte],
+                in_array($byte, ['\\', '"', '$'], true) => '\\' . $byte,
+                ord($byte) < 0x20 || 0x7F === ord($byte) => sprintf('\\x%02X', ord($byte)),
+                default                                  => $byte,
+            };
+        }
+
+        return '"' . $literal . '"';
+    }
+
+    /**
      * Prepare AST default value to PHP code print.
      *
      * @throws Exception\NotImplementedException
@@ -580,7 +609,11 @@ class Generator
             case 'string':
             case 'istring':
             case 'char':
-                $returnValue = '\'' . addslashes($parameter['default']['value']) . '\'';
+                $returnValue = $this->phpStringLiteral(Name::decodeSource((string) $parameter['default']['value']));
+                break;
+
+            case 'constant':
+                $returnValue = $parameter['default']['value'];
                 break;
 
             case 'empty-array':

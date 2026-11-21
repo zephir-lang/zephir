@@ -38,6 +38,7 @@ PHP_METHOD(Stub_Globals_Server, f1)
 	ZVAL_UNDEF(&_SERVER);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_get_global(&_SERVER, SL("_SERVER"));
@@ -49,7 +50,7 @@ PHP_METHOD(Stub_Globals_Server, f1)
 		return;
 	}
 	zend_print_zval(&_0, 0);
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "f2", NULL, 0);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, this_ptr, "f2", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	zephir_memory_observe(&_1);
 	zephir_array_fetch_string(&_1, &_SERVER, SL("PHP_SELF"), PH_NOISY, "stub/globals/server.zep", 12);

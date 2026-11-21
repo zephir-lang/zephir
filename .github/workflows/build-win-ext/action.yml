@@ -57,6 +57,11 @@ runs:
         if (Get-Module -ListAvailable -Name PhpManager) {
           Write-Host "PhpManager powershell module exist, skip install"
         } else {
+          # Some windows runner images come without the PSGallery repository registered
+          if (-not (Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue)) {
+            Write-Host "PSGallery repository is not registered, registering the default one"
+            Register-PSRepository -Default
+          }
           Install-Module -Name PhpManager -Repository PSGallery -Force
         }
         Write-Output "::endgroup::"

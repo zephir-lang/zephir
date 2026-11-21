@@ -197,7 +197,7 @@ true
 true
 'Stub'
 'Stub\\Constants'
-'Constants:testMethodMagicConstant'
+'Stub\\Constants::testMethodMagicConstant'
 'testFunctionMagicConstant'
 'Stub\\Oo\\ConstantsInterface'
 'Stub\\Oo'

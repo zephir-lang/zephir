@@ -18,13 +18,19 @@ use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable;
 
+use function array_filter;
 use function array_keys;
 use function array_merge;
+use function array_slice;
+use function array_values;
 use function count;
 use function implode;
+use function in_array;
 use function is_array;
 use function is_object;
+use function preg_match;
 use function sprintf;
+use function str_starts_with;
 
 /**
  * Base class for common functionality in functions/calls
@@ -54,6 +60,25 @@ class Call
      * @var array<int, true>
      */
     protected array $byReferenceParameters = [];
+
+    /**
+     * The name of each argument in the order written, null for a positional
+     * one.
+     *
+     * @var array<int, ?string>
+     */
+    protected array $argumentNames = [];
+
+    /**
+     * The array the named arguments are passed in, and the variables made
+     * references for them, both released after the call.
+     */
+    protected ?Variable $namedArguments = null;
+
+    /**
+     * @var string[]
+     */
+    protected array $namedReferences = [];
 
     protected array $resolvedDynamicTypes = [];
 
@@ -209,17 +234,25 @@ class Call
                     break;
 
                 case 'bool':
-                    if ('true' == $compiledExpression->getCode()) {
-                        $params[] = $compilationContext->backend->resolveValue('true', $compilationContext);
+                    $booleanCode = $compiledExpression->getBooleanCode();
+                    if ('1' === $booleanCode || '0' === $booleanCode) {
+                        $params[] = $compilationContext->backend->resolveValue(
+                            '1' === $booleanCode ? 'true' : 'false',
+                            $compilationContext
+                        );
                     } else {
-                        if ('false' == $compiledExpression->getCode()) {
-                            $params[] = $compilationContext->backend->resolveValue('false', $compilationContext);
-                        } else {
-                            throw new CompilerException(
-                                'Unable to resolve parameter using zval',
-                                $expression
-                            );
-                        }
+                        // A computed bool, such as a comparison, is boxed like any other scalar (#2771).
+                        $parameterVariable = $compilationContext->backend->getScalarTempVariable(
+                            'variable',
+                            $compilationContext
+                        );
+                        $compilationContext->backend->assignBool(
+                            $parameterVariable,
+                            $booleanCode,
+                            $compilationContext
+                        );
+                        $this->temporalVariables[] = $parameterVariable;
+                        $params[]                  = '&' . $parameterVariable->getName();
                     }
                     $types[]        = 'bool';
                     $dynamicTypes[] = 'bool';
@@ -617,61 +650,19 @@ class Call
             return $this->resolvedParams;
         }
 
-        $hasParametersByName = false;
-        foreach ($parameters as $parameter) {
-            if (isset($parameter['name'])) {
-                $hasParametersByName = true;
-                break;
-            }
-        }
-
-        /**
-         * All parameters must be passed by name
-         */
-        if ($hasParametersByName) {
-            foreach ($parameters as $parameter) {
-                if (!isset($parameter['name'])) {
-                    throw new CompilerException('All parameters must use named', $parameter);
-                }
-            }
-        }
-
-        if ($hasParametersByName) {
-            if ($this->reflection) {
-                $positionalParameters = [];
-                foreach ($this->reflection->getParameters() as $position => $reflectionParameter) {
-                    if (is_object($reflectionParameter)) {
-                        $positionalParameters[$reflectionParameter->getName()] = $position;
-                    } else {
-                        $positionalParameters[$reflectionParameter['name']] = $position;
-                    }
-                }
-                $orderedParameters = [];
-                foreach ($parameters as $parameter) {
-                    if (isset($positionalParameters[$parameter['name']])) {
-                        $orderedParameters[$positionalParameters[$parameter['name']]] = $parameter;
-                    } else {
-                        throw new CompilerException(
-                            'Named parameter "'
-                            . $parameter['name']
-                            . '" is not a valid parameter name, available: '
-                            . implode(', ', array_keys($positionalParameters)),
-                            $parameter['parameter']
-                        );
-                    }
-                }
-                $parameters_count = count($parameters);
-                for ($i = 0; $i < $parameters_count; ++$i) {
-                    if (!isset($orderedParameters[$i])) {
-                        $orderedParameters[$i] = ['parameter' => ['type' => 'null']];
-                    }
-                }
-                $parameters = $orderedParameters;
-            }
-        }
+        $parameters          = array_values($parameters);
+        $this->argumentNames = $this->checkArgumentNames($parameters);
+        $positions           = $this->calleeParameterPositions();
 
         $params = [];
-        foreach ($parameters as $position => $parameter) {
+        foreach ($parameters as $written => $parameter) {
+            /**
+             * A named argument stands for the parameter of its name, wherever
+             * it is written.
+             */
+            $name     = $this->argumentNames[$written];
+            $position = null === $name ? $written : ($positions[$name] ?? -1);
+
             if (is_array($parameter['parameter'])) {
                 $paramExpr = new Expression($parameter['parameter']);
 
@@ -725,6 +716,123 @@ class Call
         $this->resolvedParams = $params;
 
         return $this->resolvedParams;
+    }
+
+    /**
+     * A local made a reference for a by-reference parameter is assigned by the
+     * callee alone, so the memory frame has to know it before the call, or what
+     * the callee stores there is never released. A parameter is not the
+     * method's to release.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2824
+     */
+    protected function observeLocal(string $code, CompilationContext $compilationContext): void
+    {
+        if (str_starts_with($code, '&')) {
+            $compilationContext->codePrinter->output('ZEPHIR_OBSERVE_IF_UNDEF(' . $code . ');');
+        }
+    }
+
+    /**
+     * Whether any argument of the call is passed by name.
+     */
+    public function hasNamedArguments(): bool
+    {
+        return [] !== array_filter($this->argumentNames, 'is_string');
+    }
+
+    /**
+     * The argument names, in the order written, null for a positional one.
+     *
+     * @return array<int, ?string>
+     */
+    public function getArgumentNames(): array
+    {
+        return $this->argumentNames;
+    }
+
+    /**
+     * Splits resolved arguments into the positional ones and an array of the
+     * named ones, which the engine binds by the parameter names of the method
+     * or function actually called, as PHP does. Returns the positional ones and
+     * the C expression of that array's HashTable, or null without names.
+     *
+     * A parameter the known callee takes by reference gets the variable as a
+     * reference, released by releaseNamedArguments() after the call.
+     *
+     * @param string[] $params as resolved, in the order written
+     *
+     * @return array{0: string[], 1: ?string}
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2824
+     */
+    public function splitNamedArguments(array $params, CompilationContext $compilationContext): array
+    {
+        if (!$this->hasNamedArguments()) {
+            return [$params, null];
+        }
+
+        $positional = [];
+        $named      = [];
+        foreach ($params as $written => $code) {
+            $name = $this->argumentNames[$written];
+            if (null === $name) {
+                $positional[] = $code;
+                continue;
+            }
+
+            $named[$name] = $this->isByReferenceParameter($name)
+                ? [$this->namedReference($code, $written, $compilationContext), true]
+                : [$code, false];
+        }
+
+        $this->resolvedTypes        = array_slice($this->resolvedTypes, 0, count($positional));
+        $this->resolvedDynamicTypes = array_slice($this->resolvedDynamicTypes, 0, count($positional));
+
+        $compilationContext->headersManager->add('kernel/array');
+
+        $backend = $compilationContext->backend;
+        $array   = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+        $backend->initArray($array, $compilationContext, count($named));
+
+        /**
+         * An assignment would store a reference's value; the entry for a
+         * by-reference parameter has to be the reference itself.
+         */
+        $arrayCode = $backend->getVariableCode($array);
+        foreach ($named as $name => [$code, $byReference]) {
+            $compilationContext->codePrinter->output(
+                $byReference
+                    ? 'Z_TRY_ADDREF_P(' . $code . '); zend_hash_str_update(Z_ARRVAL_P(' . $arrayCode . '), SL("' . $name . '"), ' . $code . ');'
+                    : 'zephir_array_update_string(' . $arrayCode . ', SL("' . $name . '"), ' . $code . ', PH_COPY);'
+            );
+        }
+
+        $this->namedArguments      = $array;
+        $this->temporalVariables[] = $array;
+
+        return [$positional, 'Z_ARRVAL_P(' . $arrayCode . ')'];
+    }
+
+    /**
+     * Releases what splitNamedArguments() made for the call, once it is made,
+     * as PHP frees the arguments when the call returns: the array first, so a
+     * variable made a reference for the callee is the reference's only holder
+     * again when it is unwrapped.
+     */
+    public function releaseNamedArguments(CompilationContext $compilationContext): void
+    {
+        if (null === $this->namedArguments) {
+            return;
+        }
+
+        $codePrinter = $compilationContext->codePrinter;
+        $codePrinter->output(
+            'ZEPHIR_INIT_NVAR(' . $compilationContext->backend->getVariableCode($this->namedArguments) . ');'
+        );
+        foreach ($this->namedReferences as $reference) {
+            $codePrinter->output('ZEPHIR_UNREF_WRITE(' . $reference . ');');
+        }
     }
 
     /**
@@ -852,5 +960,116 @@ class Call
 
         $this->symbolVariable = $symbolVariable;
         $this->isExpecting    = $isExpecting;
+    }
+
+    /**
+     * PHP's compile time rules for named arguments, plus the parameter names
+     * of a callee known at compile time unless it collects extra names in a
+     * variadic parameter.
+     *
+     * @return array<int, ?string>
+     */
+    private function checkArgumentNames(array $parameters): array
+    {
+        $names     = [];
+        $seen      = [];
+        $positions = null;
+        foreach ($parameters as $parameter) {
+            $name = $parameter['name'] ?? null;
+            if (null === $name) {
+                if ([] !== $seen) {
+                    throw new CompilerException('Cannot use positional argument after named argument', $parameter);
+                }
+
+                $names[] = null;
+                continue;
+            }
+
+            if (isset($seen[$name])) {
+                throw new CompilerException(
+                    'Named parameter $' . $name . ' overwrites previous argument',
+                    $parameter['parameter']
+                );
+            }
+
+            $seen[$name] = true;
+            $names[]     = $name;
+
+            $positions ??= $this->calleeParameterPositions();
+            if ($this->reflection && !$this->isVariadicCallee() && !isset($positions[$name])) {
+                throw new CompilerException(
+                    'Named parameter "'
+                    . $name
+                    . '" is not a valid parameter name, available: '
+                    . implode(', ', array_keys($positions)),
+                    $parameter['parameter']
+                );
+            }
+        }
+
+        return $names;
+    }
+
+    /**
+     * The known callee's parameter positions by name.
+     *
+     * @return array<string, int>
+     */
+    private function calleeParameterPositions(): array
+    {
+        $positions = [];
+        foreach ($this->reflection?->getParameters() ?? [] as $position => $parameter) {
+            $positions[is_object($parameter) ? $parameter->getName() : $parameter['name']] = $position;
+        }
+
+        return $positions;
+    }
+
+    private function isVariadicCallee(): bool
+    {
+        return (bool) $this->reflection?->isVariadic();
+    }
+
+    private function isByReferenceParameter(string $name): bool
+    {
+        $position = $this->calleeParameterPositions()[$name] ?? null;
+
+        return null !== $position && isset($this->byReferenceParameters[$position]);
+    }
+
+    /**
+     * The variable a by-reference named argument passes, made a reference.
+     * A closure's `use (&x)` capture is one already.
+     */
+    private function namedReference(string $code, int $written, CompilationContext $compilationContext): string
+    {
+        if (preg_match('/^Z_REFVAL_P\\((&[a-zA-Z0-9_]+)\\)$/', $code, $slot)) {
+            return $slot[1];
+        }
+
+        $parameter = $this->resolvedParams[$written]->getOriginal();
+        $variable  = 'variable' === ($parameter['type'] ?? null)
+            ? $compilationContext->symbolTable->getVariable($parameter['value'])
+            : null;
+        if (
+            null === $variable
+            || !in_array($variable->getType(), ['variable', 'mixed'], true)
+            || $code !== $compilationContext->backend->getVariableCode($variable)
+        ) {
+            throw new CompilerException('Only variables can be passed by reference', $parameter);
+        }
+
+        /**
+         * The callee writes through the reference, as for a positional one
+         * (#2654): without the record the variable looks never assigned.
+         */
+        $variable->increaseMutates();
+        $variable->setDynamicTypes('undefined');
+
+        $this->observeLocal($code, $compilationContext);
+        $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF(' . $code . ');');
+        $this->namedReferences[] = $code;
+
+        return $code;
     }
 }

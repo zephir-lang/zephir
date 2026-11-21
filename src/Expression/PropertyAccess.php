@@ -50,8 +50,16 @@ class PropertyAccess
     {
         $propertyAccess = $expression;
 
+        /**
+         * The container is fetched as quietly as this access: in an `isset`,
+         * `empty` or `fetch` chain PHP fetches every container with BP_VAR_IS,
+         * not only the last one.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2832
+         */
         $expr = new Expression($propertyAccess['left']);
         $expr->setReadOnly(true);
+        $expr->setNoisy($this->noisy);
         $exprVariable = $expr->compile($compilationContext);
 
         switch ($exprVariable->getType()) {
@@ -200,6 +208,17 @@ class PropertyAccess
         }
 
         /**
+         * A read-only read borrows the zval in the object's property table. A
+         * value __get() returns lives in no such table, and borrowed it would
+         * have no owner and leak, so only a declared property of `this` is
+         * borrowed: PHP asks __get() for a declared property only once it has
+         * been unset.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2805
+         */
+        $canBorrow = 'this' === $variableVariable->getRealName() && null !== $propertyDefinition;
+
+        /**
          * Resolves the symbol that expects the value.
          */
         $readOnly           = false;
@@ -212,7 +231,7 @@ class PropertyAccess
                  * If a variable is assigned once in the method, we try to promote it
                  * to a read only variable
                  */
-                if ('return_value' != $symbolVariable->getName()) {
+                if ($canBorrow && 'return_value' != $symbolVariable->getName()) {
                     $line = $compilationContext->symbolTable->getLastCallLine();
                     if (false === $line || ($line > 0 && $line < $expression['line'])) {
                         $numberMutations = $compilationContext->symbolTable->getExpectedMutations(
@@ -246,7 +265,7 @@ class PropertyAccess
             $makeSymbolVariable = true;
         }
 
-        $readOnly = $this->readOnly || $readOnly;
+        $readOnly = $canBorrow && ($this->readOnly || $readOnly);
 
         if ($makeSymbolVariable) {
             if ($readOnly) {
@@ -284,7 +303,8 @@ class PropertyAccess
             $variableVariable,
             $property,
             $readOnly,
-            $compilationContext
+            $compilationContext,
+            $this->noisy
         );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

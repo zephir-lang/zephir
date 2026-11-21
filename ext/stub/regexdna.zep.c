@@ -266,7 +266,7 @@ PHP_METHOD(Stub_RegexDNA, process)
 	}
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "");
-	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 17, &_1, &_0, &contents);
+	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 9, &_1, &_0, &contents);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&contents, &_2);
 	ZEPHIR_INIT_VAR(&codeLength);
@@ -297,7 +297,7 @@ PHP_METHOD(Stub_RegexDNA, process)
 		php_printf("%c", '\n');
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&regex);
-	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 17, &vIUB, &vIUBnew, &contents);
+	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 9, &vIUB, &vIUBnew, &contents);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&contents, &_2);
 	php_printf("%c", '\n');

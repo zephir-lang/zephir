@@ -86,7 +86,11 @@ PHP_METHOD(Stub_Issue2706Keys, getStaticKeys)
 	zval _0;
 
 	ZVAL_UNDEF(&_0);
-	zephir_read_static_property_ce(&_0, stub_issue2706keys_ce, SL("staticKeys"), PH_NOISY_CC | PH_READONLY);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
+	zephir_read_static_property_cached(&_0, stub_issue2706keys_ce, stub_issue2706keys_ce, SL("staticKeys"), &_zephir_sprop_cache[0], PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_CTORW(&_0);
 }
 
@@ -129,6 +133,7 @@ void zephir_init_static_properties_Stub_Issue2706Keys()
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
+	ZEND_TLS zephir_static_property_cache _zephir_sprop_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -142,7 +147,11 @@ void zephir_init_static_properties_Stub_Issue2706Keys()
 	add_assoc_stringl_ex(&_0, SL("3"), SL("f"));
 	add_assoc_stringl_ex(&_0, SL("03"), SL("g"));
 	add_index_stringl(&_0, -1, SL("h"));
-	zephir_update_static_property_ce(stub_issue2706keys_ce, ZEND_STRL("staticKeys"), &_0);
+	zephir_update_static_property_cached(stub_issue2706keys_ce, stub_issue2706keys_ce, SL("staticKeys"), &_zephir_sprop_cache[0], &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

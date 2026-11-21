@@ -8,12 +8,12 @@ PHP_METHOD(Stub_ExitDie, testDie);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_exitdie_testexit, 0, 0, IS_VOID, 0)
 
-	ZEND_ARG_INFO(0, param)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, param, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_exitdie_testdie, 0, 0, IS_VOID, 0)
 
-	ZEND_ARG_INFO(0, param)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, param, "null")
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_exitdie_method_entry) {

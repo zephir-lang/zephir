@@ -92,7 +92,7 @@ final class Issue2747Test extends TestCase
         $this->assertStringContainsString('mul_function, SL("a"), 1);', $generated);
         $this->assertStringContainsString('div_function, SL("za"), 2, k);', $generated);
         $this->assertStringContainsString('zephir_fetch_property_rw(', $generated);
-        $this->assertStringContainsString('zephir_fetch_static_property_rw_ce(', $generated);
+        $this->assertStringContainsString('zephir_fetch_static_property_rw_cached(', $generated);
         $this->assertStringNotContainsString('zephir_array_update', $generated);
     }
 

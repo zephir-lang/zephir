@@ -16,6 +16,7 @@ namespace Zephir;
 use ReflectionException;
 use ReflectionFunction;
 use Zephir\Exception\CompilerException;
+use Zephir\Optimizers\FunctionCall\CallUserFuncOptimizer;
 use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Traits\VariablesTrait;
 
@@ -223,6 +224,8 @@ class FunctionCall extends Call
             $params = [];
         }
 
+        [$params, $named] = $this->splitNamedArguments($params, $compilationContext);
+
         $codePrinter = $compilationContext->codePrinter;
 
         /**
@@ -259,50 +262,21 @@ class FunctionCall extends Call
          */
         $compilationContext->symbolTable->mustGrownStack(true);
 
-        if (!isset($expression['parameters'])) {
-            if ($this->isExpectingReturn()) {
-                if ('return_value' != $symbolVariable->getName()) {
-                    if ($this->mustInitSymbolVariable()) {
-                        $symbolVariable->setMustInitNull(true);
-                        $symbolVariable->trackVariant($compilationContext);
-                    }
-                }
-                $compilationContext->backend->callDynamicFunction($symbolVariable, $variable, $compilationContext);
-            } else {
-                $compilationContext->backend->callDynamicFunction(null, $variable, $compilationContext);
-            }
-        } else {
-            if (count($params)) {
-                if ($this->isExpectingReturn()) {
-                    if ('return_value' != $symbolVariable->getName()) {
-                        if ($this->mustInitSymbolVariable()) {
-                            $symbolVariable->setMustInitNull(true);
-                            $symbolVariable->trackVariant($compilationContext);
-                        }
-                    }
-                    $compilationContext->backend->callDynamicFunction(
-                        $symbolVariable,
-                        $variable,
-                        $compilationContext,
-                        $params
-                    );
-                } else {
-                    $compilationContext->backend->callDynamicFunction(null, $variable, $compilationContext, $params);
-                }
-            } else {
-                if ($this->isExpectingReturn()) {
-                    if ('return_value' != $symbolVariable->getName()) {
-                        if ($this->mustInitSymbolVariable()) {
-                            $symbolVariable->setMustInitNull(true);
-                            $symbolVariable->trackVariant($compilationContext);
-                        }
-                    }
-                    $compilationContext->backend->callDynamicFunction($symbolVariable, $variable, $compilationContext);
-                } else {
-                    $compilationContext->backend->callDynamicFunction(null, $variable, $compilationContext);
-                }
-            }
+        if ($this->isExpectingReturn() && 'return_value' != $symbolVariable->getName() && $this->mustInitSymbolVariable()) {
+            $symbolVariable->setMustInitNull(true);
+            $symbolVariable->trackVariant($compilationContext);
         }
+
+        $compilationContext->backend->callDynamicFunction(
+            $this->isExpectingReturn() ? $symbolVariable : null,
+            $variable,
+            $compilationContext,
+            $params,
+            'NULL',
+            0,
+            $named
+        );
+        $this->releaseNamedArguments($compilationContext);
 
         /**
          * Temporary variables must be copied if they have more than one reference
@@ -400,6 +374,8 @@ class FunctionCall extends Call
             $params = [];
         }
 
+        [$params, $named] = $this->splitNamedArguments($params, $compilationContext);
+
         /**
          * Some functions receive parameters as references
          * We mark those parameters temporary as references to properly pass them
@@ -459,7 +435,22 @@ class FunctionCall extends Call
          */
         $this->addCallStatusFlag($compilationContext);
 
-        if (!count($params)) {
+        if (null !== $named) {
+            /**
+             * Named arguments go to the engine with no cache (#2824).
+             */
+            if ($this->isExpectingReturn() && 'return_value' != $symbolVariable->getName() && $this->mustInitSymbolVariable()) {
+                $symbolVariable->setMustInitNull(true);
+                $symbolVariable->trackVariant($compilationContext);
+            }
+
+            $compilationContext->backend->emitCall(
+                $this->isExpectingReturn() ? $symbolVariable : null,
+                'CALL_FUNCTION_NAMED',
+                '"' . $callName . '", ' . $named . (count($params) ? ', ' . implode(', ', $params) : ''),
+                $compilationContext
+            );
+        } elseif (!count($params)) {
             if ($this->isExpectingReturn()) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output(
@@ -512,6 +503,8 @@ class FunctionCall extends Call
                 );
             }
         }
+
+        $this->releaseNamedArguments($compilationContext);
 
         /**
          * Temporary variables must be copied if they have more than one reference
@@ -768,6 +761,7 @@ class FunctionCall extends Call
                                         $references[] = $argument;
                                     }
                                 } else {
+                                    $this->observeLocal($referenceSymbol, $compilationContext);
                                     $compilationContext->codePrinter->output(
                                         'ZEPHIR_MAKE_REF(' . $referenceSymbol . ');'
                                     );
@@ -797,9 +791,38 @@ class FunctionCall extends Call
     protected function optimize(string $funcName, array $expression, Call $call, CompilationContext $compilationContext)
     {
         $optimizer = $this->resolveOptimizer($funcName);
+        if (!$optimizer) {
+            return false;
+        }
 
-        if ($optimizer) {
-            return $optimizer->optimize($expression, $call, $compilationContext);
+        /**
+         * An optimizer reads its arguments by position, so a call naming them
+         * is left to the engine, which binds them by name. A function only
+         * Zephir provides has no parameter names to bind them to (#2824).
+         */
+        if (self::hasNamedArgument($expression) && !$optimizer instanceof CallUserFuncOptimizer) {
+            if ($this->isBuiltInFunction($funcName) || !function_exists($funcName)) {
+                throw new CompilerException(
+                    'Named arguments cannot be passed to the built-in function ' . $funcName . '()',
+                    $expression
+                );
+            }
+
+            return false;
+        }
+
+        return $optimizer->optimize($expression, $call, $compilationContext);
+    }
+
+    /**
+     * Whether the call passes any argument by name.
+     */
+    public static function hasNamedArgument(array $expression): bool
+    {
+        foreach ($expression['parameters'] ?? [] as $parameter) {
+            if (isset($parameter['name'])) {
+                return true;
+            }
         }
 
         return false;
@@ -870,7 +893,7 @@ class FunctionCall extends Call
         $namespace = $this->callerNamespace($context);
 
         if (str_contains($name, '\\')) {
-            return Name::fetchFQN($name, $namespace, $context->aliasManager);
+            return Name::fetchFQN($name, $namespace, $context->currentAliasManager());
         }
 
         if ('' !== $namespace && $this->isDefinedFunction($namespace, $name, $context)) {

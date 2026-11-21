@@ -18,7 +18,6 @@ use Zephir\Cache\ClassEntryCache;
 use Zephir\Cache\FunctionCache;
 use Zephir\Cache\Manager;
 use Zephir\Cache\MethodCache;
-use Zephir\Cache\StaticMethodCache;
 use Zephir\Passes\CallGathererPass;
 
 final class ManagerTest extends TestCase
@@ -54,15 +53,6 @@ final class ManagerTest extends TestCase
         $cache2 = $this->manager->getMethodCache();
 
         $this->assertInstanceOf(MethodCache::class, $cache1);
-        $this->assertSame($cache1, $cache2, 'Should return same instance');
-    }
-
-    public function testShouldGetStaticMethodCache(): void
-    {
-        $cache1 = $this->manager->getStaticMethodCache();
-        $cache2 = $this->manager->getStaticMethodCache();
-
-        $this->assertInstanceOf(StaticMethodCache::class, $cache1);
         $this->assertSame($cache1, $cache2, 'Should return same instance');
     }
 

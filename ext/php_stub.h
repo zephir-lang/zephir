@@ -14,7 +14,7 @@
 #define PHP_STUB_VERSION     "1.0.0"
 #define PHP_STUB_EXTNAME     "stub"
 #define PHP_STUB_AUTHOR      "Phalcon Team and contributors"
-#define PHP_STUB_ZEPVERSION  "1.7.0-$Id$"
+#define PHP_STUB_ZEPVERSION  "1.9.0-$Id$"
 #define PHP_STUB_DESCRIPTION "Description <b>test</b> for<br/>Test Extension."
 
 #define ZEPHIR_GENERATOR_ENABLED 1
@@ -57,6 +57,9 @@ ZEND_BEGIN_MODULE_GLOBALS(stub)
 
 	/* Cache enabled */
 	unsigned int cache_enabled;
+
+	/* The request this thread is serving: a call site's inline cache filled in an earlier one is stale (#2790) */
+	uint64_t request_number;
 
 	/* Max recursion control */
 	unsigned int recursive_lock;

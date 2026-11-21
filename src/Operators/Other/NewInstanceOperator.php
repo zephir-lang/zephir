@@ -26,6 +26,8 @@ use Zephir\Operators\AbstractOperator;
 use Zephir\Variable\Variable;
 
 use function count;
+use function in_array;
+use function ltrim;
 use function sprintf;
 
 /**
@@ -74,8 +76,16 @@ class NewInstanceOperator extends AbstractOperator
 
         $dynamic = false;
         $isLateStaticBinding = false;
+        if (
+            empty($expression['dynamic'])
+            && in_array($expression['class'], ['self', 'static', 'parent'], true)
+            && null === $compilationContext->classScope($expression['class'], $expression)
+        ) {
+            return new CompiledExpression('null', null, $expression);
+        }
+
         if ('self' == $expression['class'] || 'static' == $expression['class']) {
-            $className = $compilationContext->classDefinition->getCompleteName();
+            $className = $compilationContext->lexicalClassDefinition()->getCompleteName();
             $isLateStaticBinding = 'static' == $expression['class'];
         } elseif ('parent' === $expression['class'] && !$expression['dynamic']) {
             $className = $compilationContext->parentClassName($expression);
@@ -215,7 +225,13 @@ class NewInstanceOperator extends AbstractOperator
                             throw new CompilerException('Traits cannot be instantiated', $expression);
                         }
 
-                        $entryName  = 'parent' === $expression['class'] ? $className : $expression['class'];
+                        /**
+                         * The resolved name of `parent` is qualified, so Entry
+                         * does not resolve it again against the namespace.
+                         */
+                        $entryName  = 'parent' === $expression['class']
+                            ? '\\' . ltrim($className, '\\')
+                            : $expression['class'];
                         $classEntry = (new Entry($entryName, $compilationContext))->get();
                         $symbolVariable->setAssociatedClass($reflectionClass);
                     }

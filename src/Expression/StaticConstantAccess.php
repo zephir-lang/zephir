@@ -23,7 +23,6 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Name;
 use Zephir\Variable\Variable;
 
 use function gettype;
@@ -56,55 +55,30 @@ class StaticConstantAccess
         }
 
         /**
-         * A parent only known at runtime still has a known name, which is all
-         * `parent::class` needs. See #2714.
+         * A declaration is a compile-time constant expression, which has no
+         * called class. PHP's own compile errors. See #2825.
          */
-        $parentName = $compilationContext->classDefinition?->getExtendsClass();
-        if (
-            'class' === $constant
-            && 'parent' === $className
-            && $parentName
-            && !$compilationContext->classDefinition->getExtendsClassDefinition() instanceof Definition
-        ) {
-            return new CompiledExpression('string', Name::addSlashes($parentName), $expression);
-        }
-
-        $classDefinition = $this->resolveClassDefinition($className, $expression, $compilationContext);
-
-        /**
-         * The `::class` postfix is not a real constant: it resolves to the
-         * fully-qualified class name. `self`/`parent`/explicit names fold to a
-         * compile-time string literal (exactly like `__CLASS__`); `static::class`
-         * needs runtime late static binding via the called scope. See #2527.
-         */
-        if ('class' === $constant) {
-            if ('static' === $className) {
-                if ($this->expecting && $this->expectingVariable) {
-                    $symbolVariable = $this->expectingVariable;
-                    $symbolVariable->initVariant($compilationContext);
-                } else {
-                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
-                        'variable',
-                        $compilationContext,
-                        $expression
-                    );
-                }
-
-                $symbolVariable->setDynamicTypes('string');
-                $compilationContext->headersManager->add('kernel/object');
-                $compilationContext->codePrinter->output(
-                    'zephir_get_called_class(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');'
-                );
-
-                return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-            }
-
-            return new CompiledExpression(
-                'string',
-                Name::addSlashes($classDefinition->getCompleteName()),
+        if ($this->alwaysFold && 'static' === $className) {
+            throw new CompilerException(
+                'class' === $constant
+                    ? 'static::class cannot be used for compile-time class name resolution'
+                    : '"static::" is not allowed in compile-time constants',
                 $expression
             );
         }
+
+        if ('class' === $constant) {
+            return $this->compileClassName($className, $expression, $compilationContext);
+        }
+
+        if (
+            in_array($className, ['self', 'static', 'parent'], true)
+            && null === $compilationContext->classScope($className, $expression)
+        ) {
+            return new CompiledExpression('null', null, $expression);
+        }
+
+        $classDefinition = $this->resolveClassDefinition($className, $expression, $compilationContext);
 
         /**
          * A version-shaped engine constant is emitted as its C macro, before
@@ -175,6 +149,14 @@ class StaticConstantAccess
             }
         }
 
+        /**
+         * A single-quoted constant is a `char` or an `istring` to Zephir and a
+         * string to PHP. See #2825.
+         */
+        if ('char' === $type || 'istring' === $type) {
+            $type = 'string';
+        }
+
         switch ($type) {
             case 'string':
             case 'int':
@@ -193,6 +175,106 @@ class StaticConstantAccess
         }
 
         return new CompiledExpression($type, $value, $expression);
+    }
+
+    /**
+     * The `::class` postfix is not a real constant but the class name PHP
+     * resolves at compile time: an explicit name as written (through `use`
+     * aliases, never loading the class), `self` the declared name, `parent`
+     * the `extends` name as written, and `static` the called class, which only
+     * exists at run time.
+     *
+     * The name goes out escaped with Entry::escape(), not Name::addSlashes(),
+     * which would keep a segment such as `\nested` as a C escape.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2527
+     * @see https://github.com/zephir-lang/zephir/issues/2825
+     */
+    private function compileClassName(
+        string $className,
+        array $expression,
+        CompilationContext $compilationContext
+    ): CompiledExpression {
+        if (
+            in_array($className, ['self', 'static', 'parent'], true)
+            && null === $compilationContext->classScope($className, $expression, true)
+        ) {
+            return new CompiledExpression('null', null, $expression);
+        }
+
+        if ('static' === $className) {
+            if ($this->expecting && $this->expectingVariable) {
+                $symbolVariable = $this->expectingVariable;
+                $symbolVariable->initVariant($compilationContext);
+            } else {
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext,
+                    $expression
+                );
+            }
+
+            $symbolVariable->setDynamicTypes('string');
+            $compilationContext->headersManager->add('kernel/object');
+            $compilationContext->codePrinter->output(
+                'zephir_get_called_class(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');'
+            );
+
+            return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        }
+
+        $name = match ($className) {
+            'self', 'this' => $compilationContext->lexicalClassDefinition()->getCompleteName(),
+            'parent'       => $compilationContext->lexicalClassDefinition()->getExtendsClass()
+                ?: throw new CompilerException(
+                    'Cannot use "parent" when current class scope has no parent',
+                    $expression
+                ),
+            default        => $className,
+        };
+
+        return new CompiledExpression('string', ClassEntry::escape(ltrim($name, '\\')), $expression);
+    }
+
+    /**
+     * The array a Zephir class constant holds, when $expression reads one,
+     * for a declaration to take in place: a declaration has no symbol table
+     * to build it in at run time. Null for anything else.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    public function arrayConstantValue(array $expression, CompilationContext $compilationContext): ?array
+    {
+        $className = $expression['left']['value'];
+        $constant  = $expression['right']['value'];
+
+        if ('class' === $constant || 'static' === $className) {
+            return null;
+        }
+
+        if (!in_array($className, ['this', 'self', 'parent'])) {
+            $className = $compilationContext->getFullName($className);
+        }
+
+        if (!$this->isResolvable($className, $compilationContext)) {
+            return null;
+        }
+
+        $classDefinition = $this->resolveClassDefinition($className, $expression, $compilationContext);
+        if (!$classDefinition->hasConstant($constant)) {
+            return null;
+        }
+
+        $constantDefinition = $classDefinition->getConstant($constant);
+        if (!$constantDefinition instanceof Constant) {
+            return null;
+        }
+
+        $constantDefinition->processValue($compilationContext);
+        $value = $constantDefinition->getValue();
+
+        return in_array($value['type'], ['array', 'empty-array'], true) ? $value : null;
     }
 
     /**
@@ -286,11 +368,11 @@ class StaticConstantAccess
         $compiler = $compilationContext->compiler;
 
         if (in_array($className, ['self', 'static', 'this'])) {
-            return null !== $compilationContext->classDefinition;
+            return null !== $compilationContext->lexicalClassDefinition();
         }
 
         if ('parent' === $className) {
-            return $compilationContext->classDefinition?->getExtendsClassDefinition() instanceof Definition;
+            return $compilationContext->lexicalClassDefinition()?->getExtendsClassDefinition() instanceof Definition;
         }
 
         return $compiler->isClass($className)
@@ -316,7 +398,7 @@ class StaticConstantAccess
         $compiler = $compilationContext->compiler;
 
         if (in_array($className, ['self', 'static', 'this'])) {
-            return $compilationContext->classDefinition;
+            return $compilationContext->lexicalClassDefinition();
         }
 
         if ('parent' === $className) {

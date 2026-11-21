@@ -29,6 +29,7 @@ use Zephir\Name;
 use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
 
+use function array_filter;
 use function array_key_first;
 use function array_reverse;
 use function count;
@@ -201,13 +202,14 @@ class Backend
     {
         $value = $this->resolveValue($value, $context);
         $context->codePrinter->output(
-            'zephir_add_static_property_ce('
-            . $classEntry
-            . ', ZEND_STRL("'
-            . $property
-            . '"), '
-            . $value
-            . ');'
+            sprintf(
+                'zephir_add_static_property_cached(%s, %s, SL("%s"), %s, %s);',
+                $classEntry,
+                $this->staticPropertyScope($context),
+                $property,
+                $this->staticPropertyCacheSite($context),
+                $value
+            )
         );
         $context->emitExceptionCheck();
     }
@@ -693,9 +695,11 @@ class Backend
         $offsetStr = $offsetItems ? ', ' . implode(', ', $offsetItems) : '';
         $compilationContext->codePrinter->output(
             sprintf(
-                'zephir_update_static_property_array_multi_ce(%s, SL("%s"), %s, SL("%s"), %d%s);',
+                'zephir_update_static_property_array_multi_cached(%s, %s, SL("%s"), %s, %s, SL("%s"), %d%s);',
                 $classEntry,
+                $this->staticPropertyScope($compilationContext),
                 $propertyName,
+                $this->staticPropertyCacheSite($compilationContext),
                 $valueVariable,
                 $keys,
                 $numberParams,
@@ -751,9 +755,21 @@ class Backend
         CompilationContext $context,
         $params = [],
         $cache = 'NULL',
-        $cacheSlot = 0
+        $cacheSlot = 0,
+        ?string $named = null
     ): void {
         $paramStr = null != $params ? ', ' . implode(', ', $params) : '';
+
+        /**
+         * Named arguments go to the engine with no cache (#2824).
+         */
+        if (null !== $named) {
+            $target = $this->getVariableCode($variable) . ', ' . $named . $paramStr;
+            $this->emitCall($symbolVariable, 'CALL_ZVAL_FUNCTION_NAMED', $target, $context);
+
+            return;
+        }
+
         if (!isset($symbolVariable)) {
             $context->codePrinter->output(
                 'ZEPHIR_CALL_ZVAL_FUNCTION(NULL, ' . $this->getVariableCode(
@@ -781,10 +797,37 @@ class Backend
         $methodName,
         $cachePointer,
         $params,
-        CompilationContext $context
+        CompilationContext $context,
+        ?string $named = null
     ): void {
         $paramStr = null != $params ? ', ' . implode(', ', $params) : '';
-        $macro    = 'CALL_METHOD';
+
+        /**
+         * Named arguments go to the engine with no inline cache: which
+         * parameter each one binds to depends on the method the object has
+         * (#2824). The class comes from the object.
+         */
+        if (null !== $named) {
+            $macro = 'CALL_CLASS_METHOD_NAMED';
+            if ($methodName instanceof Variable) {
+                $macro      = 'CALL_CLASS_METHOD_ZVAL_NAMED';
+                $methodName = $this->getVariableCode($methodName);
+            } else {
+                $methodName = '"' . $methodName . '"';
+            }
+
+            $target = 'zephir_fcall_method, NULL, ' . $this->getVariableCode($variable) . ', ' . $methodName
+                . ', ' . $named . $paramStr;
+            $this->emitCall($symbolVariable, $macro, $target, $context);
+
+            return;
+        }
+
+        /**
+         * A name known at compile time comes with the site's own inline cache
+         * record; a name held in a variable comes with `NULL, 0` (#2790).
+         */
+        $macro = 'CALL_METHOD_CACHED';
         if ($methodName instanceof Variable) {
             $macro      = 'CALL_METHOD_ZVAL';
             $methodName = $this->getVariableCode($methodName);
@@ -810,6 +853,23 @@ class Backend
                 'ZEPHIR_' . $macro . '(' . $symbol . ', ' . $this->getVariableCode(
                     $variable
                 ) . ', ' . $methodName . ', ' . $cachePointer . $paramStr . ');'
+            );
+        }
+    }
+
+    /**
+     * Emits `ZEPHIR_[RETURN_]<macro>(...)`: the result goes to the symbol
+     * variable, to `return_value` through the RETURN form, or nowhere.
+     */
+    public function emitCall(?Variable $symbolVariable, string $macro, string $target, CompilationContext $context): void
+    {
+        if (null === $symbolVariable) {
+            $context->codePrinter->output('ZEPHIR_' . $macro . '(NULL, ' . $target . ');');
+        } elseif ('return_value' === $symbolVariable->getName()) {
+            $context->codePrinter->output('ZEPHIR_RETURN_' . $macro . '(' . $target . ');');
+        } else {
+            $context->codePrinter->output(
+                'ZEPHIR_' . $macro . '(' . $this->getVariableCode($symbolVariable) . ', ' . $target . ');'
             );
         }
     }
@@ -969,7 +1029,13 @@ class Backend
     ): void {
         $symbol     = $this->getVariableCode($variable);
         $classEntry = $classDefinition->getClassEntry();
-        $thisArg    = $bindThis ? 'this_ptr' : 'NULL';
+
+        /**
+         * Inside a capturing closure with no enclosing object, `this_ptr` is
+         * that closure's capture carrier, which a nested closure must not
+         * take for its $this.
+         */
+        $thisArg = $bindThis && 'NULL' !== $context->enclosingObjectCode() ? 'this_ptr' : 'NULL';
 
         /*
          * Without captures the closure needs no state of its own, so the
@@ -1437,6 +1503,14 @@ class Backend
             return sprintf('add_next_index_%s(&%s%s);', $func, $var, $tail);
         }
 
+        /**
+         * A constant whose value depends on the PHP that compiles the C keeps
+         * its macro as a key too, where folding the node gave 0. See #2825.
+         */
+        if (isset($key['native'])) {
+            return sprintf('add_index_%s(&%s, (zend_long) (%s)%s);', $func, $var, $key['value'], $tail);
+        }
+
         $keyValue = $this->constantArrayKey($key);
         if (is_int($keyValue)) {
             return sprintf('add_index_%s(&%s, %d%s);', $func, $var, $keyValue, $tail);
@@ -1583,17 +1657,25 @@ class Backend
         return $output;
     }
 
+    /**
+     * Reads a property. A noisy read is PHP's `$o->x`: `__get()` without
+     * asking `__isset()` first, a warning for an undefined property and an
+     * Error for an inaccessible or uninitialized one. A read that is not
+     * noisy is the silent fetch of the object in `isset o->x[k]`. Either may
+     * throw, and the method stops there as PHP does.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2831
+     */
     public function fetchProperty(
         Variable $symbolVariable,
         Variable $variableVariable,
         $property,
         $readOnly,
-        CompilationContext $context
+        CompilationContext $context,
+        bool $noisy = true
     ): void {
-        $flags = 'PH_NOISY_CC';
-        if ($readOnly) {
-            $flags .= ' | PH_READONLY';
-        }
+        $flags = array_filter([$noisy ? 'PH_NOISY_CC' : '', $readOnly ? 'PH_READONLY' : '']);
+        $flags = [] === $flags ? '0' : implode(' | ', $flags);
 
         $variableCode = $this->getVariableCode($variableVariable);
         $symbol       = $this->getVariableCode($symbolVariable);
@@ -1608,29 +1690,31 @@ class Backend
                     $flags
                 )
             );
-
-            return;
-        }
-
-        /* Are we going to init default object property value? */
-        if ($context->currentMethod && $context->currentMethod->isInitializer()) {
+        } elseif ($context->currentMethod && $context->currentMethod->isInitializer()) {
+            /* Are we going to init default object property value? */
             $context->codePrinter->output(
                 sprintf('zephir_read_property_ex(%s, %s, ZEND_STRL("%s"), %s);', $symbol, $variableCode, $property, $flags)
             );
-
-            return;
+        } else {
+            /*
+             * Cached read: pass a method-scope interned zend_string for the name
+             * (no per-call alloc) and the site's inline cache slot.
+             */
+            $nameSlot  = $this->internedPropertyName((string) $property, $context);
+            $cacheSlot = $this->propertyCacheSlot($variableVariable, (string) $property, $context);
+            $context->codePrinter->output(
+                sprintf(
+                    'zephir_read_property_cached(%s, %s, %s, %d, %s);',
+                    $symbol,
+                    $variableCode,
+                    $nameSlot,
+                    $cacheSlot,
+                    $flags
+                )
+            );
         }
 
-        /*
-         * Cached read: pass a method-scope interned zend_string for the name
-         * (no per-call alloc). cache_slot 0 = uncached in Stage 1; Stage 2
-         * threads a real inline-cache slot here.
-         */
-        $nameSlot  = $this->internedPropertyName((string) $property, $context);
-        $cacheSlot = $this->propertyCacheSlot($variableVariable, (string) $property, $context);
-        $context->codePrinter->output(
-            sprintf('zephir_read_property_cached(%s, %s, %s, %d, %s);', $symbol, $variableCode, $nameSlot, $cacheSlot, $flags)
-        );
+        $context->emitExceptionCheck();
     }
 
     /**
@@ -1706,14 +1790,61 @@ class Backend
     ): void {
         $context->codePrinter->output(
             sprintf(
-                '%s = %s(%s, SL("%s"), %s);',
+                '%s = %s(%s, %s, SL("%s"), %s, %s);',
                 $this->getVariableCode($slot),
-                $readWrite ? 'zephir_fetch_static_property_rw_ce' : 'zephir_fetch_static_property_write_ce',
-                $classDefinition->getClassEntry(),
+                $readWrite ? 'zephir_fetch_static_property_rw_cached' : 'zephir_fetch_static_property_write_cached',
+                $classDefinition->getClassEntry($context),
+                $this->staticPropertyScope($context),
                 $property,
+                $this->staticPropertyCacheSite($context),
                 $this->getVariableCode($fallback)
             )
         );
+        $context->emitExceptionCheck();
+    }
+
+    /**
+     * `isset X::y`, for a property the code can see.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2805
+     */
+    public function staticPropertyIsset($classDefinition, string $property, CompilationContext $context): CompiledExpression
+    {
+        $context->headersManager->add('kernel/object');
+
+        return new CompiledExpression(
+            'bool',
+            $context->emitCheckedBool(
+                sprintf(
+                    'zephir_isset_static_property_cached(%s, %s, SL("%s"), %s)',
+                    $classDefinition->getClassEntry($context),
+                    $this->staticPropertyScope($context),
+                    $property,
+                    $this->staticPropertyCacheSite($context)
+                )
+            ),
+            null
+        );
+    }
+
+    /**
+     * The cache record of one more static property access in the function
+     * being compiled, which Method::compile() declares.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2805
+     */
+    private function staticPropertyCacheSite(CompilationContext $context): string
+    {
+        return '&_zephir_sprop_cache[' . $context->staticPropertyCacheCounter++ . ']';
+    }
+
+    /**
+     * The class a static property access checks visibility against: the class
+     * the code is written in, as PHP checks it, or none in a function.
+     */
+    private function staticPropertyScope(CompilationContext $context): string
+    {
+        return $context->lexicalClassDefinition()?->getClassEntry($context) ?? 'NULL';
     }
 
     /**
@@ -1721,8 +1852,8 @@ class Backend
      * zend_string slot for a compile-time-known object-property name and
      * returns its C variable. The `static` declaration and lazy init are
      * emitted at function scope by Method::compile() so the reference is valid
-     * from any nested block. Mirrors the isset `_fast` slot, hoisted to
-     * function scope. See property-access optimization (issue #1884 follow-up).
+     * from any nested block. The `isset` and `empty` `_fast` helpers share
+     * it. See property-access optimization (issue #1884 follow-up).
      */
     private function internedPropertyName(string $key, CompilationContext $context): string
     {
@@ -1765,12 +1896,14 @@ class Backend
         $classDefinition,
         $property,
         $readOnly,
-        CompilationContext $context
+        CompilationContext $context,
+        bool $noisy = true
     ): void {
-        // TODO: maybe optimizations as well as above
+        $flags = array_filter([$noisy ? 'PH_NOISY_CC' : '', $readOnly ? 'PH_READONLY' : '']);
+
         $context->codePrinter->output(
             sprintf(
-                'zephir_read_static_property_ce(%s, %s, SL("%s"), PH_NOISY_CC%s);',
+                'zephir_read_static_property_cached(%s, %s, %s, SL("%s"), %s, %s);',
                 /**
                  * Resolved rather than spelled out: hand-building `&` + name
                  * wrote over the `zend_reference` of a `use (&x)` capture
@@ -1779,11 +1912,14 @@ class Backend
                  * @see https://github.com/zephir-lang/zephir/issues/2668
                  */
                 $this->getVariableCode($symbolVariable),
-                $classDefinition->getClassEntry(),
+                $classDefinition->getClassEntry($context),
+                $this->staticPropertyScope($context),
                 $property,
-                $readOnly ? ' | PH_READONLY' : ''
+                $this->staticPropertyCacheSite($context),
+                [] === $flags ? '0' : implode(' | ', $flags)
             )
         );
+        $context->emitExceptionCheck();
     }
 
     public function forStatement(
@@ -1976,6 +2112,7 @@ class Backend
              * @see https://github.com/zephir-lang/zephir/issues/2546
              */
             $firstIterFlag = $compilationContext->symbolTable->addTemp('bool', $compilationContext);
+            $methodCache   = $compilationContext->cacheManager->getMethodCache();
 
             if ($emitTypeWrapper) {
                 $codePrinter->output('} else {');
@@ -1983,7 +2120,8 @@ class Backend
             }
 
             $codePrinter->output(
-                'ZEPHIR_CALL_METHOD(NULL, ' . $this->getVariableCode($exprVariable) . ', "rewind", NULL, 0);'
+                'ZEPHIR_CALL_METHOD_CACHED(NULL, ' . $this->getVariableCode($exprVariable) . ', "rewind", '
+                . $methodCache->get($compilationContext) . ');'
             );
             $codePrinter->output('zephir_check_call_status();');
             $codePrinter->output($firstIterFlag->getName() . ' = 1;');
@@ -1999,16 +2137,17 @@ class Backend
             $codePrinter->output('} else {');
             $codePrinter->increaseLevel();
             $codePrinter->output(
-                'ZEPHIR_CALL_METHOD(NULL, ' . $this->getVariableCode($exprVariable) . ', "next", NULL, 0);'
+                'ZEPHIR_CALL_METHOD_CACHED(NULL, ' . $this->getVariableCode($exprVariable) . ', "next", '
+                . $methodCache->get($compilationContext) . ');'
             );
             $codePrinter->output('zephir_check_call_status();');
             $codePrinter->decreaseLevel();
             $codePrinter->output('}');
 
             $codePrinter->output(
-                'ZEPHIR_CALL_METHOD(&' . $tempValidVariable->getName() . ', ' . $this->getVariableCode(
+                'ZEPHIR_CALL_METHOD_CACHED(&' . $tempValidVariable->getName() . ', ' . $this->getVariableCode(
                     $exprVariable
-                ) . ', "valid", NULL, 0);'
+                ) . ', "valid", ' . $methodCache->get($compilationContext) . ');'
             );
             $codePrinter->output('zephir_check_call_status();');
             $codePrinter->output('if (!zend_is_true(&' . $tempValidVariable->getName() . ')) {');
@@ -2019,18 +2158,18 @@ class Backend
 
             if (isset($keyVariable)) {
                 $codePrinter->output(
-                    'ZEPHIR_CALL_METHOD(' . $this->getVariableCode($keyVariable) . ', ' . $this->getVariableCode(
+                    'ZEPHIR_CALL_METHOD_CACHED(' . $this->getVariableCode($keyVariable) . ', ' . $this->getVariableCode(
                         $exprVariable
-                    ) . ', "key", NULL, 0);'
+                    ) . ', "key", ' . $methodCache->get($compilationContext) . ');'
                 );
                 $codePrinter->output('zephir_check_call_status();');
             }
 
             if (isset($variable)) {
                 $codePrinter->output(
-                    'ZEPHIR_CALL_METHOD(' . $this->getVariableCode($variable) . ', ' . $this->getVariableCode(
+                    'ZEPHIR_CALL_METHOD_CACHED(' . $this->getVariableCode($variable) . ', ' . $this->getVariableCode(
                         $exprVariable
-                    ) . ', "current", NULL, 0);'
+                    ) . ', "current", ' . $methodCache->get($compilationContext) . ');'
                 );
                 $codePrinter->output('zephir_check_call_status();');
             }
@@ -2685,39 +2824,35 @@ class Backend
         return '';
     }
 
-    public function propertyIsset(Variable $var, $key, ?CompilationContext $context = null): CompiledExpression
-    {
+    /**
+     * `isset o->x`, or `empty o->x` with `$empty`, through the object's
+     * has_property handler.
+     */
+    public function propertyIsset(
+        Variable $var,
+        $key,
+        ?CompilationContext $context = null,
+        bool $empty = false
+    ): CompiledExpression {
         /*
          * PHP isset() semantics — see https://github.com/zephir-lang/zephir/issues/2385.
          *
          * Static-name property isset goes through has_property, which needs
-         * a zend_string. Allocating one per call would mean a heap alloc per
-         * isset; instead emit a method-static zend_string * slot that the
-         * generated method initializes lazily on first call and reuses for
-         * the lifetime of the worker. Repeated isset() of the same property
-         * within a method shares one slot.
+         * a zend_string. The method-scope interned slot of a cached read is
+         * reused, declared at function scope so an `isset` or `empty` in any
+         * block reaches it.
          */
         if ($context !== null) {
-            if (!isset($context->issetPropertyCache[$key])) {
-                $cacheVar = '_zephir_isset_' . $context->issetPropertyCacheCounter++;
-                $context->issetPropertyCache[$key] = $cacheVar;
-
-                $escapedKey = addslashes($key);
-                $context->codePrinter->output('static zend_string *' . $cacheVar . ' = NULL;');
-                $context->codePrinter->output('if (UNEXPECTED(!' . $cacheVar . ')) {');
-                $context->codePrinter->output(
-                    "\t" . $cacheVar . ' = zend_string_init("' . $escapedKey . '", '
-                    . strlen($key) . ', 1);'
-                );
-                $context->codePrinter->output('}');
-            }
-
             return new CompiledExpression(
                 'bool',
-                'zephir_isset_property_value_fast(' . $this->getVariableCode($var) . ', '
-                . $context->issetPropertyCache[$key] . ')',
+                ($empty ? 'zephir_isempty_property_fast(' : 'zephir_isset_property_value_fast(')
+                . $this->getVariableCode($var) . ', ' . $this->internedPropertyName((string) $key, $context) . ')',
                 null
             );
+        }
+
+        if ($empty) {
+            throw new CompilerException('empty() of a property needs a compilation context');
         }
 
         /* Fallback for callers that don't pass a CompilationContext. */
@@ -2793,7 +2928,14 @@ class Backend
     {
         $value = $this->resolveValue($value, $context);
         $context->codePrinter->output(
-            'zephir_sub_static_property_ce(' . $classEntry . ', ZEND_STRL("' . $property . '"), ' . $value . ');'
+            sprintf(
+                'zephir_sub_static_property_cached(%s, %s, SL("%s"), %s, %s);',
+                $classEntry,
+                $this->staticPropertyScope($context),
+                $property,
+                $this->staticPropertyCacheSite($context),
+                $value
+            )
         );
         $context->emitExceptionCheck();
     }
@@ -3025,6 +3167,13 @@ class Backend
         }
     }
 
+    /**
+     * Assigns a property, PHP's ASSIGN_OBJ. The write may throw, for a
+     * non-object, a typed or readonly property or a `__set()`, and the method
+     * stops there as PHP does.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2808
+     */
     public function updateProperty(Variable $variable, $property, $value, CompilationContext $context): void
     {
         $value = $this->resolveValue($value, $context);
@@ -3038,6 +3187,7 @@ class Backend
                     $value
                 )
             );
+            $context->emitExceptionCheck();
 
             return;
         }
@@ -3047,6 +3197,7 @@ class Backend
             $context->codePrinter->output(
                 sprintf('zephir_update_property_zval_ex(%s, ZEND_STRL("%s"), %s);', $this->getVariableCode($variable), $property, $value)
             );
+            $context->emitExceptionCheck();
 
             return;
         }
@@ -3060,15 +3211,88 @@ class Backend
         $context->codePrinter->output(
             sprintf('zephir_update_property_zval_cached(%s, %s, %d, %s);', $this->getVariableCode($variable), $nameSlot, $cacheSlot, $value)
         );
+        $context->emitExceptionCheck();
+    }
+
+    /**
+     * `o->x op= v`, PHP's ASSIGN_OBJ_OP: `$operatorFunction` is the engine's
+     * operator, applied by the kernel to the property in place. `$property` is
+     * the name written in the code, or the local holding a runtime name.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2808
+     */
+    public function assignPropertyOperator(
+        Variable $variable,
+        string | Variable $property,
+        Variable | string $value,
+        string $operatorFunction,
+        CompilationContext $context
+    ): void {
+        $value = $this->resolveValue($value, $context);
+
+        if ($property instanceof Variable) {
+            $context->codePrinter->output(
+                sprintf(
+                    'zephir_property_assign_op_zval(%s, %s, %s, %s);',
+                    $this->getVariableCode($variable),
+                    $this->getVariableCode($property),
+                    $value,
+                    $operatorFunction
+                )
+            );
+        } else {
+            $context->codePrinter->output(
+                sprintf(
+                    'zephir_property_assign_op(%s, %s, %d, %s, %s);',
+                    $this->getVariableCode($variable),
+                    $this->internedPropertyName($property, $context),
+                    $this->propertyCacheSlot($variable, $property, $context),
+                    $value,
+                    $operatorFunction
+                )
+            );
+        }
+
+        $context->emitExceptionCheck();
+    }
+
+    /**
+     * `o->x++` and `o->x--`, PHP's PRE_INC_OBJ and PRE_DEC_OBJ.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2808
+     */
+    public function incrementProperty(
+        Variable $variable,
+        string $property,
+        bool $increment,
+        CompilationContext $context
+    ): void {
+        $context->codePrinter->output(
+            sprintf(
+                'zephir_property_incdec(%s, %s, %d, %d);',
+                $this->getVariableCode($variable),
+                $this->internedPropertyName($property, $context),
+                $this->propertyCacheSlot($variable, $property, $context),
+                $increment ? 1 : 0
+            )
+        );
+        $context->emitExceptionCheck();
     }
 
     public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context): void
     {
-        // TODO(serghei): Sort out as well as above
         $value = $this->resolveValue($value, $context);
         $context->codePrinter->output(
-            'zephir_update_static_property_ce(' . $classEntry . ', ZEND_STRL("' . $property . '"), ' . $value . ');'
+            sprintf(
+                'zephir_update_static_property_cached(%s, %s, SL("%s"), %s, %s);',
+                $classEntry,
+                $this->staticPropertyScope($context),
+                $property,
+                $this->staticPropertyCacheSite($context),
+                $value
+            )
         );
+        $context->emitExceptionCheck();
     }
 
     public function zvalOperator(

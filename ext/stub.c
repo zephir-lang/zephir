@@ -44,8 +44,10 @@ zend_class_entry *stub_traits_counter_ce;
 zend_class_entry *stub_traits_nameable_ce;
 zend_class_entry *stub_invokes_abstractprotected_ce;
 zend_class_entry *stub_oo_extend_exception_ce;
+zend_class_entry *stub_issue2824pair_ce;
 zend_class_entry *stub_oo_extend_db_exception_ce;
 zend_class_entry *stub_scallparent_ce;
+zend_class_entry *stub_bench_ce;
 zend_class_entry *stub_constantsparent_ce;
 zend_class_entry *stub_globals_session_base_ce;
 zend_class_entry *stub_invokes_abstractinvoker_ce;
@@ -56,6 +58,7 @@ zend_class_entry *stub_issue2505_ce;
 zend_class_entry *stub_issue2537_ce;
 zend_class_entry *stub_issue2635_base_ce;
 zend_class_entry *stub_issue2723base_ce;
+zend_class_entry *stub_issue2831base_ce;
 zend_class_entry *stub_oo_abstractstatic_ce;
 zend_class_entry *stub_oo_extend_db_query_exception_ce;
 zend_class_entry *stub_oo_oodynamica_ce;
@@ -138,6 +141,7 @@ zend_class_entry *stub_75__closure_ce;
 zend_class_entry *stub_76__closure_ce;
 zend_class_entry *stub_77__closure_ce;
 zend_class_entry *stub_78__closure_ce;
+zend_class_entry *stub_79__closure_ce;
 zend_class_entry *stub_7__closure_ce;
 zend_class_entry *stub_8__closure_ce;
 zend_class_entry *stub_9__closure_ce;
@@ -162,8 +166,8 @@ zend_class_entry *stub_attributes_counteruser_ce;
 zend_class_entry *stub_attributes_demo_ce;
 zend_class_entry *stub_attributes_marker_ce;
 zend_class_entry *stub_attributes_tools_ce;
-zend_class_entry *stub_bench_ce;
 zend_class_entry *stub_bench_foo_ce;
+zend_class_entry *stub_bench_sitechild_ce;
 zend_class_entry *stub_bitwise_ce;
 zend_class_entry *stub_branchprediction_ce;
 zend_class_entry *stub_bufferops_ce;
@@ -260,6 +264,7 @@ zend_class_entry *stub_issue2651_ce;
 zend_class_entry *stub_issue2654_ce;
 zend_class_entry *stub_issue2656_ce;
 zend_class_entry *stub_issue2666_ce;
+zend_class_entry *stub_issue2670_ce;
 zend_class_entry *stub_issue2674_ce;
 zend_class_entry *stub_issue2675_ce;
 zend_class_entry *stub_issue2676_ce;
@@ -286,6 +291,25 @@ zend_class_entry *stub_issue2746_ce;
 zend_class_entry *stub_issue2747_ce;
 zend_class_entry *stub_issue2761_accessors_ce;
 zend_class_entry *stub_issue2761_collaborator_ce;
+zend_class_entry *stub_issue2774_ce;
+zend_class_entry *stub_issue2790_ce;
+zend_class_entry *stub_issue2805_ce;
+zend_class_entry *stub_issue2805request_ce;
+zend_class_entry *stub_issue2808_ce;
+zend_class_entry *stub_issue2808counter_ce;
+zend_class_entry *stub_issue2824_ce;
+zend_class_entry *stub_issue2824callbacks_ce;
+zend_class_entry *stub_issue2824child_ce;
+zend_class_entry *stub_issue2824ctor_ce;
+zend_class_entry *stub_issue2824renamed_ce;
+zend_class_entry *stub_issue2825_ce;
+zend_class_entry *stub_issue2826_ce;
+zend_class_entry *stub_issue2831_ce;
+zend_class_entry *stub_issue2831child_ce;
+zend_class_entry *stub_issue2832_ce;
+zend_class_entry *stub_issue2832base_ce;
+zend_class_entry *stub_issue2839_ce;
+zend_class_entry *stub_issue2839pair_ce;
 zend_class_entry *stub_issue663_ce;
 zend_class_entry *stub_issue760_ce;
 zend_class_entry *stub_issue808_ce;
@@ -491,8 +515,10 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Traits_Nameable);
 	ZEPHIR_INIT(Stub_Invokes_AbstractProtected);
 	ZEPHIR_INIT(Stub_Oo_Extend_Exception);
+	ZEPHIR_INIT(Stub_Issue2824Pair);
 	ZEPHIR_INIT(Stub_Oo_Extend_Db_Exception);
 	ZEPHIR_INIT(Stub_ScallParent);
+	ZEPHIR_INIT(Stub_Bench);
 	ZEPHIR_INIT(Stub_ConstantsParent);
 	ZEPHIR_INIT(Stub_Globals_Session_Base);
 	ZEPHIR_INIT(Stub_Invokes_AbstractInvoker);
@@ -503,6 +529,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Issue2537);
 	ZEPHIR_INIT(Stub_Issue2635_Base);
 	ZEPHIR_INIT(Stub_Issue2723Base);
+	ZEPHIR_INIT(Stub_Issue2831Base);
 	ZEPHIR_INIT(Stub_Oo_AbstractStatic);
 	ZEPHIR_INIT(Stub_Oo_Extend_Db_Query_Exception);
 	ZEPHIR_INIT(Stub_Oo_OoDynamicA);
@@ -530,8 +557,8 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Attributes_Demo);
 	ZEPHIR_INIT(Stub_Attributes_Marker);
 	ZEPHIR_INIT(Stub_Attributes_Tools);
-	ZEPHIR_INIT(Stub_Bench);
 	ZEPHIR_INIT(Stub_Bench_Foo);
+	ZEPHIR_INIT(Stub_Bench_SiteChild);
 	ZEPHIR_INIT(Stub_Bitwise);
 	ZEPHIR_INIT(Stub_BranchPrediction);
 	ZEPHIR_INIT(Stub_BufferOps);
@@ -628,6 +655,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Issue2654);
 	ZEPHIR_INIT(Stub_Issue2656);
 	ZEPHIR_INIT(Stub_Issue2666);
+	ZEPHIR_INIT(Stub_Issue2670);
 	ZEPHIR_INIT(Stub_Issue2674);
 	ZEPHIR_INIT(Stub_Issue2675);
 	ZEPHIR_INIT(Stub_Issue2676);
@@ -654,6 +682,25 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Issue2747);
 	ZEPHIR_INIT(Stub_Issue2761_Accessors);
 	ZEPHIR_INIT(Stub_Issue2761_Collaborator);
+	ZEPHIR_INIT(Stub_Issue2774);
+	ZEPHIR_INIT(Stub_Issue2790);
+	ZEPHIR_INIT(Stub_Issue2805);
+	ZEPHIR_INIT(Stub_Issue2805Request);
+	ZEPHIR_INIT(Stub_Issue2808);
+	ZEPHIR_INIT(Stub_Issue2808Counter);
+	ZEPHIR_INIT(Stub_Issue2824);
+	ZEPHIR_INIT(Stub_Issue2824Callbacks);
+	ZEPHIR_INIT(Stub_Issue2824Child);
+	ZEPHIR_INIT(Stub_Issue2824Ctor);
+	ZEPHIR_INIT(Stub_Issue2824Renamed);
+	ZEPHIR_INIT(Stub_Issue2825);
+	ZEPHIR_INIT(Stub_Issue2826);
+	ZEPHIR_INIT(Stub_Issue2831);
+	ZEPHIR_INIT(Stub_Issue2831Child);
+	ZEPHIR_INIT(Stub_Issue2832);
+	ZEPHIR_INIT(Stub_Issue2832Base);
+	ZEPHIR_INIT(Stub_Issue2839);
+	ZEPHIR_INIT(Stub_Issue2839Pair);
 	ZEPHIR_INIT(Stub_Issue663);
 	ZEPHIR_INIT(Stub_Issue760);
 	ZEPHIR_INIT(Stub_Issue808);
@@ -864,6 +911,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(stub_76__closure);
 	ZEPHIR_INIT(stub_77__closure);
 	ZEPHIR_INIT(stub_78__closure);
+	ZEPHIR_INIT(stub_79__closure);
 	ZEPHIR_INIT(stub_7__closure);
 	ZEPHIR_INIT(stub_8__closure);
 	ZEPHIR_INIT(stub_9__closure);
@@ -935,6 +983,8 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
  */
 static void php_zephir_init_module_globals(zend_stub_globals *stub_globals)
 {
+	/* No request yet: a call site's inline cache starts zeroed, so it never matches */
+	stub_globals->request_number = 0;
 	stub_globals->orm.zephir_owned_cache_prefix = NULL;
 	stub_globals->zephir_owned_my_setting_5 = NULL;
 }
@@ -945,6 +995,7 @@ void zephir_init_static_properties_Stub_Issue2705();
 void zephir_init_static_properties_Stub_Issue2706();
 void zephir_init_static_properties_Stub_Issue2706Keys();
 void zephir_init_static_properties_Stub_Issue2747();
+void zephir_init_static_properties_Stub_Issue2805();
 void zephir_init_static_properties_Stub_Properties_StaticPropertyArray();
 void zephir_init_static_properties_Stub_SPropertyAccess();
 static PHP_RINIT_FUNCTION(stub)
@@ -953,6 +1004,7 @@ static PHP_RINIT_FUNCTION(stub)
 	stub_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(stub_globals_ptr);
+	stub_globals_ptr->request_number++;
 	zephir_ini_activate_globals(zephir_request_ini_entries);
 	zephir_initialize_memory(stub_globals_ptr);
 
@@ -962,6 +1014,7 @@ static PHP_RINIT_FUNCTION(stub)
 		zephir_init_static_properties_Stub_Issue2706();
 		zephir_init_static_properties_Stub_Issue2706Keys();
 		zephir_init_static_properties_Stub_Issue2747();
+		zephir_init_static_properties_Stub_Issue2805();
 		zephir_init_static_properties_Stub_Properties_StaticPropertyArray();
 		zephir_init_static_properties_Stub_SPropertyAccess();
 	
@@ -1056,6 +1109,12 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_stub_test_call_object_hint, 0,
 	ZEND_ARG_OBJ_INFO(0, a, Stub\\Oo\\PropertyAccess, 0)
 ZEND_END_ARG_INFO()
 
+PHP_FUNCTION(f_Stub_issue2824_pair);
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_stub_issue2824_pair, 0, 2, IS_STRING, 0)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
+ZEND_END_ARG_INFO()
+
 PHP_FUNCTION(f_Stub_variadicSum);
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_stub_variadicsum, 0, 0, IS_LONG, 0)
 	ZEND_ARG_VARIADIC_INFO(0, numbers)
@@ -1070,6 +1129,7 @@ ZEND_NS_NAMED_FE("Stub", zephir_namespaced_method_test, ZEND_FN(f_Stub_zephir_na
 ZEND_NS_NAMED_FE("Stub", test_call_relative_object_hint, ZEND_FN(f_Stub_test_call_relative_object_hint), arginfo_f_stub_test_call_relative_object_hint)
 ZEND_NS_NAMED_FE("Stub", zephir_namespaced_method_with_type_casting, ZEND_FN(f_Stub_zephir_namespaced_method_with_type_casting), arginfo_f_stub_zephir_namespaced_method_with_type_casting)
 ZEND_NS_NAMED_FE("Stub", test_call_object_hint, ZEND_FN(f_Stub_test_call_object_hint), arginfo_f_stub_test_call_object_hint)
+ZEND_NS_NAMED_FE("Stub", issue2824_pair, ZEND_FN(f_Stub_issue2824_pair), arginfo_f_stub_issue2824_pair)
 ZEND_NS_NAMED_FE("Stub", variadicSum, ZEND_FN(f_Stub_variadicSum), arginfo_f_stub_variadicsum)
 ZEND_FE_END
 

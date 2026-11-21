@@ -1,0 +1,129 @@
+--TEST--
+Issue #2771: a switch on a bool compares each case with it as PHP does, whether the case is a typeof test, a call, a comparison or a var
+--FILE--
+namespace Stub;
+
+class SwitchBool
+{
+    public function trueTypeof(var x) -> string
+    {
+        switch true {
+            case typeof x == "array":
+                return "array";
+            case typeof x == "string":
+                return "string";
+            case is_int(x):
+                return "int";
+        }
+
+        return "other";
+    }
+
+    public function trueVar(var x, var y) -> string
+    {
+        switch true {
+            case x:
+                return "x";
+            case y:
+                return "y";
+        }
+
+        return "none";
+    }
+
+    public function falseVar(var x) -> string
+    {
+        switch false {
+            case x:
+                return "falsy";
+        }
+
+        return "truthy";
+    }
+
+    public function boolParam(bool b, var x) -> string
+    {
+        switch b {
+            case x:
+                return "match";
+        }
+
+        return "no match";
+    }
+
+    public function trueComparisons(int i) -> string
+    {
+        switch true {
+            case i > 10:
+                return "big";
+            case i > 0 && i < 5:
+                return "small";
+        }
+
+        return "other";
+    }
+}
+--USAGE--
+function trueTypeof($x) {
+    switch (true) {
+        case is_array($x): return "array";
+        case is_string($x): return "string";
+        case is_int($x): return "int";
+    }
+    return "other";
+}
+function trueVar($x, $y) {
+    switch (true) {
+        case $x: return "x";
+        case $y: return "y";
+    }
+    return "none";
+}
+function falseVar($x) {
+    switch (false) {
+        case $x: return "falsy";
+    }
+    return "truthy";
+}
+function boolParam($b, $x) {
+    switch ($b) {
+        case $x: return "match";
+    }
+    return "no match";
+}
+function trueComparisons($i) {
+    switch (true) {
+        case $i > 10: return "big";
+        case $i > 0 && $i < 5: return "small";
+    }
+    return "other";
+}
+
+$o = new \Stub\SwitchBool();
+$values = [0, 1, 5, -1, 0.0, 0.5, "", "0", "a", [], [1], null, true, false, new \stdClass()];
+$checked = 0;
+$mismatches = 0;
+$check = function (string $name, $zephir, $php) use (&$checked, &$mismatches) {
+    $checked++;
+    if ($zephir !== $php) {
+        $mismatches++;
+        echo $name, ": zephir ", $zephir, " php ", $php, "\n";
+    }
+};
+foreach ($values as $x) {
+    $label = json_encode($x);
+    $check("trueTypeof($label)", $o->trueTypeof($x), trueTypeof($x));
+    $check("falseVar($label)", $o->falseVar($x), falseVar($x));
+    foreach ([true, false] as $b) {
+        $check("boolParam(" . var_export($b, true) . ", $label)", $o->boolParam($b, $x), boolParam($b, $x));
+    }
+    foreach ([0, 1, "", "a"] as $y) {
+        $check("trueVar($label, " . json_encode($y) . ")", $o->trueVar($x, $y), trueVar($x, $y));
+    }
+}
+foreach ([-3, 0, 3, 7, 12] as $i) {
+    $check("trueComparisons($i)", $o->trueComparisons($i), trueComparisons($i));
+}
+echo "checked ", $checked, ", mismatches ", $mismatches, "\n";
+--EXPECT--
+checked 125, mismatches 0

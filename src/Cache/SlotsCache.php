@@ -13,20 +13,17 @@ declare(strict_types=1);
 
 namespace Zephir\Cache;
 
-use Zephir\Class\Method\Method;
-
 /**
- * In order to reduce memory allocation when calling functions and method_exists
- * Zephir provides a global cache that store pointers to resolved functions
- * that aren't dynamical reducing the time to lookup functions and methods
+ * In order to reduce memory allocation when calling functions Zephir provides
+ * a global cache that store pointers to resolved functions that aren't
+ * dynamical reducing the time to lookup functions. Method and static calls
+ * have a cache per call site instead, see MethodCache.
  */
 class SlotsCache
 {
     public const MAX_SLOTS_NUMBER = 512;
 
     private static array $cacheFunctionSlots = [];
-
-    private static array $cacheMethodSlots = [];
 
     private static int $slot = 1;
 
@@ -39,7 +36,6 @@ class SlotsCache
     public static function reset(): void
     {
         self::$cacheFunctionSlots = [];
-        self::$cacheMethodSlots   = [];
         self::$slot               = 1;
     }
 
@@ -49,17 +45,6 @@ class SlotsCache
     public static function getExistingFunctionSlot(string $functionName): int
     {
         return self::$cacheFunctionSlots[$functionName] ?? 0;
-    }
-
-    /**
-     * Returns a cache slot for a method.
-     */
-    public static function getExistingMethodSlot(Method $method): int
-    {
-        $className  = $method->getClassDefinition()->getCompleteName();
-        $methodName = $method->getName();
-
-        return self::$cacheMethodSlots[$className][$methodName] ?? 0;
     }
 
     /**
@@ -77,28 +62,6 @@ class SlotsCache
         }
 
         self::$cacheFunctionSlots[$functionName] = $slot;
-
-        return $slot;
-    }
-
-    /**
-     * Returns or creates a cache slot for a method.
-     */
-    public static function getMethodSlot(Method $method): int
-    {
-        $className  = $method->getClassDefinition()->getCompleteName();
-        $methodName = $method->getName();
-
-        if (isset(self::$cacheMethodSlots[$className][$methodName])) {
-            return self::$cacheMethodSlots[$className][$methodName];
-        }
-
-        $slot = self::$slot++;
-        if ($slot >= self::MAX_SLOTS_NUMBER) {
-            return 0;
-        }
-
-        self::$cacheMethodSlots[$className][$methodName] = $slot;
 
         return $slot;
     }

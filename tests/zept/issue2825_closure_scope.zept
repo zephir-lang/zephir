@@ -1,0 +1,172 @@
+--TEST--
+self, parent, static and magic constants inside closures behave as in the enclosing class (issue #2825)
+--FILE--
+namespace Stub;
+
+class ClosureBase
+{
+	const C = "base";
+
+	public static sp = "base-sp";
+
+	public static function sm() -> string
+	{
+		return "Base::sm/" . static::class;
+	}
+
+	public function im() -> string
+	{
+		return "Base::im/" . get_class(this);
+	}
+}
+--FILE--
+namespace Stub;
+
+class ClosureScope extends ClosureBase
+{
+	const C = "scope";
+
+	public static sp = "scope-sp";
+
+	protected items = [];
+
+	private static function priv() -> string
+	{
+		return "priv/" . static::class;
+	}
+
+	public static function sm() -> string
+	{
+		return "Scope::sm/" . static::class;
+	}
+
+	public function im() -> string
+	{
+		return "Scope::im/" . get_class(this);
+	}
+
+	public function fromInstance() -> array
+	{
+		var x = 5;
+
+		return [
+			"self::class": function () { return self::class; },
+			"static::class": function () { return static::class; },
+			"parent::class": function () { return parent::class; },
+			"__CLASS__": function () { return __CLASS__; },
+			"__NAMESPACE__": function () { return __NAMESPACE__; },
+			"self::C": function () { return self::C; },
+			"static::C": function () { return static::C; },
+			"parent::C": function () { return parent::C; },
+			"self::sm()": function () { return self::sm(); },
+			"static::sm()": function () { return static::sm(); },
+			"parent::sm()": function () { return parent::sm(); },
+			"self::priv()": function () { return self::priv(); },
+			"self::im()": function () { return self::im(); },
+			"parent::im()": function () { return parent::im(); },
+			"new self": function () { return get_class(new self()); },
+			"new static": function () { return get_class(new static()); },
+			"new parent": function () { return get_class(new parent()); },
+			"instanceof self": function () { var o; let o = new ClosureBase(); return o instanceof self; },
+			"instanceof static": function () { var o; let o = new ClosureScope(); return o instanceof static; },
+			"instanceof parent": function () { var o; let o = new ClosureScope(); return o instanceof parent; },
+			"self::sp": function () { return self::sp; },
+			"parent::sp": function () { return parent::sp; },
+			"capture static::class": function () use (x) { return static::class . x; },
+			"capture this": function () use (x) { return get_class(this) . x . static::class; },
+			"this->items[]": function () { let this->items[] = 1; let this->items["k"] = 2; return count(this->items); },
+			"nested": function () { var inner; let inner = function () { return static::class . "|" . self::class . "|" . __CLASS__; }; return {inner}(); },
+			"arrow": n => static::class . n
+		];
+	}
+
+	public static function fromStatic() -> array
+	{
+		var x = 7;
+
+		return [
+			"self::class": function () { return self::class; },
+			"static::class": function () { return static::class; },
+			"parent::class": function () { return parent::class; },
+			"__CLASS__": function () { return __CLASS__; },
+			"static::C": function () { return static::C; },
+			"static::sm()": function () { return static::sm(); },
+			"self::priv()": function () { return self::priv(); },
+			"self::im()": function () { return self::im(); },
+			"new static": function () { return get_class(new static()); },
+			"instanceof static": function () { var o; let o = new ClosureScope(); return o instanceof static; },
+			"capture static::class": function () use (x) { return static::class . x; },
+			"nested": function () { var inner; let inner = function () { return static::class . "|" . self::class; }; return {inner}(); },
+			"arrow": n => static::class . n
+		];
+	}
+}
+--FILE--
+namespace Stub;
+
+class ClosureSub extends ClosureScope
+{
+	const C = "sub";
+
+	public static sp = "sub-sp";
+}
+--USAGE--
+function report(array $closures): void
+{
+    foreach ($closures as $label => $f) {
+        try {
+            $v = "arrow" === $label ? $f("!") : $f();
+        } catch (\Throwable $e) {
+            $v = get_class($e) . ": " . $e->getMessage();
+        }
+        echo $label, " = ", var_export($v, true), "\n";
+    }
+}
+
+echo "-- instance\n";
+report((new \Stub\ClosureSub())->fromInstance());
+echo "-- static\n";
+report(\Stub\ClosureSub::fromStatic());
+--EXPECT--
+-- instance
+self::class = 'Stub\\ClosureScope'
+static::class = 'Stub\\ClosureSub'
+parent::class = 'Stub\\ClosureBase'
+__CLASS__ = 'Stub\\ClosureScope'
+__NAMESPACE__ = 'Stub'
+self::C = 'scope'
+static::C = 'sub'
+parent::C = 'base'
+self::sm() = 'Scope::sm/Stub\\ClosureSub'
+static::sm() = 'Scope::sm/Stub\\ClosureSub'
+parent::sm() = 'Base::sm/Stub\\ClosureSub'
+self::priv() = 'priv/Stub\\ClosureSub'
+self::im() = 'Scope::im/Stub\\ClosureSub'
+parent::im() = 'Base::im/Stub\\ClosureSub'
+new self = 'Stub\\ClosureScope'
+new static = 'Stub\\ClosureSub'
+new parent = 'Stub\\ClosureBase'
+instanceof self = false
+instanceof static = false
+instanceof parent = true
+self::sp = 'scope-sp'
+parent::sp = 'base-sp'
+capture static::class = 'Stub\\ClosureSub5'
+capture this = 'Stub\\ClosureSub5Stub\\ClosureSub'
+this->items[] = 2
+nested = 'Stub\\ClosureSub|Stub\\ClosureScope|Stub\\ClosureScope'
+arrow = 'Stub\\ClosureSub!'
+-- static
+self::class = 'Stub\\ClosureScope'
+static::class = 'Stub\\ClosureSub'
+parent::class = 'Stub\\ClosureBase'
+__CLASS__ = 'Stub\\ClosureScope'
+static::C = 'sub'
+static::sm() = 'Scope::sm/Stub\\ClosureSub'
+self::priv() = 'priv/Stub\\ClosureSub'
+self::im() = 'Error: Non-static method Stub\\ClosureScope::im() cannot be called statically'
+new static = 'Stub\\ClosureSub'
+instanceof static = false
+capture static::class = 'Stub\\ClosureSub7'
+nested = 'Stub\\ClosureSub|Stub\\ClosureScope'
+arrow = 'Stub\\ClosureSub!'

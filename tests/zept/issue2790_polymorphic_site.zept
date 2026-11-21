@@ -1,0 +1,146 @@
+--TEST--
+Issue #2790: a cached method call site runs the method of each receiver's own class, and errors, exceptions and Iterator calls behave as before
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class IcBase
+{
+    public function who() -> string
+    {
+        return "base";
+    }
+
+    public function callWho(var o) -> string
+    {
+        return o->who();
+    }
+
+    public function viaThis() -> string
+    {
+        return this->who();
+    }
+
+    public function iterate(var it) -> string
+    {
+        var k, v;
+        string out = "";
+
+        for k, v in it {
+            let out .= k . "=" . v . ";";
+        }
+
+        return out;
+    }
+}
+--FILE--
+namespace Stub;
+
+class IcOne extends IcBase
+{
+    public function who() -> string
+    {
+        return "one";
+    }
+}
+--FILE--
+namespace Stub;
+
+class IcTwo extends IcBase
+{
+    public function who() -> string
+    {
+        return "two";
+    }
+}
+--FILE--
+namespace Stub;
+
+class IcThrows extends IcBase
+{
+    public function who() -> string
+    {
+        throw new \RuntimeException("who failed");
+    }
+}
+--USAGE--
+class IcUser extends \Stub\IcBase
+{
+    public function who(): string { return "user"; }
+}
+
+class IcPlain
+{
+    public function who(): string { return "plain"; }
+}
+
+class IcIter implements \Iterator
+{
+    private array $keys;
+    private int $i = 0;
+
+    public function __construct(private array $data) { $this->keys = array_keys($data); }
+    public function current(): mixed { return $this->data[$this->keys[$this->i]]; }
+    public function key(): mixed { return $this->keys[$this->i]; }
+    public function next(): void { $this->i++; }
+    public function rewind(): void { $this->i = 0; }
+    public function valid(): bool { return $this->i < count($this->keys); }
+}
+
+class IcUpper extends \ArrayIterator
+{
+    public function current(): mixed { return strtoupper((string) parent::current()); }
+}
+
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+
+$b = new \Stub\IcBase();
+
+// One call site, the receiver's class changing from call to call.
+$out = [];
+foreach ([new \Stub\IcOne(), new \Stub\IcOne(), new \Stub\IcTwo(), new IcUser(), new \Stub\IcBase(), new IcPlain(), new \Stub\IcTwo(), new IcUser(), new \Stub\IcOne()] as $o) {
+    $out[] = $b->callWho($o);
+}
+echo "site: ", implode(",", $out), "\n";
+
+// `this->who()` in an inherited method, on objects of different classes.
+$out = [];
+foreach ([new \Stub\IcTwo(), new IcUser(), new \Stub\IcBase(), new \Stub\IcOne(), new IcUser()] as $o) {
+    $out[] = $o->viaThis();
+}
+echo "this: ", implode(",", $out), "\n";
+
+t("null after hits", fn() => $b->callWho(null));
+t("object after null", fn() => $b->callWho(new \Stub\IcTwo()));
+t("undefined after hits", fn() => $b->callWho(new \stdClass()));
+t("throws", fn() => $b->callWho(new \Stub\IcThrows()));
+t("throws again", fn() => $b->callWho(new \Stub\IcThrows()));
+t("after throw", fn() => $b->callWho(new \Stub\IcOne()));
+
+// The rewind/valid/current/key/next calls of one `for..in`, over different Iterator classes.
+foreach ([new \ArrayIterator(["a" => 1]), new IcIter(["b" => 2]), new IcUpper(["c" => "x"]), new \ArrayIterator(["d" => 4]), new IcIter(["e" => 5, "f" => 6])] as $it) {
+    echo "iterate: ", $b->iterate($it), "\n";
+}
+--EXPECT--
+site: one,one,two,user,base,plain,two,user,one
+this: two,user,base,one,user
+null after hits: Error: Call to a member function who() on null
+object after null: two
+undefined after hits: Error: Call to undefined method stdClass::who()
+throws: RuntimeException: who failed
+throws again: RuntimeException: who failed
+after throw: one
+iterate: a=1;
+iterate: b=2;
+iterate: c=X;
+iterate: d=4;
+iterate: e=5;f=6;

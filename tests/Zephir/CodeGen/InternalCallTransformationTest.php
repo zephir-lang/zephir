@@ -326,13 +326,13 @@ final class InternalCallTransformationTest extends TestCase
 
         $this->assertStringNotContainsString('"privateStep_zephir_internal_call"', $c, $leaked);
         $this->assertStringNotContainsString('"finalStep_zephir_internal_call"', $c, $leaked);
-        $this->assertStringNotContainsString('"MagicNames:selfStep_zephir_internal_call"', $c, $leaked);
+        $this->assertStringNotContainsString('"Stub\\\\Issue2021\\\\MagicNames::selfStep_zephir_internal_call"', $c, $leaked);
 
         $folded = "The declared name was not folded into the twin's body.\nEmitted C:\n" . $c;
 
         $this->assertStringContainsString('"privateStep"', $c, $folded);
         $this->assertStringContainsString('"finalStep"', $c, $folded);
-        $this->assertStringContainsString('"MagicNames:selfStep"', $c, $folded);
+        $this->assertStringContainsString('"Stub\\\\Issue2021\\\\MagicNames::selfStep"', $c, $folded);
     }
 
     /**
@@ -363,12 +363,12 @@ final class InternalCallTransformationTest extends TestCase
         $leaked = "The step's name reached a folded string literal.\nEmitted C:\n" . $c;
 
         $this->assertStringNotContainsString('"zephir_gen_step_numbers"', $c, $leaked);
-        $this->assertStringNotContainsString('"GenNames:zephir_gen_step_numbers"', $c, $leaked);
+        $this->assertStringNotContainsString('"Stub\\\\Issue2021\\\\GenNames::zephir_gen_step_numbers"', $c, $leaked);
 
         $folded = "The declared name was not folded into the step's body.\nEmitted C:\n" . $c;
 
         $this->assertStringContainsString('"numbers"', $c, $folded);
-        $this->assertStringContainsString('"GenNames:numbers"', $c, $folded);
+        $this->assertStringContainsString('"Stub\\\\Issue2021\\\\GenNames::numbers"', $c, $folded);
     }
 
     /**

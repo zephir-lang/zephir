@@ -297,7 +297,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2668byreftyped
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2668byrefoptionalparam, 0, 0, Closure, 0)
-	ZEND_ARG_INFO(0, seed)
+	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, seed, "3")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2668byrefvariadicparam, 0, 0, Closure, 0)

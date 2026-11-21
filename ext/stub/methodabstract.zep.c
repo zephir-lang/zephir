@@ -30,10 +30,12 @@ PHP_METHOD(Stub_MethodAbstract, testInterfaceMetho)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
+
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "testMethod", NULL, 0);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, this_ptr, "testMethod", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 }

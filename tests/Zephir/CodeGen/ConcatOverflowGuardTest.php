@@ -155,7 +155,7 @@ final class ConcatOverflowGuardTest extends TestCase
 
         $overflow = strpos($body, PHP_EOL . 'zephir_concat_overflow:' . PHP_EOL);
         $cleanup  = strpos($body, PHP_EOL . 'zephir_concat_cleanup:' . PHP_EOL);
-        $dtor     = strpos($body, 'zval_dtor(op1);');
+        $dtor     = strpos($body, 'zval_ptr_dtor_nogc(op1);');
 
         $this->assertNotFalse($overflow, 'The overflow tail needs its own label.');
         $this->assertNotFalse($cleanup, 'The shared cleanup tail needs its own label.');

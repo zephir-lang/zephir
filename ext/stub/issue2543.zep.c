@@ -59,7 +59,10 @@ PHP_METHOD(Stub_Issue2543, setVarIntPositive)
 	zephir_fetch_params_without_memory_grow(1, 0, &varIntPositive_param);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, varIntPositive);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 62, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 63, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_THISW();
 }
 
@@ -88,7 +91,10 @@ PHP_METHOD(Stub_Issue2543, setLabel)
 		Z_PARAM_ZVAL(label)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &label);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 63, label);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 64, label);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	RETURN_THISW();
 }
 

@@ -79,7 +79,8 @@
                                             },
                                             "file": "stub__functional.zep",
                                             "line": 9,
-                                            "char": 27
+                                            "char": 27,
+                                            "start-line": 9
                                         },
                                         "file": "stub__functional.zep",
                                         "line": 9,

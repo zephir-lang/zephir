@@ -55,8 +55,12 @@ class StaticPropertyAppend extends ArrayIndex
                 }
             }
         } else {
+            if (null === $compilationContext->classScope($className, $statement)) {
+                return;
+            }
+
             if (in_array($className, ['self', 'static'])) {
-                $classDefinition = $compilationContext->classDefinition;
+                $classDefinition = $compilationContext->lexicalClassDefinition();
             } else {
                 if ('parent' == $className) {
                     $classDefinition = $compilationContext->parentClassDefinition(

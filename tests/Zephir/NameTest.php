@@ -165,4 +165,32 @@ final class NameTest extends TestCase
             sprintf('Dangling backslash would escape the closing quote in: %s', $output)
         );
     }
+
+    /**
+     * @return iterable<string, array{0: string}>
+     */
+    public static function rawValueProvider(): iterable
+    {
+        yield 'class name'   => ['Stub\\nested\\Thing'];
+        yield 'line break'   => ["a\nb\r\n"];
+        yield 'control byte' => ["\0\x01\x7F"];
+        yield 'quote'        => ['q"x\'y'];
+        yield 'utf-8'        => ['é☺'];
+        yield 'escape text'  => ['\\n \\x41 \\u{263A}'];
+    }
+
+    /**
+     * A raw value spelled as Zephir source reads back as the same value, and
+     * becomes a C literal that cannot end early. See #2825.
+     *
+     * @dataProvider rawValueProvider
+     */
+    public function testEncodeSourceRoundTrips(string $value): void
+    {
+        $source = Name::encodeSource($value);
+
+        $this->assertSame($value, Name::decodeSource($source));
+        $this->assertSame($value, stripcslashes(Name::addSlashes($source)));
+        $this->assertStringNotContainsString("\n", Name::addSlashes($source));
+    }
 }

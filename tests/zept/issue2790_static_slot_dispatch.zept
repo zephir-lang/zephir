@@ -1,0 +1,61 @@
+--TEST--
+Issue #2790: a recursive this->m() and a call on a local first assigned with new run the method of the object's own class
+--FILE--
+namespace Stub;
+
+class IcRecA
+{
+    public function m(int n) -> string
+    {
+        int i;
+        string out = "A";
+
+        if n > 0 {
+            for i in range(1, 1) {
+                let out .= this->m(n - 1);
+            }
+        }
+
+        return out;
+    }
+
+    public function viaLocal(var other, int n) -> string
+    {
+        var o;
+        int i;
+        string out = "";
+
+        let o = new IcRecA();
+        let o = other;
+
+        for i in range(1, n) {
+            let out .= o->m(0);
+        }
+
+        return out;
+    }
+}
+--FILE--
+namespace Stub;
+
+class IcRecB extends IcRecA
+{
+    public function m(int n) -> string
+    {
+        return "B" . parent::m(n);
+    }
+}
+--USAGE--
+echo "B first: ", (new \Stub\IcRecB())->m(2), "\n";
+echo "A after B: ", (new \Stub\IcRecA())->m(2), "\n";
+echo "B after A: ", (new \Stub\IcRecB())->m(1), "\n";
+echo "local B: ", (new \Stub\IcRecA())->viaLocal(new \Stub\IcRecB(), 2), "\n";
+echo "A after local B: ", (new \Stub\IcRecA())->m(1), "\n";
+echo "local A: ", (new \Stub\IcRecA())->viaLocal(new \Stub\IcRecA(), 2), "\n";
+--EXPECT--
+B first: BABABA
+A after B: AAA
+B after A: BABA
+local B: BABA
+A after local B: AA
+local A: AA
