@@ -118,10 +118,12 @@ PHP_METHOD(Stub_Issue2825, newAliasInOtherCase)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	object_init_ex(return_value, php_date_get_date_ce());
+	zephir_constructor_start(return_value);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "2020-01-01");
 	ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0], &_0);
 	zephir_check_call_status();
+	zephir_constructor_finish(return_value);
 	RETURN_MM();
 }
 

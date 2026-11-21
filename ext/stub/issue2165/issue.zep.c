@@ -62,9 +62,11 @@ PHP_METHOD(Stub_Issue2165_Issue, build)
 		zephir_get_arrval(&a, a_param);
 	}
 	object_init_ex(return_value, stub_issue2165_issue_ce);
+	zephir_constructor_start(return_value);
 	ZVAL_BOOL(&_0, 1);
 	ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0], &a, &_0);
 	zephir_check_call_status();
+	zephir_constructor_finish(return_value);
 	RETURN_MM();
 }
 
@@ -157,6 +159,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 			if (UNEXPECTED(zephir_fast_count_int(&rowA) != n)) {
 				ZEPHIR_INIT_NVAR(&_6$$5);
 				object_init_ex(&_6$$5, spl_ce_InvalidArgumentException);
+				zephir_constructor_start(&_6$$5);
 				ZVAL_LONG(&_7$$5, n);
 				ZEPHIR_CALL_FUNCTION(&_8$$5, "strval", &_9, 41, &_7$$5);
 				zephir_check_call_status();
@@ -170,6 +173,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 				}
 				ZEPHIR_CALL_METHOD_CACHED(NULL, &_6$$5, "__construct", &_zephir_call_cache[0], &_11$$5);
 				zephir_check_call_status();
+				zephir_constructor_finish(&_6$$5);
 				zephir_throw_exception_debug(&_6$$5, "stub/issue2165/issue.zep", 34);
 				ZEPHIR_MM_RESTORE();
 				return;
@@ -196,6 +200,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 					if (UNEXPECTED(_15$$6)) {
 						ZEPHIR_INIT_NVAR(&_18$$7);
 						object_init_ex(&_18$$7, spl_ce_InvalidArgumentException);
+						zephir_constructor_start(&_18$$7);
 						ZEPHIR_INIT_NVAR(&_19$$7);
 						zephir_gettype(&_19$$7, &valueA);
 						ZEPHIR_INIT_NVAR(&_20$$7);
@@ -206,6 +211,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 						}
 						ZEPHIR_CALL_METHOD_CACHED(NULL, &_18$$7, "__construct", &_zephir_call_cache[1], &_20$$7);
 						zephir_check_call_status();
+						zephir_constructor_finish(&_18$$7);
 						zephir_throw_exception_debug(&_18$$7, "stub/issue2165/issue.zep", 41);
 						ZEPHIR_MM_RESTORE();
 						return;
@@ -238,6 +244,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 						if (UNEXPECTED(_23$$8)) {
 							ZEPHIR_INIT_NVAR(&_25$$9);
 							object_init_ex(&_25$$9, spl_ce_InvalidArgumentException);
+							zephir_constructor_start(&_25$$9);
 							ZEPHIR_INIT_NVAR(&_26$$9);
 							zephir_gettype(&_26$$9, &valueA);
 							ZEPHIR_INIT_NVAR(&_27$$9);
@@ -248,6 +255,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 							}
 							ZEPHIR_CALL_METHOD_CACHED(NULL, &_25$$9, "__construct", &_zephir_call_cache[6], &_27$$9);
 							zephir_check_call_status();
+							zephir_constructor_finish(&_25$$9);
 							zephir_throw_exception_debug(&_25$$9, "stub/issue2165/issue.zep", 41);
 							ZEPHIR_MM_RESTORE();
 							return;
@@ -312,9 +320,11 @@ PHP_METHOD(Stub_Issue2165_Issue, quick)
 		zephir_get_arrval(&a, a_param);
 	}
 	object_init_ex(return_value, stub_issue2165_issue_ce);
+	zephir_constructor_start(return_value);
 	ZVAL_BOOL(&_0, 0);
 	ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0], &a, &_0);
 	zephir_check_call_status();
+	zephir_constructor_finish(return_value);
 	RETURN_MM();
 }
 
@@ -386,6 +396,7 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 	if (UNEXPECTED(_0)) {
 		ZEPHIR_INIT_VAR(&_2$$3);
 		object_init_ex(&_2$$3, spl_ce_InvalidArgumentException);
+		zephir_constructor_start(&_2$$3);
 		ZEPHIR_INIT_VAR(&_3$$3);
 		zephir_gettype(&_3$$3, value);
 		ZEPHIR_INIT_VAR(&_4$$3);
@@ -396,6 +407,7 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 		}
 		ZEPHIR_CALL_METHOD_CACHED(NULL, &_2$$3, "__construct", &_zephir_call_cache[0], &_4$$3);
 		zephir_check_call_status();
+		zephir_constructor_finish(&_2$$3);
 		zephir_throw_exception_debug(&_2$$3, "stub/issue2165/issue.zep", 69);
 		ZEPHIR_MM_RESTORE();
 		return;
@@ -403,6 +415,7 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 	if (UNEXPECTED(m < 1)) {
 		ZEPHIR_INIT_VAR(&_5$$4);
 		object_init_ex(&_5$$4, spl_ce_InvalidArgumentException);
+		zephir_constructor_start(&_5$$4);
 		ZVAL_LONG(&_6$$4, m);
 		ZEPHIR_CALL_FUNCTION(&_7$$4, "strval", &_8, 41, &_6$$4);
 		zephir_check_call_status();
@@ -414,6 +427,7 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 		}
 		ZEPHIR_CALL_METHOD_CACHED(NULL, &_5$$4, "__construct", &_zephir_call_cache[1], &_9$$4);
 		zephir_check_call_status();
+		zephir_constructor_finish(&_5$$4);
 		zephir_throw_exception_debug(&_5$$4, "stub/issue2165/issue.zep", 74);
 		ZEPHIR_MM_RESTORE();
 		return;
@@ -421,6 +435,7 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 	if (UNEXPECTED(n < 1)) {
 		ZEPHIR_INIT_VAR(&_10$$5);
 		object_init_ex(&_10$$5, spl_ce_InvalidArgumentException);
+		zephir_constructor_start(&_10$$5);
 		ZVAL_LONG(&_11$$5, n);
 		ZEPHIR_CALL_FUNCTION(&_12$$5, "strval", &_8, 41, &_11$$5);
 		zephir_check_call_status();
@@ -432,6 +447,7 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 		}
 		ZEPHIR_CALL_METHOD_CACHED(NULL, &_10$$5, "__construct", &_zephir_call_cache[2], &_13$$5);
 		zephir_check_call_status();
+		zephir_constructor_finish(&_10$$5);
 		zephir_throw_exception_debug(&_10$$5, "stub/issue2165/issue.zep", 79);
 		ZEPHIR_MM_RESTORE();
 		return;

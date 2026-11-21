@@ -435,13 +435,14 @@ PHP_METHOD(Stub_Issue2656, unsetPropertyProbe)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_0 = NULL;
-	zval *iterations_param = NULL, before, after, obj, _1$$3;
+	zval *iterations_param = NULL, before, after, obj, _1$$3, _2$$3;
 	zend_long iterations, ZEPHIR_LAST_CALL_STATUS, i = 0;
 
 	ZVAL_UNDEF(&before);
 	ZVAL_UNDEF(&after);
 	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&_1$$3);
+	ZVAL_UNDEF(&_2$$3);
 	static zend_string *_zephir_prop_0 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("probe", 5, 1);
@@ -460,11 +461,13 @@ PHP_METHOD(Stub_Issue2656, unsetPropertyProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_INIT_NVAR(&obj);
-		object_init(&obj);
-		ZVAL_UNDEF(&_1$$3);
-		ZVAL_LONG(&_1$$3, 1);
-		zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		object_init(&_1$$3);
+		ZEPHIR_CPY_WRT(&obj, &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		ZVAL_UNDEF(&_2$$3);
+		ZVAL_LONG(&_2$$3, 1);
+		zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_2$$3);
 		if (UNEXPECTED(EG(exception))) {
 			ZEPHIR_MM_RESTORE();
 			return;

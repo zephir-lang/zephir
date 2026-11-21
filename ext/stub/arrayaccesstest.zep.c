@@ -35,30 +35,7 @@ ZEPHIR_INIT_CLASS(Stub_ArrayAccessTest)
 
 PHP_METHOD(Stub_ArrayAccessTest, exits)
 {
-	zend_bool _0;
-	zval arr;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zend_long ZEPHIR_LAST_CALL_STATUS;
-
-	ZVAL_UNDEF(&arr);
-	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&arr);
-	object_init_ex(&arr, stub_arrayaccessarr_ce);
-	ZEPHIR_CALL_METHOD_CACHED(NULL, &arr, "__construct", &_zephir_call_cache[0]);
-	zephir_check_call_status();
-	_0 = zephir_array_isset_value_string(&arr, SL("one"));
-	if (UNEXPECTED(EG(exception))) {
-		ZEPHIR_MM_RESTORE();
-		return;
-	}
-	RETURN_MM_BOOL(_0);
-}
-
-PHP_METHOD(Stub_ArrayAccessTest, get)
-{
+	zend_bool _1;
 	zval arr, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -69,17 +46,50 @@ PHP_METHOD(Stub_ArrayAccessTest, get)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_INIT_VAR(&arr);
-	object_init_ex(&arr, stub_arrayaccessarr_ce);
-	ZEPHIR_CALL_METHOD_CACHED(NULL, &arr, "__construct", &_zephir_call_cache[0]);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_arrayaccessarr_ce);
+	zephir_constructor_start(&_0);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, &_0, "__construct", &_zephir_call_cache[0]);
 	zephir_check_call_status();
-	zephir_memory_observe(&_0);
-	zephir_array_fetch_string(&_0, &arr, SL("two"), PH_NOISY, "stub/arrayaccesstest.zep", 29);
+	zephir_constructor_finish(&_0);
+	ZEPHIR_CPY_WRT(&arr, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	_1 = zephir_array_isset_value_string(&arr, SL("one"));
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	RETURN_CCTOR(&_0);
+	RETURN_MM_BOOL(_1);
+}
+
+PHP_METHOD(Stub_ArrayAccessTest, get)
+{
+	zval arr, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZVAL_UNDEF(&arr);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_arrayaccessarr_ce);
+	zephir_constructor_start(&_0);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, &_0, "__construct", &_zephir_call_cache[0]);
+	zephir_check_call_status();
+	zephir_constructor_finish(&_0);
+	ZEPHIR_CPY_WRT(&arr, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	zephir_memory_observe(&_1);
+	zephir_array_fetch_string(&_1, &arr, SL("two"), PH_NOISY, "stub/arrayaccesstest.zep", 29);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	RETURN_CCTOR(&_1);
 }
 
 PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromArray)

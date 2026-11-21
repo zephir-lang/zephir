@@ -45,8 +45,10 @@ PHP_METHOD(Stub_Spl, issue1212)
 	zephir_memory_observe(&file_zv);
 	ZVAL_STR_COPY(&file_zv, file);
 	object_init_ex(return_value, spl_ce_SplFileObject);
+	zephir_constructor_start(return_value);
 	ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0], &file_zv);
 	zephir_check_call_status();
+	zephir_constructor_finish(return_value);
 	RETURN_MM();
 }
 

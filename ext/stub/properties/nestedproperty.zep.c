@@ -48,8 +48,10 @@ PHP_METHOD(Stub_Properties_NestedProperty, __construct)
 	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, stub_properties_nestedpropertytarget_ce);
 	if (zephir_has_constructor(&_0)) {
+		zephir_constructor_start(&_0);
 		ZEPHIR_CALL_METHOD_CACHED(NULL, &_0, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
+		zephir_constructor_finish(&_0);
 	}
 
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 114, &_0);

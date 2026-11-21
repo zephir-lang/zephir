@@ -70,19 +70,24 @@ PHP_METHOD(Stub_Invoke, __invoke)
 
 PHP_METHOD(Stub_Invoke, test)
 {
-	zval func;
+	zval func, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&func);
+	ZVAL_UNDEF(&_0);
 	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_INIT_VAR(&func);
-	object_init_ex(&func, stub_invoke_ce);
-	ZEPHIR_CALL_METHOD_CACHED(NULL, &func, "__construct", &_zephir_call_cache[0]);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init_ex(&_0, stub_invoke_ce);
+	zephir_constructor_start(&_0);
+	ZEPHIR_CALL_METHOD_CACHED(NULL, &_0, "__construct", &_zephir_call_cache[0]);
 	zephir_check_call_status();
+	zephir_constructor_finish(&_0);
+	ZEPHIR_CPY_WRT(&func, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(&func, NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();

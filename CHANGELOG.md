@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+- Fixed `new` inside `try` leaving the method instead of reaching `catch` when the constructor cannot be called [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed `let x = new X()` and `return new X()` taking the object before its constructor returns, so a failing constructor inside `try` changed `x` or the return value, and `x` released its old object first [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed `new` in a function, or in a closure written in one, checking the constructor visibility against the calling class instead of the global scope [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed `new` running the destructor of an object whose constructor or argument threw [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed `new static()` of an abstract class going on with the method after PHP's Error [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed `new` of a class without a constructor not evaluating its arguments [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed `new` of a class that does not exist being a fatal error instead of PHP's Error [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+
 ## [1.9.0] - 2026-11-20
 
 ### Added

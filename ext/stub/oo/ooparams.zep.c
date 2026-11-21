@@ -42,8 +42,10 @@ PHP_METHOD(Stub_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace)
 
 	object_init_ex(return_value, stub_oo_ooparams_ce);
 	if (zephir_has_constructor(return_value)) {
+		zephir_constructor_start(return_value);
 		ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
+		zephir_constructor_finish(return_value);
 	}
 
 	RETURN_MM();
@@ -60,8 +62,10 @@ PHP_METHOD(Stub_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace)
 
 	object_init_ex(return_value, stub_oo_oodynamica_ce);
 	if (zephir_has_constructor(return_value)) {
+		zephir_constructor_start(return_value);
 		ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
+		zephir_constructor_finish(return_value);
 	}
 
 	RETURN_MM();

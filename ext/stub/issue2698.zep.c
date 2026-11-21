@@ -224,13 +224,17 @@ PHP_METHOD(Stub_Issue2698, writeProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_INIT_NVAR(&subject);
-		object_init_ex(&subject, stub_issue2698_ce);
-		if (zephir_has_constructor(&subject)) {
-			ZEPHIR_CALL_METHOD_CACHED(NULL, &subject, "__construct", &_zephir_call_cache[0]);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		object_init_ex(&_1$$3, stub_issue2698_ce);
+		if (zephir_has_constructor(&_1$$3)) {
+			zephir_constructor_start(&_1$$3);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_1$$3, "__construct", &_zephir_call_cache[0]);
 			zephir_check_call_status();
+			zephir_constructor_finish(&_1$$3);
 		}
 
+		ZEPHIR_CPY_WRT(&subject, &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "added");
 		ZVAL_LONG(&_2$$3, 1);
@@ -257,13 +261,14 @@ PHP_METHOD(Stub_Issue2698, appendProbe)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_0 = NULL;
-	zval *iterations_param = NULL, before, after, subject, _1$$3;
+	zval *iterations_param = NULL, before, after, subject, _1$$3, _2$$3;
 	zend_long iterations, ZEPHIR_LAST_CALL_STATUS, i = 0;
 
 	ZVAL_UNDEF(&before);
 	ZVAL_UNDEF(&after);
 	ZVAL_UNDEF(&subject);
 	ZVAL_UNDEF(&_1$$3);
+	ZVAL_UNDEF(&_2$$3);
 	ZEND_TLS zephir_method_cache _zephir_call_cache[2];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(iterations)
@@ -280,15 +285,19 @@ PHP_METHOD(Stub_Issue2698, appendProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_INIT_NVAR(&subject);
-		object_init_ex(&subject, stub_issue2698_ce);
-		if (zephir_has_constructor(&subject)) {
-			ZEPHIR_CALL_METHOD_CACHED(NULL, &subject, "__construct", &_zephir_call_cache[0]);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		object_init_ex(&_1$$3, stub_issue2698_ce);
+		if (zephir_has_constructor(&_1$$3)) {
+			zephir_constructor_start(&_1$$3);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_1$$3, "__construct", &_zephir_call_cache[0]);
 			zephir_check_call_status();
+			zephir_constructor_finish(&_1$$3);
 		}
 
-		ZVAL_LONG(&_1$$3, 1);
-		ZEPHIR_CALL_METHOD_CACHED(NULL, &subject, "appendValue", &_zephir_call_cache[1], &_1$$3);
+		ZEPHIR_CPY_WRT(&subject, &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		ZVAL_LONG(&_2$$3, 1);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, &subject, "appendValue", &_zephir_call_cache[1], &_2$$3);
 		zephir_check_call_status();
 		i++;
 	}
@@ -335,13 +344,17 @@ PHP_METHOD(Stub_Issue2698, nestedProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_INIT_NVAR(&subject);
-		object_init_ex(&subject, stub_issue2698_ce);
-		if (zephir_has_constructor(&subject)) {
-			ZEPHIR_CALL_METHOD_CACHED(NULL, &subject, "__construct", &_zephir_call_cache[0]);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		object_init_ex(&_1$$3, stub_issue2698_ce);
+		if (zephir_has_constructor(&_1$$3)) {
+			zephir_constructor_start(&_1$$3);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_1$$3, "__construct", &_zephir_call_cache[0]);
 			zephir_check_call_status();
+			zephir_constructor_finish(&_1$$3);
 		}
 
+		ZEPHIR_CPY_WRT(&subject, &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "row");
 		ZEPHIR_INIT_NVAR(&_2$$3);
@@ -392,13 +405,17 @@ PHP_METHOD(Stub_Issue2698, unsetProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_INIT_NVAR(&subject);
-		object_init_ex(&subject, stub_issue2698_ce);
-		if (zephir_has_constructor(&subject)) {
-			ZEPHIR_CALL_METHOD_CACHED(NULL, &subject, "__construct", &_zephir_call_cache[0]);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		object_init_ex(&_1$$3, stub_issue2698_ce);
+		if (zephir_has_constructor(&_1$$3)) {
+			zephir_constructor_start(&_1$$3);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_1$$3, "__construct", &_zephir_call_cache[0]);
 			zephir_check_call_status();
+			zephir_constructor_finish(&_1$$3);
 		}
 
+		ZEPHIR_CPY_WRT(&subject, &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "a");
 		ZEPHIR_CALL_METHOD_CACHED(NULL, &subject, "removeOffset", &_zephir_call_cache[1], &_1$$3);
@@ -452,13 +469,17 @@ PHP_METHOD(Stub_Issue2698, unsetSharedProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_INIT_NVAR(&subject);
-		object_init_ex(&subject, stub_issue2698_ce);
-		if (zephir_has_constructor(&subject)) {
-			ZEPHIR_CALL_METHOD_CACHED(NULL, &subject, "__construct", &_zephir_call_cache[0]);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		object_init_ex(&_1$$3, stub_issue2698_ce);
+		if (zephir_has_constructor(&_1$$3)) {
+			zephir_constructor_start(&_1$$3);
+			ZEPHIR_CALL_METHOD_CACHED(NULL, &_1$$3, "__construct", &_zephir_call_cache[0]);
 			zephir_check_call_status();
+			zephir_constructor_finish(&_1$$3);
 		}
 
+		ZEPHIR_CPY_WRT(&subject, &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZEPHIR_INIT_NVAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "a");
 		ZEPHIR_CALL_METHOD_CACHED(NULL, &subject, "removeOffset", &_zephir_call_cache[1], &_1$$3);

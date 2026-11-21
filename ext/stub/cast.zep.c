@@ -326,15 +326,18 @@ PHP_METHOD(Stub_Cast, testIntCastFromStdClass)
  */
 PHP_METHOD(Stub_Cast, testIntCastFromVariableStdClass)
 {
-	zval a;
+	zval a, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
+	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_INIT_VAR(&a);
-	object_init(&a);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init(&_0);
+	ZEPHIR_CPY_WRT(&a, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	RETURN_MM_LONG(zephir_get_intval(&a));
 }
 
@@ -523,15 +526,18 @@ PHP_METHOD(Stub_Cast, testFloatCastFromStdClass)
  */
 PHP_METHOD(Stub_Cast, testFloatCastFromVariableStdClass)
 {
-	zval a;
+	zval a, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
+	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_INIT_VAR(&a);
-	object_init(&a);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init(&_0);
+	ZEPHIR_CPY_WRT(&a, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	RETURN_MM_DOUBLE(zephir_get_doubleval(&a));
 }
 
@@ -574,15 +580,18 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromIntFalse)
 
 PHP_METHOD(Stub_Cast, testBooleanCastFromObject)
 {
-	zval simpleObject;
+	zval simpleObject, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&simpleObject);
+	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_INIT_VAR(&simpleObject);
-	object_init(&simpleObject);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init(&_0);
+	ZEPHIR_CPY_WRT(&simpleObject, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	RETURN_MM_BOOL(zephir_get_boolval(&simpleObject));
 }
 
@@ -1022,9 +1031,10 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableStdClass)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_INIT_VAR(&uids);
-	object_init(&uids);
 	ZEPHIR_INIT_VAR(&_0);
+	object_init(&_0);
+	ZEPHIR_CPY_WRT(&uids, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "v1");
 	zephir_update_property_zval_cached(&uids, _zephir_prop_0, 0, &_0);

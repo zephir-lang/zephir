@@ -40,30 +40,6 @@ int zephir_has_constructor_ce(const zend_class_entry *ce)
 	return 0;
 }
 
-int zephir_check_constructor_access(const zval *object)
-{
-	zend_object *obj;
-
-	if (Z_TYPE_P(object) != IS_OBJECT) {
-		return SUCCESS;
-	}
-
-	obj = Z_OBJ_P(object);
-
-	/*
-	 * The get_constructor handler enforces PHP's visibility rules against the
-	 * currently executing scope and throws an Error when the constructor is
-	 * not accessible (e.g. protected or private). This mirrors what the engine
-	 * does for "new ClassName()" and prevents dynamic instantiation from
-	 * bypassing the access control.
-	 *
-	 * @see https://github.com/zephir-lang/zephir/issues/882
-	 */
-	obj->handlers->get_constructor(obj);
-
-	return EG(exception) ? FAILURE : SUCCESS;
-}
-
 /**
  * Creates a unique key to cache the current method/function call address for the current scope
  */
@@ -482,6 +458,65 @@ static zend_always_inline bool zephir_is_method_accessible(const zend_function *
 	}
 
 	return 0;
+}
+
+/**
+ * Checks that `new` may construct the object it has just initialized, as
+ * ZEND_NEW does before the arguments are evaluated, and releases the object
+ * when it may not, as PHP frees it before any `catch` runs.
+ *
+ * The engine's get_constructor handler decides, so each PHP version keeps its
+ * own rules, messages and destructor behavior, except in the global scope:
+ * Zephir code without a class, a function or a closure written in one, runs
+ * there, while the handler would walk up to the class of its caller (see
+ * zephir_get_calling_scope()).
+ *
+ * A non-object means object_init_ex() refused the class, such as an abstract
+ * class reached through `new static()`, and threw.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/882
+ * @see https://github.com/zephir-lang/zephir/issues/2802
+ */
+int zephir_check_constructor_access(zval *object)
+{
+	zend_object *obj;
+	zend_function *constructor;
+
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		return EG(exception) ? FAILURE : SUCCESS;
+	}
+
+	obj         = Z_OBJ_P(object);
+	constructor = obj->ce->constructor;
+
+	if (constructor
+		&& !(constructor->common.fn_flags & ZEND_ACC_PUBLIC)
+		&& obj->handlers->get_constructor == zend_std_get_constructor
+		&& !zephir_get_calling_scope()
+	) {
+		zend_throw_error(
+			NULL,
+			"Call to %s %s::%s() from global scope",
+			zephir_visibility_string(constructor->common.fn_flags),
+			ZSTR_VAL(constructor->common.scope->name),
+			ZSTR_VAL(constructor->common.function_name)
+		);
+		/* GH-14456: from these versions on, a refused object is freed without its destructor. */
+#if PHP_VERSION_ID >= 80309 || (PHP_VERSION_ID >= 80221 && PHP_VERSION_ID < 80300)
+		zend_object_store_ctor_failed(obj);
+#endif
+	} else {
+		obj->handlers->get_constructor(obj);
+	}
+
+	if (!EG(exception)) {
+		return SUCCESS;
+	}
+
+	zval_ptr_dtor(object);
+	ZVAL_NULL(object);
+
+	return FAILURE;
 }
 
 /* zend_get_parent_private_method(), static in the engine. */

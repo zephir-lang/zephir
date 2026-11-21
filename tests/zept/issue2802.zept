@@ -1,0 +1,232 @@
+--TEST--
+Issue #2802: new static() checks the constructor of the called class, and a failed new inside try reaches catch and keeps the assigned variable
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class NSFactory
+{
+    public function __construct(var value = null)
+    {
+    }
+
+    public static function make()
+    {
+        return new static();
+    }
+
+    public static function makeWithArgument()
+    {
+        return new static(self::sideEffect());
+    }
+
+    public static function sideEffect()
+    {
+        echo "evaluated\n";
+
+        return 1;
+    }
+
+    public static function makeCaught()
+    {
+        var e;
+
+        try {
+            return new static();
+        } catch \Error, e {
+            return "caught " . e->getMessage();
+        }
+    }
+
+    public static function keep()
+    {
+        var o, e;
+
+        let o = "old";
+        try {
+            let o = new static();
+        } catch \Throwable, e {
+            echo "in catch\n";
+        }
+        echo "after\n";
+
+        return o;
+    }
+
+    public static function replace()
+    {
+        var o;
+
+        let o = new static("first");
+        let o = new static("second");
+
+        return "done";
+    }
+
+    public static function makeNamedCaught(string name)
+    {
+        var e;
+
+        try {
+            return new {name}();
+        } catch \Error, e {
+            return "caught " . e->getMessage();
+        }
+    }
+
+    public static function makeUnknown()
+    {
+        return new \NoSuchClass2802();
+    }
+
+    public static function makeUnknownCaught()
+    {
+        var e;
+
+        try {
+            return new \NoSuchClass2802();
+        } catch \Error, e {
+            return "caught " . e->getMessage();
+        }
+    }
+
+    public static function makeWithThrowingArgument()
+    {
+        return new static(self::boom());
+    }
+
+    public static function boom()
+    {
+        throw new \RuntimeException("argument");
+    }
+
+    public static function fallThrough()
+    {
+        var e;
+
+        try {
+            return new static();
+        } catch \Throwable, e {
+            echo "in catch\n";
+        }
+
+        return "fell through";
+    }
+}
+--FILE--
+namespace Stub;
+
+class NSBare
+{
+    public static function make()
+    {
+        return new static();
+    }
+
+    public static function makeWithArgument()
+    {
+        return new static(self::sideEffect());
+    }
+
+    public static function sideEffect()
+    {
+        echo "evaluated\n";
+
+        return 1;
+    }
+}
+--FILE--
+namespace Stub;
+
+abstract class NSAbstract
+{
+    public static function make()
+    {
+        var o;
+
+        let o = new static();
+        echo "continued\n";
+
+        return o;
+    }
+
+    public static function makeCaught()
+    {
+        var e;
+
+        try {
+            return new static();
+        } catch \Error, e {
+            return "caught " . e->getMessage();
+        }
+    }
+}
+--USAGE--
+class PrivChild extends \Stub\NSFactory { private function __construct() {} }
+class ProtChild extends \Stub\NSFactory { protected function __construct() {} }
+class ThrowChild extends \Stub\NSFactory { public function __construct($v = null) { throw new \RuntimeException("ctor"); } }
+class ThrowDtor extends \Stub\NSFactory { public function __construct($v = null) { throw new \RuntimeException("ctor"); } public function __destruct() { echo "destructed\n"; } }
+class BarePriv extends \Stub\NSBare { private function __construct() {} }
+class Dtor extends \Stub\NSFactory { public function __destruct() { echo "destructed\n"; } }
+class Noisy extends \Stub\NSFactory
+{
+    public $v;
+    public function __construct($v = null) { echo "construct $v\n"; $this->v = $v; }
+    public function __destruct() { echo "destruct {$this->v}\n"; }
+}
+function t(string $label, callable $fn): void
+{
+    ob_start();
+    try {
+        $result = $fn();
+        $out = is_object($result) ? get_class($result) : var_export($result, true);
+    } catch (\Throwable $e) {
+        $out = get_class($e) . ": " . $e->getMessage();
+    }
+    $printed = ob_get_clean();
+    echo $label, ": ", $printed === "" ? "" : "[" . str_replace("\n", "|", trim($printed)) . "] ", $out, "\n";
+}
+t("issue case", fn() => \PrivChild::make());
+t("protected narrowed", fn() => \ProtChild::make());
+t("arguments not evaluated", fn() => \PrivChild::makeWithArgument());
+t("caught in try", fn() => \PrivChild::makeCaught());
+t("keep refused", fn() => \PrivChild::keep());
+t("keep throwing", fn() => \ThrowChild::keep());
+t("fall through refused", fn() => \PrivChild::fallThrough());
+t("fall through throwing", fn() => \ThrowChild::fallThrough());
+t("base without a constructor", fn() => \BarePriv::make());
+t("public", fn() => \Stub\NSFactory::make());
+t("throwing with a destructor", fn() => \ThrowDtor::make());
+t("keep throwing with a destructor", fn() => \ThrowDtor::keep());
+t("argument throws with a destructor", fn() => \Dtor::makeWithThrowingArgument());
+t("abstract called class", fn() => \Stub\NSAbstract::make());
+t("abstract called class caught", fn() => \Stub\NSAbstract::makeCaught());
+t("no constructor evaluates arguments", fn() => \Stub\NSBare::makeWithArgument());
+t("replaced after the new one is constructed", fn() => \Noisy::replace());
+t("named unknown class caught in try", fn() => \Stub\NSFactory::makeNamedCaught("Nope"));
+t("named private class caught in try", fn() => \Stub\NSFactory::makeNamedCaught("PrivChild"));
+t("unknown class", fn() => \Stub\NSFactory::makeUnknown());
+t("unknown class caught in try", fn() => \Stub\NSFactory::makeUnknownCaught());
+--EXPECT--
+issue case: Error: Call to private PrivChild::__construct() from scope Stub\NSFactory
+protected narrowed: ProtChild
+arguments not evaluated: Error: Call to private PrivChild::__construct() from scope Stub\NSFactory
+caught in try: 'caught Call to private PrivChild::__construct() from scope Stub\\NSFactory'
+keep refused: [in catch|after] 'old'
+keep throwing: [in catch|after] 'old'
+fall through refused: [in catch] 'fell through'
+fall through throwing: [in catch] 'fell through'
+base without a constructor: Error: Call to private BarePriv::__construct() from scope Stub\NSBare
+public: Stub\NSFactory
+throwing with a destructor: RuntimeException: ctor
+keep throwing with a destructor: [in catch|after] 'old'
+argument throws with a destructor: RuntimeException: argument
+abstract called class: Error: Cannot instantiate abstract class Stub\NSAbstract
+abstract called class caught: 'caught Cannot instantiate abstract class Stub\\NSAbstract'
+no constructor evaluates arguments: [evaluated] Stub\NSBare
+replaced after the new one is constructed: [construct first|construct second|destruct first|destruct second] 'done'
+named unknown class caught in try: 'caught Class "Nope" not found'
+named private class caught in try: 'caught Call to private PrivChild::__construct() from scope Stub\\NSFactory'
+unknown class: Error: Class "NoSuchClass2802" not found
+unknown class caught in try: 'caught Class "NoSuchClass2802" not found'

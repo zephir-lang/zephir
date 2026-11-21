@@ -1626,14 +1626,19 @@ class Backend
         $context->codePrinter->output('zend_iterator_dtor(' . $iteratorVariable->getName() . ');');
     }
 
-    public function fetchClass(Variable $zendClassEntry, $className, $guarded, CompilationContext $context): void
-    {
+    public function fetchClass(
+        Variable $zendClassEntry,
+        $className,
+        $guarded,
+        CompilationContext $context,
+        string $fetchType = 'ZEND_FETCH_CLASS_AUTO'
+    ): void {
         $context->headersManager->add('kernel/object');
         if ($guarded) {
             $context->codePrinter->output('if (!' . $zendClassEntry->getName() . ') {');
         }
         $context->codePrinter->output(
-            $zendClassEntry->getName() . ' = zephir_fetch_class_str_ex(' . $className . ', ZEND_FETCH_CLASS_AUTO);'
+            $zendClassEntry->getName() . ' = zephir_fetch_class_str_ex(' . $className . ', ' . $fetchType . ');'
         );
         if ($guarded) {
             $context->codePrinter->output('}');

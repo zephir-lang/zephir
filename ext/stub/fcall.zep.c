@@ -470,8 +470,10 @@ PHP_FUNCTION(g_stub_zephir_global_method_test) {
 	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, stub_fcall_ce);
 	if (zephir_has_constructor(&_0)) {
+		zephir_constructor_start(&_0);
 		ZEPHIR_CALL_METHOD_CACHED(NULL, &_0, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
+		zephir_constructor_finish(&_0);
 	}
 
 	ZEPHIR_RETURN_CALL_METHOD_CACHED(&_0, "testStrtokVarBySlash", &_zephir_call_cache[1], str);
@@ -507,8 +509,10 @@ PHP_FUNCTION(f_Stub_zephir_namespaced_method_test) {
 	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, stub_fcall_ce);
 	if (zephir_has_constructor(&_0)) {
+		zephir_constructor_start(&_0);
 		ZEPHIR_CALL_METHOD_CACHED(NULL, &_0, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
+		zephir_constructor_finish(&_0);
 	}
 
 	ZVAL_LONG(&_1, 5);
