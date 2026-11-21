@@ -1,5 +1,5 @@
 FROM composer:latest AS composer
-FROM php:8.6-rc-fpm
+FROM php:8.6-fpm
 
 RUN CPU_CORES="$(getconf _NPROCESSORS_ONLN)";
 ENV MAKEFLAGS="-j${CPU_CORES}"
@@ -15,7 +15,7 @@ RUN apt update -y && apt install -y \
     libzip-dev
 
 # The PHP 8.6 images ship neither PEAR (so no `pecl`) nor mbstring.
-RUN for pkg in psr-1.2.0 zephir_parser-2.11.0; do \
+RUN for pkg in psr-1.2.0 zephir_parser-2.12.0; do \
         curl -fsSL "https://pecl.php.net/get/${pkg}.tgz" | tar xz -C /tmp && \
         (cd "/tmp/${pkg}" && phpize && ./configure && make && make install) && \
         rm -rf "/tmp/${pkg}" || exit 1; \
