@@ -29,6 +29,7 @@ use function implode;
  * @see https://github.com/zephir-lang/zephir/issues/2711
  * @see https://github.com/zephir-lang/zephir/issues/2723
  * @see https://github.com/zephir-lang/zephir/issues/2825
+ * @see https://github.com/zephir-lang/zephir/issues/2824
  */
 final class ParserExtensionGrammarTest extends TestCase
 {
@@ -38,6 +39,7 @@ final class ParserExtensionGrammarTest extends TestCase
         namespace Pegrammar;
 
         use DateTime;
+        use PDO;
 
         class Sample
         {
@@ -74,6 +76,31 @@ final class ParserExtensionGrammarTest extends TestCase
                     return __FUNCTION__;
                 };
             }
+
+            public static function allCapsClass(<PDO> pdo, var value) -> <PDO>
+            {
+                var cast;
+
+                let cast = <PDO> value;
+
+                return cast;
+            }
+
+            public static function allCapsCatch(var value) -> var
+            {
+                var e;
+
+                try {
+                    return value;
+                } catch PDOEXCEPTION, e {
+                    return e;
+                }
+            }
+
+            public static function keywordArgumentName(string s, var value) -> bool
+            {
+                return strlen(string: s) > 0 && is_a(value, class: "PDO");
+            }
         }
 
         ZEP;
@@ -104,7 +131,11 @@ final class ParserExtensionGrammarTest extends TestCase
         // static::NAME is looked up on the called class at run time.
         $this->assertStringContainsString('zephir_get_called_scope(execute_data), SL("NAME")', $fromExtension);
         // PHP 8.4 names a closure after the line it starts on, not the line it ends on.
-        $this->assertStringContainsString('SL("{closure:Pegrammar\\\\Sample::closureName():36}")', $fromExtension);
+        $this->assertStringContainsString('SL("{closure:Pegrammar\\\\Sample::closureName():37}")', $fromExtension);
+        // An all-caps name is the PDO class in a type hint, not a constant.
+        $this->assertStringContainsString('ZEND_ARG_OBJ_INFO(0, pdo, PDO, 0)', $fromExtension);
+        // A keyword names the argument.
+        $this->assertStringContainsString('SL("class"), ', $fromExtension);
         $this->assertSame($fromPurePhp, $fromExtension);
     }
 

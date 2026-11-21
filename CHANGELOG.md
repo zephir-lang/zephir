@@ -6,11 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-11-20
+
 ### Added
 - Added PHP 8.6 support [#2670](https://github.com/zephir-lang/zephir/issues/2670)
 
 ### Changed
+- Raised the minimum `ext-zephir_parser` to 2.12.0 for all-caps class names in a cast, a type hint, a return type or `catch`, and a keyword as a named argument name [#2824](https://github.com/zephir-lang/zephir/issues/2824)
 - Changed `doubleval()` to call PHP's function instead of inlining it, so PHP 8.6 reports its deprecation [#2670](https://github.com/zephir-lang/zephir/issues/2670)
+- Changed `call_user_func()` and `call_user_func_array()` to throw PHP's TypeError for an invalid callback, such as an unknown method or a private method of another class, where they gave a warning and returned null; a private callback of the calling class is now accepted [#2824](https://github.com/zephir-lang/zephir/issues/2824)
 
 ### Fixed
 - Fixed a method using `func_get_arg()` throwing when called through a callable such as `call_user_func()` [#2670](https://github.com/zephir-lang/zephir/issues/2670)
@@ -35,7 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed named arguments being passed in the order written, and a skipped optional parameter getting `null` instead of its default [#2824](https://github.com/zephir-lang/zephir/issues/2824)
 - Fixed a named argument failing to compile after a positional one or with a keyword as its name, such as `strlen(string: s)` [#2824](https://github.com/zephir-lang/zephir/issues/2824)
 - Fixed a variadic parameter dropping the named arguments it has no parameter for [#2824](https://github.com/zephir-lang/zephir/issues/2824)
-- Fixed `call_user_func()` and `call_user_func_array()` rejecting a private callback of the class and warning instead of throwing PHP's TypeError [#2824](https://github.com/zephir-lang/zephir/issues/2824)
 - Fixed a variable first assigned by a by-reference parameter, as in `parse_str(s, result)`, leaking what the callee stored in it [#2824](https://github.com/zephir-lang/zephir/issues/2824)
 - Fixed `create_instance_params()` crashing when given arguments for a class without a constructor [#2839](https://github.com/zephir-lang/zephir/issues/2839)
 - Fixed `var_export(x, true)` failing to compile when `x` is a cast, a native variable, a literal or another expression [#2774](https://github.com/zephir-lang/zephir/issues/2774)

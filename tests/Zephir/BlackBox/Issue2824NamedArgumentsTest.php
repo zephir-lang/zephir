@@ -15,8 +15,6 @@ namespace Zephir\Test\BlackBox;
 
 use PHPUnit\Framework\TestCase;
 
-use function putenv;
-
 /**
  * The compile time rules PHP applies to named arguments, plus the one Zephir
  * adds: a built-in function that only exists in Zephir has no parameter names
@@ -31,15 +29,11 @@ final class Issue2824NamedArgumentsTest extends TestCase
     protected function setUp(): void
     {
         $this->setUpStubProject();
-
-        // A keyword as an argument name needs a parser newer than ext-zephir_parser 2.11.0.
-        putenv('ZEPHIR_FORCE_PHP_PARSER=1');
     }
 
     protected function tearDown(): void
     {
         $this->tearDownZephirRunner();
-        putenv('ZEPHIR_FORCE_PHP_PARSER');
     }
 
     /**

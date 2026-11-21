@@ -14,13 +14,12 @@ declare(strict_types=1);
 namespace Zephir\Test\BlackBox;
 
 use PHPUnit\Framework\TestCase;
+use Zephir\Parser\Manager;
 
 use function file_get_contents;
-use function function_exists;
-use function is_array;
+use function phpversion;
 use function putenv;
 use function str_replace;
-use function zephir_parse_file;
 
 /**
  * A class whose name is all capitals, such as `A` or `PDO`, is a class name
@@ -165,8 +164,6 @@ final class Issue2824AllCapsTest extends TestCase
 
     public function testAllCapsClassNameCompilesEverywhere(): void
     {
-        putenv('ZEPHIR_FORCE_PHP_PARSER=1');
-
         [$output, $generated] = $this->generateUser();
 
         $this->assertStringContainsString('ZEND_ARG_OBJ_INFO(0, a, Stub\\\\A, 0)', $generated);
@@ -176,7 +173,6 @@ final class Issue2824AllCapsTest extends TestCase
 
     public function testInstanceofAllCapsNameIsAClassCheck(): void
     {
-        putenv('ZEPHIR_FORCE_PHP_PARSER=1');
         $this->generateUser();
         $allCaps = (string) file_get_contents($this->projectDir . '/ext/stub/user.zep.c');
 
@@ -194,8 +190,9 @@ final class Issue2824AllCapsTest extends TestCase
 
     public function testExtensionParserAgrees(): void
     {
-        if (!$this->extensionParsesAllCapsCasts()) {
-            $this->markTestSkipped('Needs an ext-zephir_parser that parses all-caps class names in casts.');
+        $version = phpversion('zephir_parser');
+        if (!Manager::isExtensionUsable($version === false ? null : $version)) {
+            $this->markTestSkipped('Needs ext-zephir_parser >= ' . Manager::MINIMUM_PARSER_VERSION . '.');
         }
 
         [, $fromExtension] = $this->generateUser();
@@ -225,16 +222,5 @@ final class Issue2824AllCapsTest extends TestCase
             file_get_contents($this->projectDir . '/ext/stub/user.zep.c')
                 . file_get_contents($this->projectDir . '/ext/stub/user.zep.h'),
         ];
-    }
-
-    private function extensionParsesAllCapsCasts(): bool
-    {
-        if (!function_exists('zephir_parse_file')) {
-            return false;
-        }
-
-        $ir = zephir_parse_file('class X { public function f(<A> a) -> <A> { } }', '(eval code)');
-
-        return is_array($ir) && 'error' !== ($ir['type'] ?? $ir[0]['type'] ?? null);
     }
 }

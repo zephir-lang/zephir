@@ -20,7 +20,9 @@ class Manager
 {
     /**
      * Oldest `ext-zephir_parser` whose grammar covers the syntax this Zephir
-     * accepts. 2.11.0 added `X::class` as a parameter default and the closure
+     * accepts. 2.12.0 added all-caps class names in a cast, a type hint, a
+     * return type and `catch`, and a keyword as a named argument name
+     * (zephir#2824); 2.11.0 `X::class` as a parameter default and the closure
      * start line (zephir#2825); 2.10.0 `static::CONSTANT` (zephir#2711),
      * `static::{method}()` and `CONSTANT::{method}()` (zephir#2723); 2.9.0
      * `instanceof static` (zephir#2714); 2.8.0 PHP attributes (zephir#2466);
@@ -28,7 +30,7 @@ class Manager
      * (zephir#2061); 2.1.0 trait AST nodes (zephir#504).
      * Raise this in the same change that adds a grammar feature.
      */
-    public const MINIMUM_PARSER_VERSION = '2.11.0';
+    public const MINIMUM_PARSER_VERSION = '2.12.0';
     public const PARSER_HOME_PAGE       = 'https://github.com/zephir-lang/php-zephir-parser';
 
     public function __construct(protected Parser $parser)
