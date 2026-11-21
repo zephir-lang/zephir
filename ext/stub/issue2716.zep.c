@@ -156,10 +156,12 @@ PHP_METHOD(Stub_Issue2716, swallowedThrow)
 
 		ZEPHIR_INIT_VAR(&_0$$3);
 		object_init_ex(&_0$$3, stub_exception_ce);
+		zephir_constructor_start(&_0$$3);
 		ZEPHIR_INIT_VAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "swallowed");
 		ZEPHIR_CALL_METHOD_CACHED(NULL, &_0$$3, "__construct", &_zephir_call_cache[0], &_1$$3);
 		zephir_check_call_status_or_jump(try_end_1);
+		zephir_constructor_finish(&_0$$3);
 		zephir_throw_exception_debug(&_0$$3, "stub/issue2716.zep", 51);
 		goto try_end_1;
 	try_end_1:
@@ -172,12 +174,13 @@ PHP_METHOD(Stub_Issue2716, constructProbe)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_0 = NULL;
-	zval *iterations_param = NULL, before, after, subject;
+	zval *iterations_param = NULL, before, after, subject, _1$$3;
 	zend_long iterations, ZEPHIR_LAST_CALL_STATUS, i = 0;
 
 	ZVAL_UNDEF(&before);
 	ZVAL_UNDEF(&after);
 	ZVAL_UNDEF(&subject);
+	ZVAL_UNDEF(&_1$$3);
 	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(iterations)
@@ -194,10 +197,14 @@ PHP_METHOD(Stub_Issue2716, constructProbe)
 		if (!(i < iterations)) {
 			break;
 		}
-		ZEPHIR_INIT_NVAR(&subject);
-		object_init_ex(&subject, stub_issue2716_ce);
-		ZEPHIR_CALL_METHOD_CACHED(NULL, &subject, "__construct", &_zephir_call_cache[0]);
+		ZEPHIR_INIT_NVAR(&_1$$3);
+		object_init_ex(&_1$$3, stub_issue2716_ce);
+		zephir_constructor_start(&_1$$3);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, &_1$$3, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
+		zephir_constructor_finish(&_1$$3);
+		ZEPHIR_CPY_WRT(&subject, &_1$$3);
+		ZEPHIR_INIT_NVAR(&_1$$3);
 		i++;
 	}
 	ZEPHIR_CALL_FUNCTION(&after, "memory_get_usage", &_0, 35);

@@ -1,0 +1,112 @@
+--TEST--
+Issue #2802: new in a function, or in a closure written in one, checks the constructor from the global scope, whatever class called the function
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+function makePrivate()
+{
+    return new \PrivCtor();
+}
+
+function makeProtected()
+{
+    return new \ProtCtor();
+}
+
+function makePrivateInClosure()
+{
+    var f;
+
+    let f = function () {
+        return new \PrivCtor();
+    };
+
+    return {f}();
+}
+
+function makePrivateInCapturingClosure()
+{
+    var f, x;
+
+    let x = 1;
+    let f = function () use (x) {
+        return new \PrivCtor();
+    };
+
+    return {f}();
+}
+
+class NFCaller
+{
+    public static function viaFunction()
+    {
+        return \Stub\makePrivate();
+    }
+}
+
+function makePrivateCaught()
+{
+    var e;
+
+    try {
+        return new \PrivCtor();
+    } catch \Error, e {
+        return "caught " . e->getMessage();
+    }
+}
+--USAGE--
+class PrivCtor
+{
+    private function __construct() {}
+    public static function viaFunction() { return \Stub\makePrivate(); }
+    public static function viaClosure() { return \Stub\makePrivateInClosure(); }
+    public static function viaCapturingClosure() { return \Stub\makePrivateInCapturingClosure(); }
+    public static function viaCaught() { return \Stub\makePrivateCaught(); }
+    public static function viaPhpFunction() { return php_make_private(); }
+}
+class ProtCtor
+{
+    protected function __construct() {}
+    public static function viaFunction() { return \Stub\makeProtected(); }
+}
+class ProtChildCtor extends ProtCtor
+{
+    public static function viaFunction() { return \Stub\makeProtected(); }
+}
+class Other
+{
+    public static function viaFunction() { return \Stub\makePrivate(); }
+}
+function php_make_private() { return new PrivCtor(); }
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", is_object($result) ? get_class($result) : $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+t("PHP function from the class", fn() => \PrivCtor::viaPhpFunction());
+t("function from global", fn() => \Stub\makePrivate());
+t("function from the class", fn() => \PrivCtor::viaFunction());
+t("function from another class", fn() => \Other::viaFunction());
+t("function from a Zephir class", fn() => \Stub\NFCaller::viaFunction());
+t("protected from the class", fn() => \ProtCtor::viaFunction());
+t("protected from a child", fn() => \ProtChildCtor::viaFunction());
+t("closure from the class", fn() => \PrivCtor::viaClosure());
+t("capturing closure from the class", fn() => \PrivCtor::viaCapturingClosure());
+t("caught in try from the class", fn() => \PrivCtor::viaCaught());
+--EXPECT--
+PHP function from the class: Error: Call to private PrivCtor::__construct() from global scope
+function from global: Error: Call to private PrivCtor::__construct() from global scope
+function from the class: Error: Call to private PrivCtor::__construct() from global scope
+function from another class: Error: Call to private PrivCtor::__construct() from global scope
+function from a Zephir class: Error: Call to private PrivCtor::__construct() from global scope
+protected from the class: Error: Call to protected ProtCtor::__construct() from global scope
+protected from a child: Error: Call to protected ProtCtor::__construct() from global scope
+closure from the class: Error: Call to private PrivCtor::__construct() from global scope
+capturing closure from the class: Error: Call to private PrivCtor::__construct() from global scope
+caught in try from the class: caught Call to private PrivCtor::__construct() from global scope

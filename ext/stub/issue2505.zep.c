@@ -35,8 +35,10 @@ PHP_METHOD(Stub_Issue2505, makeSelf)
 
 	object_init_ex(return_value, stub_issue2505_ce);
 	if (zephir_has_constructor(return_value)) {
+		zephir_constructor_start(return_value);
 		ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
+		zephir_constructor_finish(return_value);
 	}
 
 	RETURN_MM();
@@ -53,8 +55,10 @@ PHP_METHOD(Stub_Issue2505, makeSelfStatic)
 
 	object_init_ex(return_value, stub_issue2505_ce);
 	if (zephir_has_constructor(return_value)) {
+		zephir_constructor_start(return_value);
 		ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
+		zephir_constructor_finish(return_value);
 	}
 
 	RETURN_MM();
@@ -73,8 +77,10 @@ PHP_METHOD(Stub_Issue2505, makeStatic)
 	ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(return_value);
 	zephir_check_call_status();
 	if (zephir_has_constructor(return_value)) {
+		zephir_constructor_start(return_value);
 		ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
+		zephir_constructor_finish(return_value);
 	}
 
 	RETURN_MM();
@@ -93,8 +99,10 @@ PHP_METHOD(Stub_Issue2505, makeStaticFromStatic)
 	ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(return_value);
 	zephir_check_call_status();
 	if (zephir_has_constructor(return_value)) {
+		zephir_constructor_start(return_value);
 		ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
+		zephir_constructor_finish(return_value);
 	}
 
 	RETURN_MM();

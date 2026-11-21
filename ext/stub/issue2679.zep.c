@@ -444,10 +444,12 @@ PHP_METHOD(Stub_Issue2679, tryOnly)
 		if (boom) {
 			ZEPHIR_INIT_VAR(&_0$$4);
 			object_init_ex(&_0$$4, spl_ce_RuntimeException);
+			zephir_constructor_start(&_0$$4);
 			ZEPHIR_INIT_VAR(&_1$$4);
 			ZVAL_STRING(&_1$$4, "boom");
 			ZEPHIR_CALL_METHOD_CACHED(NULL, &_0$$4, "__construct", &_zephir_call_cache[0], &_1$$4);
 			zephir_check_call_status_or_jump(try_end_1);
+			zephir_constructor_finish(&_0$$4);
 			zephir_throw_exception_debug(&_0$$4, "stub/issue2679.zep", 206);
 			goto try_end_1;
 

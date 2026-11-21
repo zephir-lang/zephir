@@ -904,12 +904,36 @@ ZEPHIR_ATTR_WARN_UNUSED_RESULT static inline int zephir_call_user_func_array(zva
 int zephir_has_constructor_ce(const zend_class_entry *ce) ZEPHIR_ATTR_PURE ZEPHIR_ATTR_NONNULL;
 
 /**
- * Throws an Error and returns FAILURE when the object's constructor is not
- * accessible from the current scope, mirroring PHP's "new" operator.
+ * Throws an Error, releases the object and returns FAILURE when `new` may not
+ * construct it from the calling scope, mirroring PHP's "new" operator.
  *
  * @see https://github.com/zephir-lang/zephir/issues/882
+ * @see https://github.com/zephir-lang/zephir/issues/2802
  */
-int zephir_check_constructor_access(const zval *object) ZEPHIR_ATTR_NONNULL;
+int zephir_check_constructor_access(zval *object) ZEPHIR_ATTR_NONNULL;
+
+/**
+ * `new` evaluates the arguments and runs the constructor with the object
+ * marked as destructed, and lifts the mark once they return. An exception
+ * leaves the mark, so an object that was never constructed is freed without
+ * its destructor, as PHP's cleanup of an unfinished `new` marks it. A
+ * non-object is one object_init_ex() refused, and has nothing to mark.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2802
+ */
+static zend_always_inline void zephir_constructor_start(zval *object)
+{
+	if (EXPECTED(Z_TYPE_P(object) == IS_OBJECT)) {
+		GC_ADD_FLAGS(Z_OBJ_P(object), IS_OBJ_DESTRUCTOR_CALLED);
+	}
+}
+
+static zend_always_inline void zephir_constructor_finish(zval *object)
+{
+	if (EXPECTED(Z_TYPE_P(object) == IS_OBJECT)) {
+		GC_DEL_FLAGS(Z_OBJ_P(object), IS_OBJ_DESTRUCTOR_CALLED);
+	}
+}
 
 /**
  * Throws an Error and returns FAILURE when the object's __clone() is not

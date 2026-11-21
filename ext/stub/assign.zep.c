@@ -462,16 +462,19 @@ PHP_METHOD(Stub_Assign, testAssign39)
 
 PHP_METHOD(Stub_Assign, testAssign40)
 {
-	zval a, b;
+	zval a, b, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
+	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_INIT_VAR(&b);
-	object_init(&b);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init(&_0);
+	ZEPHIR_CPY_WRT(&b, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
 	ZEPHIR_INIT_NVAR(&a);

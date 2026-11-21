@@ -15,6 +15,7 @@ namespace Zephir\Operators\Other;
 
 use ReflectionClass;
 use ReflectionException;
+use Zephir\Call;
 use Zephir\Class\Entry;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -27,6 +28,7 @@ use Zephir\Variable\Variable;
 
 use function count;
 use function in_array;
+use function is_array;
 use function ltrim;
 use function sprintf;
 
@@ -35,6 +37,23 @@ use function sprintf;
  */
 class NewInstanceOperator extends AbstractOperator
 {
+    /**
+     * Argument expressions PHP evaluates without a side effect.
+     */
+    private const PURE_ARGUMENT_TYPES = [
+        'null',
+        'int',
+        'integer',
+        'long',
+        'double',
+        'bool',
+        'string',
+        'istring',
+        'char',
+        'empty-array',
+        'variable',
+    ];
+
     protected bool $literalOnly = false;
 
     /**
@@ -51,23 +70,25 @@ class NewInstanceOperator extends AbstractOperator
          * Resolves the symbol that expects the value
          */
         $this->literalOnly = false;
-        $symbolVariable    = $this->getExpectedNonLiteral($compilationContext, $expression);
-        if (!$symbolVariable->isVariable()) {
+        $targetVariable    = $this->getExpectedNonLiteral($compilationContext, $expression, false);
+        if (!$targetVariable->isVariable()) {
             throw new CompilerException('Objects can only be instantiated into dynamic variables', $expression);
         }
 
-        if ($symbolVariable->isLocalOnly()) {
+        if ($targetVariable->isLocalOnly()) {
             throw new CompilerException('Cannot use non-heap variable to store new instance', $expression);
         }
 
-        if ('return_value' !== $symbolVariable->getName()) {
-            if ($symbolVariable->hasDifferentDynamicType(['unknown', 'undefined', 'object', 'null'])) {
+        if ('return_value' !== $targetVariable->getName()) {
+            if ($targetVariable->hasDifferentDynamicType(['unknown', 'undefined', 'object', 'null'])) {
                 $compilationContext->logger->warning(
                     'Possible attempt to use non-object in "new" operator',
                     ['non-valid-new', $expression]
                 );
             }
         }
+
+        $symbolVariable = $this->getConstructionVariable($targetVariable, $compilationContext, $expression);
 
         /**
          * Mark variables as dynamic objects
@@ -195,12 +216,7 @@ class NewInstanceOperator extends AbstractOperator
                         $compilationContext
                     );
                     $classEntry       = $zendClassEntry->getName();
-
-                    $compilationContext->codePrinter->output('if(!' . $classEntry . ') {');
-                    $compilationContext->codePrinter->increaseLevel();
-                    $compilationContext->codePrinter->output('RETURN_MM_NULL();');
-                    $compilationContext->codePrinter->decreaseLevel();
-                    $compilationContext->codePrinter->output('}');
+                    $this->exitIfClassNotFound($classEntry, $compilationContext);
                 } else {
                     if (!class_exists($className, false)) {
                         $compilationContext->logger->warning(
@@ -215,6 +231,7 @@ class NewInstanceOperator extends AbstractOperator
                             $compilationContext
                         );
                         $classEntry     = $zendClassEntry->getName();
+                        $this->exitIfClassNotFound($classEntry, $compilationContext);
                     } else {
                         $reflectionClass = new ReflectionClass($className);
                         if ($reflectionClass->isInterface()) {
@@ -252,38 +269,29 @@ class NewInstanceOperator extends AbstractOperator
          * Don't check the constructor for stdclass instances
          */
         if ($isStdClass) {
-            return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+            return $this->assignConstructed($symbolVariable, $targetVariable, $compilationContext, $expression);
         }
 
         /**
          * `new` honours the constructor's visibility exactly like PHP's `new`
          * operator, with PHP's message and without the `__call()` fallback a
-         * method call would take. Only a constructor known to be public (or
-         * absent) skips the check: a dynamic class is resolved at runtime, and
-         * a class outside the extension may not exist at compile time.
+         * method call would take, and stops where object_init_ex() refused an
+         * abstract class. Only a concrete class with a constructor known to be
+         * public (or absent) skips the check: a dynamic class is resolved at
+         * runtime, and a class outside the extension may not exist at compile
+         * time. A failure reaches the `catch` of an enclosing `try`.
          *
          * @see https://github.com/zephir-lang/zephir/issues/882
          * @see https://github.com/zephir-lang/zephir/issues/2734
+         * @see https://github.com/zephir-lang/zephir/issues/2802
          */
-        if ($dynamic || !$this->hasPublicConstructor($className, $isLateStaticBinding, $compilationContext)) {
-            $compilationContext->headersManager->add('kernel/fcall');
-            $compilationContext->symbolTable->mustGrownStack(true);
-
-            if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_LAST_CALL_STATUS')) {
-                $callStatus = new Variable(
-                    'int',
-                    'ZEPHIR_LAST_CALL_STATUS',
-                    $compilationContext->branchManager->getCurrentBranch()
-                );
-                $callStatus->setIsInitialized(true, $compilationContext);
-                $callStatus->increaseUses();
-                $callStatus->setReadOnly(true);
-                $compilationContext->symbolTable->addRawVariable($callStatus);
-            }
+        if ($dynamic || $this->needsConstructorCheck($className, $isLateStaticBinding, $compilationContext)) {
+            $statusCall = new Call();
+            $statusCall->addCallStatusFlag($compilationContext);
 
             $symbolCode = $compilationContext->backend->getVariableCode($symbolVariable);
             $codePrinter->output('ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(' . $symbolCode . ');');
-            $codePrinter->output('zephir_check_call_status();');
+            $statusCall->addCallStatusOrJump($compilationContext);
         }
 
         /**
@@ -335,56 +343,204 @@ class NewInstanceOperator extends AbstractOperator
          * If we are certain that there is a constructor we call it, otherwise we checked it at runtime.
          */
         if ($callConstructor) {
-            $methodCall = new MethodCall();
-            $callExpr->setExpectReturn(false);
-            $methodCall->compile($callExpr, $compilationContext);
+            $this->callConstructor($callExpr, $symbolVariable, $compilationContext);
         } else {
+            $symbolCode = $compilationContext->backend->getVariableCode($symbolVariable);
+
             $compilationContext->headersManager->add('kernel/fcall');
-            $compilationContext->codePrinter->output(
-                'if (zephir_has_constructor(' . $compilationContext->backend->getVariableCode($symbolVariable) . ')) {'
-            );
+            $compilationContext->codePrinter->output('if (zephir_has_constructor(' . $symbolCode . ')) {');
             $codePrinter->increaseLevel();
-
-            $methodCall = new MethodCall();
-            $callExpr->setExpectReturn(false);
-            $methodCall->compile($callExpr, $compilationContext);
-
+            $this->callConstructor($callExpr, $symbolVariable, $compilationContext);
             $codePrinter->decreaseLevel();
+
+            /**
+             * Without a constructor PHP still evaluates the arguments, in a
+             * call to a function that does nothing. Only an argument whose
+             * evaluation can be observed is compiled again here.
+             */
+            $arguments = $this->argumentsWithEffects($expression['parameters'] ?? []);
+            if ([] !== $arguments) {
+                $codePrinter->output('} else {');
+                $codePrinter->increaseLevel();
+                $codePrinter->output('zephir_constructor_start(' . $symbolCode . ');');
+                foreach ($arguments as $argument) {
+                    $argumentExpression = new Expression($argument);
+                    $argumentExpression->setReadOnly(true);
+                    $argumentExpression->compile($compilationContext);
+                }
+                $codePrinter->output('zephir_constructor_finish(' . $symbolCode . ');');
+                $codePrinter->decreaseLevel();
+            }
+
             $codePrinter->output('}');
             $codePrinter->outputBlankLine();
         }
 
-        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        return $this->assignConstructed($symbolVariable, $targetVariable, $compilationContext, $expression);
     }
 
     /**
-     * Whether `new` is known to reach a public constructor, or none at all.
+     * A class that does not exist at runtime throws PHP's Error, which leaves
+     * the method or reaches the `catch` of an enclosing `try`.
      *
-     * `new static()` never is: a subclass may narrow the constructor it
-     * inherits, and PHP checks the one of the class actually instantiated.
+     * @see https://github.com/zephir-lang/zephir/issues/2802
      */
-    private function hasPublicConstructor(
+    private function exitIfClassNotFound(string $classEntry, CompilationContext $compilationContext): void
+    {
+        $compilationContext->codePrinter->output('if (!' . $classEntry . ') {');
+        $compilationContext->codePrinter->increaseLevel();
+        $compilationContext->emitExceptionExit();
+        $compilationContext->codePrinter->decreaseLevel();
+        $compilationContext->codePrinter->output('}');
+    }
+
+    /**
+     * The variable the object is built in.
+     *
+     * PHP assigns the result of `new` only once the constructor has returned:
+     * until then a variable keeps its old value, so a refused or throwing
+     * constructor leaves it as it was, and its old object is released after
+     * the new one is constructed. The object is built in place only where
+     * nothing can see it before that: a temporary, or the return value
+     * outside a `try`, which a failure discards.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2802
+     */
+    private function getConstructionVariable(
+        Variable $targetVariable,
+        CompilationContext $compilationContext,
+        array $expression
+    ): Variable {
+        if ($targetVariable->isTemporal()) {
+            return $targetVariable;
+        }
+
+        if ('return_value' === $targetVariable->getName() && !$compilationContext->insideTryCatch) {
+            $targetVariable->initVariant($compilationContext);
+
+            return $targetVariable;
+        }
+
+        return $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+    }
+
+    /**
+     * Moves the constructed object into the variable it is assigned to, the
+     * way a `let` copies a variable, and drops the temporary's reference at
+     * once, so the object is released when the variable lets it go. A `return`
+     * copies the temporary itself.
+     */
+    private function assignConstructed(
+        Variable $symbolVariable,
+        Variable $targetVariable,
+        CompilationContext $compilationContext,
+        array $expression
+    ): CompiledExpression {
+        if ($symbolVariable === $targetVariable || 'return_value' === $targetVariable->getName()) {
+            return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        }
+
+        $targetVariable->setMustInitNull(true);
+        $compilationContext->symbolTable->mustGrownStack(true);
+        $targetVariable->setDynamicTypes('object');
+        $targetVariable->setClassTypes($symbolVariable->getClassTypes());
+        $associatedClass = $symbolVariable->getAssociatedClass();
+        if (null !== $associatedClass) {
+            $targetVariable->setAssociatedClass($associatedClass);
+        }
+        $targetVariable->increaseVariantIfNull();
+        $targetVariable->setIsInitialized(true, $compilationContext);
+
+        $compilationContext->backend->copyOnWrite($targetVariable, $symbolVariable, $compilationContext);
+        $compilationContext->codePrinter->output(
+            'ZEPHIR_INIT_NVAR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');'
+        );
+        $symbolVariable->setIdle(true);
+
+        return new CompiledExpression('variable', $targetVariable->getRealName(), $expression);
+    }
+
+    /**
+     * Calls the constructor with the object marked as destructed until it
+     * returns: an exception from the constructor or from one of its arguments
+     * leaves the mark, so the object is freed without its destructor, as
+     * PHP's cleanup of an unfinished `new` does.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2802
+     */
+    private function callConstructor(
+        Expression $callExpr,
+        Variable $symbolVariable,
+        CompilationContext $compilationContext
+    ): void {
+        $symbolCode = $compilationContext->backend->getVariableCode($symbolVariable);
+
+        $compilationContext->headersManager->add('kernel/fcall');
+        $compilationContext->codePrinter->output('zephir_constructor_start(' . $symbolCode . ');');
+
+        $methodCall = new MethodCall();
+        $callExpr->setExpectReturn(false);
+        $methodCall->compile($callExpr, $compilationContext);
+
+        $compilationContext->codePrinter->output('zephir_constructor_finish(' . $symbolCode . ');');
+    }
+
+    /**
+     * The arguments whose evaluation can be observed: anything but a literal
+     * or a variable, which PHP reads without a side effect.
+     *
+     * @return list<array>
+     */
+    private function argumentsWithEffects(array $parameters): array
+    {
+        $arguments = [];
+        foreach ($parameters as $parameter) {
+            $argument = $parameter['parameter'] ?? null;
+            if (!is_array($argument) || in_array($argument['type'], self::PURE_ARGUMENT_TYPES, true)) {
+                continue;
+            }
+
+            $arguments[] = $argument;
+        }
+
+        return $arguments;
+    }
+
+    /**
+     * Whether `new` must check at runtime that the object can be
+     * constructed: PHP refuses a constructor the calling code cannot see, and
+     * object_init_ex() refuses an abstract class. A concrete class with a
+     * constructor known to be public, or none, skips it.
+     *
+     * `new static()` always checks: the called class may be abstract, or
+     * narrow the constructor it inherits, and PHP checks the class actually
+     * instantiated.
+     */
+    private function needsConstructorCheck(
         string $className,
         bool $isLateStaticBinding,
         CompilationContext $compilationContext
     ): bool {
         if ($isLateStaticBinding) {
-            return false;
+            return true;
         }
 
         $compiler = $compilationContext->compiler;
         if ($compiler->isClass($className)) {
-            $constructor = $compiler->getClassDefinition($className)->getMethod('__construct');
+            $classDefinition = $compiler->getClassDefinition($className);
+            $constructor     = $classDefinition->getMethod('__construct');
 
-            return null === $constructor || (!$constructor->isPrivate() && !$constructor->isProtected());
+            return $classDefinition->isAbstract()
+                || (null !== $constructor && ($constructor->isPrivate() || $constructor->isProtected()));
         }
 
         if (!class_exists($className, false)) {
-            return false;
+            return true;
         }
 
-        $constructor = (new ReflectionClass($className))->getConstructor();
+        $reflectionClass = new ReflectionClass($className);
+        $constructor     = $reflectionClass->getConstructor();
 
-        return null === $constructor || $constructor->isPublic();
+        return $reflectionClass->isAbstract() || (null !== $constructor && !$constructor->isPublic());
     }
 }

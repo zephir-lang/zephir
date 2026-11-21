@@ -52,9 +52,11 @@ PHP_METHOD(Stub_Issue808, testDynamicUnset)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &propertyName);
-	ZEPHIR_INIT_VAR(&obj);
-	object_init(&obj);
 	ZEPHIR_INIT_VAR(&_0);
+	object_init(&_0);
+	ZEPHIR_CPY_WRT(&obj, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "value");
 	zephir_update_property_zval_zval(&obj, propertyName, &_0);
 	if (UNEXPECTED(EG(exception))) {
@@ -100,9 +102,10 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetSelective)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &toRemove);
-	ZEPHIR_INIT_VAR(&obj);
-	object_init(&obj);
 	ZEPHIR_INIT_VAR(&_0);
+	object_init(&_0);
+	ZEPHIR_CPY_WRT(&obj, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "keep_value");
 	zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_0);
@@ -146,9 +149,10 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetStringKey)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_INIT_VAR(&obj);
-	object_init(&obj);
 	ZEPHIR_INIT_VAR(&_0);
+	object_init(&_0);
+	ZEPHIR_CPY_WRT(&obj, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "value");
 	zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_0);
@@ -194,9 +198,10 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetNonExistentProperty)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &propertyName);
-	ZEPHIR_INIT_VAR(&obj);
-	object_init(&obj);
 	ZEPHIR_INIT_VAR(&_0);
+	object_init(&_0);
+	ZEPHIR_CPY_WRT(&obj, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "keep_value");
 	zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_0);

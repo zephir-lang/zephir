@@ -54,9 +54,10 @@ PHP_METHOD(Stub_ArrayAccessObj, __construct)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_INIT_VAR(&obj);
-	object_init(&obj);
 	ZEPHIR_INIT_VAR(&_0);
+	object_init(&_0);
+	ZEPHIR_CPY_WRT(&obj, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "val1");
 	zephir_update_property_zval_cached(&obj, _zephir_prop_0, 0, &_0);
