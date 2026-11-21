@@ -92,4 +92,39 @@ final class RequiresTest extends TestCase
         $this->test->requireOnce(__DIR__.'/../fixtures/require-me-once.php');
         $this->assertTrue(\defined('REQUIRE_ONCE_ME'));
     }
+
+    /**
+     * A require from inside a tracing-JIT trace must leave EG(jit_trace_num) as
+     * it found it, or the trace's next side exit crashes (SIGSEGV in
+     * zend_jit_trace_exit) or resumes the wrong code.
+     *
+     * @issue https://github.com/phalcon/cphalcon/issues/17767
+     */
+    public function testShouldRequireInsideTracingJitTrace(): void
+    {
+        $php = \constant('PHP_BINARY');
+        $jit = '-d opcache.enable_cli=1 -d opcache.jit=tracing -d opcache.jit_buffer_size=64M';
+        // No double quotes: escapeshellarg() blanks them out on Windows.
+        $probe = escapeshellarg(<<<'PHP'
+            echo class_exists('Stub\Requires') && (opcache_get_status(false)['jit']['on'] ?? false) ? 'yes' : 'no';
+            PHP);
+
+        // OPcache may be loaded by php.ini or not at all: try both ways.
+        $opcache = null;
+        foreach (['', '-d zend_extension=opcache'] as $load) {
+            if ('yes' === trim((string) shell_exec("$php $load $jit -r $probe 2>&1"))) {
+                $opcache = $load;
+                break;
+            }
+        }
+        if (null === $opcache) {
+            $this->markTestSkipped('A child PHP with the stub extension and the tracing JIT is not available');
+        }
+
+        $command = "$php $opcache $jit ".escapeshellarg(__DIR__.'/../fixtures/require-jit-loop.php').' 2000 2>&1';
+        exec($command, $output, $status);
+
+        $this->assertSame(0, $status, "Exit status of: $command\n".implode("\n", $output));
+        $this->assertSame(['ok'], $output, $command);
+    }
 }
