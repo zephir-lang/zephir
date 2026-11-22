@@ -17,8 +17,10 @@ use FilesystemIterator;
 use Psr\Log\NullLogger;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ReflectionProperty;
 use Zephir\Backend\Backend;
 use Zephir\Backend\StringsManager;
+use Zephir\Class\Definition\Definition;
 use Zephir\Compiler;
 use Zephir\Compiler\CompilerFileFactory;
 use Zephir\Config;
@@ -98,6 +100,7 @@ trait CompilesZephirSource
 
         $compilerFile = $this->compilerFileFactory->create($fqcn, $relPath);
         $compilerFile->preCompile($this->compiler);
+        $this->registerDefinition($fqcn, $compilerFile->getClassDefinition());
         $compilerFile->compile($this->compiler, new StringsManager());
     }
 
@@ -105,6 +108,23 @@ trait CompilesZephirSource
      * The generated C for a source, addressed the way it was compiled:
      * `stub/issue2682/fetchdim.zep` reads `ext/stub/issue2682/fetchdim.zep.c`.
      */
+    /**
+     * A project's compiler knows every class before it compiles any, which is
+     * what lets a call or a `new` resolve against a class of the extension.
+     */
+    private function registerDefinition(string $fqcn, Definition $definition): void
+    {
+        $property = new ReflectionProperty(Compiler::class, 'definitions');
+        if (PHP_VERSION_ID < 80100) {
+            $property->setAccessible(true);
+        }
+
+        $definitions = $property->getValue($this->compiler);
+
+        $definitions[$fqcn] = $definition;
+        $property->setValue($this->compiler, $definitions);
+    }
+
     protected function generatedC(string $relPath): string
     {
         return $this->generatedFile($relPath . '.c');

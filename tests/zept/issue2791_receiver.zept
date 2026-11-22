@@ -1,0 +1,68 @@
+--TEST--
+Issue #2791: a final method called on a variable is the method of the object the variable holds
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+/**
+ * A class type on a variable is not checked: `<Receiver> x` and a nullable
+ * class parameter both leave a value of another class or null in it. The call
+ * went straight to the C copy of Receiver::name() on whatever it held.
+ */
+class Receiver
+{
+	final public function name() -> string
+	{
+		return "Receiver::name on " . get_class(this);
+	}
+
+	public function callCast(var x) -> string
+	{
+		var r;
+
+		let r = <Receiver> x;
+
+		return r->name();
+	}
+
+	public function callNullable(<Receiver> r = null) -> string
+	{
+		return r->name();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Stranger
+{
+	final public function name() -> string
+	{
+		return "Stranger::name";
+	}
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+
+$receiver = new \Stub\Receiver();
+t("cast, receiver", fn () => $receiver->callCast($receiver));
+t("cast, stranger", fn () => $receiver->callCast(new \Stub\Stranger()));
+t("cast, null", fn () => $receiver->callCast(null));
+t("nullable, receiver", fn () => $receiver->callNullable($receiver));
+t("nullable, null", fn () => $receiver->callNullable(null));
+--EXPECT--
+cast, receiver: Receiver::name on Stub\Receiver
+cast, stranger: Stranger::name
+cast, null: Error: Call to a member function name() on null
+nullable, receiver: Receiver::name on Stub\Receiver
+nullable, null: Error: Call to a member function name() on null

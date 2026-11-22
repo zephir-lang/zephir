@@ -1,0 +1,56 @@
+--TEST--
+Issue #2791: the C copy of a method is compiled with the method's own analysis of its body
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--FILE--
+namespace Stub;
+
+/**
+ * A final method, called on `this`, so each call runs the C copy. The copy's
+ * body was compiled without the analysis the method's body gets, so a local
+ * assigned on one path only was returned uninitialized (#2679).
+ */
+class Analysis
+{
+	final public function conditional(bool flag)
+	{
+		var x;
+
+		if flag {
+			let x = "set";
+		}
+
+		return x;
+	}
+
+	public function viaConditional(bool flag)
+	{
+		return this->conditional(flag);
+	}
+
+	public function probe(int n) -> int
+	{
+		var before, sink;
+		int i = 0;
+
+		let sink = null;
+		let before = memory_get_usage();
+		while i < n {
+			let sink = this->conditional(false);
+			let i++;
+		}
+
+		return memory_get_usage() - before;
+	}
+}
+--USAGE--
+$a = new \Stub\Analysis();
+var_dump($a->viaConditional(true), $a->viaConditional(false), $a->viaConditional(false));
+
+$a->probe(10);
+echo $a->probe(100) === $a->probe(10000) ? "no growth\n" : "grows\n";
+--EXPECT--
+string(3) "set"
+NULL
+NULL
+no growth

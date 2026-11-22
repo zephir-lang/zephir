@@ -26,6 +26,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\FunctionDefinition;
 use Zephir\GlobalConstant;
 use Zephir\Name;
+use Zephir\Types\Types;
 use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
 
@@ -2445,23 +2446,19 @@ class Backend
                     $parameter['name'] .= Parameters::BYREF_SHADOW_SUFFIX;
                 }
 
-                switch ($parameter['data-type']) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'double':
-                    case 'bool':
-                    case 'char':
-                    case 'uchar':
-                    case 'string':
-                    case 'array':
-                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_param_ext';
-                        break;
-
-                    default:
-                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_ext ';
-                        break;
-                }
+                /**
+                 * The same names Parameters::fetchParameters() gives the
+                 * body: a parameter converted into a native local arrives as
+                 * `<name>_param`, a zval one under its own name.
+                 */
+                $signatureParameters[] = match ($parameter['data-type'] ?? Types::T_VARIABLE) {
+                    Types::T_OBJECT,
+                    Types::T_CALLABLE,
+                    Types::T_RESOURCE,
+                    Types::T_VARIABLE,
+                    Types::T_MIXED => 'zval *' . $parameter['name'] . '_ext ',
+                    default        => 'zval *' . $parameter['name'] . '_param_ext',
+                };
             }
         }
 

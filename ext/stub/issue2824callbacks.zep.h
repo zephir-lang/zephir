@@ -5,7 +5,9 @@ ZEPHIR_INIT_CLASS(Stub_Issue2824Callbacks);
 
 PHP_METHOD(Stub_Issue2824Callbacks, secret);
 void zep_Stub_Issue2824Callbacks_viaInternal(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used);
+extern zend_internal_function zephir_frame_zep_Stub_Issue2824Callbacks_viaInternal;
 void zep_Stub_Issue2824Callbacks_viaInternalFunc(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used);
+extern zend_internal_function zephir_frame_zep_Stub_Issue2824Callbacks_viaInternalFunc;
 PHP_METHOD(Stub_Issue2824Callbacks, fromInternal);
 PHP_METHOD(Stub_Issue2824Callbacks, fromMethod);
 PHP_METHOD(Stub_Issue2824Callbacks, fromMethodArray);

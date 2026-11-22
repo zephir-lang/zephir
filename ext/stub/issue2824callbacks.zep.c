@@ -30,8 +30,13 @@ ZEPHIR_INIT_CLASS(Stub_Issue2824Callbacks)
 {
 	ZEPHIR_REGISTER_CLASS(Stub, Issue2824Callbacks, stub, issue2824callbacks, stub_issue2824callbacks_method_entry, 0);
 
+	zephir_init_internal_frame(&zephir_frame_zep_Stub_Issue2824Callbacks_viaInternal, stub_issue2824callbacks_ce, SL("viaInternal"));
+	zephir_init_internal_frame(&zephir_frame_zep_Stub_Issue2824Callbacks_viaInternalFunc, stub_issue2824callbacks_ce, SL("viaInternalFunc"));
 	return SUCCESS;
 }
+
+zend_internal_function zephir_frame_zep_Stub_Issue2824Callbacks_viaInternal;
+zend_internal_function zephir_frame_zep_Stub_Issue2824Callbacks_viaInternalFunc;
 
 PHP_METHOD(Stub_Issue2824Callbacks, secret)
 {

@@ -6,7 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Changed
+- Changed `internal-call-transformation` to also cover overridable methods, methods with optional parameters and constructors, checked at run time to call the method PHP would call [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+
 ### Fixed
+- Fixed `internal-call-transformation` converting an argument PHP refuses instead of throwing PHP's TypeError or deprecation [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed `internal-call-transformation` releasing too early, or leaking, an argument the called method changes [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed `internal-call-transformation` calling a final method on a variable that holds null or an object of another class [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed `internal-call-transformation` skipping the deprecation of a `deprecated` method [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed `func_get_args()`, `func_num_args()` and `func_get_arg()` reading the caller's arguments under `internal-call-transformation` [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed `self::` under `internal-call-transformation` running a non-static method without `this` and giving a static one its declaring class as the called class [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed a `ulong` parameter failing to compile under `internal-call-transformation` [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed `internal-call-transformation` returning a local assigned on one path only without initializing it [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed a runaway recursion under `internal-call-transformation` crashing instead of throwing the stack limit Error of PHP 8.6 [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed a warning raised in an internal method, or in the C copy `internal-call-transformation` makes of a method, crashing instead of naming the method [#2791](https://github.com/zephir-lang/zephir/issues/2791)
 - Fixed `new` inside `try` leaving the method instead of reaching `catch` when the constructor cannot be called [#2802](https://github.com/zephir-lang/zephir/issues/2802)
 - Fixed `let x = new X()` and `return new X()` taking the object before its constructor returns, so a failing constructor inside `try` changed `x` or the return value, and `x` released its old object first [#2802](https://github.com/zephir-lang/zephir/issues/2802)
 - Fixed `new` in a function, or in a closure written in one, checking the constructor visibility against the calling class instead of the global scope [#2802](https://github.com/zephir-lang/zephir/issues/2802)

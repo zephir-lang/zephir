@@ -25,6 +25,7 @@ use Zephir\Types\AbstractType;
 use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
+use function array_unshift;
 use function class_exists;
 use function count;
 use function implode;
@@ -768,6 +769,7 @@ class MethodCall extends Call
             );
 
             $isInternal = false;
+            $twin       = null;
             if (is_object($resolvedMethod)) {
                 $method = $resolvedMethod;
 
@@ -776,11 +778,6 @@ class MethodCall extends Call
                  * kept out of the class' method_entry, so there is no PHP-level
                  * method to dispatch to and a direct call is the only option.
                  *
-                 * The twin that `internal-call-transformation` generates is a
-                 * different matter: substituting it is only correct where PHP
-                 * would not have dispatched virtually in the first place.
-                 */
-                /**
                  * Named arguments are bound by the engine, which a direct C
                  * call skips (#2824).
                  */
@@ -791,25 +788,24 @@ class MethodCall extends Call
                     );
                 }
 
-                if (
-                    null === $named
-                    && !$method->isInternal()
-                    && $this->isStaticallyDispatched(
-                        $method,
-                        $receiverDefinition,
-                        $numberPoly,
-                        $compilationContext
-                    )
-                ) {
-                    $method = $method->getOptimizedMethod();
-                }
-
                 $isInternal = $method->isInternal();
                 if ($isInternal && $numberPoly > 1) {
                     throw new CompilerException(
                         "Cannot resolve method: '" . $expression['name'] . "' in polymorphic variable",
                         $expression
                     );
+                }
+
+                /**
+                 * The C copy that `internal-call-transformation` makes of a
+                 * method is a different matter: it runs only where it gives
+                 * what PHP's call would give (#2791).
+                 */
+                if (!$isInternal && null === $named && self::CALL_NORMAL == $type && 1 === $numberPoly) {
+                    $twin = $method->getOptimizedMethod();
+                    if ($twin === $method || $method->isStatic()) {
+                        $twin = null;
+                    }
                 }
             }
 
@@ -829,7 +825,7 @@ class MethodCall extends Call
                  *
                  * @see https://github.com/zephir-lang/zephir/issues/2715
                  */
-                $compilationContext->backend->callMethod(
+                $call = fn () => $compilationContext->backend->callMethod(
                     $isExpecting ? $symbolVariable : null,
                     $variableVariable,
                     $expression['name'],
@@ -838,35 +834,49 @@ class MethodCall extends Call
                     $compilationContext,
                     $named
                 );
-            } else {
-                // TODO: also move to backend
-                if ($isExpecting) {
-                    $symbolCode = $compilationContext->backend->getVariableCode($symbolVariable);
-                }
-                $variableCode = $compilationContext->backend->getVariableCode($variableVariable)
-                    . ', ' . $method->getClassDefinition()->getClassEntry($compilationContext);
-                $paramCount   = count($params);
-                $paramsStr    = $paramCount ? ', ' . implode(', ', $params) : '';
 
-                if ($isExpecting) {
-                    if ('return_value' == $symbolVariable->getName()) {
-                        $macro = $compilationContext->backend->getFcallManager()->getMacro(false, 1, $paramCount);
-                        $codePrinter->output(
-                            $macro . '(' . $variableCode . ', ' . $method->getInternalName() . $paramsStr . ');'
-                        );
-                    } else {
-                        $macro = $compilationContext->backend->getFcallManager()->getMacro(false, 2, $paramCount);
-                        $codePrinter->output(
-                            $macro . '(' . $symbolCode . ', ' . $variableCode . ', ' . $method->getInternalName(
-                            ) . $paramsStr . ');'
-                        );
-                    }
-                } else {
-                    $macro = $compilationContext->backend->getFcallManager()->getMacro(false, 0, $paramCount);
-                    $codePrinter->output(
-                        $macro . '(' . $variableCode . ', ' . $method->getInternalName() . $paramsStr . ');'
+                $conditions = null;
+                if (null !== $twin) {
+                    $conditions = $this->twinConditions(
+                        $method,
+                        $variableVariable,
+                        $receiverDefinition,
+                        $cachePointer,
+                        $params,
+                        $compilationContext
                     );
                 }
+
+                if (null === $conditions) {
+                    $call();
+                } else {
+                    $this->emitGuardedDirectCall(
+                        $conditions,
+                        fn () => $this->emitInternalMethodCall(
+                            $twin,
+                            false,
+                            $compilationContext->backend->getVariableCode($variableVariable)
+                                . ', ' . $method->getClassDefinition()->getClassEntry($compilationContext),
+                            $params,
+                            $symbolVariable,
+                            $isExpecting,
+                            $compilationContext
+                        ),
+                        $call,
+                        $compilationContext
+                    );
+                }
+            } else {
+                $this->emitInternalMethodCall(
+                    $method,
+                    false,
+                    $compilationContext->backend->getVariableCode($variableVariable)
+                        . ', ' . $method->getClassDefinition()->getClassEntry($compilationContext),
+                    $params,
+                    $symbolVariable,
+                    $isExpecting,
+                    $compilationContext
+                );
             }
         } else {
             if (self::CALL_DYNAMIC == $type) {
@@ -992,13 +1002,65 @@ class MethodCall extends Call
     }
 
     /**
-     * Whether PHP itself resolves this call without consulting the receiver's
-     * class. That is the precondition for replacing the call with a direct call
-     * to the method's own C function, which is what the
-     * `internal-call-transformation` optimization does.
+     * The run-time conditions under which this call runs the C copy of
+     * $method, or null when it cannot take the call.
      *
-     * `obj->m()` is a virtual call: any subclass may override `m` — including a
-     * userland PHP class extending a Zephir one, which no amount of
+     * Where PHP itself does not consult the object (isStaticallyDispatched())
+     * only the arguments are checked. Everywhere else the call site's inline
+     * cache must hold this very method for the object's class and the calling
+     * class: an override, in Zephir or in PHP, a `__call()` fallback, an
+     * object of another class or no object at all makes PHP's call.
+     *
+     * @param list<string> $params
+     *
+     * @return list<string>|null
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    private function twinConditions(
+        Method $method,
+        Variable $caller,
+        ?Definition $receiver,
+        string $cachePointer,
+        array $params,
+        CompilationContext $compilationContext
+    ): ?array {
+        $checks = $this->twinArgumentChecks($method, $params, $compilationContext);
+        if (null === $checks) {
+            return null;
+        }
+
+        if ('this' === $caller->getRealName() && $this->isStaticallyDispatched($method, $receiver, $compilationContext)) {
+            $checks[] = 'zephir_has_stack_for_direct_call()';
+
+            return $checks;
+        }
+
+        $declaring = $method->getClassDefinition();
+        array_unshift(
+            $checks,
+            sprintf(
+                'zephir_cached_method_is(%s, %s, ZEND_MN(%s_%s_%s), %s)',
+                $cachePointer,
+                $compilationContext->backend->getVariableCode($caller),
+                $declaring->getCNamespace(),
+                $declaring->getName(),
+                $method->getName(),
+                $declaring->getClassEntry($compilationContext)
+            )
+        );
+
+        return $checks;
+    }
+
+    /**
+     * Whether PHP itself resolves a call on `this` without consulting the
+     * object's class, so that the call can go straight to the method's own C
+     * copy, which is what the `internal-call-transformation` optimization
+     * does.
+     *
+     * `this->m()` is a virtual call: any subclass may override `m` — including
+     * a userland PHP class extending a Zephir one, which no amount of
      * whole-program analysis of the extension can see. Only three premises make
      * the target static, and the engine enforces each of them itself
      * (ZEND_ACC_FINAL, ZEND_ACC_PRIVATE, ZEND_ACC_FINAL_CLASS):
@@ -1006,30 +1068,21 @@ class MethodCall extends Call
      *  - the method is final, so nothing can override it;
      *  - the method is private to the class being compiled, so a same-named
      *    method in a subclass is a separate method rather than an override;
-     *  - the receiver is `this` and its class is final, so the runtime class is
-     *    exactly the class being compiled.
+     *  - its class is final, so the runtime class is exactly the class being
+     *    compiled.
      *
-     * A class type declared on a variable is deliberately *not* accepted as
-     * proof of the receiver's class: `let v = <Vector> x` and declared return
-     * types assert a class without verifying it.
+     * Only `this` is known to hold an object of the class being compiled. A
+     * class type declared on a variable is no proof of anything: `let v =
+     * <Vector> x` and declared return types assert a class without verifying
+     * it, and a nullable class parameter may hold null (#2791).
      *
      * @see https://github.com/zephir-lang/zephir/issues/2021
      */
     private function isStaticallyDispatched(
         Method $method,
         ?Definition $receiver,
-        int $numberPoly,
         CompilationContext $compilationContext
     ): bool {
-        /**
-         * Resolution collected more than one candidate class (a variable
-         * declared with several class types) and kept only the last match, so
-         * the receiver's class — and with it the target — is unknown.
-         */
-        if (1 !== $numberPoly) {
-            return false;
-        }
-
         /**
          * The engine settles the target only once it knows the calling class:
          * an inaccessible method goes to `__call()`, and a private method of

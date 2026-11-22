@@ -14,8 +14,12 @@ declare(strict_types=1);
 namespace Zephir;
 
 use ReflectionException;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
+use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
 use function array_filter;
@@ -841,6 +845,213 @@ class Call
     public function getResolvedTypes(): array
     {
         return $this->resolvedTypes;
+    }
+
+    /**
+     * The run-time conditions under which the C copy of $method
+     * (`internal-call-transformation`) gives, for these arguments, what PHP's
+     * call gives. Null when the copy cannot take this call at all.
+     *
+     * The copy converts its arguments itself, where PHP's call parses them:
+     * the two agree only when an argument already has the type the parsing
+     * accepts as it is. Any other argument makes PHP's call, so a TypeError,
+     * a conversion or a deprecation is PHP's own. An argument the compiler
+     * built from a native value needs no check.
+     *
+     * @param list<string> $params The compiled arguments, in call order.
+     *
+     * @return list<string>|null
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    protected function twinArgumentChecks(Method $method, array $params, CompilationContext $compilationContext): ?array
+    {
+        $declared = $method->getParameters() instanceof Parameters
+            ? array_values($method->getParameters()->getParameters())
+            : [];
+
+        if (count($params) > count($declared) || count($params) < $method->getNumberOfRequiredParameters()) {
+            return null;
+        }
+
+        $resolvedTypes = $this->getResolvedTypes();
+        $checks        = [];
+        foreach (array_values($params) as $position => $param) {
+            $check = $this->twinArgumentCheck(
+                $method,
+                $declared[$position],
+                $param,
+                $resolvedTypes[$position] ?? null,
+                $compilationContext
+            );
+
+            if (false === $check) {
+                return null;
+            }
+
+            if ('' !== $check) {
+                $checks[] = $check;
+            }
+        }
+
+        return $checks;
+    }
+
+    /**
+     * Emits a call to an internal method or to a method's C copy: `$target`
+     * is `<object>, <declaring class entry>` for an instance call and
+     * `<declaring class entry>, <called class entry>` for a static one. An
+     * argument left out of an optional parameter is passed as ZEPHIR_NO_ARG.
+     *
+     * @param list<string> $params
+     */
+    protected function emitInternalMethodCall(
+        Method $method,
+        bool $static,
+        string $target,
+        array $params,
+        ?Variable $symbolVariable,
+        bool $isExpecting,
+        CompilationContext $compilationContext
+    ): void {
+        if (!$method->isVariadic()) {
+            while (count($params) < $method->getNumberOfParameters()) {
+                $params[] = 'ZEPHIR_NO_ARG';
+            }
+        }
+
+        $paramCount   = count($params);
+        $paramsStr    = $paramCount ? ', ' . implode(', ', $params) : '';
+        $fcallManager = $compilationContext->backend->getFcallManager();
+        $call         = $target . ', ' . $method->getInternalName() . $paramsStr;
+
+        if (!$isExpecting) {
+            $call = $fcallManager->getMacro($static, 0, $paramCount) . '(' . $call;
+        } elseif ('return_value' === $symbolVariable->getName()) {
+            $call = $fcallManager->getMacro($static, 1, $paramCount) . '(' . $call;
+        } else {
+            $call = $fcallManager->getMacro($static, 2, $paramCount)
+                . '(' . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $call;
+        }
+
+        $compilationContext->codePrinter->output($call . ');');
+    }
+
+    /**
+     * Emits `if (<conditions>) { <direct> } else { <call> }`: the C copy of a
+     * method where it gives what PHP's call gives, PHP's call otherwise.
+     *
+     * @param list<string> $conditions
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    protected function emitGuardedDirectCall(
+        array $conditions,
+        callable $direct,
+        callable $call,
+        CompilationContext $compilationContext
+    ): void {
+        $codePrinter = $compilationContext->codePrinter;
+
+        $codePrinter->output('if (' . implode(' && ', $conditions) . ') {');
+        $codePrinter->increaseLevel();
+        $direct();
+        $codePrinter->decreaseLevel();
+        $codePrinter->output('} else {');
+        $codePrinter->increaseLevel();
+        $call();
+        $codePrinter->decreaseLevel();
+        $codePrinter->output('}');
+    }
+
+    /**
+     * One argument's condition: '' when it needs none, false when the copy
+     * cannot take it (a union type, or a class the extension does not
+     * compile, whose class entry is not at hand).
+     */
+    private function twinArgumentCheck(
+        Method $method,
+        array $parameter,
+        string $param,
+        ?string $resolvedType,
+        CompilationContext $compilationContext
+    ): string|false {
+        if (!empty($parameter['data-types'])) {
+            return false;
+        }
+
+        $nullable = 'null' === ($parameter['default']['type'] ?? null);
+        if ($nullable && 'null' === $resolvedType) {
+            return '';
+        }
+
+        $types = match ($parameter['data-type'] ?? Types::T_VARIABLE) {
+            'int', 'uint', 'long', 'ulong' => in_array($resolvedType, ['int', 'uint', 'long'], true) ? [] : ['IS_LONG'],
+            'double'   => in_array($resolvedType, ['double', 'int', 'uint', 'long'], true) ? [] : ['IS_DOUBLE', 'IS_LONG'],
+            'bool'     => 'bool' === $resolvedType ? [] : ['IS_TRUE', 'IS_FALSE'],
+            'string'   => ['IS_STRING'],
+            'array'    => ['IS_ARRAY'],
+            'object'   => ['IS_OBJECT'],
+            'resource' => ['IS_RESOURCE'],
+            default    => [],
+        };
+
+        if (isset($parameter['cast'])) {
+            $classEntry = $this->twinParameterClassEntry($method, $parameter['cast']['value'], $compilationContext);
+            if (null === $classEntry) {
+                return false;
+            }
+
+            $instance = sprintf(
+                '(Z_TYPE_P(%s) == IS_OBJECT && instanceof_function(Z_OBJCE_P(%s), %s))',
+                $param,
+                $param,
+                $classEntry
+            );
+
+            return $nullable ? '(' . $instance . ' || Z_TYPE_P(' . $param . ') == IS_NULL)' : $instance;
+        }
+
+        if ([] === $types) {
+            return '';
+        }
+
+        if ($nullable) {
+            $types[] = 'IS_NULL';
+        }
+
+        $alternatives = [];
+        foreach ($types as $type) {
+            $alternatives[] = 'Z_TYPE_P(' . $param . ') == ' . $type;
+        }
+
+        return 1 === count($alternatives) ? $alternatives[0] : '(' . implode(' || ', $alternatives) . ')';
+    }
+
+    /**
+     * The class entry of a class a parameter is declared with, resolved where
+     * the method is written; null unless the extension compiles that class.
+     */
+    private function twinParameterClassEntry(
+        Method $method,
+        string $className,
+        CompilationContext $compilationContext
+    ): ?string {
+        if (null !== $method->getDeclaringTrait()) {
+            return null;
+        }
+
+        $declaring = $method->getClassDefinition();
+        $fullName  = Name::fetchFQN($className, $declaring->getNamespace(), $declaring->getAliasManager());
+        $compiler  = $compilationContext->compiler;
+
+        if (!$compiler->isClass($fullName) && !$compiler->isInterface($fullName)) {
+            return null;
+        }
+
+        $definition = $compiler->getClassDefinition($fullName);
+
+        return $definition instanceof Definition ? $definition->getClassEntry($compilationContext) : null;
     }
 
     /**

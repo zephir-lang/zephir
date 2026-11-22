@@ -24,8 +24,14 @@
 #include "kernel/backtrace.h"
 #include "kernel/variables.h"
 
-/* See the declaration in kernel/fcall.h for what this stands in for (#2639). */
-zend_internal_function zephir_internal_call_frame_func = { ZEND_INTERNAL_FUNCTION };
+/* See the declaration in kernel/fcall.h for what the frame stands in for. */
+void zephir_init_internal_frame(zend_internal_function *frame, zend_class_entry *scope, const char *name, size_t name_length)
+{
+	memset(frame, 0, sizeof(zend_internal_function));
+	frame->type          = ZEND_INTERNAL_FUNCTION;
+	frame->function_name = zend_string_init_interned(name, name_length, 1);
+	frame->scope         = scope;
+}
 
 int zephir_has_constructor_ce(const zend_class_entry *ce)
 {
