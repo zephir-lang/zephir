@@ -1,5 +1,5 @@
 --TEST--
-Issue #2791: a warning raised in the C copy of a method names that method
+Issue #2791: a warning raised in the C copy of a method is reported instead of crashing
 --CONFIG--
 {"optimizations": {"internal-call-transformation": true}}
 --INI--
@@ -8,9 +8,10 @@ display_errors=stdout
 namespace Stub;
 
 /**
- * preg_match() is compiled to a direct PCRE call, so its warning names the
- * running method. The C copy ran on a frame with no name and the warning
- * crashed the process.
+ * With PHP's bundled PCRE, preg_match() is compiled to a direct PCRE call, so
+ * its warning names the running method. The C copy ran on a frame with no
+ * name and the warning crashed the process. Without it, preg_match() is
+ * called as a function and its warning names it, as in PHP.
  */
 class Warn
 {
@@ -64,7 +65,7 @@ function messages(callable $fn): string
 {
     $messages = [];
     set_error_handler(static function (int $number, string $message) use (&$messages): bool {
-        $messages[] = $message;
+        $messages[] = preg_replace('/^(?:preg_match|Stub\\\\Warn::\\w+)\\(\\): /', '', $message);
 
         return true;
     });
@@ -88,12 +89,12 @@ foreach (['viaProtected', 'viaPrivate', 'viaSelf', 'viaOther', 'viaInternal'] as
 $warn->viaProtected('#(x|e#f)#');
 $warn->viaInternal('#(x|e#f)#');
 --EXPECTF--
-viaProtected: false Stub\Warn::match(): Unknown modifier 'f'
-viaPrivate: false Stub\Warn::matchPrivate(): Unknown modifier 'f'
-viaSelf: false Stub\Warn::matchStatic(): Unknown modifier 'f'
-viaOther: false Stub\Warn::matchStatic(): Unknown modifier 'f'
-viaInternal: false Stub\Warn::matchInternal(): Unknown modifier 'f'
+viaProtected: false Unknown modifier 'f'
+viaPrivate: false Unknown modifier 'f'
+viaSelf: false Unknown modifier 'f'
+viaOther: false Unknown modifier 'f'
+viaInternal: false Unknown modifier 'f'
 
-Warning: Stub\Warn::match(): Unknown modifier 'f' in %s on line %d
+Warning: %s(): Unknown modifier 'f' in %s on line %d
 
-Warning: Stub\Warn::matchInternal(): Unknown modifier 'f' in %s on line %d
+Warning: %s(): Unknown modifier 'f' in %s on line %d
