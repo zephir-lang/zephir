@@ -38,7 +38,7 @@
         "ext-pdo_sqlite": "*",
         "ext-zip": "*",
         "phpbench/phpbench": "~1.2.0",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^13.4",
         "psr/log": "1.1.*",
         "squizlabs/php_codesniffer": "^4.0"
     },
