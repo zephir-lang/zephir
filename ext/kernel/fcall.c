@@ -420,6 +420,27 @@ static void zephir_bad_method_call(const zend_function *fbc, const zend_string *
 	);
 }
 
+/* zend_abstract_method_call(), exported only from PHP 8.5 on. */
+static void zephir_abstract_method_call(const zend_function *fbc)
+{
+	zend_throw_error(
+		NULL,
+		"Cannot call abstract method %s::%s()",
+		ZSTR_VAL(fbc->common.scope->name),
+		ZSTR_VAL(fbc->common.function_name)
+	);
+}
+
+/**
+ * Whether a call written as `X::__construct()` names the constructor. PHP
+ * calls the class's constructor for it without looking the method up, so
+ * neither the lookup's abstract check nor its fallbacks apply.
+ */
+static zend_always_inline bool zephir_is_constructor_call(zephir_call_type type, const zend_string *method_name)
+{
+	return type != zephir_fcall_method && zend_string_equals_literal_ci(method_name, "__construct");
+}
+
 /* From PHP 8.6 on, zend_get_call_trampoline_func() takes the magic method. */
 static zend_function *zephir_call_trampoline(zend_class_entry *ce, zend_string *method_name, bool is_static)
 {
@@ -918,6 +939,23 @@ static int zephir_call_user_function(
 	if (raw_handler && type != zephir_fcall_function && Z_TYPE_P(function_name) == IS_STRING) {
 		zend_function *resolved = zephir_resolve_visible_method(&fcic, type, Z_STR_P(function_name));
 
+		/**
+		 * PHP refuses an abstract method once visibility is settled, before it
+		 * checks whether the method is static, and before the handler, an empty
+		 * body or none at all for an interface, could run. `parent::__construct()`
+		 * is the exception (see zephir_is_constructor_call()); a name held in a
+		 * variable is looked up, and zephir_call_class_method_zval_ex() refuses
+		 * that one (#2789).
+		 */
+		if (
+			resolved
+			&& UNEXPECTED(resolved->common.fn_flags & ZEND_ACC_ABSTRACT)
+			&& !zephir_is_constructor_call(type, Z_STR_P(function_name))
+		) {
+			zephir_abstract_method_call(resolved);
+			resolved = NULL;
+		}
+
 		if (UNEXPECTED(!resolved)) {
 			if (Z_TYPE(callable) != IS_UNDEF) {
 				zval_ptr_dtor(&callable);
@@ -1115,12 +1153,52 @@ int zephir_call_func_named(
 }
 
 /**
- * Throws the Error PHP throws for `$f()` when $f is an array callback it
- * cannot call, as zend_init_dynamic_call_array() words it. Getting here means
- * zend_is_callable() already refused it, which raises no exception of its own,
- * so a `__call()`/`__callStatic()` fallback is no longer in play.
+ * Throws the Error PHP throws for `$f()` when $f names method `method` of class
+ * `ce` and zend_is_callable() refused it, checking what INIT_DYNAMIC_CALL
+ * checks, in its order: the method exists, is visible from the calling class,
+ * is not abstract, and is static when no object goes with it. Getting here
+ * means zend_is_callable() raised no exception of its own, so a `__call()` or
+ * `__callStatic()` fallback is no longer in play.
  *
  * @see https://github.com/zephir-lang/zephir/issues/2734
+ * @see https://github.com/zephir-lang/zephir/issues/2789
+ */
+static void zephir_throw_method_callback_error(zend_class_entry *ce, zend_string *method, bool without_object)
+{
+	zend_class_entry *scope;
+	zend_function *fbc = zend_hash_find_ptr_lc(&ce->function_table, method);
+
+	if (!fbc) {
+		zend_throw_error(NULL, "Call to undefined method %s::%s()", ZSTR_VAL(ce->name), ZSTR_VAL(method));
+		return;
+	}
+
+	scope = zephir_get_calling_scope();
+	if (!zephir_is_method_accessible(fbc, scope)) {
+		zephir_bad_method_call(fbc, method, scope);
+		return;
+	}
+
+	if (fbc->common.fn_flags & ZEND_ACC_ABSTRACT) {
+		zephir_abstract_method_call(fbc);
+		return;
+	}
+
+	if (without_object && !(fbc->common.fn_flags & ZEND_ACC_STATIC)) {
+		zend_throw_error(
+			NULL,
+			"Non-static method %s::%s() cannot be called statically",
+			ZSTR_VAL(fbc->common.scope->name),
+			ZSTR_VAL(fbc->common.function_name)
+		);
+		return;
+	}
+
+	zend_throw_error(NULL, "Call to undefined function undefined()");
+}
+
+/**
+ * The Error for an array callback, as zend_init_dynamic_call_array() words it.
  */
 static void zephir_throw_array_callback_error(zval *callback)
 {
@@ -1128,8 +1206,6 @@ static void zephir_throw_array_callback_error(zval *callback)
 	zval *target;
 	zval *method;
 	zend_class_entry *ce;
-	zend_class_entry *scope;
-	zend_function *fbc;
 
 	if (zend_hash_num_elements(ht) != 2) {
 		zend_throw_error(NULL, "Array callback must have exactly two elements");
@@ -1164,29 +1240,40 @@ static void zephir_throw_array_callback_error(zval *callback)
 		}
 	}
 
-	fbc = zend_hash_find_ptr_lc(&ce->function_table, Z_STR_P(method));
-	if (!fbc) {
-		zend_throw_error(NULL, "Call to undefined method %s::%s()", ZSTR_VAL(ce->name), Z_STRVAL_P(method));
+	zephir_throw_method_callback_error(ce, Z_STR_P(method), Z_TYPE_P(target) == IS_STRING);
+}
+
+/**
+ * The Error for a string callback, as zend_init_dynamic_call_string() words
+ * it: a "Class::method" string is split at its last "::", any other string
+ * names a function.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2789
+ */
+static void zephir_throw_string_callback_error(zval *callback)
+{
+	const char *name = Z_STRVAL_P(callback);
+	size_t length = Z_STRLEN_P(callback);
+	const char *colon = zend_memrchr(name, ':', length);
+	zend_string *class_name;
+	zend_string *method;
+	zend_class_entry *ce;
+
+	if (!colon || colon == name || *(colon - 1) != ':') {
+		zend_throw_error(NULL, "Call to undefined function %s()", name);
 		return;
 	}
 
-	scope = zephir_get_calling_scope();
-	if (!zephir_is_method_accessible(fbc, scope)) {
-		zephir_bad_method_call(fbc, Z_STR_P(method), scope);
+	class_name = zend_string_init(name, colon - name - 1, 0);
+	ce = zend_fetch_class_by_name(class_name, NULL, ZEND_FETCH_CLASS_DEFAULT | ZEND_FETCH_CLASS_EXCEPTION);
+	zend_string_release(class_name);
+	if (!ce) {
 		return;
 	}
 
-	if (Z_TYPE_P(target) == IS_STRING && !(fbc->common.fn_flags & ZEND_ACC_STATIC)) {
-		zend_throw_error(
-			NULL,
-			"Non-static method %s::%s() cannot be called statically",
-			ZSTR_VAL(fbc->common.scope->name),
-			ZSTR_VAL(fbc->common.function_name)
-		);
-		return;
-	}
-
-	zend_throw_error(NULL, "Call to undefined function undefined()");
+	method = zend_string_init(colon + 1, length - (size_t) (colon + 1 - name), 0);
+	zephir_throw_method_callback_error(ce, method, 1);
+	zend_string_release(method);
 }
 
 static int zephir_call_zval_func_ex(
@@ -1215,9 +1302,11 @@ static int zephir_call_zval_func_ex(
 
 	if (status == FAILURE && !EG(exception) && Z_TYPE_P(func_name) == IS_ARRAY) {
 		zephir_throw_array_callback_error(func_name);
+	} else if (status == FAILURE && !EG(exception) && Z_TYPE_P(func_name) == IS_STRING) {
+		zephir_throw_string_callback_error(func_name);
 	} else if (status == FAILURE && !EG(exception)) {
 		/* PHP throws Error here, not an SPL exception (#2712). */
-		zend_throw_error(NULL, "Call to undefined function %s()", Z_TYPE_P(func_name) == IS_STRING ? Z_STRVAL_P(func_name) : "undefined");
+		zend_throw_error(NULL, "Call to undefined function undefined()");
 	} else if (EG(exception)) {
 		status = FAILURE;
 	}
@@ -1483,22 +1572,27 @@ static int zephir_call_class_method_zval_ex(
 		}
 
 		/* PHP settles visibility, and with it any __call()/__callStatic()
-		 * fallback, before it looks at whether the method is static (#2734). */
+		 * fallback, before it looks at whether the method is abstract (#2789),
+		 * then static (#2734). A name held here is always looked up, so an
+		 * abstract constructor is refused as well. */
 		function = scope ? zend_hash_find_ptr_lc(&scope->function_table, Z_STR_P(name)) : NULL;
-		if (
-			function
-			&& !(function->common.fn_flags & ZEND_ACC_STATIC)
-			&& !object
-			&& zephir_is_method_accessible(function, zephir_get_calling_scope())
-		) {
-			zend_throw_error(
-				NULL,
-				"Non-static method %s::%s() cannot be called statically",
-				ZSTR_VAL(function->common.scope->name),
-				ZSTR_VAL(function->common.function_name)
-			);
+		if (function && zephir_is_method_accessible(function, zephir_get_calling_scope())) {
+			if (function->common.fn_flags & ZEND_ACC_ABSTRACT) {
+				zephir_abstract_method_call(function);
 
-			return FAILURE;
+				return FAILURE;
+			}
+
+			if (!(function->common.fn_flags & ZEND_ACC_STATIC) && !object) {
+				zend_throw_error(
+					NULL,
+					"Non-static method %s::%s() cannot be called statically",
+					ZSTR_VAL(function->common.scope->name),
+					ZSTR_VAL(function->common.function_name)
+				);
+
+				return FAILURE;
+			}
 		}
 	}
 

@@ -128,10 +128,16 @@ class StaticCall extends Call
             if (!in_array($className, ['self', 'static', 'parent'])) {
                 if (is_string($className)) {
                     $className = $compilationContext->getFullName($className);
-                    if ($compiler->isClass($className)) {
+                    /**
+                     * PHP compiles a call through an interface and throws at
+                     * run time, as its methods are abstract.
+                     *
+                     * @see https://github.com/zephir-lang/zephir/issues/2789
+                     */
+                    if ($compiler->isClass($className) || $compiler->isInterface($className)) {
                         $classDefinition = $compiler->getClassDefinition($className);
                     } else {
-                        if ($compiler->isBundledClass($className)) {
+                        if ($compiler->isBundledClass($className) || $compiler->isBundledInterface($className)) {
                             $classDefinition = $compiler->getInternalClassDefinition($className);
                         } else {
                             throw new CompilerException('Class name: ' . $className . ' does not exist', $expression);

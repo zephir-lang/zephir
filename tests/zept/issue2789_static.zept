@@ -1,0 +1,129 @@
+--TEST--
+Issue #2789: an `abstract static` method of a class or a trait registers without a startup warning and stays abstract to PHP
+--INI--
+; Startup diagnostics go to stderr, which --EXPECT-- never sees: log them to a
+; file in the working directory, where the usage script looks for it.
+log_errors=1
+error_log=startup.log
+--FILE--
+namespace Stub;
+
+abstract class Issue2789Static
+{
+	abstract public static function sop();
+
+	abstract protected static function prot(var value) -> string;
+
+	public static function run()
+	{
+		return static::sop();
+	}
+}
+--FILE--
+namespace Stub;
+
+trait Issue2789Trait
+{
+	abstract public static function tsop() -> string;
+}
+--USAGE--
+/**
+ * PHP declares `abstract static` in a class or a trait without complaint, but
+ * the API an extension registers its methods with refuses it, with a warning
+ * at every startup. The method still has to be abstract to PHP: reflection
+ * reports it, PHP's own calls refuse it, and a PHP subclass implements it.
+ *
+ * Startup diagnostics never reach stdout here, so --INI-- logs them to a file
+ * next to this script.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2789
+ */
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ': ', is_object($result) ? get_class($result) : var_export($result, true), "\n";
+    } catch (\Throwable $e) {
+        echo $label, ': ', get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+$log = __DIR__ . '/startup.log';
+echo is_file($log) ? preg_replace('/^\[[^\]]+\] /m', '', file_get_contents($log)) : "startup: clean\n";
+
+$methods = [
+    [\Stub\Issue2789Static::class, 'sop'],
+    [\Stub\Issue2789Static::class, 'prot'],
+    [\Stub\Issue2789Trait::class, 'tsop'],
+];
+
+foreach ($methods as [$class, $name]) {
+    $method = new \ReflectionMethod($class, $name);
+    printf("%s::%s(): %s\n", $class, $name, implode(' ', \Reflection::getModifierNames($method->getModifiers())));
+}
+
+$abstract = (new \ReflectionClass(\Stub\Issue2789Static::class))->getMethods(\ReflectionMethod::IS_ABSTRACT);
+echo 'abstract methods: ', implode(', ', array_map(static fn(\ReflectionMethod $m): string => $m->name, $abstract)), "\n";
+echo 'abstract trait: ', var_export((new \ReflectionClass(\Stub\Issue2789Trait::class))->isAbstract(), true), "\n";
+
+// The body of PHP's own abstract method is empty too.
+t('closure of sop()', fn() => (new \ReflectionMethod(\Stub\Issue2789Static::class, 'sop'))->getClosure()());
+
+class UserStatic extends \Stub\Issue2789Static
+{
+    public static function sop()
+    {
+        return parent::sop();
+    }
+
+    protected static function prot($value): string
+    {
+        return (string) $value;
+    }
+}
+
+class UserImpl extends \Stub\Issue2789Static
+{
+    public static function sop()
+    {
+        return 'user';
+    }
+
+    protected static function prot($value): string
+    {
+        return (string) $value;
+    }
+}
+
+class UserTrait
+{
+    use \Stub\Issue2789Trait;
+
+    public static function tsop(): string
+    {
+        return 'tsop';
+    }
+}
+
+t('static::sop() of the abstract class', fn() => \Stub\Issue2789Static::run());
+t('static::sop() of a PHP subclass', fn() => UserImpl::run());
+t('PHP Issue2789Static::sop()', fn() => \Stub\Issue2789Static::sop());
+t('PHP parent::sop()', fn() => UserStatic::sop());
+t('PHP call_user_func()', fn() => call_user_func([\Stub\Issue2789Static::class, 'sop']));
+t('PHP is_callable()', fn() => is_callable([\Stub\Issue2789Static::class, 'sop']));
+t('trait method', fn() => UserTrait::tsop());
+--EXPECT--
+startup: clean
+Stub\Issue2789Static::sop(): abstract public static
+Stub\Issue2789Static::prot(): abstract protected static
+Stub\Issue2789Trait::tsop(): abstract public static
+abstract methods: sop, prot
+abstract trait: true
+closure of sop(): NULL
+static::sop() of the abstract class: Error: Cannot call abstract method Stub\Issue2789Static::sop()
+static::sop() of a PHP subclass: 'user'
+PHP Issue2789Static::sop(): Error: Cannot call abstract method Stub\Issue2789Static::sop()
+PHP parent::sop(): Error: Cannot call abstract method Stub\Issue2789Static::sop()
+PHP call_user_func(): TypeError: call_user_func(): Argument #1 ($callback) must be a valid callback, cannot call abstract method Stub\Issue2789Static::sop()
+PHP is_callable(): false
+trait method: 'tsop'
