@@ -386,7 +386,6 @@ PHP_METHOD(Stub_Oo, createInstancesInLoop)
 			return;
 		}
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&className);
 	RETURN_CTOR(&result);
 }
 

@@ -207,8 +207,6 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 					}
 			}
 		}
-		ZEPHIR_INIT_NVAR(&value);
-		ZEPHIR_INIT_NVAR(&key);
 	}
 	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_10);
 	if (zephir_require_zval_ret(&_10, &templatePath_zv) == FAILURE) {

@@ -37,6 +37,13 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed a `mixed` variable failing to compile as an object, and `clone` of one crashing the compiler [#2770](https://github.com/zephir-lang/zephir/issues/2770)
 - Fixed writing a property of an `object`, `mixed` or `callable` parameter failing to compile, and of an object without a known class crashing the compiler [#2770](https://github.com/zephir-lang/zephir/issues/2770)
 - Fixed `let o->a[k][] = v` on a local object generating C that does not compile [#2770](https://github.com/zephir-lang/zephir/issues/2770)
+- Fixed `let _SESSION = []` and any other assignment to a superglobal freeing the array the global still uses instead of writing the new value to it [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed assigning an expression to a superglobal merging it into the old array instead of replacing it [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed `fetch`, destructuring, `for` and `catch` variables and by-reference arguments named like a superglobal freeing its array [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed `preg_match()` with a superglobal as `matches` failing to compile [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed reading a superglobal from Zephir breaking a reference to it, such as the session's, or replacing an object in it with an empty array [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed assigning a variable to a local declared with a superglobal name leaving the local unchanged [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed the key and value of a `for` loop over an array or object being null after the loop instead of keeping the last element [#2856](https://github.com/zephir-lang/zephir/issues/2856)
 
 ## [1.9.0] - 2026-11-20
 

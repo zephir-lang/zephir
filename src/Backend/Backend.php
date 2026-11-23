@@ -27,7 +27,6 @@ use Zephir\FunctionDefinition;
 use Zephir\GlobalConstant;
 use Zephir\Name;
 use Zephir\Types\Types;
-use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
 
 use function array_filter;
@@ -1000,25 +999,46 @@ class Backend
             return;
         }
 
-        $globalsManager = new Globals();
+        /**
+         * The local of a superglobal only borrows it, see assignSuperGlobal().
+         */
+        if ($target->isSuperGlobal()) {
+            $this->setGlobal($target, $this->resolveValue($var, $context), $context);
+            $this->fetchGlobal($target, $context);
+            $context->emitExceptionCheck();
 
-        if ($globalsManager->isSuperGlobal($target->getName())) {
-            $context->codePrinter->output(
-                sprintf(
-                    'ZEPHIR_HASH_COPY(%s, %s);',
-                    $this->getVariableCode($target),
-                    $this->resolveValue($var, $context)
-                )
-            );
-        } else {
-            $context->codePrinter->output(
-                sprintf(
-                    'ZEPHIR_CPY_WRT(%s, %s);',
-                    $this->getVariableCode($target),
-                    $this->resolveValue($var, $context)
-                )
-            );
+            return;
         }
+
+        $context->codePrinter->output(
+            sprintf(
+                'ZEPHIR_CPY_WRT(%s, %s);',
+                $this->getVariableCode($target),
+                $this->resolveValue($var, $context)
+            )
+        );
+    }
+
+    /**
+     * `let <superglobal> = value`, where `value` is a temporary the caller
+     * owns and gives up.
+     *
+     * The local of a superglobal only borrows it (see zephir_get_global()), so
+     * it is never released or overwritten: the value is assigned to the global,
+     * the temporary drops its reference, so that the global does not have to
+     * separate an array it would otherwise share with it, and the local borrows
+     * the new value.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2856
+     */
+    public function assignSuperGlobal(Variable $superGlobal, Variable $value, CompilationContext $context): void
+    {
+        $code = $this->getVariableCode($value);
+
+        $this->setGlobal($superGlobal, $code, $context);
+        $context->codePrinter->output('ZEPHIR_INIT_NVAR(' . $code . ');');
+        $this->fetchGlobal($superGlobal, $context);
+        $context->emitExceptionCheck();
     }
 
     public function createClosure(
@@ -1657,10 +1677,26 @@ class Backend
         $output = strtr('zephir_get_global(&:name, SL(":name"));', [':name' => $name]);
 
         if ($useCodePrinter) {
+            $compilationContext->headersManager->add('kernel/main');
             $compilationContext->codePrinter->output($output);
         }
 
         return $output;
+    }
+
+    /**
+     * Assigns the C value `code` to a superglobal, see zephir_set_global().
+     * It can throw: a typed reference to the global refuses the value, or the
+     * destructor of the old value throws. The caller checks for the exception
+     * once the local borrows the global again.
+     */
+    private function setGlobal(Variable $globalVar, string $code, CompilationContext $compilationContext): void
+    {
+        $compilationContext->headersManager->add('kernel/main');
+        $compilationContext->headersManager->add('kernel/memory');
+        $compilationContext->codePrinter->output(
+            sprintf('zephir_set_global(SL("%s"), %s);', $globalVar->getName(), $code)
+        );
     }
 
     /**
@@ -2198,9 +2234,13 @@ class Backend
             }
         }
 
-        /* Since we do not observe, still do cleanup */
-        $variable?->initVariant($compilationContext);
-        $keyVariable?->initVariant($compilationContext);
+        /**
+         * The key and the value keep the last element after the loop, and
+         * what they held before when it does not run, as with PHP's foreach.
+         * Both own what they hold and the memory frame releases them.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2856
+         */
     }
 
     /**

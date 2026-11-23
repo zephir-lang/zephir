@@ -28,6 +28,7 @@ use Zephir\FunctionCall;
 use Zephir\Name;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
+use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
 
 use function count;
@@ -40,6 +41,8 @@ class ForStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext): void
     {
+        $this->bindSuperGlobals($compilationContext);
+
         $exprRaw = $this->statement['expr'];
 
         /*
@@ -222,6 +225,58 @@ class ForStatement extends StatementAbstract
      * - A key must be a zval
      * - A value must be a zval
      */
+    /**
+     * `for k, _GET in a`: a superglobal key or value is assigned to the global
+     * on each iteration, as PHP's foreach assigns `$_GET`. The loop writes a
+     * temporary instead, and the body starts by assigning it with `let`, which
+     * writes the global (the superglobal's local only borrows it).
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2856
+     */
+    private function bindSuperGlobals(CompilationContext $compilationContext): void
+    {
+        $globals     = new Globals();
+        $symbolTable = $compilationContext->symbolTable;
+        $where       = [
+            'file' => $this->statement['file'] ?? null,
+            'line' => $this->statement['line'] ?? null,
+            'char' => $this->statement['char'] ?? null,
+        ];
+        $assignments = [];
+
+        foreach (['key', 'value'] as $position) {
+            $name = $this->statement[$position] ?? '_';
+            if (!$globals->isSuperGlobal($name)) {
+                continue;
+            }
+
+            /**
+             * A local declared with the name is an ordinary variable.
+             */
+            if ($symbolTable->hasVariable($name) && !$symbolTable->getVariable($name)->isSuperGlobal()) {
+                continue;
+            }
+
+            $temp = $symbolTable->addTemp('variable', $compilationContext);
+            $temp->setDynamicTypes('undefined');
+            $this->statement[$position] = $temp->getName();
+
+            $assignments[] = $where + [
+                'assign-type' => 'variable',
+                'operator'    => 'assign',
+                'variable'    => $name,
+                'expr'        => $where + ['type' => 'variable', 'value' => $temp->getName()],
+            ];
+        }
+
+        if ([] !== $assignments) {
+            $this->statement['statements'] = array_merge(
+                [$where + ['type' => 'let', 'assignments' => $assignments]],
+                $this->statement['statements'] ?? []
+            );
+        }
+    }
+
     public function compileHashTraverse(
         CompilationContext $compilationContext,
         Variable $exprVariable

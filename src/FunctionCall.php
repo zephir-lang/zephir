@@ -19,6 +19,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\FunctionCall\CallUserFuncOptimizer;
 use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Traits\VariablesTrait;
+use Zephir\Variable\Variable;
 
 use function class_exists;
 use function count;
@@ -62,6 +63,14 @@ class FunctionCall extends Call
     protected static $functionReflection   = [];
     protected static $optimizerDirectories = [];
     protected static $optimizers           = [];
+
+    /**
+     * Superglobals passed as positional by-reference arguments, each with the
+     * temporary passed in its place, see Call::passSuperGlobalByReference().
+     *
+     * @var list<array{0: Variable, 1: Variable}>
+     */
+    private array $positionalSuperGlobals = [];
 
     /**
      * Appends an optimizer directory to the directory list.
@@ -534,6 +543,11 @@ class FunctionCall extends Call
             }
         }
 
+        foreach ($this->positionalSuperGlobals as [$superGlobal, $temp]) {
+            $compilationContext->backend->assignSuperGlobal($superGlobal, $temp, $compilationContext);
+        }
+        $this->positionalSuperGlobals = [];
+
         $this->addCallStatusOrJump($compilationContext);
 
         /**
@@ -730,6 +744,17 @@ class FunctionCall extends Call
                              * @see https://github.com/zephir-lang/zephir/issues/2654
                              */
                             $variable = $compilationContext->symbolTable->getVariable($argument);
+                            if ($variable && $variable->isSuperGlobal()) {
+                                $temp                         = $this->passSuperGlobalByReference(
+                                    $variable,
+                                    $compilationContext
+                                );
+                                $this->positionalSuperGlobals[] = [$variable, $temp];
+                                $variable                     = $temp;
+                                $argument                     = $temp->getName();
+                                $parameters[$n - 1]           = $compilationContext->backend->getVariableCode($temp);
+                            }
+
                             if ($variable) {
                                 $variable->increaseMutates();
                                 $variable->setDynamicTypes('undefined');

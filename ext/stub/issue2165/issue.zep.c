@@ -262,7 +262,6 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 						}
 				}
 			}
-			ZEPHIR_INIT_NVAR(&valueA);
 			ZEPHIR_CALL_FUNCTION(&_28$$4, "array_values", &_2, 40, &rowA);
 			zephir_check_call_status();
 			zephir_array_append(&rowA, &_28$$4, PH_SEPARATE, "stub/issue2165/issue.zep", 45);
@@ -271,8 +270,6 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 				return;
 			}
 		} ZEND_HASH_FOREACH_END();
-		ZEPHIR_INIT_NVAR(&rowA);
-		ZEPHIR_INIT_NVAR(&i);
 	}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 57, &a);
 	if (UNEXPECTED(EG(exception))) {

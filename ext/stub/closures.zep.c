@@ -939,7 +939,6 @@ PHP_METHOD(Stub_Closures, issue2652Loop)
 			return;
 		}
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&i);
 	RETURN_CCTOR(&result);
 }
 

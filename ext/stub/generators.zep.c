@@ -298,7 +298,6 @@ PHP_METHOD(Stub_Generators, consume)
 				}
 		}
 	}
-	ZEPHIR_INIT_NVAR(&v);
 	RETURN_CTOR(&result);
 }
 
@@ -743,8 +742,6 @@ void zep_Stub_Generators_zephir_gen_step_arr(int ht, zend_execute_data *execute_
 			return;
 			zephir_yield_resume_1:;
 	}
-	ZEPHIR_INIT_NVAR(&v);
-	ZEPHIR_INIT_NVAR(&k);
 	zephir_generator_finish(zephir_gen, NULL);
 	ZEPHIR_MM_RESTORE();
 }
@@ -794,7 +791,6 @@ void zep_Stub_Generators_zephir_gen_step_arrReverse(int ht, zend_execute_data *e
 			return;
 			zephir_yield_resume_1:;
 	}
-	ZEPHIR_INIT_NVAR(&v);
 	zephir_generator_finish(zephir_gen, NULL);
 	ZEPHIR_MM_RESTORE();
 }
@@ -906,9 +902,7 @@ void zep_Stub_Generators_zephir_gen_step_nested(int ht, zend_execute_data *execu
 						zephir_yield_resume_2:;
 				}
 			}
-			ZEPHIR_INIT_NVAR(&x);
 	}
-	ZEPHIR_INIT_NVAR(&row);
 	zephir_generator_finish(zephir_gen, NULL);
 	ZEPHIR_MM_RESTORE();
 }
@@ -1002,7 +996,6 @@ void zep_Stub_Generators_zephir_gen_step_overItems(int ht, zend_execute_data *ex
 				zephir_yield_resume_2:;
 		}
 	}
-	ZEPHIR_INIT_NVAR(&v);
 	zephir_generator_finish(zephir_gen, NULL);
 	ZEPHIR_MM_RESTORE();
 }
@@ -1163,7 +1156,6 @@ void zep_Stub_Generators_zephir_gen_step_relay(int ht, zend_execute_data *execut
 			return;
 			zephir_yield_resume_1:;
 	}
-	ZEPHIR_INIT_NVAR(&v);
 	zephir_generator_finish(zephir_gen, NULL);
 	ZEPHIR_MM_RESTORE();
 }

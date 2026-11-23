@@ -150,6 +150,15 @@ class LetStatement extends StatementAbstract
                 ),
             };
 
+            if (
+                $symbolVariable instanceof Variable
+                && $symbolVariable->isSuperGlobal()
+                && in_array($assignment['assign-type'], ['variable', 'incr', 'decr'], true)
+            ) {
+                $this->assignSuperGlobal($assignment, $symbolVariable, $compilationContext, $readDetector);
+                continue;
+            }
+
             /**
              * Incr/Decr assignments don't require an expression
              */
@@ -475,6 +484,73 @@ class LetStatement extends StatementAbstract
      * Copies the source position of the statement onto a synthesized node, so
      * a diagnostic about it points at the original `/=` or `%=`.
      */
+    /**
+     * `let <superglobal> = e`, `let <superglobal> op= e`, `let <superglobal>++`
+     * and `let <superglobal>--`, as PHP assigns `$_GET`.
+     *
+     * The local of a superglobal only borrows the global's value, so it is
+     * never written: the new value is built in a temporary and assigned to the
+     * global (see Backend::assignSuperGlobal()). A compound operator applies to
+     * the value the global has once `e` ran, as ASSIGN_OP does, so an `e` that
+     * runs code is evaluated first and the global fetched again, since that
+     * code may have replaced it.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2856
+     */
+    private function assignSuperGlobal(
+        array $assignment,
+        Variable $superGlobal,
+        CompilationContext $compilationContext,
+        ReadDetector $readDetector
+    ): void {
+        $backend = $compilationContext->backend;
+        $temp    = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+
+        $assignment['variable'] = $temp->getName();
+
+        if ('variable' !== $assignment['assign-type']) {
+            $backend->copyOnWrite($temp, $superGlobal, $compilationContext);
+            $temp->setIsInitialized(true, $compilationContext);
+            $temp->setDynamicTypes('undefined');
+            AssignmentFactory::process($assignment, $temp, null, $compilationContext, $readDetector);
+            $backend->assignSuperGlobal($superGlobal, $temp, $compilationContext);
+
+            return;
+        }
+
+        $operator = $assignment['operator'] ?? AssignVariableOperator::OPERATOR_ASSIGN;
+        if (isset(self::COMPOUND_OPERATORS[$operator])) {
+            $right = $assignment['expr'];
+            if (!in_array($right['type'], self::IN_PLACE_EXPRESSIONS, true)) {
+                $right = $this->evaluatedIndex($right, $compilationContext);
+                $backend->fetchGlobal($superGlobal, $compilationContext);
+            }
+
+            $assignment['expr'] = $this->astNode($assignment, [
+                'type'  => self::COMPOUND_OPERATORS[$operator],
+                'left'  => $this->astNode($assignment, ['type' => 'variable', 'value' => $superGlobal->getName()]),
+                'right' => $right,
+            ]);
+        }
+
+        $assignment['operator'] = AssignVariableOperator::OPERATOR_ASSIGN;
+
+        $expression = new Expression($assignment['expr']);
+        $expression->setExpectReturn(true, $temp);
+
+        AssignmentFactory::process(
+            $assignment,
+            $temp,
+            $expression->compile($compilationContext),
+            $compilationContext,
+            $readDetector
+        );
+        $backend->assignSuperGlobal($superGlobal, $temp, $compilationContext);
+    }
+
     private function astNode(array $assignment, array $node): array
     {
         foreach (['file', 'line', 'char'] as $position) {

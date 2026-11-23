@@ -955,8 +955,6 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths)
 				}
 		}
 	}
-	ZEPHIR_INIT_NVAR(&position);
-	ZEPHIR_INIT_NVAR(&path);
 	RETURN_CCTOR(&reversed);
 }
 
