@@ -193,10 +193,14 @@ class Variable implements TypeAwareInterface
     protected ?array $usedNode     = null;
     protected int    $variantInits = 0;
 
+    /**
+     * A `callable`, `object`, `resource` or `mixed` slot holds any zval, so
+     * it is a `variable`: a `mixed` one failed every object operation (#2770).
+     */
     public function __construct(protected string $type, protected string $name, protected ?Branch $branch = null)
     {
         $this->globalsManager = new Globals();
-        $this->type           = in_array($type, ['callable', 'object', 'resource'], true) ? 'variable' : $type;
+        $this->type           = in_array($type, ['callable', 'object', 'resource', 'mixed'], true) ? 'variable' : $type;
     }
 
     /**

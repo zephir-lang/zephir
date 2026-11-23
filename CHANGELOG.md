@@ -31,6 +31,12 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed an `abstract static` method of a class or a trait raising a warning at every startup [#2789](https://github.com/zephir-lang/zephir/issues/2789)
 - Fixed a static call through an interface failing to compile, or crashing with a dynamic class, instead of throwing PHP's Error [#2789](https://github.com/zephir-lang/zephir/issues/2789)
 - Fixed a `Class::method` string or a `[class, method]` array called as a function throwing the wrong Error [#2789](https://github.com/zephir-lang/zephir/issues/2789)
+- Fixed `this->join()` and the other array built-in method names calling the PHP function of that name instead of the method of an object [#2770](https://github.com/zephir-lang/zephir/issues/2770)
+- Fixed the array built-in `hasKey()` passing its arguments to `array_key_exists()` in the wrong order [#2770](https://github.com/zephir-lang/zephir/issues/2770)
+- Fixed a dynamic method call through a variable named like an array built-in failing to compile [#2770](https://github.com/zephir-lang/zephir/issues/2770)
+- Fixed a `mixed` variable failing to compile as an object, and `clone` of one crashing the compiler [#2770](https://github.com/zephir-lang/zephir/issues/2770)
+- Fixed writing a property of an `object`, `mixed` or `callable` parameter failing to compile, and of an object without a known class crashing the compiler [#2770](https://github.com/zephir-lang/zephir/issues/2770)
+- Fixed `let o->a[k][] = v` on a local object generating C that does not compile [#2770](https://github.com/zephir-lang/zephir/issues/2770)
 
 ## [1.9.0] - 2026-11-20
 

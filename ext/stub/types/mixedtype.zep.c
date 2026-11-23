@@ -104,8 +104,7 @@ PHP_METHOD(Stub_Types_MixedType, returnMultiButAlwaysMixed)
  */
 PHP_METHOD(Stub_Types_MixedType, paramMixed)
 {
-	zval val_sub;
-	zval *val;
+	zval *val, val_sub;
 
 	ZVAL_UNDEF(&val_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -118,8 +117,7 @@ PHP_METHOD(Stub_Types_MixedType, paramMixed)
 
 PHP_METHOD(Stub_Types_MixedType, paramMixedTwo)
 {
-	zval val1_sub, val2_sub;
-	zval *val1, *val2;
+	zval *val1, val1_sub, *val2, val2_sub;
 
 	ZVAL_UNDEF(&val1_sub);
 	ZVAL_UNDEF(&val2_sub);
@@ -137,9 +135,8 @@ PHP_METHOD(Stub_Types_MixedType, paramMixedTwo)
 PHP_METHOD(Stub_Types_MixedType, paramMixedWithMulti)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *mixedVal;
 	zend_string *stringVal = NULL;
-	zval *intVal_param = NULL, stringVal_zv, mixedVal_sub, _0;
+	zval *intVal_param = NULL, stringVal_zv, *mixedVal, mixedVal_sub, _0;
 	zend_long intVal;
 
 	ZVAL_UNDEF(&stringVal_zv);
@@ -170,8 +167,7 @@ PHP_METHOD(Stub_Types_MixedType, paramMixedWithMulti)
  */
 PHP_METHOD(Stub_Types_MixedType, paramAndReturnMixed)
 {
-	zval val_sub;
-	zval *val;
+	zval *val, val_sub;
 
 	ZVAL_UNDEF(&val_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -186,8 +182,7 @@ PHP_METHOD(Stub_Types_MixedType, castToStringMixedAndReturnMixed)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval val_sub;
-	zval *val;
+	zval *val, val_sub;
 
 	ZVAL_UNDEF(&val_sub);
 	ZVAL_UNDEF(&_0);
@@ -209,8 +204,7 @@ PHP_METHOD(Stub_Types_MixedType, castToStringInternallyMixedAndReturnMixed)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval val_sub;
-	zval *val = NULL;
+	zval *val = NULL, val_sub;
 
 	ZVAL_UNDEF(&val_sub);
 	ZVAL_UNDEF(&_0);
@@ -232,8 +226,7 @@ PHP_METHOD(Stub_Types_MixedType, castToStringInternallyMixedAndReturnMixed)
 
 PHP_METHOD(Stub_Types_MixedType, castToIntMixedAndReturnMixed)
 {
-	zval val_sub;
-	zval *val;
+	zval *val, val_sub;
 
 	ZVAL_UNDEF(&val_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -247,8 +240,7 @@ PHP_METHOD(Stub_Types_MixedType, castToIntInternallyMixedAndReturnMixed)
 {
 	zend_long _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval val_sub;
-	zval *val = NULL;
+	zval *val = NULL, val_sub;
 
 	ZVAL_UNDEF(&val_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -266,8 +258,7 @@ PHP_METHOD(Stub_Types_MixedType, castToIntInternallyMixedAndReturnMixed)
 
 PHP_METHOD(Stub_Types_MixedType, castToBoolMixedAndReturnMixed)
 {
-	zval val_sub;
-	zval *val;
+	zval *val, val_sub;
 
 	ZVAL_UNDEF(&val_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -281,8 +272,7 @@ PHP_METHOD(Stub_Types_MixedType, castToBoolInternallyMixedAndReturnMixed)
 {
 	double _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval val_sub;
-	zval *val = NULL;
+	zval *val = NULL, val_sub;
 
 	ZVAL_UNDEF(&val_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -300,8 +290,7 @@ PHP_METHOD(Stub_Types_MixedType, castToBoolInternallyMixedAndReturnMixed)
 
 PHP_METHOD(Stub_Types_MixedType, castToFloatMixedAndReturnMixed)
 {
-	zval val_sub;
-	zval *val;
+	zval *val, val_sub;
 
 	ZVAL_UNDEF(&val_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -315,8 +304,7 @@ PHP_METHOD(Stub_Types_MixedType, castToFloatInternallyMixedAndReturnMixed)
 {
 	double _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval val_sub;
-	zval *val = NULL;
+	zval *val = NULL, val_sub;
 
 	ZVAL_UNDEF(&val_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -337,8 +325,7 @@ PHP_METHOD(Stub_Types_MixedType, castToFloatInternallyMixedAndReturnMixed)
  */
 PHP_METHOD(Stub_Types_MixedType, mixedInCondition)
 {
-	zval val_sub;
-	zval *val;
+	zval *val, val_sub;
 
 	ZVAL_UNDEF(&val_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)

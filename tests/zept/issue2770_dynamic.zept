@@ -1,0 +1,47 @@
+--TEST--
+Issue #2770: a dynamic method call through a variable named like an array built-in calls the method the variable holds
+--FILE--
+namespace Stub;
+
+class Issue2770Dynamic
+{
+	public function rev() -> string
+	{
+		return "rev";
+	}
+
+	public function other() -> string
+	{
+		return "other";
+	}
+
+	public static function byVariable(var v, string join)
+	{
+		return v->{join}();
+	}
+
+	public function onThis(string rev)
+	{
+		return this->{rev}();
+	}
+}
+--USAGE--
+function show(callable $f)
+{
+    try {
+        echo var_export($f(), true), "\n";
+    } catch (\Throwable $e) {
+        echo get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+$d = new \Stub\Issue2770Dynamic();
+show(fn () => \Stub\Issue2770Dynamic::byVariable($d, 'rev'));
+show(fn () => \Stub\Issue2770Dynamic::byVariable($d, 'other'));
+show(fn () => \Stub\Issue2770Dynamic::byVariable([1, 2], 'rev'));
+show(fn () => $d->onThis('other'));
+--EXPECT--
+'rev'
+'other'
+Error: Call to a member function rev() on array
+'other'
