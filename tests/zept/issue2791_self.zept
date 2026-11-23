@@ -1,0 +1,70 @@
+--TEST--
+Issue #2791: self:: calls keep $this and the called class with internal-call-transformation on
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+/**
+ * `self::m()` is resolved statically, so it gets the C copy. PHP still runs a
+ * non-static m() with the current $this, and `self::` forwards the called
+ * class to a static one.
+ */
+class SelfBase
+{
+	protected name = "base";
+
+	protected function who() -> string
+	{
+		return get_called_class() . ":" . this->name;
+	}
+
+	protected static function staticWho() -> string
+	{
+		return get_called_class();
+	}
+
+	public function viaSelf() -> string
+	{
+		return self::who();
+	}
+
+	public function viaSelfStatic() -> string
+	{
+		return self::staticWho();
+	}
+
+	public static function staticViaSelf() -> string
+	{
+		return self::staticWho();
+	}
+}
+--FILE--
+namespace Stub;
+
+class SelfChild extends SelfBase
+{
+	protected name = "child";
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+
+t("instance self::", fn () => (new \Stub\SelfChild())->viaSelf());
+t("instance self:: static", fn () => (new \Stub\SelfChild())->viaSelfStatic());
+t("static self:: static", fn () => \Stub\SelfChild::staticViaSelf());
+t("base", fn () => (new \Stub\SelfBase())->viaSelf());
+--EXPECT--
+instance self::: Stub\SelfChild:child
+instance self:: static: Stub\SelfChild
+static self:: static: Stub\SelfChild
+base: Stub\SelfBase:base

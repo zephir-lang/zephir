@@ -35,6 +35,8 @@ use Zephir\HeadersManager;
 use Zephir\Name;
 use Zephir\StatementsBlock;
 
+use function array_filter;
+use function array_values;
 use function count;
 use function explode;
 use function gettype;
@@ -510,9 +512,7 @@ final class Definition extends AbstractDefinition
             $methodEntry = 'NULL';
         }
 
-        foreach ($methods as $method) {
-            $method->setupOptimized($compilationContext);
-        }
+        $this->setupOptimizedMethods($compilationContext);
 
         $namespace = str_replace('\\', '_', $compilationContext->config->get('namespace'));
 
@@ -730,11 +730,26 @@ final class Definition extends AbstractDefinition
             $this->checkAbstractMethodsImplemented();
         }
 
+        $calledInternalMethods = $this->getCalledInternalMethods();
+        foreach ($calledInternalMethods as $method) {
+            $codePrinter->output(
+                'zephir_init_internal_frame(&zephir_frame_' . $method->getInternalName() . ', '
+                . $this->getClassEntry() . ', SL("' . $method->getDeclaredName() . '"));'
+            );
+        }
+
         $codePrinter->output('return SUCCESS;');
         $codePrinter->decreaseLevel();
 
         $codePrinter->output('}');
         $codePrinter->outputBlankLine();
+
+        if ([] !== $calledInternalMethods) {
+            foreach ($calledInternalMethods as $method) {
+                $codePrinter->output('zend_internal_function zephir_frame_' . $method->getInternalName() . ';');
+            }
+            $codePrinter->outputBlankLine();
+        }
 
         /**
          * Compile methods
@@ -810,6 +825,9 @@ final class Definition extends AbstractDefinition
                         $compilationContext
                     );
                     $codePrinter->output($internalSignature . ';');
+                    if (self::isCalledInternalMethod($method)) {
+                        $codePrinter->output('extern zend_internal_function zephir_frame_' . $method->getInternalName() . ';');
+                    }
                 }
             }
             $codePrinter->outputBlankLine();
@@ -1422,6 +1440,45 @@ final class Definition extends AbstractDefinition
     public function isTrait(): bool
     {
         return Definition::TYPE_TRAIT === $this->type;
+    }
+
+    /**
+     * The internal methods, and the C copies `internal-call-transformation`
+     * makes, that are called C-to-C: each runs on a frame of its own, set up
+     * when the class registers (see zephir_init_internal_frame()). An
+     * initializer is not one of them, the engine calls it, nor is a
+     * generator's step, which the generator resumes from a frame of its own.
+     *
+     * @return list<Method>
+     */
+    private function getCalledInternalMethods(): array
+    {
+        if ($this->isInterface()) {
+            return [];
+        }
+
+        return array_values(array_filter(
+            $this->methods,
+            fn (Method $method) => self::isCalledInternalMethod($method)
+        ));
+    }
+
+    private static function isCalledInternalMethod(Method $method): bool
+    {
+        return $method->isInternal() && !$method->isInitializer() && !$method->isGeneratorStep();
+    }
+
+    /**
+     * Makes the C copies of the methods that `internal-call-transformation`
+     * calls directly. Safe to repeat: a method that has its copy is skipped.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    public function setupOptimizedMethods(CompilationContext $compilationContext): void
+    {
+        foreach ($this->methods as $method) {
+            $method->setupOptimized($compilationContext);
+        }
     }
 
     /**

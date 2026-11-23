@@ -26,8 +26,19 @@ ZEPHIR_INIT_CLASS(Stub_McallInternal)
 {
 	ZEPHIR_REGISTER_CLASS(Stub, McallInternal, stub, mcallinternal, stub_mcallinternal_method_entry, 0);
 
+	zephir_init_internal_frame(&zephir_frame_zep_Stub_McallInternal_a, stub_mcallinternal_ce, SL("a"));
+	zephir_init_internal_frame(&zephir_frame_zep_Stub_McallInternal_b, stub_mcallinternal_ce, SL("b"));
+	zephir_init_internal_frame(&zephir_frame_zep_Stub_McallInternal_c, stub_mcallinternal_ce, SL("c"));
+	zephir_init_internal_frame(&zephir_frame_zep_Stub_McallInternal_other, stub_mcallinternal_ce, SL("other"));
+	zephir_init_internal_frame(&zephir_frame_zep_Stub_McallInternal_test1956, stub_mcallinternal_ce, SL("test1956"));
 	return SUCCESS;
 }
+
+zend_internal_function zephir_frame_zep_Stub_McallInternal_a;
+zend_internal_function zephir_frame_zep_Stub_McallInternal_b;
+zend_internal_function zephir_frame_zep_Stub_McallInternal_c;
+zend_internal_function zephir_frame_zep_Stub_McallInternal_other;
+zend_internal_function zephir_frame_zep_Stub_McallInternal_test1956;
 
 void zep_Stub_McallInternal_a(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used)
 {

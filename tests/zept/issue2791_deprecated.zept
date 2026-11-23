@@ -1,0 +1,40 @@
+--TEST--
+Issue #2791: calling a deprecated method reports its deprecation with internal-call-transformation on
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--FILE--
+namespace Stub;
+
+/**
+ * PHP reports a deprecated method in zend_call_function(), which the C copy
+ * of a private method skipped.
+ */
+class Deprecations
+{
+	private deprecated function old() -> string
+	{
+		return "old";
+	}
+
+	final public deprecated function finalOld() -> string
+	{
+		return "finalOld";
+	}
+
+	public function run() -> string
+	{
+		return this->old() . "," . this->finalOld();
+	}
+}
+--USAGE--
+set_error_handler(function (int $no, string $message): bool {
+    echo $no === E_DEPRECATED ? "deprecated: " : "error $no: ", $message, "\n";
+
+    return true;
+});
+
+echo (new \Stub\Deprecations())->run(), "\n";
+--EXPECT--
+deprecated: Method Stub\Deprecations::old() is deprecated
+deprecated: Method Stub\Deprecations::finalOld() is deprecated
+old,finalOld

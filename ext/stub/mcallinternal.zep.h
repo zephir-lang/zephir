@@ -4,15 +4,20 @@ extern zend_class_entry *stub_mcallinternal_ce;
 ZEPHIR_INIT_CLASS(Stub_McallInternal);
 
 void zep_Stub_McallInternal_a(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used);
+extern zend_internal_function zephir_frame_zep_Stub_McallInternal_a;
 void zep_Stub_McallInternal_b(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_ext , zval *b_ext );
+extern zend_internal_function zephir_frame_zep_Stub_McallInternal_b;
 void zep_Stub_McallInternal_c(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext);
+extern zend_internal_function zephir_frame_zep_Stub_McallInternal_c;
 PHP_METHOD(Stub_McallInternal, e);
 PHP_METHOD(Stub_McallInternal, d);
 PHP_METHOD(Stub_McallInternal, f);
 PHP_METHOD(Stub_McallInternal, g);
 void zep_Stub_McallInternal_other(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext);
+extern zend_internal_function zephir_frame_zep_Stub_McallInternal_other;
 PHP_METHOD(Stub_McallInternal, callFibonacci);
 void zep_Stub_McallInternal_test1956(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used);
+extern zend_internal_function zephir_frame_zep_Stub_McallInternal_test1956;
 PHP_METHOD(Stub_McallInternal, issue1956);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcallinternal_a, 0, 0, 0)

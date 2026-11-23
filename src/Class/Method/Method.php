@@ -53,8 +53,10 @@ use function implode;
 use function in_array;
 use function is_array;
 use function is_object;
+use function is_string;
 use function json_decode;
 use function json_encode;
+use function ltrim;
 use function preg_replace;
 use function sprintf;
 use function str_replace;
@@ -94,6 +96,12 @@ class Method
     private const LOOP_TYPES = ['while', 'do-while', 'for', 'loop'];
 
     private ?array $attributes = null;
+
+    /**
+     * Whether this is the C copy `internal-call-transformation` makes of a
+     * method. Its call sites check every argument's type first (#2791).
+     */
+    private bool $isTwin = false;
 
     public bool $optimizable = true;
 
@@ -1333,8 +1341,13 @@ class Method
                              * mixed methods), which an internal method does not
                              * own. They take the zval path so the trailing _ext
                              * pointer stays the single source of truth (#2021).
+                             *
+                             * A method's C copy is the exception: its call
+                             * sites pass a string, or null where the parameter
+                             * allows it, so it borrows the zend_string * from
+                             * its _ext pointer (#2791).
                              */
-                            $canUseNativeString = !$this->isInternal()
+                            $canUseNativeString = (!$this->isInternal() || $this->isTwin)
                                 && $mutations <= 1
                                 && (!isset($parameter['default']) || $defaultType === 'string' || $defaultType === 'null');
 
@@ -1624,7 +1637,15 @@ class Method
                 }
             }
 
+            /**
+             * An internal method takes every argument from its _ext pointers,
+             * native strings included, so it keeps its whole list.
+             */
             $perParamFetchCode = '';
+            if ($this->isInternal()) {
+                $nativeStringCount = 0;
+            }
+
             if ($nativeStringCount === $totalParamCount && $totalParamCount > 0) {
                 // All params are native strings — skip zephir_fetch_params
                 $params = [];
@@ -1900,7 +1921,26 @@ class Method
                     }
                 }
             } else {
-                foreach ($params as $param) {
+                $declaredNames = [];
+                foreach ($this->parameters->getParameters() as $parameter) {
+                    if (empty($parameter['variadic'])) {
+                        $declaredNames[] = $this->shadowName($parameter['name']);
+                    }
+                }
+
+                foreach ($params as $position => $param) {
+                    $declared = $declaredNames[$position] ?? null;
+                    $native   = null !== $declared
+                        ? $compilationContext->symbolTable->getVariable($declared)
+                        : null;
+
+                    if (null !== $native && $native->isNativeString()) {
+                        $compilationContext->headersManager->add('kernel/main');
+                        $code .= "\t" . $declared . ' = zephir_internal_str_arg(' . $param . '_ext);' . PHP_EOL;
+
+                        continue;
+                    }
+
                     /* TODO: Migrate all this code to codeprinter, get rid of temp code printer */
                     $tempCodePrinter                 = new Printer();
                     $realCodePrinter                 = $compilationContext->codePrinter;
@@ -4380,30 +4420,17 @@ class Method
             return $this;
         }
 
-        if (!$this->isInternal() && !$classDefinition->isBundled()) {
-            /* Not supported for now */
-            if ($this->getNumberOfRequiredParameters() != $this->getNumberOfParameters()) {
-                return $this;
-            }
-
-            if ($this->isConstructor()) {
-                return $this;
-            }
+        if (!$this->isInternal() && !$classDefinition->isBundled() && $this->canHaveTwin()) {
+            $optimizedName = $this->getName() . '_zephir_internal_call';
 
             /**
-             * A method with no body of its own cannot be turned into a C
-             * function. The twin's visibility is just `internal`, so it does not
-             * inherit `isAbstract()` and would be emitted as a body-less
-             * function that silently returns nothing. Generator creators are the
-             * same shape: GeneratorTransformer moves the body into a step and
-             * nulls the statements before this runs, and the twin carries no
-             * generator step, so it would return null instead of a Generator.
+             * Twins are made for every class before any of them compiles, so
+             * that a call into a class compiled later finds one, and again
+             * when a class compiles on its own.
              */
-            if ($this->isAbstract() || null === $this->statements || $this->isGeneratorCreator()) {
+            if (null !== $classDefinition->getMethod($optimizedName, false)) {
                 return $this;
             }
-
-            $optimizedName = $this->getName() . '_zephir_internal_call';
 
             /**
              * `static` has to be carried over: the twin's body is compiled with
@@ -4442,13 +4469,84 @@ class Method
                 null,
                 $this->expression
             );
-            $optimizedMethod->typeInference = $this->typeInference;
             $optimizedMethod->setReturnTypes($this->returnTypes);
             $optimizedMethod->setDeclaredName($this->getName());
+            $optimizedMethod->isTwin = true;
+
+            /**
+             * The twin's body gets its own analysis, as the method's did:
+             * which locals every path assigns (#2679), which hold only native
+             * arrays (#2682), how often each is written. Without it a local
+             * assigned on one path only was returned uninitialized (#2791).
+             * The results are not shared, since compiling a body adds to them.
+             */
+            $currentMethod = $compilationContext->currentMethod;
+            $optimizedMethod->preCompile($compilationContext);
+            $compilationContext->currentMethod = $currentMethod;
+
             $classDefinition->addMethod($optimizedMethod);
         }
 
         return $this;
+    }
+
+    /**
+     * Whether the method can be copied into a C function that is called
+     * C-to-C, on a frame that holds no arguments (`internal-call-transformation`).
+     *
+     * Left out:
+     *  - a method with no body of its own: the twin's visibility is just
+     *    `internal`, so it does not inherit `isAbstract()` and would be
+     *    emitted as a body-less function that silently returns nothing.
+     *    Generator creators are the same shape: GeneratorTransformer moves the
+     *    body into a step and nulls the statements before this runs;
+     *  - a variadic method, whose rest parameter is read from the arguments in
+     *    the call frame;
+     *  - a deprecated method, which PHP reports in zend_call_function();
+     *  - a method calling func_get_args(), func_num_args() or func_get_arg(),
+     *    which read the arguments in the call frame;
+     *  - a trait's method, which runs with the scope of the class using it.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    private function canHaveTwin(): bool
+    {
+        if ($this->isAbstract() || null === $this->statements || $this->isGeneratorCreator()) {
+            return false;
+        }
+
+        if ($this->isVariadic() || $this->isDeprecated() || $this->getClassDefinition()->isTrait()) {
+            return false;
+        }
+
+        return !self::callsFunction(
+            $this->statements->getStatements(),
+            ['func_get_args', 'func_num_args', 'func_get_arg']
+        );
+    }
+
+    /**
+     * Whether the statements call one of the named functions anywhere.
+     *
+     * @param list<string> $names Lower-case function names.
+     */
+    private static function callsFunction(array $node, array $names): bool
+    {
+        if (
+            'fcall' === ($node['type'] ?? null)
+            && is_string($node['name'] ?? null)
+            && in_array(strtolower(ltrim($node['name'], '\\')), $names, true)
+        ) {
+            return true;
+        }
+
+        foreach ($node as $child) {
+            if (is_array($child) && self::callsFunction($child, $names)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

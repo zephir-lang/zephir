@@ -1,0 +1,23 @@
+--TEST--
+Issue #2791: a method with a ulong parameter compiles with internal-call-transformation on
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--FILE--
+namespace Stub;
+
+class Unsigned
+{
+	final public function twice(ulong n) -> ulong
+	{
+		return n * 2;
+	}
+
+	public function run() -> ulong
+	{
+		return this->twice(21);
+	}
+}
+--USAGE--
+echo (new \Stub\Unsigned())->run(), "\n";
+--EXPECT--
+42

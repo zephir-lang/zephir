@@ -1,0 +1,181 @@
+--TEST--
+Issue #2791: new runs the C copy of the constructor and gives what PHP's new gives
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class Point
+{
+	public x;
+
+	public y;
+
+	public function __construct(long x, var y = "y")
+	{
+		let this->x = x;
+		let this->y = y;
+	}
+}
+--FILE--
+namespace Stub;
+
+class Boom
+{
+	public function __construct(var fail)
+	{
+		if fail {
+			throw new \RuntimeException("boom");
+		}
+	}
+
+	public function __destruct()
+	{
+		echo "destruct\n";
+	}
+}
+--FILE--
+namespace Stub;
+
+class Base
+{
+	public function __construct()
+	{
+		echo "Base::__construct ", get_class(this), "\n";
+	}
+
+	public function create() -> <Base>
+	{
+		return new static();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Kid extends Base
+{
+	public function __construct()
+	{
+		echo "Kid::__construct\n";
+	}
+}
+--FILE--
+namespace Stub;
+
+class Probe
+{
+	public depth;
+
+	public function __construct(var marker)
+	{
+		var trace;
+
+		let trace = debug_backtrace();
+		let this->depth = count(trace[0]["args"]);
+	}
+}
+--FILE--
+namespace Stub;
+
+class Factory
+{
+	public function point(var x) -> <Point>
+	{
+		return new Point(x);
+	}
+
+	public function pointTwo(var x, var y) -> <Point>
+	{
+		return new Point(x, y);
+	}
+
+	public function boom(var fail) -> <Boom>
+	{
+		return new Boom(fail);
+	}
+
+	public function depths() -> array
+	{
+		var out = [], i, p;
+
+		for i in [1, 2] {
+			let p = new Probe(i);
+			let out[] = p->depth;
+		}
+
+		return out;
+	}
+}
+--USAGE--
+function outcome(callable $fn): string
+{
+    $notes = [];
+    set_error_handler(function (int $no, string $message) use (&$notes): bool {
+        $notes[] = $no . ':' . $message;
+
+        return true;
+    });
+
+    ob_start();
+    try {
+        $result = 'returned ' . json_encode(get_object_vars($fn()));
+    } catch (\Throwable $e) {
+        $result = get_class($e) . ': ' . $e->getMessage();
+    } finally {
+        restore_error_handler();
+    }
+    gc_collect_cycles();
+    $printed = ob_get_clean();
+
+    return $result . ($notes ? ' [' . implode(' | ', $notes) . ']' : '') . ($printed !== '' ? ' printed ' . json_encode($printed) : '');
+}
+
+function same(string $label, callable $via, callable $direct): void
+{
+    for ($i = 0; $i < 2; $i++) {
+        $a = outcome($via);
+        $b = outcome($direct);
+        if ($a !== $b) {
+            echo $label, ": DIFF\n  via:    ", $a, "\n  direct: ", $b, "\n";
+
+            return;
+        }
+    }
+    echo $label, ": same\n";
+}
+
+$f = new \Stub\Factory();
+same("point", fn () => $f->point(5), fn () => new \Stub\Point(5));
+same("point, coerced", fn () => $f->point("5"), fn () => new \Stub\Point("5"));
+same("point, null", fn () => $f->point(null), fn () => new \Stub\Point(null));
+same("point, wrong", fn () => $f->point("abc"), fn () => new \Stub\Point("abc"));
+same("point, two", fn () => $f->pointTwo(1, [2]), fn () => new \Stub\Point(1, [2]));
+same("boom, fine", fn () => $f->boom(false), fn () => new \Stub\Boom(false));
+same("boom, throws", fn () => $f->boom(true), fn () => new \Stub\Boom(true));
+
+(new \Stub\Kid())->create();
+(new \Stub\Kid())->create();
+(new \Stub\Base())->create();
+(new \Stub\Base())->create();
+
+[$first, $second] = $f->depths();
+echo "arguments in the constructor frame: ", $first, " then ", $second, "\n";
+--EXPECT--
+point: same
+point, coerced: same
+point, null: same
+point, wrong: same
+point, two: same
+boom, fine: same
+boom, throws: same
+Kid::__construct
+Kid::__construct
+Kid::__construct
+Kid::__construct
+Base::__construct Stub\Base
+Base::__construct Stub\Base
+Base::__construct Stub\Base
+Base::__construct Stub\Base
+arguments in the constructor frame: 1 then 0

@@ -1,0 +1,226 @@
+--TEST--
+Issue #2791: a virtual call runs the C copy only when the object's method is that Zephir method
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+/**
+ * describe() and depth() can be overridden, so each call checks at run time
+ * which method the object has before it takes the C copy.
+ */
+class Shape
+{
+	protected label = "shape";
+
+	protected function describe(var suffix) -> string
+	{
+		return "Shape::describe(" . get_class(this) . "," . get_called_class() . "," . static::kind() . "," . this->label . "," . suffix . ")";
+	}
+
+	public static function kind() -> string
+	{
+		return "shape";
+	}
+
+	public function run(var suffix) -> string
+	{
+		return this->describe(suffix);
+	}
+
+	public function callOn(<Shape> s, var suffix) -> string
+	{
+		return s->describe(suffix);
+	}
+
+	public function callCast(var x) -> string
+	{
+		var s;
+
+		let s = <Shape> x;
+
+		return s->describe("cast");
+	}
+
+	/**
+	 * The frame of the C copy has no slots for arguments, so the arguments
+	 * in the method's frame tell the two paths apart: the first call fills
+	 * the call site's cache through PHP, the second one runs the copy.
+	 */
+	protected function depth(var marker) -> long
+	{
+		var trace;
+
+		let trace = debug_backtrace();
+
+		return count(trace[0]["args"]);
+	}
+
+	public function probe() -> array
+	{
+		var out = [], i;
+
+		for i in [1, 2] {
+			let out[] = this->depth(i);
+		}
+
+		return out;
+	}
+}
+--FILE--
+namespace Stub;
+
+class Circle extends Shape
+{
+	protected function describe(var suffix) -> string
+	{
+		return "Circle::describe(" . suffix . ")";
+	}
+
+	public static function kind() -> string
+	{
+		return "circle";
+	}
+}
+--FILE--
+namespace Stub;
+
+class Square extends Shape
+{
+	protected label = "square";
+
+	public static function kind() -> string
+	{
+		return "square";
+	}
+}
+--FILE--
+namespace Stub;
+
+/**
+ * A private method of the calling class wins over a public one of the
+ * object's class, which PHP decides from the calling class.
+ */
+class PBase
+{
+	private function m() -> string
+	{
+		return "PBase::m";
+	}
+
+	public function callM(<PBase> o) -> string
+	{
+		return o->m();
+	}
+}
+--FILE--
+namespace Stub;
+
+class PChild extends PBase
+{
+	public function m() -> string
+	{
+		return "PChild::m";
+	}
+}
+--FILE--
+namespace Stub;
+
+class Magic
+{
+	protected function hidden() -> string
+	{
+		return "hidden";
+	}
+
+	public function __call(string name, array args) -> string
+	{
+		return "__call(" . name . ")";
+	}
+
+	public function callHidden(<Magic> m) -> string
+	{
+		return m->hidden();
+	}
+}
+--FILE--
+namespace Stub;
+
+class MagicCaller
+{
+	public function callHidden(<Magic> m) -> string
+	{
+		return m->hidden();
+	}
+}
+--USAGE--
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ": ", $result, "\n";
+    } catch (\Throwable $e) {
+        echo $label, ": ", get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+
+class PhpOverride extends \Stub\Shape
+{
+    protected function describe($suffix): string
+    {
+        return "PhpOverride::describe($suffix)";
+    }
+}
+
+class PhpInherit extends \Stub\Shape
+{
+    protected $label = "php";
+
+    public static function kind(): string
+    {
+        return "php";
+    }
+}
+
+foreach ([new \Stub\Shape(), new \Stub\Circle(), new \Stub\Square(), new PhpOverride(), new PhpInherit()] as $shape) {
+    t(get_class($shape), fn () => $shape->run(1) . " " . $shape->run(2));
+}
+
+$on = new \Stub\Shape();
+foreach ([new \Stub\Shape(), new \Stub\Circle(), new PhpInherit(), new PhpOverride(), new \Stub\Shape(), new \Stub\Square()] as $i => $shape) {
+    t("one site, " . get_class($shape), fn () => $on->callOn($shape, $i));
+}
+
+t("cast, Square", fn () => $on->callCast(new \Stub\Square()));
+t("cast, Square again", fn () => $on->callCast(new \Stub\Square()));
+t("cast, null", fn () => $on->callCast(null));
+t("cast, stdClass", fn () => $on->callCast(new \stdClass()));
+
+t("private of the calling class", fn () => (new \Stub\PBase())->callM(new \Stub\PChild()) . " " . (new \Stub\PBase())->callM(new \Stub\PChild()));
+t("protected, in scope", fn () => (new \Stub\Magic())->callHidden(new \Stub\Magic()) . " " . (new \Stub\Magic())->callHidden(new \Stub\Magic()));
+t("protected, out of scope", fn () => (new \Stub\MagicCaller())->callHidden(new \Stub\Magic()) . " " . (new \Stub\MagicCaller())->callHidden(new \Stub\Magic()));
+
+[$first, $second] = (new PhpInherit())->probe();
+echo "arguments in the frame: ", $first, " then ", $second, "\n";
+--EXPECT--
+Stub\Shape: Shape::describe(Stub\Shape,Stub\Shape,shape,shape,1) Shape::describe(Stub\Shape,Stub\Shape,shape,shape,2)
+Stub\Circle: Circle::describe(1) Circle::describe(2)
+Stub\Square: Shape::describe(Stub\Square,Stub\Square,square,square,1) Shape::describe(Stub\Square,Stub\Square,square,square,2)
+PhpOverride: PhpOverride::describe(1) PhpOverride::describe(2)
+PhpInherit: Shape::describe(PhpInherit,PhpInherit,php,php,1) Shape::describe(PhpInherit,PhpInherit,php,php,2)
+one site, Stub\Shape: Shape::describe(Stub\Shape,Stub\Shape,shape,shape,0)
+one site, Stub\Circle: Circle::describe(1)
+one site, PhpInherit: Shape::describe(PhpInherit,PhpInherit,php,php,2)
+one site, PhpOverride: PhpOverride::describe(3)
+one site, Stub\Shape: Shape::describe(Stub\Shape,Stub\Shape,shape,shape,4)
+one site, Stub\Square: Shape::describe(Stub\Square,Stub\Square,square,square,5)
+cast, Square: Shape::describe(Stub\Square,Stub\Square,square,square,cast)
+cast, Square again: Shape::describe(Stub\Square,Stub\Square,square,square,cast)
+cast, null: Error: Call to a member function describe() on null
+cast, stdClass: Error: Call to undefined method stdClass::describe()
+private of the calling class: PBase::m PBase::m
+protected, in scope: hidden hidden
+protected, out of scope: __call(hidden) __call(hidden)
+arguments in the frame: 1 then 0

@@ -16,6 +16,7 @@ namespace Zephir\Backend;
 use Zephir\Code\Printer;
 use Zephir\FileSystem\HardDisk;
 
+use function array_merge;
 use function implode;
 use function ksort;
 use function sprintf;
@@ -90,7 +91,20 @@ HEAD;
                 $retParam = 'rvp';
             }
 
-            $codePrinter->output('ZEPHIR_BACKUP_SCOPE(); \\');
+            /**
+             * A static call names the class `static` means in the method. It
+             * is read before the frame is replaced, since `self::` passes on
+             * the called class of the code that makes the call (#2791).
+             */
+            if ($scope) {
+                $codePrinter->output('zend_class_entry *zephir_called_ce_ = (called_ce); \\');
+            }
+
+            /**
+             * The frame the method runs on is named after it: the class that
+             * declares the method sets up `zephir_frame_<method>` (#2791).
+             */
+            $codePrinter->output('ZEPHIR_BACKUP_SCOPE(&zephir_frame_##method); \\');
             if (!$scope) {
                 $codePrinter->output('ZEPHIR_SET_THIS(object); \\');
                 $codePrinter->output(
@@ -98,20 +112,27 @@ HEAD;
                 );
             } else {
                 $codePrinter->output('ZEPHIR_SET_THIS_EXPLICIT_NULL(); \\');
-                $codePrinter->output('ZEPHIR_SET_SCOPE(scope_ce, called_ce); \\');
+                $codePrinter->output('ZEPHIR_SET_SCOPE(scope_ce, zephir_called_ce_); \\');
             }
 
-            /* Create new zval's for parameters */
+            /**
+             * Each argument gets a slot of its own, as in PHP's call frame:
+             * the method may separate or overwrite its parameter, and the slot
+             * is released after the call. An argument left out is passed as
+             * NULL, so the method takes the parameter's default (#2791).
+             */
+            $slots  = [];
+            $copies = [];
             for ($i = 0; $i < $paramCount; ++$i) {
-                $zv               = '_' . $params[$i];
-                $zvals[]          = $zv;
-                $initStatements[] = 'ZVAL_COPY(&' . $zv . ', ' . $params[$i] . '); \\';
-                $postStatements[] = 'Z_TRY_DELREF_P(' . $params[$i] . '); \\';
+                $zvals[]          = '_' . $params[$i];
+                $slots[]          = '_a' . $i;
+                $copies[]         = 'zval *_a' . $i . ' = zephir_internal_arg(&_' . $params[$i] . ', ' . $params[$i] . '); \\';
+                $postStatements[] = 'zephir_internal_arg_release(_a' . $i . '); \\';
             }
-            if ($i) {
+            if ($paramCount) {
                 $codePrinter->output('zval ' . implode(', ', $zvals) . '; \\');
             }
-            foreach ($initStatements as $statement) {
+            foreach (array_merge($copies, $initStatements) as $statement) {
                 $codePrinter->output($statement);
             }
 
@@ -121,7 +142,7 @@ HEAD;
                     $retParam,
                     $scope ? 'NULL, ' : 'object, ',
                     $retValueUsed,
-                    $i ? ', &' . implode(', &', $zvals) : ''
+                    $paramCount ? ', ' . implode(', ', $slots) : ''
                 )
             );
 

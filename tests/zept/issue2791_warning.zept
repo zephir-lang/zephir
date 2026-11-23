@@ -1,0 +1,100 @@
+--TEST--
+Issue #2791: a warning raised in the C copy of a method is reported instead of crashing
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+/**
+ * With PHP's bundled PCRE, preg_match() is compiled to a direct PCRE call, so
+ * its warning names the running method. The C copy ran on a frame with no
+ * name and the warning crashed the process. Without it, preg_match() is
+ * called as a function and its warning names it, as in PHP.
+ */
+class Warn
+{
+	public function viaProtected(string pattern) -> var
+	{
+		return this->match(pattern);
+	}
+
+	public function viaPrivate(string pattern) -> var
+	{
+		return this->matchPrivate(pattern);
+	}
+
+	public function viaSelf(string pattern) -> var
+	{
+		return self::matchStatic(pattern);
+	}
+
+	public function viaOther(string pattern) -> var
+	{
+		return Warn::matchStatic(pattern);
+	}
+
+	public function viaInternal(string pattern) -> var
+	{
+		return this->matchInternal(pattern);
+	}
+
+	protected function match(string pattern) -> var
+	{
+		return preg_match(pattern, "x");
+	}
+
+	private function matchPrivate(string pattern) -> var
+	{
+		return preg_match(pattern, "x");
+	}
+
+	public static function matchStatic(string pattern) -> var
+	{
+		return preg_match(pattern, "x");
+	}
+
+	internal function matchInternal(string pattern) -> var
+	{
+		return preg_match(pattern, "x");
+	}
+}
+--USAGE--
+function messages(callable $fn): string
+{
+    $messages = [];
+    set_error_handler(static function (int $number, string $message) use (&$messages): bool {
+        $messages[] = preg_replace('/^(?:preg_match|Stub\\\\Warn::\\w+)\\(\\): /', '', $message);
+
+        return true;
+    });
+
+    try {
+        $result = $fn();
+    } finally {
+        restore_error_handler();
+    }
+
+    return var_export($result, true) . ' ' . implode(' | ', $messages);
+}
+
+$warn = new \Stub\Warn();
+foreach (['viaProtected', 'viaPrivate', 'viaSelf', 'viaOther', 'viaInternal'] as $method) {
+    $first  = messages(fn () => $warn->$method('#(x|e#f)#'));
+    $second = messages(fn () => $warn->$method('#(x|e#f)#'));
+    echo $method, ': ', $second, $first === $second ? '' : ' DIFF ' . $first, "\n";
+}
+
+$warn->viaProtected('#(x|e#f)#');
+$warn->viaInternal('#(x|e#f)#');
+--EXPECTF--
+viaProtected: false Unknown modifier 'f'
+viaPrivate: false Unknown modifier 'f'
+viaSelf: false Unknown modifier 'f'
+viaOther: false Unknown modifier 'f'
+viaInternal: false Unknown modifier 'f'
+
+Warning: %s(): Unknown modifier 'f' in %s on line %d
+
+Warning: %s(): Unknown modifier 'f' in %s on line %d
