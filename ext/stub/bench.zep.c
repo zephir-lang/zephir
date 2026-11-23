@@ -135,7 +135,6 @@ PHP_METHOD(Stub_Bench, forOverArray)
 				sum += zephir_get_intval(&v);
 		}
 	}
-	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(sum);
 }
 
@@ -239,7 +238,6 @@ PHP_METHOD(Stub_Bench, forOverIterator)
 				sum += zephir_get_intval(&v);
 		}
 	}
-	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(sum);
 }
 
@@ -355,7 +353,6 @@ PHP_METHOD(Stub_Bench, forOverIteratorWithContinue)
 				sum += iv;
 		}
 	}
-	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(sum);
 }
 
@@ -602,7 +599,6 @@ PHP_METHOD(Stub_Bench, variadicSum)
 		ZVAL_COPY(&v, _2);
 		sum += zephir_get_intval(&v);
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(sum);
 }
 
@@ -761,7 +757,6 @@ PHP_METHOD(Stub_Bench, funcGetArgsSum)
 		ZVAL_COPY(&v, _2);
 		sum += zephir_get_intval(&v);
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(sum);
 }
 
@@ -1026,7 +1021,6 @@ PHP_METHOD(Stub_Bench, sumViaGenerator)
 				total += zephir_get_intval(&v);
 		}
 	}
-	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(total);
 }
 
@@ -1091,7 +1085,6 @@ PHP_METHOD(Stub_Bench, sumViaArray)
 				total += zephir_get_intval(&v);
 		}
 	}
-	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(total);
 }
 
@@ -2112,7 +2105,6 @@ PHP_METHOD(Stub_Bench, siteIteratorOnce)
 				sum += zephir_get_numberval(&v);
 		}
 	}
-	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(sum);
 }
 
@@ -2200,7 +2192,6 @@ void zep_Stub_Bench_zephir_gen_step_generatorOverArray(int ht, zend_execute_data
 			return;
 			zephir_yield_resume_1:;
 	}
-	ZEPHIR_INIT_NVAR(&v);
 	zephir_generator_finish(zephir_gen, NULL);
 	ZEPHIR_MM_RESTORE();
 }

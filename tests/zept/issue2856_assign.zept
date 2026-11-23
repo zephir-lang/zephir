@@ -1,0 +1,166 @@
+--TEST--
+Issue #2856: let on a superglobal writes the global, through a reference, for every right-hand side and compound operator
+--FILE--
+namespace Stub;
+
+class Issue2856Assign
+{
+    public function assignNull() { let _GET = null; }
+
+    public function assignInt() { let _GET = 5; }
+
+    public function assignDouble() { let _GET = 1.5; }
+
+    public function assignBool() { let _GET = true; }
+
+    public function assignString() { let _GET = "str"; }
+
+    public function assignEmpty() { let _GET = []; }
+
+    public function assignArray() { let _GET = ["k": "v"]; }
+
+    public function assignVar(var v) { let _GET = v; }
+
+    public function assignTyped(array v) { let _GET = v; }
+
+    public function assignCall() { let _GET = array_merge(["n": 1], ["m": 2]); }
+
+    public function assignSlice() { let _GET = array_slice(_GET, 1); }
+
+    public function assignNew() { let _GET = new \ArrayObject([1]); }
+
+    public function assignMethod() { let _GET = this->make(); }
+
+    protected function make() { return ["made": 1]; }
+
+    public function concat() { let _GET .= "x"; }
+
+    public function union() { let _GET += ["b": 2, "a": 9]; }
+
+    public function bitOr() { let _GET |= 4; }
+
+    public function incr() { let _GET++; }
+
+    public function decr() { let _GET--; }
+
+    public function readBack()
+    {
+        let _GET = ["r": 1];
+
+        return _GET;
+    }
+
+    public function writeAfter()
+    {
+        let _GET = ["w": 1];
+        let _GET["x"] = 2;
+
+        return _GET;
+    }
+
+    public function concatCall() { let _GET .= this->replaceGlobal(); }
+
+    protected function replaceGlobal()
+    {
+        let _GET = "new";
+
+        return "-tail";
+    }
+
+    public function assignMany(int n)
+    {
+        int i = 0;
+
+        while i < n {
+            let _GET = [i];
+            let i++;
+        }
+    }
+}
+--USAGE--
+$a = new Stub\Issue2856Assign();
+function show(string $label): void
+{
+    $v = $GLOBALS['_GET'];
+    echo $label, ': ', get_debug_type($v), ' ', json_encode($v instanceof ArrayObject ? $v->getArrayCopy() : $v), "\n";
+}
+
+$_GET = ['old' => 1];
+// The one difference from PHP: Zephir never leaves a superglobal null, it reads a
+// missing or null one back as [] (PHP keeps null here)
+$a->assignNull(); show('null');
+$a->assignInt(); show('int');
+$a->assignDouble(); show('double');
+$a->assignBool(); show('bool');
+$a->assignString(); show('string');
+$_GET = ['old' => 1];
+$a->assignEmpty(); show('empty');
+$a->assignArray(); show('array');
+$a->assignVar(['v' => 1]); show('var');
+$a->assignVar('s'); show('var string');
+$a->assignTyped(['t' => 1]); show('typed array');
+$a->assignCall(); show('call');
+$_GET = ['x' => 1, 'y' => 2, 'z' => 3];
+$a->assignSlice(); show('slice');
+$a->assignNew(); show('new');
+$a->assignMethod(); show('method');
+
+$_GET = 'a';
+$a->concat(); show('concat');
+$_GET = ['a' => 1];
+$a->union(); show('union');
+$_GET = 1;
+$a->bitOr(); show('bit or');
+$_GET = 5;
+$a->incr(); show('incr');
+$a->decr(); show('decr');
+$_GET = 'a';
+$a->concatCall(); show('concat call');
+
+echo 'read back: ', json_encode($a->readBack()), "\n";
+echo 'write after: ', json_encode($a->writeAfter()), "\n";
+show('write after global');
+
+// Through a reference to the global
+$_GET = ['old' => 1];
+$r = &$_GET;
+$a->assignArray();
+echo 'reference: ', json_encode($r), "\n";
+$a->assignEmpty();
+echo 'reference empty: ', json_encode($r), "\n";
+unset($r);
+
+// Each replaced array is released: two identical states, no growth
+$a->assignMany(10);
+$_GET = [];
+$before = memory_get_usage();
+$a->assignMany(100000);
+$_GET = [];
+echo 'leak: ', memory_get_usage() - $before, "\n";
+--EXPECT--
+null: array []
+int: int 5
+double: float 1.5
+bool: bool true
+string: string "str"
+empty: array []
+array: array {"k":"v"}
+var: array {"v":1}
+var string: string "s"
+typed array: array {"t":1}
+call: array {"n":1,"m":2}
+slice: array {"y":2,"z":3}
+new: ArrayObject [1]
+method: array {"made":1}
+concat: string "ax"
+union: array {"a":1,"b":2}
+bit or: int 5
+incr: int 6
+decr: int 5
+concat call: string "new-tail"
+read back: {"r":1}
+write after: {"w":1,"x":2}
+write after global: array {"w":1,"x":2}
+reference: {"k":"v"}
+reference empty: []
+leak: 0

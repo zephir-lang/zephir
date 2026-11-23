@@ -20,6 +20,7 @@ use Zephir\Detectors\ReadDetector;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Statements\LetStatement;
 
 use function in_array;
 
@@ -67,6 +68,16 @@ class Destructure
                 $compilationContext,
                 $statement
             );
+
+            /**
+             * A superglobal is assigned to the global, as `let` assigns it.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2856
+             */
+            if ($target->isSuperGlobal()) {
+                (new LetStatement(['assignments' => [$statement]]))->compile($compilationContext);
+                continue;
+            }
 
             $expression = new Expression($statement['expr']);
             $expression->setReadOnly(true);

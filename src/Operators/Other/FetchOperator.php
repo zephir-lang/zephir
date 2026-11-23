@@ -63,6 +63,14 @@ class FetchOperator extends AbstractOperator
         $readsTarget = 'return_value' !== $variable->getName()
             && $this->readsVariable($expression['right'], $variable->getName());
 
+        /**
+         * A superglobal only borrows the global, so it is fetched the same way
+         * and then assigned to the global.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2856
+         */
+        $readsTarget = $readsTarget || $variable->isSuperGlobal();
+
         $readOnly = false;
         $target   = $variable;
 

@@ -449,6 +449,7 @@ static inline void zephir_throw_variable_type_error(zval *value, const char *nam
 
 /* Globals functions */
 int zephir_get_global(zval *arr, const char *global, unsigned int global_length);
+int zephir_set_global(const char *global, unsigned int global_length, zval *value);
 
 /* Count */
 void zephir_fast_count(zval *result, zval *array);

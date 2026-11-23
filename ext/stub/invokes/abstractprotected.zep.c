@@ -197,7 +197,6 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex)
 			return;
 		}
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&item);
 	RETURN_CTOR(&result);
 }
 

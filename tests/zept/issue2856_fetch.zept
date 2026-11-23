@@ -1,0 +1,58 @@
+--TEST--
+Issue #2856: a superglobal read from Zephir keeps a reference to it and does not replace an object in it
+--FILE--
+namespace Stub;
+
+class Issue2856Fetch
+{
+    public function setKey(string k, var v)
+    {
+        let _GET[k] = v;
+    }
+
+    public function unsetKey(string k)
+    {
+        unset _GET[k];
+    }
+
+    public function read()
+    {
+        return _GET;
+    }
+}
+--USAGE--
+$f = new Stub\Issue2856Fetch();
+// A shared array behind a reference: the write separates inside the reference
+$_GET = ['a' => 1];
+$r = &$_GET;
+$copy = $_GET;
+$f->setKey('b', 2);
+echo 'reference: ', json_encode($r), "\n";
+echo 'global: ', json_encode($_GET), "\n";
+echo 'copy: ', json_encode($copy), "\n";
+$f->unsetKey('a');
+echo 'reference after unset: ', json_encode($r), "\n";
+unset($r);
+
+// A shared array without a reference
+$_GET = ['a' => 1];
+$copy = $_GET;
+$f->setKey('c', 3);
+echo 'plain global: ', json_encode($_GET), ' copy: ', json_encode($copy), "\n";
+
+// An object in a superglobal is neither replaced by a read nor by a write
+$_GET = new ArrayObject(['x' => 1]);
+echo 'object read: ', get_debug_type($f->read()), "\n";
+echo 'object global: ', get_debug_type($_GET), "\n";
+$f->setKey('y', 2);
+echo 'object write: ', json_encode($_GET->getArrayCopy()), "\n";
+
+--EXPECT--
+reference: {"a":1,"b":2}
+global: {"a":1,"b":2}
+copy: {"a":1}
+reference after unset: {"b":2}
+plain global: {"a":1,"c":3} copy: {"a":1}
+object read: ArrayObject
+object global: ArrayObject
+object write: {"x":1,"y":2}

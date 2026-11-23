@@ -1,0 +1,146 @@
+--TEST--
+Issue #2856: fetch, destructuring, for and catch variables and by-reference arguments named like a superglobal
+--FILE--
+namespace Stub;
+
+class Issue2856Targets
+{
+    public function fetchHit(array a) -> bool
+    {
+        return fetch _GET, a["k"];
+    }
+
+    public function destructure(array a)
+    {
+        var x;
+
+        let [x, _GET] = a;
+
+        return x;
+    }
+
+    public function forValue(array a)
+    {
+        var k = null;
+
+        for k, _GET in a {
+        }
+
+        return k;
+    }
+
+    public function forKey(array a)
+    {
+        var v = null;
+
+        for _GET, v in a {
+        }
+
+        return v;
+    }
+
+    public function forBodyReads(array a)
+    {
+        var out = [];
+
+        for _GET in a {
+            let out[] = _GET;
+        }
+
+        return out;
+    }
+
+    public function catchVar()
+    {
+        try {
+            throw new \Exception("x");
+        } catch \Exception, _GET {
+            return _GET;
+        }
+    }
+
+    public function byRef()
+    {
+        parse_str("p=1&q=2", _GET);
+    }
+
+    public function sortRef()
+    {
+        sort(_GET);
+    }
+
+    public function pregMatch()
+    {
+        return preg_match("/(a)(b)/", "ab", _GET);
+    }
+
+    public function pregMatchAll()
+    {
+        return preg_match_all("/a/", "aa", _GET);
+    }
+
+    public function localNamed(var v)
+    {
+        var _POST;
+
+        let _POST = v;
+
+        return _POST;
+    }
+}
+--USAGE--
+$t = new Stub\Issue2856Targets();
+function show(string $label): void
+{
+    echo $label, ': ', json_encode($GLOBALS['_GET']), "\n";
+}
+
+$_GET = ['old' => 1];
+echo 'fetch hit: ', var_export($t->fetchHit(['k' => ['f' => 1]]), true), "\n"; show('fetch hit global');
+$_GET = ['old' => 1];
+// fetch assigns null on a miss, which Zephir reads back as [] (PHP has no fetch)
+echo 'fetch miss: ', var_export($t->fetchHit(['other' => 1]), true), "\n"; show('fetch miss global');
+$_GET = ['old' => 1];
+echo 'destructure: ', json_encode($t->destructure([1, ['d' => 2]])), "\n"; show('destructure global');
+$_GET = ['old' => 1];
+echo 'for value: ', json_encode($t->forValue(['a' => ['v' => 1], 'b' => ['v' => 2]])), "\n"; show('for value global');
+$_GET = ['old' => 1];
+echo 'for key: ', json_encode($t->forKey(['ka' => 1, 'kb' => 2])), "\n"; show('for key global');
+$_GET = ['old' => 1];
+echo 'for body: ', json_encode($t->forBodyReads([['x' => 1], ['y' => 2]])), "\n"; show('for body global');
+$_GET = ['old' => 1];
+echo 'catch: ', json_encode($t->catchVar()), "\n"; show('catch global');
+$_GET = ['old' => 1];
+$t->byRef(); show('by ref');
+$_GET = [3, 1, 2];
+$t->sortRef(); show('sort');
+$_GET = ['old' => 1];
+echo 'preg_match: ', $t->pregMatch(), "\n"; show('preg_match global');
+$_GET = ['old' => 1];
+echo 'preg_match_all: ', $t->pregMatchAll(), "\n"; show('preg_match_all global');
+$_POST = ['post' => 1];
+echo 'local named: ', json_encode($t->localNamed(['l' => 1])), "\n";
+echo 'post: ', json_encode($_POST), "\n";
+--EXPECT--
+fetch hit: true
+fetch hit global: {"f":1}
+fetch miss: false
+fetch miss global: []
+destructure: 1
+destructure global: {"d":2}
+for value: "b"
+for value global: {"v":2}
+for key: 2
+for key global: "kb"
+for body: [{"x":1},{"y":2}]
+for body global: {"y":2}
+catch: {"old":1}
+catch global: {"old":1}
+by ref: {"p":"1","q":"2"}
+sort: [1,2,3]
+preg_match: 1
+preg_match global: ["ab","a","b"]
+preg_match_all: 2
+preg_match_all global: [["a","a"]]
+local named: {"l":1}
+post: {"post":1}

@@ -84,6 +84,14 @@ class Call
      */
     protected array $namedReferences = [];
 
+    /**
+     * Superglobals passed as by-reference named arguments, each with the
+     * temporary passed in its place, see passSuperGlobalByReference().
+     *
+     * @var list<array{0: Variable, 1: Variable}>
+     */
+    protected array $namedSuperGlobals = [];
+
     protected array $resolvedDynamicTypes = [];
 
     protected array $resolvedParams = [];
@@ -837,6 +845,29 @@ class Call
         foreach ($this->namedReferences as $reference) {
             $codePrinter->output('ZEPHIR_UNREF_WRITE(' . $reference . ');');
         }
+
+        foreach ($this->namedSuperGlobals as [$superGlobal, $temp]) {
+            $compilationContext->backend->assignSuperGlobal($superGlobal, $temp, $compilationContext);
+        }
+        $this->namedSuperGlobals = [];
+    }
+
+    /**
+     * A superglobal passed by reference: the local only borrows the global
+     * (see Backend::assignSuperGlobal()), so a temporary copy of it is passed
+     * instead, and the caller assigns the temporary to the global once the
+     * call has written it and it is no longer a reference.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2856
+     */
+    protected function passSuperGlobalByReference(Variable $superGlobal, CompilationContext $compilationContext): Variable
+    {
+        $temp = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+        $compilationContext->backend->copyOnWrite($temp, $superGlobal, $compilationContext);
+        $temp->increaseMutates();
+        $temp->setDynamicTypes('undefined');
+
+        return $temp;
     }
 
     /**
@@ -1268,6 +1299,13 @@ class Call
             || $code !== $compilationContext->backend->getVariableCode($variable)
         ) {
             throw new CompilerException('Only variables can be passed by reference', $parameter);
+        }
+
+        if ($variable->isSuperGlobal()) {
+            $temp                      = $this->passSuperGlobalByReference($variable, $compilationContext);
+            $this->namedSuperGlobals[] = [$variable, $temp];
+            $variable                  = $temp;
+            $code                      = $compilationContext->backend->getVariableCode($temp);
         }
 
         /**

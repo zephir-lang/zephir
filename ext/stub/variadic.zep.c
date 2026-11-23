@@ -86,7 +86,6 @@ PHP_METHOD(Stub_Variadic, sum)
 		ZVAL_COPY(&n, _2);
 		total += zephir_get_numberval(&n);
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&n);
 	RETURN_MM_LONG(total);
 }
 
@@ -227,7 +226,6 @@ PHP_METHOD(Stub_Variadic, totalLength)
 		ZVAL_COPY(&row, _2);
 		total += zephir_fast_count_int(&row);
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&row);
 	RETURN_MM_LONG(total);
 }
 
@@ -275,7 +273,6 @@ PHP_METHOD(Stub_Variadic, classNames)
 			return;
 		}
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&obj);
 	RETURN_CTOR(&names);
 }
 
@@ -307,7 +304,6 @@ PHP_FUNCTION(f_Stub_variadicSum) {
 		ZVAL_COPY(&n, _2);
 		total += zephir_get_numberval(&n);
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&n);
 	RETURN_MM_LONG(total);
 }
 

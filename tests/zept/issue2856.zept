@@ -1,0 +1,75 @@
+--TEST--
+Issue #2856: let _SESSION = [] writes the session array instead of freeing the one the global still uses
+--INI--
+; Harmless where the session extension is built in: the load warning goes to stderr.
+extension=session
+--FILE--
+namespace Stub;
+
+class Issue2856Session
+{
+    public function destroy() -> void
+    {
+        session_destroy();
+
+        let _SESSION = [];
+    }
+
+    public function reset() -> void
+    {
+        let _SESSION = ["k": "v"];
+    }
+
+    public function set(string k, var v) -> void
+    {
+        let _SESSION[k] = v;
+    }
+}
+--USAGE--
+$s = new Stub\Issue2856Session();
+// Sessions need headers not sent yet: collect the output, print it at the end
+ini_set('session.use_cookies', '0');
+ini_set('session.cache_limiter', '');
+ini_set('session.save_path', sys_get_temp_dir());
+$out = [];
+
+// The issue: destroy() after session_destroy(), then $GLOBALS reads the session array
+session_start();
+$_SESSION['a'] = 1;
+$s->destroy();
+$copy = $GLOBALS;
+$out[] = json_encode($_SESSION);
+$out[] = json_encode($copy['_SESSION']);
+$out[] = var_export(session_status() === PHP_SESSION_NONE, true);
+
+// The new value goes through the session reference and is saved
+session_start();
+$_SESSION['a'] = 1;
+$s->reset();
+$_SESSION['b'] = 2;
+$id = session_id();
+session_write_close();
+session_id($id);
+session_start();
+$out[] = json_encode($_SESSION);
+session_destroy();
+
+// A write while the session array is shared still reaches the session
+session_start();
+$_SESSION['a'] = 1;
+$shared = $_SESSION;
+$s->set('b', 2);
+$id = session_id();
+session_write_close();
+session_id($id);
+session_start();
+$out[] = json_encode($_SESSION) . ' ' . json_encode($shared);
+session_destroy();
+
+echo implode("\n", $out), "\n";
+--EXPECT--
+[]
+[]
+true
+{"k":"v","b":2}
+{"a":1,"b":2} {"a":1}

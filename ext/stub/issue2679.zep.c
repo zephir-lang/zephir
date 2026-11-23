@@ -314,7 +314,6 @@ PHP_METHOD(Stub_Issue2679, loopOnly)
 				ZEPHIR_CPY_WRT(&x, &item);
 		}
 	}
-	ZEPHIR_INIT_NVAR(&item);
 	RETURN_CCTOR(&x);
 }
 

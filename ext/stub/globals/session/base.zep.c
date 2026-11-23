@@ -155,8 +155,6 @@ PHP_METHOD(Stub_Globals_Session_Base, removeSessionData)
 			return;
 		}
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&_2);
-	ZEPHIR_INIT_NVAR(&key);
 	RETVAL_ZVAL(&_SESSION, 1, 0);
 	RETURN_MM();
 }

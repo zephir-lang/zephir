@@ -112,7 +112,6 @@ PHP_METHOD(Stub_Issue2546, collectExcluding)
 				}
 		}
 	}
-	ZEPHIR_INIT_NVAR(&item);
 	RETURN_CCTOR(&result);
 }
 
@@ -192,7 +191,6 @@ PHP_METHOD(Stub_Issue2546, collectUntil)
 				}
 		}
 	}
-	ZEPHIR_INIT_NVAR(&item);
 	RETURN_CCTOR(&result);
 }
 
@@ -284,8 +282,6 @@ PHP_METHOD(Stub_Issue2546, collectKeysExcluding)
 				}
 		}
 	}
-	ZEPHIR_INIT_NVAR(&v);
-	ZEPHIR_INIT_NVAR(&k);
 	RETURN_CCTOR(&result);
 }
 
