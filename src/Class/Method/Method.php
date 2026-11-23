@@ -1506,19 +1506,18 @@ class Method
                 $symbol->setIsInitialized(true, $compilationContext);
 
                 /**
-                 * Variables with class/type must be objects across the execution
+                 * Variables with class/type must be objects across the execution.
+                 * Any other zval parameter gets a dynamic type too: one left
+                 * 'unknown' failed every property write as not initialized (#2770).
                  */
+                $declaredType = $parameter['data-type'] ?? 'variable';
                 if (isset($parameter['cast'])) {
                     $symbol->setDynamicTypes('object');
                     $symbol->setClassTypes($compilationContext->getFullName($parameter['cast']['value']));
-                } else {
-                    if (isset($parameter['data-type'])) {
-                        if ('variable' === $parameter['data-type']) {
-                            $symbol->setDynamicTypes('undefined');
-                        }
-                    } else {
-                        $symbol->setDynamicTypes('undefined');
-                    }
+                } elseif ('object' === $declaredType) {
+                    $symbol->setDynamicTypes('object');
+                } elseif (in_array($declaredType, ['variable', 'mixed', 'callable', 'resource'], true)) {
+                    $symbol->setDynamicTypes('undefined');
                 }
             }
 

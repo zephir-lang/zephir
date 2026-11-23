@@ -667,12 +667,12 @@ class Backend
     ): void {
         [$keys, $offsetItems, $numberParams] = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
         $valueVariable = $this->resolveValue($valueVariable, $compilationContext);
-        $variable->setUsed(true);
 
+        /* A local object is a zval, not a pointer to one (#2770) */
         $compilationContext->codePrinter->output(
             sprintf(
                 'zephir_update_property_array_multi(%s, SL("%s"), %s, SL("%s"), %d, %s);',
-                $variable->getName(),
+                $this->getVariableCode($variable),
                 $propertyName,
                 $valueVariable,
                 $keys,

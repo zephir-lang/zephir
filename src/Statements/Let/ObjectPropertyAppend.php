@@ -75,7 +75,7 @@ class ObjectPropertyAppend
                 $classType = current($symbolVariable->getClassTypes());
                 $compiler  = $compilationContext->compiler;
 
-                if ($compiler->isClass($classType)) {
+                if ($classType !== false && $compiler->isClass($classType)) {
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
                         throw new CompilerException(

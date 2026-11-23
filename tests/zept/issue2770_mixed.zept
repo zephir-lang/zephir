@@ -1,0 +1,50 @@
+--TEST--
+Issue #2770: a method is called on a `mixed` receiver as on a `var` one, an array built-in name included
+--FILE--
+namespace Stub;
+
+class Issue2770Mixed
+{
+	public function describe() -> string
+	{
+		return "describe";
+	}
+
+	public function rev() -> string
+	{
+		return "rev";
+	}
+
+	public static function call(mixed v)
+	{
+		return v->describe();
+	}
+
+	public static function callBuiltinName(mixed v)
+	{
+		return v->rev();
+	}
+}
+--USAGE--
+function show(callable $f)
+{
+    try {
+        $r = $f();
+        echo is_array($r) ? implode(',', $r) : var_export($r, true), "\n";
+    } catch (\Throwable $e) {
+        echo get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+$o = new \Stub\Issue2770Mixed();
+show(fn () => \Stub\Issue2770Mixed::call($o));
+show(fn () => \Stub\Issue2770Mixed::call(null));
+show(fn () => \Stub\Issue2770Mixed::callBuiltinName($o));
+show(fn () => \Stub\Issue2770Mixed::callBuiltinName([1, 2, 3]));
+show(fn () => \Stub\Issue2770Mixed::callBuiltinName('str'));
+--EXPECT--
+'describe'
+Error: Call to a member function describe() on null
+'rev'
+3,2,1
+Error: Call to a member function rev() on string

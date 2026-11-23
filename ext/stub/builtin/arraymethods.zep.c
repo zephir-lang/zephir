@@ -123,20 +123,22 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, issue733BuiltInJoinSpecialChars)
 {
 	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zephir_fcall_cache_entry *_7 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_6 = NULL;
-	zval a_zv, *b = NULL, b_sub, __$null, _3, _4, _5, _7, _1$$3, _2$$4;
+	zval a_zv, *b = NULL, b_sub, __$null, _4, _5, _6, _8, _1$$3, _2$$4, _3$$4;
 	zend_string *a = NULL;
 
 	ZVAL_UNDEF(&a_zv);
 	ZVAL_UNDEF(&b_sub);
 	ZVAL_NULL(&__$null);
-	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
-	ZVAL_UNDEF(&_7);
+	ZVAL_UNDEF(&_6);
+	ZVAL_UNDEF(&_8);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$4);
+	ZVAL_UNDEF(&_3$$4);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(a)
@@ -166,26 +168,34 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, issue733BuiltInJoinSpecialChars)
 		RETURN_CCTOR(&_1$$3);
 	}
 	if (Z_TYPE_P(b) == IS_ARRAY) {
-		ZEPHIR_INIT_VAR(&_2$$4);
-		zephir_fast_join_str(&_2$$4, SL(""), b);
-		ZEPHIR_CPY_WRT(b, &_2$$4);
+		if (Z_TYPE_P(b) == IS_ARRAY) {
+			ZEPHIR_INIT_VAR(&_2$$4);
+			zephir_fast_join_str(&_2$$4, SL(""), b);
+			ZEPHIR_CPY_WRT(b, &_2$$4);
+		} else {
+			ZEPHIR_INIT_NVAR(&_2$$4);
+			ZVAL_STRING(&_2$$4, "");
+			ZEPHIR_CALL_METHOD_CACHED(&_3$$4, b, "join", &_zephir_call_cache[0], &_2$$4);
+			zephir_check_call_status();
+			ZEPHIR_CPY_WRT(b, &_3$$4);
+		}
 	}
-	ZEPHIR_INIT_VAR(&_3);
-	ZVAL_STRING(&_3, "#[-\\[\\]:\\\\^/]#");
 	ZEPHIR_INIT_VAR(&_4);
-	ZVAL_STRING(&_4, "\\\\$0");
-	ZEPHIR_CALL_FUNCTION(&_5, "preg_replace", &_6, 9, &_3, &_4, b);
+	ZVAL_STRING(&_4, "#[-\\[\\]:\\\\^/]#");
+	ZEPHIR_INIT_VAR(&_5);
+	ZVAL_STRING(&_5, "\\\\$0");
+	ZEPHIR_CALL_FUNCTION(&_6, "preg_replace", &_7, 9, &_4, &_5, b);
 	zephir_check_call_status();
-	ZEPHIR_CPY_WRT(b, &_5);
-	ZEPHIR_INIT_VAR(&_7);
-	ZEPHIR_CONCAT_SVS(&_7, "/^[", b, "]+/u");
+	ZEPHIR_CPY_WRT(b, &_6);
+	ZEPHIR_INIT_VAR(&_8);
+	ZEPHIR_CONCAT_SVS(&_8, "/^[", b, "]+/u");
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_INIT_NVAR(&_3);
-	ZVAL_STRING(&_3, "");
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace", &_6, 9, &_7, &_3, &a_zv);
+	ZEPHIR_INIT_NVAR(&_4);
+	ZVAL_STRING(&_4, "");
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace", &_7, 9, &_8, &_4, &a_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -197,10 +207,13 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, issue733BuiltInJoinSpecialChars)
 PHP_METHOD(Stub_BuiltIn_ArrayMethods, issue733JoinOnVar)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *input, input_sub, _0;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *input, input_sub, _0, _1;
 
 	ZVAL_UNDEF(&input_sub);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(input)
 	ZEND_PARSE_PARAMETERS_END();
@@ -208,7 +221,15 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, issue733JoinOnVar)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &input);
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_fast_join_str(&_0, SL(","), input);
+	if (Z_TYPE_P(input) == IS_ARRAY) {
+		ZEPHIR_INIT_NVAR(&_0);
+		zephir_fast_join_str(&_0, SL(","), input);
+	} else {
+		ZEPHIR_INIT_VAR(&_1);
+		ZVAL_STRING(&_1, ",");
+		ZEPHIR_CALL_METHOD_CACHED(&_0, input, "join", &_zephir_call_cache[0], &_1);
+		zephir_check_call_status();
+	}
 	RETURN_CCTOR(&_0);
 }
 
@@ -220,18 +241,27 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, issue733ReversedOnVar)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *input, input_sub, _0;
+	zval *input, input_sub, _0, _1;
 
 	ZVAL_UNDEF(&input_sub);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(input)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &input);
-	ZEPHIR_CALL_FUNCTION(&_0, "array_reverse", NULL, 7, input);
-	zephir_check_call_status();
+	ZEPHIR_INIT_VAR(&_0);
+	if (Z_TYPE_P(input) == IS_ARRAY) {
+		ZEPHIR_CALL_FUNCTION(&_1, "array_reverse", NULL, 7, input);
+		zephir_check_call_status();
+		ZEPHIR_CPY_WRT(&_0, &_1);
+	} else {
+		ZEPHIR_CALL_METHOD_CACHED(&_0, input, "reversed", &_zephir_call_cache[0]);
+		zephir_check_call_status();
+	}
 	RETURN_CCTOR(&_0);
 }
 

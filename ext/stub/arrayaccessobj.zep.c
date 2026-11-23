@@ -90,8 +90,7 @@ PHP_METHOD(Stub_ArrayAccessObj, __construct)
 PHP_METHOD(Stub_ArrayAccessObj, offsetSet)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval offset_sub, value_sub, obj;
-	zval *offset, *value;
+	zval *offset, offset_sub, *value, value_sub, obj;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&offset_sub);
@@ -134,8 +133,7 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetExists)
 {
 	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval offset_sub, obj;
-	zval *offset;
+	zval *offset, offset_sub, obj;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&offset_sub);
@@ -169,8 +167,7 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetUnset)
 {
 	zval _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval offset_sub, obj, _0, _2;
-	zval *offset;
+	zval *offset, offset_sub, obj, _0, _2;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&offset_sub);
@@ -217,8 +214,7 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetGet)
 {
 	zend_bool _2;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval offset_sub, _0, _1, _3;
-	zval *offset;
+	zval *offset, offset_sub, _0, _1, _3;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&offset_sub);

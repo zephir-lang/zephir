@@ -1,0 +1,115 @@
+--TEST--
+Issue #2770: the array built-in method names keep calling the array function on a receiver that holds an array, and hasKey() passes the key first
+--FILE--
+namespace Stub;
+
+class Issue2770Arrays
+{
+	public static function onVar(var a) -> array
+	{
+		return [
+			a->join("-"),
+			a->reversed(),
+			a->rev(),
+			a->toJson(),
+			a->hasKey("b"),
+			a->hasKey("z"),
+			a->mergeRecursive(["b": [9]]),
+			a->replaceRecursive(["b": 9])
+		];
+	}
+
+	public static function onTyped(array a) -> array
+	{
+		return [
+			a->join("-"),
+			a->reversed(),
+			a->rev(),
+			a->toJson(),
+			a->hasKey("b"),
+			a->hasKey("z"),
+			a->mergeRecursive(["b": [9]]),
+			a->replaceRecursive(["b": 9])
+		];
+	}
+
+	public static function onLocal() -> array
+	{
+		var a;
+
+		let a = ["b": 1, "a": 2];
+
+		return [
+			a->join("-"),
+			a->rev(),
+			a->hasKey("a"),
+			a->hasKey("z")
+		];
+	}
+
+	public static function sortsOnVar(var a) -> array
+	{
+		var x, y, z;
+
+		let x = a;
+		let y = a;
+		let z = a;
+
+		return [
+			x->sortByKey(),
+			y->reverseSort(),
+			z->reverseSortByKey(),
+			x,
+			y,
+			z,
+			a
+		];
+	}
+
+	public static function sortStatementOnVar(var a) -> array
+	{
+		a->sortByKey();
+
+		return a;
+	}
+
+	public static function onVarAssignedToItself(var a)
+	{
+		let a = a->join("+");
+
+		return a;
+	}
+
+	public static function onVarDynamicString(var a)
+	{
+		return a->{"join"}("|");
+	}
+}
+--USAGE--
+function show(callable $f)
+{
+    try {
+        echo json_encode($f()), "\n";
+    } catch (\Throwable $e) {
+        echo get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+$a = ['b' => 1, 'a' => 2];
+show(fn () => \Stub\Issue2770Arrays::onVar($a));
+show(fn () => \Stub\Issue2770Arrays::onTyped($a));
+show(fn () => \Stub\Issue2770Arrays::onLocal());
+show(fn () => \Stub\Issue2770Arrays::sortsOnVar($a));
+show(fn () => \Stub\Issue2770Arrays::sortStatementOnVar($a));
+show(fn () => \Stub\Issue2770Arrays::onVarAssignedToItself($a));
+show(fn () => \Stub\Issue2770Arrays::onVarDynamicString($a));
+echo json_encode($a), "\n";
+--EXPECT--
+["1-2",{"a":2,"b":1},{"a":2,"b":1},"{\"b\":1,\"a\":2}",true,false,{"b":[1,9],"a":2},{"b":9,"a":2}]
+["1-2",{"a":2,"b":1},{"a":2,"b":1},"{\"b\":1,\"a\":2}",true,false,{"b":[1,9],"a":2},{"b":9,"a":2}]
+["1-2",{"a":2,"b":1},true,false]
+[true,true,true,{"a":2,"b":1},[2,1],{"b":1,"a":2},{"b":1,"a":2}]
+{"a":2,"b":1}
+"1+2"
+"1|2"
+{"b":1,"a":2}

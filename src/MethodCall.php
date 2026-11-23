@@ -22,6 +22,7 @@ use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Traits\VariablesTrait;
 use Zephir\Types\AbstractType;
+use Zephir\Types\ArrayType;
 use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
@@ -29,6 +30,7 @@ use function array_unshift;
 use function class_exists;
 use function count;
 use function implode;
+use function in_array;
 use function is_array;
 use function is_object;
 use function sprintf;
@@ -56,17 +58,17 @@ class MethodCall extends Call
     public const CALL_NORMAL = 1;
 
     /**
-     * Built-in array-method names that we dispatch via ArrayType even when the
-     * caller is statically a generic `variable` (i.e. `var`). These are names
-     * that effectively don't exist as real object methods in PHP land, so
-     * redispatching them as PHP function calls does the right thing without
-     * silently breaking any object dispatch a user might have relied on.
+     * Built-in array-method names that are dispatched via ArrayType when the
+     * caller is a generic `variable` (i.e. `var`) that may hold an array.
+     * A receiver that holds an object calls its method, as PHP does: a class
+     * can declare `join()` or `toJson()` and call it on `this` (#2770).
      *
      * Methods that overlap with common object APIs (count, push, pop, shift,
      * sort, current, next, end, key, reset, each) are deliberately excluded
      * to avoid changing semantics for objects implementing Iterator/Countable.
      *
      * @see https://github.com/zephir-lang/zephir/issues/733
+     * @see https://github.com/zephir-lang/zephir/issues/2770
      */
     private const ARRAY_BUILTIN_METHODS_ON_VAR = [
         'join',
@@ -108,25 +110,16 @@ class MethodCall extends Call
                         $caller = $variableVariable;
 
                         /**
-                         * Built-in array methods called on a `var` variable.
-                         *
-                         * When the caller is statically `variable` (e.g. a `var` parameter
-                         * or an array stored in a `var` slot) we previously emitted
-                         * ZEPHIR_CALL_METHOD(b, "join", ...) which fails at runtime with
-                         * "Trying to call method on non-object" the moment `b` actually
-                         * holds an array. Several Zephir-only built-in array method names
-                         * cannot meaningfully exist as real object methods, so for those
-                         * we dispatch via ArrayType (which lowers to PHP's matching
-                         * function call). If the runtime value isn't an array, PHP's
-                         * function will surface a proper TypeError instead of the
-                         * misleading "non-object" message.
-                         *
-                         * @see https://github.com/zephir-lang/zephir/issues/733
+                         * Built-in array methods called on a `var` variable: an
+                         * array calls PHP's matching function (#733), anything
+                         * else calls the method, as PHP does (#2770).
                          */
-                        $methodName = strtolower($expression['name'] ?? '');
-                        if (in_array($methodName, self::ARRAY_BUILTIN_METHODS_ON_VAR, true)) {
-                            $builtInType = new \Zephir\Types\ArrayType();
+                        $receiverType = $this->getArrayBuiltinReceiverType($expression, $variableVariable);
+                        if ('array' === $receiverType) {
+                            $builtInType = new ArrayType();
                             $caller      = $exprCompiledVariable;
+                        } elseif ('either' === $receiverType) {
+                            return $this->compileArrayOrObjectCall($expr, $exprCompiledVariable, $compilationContext);
                         }
                         break;
                     default:
@@ -937,6 +930,80 @@ class MethodCall extends Call
         }
 
         return new CompiledExpression('null', null, $expression);
+    }
+
+    /**
+     * What a `var` receiver of an array built-in method name holds: 'array'
+     * calls the array built-in, 'object' calls the method, 'either' chooses at
+     * run time. Any other name, or a name held in a variable, is a method.
+     *
+     * Dynamic types are the union of every assignment seen so far, and class
+     * types come from a hint, a cast, `new` or a typed return, so they mean an
+     * object only while no array was assigned too.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2770
+     */
+    private function getArrayBuiltinReceiverType(array $expression, Variable $receiver): string
+    {
+        if (isset($expression['receiver-type'])) {
+            return $expression['receiver-type'];
+        }
+
+        if (self::CALL_DYNAMIC == $expression['call-type']) {
+            return 'object';
+        }
+
+        if (!in_array(strtolower($expression['name']), self::ARRAY_BUILTIN_METHODS_ON_VAR, true)) {
+            return 'object';
+        }
+
+        $unknown    = $receiver->hasAnyDynamicType(['unknown', 'undefined']);
+        $classTyped = count($receiver->getClassTypes()) > 0;
+
+        $mayBeArray = $receiver->hasAnyDynamicType('array') || ($unknown && !$classTyped);
+        if (!$mayBeArray) {
+            return 'object';
+        }
+
+        $mayBeObject = $receiver->hasAnyDynamicType('object') || $unknown || $classTyped;
+
+        return $mayBeObject ? 'either' : 'array';
+    }
+
+    /**
+     * Compiles `receiver->name(...)` on a receiver that may hold an array or
+     * an object as `typeof receiver == "array" ? <array built-in> : <method>`.
+     * Both calls read the receiver already compiled, so it is evaluated once.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2770
+     */
+    private function compileArrayOrObjectCall(
+        Expression $expr,
+        CompiledExpression $receiver,
+        CompilationContext $compilationContext
+    ): CompiledExpression {
+        $expression = $expr->getExpression();
+        $position   = [
+            'file' => $expression['file'],
+            'line' => $expression['line'],
+            'char' => $expression['char'],
+        ];
+        $variable   = ['type' => 'variable', 'value' => $receiver->getCode()] + $position;
+
+        $ternary = new Expression([
+            'type'  => 'ternary',
+            'left'  => [
+                'type'  => 'equals',
+                'left'  => ['type' => 'typeof', 'left' => $variable] + $position,
+                'right' => ['type' => 'string', 'value' => 'array'] + $position,
+            ] + $position,
+            'right' => ['variable' => $variable, 'receiver-type' => 'array'] + $expression,
+            /* The class types may come from an assignment before the array one */
+            'extra' => ['variable' => $variable, 'receiver-type' => 'object', 'check' => false] + $expression,
+        ] + $position);
+        $ternary->setExpectReturn(true, $expr->isExpectingReturn() ? $expr->getExpectingVariable() : null);
+
+        return $ternary->compile($compilationContext);
     }
 
     /**

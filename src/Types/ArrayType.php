@@ -105,8 +105,12 @@ class ArrayType extends AbstractType
         return $expression->compile($compilationContext);
     }
 
+    /**
+     * The array goes second to array_map(callback, array) and to
+     * array_key_exists(key, array) (#2770).
+     */
     protected function getNumberParam(string $methodName): int
     {
-        return 'map' === $methodName ? 1 : 0;
+        return 'map' === $methodName || 'haskey' === $methodName ? 1 : 0;
     }
 }
