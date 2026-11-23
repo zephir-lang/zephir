@@ -2676,7 +2676,11 @@ class Method
     }
 
     /**
-     * Returns the C-modifier flags.
+     * Returns the C-modifier flags the method of a class or a trait registers with.
+     *
+     * An `abstract static` method registers without ZEND_ACC_ABSTRACT, which
+     * zend_register_functions() refuses there with a startup warning; the class
+     * marks it once registered (see Definition::compileAbstractStaticMethods()).
      *
      * @throws Exception
      */
@@ -2727,6 +2731,10 @@ class Method
             $modifiers['ZEND_ACC_CTOR'] = true;
         } elseif ('__destruct' === $this->name) {
             $modifiers['ZEND_ACC_DTOR'] = true;
+        }
+
+        if (isset($modifiers['ZEND_ACC_STATIC'])) {
+            unset($modifiers['ZEND_ACC_ABSTRACT']);
         }
 
         return implode('|', array_keys($modifiers));

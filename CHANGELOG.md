@@ -27,6 +27,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `new static()` of an abstract class going on with the method after PHP's Error [#2802](https://github.com/zephir-lang/zephir/issues/2802)
 - Fixed `new` of a class without a constructor not evaluating its arguments [#2802](https://github.com/zephir-lang/zephir/issues/2802)
 - Fixed `new` of a class that does not exist being a fatal error instead of PHP's Error [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed calling an abstract method returning null, or throwing the wrong Error, instead of throwing PHP's Error [#2789](https://github.com/zephir-lang/zephir/issues/2789)
+- Fixed an `abstract static` method of a class or a trait raising a warning at every startup [#2789](https://github.com/zephir-lang/zephir/issues/2789)
+- Fixed a static call through an interface failing to compile, or crashing with a dynamic class, instead of throwing PHP's Error [#2789](https://github.com/zephir-lang/zephir/issues/2789)
+- Fixed a `Class::method` string or a `[class, method]` array called as a function throwing the wrong Error [#2789](https://github.com/zephir-lang/zephir/issues/2789)
 
 ## [1.9.0] - 2026-11-20
 

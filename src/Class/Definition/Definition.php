@@ -581,6 +581,10 @@ final class Definition extends AbstractDefinition
             }
         }
 
+        if (!$this->isInterface()) {
+            $this->compileAbstractStaticMethods($codePrinter);
+        }
+
         $codePrinter->outputBlankLine();
 
         /**
@@ -1466,6 +1470,41 @@ final class Definition extends AbstractDefinition
     private static function isCalledInternalMethod(Method $method): bool
     {
         return $method->isInternal() && !$method->isInitializer() && !$method->isGeneratorStep();
+    }
+
+    /**
+     * Marks the `abstract static` methods of a class or a trait abstract once it
+     * is registered, before any class can inherit them, and the class abstract
+     * the way a PHP class declaring one is. They register without the flag (see
+     * Method::getModifiers()): zend_register_functions() refuses it on a static
+     * method outside an interface, with a startup warning PHP code never gets.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2789
+     */
+    private function compileAbstractStaticMethods(Printer $codePrinter): void
+    {
+        $marked = false;
+
+        foreach ($this->methods as $method) {
+            if (!$method->isAbstract() || !$method->isStatic()) {
+                continue;
+            }
+
+            $codePrinter->output(
+                sprintf(
+                    'zephir_mark_method_flags(%s, SL("%s"), ZEND_ACC_ABSTRACT);',
+                    $this->getClassEntry(),
+                    strtolower($method->getName())
+                )
+            );
+            $marked = true;
+        }
+
+        if ($marked) {
+            $codePrinter->output(
+                sprintf('zephir_mark_class_flags(%s, ZEND_ACC_IMPLICIT_ABSTRACT_CLASS);', $this->getClassEntry())
+            );
+        }
     }
 
     /**
