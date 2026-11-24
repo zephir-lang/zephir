@@ -211,17 +211,13 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAc
 PHP_METHOD(Stub_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAccess)
 {
 	zval *parameter_param = NULL;
-	double parameter;
+	double parameter = 1.32;
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_DOUBLE(parameter)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &parameter_param);
-	if (!parameter_param) {
-		parameter = 1.32;
-	} else {
-		}
 	RETURN_DOUBLE(parameter);
 }
 
@@ -232,17 +228,13 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAc
 PHP_METHOD(Stub_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAccess)
 {
 	zval *parameter_param = NULL;
-	zend_bool parameter;
+	zend_bool parameter = 1;
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_BOOL(parameter)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &parameter_param);
-	if (!parameter_param) {
-		parameter = 1;
-	} else {
-		}
 	RETURN_BOOL(parameter);
 }
 
@@ -253,17 +245,13 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAcce
 PHP_METHOD(Stub_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAccess)
 {
 	zval *parameter_param = NULL;
-	zend_long parameter;
+	zend_long parameter = 12345;
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(parameter)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &parameter_param);
-	if (!parameter_param) {
-		parameter = 12345;
-	} else {
-		}
 	RETURN_LONG(parameter);
 }
 

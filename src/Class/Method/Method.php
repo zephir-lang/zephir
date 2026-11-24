@@ -415,152 +415,17 @@ class Method
 
         $paramVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext);
 
-        /**
-         * TODO: Refactoring this place, move to one - static-constant-access
-         */
         $dataType = $this->getParamDataType($parameter);
         switch ($dataType) {
             case 'int':
             case 'uint':
             case 'long':
             case 'ulong':
-                switch ($parameter['default']['type']) {
-                    case 'static-constant-access':
-                        /**
-                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
-                         *
-                         * TODO: Rewrite all to codePrinter
-                         */
-                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite(
-                            $parameter['name'],
-                            $compilationContext,
-                            $parameter['default']
-                        );
-                        $compiledExpression = $this->foldDefaultConstant($parameter['default'], $symbolVariable, $compilationContext);
-
-                        if ('int' != $compiledExpression->getType()) {
-                            throw new CompilerException(
-                                'Default parameter value type: '
-                                . $compiledExpression->getType()
-                                . ' cannot be assigned to variable(int)',
-                                $parameter
-                            );
-                        }
-
-                        $parameter['default']['type']  = $compiledExpression->getType();
-                        $parameter['default']['value'] = $compiledExpression->getCode();
-
-                        $compilationContext->codePrinter = $oldCodePrinter;
-
-                        return $this->assignDefaultValue($parameter, $compilationContext);
-
-                    case 'null':
-                        $codePrinter->output($parameter['name'] . ' = 0;');
-                        break;
-
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                        $codePrinter->output($parameter['name'] . ' = ' . $parameter['default']['value'] . ';');
-                        break;
-
-                    case 'double':
-                        $codePrinter->output($parameter['name'] . ' = (int) ' . $parameter['default']['value'] . ';');
-                        break;
-
-                    default:
-                        throw new CompilerException(
-                            'Default parameter value type: ' . $parameter['default']['type'] . ' cannot be assigned to variable(int)',
-                            $parameter
-                        );
-                }
-                break;
-
             case 'double':
-                switch ($parameter['default']['type']) {
-                    case 'static-constant-access':
-                        return $this->processStaticConstantAccess(
-                            $compilationContext,
-                            $parameter,
-                            $oldCodePrinter,
-                            'double'
-                        );
-
-                    case 'null':
-                        $codePrinter->output($parameter['name'] . ' = 0;');
-                        break;
-
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                        $codePrinter->output(
-                            $parameter['name'] . ' = (double) ' . $parameter['default']['value'] . ';'
-                        );
-                        break;
-
-                    case 'double':
-                        $codePrinter->output($parameter['name'] . ' = ' . $parameter['default']['value'] . ';');
-                        break;
-
-                    default:
-                        throw new CompilerException(
-                            'Default parameter value type: ' . $parameter['default']['type'] . ' cannot be assigned to variable(double)',
-                            $parameter
-                        );
-                }
-                break;
-
             case 'bool':
-                switch ($parameter['default']['type']) {
-                    case 'static-constant-access':
-                        /**
-                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
-                         *
-                         * TODO: Rewrite all to codePrinter
-                         */
-                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite(
-                            $parameter['name'],
-                            $compilationContext,
-                            $parameter['default']
-                        );
-                        $compiledExpression = $this->foldDefaultConstant($parameter['default'], $symbolVariable, $compilationContext);
-
-                        if ('bool' !== $compiledExpression->getType()) {
-                            throw new CompilerException(
-                                'Default parameter value type: '
-                                . $compiledExpression->getType()
-                                . ' cannot be assigned to variable(bool)',
-                                $parameter
-                            );
-                        }
-
-                        $parameter['default']['type']  = $compiledExpression->getType();
-                        $parameter['default']['value'] = $compiledExpression->getCode();
-
-                        $compilationContext->codePrinter = $oldCodePrinter;
-
-                        return $this->assignDefaultValue($parameter, $compilationContext);
-
-                    case 'null':
-                        $codePrinter->output($parameter['name'] . ' = 0;');
-                        break;
-
-                    case 'bool':
-                        if ('true' === $parameter['default']['value']) {
-                            $codePrinter->output($parameter['name'] . ' = 1;');
-                        } else {
-                            $codePrinter->output($parameter['name'] . ' = 0;');
-                        }
-                        break;
-
-                    default:
-                        throw new CompilerException(
-                            'Default parameter value type: '
-                            . $parameter['default']['type']
-                            . ' cannot be assigned to variable(bool)',
-                            $parameter
-                        );
-                }
+                $codePrinter->output(
+                    $parameter['name'] . ' = ' . $this->scalarDefaultValue($parameter, $compilationContext) . ';'
+                );
                 break;
 
             case 'string':
@@ -1803,6 +1668,30 @@ class Method
                 $mandatory = $parameter['mandatory'] ?? 0;
                 $dataType  = $this->getParamDataType($parameter);
 
+                /**
+                 * ZEND_PARSE_PARAMETERS writes a `bool`, `int` or `double`
+                 * local only when the argument is passed, so the local is
+                 * declared with its default, as PHP's own functions do. Given
+                 * the default afterwards in `if (!x_param)`, it held nothing
+                 * until then, and gcc 11 merged the two into a read of it: a
+                 * bool that was neither 0 nor 1.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2857
+                 */
+                if (
+                    $this->parsesParameters()
+                    && in_array($dataType, ['bool', 'int', 'uint', 'long', 'ulong', 'double'], true)
+                ) {
+                    $compilationContext->symbolTable
+                        ->getVariableForWrite($parameter['name'], $compilationContext)
+                        ->setDefaultInitValue($this->scalarDefaultValue($parameter, $compilationContext));
+
+                    /* The strict type check of a `!` parameter still needs its block. */
+                    if (!$mandatory) {
+                        continue;
+                    }
+                }
+
                 $name = match ($dataType) {
                     'object',
                     'callable',
@@ -2244,8 +2133,7 @@ class Method
         if (
             $this->parameters instanceof Parameters
             && $this->parameters->count() > 0
-            && !$this->isGeneratorStep()
-            && !$this->isInternal()
+            && $this->parsesParameters()
         ) {
             // Do not declare variable when it is not needed.
             if ($this->parameters->hasNullableParameters()) {
@@ -3730,6 +3618,16 @@ class Method
     }
 
     /**
+     * Whether ZEND_PARSE_PARAMETERS reads the arguments into the parameter
+     * locals. A generator step and an internal method get theirs from the C
+     * caller instead (see the ZEND_PARSE_PARAMETERS block in compile()).
+     */
+    private function parsesParameters(): bool
+    {
+        return !$this->isGeneratorStep() && !$this->isInternal();
+    }
+
+    /**
      * Checks whether the method is internal.
      */
     public function isInternal(): bool
@@ -4596,6 +4494,63 @@ class Method
                 $compilationContext
             );
         }
+    }
+
+    /**
+     * The C value of the default of a `bool`, `int` or `double` parameter:
+     * `1`, `1337`, `(double) 2`, or the literal a class constant folds to.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function scalarDefaultValue(array $parameter, CompilationContext $compilationContext): string
+    {
+        $dataType     = $this->getParamDataType($parameter);
+        $variableType = in_array($dataType, ['int', 'uint', 'long', 'ulong'], true) ? 'int' : $dataType;
+        $default      = $parameter['default'];
+
+        if ('static-constant-access' === $default['type']) {
+            $symbolVariable = $compilationContext->symbolTable->getVariableForWrite(
+                $parameter['name'],
+                $compilationContext,
+                $default
+            );
+            $compiledExpression = $this->foldDefaultConstant($default, $symbolVariable, $compilationContext);
+
+            if ($variableType !== $compiledExpression->getType()) {
+                throw new CompilerException(
+                    'Default parameter value type: '
+                    . $compiledExpression->getType()
+                    . ' cannot be assigned to variable(' . $variableType . ')',
+                    $parameter
+                );
+            }
+
+            $parameter['default']['type']  = $compiledExpression->getType();
+            $parameter['default']['value'] = $compiledExpression->getCode();
+
+            return $this->scalarDefaultValue($parameter, $compilationContext);
+        }
+
+        $value = match ($variableType . ':' . $default['type']) {
+            'int:null', 'double:null', 'bool:null' => '0',
+            'int:int', 'int:uint', 'int:long', 'double:double' => (string) $default['value'],
+            'int:double'    => '(int) ' . $default['value'],
+            'double:int', 'double:uint', 'double:long' => '(double) ' . $default['value'],
+            'bool:bool'     => 'true' === $default['value'] ? '1' : '0',
+            default         => null,
+        };
+
+        if (null === $value) {
+            throw new CompilerException(
+                'Default parameter value type: '
+                . $default['type']
+                . ' cannot be assigned to variable(' . $variableType . ')',
+                $parameter
+            );
+        }
+
+        return $value;
     }
 
     /**

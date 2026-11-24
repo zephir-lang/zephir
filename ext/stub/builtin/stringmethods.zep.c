@@ -496,7 +496,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getParsedCsv)
 PHP_METHOD(Stub_BuiltIn_StringMethods, getParsedJson)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zend_bool assoc;
+	zend_bool assoc = 1;
 	zval str_zv, *assoc_param = NULL, _0, _1;
 	zend_string *str = NULL;
 
@@ -515,10 +515,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getParsedJson)
 	}
 	zephir_memory_observe(&str_zv);
 	ZVAL_STR_COPY(&str_zv, str);
-	if (!assoc_param) {
-		assoc = 1;
-	} else {
-		}
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_1, (assoc ? 1 : 0));
 	zephir_json_decode(&_0, &str_zv, zephir_get_intval(&str_zv) );

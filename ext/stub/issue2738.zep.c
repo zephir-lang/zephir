@@ -12,7 +12,6 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
 #include "kernel/concat.h"
@@ -52,17 +51,13 @@ ZEPHIR_INIT_CLASS(Stub_Issue2738)
 PHP_METHOD(Stub_Issue2738, withDefault)
 {
 	zval *flags_param = NULL;
-	zend_long flags;
+	zend_long flags = ZEND_ATTRIBUTE_IS_REPEATABLE;
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(flags)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &flags_param);
-	if (!flags_param) {
-		flags = ZEND_ATTRIBUTE_IS_REPEATABLE;
-	} else {
-		}
 	RETURN_LONG(flags);
 }
 

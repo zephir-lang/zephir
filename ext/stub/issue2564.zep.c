@@ -14,7 +14,6 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Issue2564)
@@ -30,7 +29,7 @@ ZEPHIR_INIT_CLASS(Stub_Issue2564)
 PHP_METHOD(Stub_Issue2564, __construct)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zend_bool useSigning;
+	zend_bool useSigning = 1;
 	zval cipher_zv, *useSigning_param = NULL, *padFactory = NULL, padFactory_sub, __$true, __$false, __$null;
 	zend_string *cipher = NULL;
 	zval *this_ptr = getThis();
@@ -76,10 +75,6 @@ PHP_METHOD(Stub_Issue2564, __construct)
 		zephir_memory_observe(&cipher_zv);
 	ZVAL_STR_COPY(&cipher_zv, cipher);
 	}
-	if (!useSigning_param) {
-		useSigning = 1;
-	} else {
-		}
 	if (!padFactory) {
 		padFactory = &padFactory_sub;
 		padFactory = &__$null;

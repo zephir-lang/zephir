@@ -15,7 +15,6 @@
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 
 
 /**
@@ -66,7 +65,7 @@ PHP_METHOD(Stub_Properties_NestedProperty, setData)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *value_param = NULL, _0, _1;
-	zend_long value;
+	zend_long value = 0;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -87,10 +86,6 @@ PHP_METHOD(Stub_Properties_NestedProperty, setData)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &value_param);
-	if (!value_param) {
-		value = 0;
-	} else {
-		}
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 114, PH_NOISY_CC);
 	if (UNEXPECTED(EG(exception))) {

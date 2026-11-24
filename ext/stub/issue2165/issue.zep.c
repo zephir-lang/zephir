@@ -77,7 +77,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_2 = NULL, *_9 = NULL, *_17 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, m, n;
-	zend_bool validate, _22$$4, _15$$6, _23$$8;
+	zend_bool validate = 1, _22$$4, _15$$6, _23$$8;
 	zval *a_param = NULL, *validate_param = NULL, i, rowA, valueA, _0, _29, _1$$3, *_3$$3, _6$$5, _7$$5, _8$$5, _10$$5, _11$$5, *_12$$4, _13$$4, *_14$$4, _21$$4, _28$$4, _16$$6, _18$$7, _19$$7, _20$$7, _24$$8, _25$$9, _26$$9, _27$$9;
 	zval a;
 	zval *this_ptr = getThis();
@@ -128,10 +128,6 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 1, &a_param, &validate_param);
 	zephir_get_arrval(&a, a_param);
-	if (!validate_param) {
-		validate = 1;
-	} else {
-		}
 	m = zephir_fast_count_int(&a);
 	ZEPHIR_CALL_FUNCTION(&_0, "current", NULL, 38, &a);
 	zephir_check_call_status();

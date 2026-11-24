@@ -88,7 +88,7 @@ PHP_METHOD(Stub_Router, __construct)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *defaultRoutes_param = NULL, routes, _5, _0$$3, _2$$3, _4$$3;
-	zend_bool defaultRoutes;
+	zend_bool defaultRoutes = 1;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&routes);
@@ -115,10 +115,6 @@ PHP_METHOD(Stub_Router, __construct)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &defaultRoutes_param);
-	if (!defaultRoutes_param) {
-		defaultRoutes = 1;
-	} else {
-		}
 	ZEPHIR_INIT_VAR(&routes);
 	array_init(&routes);
 	if (defaultRoutes == 1) {

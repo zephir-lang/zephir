@@ -120,7 +120,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 	zend_bool _32$$13;
 	zend_class_entry *_28$$11 = NULL, *_22$$12 = NULL, *_34$$14 = NULL;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zend_long width, height, ZEPHIR_LAST_CALL_STATUS;
+	zend_long width = 0, height = 0, ZEPHIR_LAST_CALL_STATUS;
 	zval file_zv, *width_param = NULL, *height_param = NULL, __$true, imageinfo, _0, _1, _2$$4, _3$$4, _4$$4, _9$$4, _30$$4, _31$$4, _5$$5, _6$$5, _7$$5, _8$$5, _10$$6, _11$$6, _12$$7, _13$$7, _14$$8, _15$$8, _16$$9, _17$$9, _18$$10, _19$$10, _20$$11, _27$$11, _29$$11, _21$$12, _23$$12, _24$$12, _25$$12, _26$$12, _39$$13, _40$$13, _41$$13, _42$$13, _43$$13, _44$$13, _33$$14, _35$$14, _36$$14, _37$$14, _38$$14;
 	zend_string *file = NULL;
 	zval *this_ptr = getThis();
@@ -217,14 +217,6 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 	}
 	zephir_memory_observe(&file_zv);
 	ZVAL_STR_COPY(&file_zv, file);
-	if (!width_param) {
-		width = 0;
-	} else {
-		}
-	if (!height_param) {
-		height = 0;
-	} else {
-		}
 	zephir_read_static_property_cached(&_0, stub_oo_oodestruct_ce, stub_oo_oodestruct_ce, SL("checked"), &_zephir_sprop_cache[0], PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();

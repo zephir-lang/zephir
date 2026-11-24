@@ -274,7 +274,7 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getLog)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *num_param = NULL, *base_param = NULL, _0$$3, _1$$3, _2, _3, _4;
-	zend_long num, base, ZEPHIR_LAST_CALL_STATUS;
+	zend_long num, base = -1, ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&_1$$3);
@@ -289,10 +289,6 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getLog)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 1, &num_param, &base_param);
-	if (!base_param) {
-		base = -1;
-	} else {
-		}
 	if (base == -1) {
 		ZVAL_LONG(&_0$$3, num);
 		ZEPHIR_CALL_FUNCTION(&_1$$3, "log", NULL, 16, &_0$$3);

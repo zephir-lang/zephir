@@ -142,7 +142,7 @@ PHP_METHOD(Stub_Variadic, describe)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *req_param = NULL, *opt_param = NULL, params, _0;
-	zend_long req, opt;
+	zend_long req, opt = 0;
 
 	ZVAL_UNDEF(&params);
 	ZVAL_UNDEF(&_0);
@@ -154,10 +154,6 @@ PHP_METHOD(Stub_Variadic, describe)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params_variadic(1, 1, 1, &req_param, &opt_param);
-	if (!opt_param) {
-		opt = 0;
-	} else {
-		}
 	ZEPHIR_INIT_VAR(&params);
 	zephir_get_args_from(&params, 2);
 	zephir_create_array(return_value, 3, 0);

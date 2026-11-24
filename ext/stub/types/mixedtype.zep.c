@@ -13,9 +13,9 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/array.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Types_MixedType)
@@ -75,17 +75,13 @@ PHP_METHOD(Stub_Types_MixedType, returnMixedNull)
 PHP_METHOD(Stub_Types_MixedType, returnMixed74)
 {
 	zval *diff_param = NULL;
-	zend_bool diff;
+	zend_bool diff = 0;
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_BOOL(diff)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &diff_param);
-	if (!diff_param) {
-		diff = 0;
-	} else {
-		}
 	if (diff) {
 		RETURN_STRING("string");
 	}

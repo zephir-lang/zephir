@@ -13,7 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
 
 
@@ -116,17 +115,13 @@ PHP_METHOD(Stub_Issue2061, getLabel)
 PHP_METHOD(Stub_Issue2061, withDefault)
 {
 	zval *size_param = NULL;
-	zend_long size;
+	zend_long size = 2048;
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(size)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &size_param);
-	if (!size_param) {
-		size = 2048;
-	} else {
-		}
 	RETURN_LONG(size);
 }
 
