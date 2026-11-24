@@ -40,7 +40,7 @@ ZEPHIR_INIT_CLASS(Stub_ConstantParameterDefault)
 PHP_METHOD(Stub_ConstantParameterDefault, __construct)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zend_long rounds;
+	zend_long rounds = 12;
 	zval *cipher_param = NULL, *rounds_param = NULL, _0;
 	zval cipher;
 	zval *this_ptr = getThis();
@@ -70,10 +70,6 @@ PHP_METHOD(Stub_ConstantParameterDefault, __construct)
 	} else {
 		zephir_get_strval(&cipher, cipher_param);
 	}
-	if (!rounds_param) {
-		rounds = 12;
-	} else {
-		}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 35, &cipher);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();

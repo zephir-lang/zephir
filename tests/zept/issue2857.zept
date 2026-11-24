@@ -1,0 +1,106 @@
+--TEST--
+Issue #2857: an optional bool, int or double parameter left out of a call takes its default
+--FILE--
+namespace Stub;
+
+class Issue2857
+{
+    const LIMIT = 10;
+    const ON = true;
+    const RATIO = 0.5;
+
+    public function getMessages(var type = null, bool remove = true) -> array
+    {
+        return this->getSessionMessages(remove, type);
+    }
+
+    protected function getSessionMessages(bool remove, var type = null) -> array
+    {
+        return [remove, type];
+    }
+
+    public function bools(bool yes = true, bool no = false) -> array
+    {
+        return [yes, no];
+    }
+
+    public function ints(int number = 1337, uint count = 7, long negative = -5, ulong big = 9) -> array
+    {
+        return [number, count, negative, big];
+    }
+
+    public function doubles(double ratio = 13.37, double fromInt = 2) -> array
+    {
+        return [ratio, fromInt];
+    }
+
+    public function constants(int number = self::LIMIT, bool flag = self::ON, double ratio = self::RATIO) -> array
+    {
+        return [number, flag, ratio];
+    }
+
+    public static function staticDefaults(bool remove = true, int number = 3) -> array
+    {
+        return [remove, number];
+    }
+}
+
+function issue2857_defaults(bool remove = true, int number = 3, double ratio = 1.5) -> array
+{
+    return [remove, number, ratio];
+}
+--USAGE--
+function show(string $label, array $values): void
+{
+    echo $label, ': ', json_encode($values, JSON_PRESERVE_ZERO_FRACTION), "\n";
+}
+
+$o = new Stub\Issue2857();
+
+show('getMessages()', $o->getMessages());
+show('getMessages("error")', $o->getMessages('error'));
+show('getMessages(null, false)', $o->getMessages(null, false));
+show('getMessages(remove: false)', $o->getMessages(remove: false));
+show('getMessages(type: "notice")', $o->getMessages(type: 'notice'));
+
+show('bools(false, true)', $o->bools(false, true));
+show('bools()', $o->bools());
+show('bools(no: true)', $o->bools(no: true));
+
+show('ints()', $o->ints());
+show('ints(1, 2, 3, 4)', $o->ints(1, 2, 3, 4));
+show('ints(big: 1)', $o->ints(big: 1));
+
+show('doubles()', $o->doubles());
+show('doubles(fromInt: 0.25)', $o->doubles(fromInt: 0.25));
+
+show('constants()', $o->constants());
+show('constants(flag: false)', $o->constants(flag: false));
+
+show('staticDefaults()', Stub\Issue2857::staticDefaults());
+show('staticDefaults(number: 4)', Stub\Issue2857::staticDefaults(number: 4));
+
+show('issue2857_defaults()', Stub\issue2857_defaults());
+show('issue2857_defaults(number: 4)', Stub\issue2857_defaults(number: 4));
+show('issue2857_defaults(false, 5, 2)', Stub\issue2857_defaults(false, 5, 2));
+--EXPECT--
+getMessages(): [true,null]
+getMessages("error"): [true,"error"]
+getMessages(null, false): [false,null]
+getMessages(remove: false): [false,null]
+getMessages(type: "notice"): [true,"notice"]
+bools(false, true): [false,true]
+bools(): [true,false]
+bools(no: true): [true,true]
+ints(): [1337,7,-5,9]
+ints(1, 2, 3, 4): [1,2,3,4]
+ints(big: 1): [1337,7,-5,1]
+doubles(): [13.37,2.0]
+doubles(fromInt: 0.25): [13.37,0.25]
+constants(): [10,true,0.5]
+constants(flag: false): [10,false,0.5]
+staticDefaults(): [true,3]
+staticDefaults(number: 4): [true,4]
+issue2857_defaults(): [true,3,1.5]
+issue2857_defaults(number: 4): [true,4,1.5]
+issue2857_defaults(false, 5, 2): [false,5,2.0]

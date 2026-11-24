@@ -74,9 +74,9 @@ ZEPHIR_INIT_CLASS(Stub_Attributes_Marker)
 PHP_METHOD(Stub_Attributes_Marker, __construct)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zend_long number;
+	zend_long number = 0;
 	zval extra;
-	zend_bool flag;
+	zend_bool flag = 0;
 	zval text_zv, *flag_param = NULL, *extra_param = NULL, *number_param = NULL, __$true, __$false, _0;
 	zend_string *text = NULL;
 	zval *this_ptr = getThis();
@@ -129,20 +129,12 @@ PHP_METHOD(Stub_Attributes_Marker, __construct)
 		zephir_memory_observe(&text_zv);
 	ZVAL_STR_COPY(&text_zv, text);
 	}
-	if (!flag_param) {
-		flag = 0;
-	} else {
-		}
 	if (!extra_param) {
 		ZEPHIR_INIT_VAR(&extra);
 		array_init(&extra);
 	} else {
 		zephir_get_arrval(&extra, extra_param);
 	}
-	if (!number_param) {
-		number = 0;
-	} else {
-		}
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 26, &text_zv);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();

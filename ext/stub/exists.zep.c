@@ -27,7 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_Exists)
 
 PHP_METHOD(Stub_Exists, testClassExists)
 {
-	zend_bool autoload;
+	zend_bool autoload = 1;
 	zval *className, className_sub, *autoload_param = NULL, _0;
 
 	ZVAL_UNDEF(&className_sub);
@@ -38,17 +38,13 @@ PHP_METHOD(Stub_Exists, testClassExists)
 		Z_PARAM_BOOL(autoload)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 1, &className, &autoload_param);
-	if (!autoload_param) {
-		autoload = 1;
-	} else {
-		}
 	ZVAL_BOOL(&_0, (autoload ? 1 : 0));
 	RETURN_BOOL(zephir_class_exists(className, zephir_is_true(&_0) ));
 }
 
 PHP_METHOD(Stub_Exists, testInterfaceExists)
 {
-	zend_bool autoload;
+	zend_bool autoload = 1;
 	zval *interfaceName, interfaceName_sub, *autoload_param = NULL, _0;
 
 	ZVAL_UNDEF(&interfaceName_sub);
@@ -59,10 +55,6 @@ PHP_METHOD(Stub_Exists, testInterfaceExists)
 		Z_PARAM_BOOL(autoload)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 1, &interfaceName, &autoload_param);
-	if (!autoload_param) {
-		autoload = 1;
-	} else {
-		}
 	ZVAL_BOOL(&_0, (autoload ? 1 : 0));
 	RETURN_BOOL(zephir_interface_exists(interfaceName, zephir_is_true(&_0) ));
 }

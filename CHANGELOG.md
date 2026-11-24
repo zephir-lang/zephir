@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed reading a superglobal from Zephir breaking a reference to it, such as the session's, or replacing an object in it with an empty array [#2856](https://github.com/zephir-lang/zephir/issues/2856)
 - Fixed assigning a variable to a local declared with a superglobal name leaving the local unchanged [#2856](https://github.com/zephir-lang/zephir/issues/2856)
 - Fixed the key and value of a `for` loop over an array or object being null after the loop instead of keeping the last element [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed an optional `bool`, `int` or `double` parameter left out of a call getting an undefined value instead of its default with some C compilers [#2857](https://github.com/zephir-lang/zephir/issues/2857)
 
 ## [1.9.0] - 2026-11-20
 

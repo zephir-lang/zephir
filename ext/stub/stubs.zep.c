@@ -13,7 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/main.h"
@@ -73,7 +72,7 @@ PHP_METHOD(Stub_Stubs, testDocBlockAndReturnTypeDeclared)
  */
 PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlock)
 {
-	zend_long number;
+	zend_long number = 1;
 	zval *intOrString, intOrString_sub, *number_param = NULL;
 
 	ZVAL_UNDEF(&intOrString_sub);
@@ -83,10 +82,6 @@ PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlock)
 		Z_PARAM_LONG(number)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 1, &intOrString, &number_param);
-	if (!number_param) {
-		number = 1;
-	} else {
-		}
 	RETURN_LONG(number);
 }
 
@@ -101,7 +96,7 @@ PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlock)
  */
 PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlockDeclared)
 {
-	zend_long number;
+	zend_long number = 1;
 	zval *intOrString, intOrString_sub, *number_param = NULL;
 
 	ZVAL_UNDEF(&intOrString_sub);
@@ -111,10 +106,6 @@ PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlockDeclared)
 		Z_PARAM_LONG(number)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 1, &intOrString, &number_param);
-	if (!number_param) {
-		number = 1;
-	} else {
-		}
 	RETURN_LONG(number);
 }
 

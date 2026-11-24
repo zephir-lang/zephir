@@ -198,7 +198,7 @@ PHP_METHOD(Stub_Issue2824Pair, withInt)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a_param = NULL, *b_param = NULL, _0, _1;
-	zend_long a, b;
+	zend_long a = 5, b = 6;
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
@@ -210,14 +210,6 @@ PHP_METHOD(Stub_Issue2824Pair, withInt)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 2, &a_param, &b_param);
-	if (!a_param) {
-		a = 5;
-	} else {
-		}
-	if (!b_param) {
-		b = 6;
-	} else {
-		}
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, a);
 	ZEPHIR_INIT_VAR(&_1);

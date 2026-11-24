@@ -234,34 +234,26 @@ PHP_METHOD(Stub_Oo_OoParams, setStrictList)
 PHP_METHOD(Stub_Oo_OoParams, setAgeDefault)
 {
 	zval *age_param = NULL;
-	zend_long age;
+	zend_long age = 25;
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(age)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &age_param);
-	if (!age_param) {
-		age = 25;
-	} else {
-		}
 	RETURN_LONG(age);
 }
 
 PHP_METHOD(Stub_Oo_OoParams, setAverageDefault)
 {
 	zval *average_param = NULL;
-	double average;
+	double average = (double) 25;
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_DOUBLE(average)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &average_param);
-	if (!average_param) {
-		average = (double) 25;
-	} else {
-		}
 	RETURN_DOUBLE(average);
 }
 
@@ -292,17 +284,13 @@ PHP_METHOD(Stub_Oo_OoParams, setNameDefault)
 PHP_METHOD(Stub_Oo_OoParams, setEnabledDefault)
 {
 	zval *enabled_param = NULL;
-	zend_bool enabled;
+	zend_bool enabled = 0;
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_BOOL(enabled)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &enabled_param);
-	if (!enabled_param) {
-		enabled = 0;
-	} else {
-		}
 	RETURN_BOOL(enabled);
 }
 
@@ -420,34 +408,26 @@ PHP_METHOD(Stub_Oo_OoParams, setObjectClassCast)
 PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValue)
 {
 	zval *i_param = NULL;
-	zend_long i;
+	zend_long i = 0;
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(i)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &i_param);
-	if (!i_param) {
-		i = 0;
-	} else {
-		}
 	RETURN_LONG(i);
 }
 
 PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValue1)
 {
 	zval *i_param = NULL;
-	zend_long i;
+	zend_long i = 1;
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(i)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &i_param);
-	if (!i_param) {
-		i = 1;
-	} else {
-		}
 	RETURN_LONG(i);
 }
 
