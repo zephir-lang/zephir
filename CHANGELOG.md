@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-11-24
+
 ### Changed
 - Changed `internal-call-transformation` to also cover overridable methods, methods with optional parameters and constructors, checked at run time to call the method PHP would call [#2791](https://github.com/zephir-lang/zephir/issues/2791)
 
