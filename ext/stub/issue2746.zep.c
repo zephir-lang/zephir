@@ -131,24 +131,20 @@ PHP_METHOD(Stub_Issue2746, doubleParam)
 PHP_METHOD(Stub_Issue2746, optionalDoubleParam)
 {
 	zval *a_param = NULL;
-	double a;
+	double a = 1.5;
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_DOUBLE(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &a_param);
-	if (!a_param) {
-		a = 1.5;
-	} else {
-		}
 	RETURN_DOUBLE(a);
 }
 
 PHP_METHOD(Stub_Issue2746, nullableDoubleParam)
 {
 	zval *a_param = NULL;
-	double a;
+	double a = 0;
 
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
@@ -156,10 +152,6 @@ PHP_METHOD(Stub_Issue2746, nullableDoubleParam)
 		Z_PARAM_DOUBLE_OR_NULL(a, is_null_true)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &a_param);
-	if (!a_param) {
-		a = 0;
-	} else {
-		}
 	RETURN_DOUBLE(a);
 }
 

@@ -1,0 +1,85 @@
+--TEST--
+Issue #2802: a refused constructor does not run the destructor (PHP 8.2.21+, 8.3.9+ and 8.4+, GH-14456)
+--SKIPIF--
+<?php if (!(PHP_VERSION_ID >= 80309 || (PHP_VERSION_ID >= 80221 && PHP_VERSION_ID < 80300))) { echo "skip PHP before GH-14456 runs the destructor"; }
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class NDFactory
+{
+    public function __construct()
+    {
+    }
+
+    public static function make()
+    {
+        return new static();
+    }
+
+    public static function keep()
+    {
+        var o, e;
+
+        let o = "old";
+        try {
+            let o = new static();
+        } catch \Throwable, e {
+            echo "in catch\n";
+        }
+        echo "after\n";
+
+        return o;
+    }
+}
+--FILE--
+namespace Stub;
+
+function makePrivateDestructible()
+{
+    return new \PrivDtorCtor();
+}
+
+class NDCaller
+{
+    public static function viaFunction()
+    {
+        return \Stub\makePrivateDestructible();
+    }
+}
+--USAGE--
+class PrivDtor extends \Stub\NDFactory { private function __construct() {} public function __destruct() { echo "destructed\n"; } }
+class PrivDtorCtor
+{
+    private function __construct() {}
+    public function __destruct() { echo "destructed\n"; }
+    public static function viaFunction() { return \Stub\makePrivateDestructible(); }
+    public static function viaPhpFunction() { return php_make_destructible(); }
+}
+function php_make_destructible() { return new PrivDtorCtor(); }
+function t(string $label, callable $fn): void
+{
+    ob_start();
+    try {
+        $result = $fn();
+        $out = is_object($result) ? get_class($result) : var_export($result, true);
+    } catch (\Throwable $e) {
+        $out = get_class($e) . ": " . $e->getMessage();
+    }
+    $printed = ob_get_clean();
+    echo $label, ": ", $printed === "" ? "" : "[" . str_replace("\n", "|", trim($printed)) . "] ", $out, "\n";
+}
+t("new static", fn() => \PrivDtor::make());
+t("keep", fn() => \PrivDtor::keep());
+t("PHP function from the class", fn() => \PrivDtorCtor::viaPhpFunction());
+t("function from global", fn() => \Stub\makePrivateDestructible());
+t("function from the class", fn() => \PrivDtorCtor::viaFunction());
+t("function from a Zephir class", fn() => \Stub\NDCaller::viaFunction());
+--EXPECT--
+new static: Error: Call to private PrivDtor::__construct() from scope Stub\NDFactory
+keep: [in catch|after] 'old'
+PHP function from the class: Error: Call to private PrivDtorCtor::__construct() from global scope
+function from global: Error: Call to private PrivDtorCtor::__construct() from global scope
+function from the class: Error: Call to private PrivDtorCtor::__construct() from global scope
+function from a Zephir class: Error: Call to private PrivDtorCtor::__construct() from global scope

@@ -26,7 +26,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\FunctionDefinition;
 use Zephir\GlobalConstant;
 use Zephir\Name;
-use Zephir\Variable\Globals;
+use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
 use function array_filter;
@@ -666,12 +666,12 @@ class Backend
     ): void {
         [$keys, $offsetItems, $numberParams] = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
         $valueVariable = $this->resolveValue($valueVariable, $compilationContext);
-        $variable->setUsed(true);
 
+        /* A local object is a zval, not a pointer to one (#2770) */
         $compilationContext->codePrinter->output(
             sprintf(
                 'zephir_update_property_array_multi(%s, SL("%s"), %s, SL("%s"), %d, %s);',
-                $variable->getName(),
+                $this->getVariableCode($variable),
                 $propertyName,
                 $valueVariable,
                 $keys,
@@ -999,25 +999,46 @@ class Backend
             return;
         }
 
-        $globalsManager = new Globals();
+        /**
+         * The local of a superglobal only borrows it, see assignSuperGlobal().
+         */
+        if ($target->isSuperGlobal()) {
+            $this->setGlobal($target, $this->resolveValue($var, $context), $context);
+            $this->fetchGlobal($target, $context);
+            $context->emitExceptionCheck();
 
-        if ($globalsManager->isSuperGlobal($target->getName())) {
-            $context->codePrinter->output(
-                sprintf(
-                    'ZEPHIR_HASH_COPY(%s, %s);',
-                    $this->getVariableCode($target),
-                    $this->resolveValue($var, $context)
-                )
-            );
-        } else {
-            $context->codePrinter->output(
-                sprintf(
-                    'ZEPHIR_CPY_WRT(%s, %s);',
-                    $this->getVariableCode($target),
-                    $this->resolveValue($var, $context)
-                )
-            );
+            return;
         }
+
+        $context->codePrinter->output(
+            sprintf(
+                'ZEPHIR_CPY_WRT(%s, %s);',
+                $this->getVariableCode($target),
+                $this->resolveValue($var, $context)
+            )
+        );
+    }
+
+    /**
+     * `let <superglobal> = value`, where `value` is a temporary the caller
+     * owns and gives up.
+     *
+     * The local of a superglobal only borrows it (see zephir_get_global()), so
+     * it is never released or overwritten: the value is assigned to the global,
+     * the temporary drops its reference, so that the global does not have to
+     * separate an array it would otherwise share with it, and the local borrows
+     * the new value.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2856
+     */
+    public function assignSuperGlobal(Variable $superGlobal, Variable $value, CompilationContext $context): void
+    {
+        $code = $this->getVariableCode($value);
+
+        $this->setGlobal($superGlobal, $code, $context);
+        $context->codePrinter->output('ZEPHIR_INIT_NVAR(' . $code . ');');
+        $this->fetchGlobal($superGlobal, $context);
+        $context->emitExceptionCheck();
     }
 
     public function createClosure(
@@ -1626,14 +1647,19 @@ class Backend
         $context->codePrinter->output('zend_iterator_dtor(' . $iteratorVariable->getName() . ');');
     }
 
-    public function fetchClass(Variable $zendClassEntry, $className, $guarded, CompilationContext $context): void
-    {
+    public function fetchClass(
+        Variable $zendClassEntry,
+        $className,
+        $guarded,
+        CompilationContext $context,
+        string $fetchType = 'ZEND_FETCH_CLASS_AUTO'
+    ): void {
         $context->headersManager->add('kernel/object');
         if ($guarded) {
             $context->codePrinter->output('if (!' . $zendClassEntry->getName() . ') {');
         }
         $context->codePrinter->output(
-            $zendClassEntry->getName() . ' = zephir_fetch_class_str_ex(' . $className . ', ZEND_FETCH_CLASS_AUTO);'
+            $zendClassEntry->getName() . ' = zephir_fetch_class_str_ex(' . $className . ', ' . $fetchType . ');'
         );
         if ($guarded) {
             $context->codePrinter->output('}');
@@ -1651,10 +1677,26 @@ class Backend
         $output = strtr('zephir_get_global(&:name, SL(":name"));', [':name' => $name]);
 
         if ($useCodePrinter) {
+            $compilationContext->headersManager->add('kernel/main');
             $compilationContext->codePrinter->output($output);
         }
 
         return $output;
+    }
+
+    /**
+     * Assigns the C value `code` to a superglobal, see zephir_set_global().
+     * It can throw: a typed reference to the global refuses the value, or the
+     * destructor of the old value throws. The caller checks for the exception
+     * once the local borrows the global again.
+     */
+    private function setGlobal(Variable $globalVar, string $code, CompilationContext $compilationContext): void
+    {
+        $compilationContext->headersManager->add('kernel/main');
+        $compilationContext->headersManager->add('kernel/memory');
+        $compilationContext->codePrinter->output(
+            sprintf('zephir_set_global(SL("%s"), %s);', $globalVar->getName(), $code)
+        );
     }
 
     /**
@@ -2192,9 +2234,13 @@ class Backend
             }
         }
 
-        /* Since we do not observe, still do cleanup */
-        $variable?->initVariant($compilationContext);
-        $keyVariable?->initVariant($compilationContext);
+        /**
+         * The key and the value keep the last element after the loop, and
+         * what they held before when it does not run, as with PHP's foreach.
+         * Both own what they hold and the memory frame releases them.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2856
+         */
     }
 
     /**
@@ -2440,23 +2486,19 @@ class Backend
                     $parameter['name'] .= Parameters::BYREF_SHADOW_SUFFIX;
                 }
 
-                switch ($parameter['data-type']) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'double':
-                    case 'bool':
-                    case 'char':
-                    case 'uchar':
-                    case 'string':
-                    case 'array':
-                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_param_ext';
-                        break;
-
-                    default:
-                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_ext ';
-                        break;
-                }
+                /**
+                 * The same names Parameters::fetchParameters() gives the
+                 * body: a parameter converted into a native local arrives as
+                 * `<name>_param`, a zval one under its own name.
+                 */
+                $signatureParameters[] = match ($parameter['data-type'] ?? Types::T_VARIABLE) {
+                    Types::T_OBJECT,
+                    Types::T_CALLABLE,
+                    Types::T_RESOURCE,
+                    Types::T_VARIABLE,
+                    Types::T_MIXED => 'zval *' . $parameter['name'] . '_ext ',
+                    default        => 'zval *' . $parameter['name'] . '_param_ext',
+                };
             }
         }
 

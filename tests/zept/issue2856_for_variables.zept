@@ -1,0 +1,125 @@
+--TEST--
+Issue #2856: for loop variables keep the last key and value after the loop, as PHP's foreach
+--FILE--
+namespace Stub;
+
+class Issue2856ForVariables
+{
+    public function hash(array a)
+    {
+        var k = "init-k", v = "init-v";
+
+        for k, v in a {
+        }
+
+        return [k, v];
+    }
+
+    public function hashBreak(array a)
+    {
+        var k = null, v = null;
+
+        for k, v in a {
+            if v == 2 {
+                break;
+            }
+        }
+
+        return [k, v];
+    }
+
+    public function hashReverse(array a)
+    {
+        var k = null, v = null;
+
+        for k, v in reverse a {
+        }
+
+        return [k, v];
+    }
+
+    public function objectIt(var it)
+    {
+        var k = "init-k", v = "init-v";
+
+        for k, v in it {
+        }
+
+        return [k, v];
+    }
+
+    public function rangeKv()
+    {
+        var k = null, v = null;
+
+        for k, v in range(1, 3) {
+        }
+
+        return [k, v];
+    }
+
+    public function rangeValue()
+    {
+        var v = null;
+
+        for v in range(1, 3) {
+        }
+
+        return v;
+    }
+
+    public function iteratorBuiltin(var it)
+    {
+        var k = null, v = null;
+
+        for k, v in iterator(it) {
+        }
+
+        return [k, v];
+    }
+
+    public function valueOnly(array a)
+    {
+        var v = "init-v";
+
+        for v in a {
+        }
+
+        return v;
+    }
+}
+--USAGE--
+$p = new Stub\Issue2856ForVariables();
+echo json_encode($p->hash(['a' => 1, 'b' => 2])), "\n";
+echo json_encode($p->hash([])), "\n";
+echo json_encode($p->hashBreak(['a' => 1, 'b' => 2, 'c' => 3])), "\n";
+echo json_encode($p->hashReverse(['a' => 1, 'b' => 2])), "\n";
+echo json_encode($p->objectIt(new ArrayIterator(['x' => 7, 'y' => 8]))), "\n";
+echo json_encode($p->objectIt(new ArrayIterator([]))), "\n";
+echo json_encode($p->rangeKv()), "\n";
+echo json_encode($p->rangeValue()), "\n";
+echo json_encode($p->iteratorBuiltin(new ArrayIterator(['x' => 7, 'y' => 8]))), "\n";
+echo json_encode($p->valueOnly(['a' => 1, 'b' => 2])), "\n";
+echo json_encode($p->valueOnly([])), "\n";
+// The last key and value are released with the method: no growth
+$p->valueOnly([[0]]);
+$before = memory_get_usage();
+for ($i = 0; $i < 10000; $i++) {
+    $p->hash(['k' . $i => [$i]]);
+    $p->valueOnly([[$i]]);
+    $p->objectIt(new ArrayIterator(['k' . $i => [$i]]));
+}
+echo 'leak: ', memory_get_usage() - $before, "\n";
+--EXPECT--
+["b",2]
+["init-k","init-v"]
+["b",2]
+["a",1]
+["y",8]
+["init-k","init-v"]
+[2,3]
+3
+["y",8]
+2
+"init-v"
+leak: 0

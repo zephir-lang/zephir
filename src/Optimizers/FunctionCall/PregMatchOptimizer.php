@@ -19,6 +19,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
 
 use function count;
@@ -66,7 +67,10 @@ class PregMatchOptimizer extends OptimizerAbstract
             );
         }
 
-        $matches = $this->createMatches($expression, $context);
+        $superGlobal = $this->matchesSuperGlobal($expression, $context);
+        $matches     = null === $superGlobal
+            ? $this->createMatches($expression, $context)
+            : $context->symbolTable->getTempVariableForWrite('variable', $context);
         [$flags, $offset] = $this->processOptionals($expression, $call, $context);
 
         /*
@@ -103,10 +107,36 @@ class PregMatchOptimizer extends OptimizerAbstract
                 )
             );
 
+            if (null !== $superGlobal) {
+                $context->backend->assignSuperGlobal($superGlobal, $matches, $context);
+            }
+
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         } catch (Exception $e) {
             throw new CompilerException($e->getMessage(), $expression, $e->getCode(), $e);
         }
+    }
+
+    /**
+     * The superglobal `matches` names, if any. Its local only borrows the
+     * global (see Backend::assignSuperGlobal()), so the captures go to a
+     * temporary that is then assigned to the global.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2856
+     */
+    private function matchesSuperGlobal(array $expression, CompilationContext $context): ?Variable
+    {
+        $parameter = $expression['parameters'][2]['parameter'] ?? null;
+        if ('variable' !== ($parameter['type'] ?? null) || !(new Globals())->isSuperGlobal($parameter['value'])) {
+            return null;
+        }
+
+        $declared = $context->symbolTable->getVariable($parameter['value']);
+        if (null !== $declared && !$declared->isSuperGlobal()) {
+            return null;
+        }
+
+        return $context->symbolTable->getVariableForWrite($parameter['value'], $context, $parameter);
     }
 
     /**

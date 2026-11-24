@@ -31,7 +31,7 @@ PHP_METHOD(Stub_ArraySearch, simpleSearch)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zend_bool strict;
+	zend_bool strict = 0;
 	zval haystack;
 	zval *needle, needle_sub, *haystack_param = NULL, *strict_param = NULL, _0;
 
@@ -48,10 +48,6 @@ PHP_METHOD(Stub_ArraySearch, simpleSearch)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 1, &needle, &haystack_param, &strict_param);
 	zephir_get_arrval(&haystack, haystack_param);
-	if (!strict_param) {
-		strict = 0;
-	} else {
-		}
 	ZVAL_BOOL(&_0, (strict ? 1 : 0));
 	ZEPHIR_RETURN_CALL_FUNCTION("array_search", NULL, 5, needle, &haystack, &_0);
 	zephir_check_call_status();

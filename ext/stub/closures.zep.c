@@ -132,25 +132,28 @@ PHP_METHOD(Stub_Closures, issue1860)
  */
 PHP_METHOD(Stub_Closures, issue642)
 {
-	zval _0;
-	zval obj, closure;
+	zval _1;
+	zval obj, closure, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&closure);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_INIT_VAR(&obj);
-	object_init(&obj);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init(&_0);
+	ZEPHIR_CPY_WRT(&obj, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_VAR(&closure);
 	zephir_create_closure_ex(&closure, NULL, stub_10__closure_ce, SL("__invoke"));
-	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 1, 0);
-	zephir_array_fast_append(&_0, &obj);
-	ZEPHIR_CALL_USER_FUNC_ARRAY(return_value, &closure, &_0);
+	ZEPHIR_INIT_VAR(&_1);
+	zephir_create_array(&_1, 1, 0);
+	zephir_array_fast_append(&_1, &obj);
+	ZEPHIR_CALL_USER_FUNC_ARRAY(return_value, &closure, &_1);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -936,7 +939,6 @@ PHP_METHOD(Stub_Closures, issue2652Loop)
 			return;
 		}
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&i);
 	RETURN_CCTOR(&result);
 }
 

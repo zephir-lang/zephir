@@ -191,8 +191,6 @@ PHP_METHOD(Stub_UnreachableLoop, toPropertyString)
 				}
 		}
 	}
-	ZEPHIR_INIT_NVAR(&v);
-	ZEPHIR_INIT_NVAR(&k);
 	ZEPHIR_CONCAT_VS(return_value, &ret, "}");
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();

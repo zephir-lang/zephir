@@ -1,0 +1,37 @@
+--TEST--
+Issue #2791: deep recursion through the C copy of a method throws PHP's stack Error on PHP 8.6
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--SKIPIF--
+<?php if (PHP_VERSION_ID < 80600) { echo "skip zend_call_function() checks the stack limit of internal calls from PHP 8.6"; }
+--INI--
+zend.max_allowed_stack_size=262144
+--FILE--
+namespace Stub;
+
+/**
+ * From PHP 8.6 every call through zend_call_function() checks the stack limit,
+ * so a runaway recursion of Zephir methods throws an Error. The C copy is
+ * called C-to-C and must fall back to that call once the stack is used up.
+ */
+class Deep
+{
+	final public function down(long n) -> long
+	{
+		if n <= 0 {
+			return 0;
+		}
+
+		return this->down(n - 1) + 1;
+	}
+}
+--USAGE--
+try {
+    echo (new \Stub\Deep())->down(10000000), "\n";
+} catch (\Error $e) {
+    echo get_class($e), ": ", str_starts_with($e->getMessage(), "Maximum call stack size") ? "stack limit" : $e->getMessage(), "\n";
+}
+echo (new \Stub\Deep())->down(10), "\n";
+--EXPECT--
+Error: stack limit
+10

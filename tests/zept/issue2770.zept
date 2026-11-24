@@ -1,0 +1,293 @@
+--TEST--
+Issue #2770: a method named like an array built-in (join, rev, toJson, hasKey, ...) is called as a method on an object receiver, as PHP calls it
+--FILE--
+namespace Stub;
+
+class Issue2770Criteria
+{
+	public log = "";
+
+	public inner;
+
+	public function join(string model, var conditions = null, var alias = null, var type = null) -> string
+	{
+		return "join:" . model . ":" . type;
+	}
+
+	public function reversed() -> string
+	{
+		return "reversed";
+	}
+
+	public function rev() -> string
+	{
+		return "rev";
+	}
+
+	public function toJson() -> string
+	{
+		return "toJson";
+	}
+
+	public function hasKey(var key) -> string
+	{
+		return "hasKey:" . key;
+	}
+
+	public function mergeRecursive(var other) -> string
+	{
+		return "mergeRecursive";
+	}
+
+	public function replaceRecursive(var other) -> string
+	{
+		return "replaceRecursive";
+	}
+
+	public function sortByKey() -> string
+	{
+		let this->log = this->log . "sortByKey;";
+
+		return "sortByKey";
+	}
+
+	public function reverseSort() -> string
+	{
+		return "reverseSort";
+	}
+
+	public function reverseSortByKey() -> string
+	{
+		return "reverseSortByKey";
+	}
+
+	public function innerJoin(string model) -> string
+	{
+		return this->join(model, null, null, "INNER");
+	}
+
+	public function onThis() -> array
+	{
+		return [
+			this->join("m", null, null, "T"),
+			this->reversed(),
+			this->rev(),
+			this->toJson(),
+			this->hasKey("k"),
+			this->mergeRecursive([]),
+			this->replaceRecursive([]),
+			this->sortByKey(),
+			this->reverseSort(),
+			this->reverseSortByKey()
+		];
+	}
+
+	public function onThisStatement() -> string
+	{
+		let this->log = "";
+		this->sortByKey();
+
+		return this->log;
+	}
+
+	public function onThisInClosure() -> string
+	{
+		var f;
+
+		let f = function () {
+			return this->rev();
+		};
+
+		return {f}();
+	}
+
+	public function setInner(var inner) -> void
+	{
+		let this->inner = inner;
+	}
+
+	public function onProperty()
+	{
+		return this->inner->rev();
+	}
+
+	public function self() -> <Issue2770Criteria>
+	{
+		return this;
+	}
+
+	public function onReturnedInstance() -> string
+	{
+		var c;
+
+		let c = this->self();
+
+		return c->rev();
+	}
+
+	public function onChained() -> string
+	{
+		return this->self()->rev();
+	}
+
+	public static function make() -> <Issue2770Criteria>
+	{
+		return new Issue2770Criteria();
+	}
+
+	public static function onReturnedStatic() -> string
+	{
+		var c;
+
+		let c = self::make();
+
+		return c->rev();
+	}
+
+	public static function onTyped(<Issue2770Criteria> c) -> string
+	{
+		return c->rev();
+	}
+
+	public static function onNullableTyped(<Issue2770Criteria> c = null) -> string
+	{
+		return c->rev();
+	}
+
+	public static function onNew() -> string
+	{
+		var c;
+
+		let c = new Issue2770Criteria();
+
+		return c->rev();
+	}
+
+	public static function onCast(var o) -> string
+	{
+		var c;
+
+		let c = <Issue2770Criteria> o;
+
+		return c->rev();
+	}
+
+	public static function onVar(var v)
+	{
+		return v->rev();
+	}
+
+	public static function onVarAll(var v) -> array
+	{
+		return [
+			v->join("m", null, null, "V"),
+			v->reversed(),
+			v->rev(),
+			v->toJson(),
+			v->hasKey("k"),
+			v->mergeRecursive([]),
+			v->replaceRecursive([]),
+			v->sortByKey(),
+			v->reverseSort(),
+			v->reverseSortByKey()
+		];
+	}
+
+	public static function onVarStatement(var v) -> string
+	{
+		let v->log = "";
+		v->sortByKey();
+		v->sortByKey();
+
+		return v->log;
+	}
+
+	public static function onVarAssignedToItself(var v)
+	{
+		let v = v->rev();
+
+		return v;
+	}
+
+	public static function onVarDynamicString(var v)
+	{
+		return v->{"rev"}();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2770Magic
+{
+	public function __call(string name, array args)
+	{
+		return "__call:" . name . ":" . count(args);
+	}
+}
+--USAGE--
+function show(callable $f)
+{
+    try {
+        $r = $f();
+        echo is_array($r) ? implode(',', $r) : var_export($r, true), "\n";
+    } catch (\Throwable $e) {
+        echo get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+$c = new \Stub\Issue2770Criteria();
+$c->setInner(new \Stub\Issue2770Criteria());
+$m = new \Stub\Issue2770Magic();
+
+show(fn () => $c->innerJoin('Robots'));
+show(fn () => $c->onThis());
+show(fn () => $c->onThisStatement());
+show(fn () => $c->onThisInClosure());
+show(fn () => $c->onProperty());
+show(fn () => $c->onReturnedInstance());
+show(fn () => $c->onChained());
+show(fn () => \Stub\Issue2770Criteria::onReturnedStatic());
+show(fn () => \Stub\Issue2770Criteria::onTyped($c));
+show(fn () => \Stub\Issue2770Criteria::onNullableTyped(null));
+show(fn () => \Stub\Issue2770Criteria::onNew());
+show(fn () => \Stub\Issue2770Criteria::onCast($c));
+show(fn () => \Stub\Issue2770Criteria::onVar($c));
+show(fn () => \Stub\Issue2770Criteria::onVar($m));
+show(fn () => \Stub\Issue2770Criteria::onVar(null));
+show(fn () => \Stub\Issue2770Criteria::onVar('str'));
+show(fn () => \Stub\Issue2770Criteria::onVar(7));
+show(fn () => \Stub\Issue2770Criteria::onVarAll($c));
+show(fn () => \Stub\Issue2770Criteria::onVarAll($m));
+show(fn () => \Stub\Issue2770Criteria::onVarStatement(new \Stub\Issue2770Criteria()));
+show(fn () => \Stub\Issue2770Criteria::onVarAssignedToItself($c));
+show(fn () => \Stub\Issue2770Criteria::onVarDynamicString($c));
+show(fn () => \Stub\Issue2770Criteria::onVarDynamicString($m));
+
+$p = new \Stub\Issue2770Criteria();
+$p->setInner($m);
+show(fn () => $p->onProperty());
+--EXPECT--
+'join:Robots:INNER'
+join:m:T,reversed,rev,toJson,hasKey:k,mergeRecursive,replaceRecursive,sortByKey,reverseSort,reverseSortByKey
+'sortByKey;'
+'rev'
+'rev'
+'rev'
+'rev'
+'rev'
+'rev'
+Error: Call to a member function rev() on null
+'rev'
+'rev'
+'rev'
+'__call:rev:0'
+Error: Call to a member function rev() on null
+Error: Call to a member function rev() on string
+Error: Call to a member function rev() on int
+join:m:V,reversed,rev,toJson,hasKey:k,mergeRecursive,replaceRecursive,sortByKey,reverseSort,reverseSortByKey
+__call:join:4,__call:reversed:0,__call:rev:0,__call:toJson:0,__call:hasKey:1,__call:mergeRecursive:1,__call:replaceRecursive:1,__call:sortByKey:0,__call:reverseSort:0,__call:reverseSortByKey:0
+'sortByKey;sortByKey;'
+'rev'
+'rev'
+'__call:rev:0'
+'__call:rev:0'

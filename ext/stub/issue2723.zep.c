@@ -178,8 +178,7 @@ PHP_METHOD(Stub_Issue2723, viaMixedParam)
 	zend_class_entry *_0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *name;
-	zval *className, className_sub, name_sub;
+	zval *className, className_sub, *name, name_sub;
 
 	ZVAL_UNDEF(&className_sub);
 	ZVAL_UNDEF(&name_sub);
@@ -205,8 +204,7 @@ PHP_METHOD(Stub_Issue2723, viaMixedClass)
 	zend_class_entry *_0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval className_sub;
-	zval *className;
+	zval *className, className_sub;
 
 	ZVAL_UNDEF(&className_sub);
 	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
@@ -448,8 +446,7 @@ PHP_METHOD(Stub_Issue2723, methodViaMixedParam)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *name;
-	zval *receiver, receiver_sub, name_sub;
+	zval *receiver, receiver_sub, *name, name_sub;
 
 	ZVAL_UNDEF(&receiver_sub);
 	ZVAL_UNDEF(&name_sub);

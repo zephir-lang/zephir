@@ -1,0 +1,123 @@
+--TEST--
+Issue #2791: the C copy of a method with optional parameters gives what PHP's call gives
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+class Opt
+{
+	const K = 7;
+
+	public function defaults(long a = 1, bool b = true, double c = 1.5, string d = "d", array e = [1, 2], var f = null, string g = null, array h = null, long i = Opt::K, var j = "j") -> string
+	{
+		return json_encode([a, b, c, d, e, f, g, h, i, j]);
+	}
+
+	public function none() -> string
+	{
+		return this->defaults();
+	}
+
+	public function two(var a, var b) -> string
+	{
+		return this->defaults(a, b);
+	}
+
+	public function all(var a, var b, var c, var d, var e, var f, var g, var h, var i, var j) -> string
+	{
+		return this->defaults(a, b, c, d, e, f, g, h, i, j);
+	}
+
+	public function natives(long a, bool b, double c) -> string
+	{
+		return this->defaults(a, b, c);
+	}
+
+	protected function frame(var a = 1) -> long
+	{
+		var trace;
+
+		let trace = debug_backtrace();
+
+		return count(trace[0]["args"]);
+	}
+
+	public function probe() -> array
+	{
+		var out = [], i;
+
+		for i in [1, 2] {
+			let out[] = this->frame(i);
+		}
+
+		return out;
+	}
+}
+--USAGE--
+function outcome(callable $fn): string
+{
+    $notes = [];
+    set_error_handler(function (int $no, string $message) use (&$notes): bool {
+        $notes[] = $no . ':' . $message;
+
+        return true;
+    });
+
+    try {
+        $result = 'returned ' . var_export($fn(), true);
+    } catch (\Throwable $e) {
+        $result = get_class($e) . ': ' . $e->getMessage();
+    } finally {
+        restore_error_handler();
+    }
+
+    return $result . ($notes ? ' [' . implode(' | ', $notes) . ']' : '');
+}
+
+function same(string $label, callable $via, callable $direct): void
+{
+    for ($i = 0; $i < 2; $i++) {
+        $a = outcome($via);
+        $b = outcome($direct);
+        if ($a !== $b) {
+            echo $label, ": DIFF\n  via:    ", $a, "\n  direct: ", $b, "\n";
+
+            return;
+        }
+    }
+    echo $label, ": same\n";
+}
+
+$o = new \Stub\Opt();
+same("none", fn () => $o->none(), fn () => $o->defaults());
+same("two", fn () => $o->two(5, false), fn () => $o->defaults(5, false));
+same("two, coerced", fn () => $o->two("5", 0), fn () => $o->defaults("5", 0));
+same("two, null", fn () => $o->two(null, null), fn () => $o->defaults(null, null));
+same("two, wrong", fn () => $o->two([], 1), fn () => $o->defaults([], 1));
+same("natives", fn () => $o->natives(3, false, 2.5), fn () => $o->defaults(3, false, 2.5));
+$all = [9, false, 3, "x", [3], "f", "g", [4], 8, ["j"]];
+same("all", fn () => $o->all(...$all), fn () => $o->defaults(...$all));
+$nulls = [9, false, 3, "x", [3], null, null, null, 8, null];
+same("all, nullable nulls", fn () => $o->all(...$nulls), fn () => $o->defaults(...$nulls));
+$wrong = [9, false, 3, "x", [3], null, [], "h", 8, null];
+same("all, wrong", fn () => $o->all(...$wrong), fn () => $o->defaults(...$wrong));
+
+echo $o->none(), "\n";
+
+[$first, $second] = $o->probe();
+echo "arguments in the frame: ", $first, " then ", $second, "\n";
+--EXPECT--
+none: same
+two: same
+two, coerced: same
+two, null: same
+two, wrong: same
+natives: same
+all: same
+all, nullable nulls: same
+all, wrong: same
+[1,true,1.5,"d",[1,2],null,null,null,7,"j"]
+arguments in the frame: 1 then 0

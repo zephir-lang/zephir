@@ -6,6 +6,48 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-11-24
+
+### Changed
+- Changed `internal-call-transformation` to also cover overridable methods, methods with optional parameters and constructors, checked at run time to call the method PHP would call [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+
+### Fixed
+- Fixed `internal-call-transformation` converting an argument PHP refuses instead of throwing PHP's TypeError or deprecation [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed `internal-call-transformation` releasing too early, or leaking, an argument the called method changes [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed `internal-call-transformation` calling a final method on a variable that holds null or an object of another class [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed `internal-call-transformation` skipping the deprecation of a `deprecated` method [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed `func_get_args()`, `func_num_args()` and `func_get_arg()` reading the caller's arguments under `internal-call-transformation` [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed `self::` under `internal-call-transformation` running a non-static method without `this` and giving a static one its declaring class as the called class [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed a `ulong` parameter failing to compile under `internal-call-transformation` [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed `internal-call-transformation` returning a local assigned on one path only without initializing it [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed a runaway recursion under `internal-call-transformation` crashing instead of throwing the stack limit Error of PHP 8.6 [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed a warning raised in an internal method, or in the C copy `internal-call-transformation` makes of a method, crashing instead of naming the method [#2791](https://github.com/zephir-lang/zephir/issues/2791)
+- Fixed `new` inside `try` leaving the method instead of reaching `catch` when the constructor cannot be called [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed `let x = new X()` and `return new X()` taking the object before its constructor returns, so a failing constructor inside `try` changed `x` or the return value, and `x` released its old object first [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed `new` in a function, or in a closure written in one, checking the constructor visibility against the calling class instead of the global scope [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed `new` running the destructor of an object whose constructor or argument threw [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed `new static()` of an abstract class going on with the method after PHP's Error [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed `new` of a class without a constructor not evaluating its arguments [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed `new` of a class that does not exist being a fatal error instead of PHP's Error [#2802](https://github.com/zephir-lang/zephir/issues/2802)
+- Fixed calling an abstract method returning null, or throwing the wrong Error, instead of throwing PHP's Error [#2789](https://github.com/zephir-lang/zephir/issues/2789)
+- Fixed an `abstract static` method of a class or a trait raising a warning at every startup [#2789](https://github.com/zephir-lang/zephir/issues/2789)
+- Fixed a static call through an interface failing to compile, or crashing with a dynamic class, instead of throwing PHP's Error [#2789](https://github.com/zephir-lang/zephir/issues/2789)
+- Fixed a `Class::method` string or a `[class, method]` array called as a function throwing the wrong Error [#2789](https://github.com/zephir-lang/zephir/issues/2789)
+- Fixed `this->join()` and the other array built-in method names calling the PHP function of that name instead of the method of an object [#2770](https://github.com/zephir-lang/zephir/issues/2770)
+- Fixed the array built-in `hasKey()` passing its arguments to `array_key_exists()` in the wrong order [#2770](https://github.com/zephir-lang/zephir/issues/2770)
+- Fixed a dynamic method call through a variable named like an array built-in failing to compile [#2770](https://github.com/zephir-lang/zephir/issues/2770)
+- Fixed a `mixed` variable failing to compile as an object, and `clone` of one crashing the compiler [#2770](https://github.com/zephir-lang/zephir/issues/2770)
+- Fixed writing a property of an `object`, `mixed` or `callable` parameter failing to compile, and of an object without a known class crashing the compiler [#2770](https://github.com/zephir-lang/zephir/issues/2770)
+- Fixed `let o->a[k][] = v` on a local object generating C that does not compile [#2770](https://github.com/zephir-lang/zephir/issues/2770)
+- Fixed `let _SESSION = []` and any other assignment to a superglobal freeing the array the global still uses instead of writing the new value to it [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed assigning an expression to a superglobal merging it into the old array instead of replacing it [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed `fetch`, destructuring, `for` and `catch` variables and by-reference arguments named like a superglobal freeing its array [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed `preg_match()` with a superglobal as `matches` failing to compile [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed reading a superglobal from Zephir breaking a reference to it, such as the session's, or replacing an object in it with an empty array [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed assigning a variable to a local declared with a superglobal name leaving the local unchanged [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed the key and value of a `for` loop over an array or object being null after the loop instead of keeping the last element [#2856](https://github.com/zephir-lang/zephir/issues/2856)
+- Fixed an optional `bool`, `int` or `double` parameter left out of a call getting an undefined value instead of its default with some C compilers [#2857](https://github.com/zephir-lang/zephir/issues/2857)
+
 ## [1.9.0] - 2026-11-20
 
 ### Added

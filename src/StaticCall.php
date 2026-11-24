@@ -128,10 +128,16 @@ class StaticCall extends Call
             if (!in_array($className, ['self', 'static', 'parent'])) {
                 if (is_string($className)) {
                     $className = $compilationContext->getFullName($className);
-                    if ($compiler->isClass($className)) {
+                    /**
+                     * PHP compiles a call through an interface and throws at
+                     * run time, as its methods are abstract.
+                     *
+                     * @see https://github.com/zephir-lang/zephir/issues/2789
+                     */
+                    if ($compiler->isClass($className) || $compiler->isInterface($className)) {
                         $classDefinition = $compiler->getClassDefinition($className);
                     } else {
-                        if ($compiler->isBundledClass($className)) {
+                        if ($compiler->isBundledClass($className) || $compiler->isBundledInterface($className)) {
                             $classDefinition = $compiler->getInternalClassDefinition($className);
                         } else {
                             throw new CompilerException('Class name: ' . $className . ' does not exist', $expression);
@@ -422,8 +428,12 @@ class StaticCall extends Call
          */
         $insideClosure = true === $compilationContext->classDefinition?->isClosure();
         $named         = FunctionCall::hasNamedArgument($expression);
-        if ('SELF' === $context && !$insideClosure && !$named) {
-            $method = $method->getOptimizedMethod();
+        $twin          = null;
+        if ('SELF' === $context && !$insideClosure && !$named && !$method->isInternal()) {
+            $twin = $method->getOptimizedMethod();
+            if ($twin === $method) {
+                $twin = null;
+            }
         }
 
         $codePrinter = $compilationContext->codePrinter;
@@ -444,10 +454,6 @@ class StaticCall extends Call
         }
 
         [$params, $named] = $this->splitNamedArguments($params, $compilationContext);
-
-        if ($symbolVariable) {
-            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
-        }
 
         $paramCount = count($params);
         $paramsStr  = $paramCount ? ', ' . implode(', ', $params) : '';
@@ -478,38 +484,41 @@ class StaticCall extends Call
             $macro  = $context . ($insideClosure ? '_THIS' : '') . '_CACHED';
             $object = $insideClosure ? $compilationContext->enclosingObjectCode() . ', ' : '';
 
-            if ($isExpecting) {
-                if ('return_value' == $symbolVariable->getName()) {
+            $call = function () use ($isExpecting, $symbolVariable, $macro, $object, $callName, $cachePointer, $paramsStr, $codePrinter, $compilationContext): void {
+                if (!$isExpecting) {
+                    $codePrinter->output(
+                        'ZEPHIR_CALL_' . $macro . '(NULL, ' . $object . '"' . $callName . '", ' . $cachePointer . $paramsStr . ');'
+                    );
+                } elseif ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output(
                         'ZEPHIR_RETURN_CALL_' . $macro . '(' . $object . '"' . $callName . '", ' . $cachePointer . $paramsStr . ');'
                     );
                 } else {
                     $codePrinter->output(
-                        'ZEPHIR_CALL_' . $macro . '(' . $symbol . ', ' . $object . '"' . $callName . '", ' . $cachePointer . $paramsStr . ');'
+                        'ZEPHIR_CALL_' . $macro . '(' . $compilationContext->backend->getVariableCode($symbolVariable)
+                        . ', ' . $object . '"' . $callName . '", ' . $cachePointer . $paramsStr . ');'
                     );
                 }
+            };
+
+            $conditions = null;
+            if (null !== $twin && ($method->isStatic() || !$this->inStaticContext($compilationContext))) {
+                $conditions = $this->twinArgumentChecks($method, $params, $compilationContext);
+            }
+
+            if (null === $conditions) {
+                $call();
             } else {
-                $codePrinter->output(
-                    'ZEPHIR_CALL_' . $macro . '(NULL, ' . $object . '"' . $callName . '", ' . $cachePointer . $paramsStr . ');'
+                $conditions[] = 'zephir_has_stack_for_direct_call()';
+                $this->emitGuardedDirectCall(
+                    $conditions,
+                    fn () => $this->emitSelfInternalCall($twin, $params, $symbolVariable, $isExpecting, $compilationContext),
+                    $call,
+                    $compilationContext
                 );
             }
         } else {
-            $ce = $method->getClassDefinition()->getClassEntry($compilationContext);
-            $ce = $ce . ', ' . $ce;
-            if ($isExpecting) {
-                if ('return_value' == $symbolVariable->getName()) {
-                    $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 1, $paramCount);
-                    $codePrinter->output($macro . '(' . $ce . ', ' . $method->getInternalName() . $paramsStr . ');');
-                } else {
-                    $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 2, $paramCount);
-                    $codePrinter->output(
-                        $macro . '(' . $symbol . ', ' . $ce . ', ' . $method->getInternalName() . $paramsStr . ');'
-                    );
-                }
-            } else {
-                $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 0, $paramCount);
-                $codePrinter->output($macro . '(' . $ce . ', ' . $method->getInternalName() . $paramsStr . ');');
-            }
+            $this->emitSelfInternalCall($method, $params, $symbolVariable, $isExpecting, $compilationContext);
         }
 
         /**
@@ -565,8 +574,17 @@ class StaticCall extends Call
          *
          * @see https://github.com/zephir-lang/zephir/issues/2734
          */
-        if (Visibility::canCallMethod($method, $compilationContext) && !FunctionCall::hasNamedArgument($expression)) {
-            $method = $method->getOptimizedMethod();
+        $twin = null;
+        if (
+            Visibility::canCallMethod($method, $compilationContext)
+            && !FunctionCall::hasNamedArgument($expression)
+            && !$method->isInternal()
+            && $method->isStatic()
+        ) {
+            $twin = $method->getOptimizedMethod();
+            if ($twin === $method) {
+                $twin = null;
+            }
         }
 
         $params = [];
@@ -576,33 +594,63 @@ class StaticCall extends Call
 
         [$params, $named] = $this->splitNamedArguments($params, $compilationContext);
 
-        if ($symbolVariable) {
-            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
-        }
-
         $paramCount = count($params);
         $paramsStr  = $paramCount ? ', ' . implode(', ', $params) : '';
 
         $this->assertNamedArgumentsReachEngine($named, $method->isInternal(), $expression);
+
+        /**
+         * `Other::m()` names the class: it is the called class, and the method
+         * runs in the scope of the class that declares it.
+         */
+        $target = $method->getClassDefinition()->getClassEntry($compilationContext)
+            . ', ' . $classDefinition->getClassEntry($compilationContext);
+
         if (null === $named && $method->isInternal()) {
-            $ce = $method->getClassDefinition()->getClassEntry($compilationContext)
-                . ', ' . $classDefinition->getClassEntry($compilationContext);
-            if ($isExpecting) {
-                if ('return_value' == $symbolVariable->getName()) {
-                    $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 1, $paramCount);
-                    $codePrinter->output($macro . '(' . $ce . ', ' . $method->getInternalName() . $paramsStr . ');');
-                } else {
-                    $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 2, $paramCount);
-                    $codePrinter->output(
-                        $macro . '(' . $symbol . ', ' . $ce . ', ' . $method->getInternalName() . $paramsStr . ');'
-                    );
-                }
-            } else {
-                $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 0, $paramCount);
-                $codePrinter->output($macro . '(' . $ce . ', ' . $method->getInternalName() . $paramsStr . ');');
-            }
+            $this->emitInternalMethodCall(
+                $method,
+                true,
+                $target,
+                $params,
+                $symbolVariable,
+                $isExpecting,
+                $compilationContext
+            );
         } else {
-            $this->emitClassCall($symbolVariable, $isExpecting, $classEntry, $callName, $paramsStr, $compilationContext, $named);
+            $call = fn () => $this->emitClassCall(
+                $symbolVariable,
+                $isExpecting,
+                $classEntry,
+                $callName,
+                $paramsStr,
+                $compilationContext,
+                $named
+            );
+
+            $conditions = null;
+            if (null !== $twin && null === $named) {
+                $conditions = $this->twinArgumentChecks($method, $params, $compilationContext);
+            }
+
+            if (null === $conditions) {
+                $call();
+            } else {
+                $conditions[] = 'zephir_has_stack_for_direct_call()';
+                $this->emitGuardedDirectCall(
+                    $conditions,
+                    fn () => $this->emitInternalMethodCall(
+                        $twin,
+                        true,
+                        $target,
+                        $params,
+                        $symbolVariable,
+                        $isExpecting,
+                        $compilationContext
+                    ),
+                    $call,
+                    $compilationContext
+                );
+            }
         }
 
         /**
@@ -1089,5 +1137,78 @@ class StaticCall extends Call
         }
 
         return [$params, $classEntryVariable->getName()];
+    }
+
+    /**
+     * Calls an internal method, or a method's C copy, reached through
+     * `self::`. PHP runs a non-static method with the current $this, and
+     * `self::` passes on the called class to a static one: it is a forwarding
+     * call.
+     *
+     * @param list<string> $params
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    private function emitSelfInternalCall(
+        Method $method,
+        array $params,
+        ?Variable $symbolVariable,
+        bool $isExpecting,
+        CompilationContext $compilationContext
+    ): void {
+        $classEntry = $method->getClassDefinition()->getClassEntry($compilationContext);
+
+        if ($method->isStatic()) {
+            $this->emitInternalMethodCall(
+                $method,
+                true,
+                $classEntry . ', zephir_get_called_scope(execute_data)',
+                $params,
+                $symbolVariable,
+                $isExpecting,
+                $compilationContext
+            );
+
+            return;
+        }
+
+        /**
+         * There is no $this to pass on from a static method. PHP throws for
+         * that call, which the C copy is never used for; an internal method
+         * has no other way to be called and keeps running without one.
+         */
+        if ($this->inStaticContext($compilationContext)) {
+            $this->emitInternalMethodCall(
+                $method,
+                true,
+                $classEntry . ', ' . $classEntry,
+                $params,
+                $symbolVariable,
+                $isExpecting,
+                $compilationContext
+            );
+
+            return;
+        }
+
+        $thisVariable = $compilationContext->symbolTable->getVariableForRead('this', $compilationContext);
+
+        $this->emitInternalMethodCall(
+            $method,
+            false,
+            $compilationContext->backend->getVariableCode($thisVariable) . ', ' . $classEntry,
+            $params,
+            $symbolVariable,
+            $isExpecting,
+            $compilationContext
+        );
+    }
+
+    /**
+     * Whether the code being compiled runs without $this.
+     */
+    private function inStaticContext(CompilationContext $compilationContext): bool
+    {
+        return true === $compilationContext->currentMethod?->isStatic();
     }
 }

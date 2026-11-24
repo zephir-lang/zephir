@@ -29,14 +29,14 @@ ZEPHIR_INIT_CLASS(Stub_Oo_PropertyAccess)
 
 PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 {
-	zval _0, _6;
-	zval test, test1, _1, _2, _3, _4, _5, _7, _8, _9;
+	zval _1, _6;
+	zval test, test1, _0, _2, _3, _4, _5, _7, _8, _9;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&test);
 	ZVAL_UNDEF(&test1);
-	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
@@ -44,7 +44,7 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	ZVAL_UNDEF(&_7);
 	ZVAL_UNDEF(&_8);
 	ZVAL_UNDEF(&_9);
-	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_6);
 	static zend_string *_zephir_prop_0 = NULL;
 	static zend_string *_zephir_prop_1 = NULL;
@@ -69,26 +69,28 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_INIT_VAR(&test);
-	object_init(&test);
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 5, 0);
+	object_init(&_0);
+	ZEPHIR_CPY_WRT(&test, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_STRING(&_1, "1");
-	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
-	ZVAL_LONG(&_1, 2);
-	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
-	ZVAL_LONG(&_1, 3);
-	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
-	ZVAL_LONG(&_1, 5);
-	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
-	ZVAL_DOUBLE(&_1, 6.00);
-	zephir_array_fast_append(&_0, &_1);
-	zephir_update_property_zval_cached(&test, _zephir_prop_0, 0, &_0);
+	zephir_create_array(&_1, 5, 0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_STRING(&_0, "1");
+	zephir_array_fast_append(&_1, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_LONG(&_0, 2);
+	zephir_array_fast_append(&_1, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_LONG(&_0, 3);
+	zephir_array_fast_append(&_1, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_LONG(&_0, 5);
+	zephir_array_fast_append(&_1, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_DOUBLE(&_0, 6.00);
+	zephir_array_fast_append(&_1, &_0);
+	zephir_update_property_zval_cached(&test, _zephir_prop_0, 0, &_1);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
@@ -142,15 +144,15 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 		return;
 	}
 	zephir_array_fast_append(&_6, &_8);
-	ZEPHIR_INIT_NVAR(&_1);
-	ZVAL_LONG(&_1, 1);
-	zephir_array_fast_append(&_6, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
-	ZVAL_LONG(&_1, 2);
-	zephir_array_fast_append(&_6, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
-	ZVAL_LONG(&_1, 3);
-	zephir_array_fast_append(&_6, &_1);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_LONG(&_0, 1);
+	zephir_array_fast_append(&_6, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_LONG(&_0, 2);
+	zephir_array_fast_append(&_6, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_LONG(&_0, 3);
+	zephir_array_fast_append(&_6, &_0);
 	zephir_update_property_zval_cached(&test, _zephir_prop_2, 0, &_6);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();

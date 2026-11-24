@@ -620,7 +620,6 @@ PHP_METHOD(Stub_Destructure, inLoop)
 			return;
 		}
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&item);
 	RETURN_CCTOR(&out);
 }
 

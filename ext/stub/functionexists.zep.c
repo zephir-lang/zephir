@@ -94,7 +94,6 @@ PHP_METHOD(Stub_FunctionExists, testBuiltInFunctions)
 			return;
 		}
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&func);
 	RETURN_CTOR(&result);
 }
 

@@ -734,7 +734,6 @@ PHP_METHOD(Stub_Flow, testFor1)
 		ZVAL_COPY(&v, _2);
 		c += zephir_get_numberval(&v);
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(c);
 }
 
@@ -789,8 +788,6 @@ PHP_METHOD(Stub_Flow, testFor2)
 		ZVAL_COPY(&v, _2);
 		c += zephir_get_numberval(&k);
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&v);
-	ZEPHIR_INIT_NVAR(&k);
 	RETURN_MM_DOUBLE(c);
 }
 
@@ -841,7 +838,6 @@ PHP_METHOD(Stub_Flow, testFor3)
 			return;
 		}
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&v);
 	RETURN_CCTOR(&c);
 }
 
@@ -1642,7 +1638,6 @@ PHP_METHOD(Stub_Flow, testFor24)
 			return;
 		}
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&a);
 	RETURN_CTOR(&b);
 }
 
@@ -1765,7 +1760,6 @@ PHP_METHOD(Stub_Flow, testFor32)
 				sum += zephir_get_numberval(&v);
 		}
 	}
-	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(sum);
 }
 

@@ -86,13 +86,13 @@ PHP_METHOD(Stub_Issue2428, classUnion)
 	zephir_fetch_params(1, 1, 0, &flag_param);
 	ZEPHIR_INIT_VAR(&_0);
 	if (flag) {
-		ZEPHIR_INIT_NVAR(&_0);
 		object_init(&_0);
 	} else {
-		ZEPHIR_INIT_NVAR(&_0);
 		object_init_ex(&_0, spl_ce_ArrayObject);
+		zephir_constructor_start(&_0);
 		ZEPHIR_CALL_METHOD_CACHED(NULL, &_0, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
+		zephir_constructor_finish(&_0);
 	}
 	RETURN_CCTOR(&_0);
 }
@@ -112,7 +112,6 @@ PHP_METHOD(Stub_Issue2428, classUnionNullable)
 	zephir_fetch_params(1, 1, 0, &n_param);
 	ZEPHIR_INIT_VAR(&_0);
 	if (n > 0) {
-		ZEPHIR_INIT_NVAR(&_0);
 		object_init(&_0);
 	} else {
 		ZEPHIR_INIT_NVAR(&_0);
@@ -136,7 +135,6 @@ PHP_METHOD(Stub_Issue2428, classOrScalar)
 	zephir_fetch_params(1, 1, 0, &flag_param);
 	ZEPHIR_INIT_VAR(&_0);
 	if (flag) {
-		ZEPHIR_INIT_NVAR(&_0);
 		object_init(&_0);
 	} else {
 		ZEPHIR_INIT_NVAR(&_0);
@@ -163,7 +161,6 @@ PHP_METHOD(Stub_Issue2428, arrayOrObject)
 		ZEPHIR_INIT_NVAR(&_0);
 		array_init(&_0);
 	} else {
-		ZEPHIR_INIT_NVAR(&_0);
 		object_init(&_0);
 	}
 	RETURN_CCTOR(&_0);

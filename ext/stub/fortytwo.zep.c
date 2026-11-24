@@ -270,7 +270,6 @@ PHP_METHOD(Stub_FortyTwo, proof)
 			return;
 		}
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&side);
 	ZEPHIR_MM_RESTORE();
 }
 

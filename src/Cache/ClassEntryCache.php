@@ -21,6 +21,12 @@ use Zephir\Variable\Variable;
  */
 class ClassEntryCache
 {
+    /**
+     * `new` of a class that does not exist throws PHP's Error, never a fatal
+     * error (#2802).
+     */
+    private const FETCH_TYPE = 'ZEND_FETCH_CLASS_AUTO | ZEND_FETCH_CLASS_EXCEPTION';
+
     protected array $cache = [];
 
     /**
@@ -35,10 +41,22 @@ class ClassEntryCache
             $zendClassEntry = $compilationContext->symbolTable->addTemp('static_zend_class_entry', $compilationContext);
             $zendClassEntry->setMustInitNull(true);
 
-            $compilationContext->backend->fetchClass($zendClassEntry, $className, true, $compilationContext);
+            $compilationContext->backend->fetchClass(
+                $zendClassEntry,
+                $className,
+                true,
+                $compilationContext,
+                self::FETCH_TYPE
+            );
         } else {
             $zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-            $compilationContext->backend->fetchClass($zendClassEntry, $className, false, $compilationContext);
+            $compilationContext->backend->fetchClass(
+                $zendClassEntry,
+                $className,
+                false,
+                $compilationContext,
+                self::FETCH_TYPE
+            );
         }
 
         return $zendClassEntry;

@@ -1,0 +1,173 @@
+--TEST--
+Issue #2770: a `mixed`, `object` or `callable` parameter, and an object a method returns without a class, can be read, written, cloned and checked as an object
+--FILE--
+namespace Stub;
+
+class Issue2770Receiver
+{
+	public p = "p";
+
+	public a = [];
+
+	public n = 0;
+
+	public function get() -> string
+	{
+		return "get";
+	}
+
+	public function __invoke() -> string
+	{
+		return "invoke";
+	}
+
+	public function makeObject() -> object
+	{
+		return new Issue2770Receiver();
+	}
+
+	public static function onMixed(mixed m) -> array
+	{
+		var n, c, x, out = [];
+
+		let n = "p";
+		let out[] = m->p;
+		let out[] = m->{n};
+		let out[] = isset m->p;
+		let out[] = empty m->p;
+		let out[] = fetch x, m->p;
+		let out[] = x;
+		let out[] = "x" . m->p;
+		let out[] = m instanceof Issue2770Receiver;
+		let out[] = typeof m;
+		let out[] = m->get();
+		let m->p = "w";
+		let out[] = m->p;
+		let m->{n} = "d";
+		let out[] = m->p;
+		let m->n++;
+		let m->n += 2;
+		let out[] = m->n;
+		let m->a[] = 1;
+		let m->a["k"] = 2;
+		let out[] = m->a;
+		unset m->p;
+		let out[] = isset m->p;
+		let c = clone m;
+		let out[] = get_class(c);
+
+		return out;
+	}
+
+	public static function onObject(object m) -> array
+	{
+		var n, c, x, out = [];
+
+		let n = "p";
+		let out[] = m->p;
+		let out[] = m->{n};
+		let out[] = isset m->p;
+		let out[] = empty m->p;
+		let out[] = fetch x, m->p;
+		let out[] = x;
+		let out[] = "x" . m->p;
+		let out[] = m instanceof Issue2770Receiver;
+		let out[] = typeof m;
+		let out[] = m->get();
+		let m->p = "w";
+		let out[] = m->p;
+		let m->{n} = "d";
+		let out[] = m->p;
+		let m->n++;
+		let m->n += 2;
+		let out[] = m->n;
+		let m->a[] = 1;
+		let m->a["k"] = 2;
+		let out[] = m->a;
+		unset m->p;
+		let out[] = isset m->p;
+		let c = clone m;
+		let out[] = get_class(c);
+
+		return out;
+	}
+
+	public static function onCallable(callable m) -> array
+	{
+		var n, c, x, out = [];
+
+		let n = "p";
+		let out[] = m->p;
+		let out[] = m->{n};
+		let out[] = isset m->p;
+		let out[] = empty m->p;
+		let out[] = fetch x, m->p;
+		let out[] = x;
+		let out[] = "x" . m->p;
+		let out[] = m instanceof Issue2770Receiver;
+		let out[] = typeof m;
+		let out[] = m->get();
+		let m->p = "w";
+		let out[] = m->p;
+		let m->{n} = "d";
+		let out[] = m->p;
+		let m->n++;
+		let m->n += 2;
+		let out[] = m->n;
+		let m->a[] = 1;
+		let m->a["k"] = 2;
+		let out[] = m->a;
+		unset m->p;
+		let out[] = isset m->p;
+		let c = clone m;
+		let out[] = get_class(c);
+
+		return out;
+	}
+
+	public function onReturnedObject() -> array
+	{
+		var o;
+
+		let o = this->makeObject();
+		let o->n++;
+		let o->n--;
+		let o->n++;
+		let o->a[] = 1;
+		let o->a["x"][] = 2;
+
+		return [o->n, o->a];
+	}
+	public static function onLocalObject() -> array
+	{
+		var o;
+
+		let o = new Issue2770Receiver();
+		let o->a["x"]["y"] = 3;
+		let o->a["x"][] = 4;
+		let o->a[] = 5;
+
+		return o->a;
+	}
+}
+--USAGE--
+function show(callable $f)
+{
+    try {
+        echo json_encode($f()), "\n";
+    } catch (\Throwable $e) {
+        echo get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+show(fn () => \Stub\Issue2770Receiver::onMixed(new \Stub\Issue2770Receiver()));
+show(fn () => \Stub\Issue2770Receiver::onObject(new \Stub\Issue2770Receiver()));
+show(fn () => \Stub\Issue2770Receiver::onCallable(new \Stub\Issue2770Receiver()));
+show(fn () => (new \Stub\Issue2770Receiver())->onReturnedObject());
+show(fn () => \Stub\Issue2770Receiver::onLocalObject());
+--EXPECT--
+["p","p",true,false,true,"p","xp",true,"object","get","w","d",3,{"0":1,"k":2},false,"Stub\\Issue2770Receiver"]
+["p","p",true,false,true,"p","xp",true,"object","get","w","d",3,{"0":1,"k":2},false,"Stub\\Issue2770Receiver"]
+["p","p",true,false,true,"p","xp",true,"object","get","w","d",3,{"0":1,"k":2},false,"Stub\\Issue2770Receiver"]
+[1,{"0":1,"x":[2]}]
+{"x":{"y":3,"0":4},"0":5}

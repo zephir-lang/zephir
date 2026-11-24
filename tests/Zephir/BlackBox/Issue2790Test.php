@@ -136,7 +136,8 @@ final class Issue2790Test extends TestCase
 
         $this->assertMatchesRegularExpression('/ZEPHIR_CALL_METHOD_CACHED\(&_\d+, this_ptr, "who", &_zephir_call_cache\[\d+\]\);/', $sites);
         $this->assertMatchesRegularExpression('/ZEPHIR_CALL_METHOD_CACHED\(&_\d+, o, "who", &_zephir_call_cache\[\d+\]\);/', $sites);
-        $this->assertMatchesRegularExpression('/ZEPHIR_CALL_METHOD_CACHED\(NULL, &made, "__construct", &_zephir_call_cache\[\d+\]\);/', $sites);
+        // `new` builds the object in a temporary and assigns it once constructed (#2802).
+        $this->assertMatchesRegularExpression('/ZEPHIR_CALL_METHOD_CACHED\(NULL, &_\d+, "__construct", &_zephir_call_cache\[\d+\]\);/', $sites);
         $this->assertMatchesRegularExpression('/ZEPHIR_CALL_SELF_CACHED\(&_\d+, "sname", &_zephir_call_cache\[\d+\]\);/', $sites);
         $this->assertMatchesRegularExpression('/ZEPHIR_CALL_STATIC_CACHED\(&_\d+, "sname", &_zephir_call_cache\[\d+\]\);/', $sites);
         $this->assertMatchesRegularExpression('/ZEPHIR_CALL_PARENT_CACHED\(&_\d+, callcache_child_ce, getThis\(\), "who", &_zephir_call_cache\[\d+\]\);/', $sites);

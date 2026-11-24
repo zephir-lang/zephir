@@ -3674,8 +3674,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedWrite)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval a;
-	zval k_sub, *a_param = NULL, _0;
-	zval *k;
+	zval *k, k_sub, *a_param = NULL, _0;
 
 	ZVAL_UNDEF(&k_sub);
 	ZVAL_UNDEF(&_0);
@@ -3756,8 +3755,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedWriteNested)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval a;
-	zval k_sub, *a_param = NULL, _0;
-	zval *k;
+	zval *k, k_sub, *a_param = NULL, _0;
 
 	ZVAL_UNDEF(&k_sub);
 	ZVAL_UNDEF(&_0);
@@ -3838,8 +3836,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedAddAssign)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval a;
-	zval k_sub, *a_param = NULL, _0;
-	zval *k;
+	zval *k, k_sub, *a_param = NULL, _0;
 
 	ZVAL_UNDEF(&k_sub);
 	ZVAL_UNDEF(&_0);
@@ -3920,8 +3917,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedAppendUnder)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval a;
-	zval k_sub, *a_param = NULL, _0;
-	zval *k;
+	zval *k, k_sub, *a_param = NULL, _0;
 
 	ZVAL_UNDEF(&k_sub);
 	ZVAL_UNDEF(&_0);
@@ -4002,8 +3998,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedRead)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval a;
-	zval k_sub, *a_param = NULL, _0;
-	zval *k;
+	zval *k, k_sub, *a_param = NULL, _0;
 
 	ZVAL_UNDEF(&k_sub);
 	ZVAL_UNDEF(&_0);
@@ -4079,8 +4074,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedIsset)
 	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval a;
-	zval k_sub, *a_param = NULL;
-	zval *k;
+	zval *k, k_sub, *a_param = NULL;
 
 	ZVAL_UNDEF(&k_sub);
 	ZVAL_UNDEF(&a);
@@ -4155,8 +4149,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedFetch)
 	zend_bool found = 0, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval a;
-	zval k_sub, *a_param = NULL, x, _1;
-	zval *k;
+	zval *k, k_sub, *a_param = NULL, x, _1;
 
 	ZVAL_UNDEF(&k_sub);
 	ZVAL_UNDEF(&x);
@@ -4264,8 +4257,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedEmpty)
 	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval a;
-	zval k_sub, *a_param = NULL;
-	zval *k;
+	zval *k, k_sub, *a_param = NULL;
 
 	ZVAL_UNDEF(&k_sub);
 	ZVAL_UNDEF(&a);
@@ -4339,8 +4331,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedUnset)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval a;
-	zval k_sub, *a_param = NULL;
-	zval *k;
+	zval *k, k_sub, *a_param = NULL;
 
 	ZVAL_UNDEF(&k_sub);
 	ZVAL_UNDEF(&a);
@@ -4412,8 +4403,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedUnsetNested)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval a;
-	zval k_sub, *a_param = NULL, _0;
-	zval *k;
+	zval *k, k_sub, *a_param = NULL, _0;
 
 	ZVAL_UNDEF(&k_sub);
 	ZVAL_UNDEF(&_0);
@@ -4499,8 +4489,7 @@ PHP_METHOD(Stub_Issue2706, keyUlongUnsetNested)
 PHP_METHOD(Stub_Issue2706, keyMixedLiteral)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval k_sub, _0;
-	zval *k;
+	zval *k, k_sub, _0;
 
 	ZVAL_UNDEF(&k_sub);
 	ZVAL_UNDEF(&_0);
@@ -4552,8 +4541,7 @@ PHP_METHOD(Stub_Issue2706, keyUlongLiteral)
 PHP_METHOD(Stub_Issue2706, keyMixedPropWrite)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval k_sub, _0, _1;
-	zval *k;
+	zval *k, k_sub, _0, _1;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&k_sub);
@@ -4671,8 +4659,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedPropRead)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval a;
-	zval k_sub, *a_param = NULL, _0, _1;
-	zval *k;
+	zval *k, k_sub, *a_param = NULL, _0, _1;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&k_sub);
@@ -4801,8 +4788,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedPropUnset)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval a;
-	zval k_sub, *a_param = NULL;
-	zval *k;
+	zval *k, k_sub, *a_param = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&k_sub);
@@ -4912,8 +4898,7 @@ PHP_METHOD(Stub_Issue2706, keyUlongPropUnset)
 PHP_METHOD(Stub_Issue2706, keyMixedStaticWrite)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval k_sub, _0, _1, _2;
-	zval *k;
+	zval *k, k_sub, _0, _1, _2;
 
 	ZVAL_UNDEF(&k_sub);
 	ZVAL_UNDEF(&_0);
@@ -5029,8 +5014,7 @@ PHP_METHOD(Stub_Issue2706, keyMixedPropIsset)
 	zend_bool _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval a;
-	zval k_sub, *a_param = NULL, _0;
-	zval *k;
+	zval *k, k_sub, *a_param = NULL, _0;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&k_sub);

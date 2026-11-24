@@ -18,6 +18,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\StatementsBlock;
+use Zephir\Variable\Globals;
 
 use function array_merge;
 use function count;
@@ -80,6 +81,16 @@ class TryCatchStatement extends StatementAbstract
             $ifs         = [];
 
             foreach ($this->statement['catches'] as $catch) {
+                if (isset($catch['variable']) && $this->bindsSuperGlobal($catch['variable']['value'], $compilationContext)) {
+                    /**
+                     * PHP binds `catch (E $_GET)` to a local of its own and
+                     * leaves the superglobal as it is.
+                     *
+                     * @see https://github.com/zephir-lang/zephir/issues/2856
+                     */
+                    unset($catch['variable']);
+                }
+
                 if (isset($catch['variable'])) {
                     $variable = $compilationContext->symbolTable->getVariableForWrite(
                         $catch['variable']['value'],
@@ -163,5 +174,20 @@ class TryCatchStatement extends StatementAbstract
         } else {
             $codePrinter->output('zend_clear_exception();');
         }
+    }
+
+    /**
+     * Whether a catch variable names a superglobal rather than a local
+     * declared with that name.
+     */
+    private function bindsSuperGlobal(string $name, CompilationContext $compilationContext): bool
+    {
+        if (!(new Globals())->isSuperGlobal($name)) {
+            return false;
+        }
+
+        $symbolTable = $compilationContext->symbolTable;
+
+        return !$symbolTable->hasVariable($name) || $symbolTable->getVariable($name)->isSuperGlobal();
     }
 }

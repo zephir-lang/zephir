@@ -694,7 +694,6 @@ PHP_METHOD(Stub_Issue760, dynTraverse)
 				}
 		}
 	}
-	ZEPHIR_INIT_NVAR(&c);
 	RETURN_CTOR(&out);
 }
 
@@ -785,8 +784,6 @@ PHP_METHOD(Stub_Issue760, dynTraverseKeyed)
 				}
 		}
 	}
-	ZEPHIR_INIT_NVAR(&c);
-	ZEPHIR_INIT_NVAR(&k);
 	RETURN_CTOR(&out);
 }
 
@@ -856,7 +853,6 @@ PHP_METHOD(Stub_Issue760, dynTraverseReverse)
 				}
 		}
 	}
-	ZEPHIR_INIT_NVAR(&c);
 	RETURN_CTOR(&out);
 }
 

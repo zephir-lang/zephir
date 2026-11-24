@@ -1,0 +1,158 @@
+--TEST--
+Issue #2770: a receiver that may hold an array or an object chooses the array built-in or the method at run time, and evaluates the arguments once
+--FILE--
+namespace Stub;
+
+class Issue2770Either
+{
+	public static calls = 0;
+
+	public function rev() -> string
+	{
+		return "rev";
+	}
+
+	public function hasKey(var key) -> string
+	{
+		return "hasKey:" . key;
+	}
+
+	public function join(string glue) -> string
+	{
+		return "join:" . glue;
+	}
+
+	public static function tick() -> string
+	{
+		let self::calls = self::calls + 1;
+
+		return "k";
+	}
+
+	public static function reassigned(bool useArray)
+	{
+		var c;
+
+		let c = new Issue2770Either();
+		if useArray {
+			let c = [1, 2];
+		}
+
+		return c->rev();
+	}
+
+	public static function reassignedNoMethod(bool useArray)
+	{
+		var c;
+
+		let c = new Issue2770EitherMagic();
+		if useArray {
+			let c = ["a", "b"];
+		}
+
+		return c->join("-");
+	}
+
+	public static function inLoop(array items) -> array
+	{
+		var item, out = [];
+
+		for item in items {
+			let out[] = item->rev();
+		}
+
+		return out;
+	}
+
+	public static function sideEffect(var v) -> array
+	{
+		var r;
+
+		let self::calls = 0;
+		let r = v->hasKey(self::tick());
+
+		return [r, self::calls];
+	}
+
+	public static function statementSideEffect(var v) -> int
+	{
+		let self::calls = 0;
+		v->hasKey(self::tick());
+
+		return self::calls;
+	}
+
+	public static function toString(var v) -> string
+	{
+		string s;
+
+		let s = v->join(",");
+
+		return s;
+	}
+
+	public static function concat(var v) -> string
+	{
+		return "<" . v->join(",") . ">";
+	}
+
+	public static function asArgument(var v) -> int
+	{
+		return strlen(v->join(","));
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2770EitherMagic
+{
+	public function __call(string name, array args)
+	{
+		return "__call:" . name . ":" . count(args);
+	}
+}
+--USAGE--
+function show(callable $f)
+{
+    try {
+        echo json_encode($f()), "\n";
+    } catch (\Throwable $e) {
+        echo get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+$o = new \Stub\Issue2770Either();
+$m = new \Stub\Issue2770EitherMagic();
+show(fn () => \Stub\Issue2770Either::reassigned(false));
+show(fn () => \Stub\Issue2770Either::reassigned(true));
+show(fn () => \Stub\Issue2770Either::reassignedNoMethod(false));
+show(fn () => \Stub\Issue2770Either::reassignedNoMethod(true));
+show(fn () => \Stub\Issue2770Either::inLoop([$o, [1, 2], $m, ['x'], $o]));
+show(fn () => \Stub\Issue2770Either::inLoop([$o, null]));
+show(fn () => \Stub\Issue2770Either::sideEffect(['k' => 1]));
+show(fn () => \Stub\Issue2770Either::sideEffect($o));
+show(fn () => \Stub\Issue2770Either::statementSideEffect(['k' => 1]));
+show(fn () => \Stub\Issue2770Either::statementSideEffect($o));
+show(fn () => \Stub\Issue2770Either::toString([1, 2]));
+show(fn () => \Stub\Issue2770Either::toString($o));
+show(fn () => \Stub\Issue2770Either::concat([1, 2]));
+show(fn () => \Stub\Issue2770Either::concat($o));
+show(fn () => \Stub\Issue2770Either::asArgument([10, 20]));
+show(fn () => \Stub\Issue2770Either::asArgument($o));
+--EXPECT--
+"rev"
+[2,1]
+"__call:join:1"
+"a-b"
+["rev",[2,1],"__call:rev:0",["x"],"rev"]
+Error: Call to a member function rev() on null
+[true,1]
+["hasKey:k",1]
+1
+1
+"1,2"
+"join:,"
+"<1,2>"
+"<join:,>"
+5
+6

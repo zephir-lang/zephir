@@ -296,7 +296,6 @@ PHP_METHOD(Stub_RegexDNA, process)
 		zend_print_zval(&_7$$3, 0);
 		php_printf("%c", '\n');
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&regex);
 	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 9, &vIUB, &vIUBnew, &contents);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&contents, &_2);

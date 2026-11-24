@@ -59,7 +59,14 @@ final class InternalCallTransformationTest extends TestCase
         );
     }
 
-    public function testOverridableMethodKeepsVirtualDispatch(): void
+    /**
+     * A protected, non-final method of a non-final class can be overridden, so
+     * the call runs the copy only when the method the object has is this one,
+     * and makes PHP's call otherwise.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    public function testOverridableMethodGetsAGuardedDirectCall(): void
     {
         $body = $this->compileAndSlice(
             'Overridable',
@@ -82,13 +89,390 @@ final class InternalCallTransformationTest extends TestCase
             'run'
         );
 
-        $this->assertStringNotContainsString(
-            '_zephir_internal_call',
+        $this->assertStringContainsString(
+            'if (zephir_cached_method_is(&_zephir_call_cache[0], this_ptr, ZEND_MN(Stub_Issue2021_Overridable_step), stub_issue2021_overridable_ce)) {',
             $body,
-            "A protected, non-final method of a non-final class can be overridden, so run() "
-            . "must go through PHP dispatch.\nEmitted body:\n" . $body
+            "The direct call must be guarded by the method the call site resolved.\nEmitted body:\n" . $body
         );
-        $this->assertStringContainsString('ZEPHIR_RETURN_CALL_METHOD', $body);
+        $this->assertStringContainsString('step_zephir_internal_call', $body);
+        $this->assertStringContainsString(
+            'ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "step", &_zephir_call_cache[0], b);',
+            $body,
+            "PHP's call stays as the other branch, on the same cache record.\nEmitted body:\n" . $body
+        );
+    }
+
+    /**
+     * A class type on a variable is not checked, so a final method called on
+     * a variable is guarded too: the variable may hold null or another class.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    public function testFinalMethodOnAVariableIsGuarded(): void
+    {
+        $body = $this->compileAndSlice(
+            'FinalOnVariable',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                class FinalOnVariable
+                {
+                    final public function step() -> string
+                    {
+                        return "step";
+                    }
+
+                    public function run(var x) -> string
+                    {
+                        var v;
+
+                        let v = <FinalOnVariable> x;
+
+                        return v->step();
+                    }
+                }
+                ZEP,
+            'run'
+        );
+
+        $this->assertStringContainsString(
+            'zephir_cached_method_is(&_zephir_call_cache[0], &v, ZEND_MN(Stub_Issue2021_FinalOnVariable_step)',
+            $body
+        );
+    }
+
+    /**
+     * Each argument must already have the type the parameter parsing would
+     * accept without a conversion; anything else makes PHP's call, which
+     * converts or throws as PHP does. A native argument needs no check.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    public function testArgumentsAreCheckedAgainstTheParameterTypes(): void
+    {
+        $c = $this->compileZep(
+            'TypedStep',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                class TypedStep
+                {
+                    final public function step(long a, string s, array arr, <TypedStep> o, var v, bool b, double d, string n = null) -> string
+                    {
+                        return "step";
+                    }
+
+                    public function run(var a, var s, var arr, var o, var v, var b, var d, var n) -> string
+                    {
+                        return this->step(a, s, arr, o, v, b, d, n);
+                    }
+
+                    public function natives(long a, bool b, double d) -> string
+                    {
+                        return this->step(a, "s", [], this, null, b, d);
+                    }
+                }
+                ZEP
+        );
+
+        $run = $this->methodBody($c, 'PHP_METHOD(Stub_Issue2021_TypedStep, run)');
+        foreach (
+            [
+                'Z_TYPE_P(a) == IS_LONG',
+                'Z_TYPE_P(s) == IS_STRING',
+                'Z_TYPE_P(arr) == IS_ARRAY',
+                '(Z_TYPE_P(o) == IS_OBJECT && instanceof_function(Z_OBJCE_P(o), stub_issue2021_typedstep_ce))',
+                '(Z_TYPE_P(b) == IS_TRUE || Z_TYPE_P(b) == IS_FALSE)',
+                '(Z_TYPE_P(d) == IS_DOUBLE || Z_TYPE_P(d) == IS_LONG)',
+                '(Z_TYPE_P(n) == IS_STRING || Z_TYPE_P(n) == IS_NULL)',
+            ] as $check
+        ) {
+            $this->assertStringContainsString($check, $run, "Missing argument check.\nEmitted body:\n" . $run);
+        }
+        $this->assertStringNotContainsString('Z_TYPE_P(v)', $run, 'A var parameter takes any value.');
+
+        $natives = $this->methodBody($c, 'PHP_METHOD(Stub_Issue2021_TypedStep, natives)');
+        $this->assertStringContainsString('step_zephir_internal_call', $natives);
+        $this->assertStringNotContainsString('IS_LONG', $natives, "A native long needs no check.\n" . $natives);
+        $this->assertStringNotContainsString('IS_TRUE', $natives, "A native bool needs no check.\n" . $natives);
+        $this->assertStringNotContainsString('IS_DOUBLE', $natives, "A native double needs no check.\n" . $natives);
+    }
+
+    /**
+     * The call sites of a copy pass a string to a string parameter, so the
+     * copy borrows its zend_string as the method does, instead of converting
+     * the argument into a zval it has to manage.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    public function testTwinBorrowsANativeStringArgument(): void
+    {
+        $c = $this->compileZep(
+            'StringStep',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                class StringStep
+                {
+                    final public function step(string s) -> string
+                    {
+                        return s;
+                    }
+                }
+                ZEP
+        );
+
+        $twin = $this->methodBody($c, 'void zep_Stub_Issue2021_StringStep_step_zephir_internal_call');
+        $this->assertStringContainsString('s = zephir_internal_str_arg(s_param_ext);', $twin, $twin);
+        $this->assertStringNotContainsString('zephir_get_strval', $twin, $twin);
+    }
+
+    /**
+     * A union parameter is checked by its own arginfo, which the copy has no
+     * frame for, so the call stays PHP's.
+     */
+    public function testUnionParameterKeepsTheCall(): void
+    {
+        $body = $this->compileAndSlice(
+            'UnionStep',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                class UnionStep
+                {
+                    final public function step(int|string a) -> string
+                    {
+                        return "step";
+                    }
+
+                    public function run(var a) -> string
+                    {
+                        return this->step(a);
+                    }
+                }
+                ZEP,
+            'run'
+        );
+
+        $this->assertStringNotContainsString('_zephir_internal_call', $body);
+    }
+
+    /**
+     * The copy skips zend_call_function(), where PHP reports a deprecated
+     * method, and runs on a frame without arguments, which func_get_args() and
+     * its siblings read. Neither can have a copy. A variadic method neither.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    public function testMethodsThatNeedTheirOwnCallGetNoTwin(): void
+    {
+        $c = $this->compileZep(
+            'OwnCall',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                class OwnCall
+                {
+                    final public deprecated function old() -> string
+                    {
+                        return "old";
+                    }
+
+                    final public function args(var a) -> int
+                    {
+                        if a {
+                            return func_num_args();
+                        }
+
+                        return 0;
+                    }
+
+                    final public function rest(var a, ...b) -> int
+                    {
+                        return 1;
+                    }
+
+                    final public function plain() -> int
+                    {
+                        return 1;
+                    }
+                }
+                ZEP
+        );
+
+        $this->assertStringNotContainsString('old_zephir_internal_call', $c);
+        $this->assertStringNotContainsString('args_zephir_internal_call', $c);
+        $this->assertStringNotContainsString('rest_zephir_internal_call', $c);
+        $this->assertStringContainsString('plain_zephir_internal_call', $c);
+    }
+
+    /**
+     * A trait's method runs with the scope of the class that uses it, which
+     * the copy cannot know.
+     */
+    public function testTraitMethodGetsNoTwin(): void
+    {
+        $c = $this->compileZep(
+            'Greets',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                trait Greets
+                {
+                    final public function greet() -> string
+                    {
+                        return "hi";
+                    }
+                }
+                ZEP
+        );
+
+        $this->assertStringNotContainsString('greet_zephir_internal_call', $c);
+    }
+
+    /**
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    public function testUlongParameterIsPassedToTheTwin(): void
+    {
+        $c = $this->compileZep(
+            'UlongStep',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                class UlongStep
+                {
+                    final public function step(ulong n) -> ulong
+                    {
+                        return n;
+                    }
+                }
+                ZEP
+        );
+
+        $this->assertStringContainsString('zval *n_param_ext)', $c);
+    }
+
+    /**
+     * An argument left out reaches the copy as NULL, where it takes the
+     * default exactly as the method does when PHP leaves it out.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    public function testOptionalParametersGetATwin(): void
+    {
+        $body = $this->compileAndSlice(
+            'OptionalStep',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                class OptionalStep
+                {
+                    final public function step(var a, long b = 2, string c = "c") -> string
+                    {
+                        return "step";
+                    }
+
+                    public function run(var a) -> string
+                    {
+                        return this->step(a);
+                    }
+                }
+                ZEP,
+            'run'
+        );
+
+        $this->assertStringContainsString('step_zephir_internal_call, a, ZEPHIR_NO_ARG, ZEPHIR_NO_ARG);', $body);
+    }
+
+    /**
+     * `new` calls the constructor through a method call, which takes the
+     * constructor's copy with the same guard.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    public function testNewCallsTheConstructorTwin(): void
+    {
+        $c = $this->compileZep(
+            'Point',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                class Point
+                {
+                    public x;
+
+                    public function __construct(long x)
+                    {
+                        let this->x = x;
+                    }
+
+                    public static function make(var x) -> <Point>
+                    {
+                        return new Point(x);
+                    }
+                }
+                ZEP
+        );
+
+        $make = $this->methodBody($c, 'PHP_METHOD(Stub_Issue2021_Point, make)');
+        $this->assertStringContainsString('ZEND_MN(Stub_Issue2021_Point___construct)', $make, $make);
+        $this->assertStringContainsString('__construct_zephir_internal_call', $make, $make);
+        $this->assertStringContainsString('zephir_constructor_finish(', $make, $make);
+    }
+
+    /**
+     * `self::` reaches a non-static method with the current $this, and passes
+     * on the called class to a static one.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    public function testSelfCallsKeepThisAndTheCalledClass(): void
+    {
+        $c = $this->compileZep(
+            'SelfCalls',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                class SelfCalls
+                {
+                    protected function who(long n) -> string
+                    {
+                        return "who";
+                    }
+
+                    protected static function staticWho() -> string
+                    {
+                        return "staticWho";
+                    }
+
+                    public function viaSelf(var n) -> string
+                    {
+                        return self::who(n);
+                    }
+
+                    public function viaSelfStatic() -> string
+                    {
+                        return self::staticWho();
+                    }
+                }
+                ZEP
+        );
+
+        $viaSelf = $this->methodBody($c, 'PHP_METHOD(Stub_Issue2021_SelfCalls, viaSelf)');
+        $this->assertStringContainsString('if (Z_TYPE_P(n) == IS_LONG', $viaSelf, $viaSelf);
+        $this->assertStringContainsString(
+            'ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P1(this_ptr, stub_issue2021_selfcalls_ce, zep_Stub_Issue2021_SelfCalls_who_zephir_internal_call, n);',
+            $viaSelf,
+            $viaSelf
+        );
+
+        $viaSelfStatic = $this->methodBody($c, 'PHP_METHOD(Stub_Issue2021_SelfCalls, viaSelfStatic)');
+        $this->assertStringContainsString(
+            'stub_issue2021_selfcalls_ce, zephir_get_called_scope(execute_data), zep_Stub_Issue2021_SelfCalls_staticWho_zephir_internal_call',
+            $viaSelfStatic,
+            $viaSelfStatic
+        );
     }
 
     public function testFinalMethodGetsTheDirectCall(): void
@@ -266,6 +650,48 @@ final class InternalCallTransformationTest extends TestCase
 
         $this->assertStringNotContainsString('numbers_zephir_internal_call', $c);
     }
+
+    /**
+     * A method called C-to-C runs on a frame named after it, set up when the
+     * class registers, so a warning it raises names it. A generator's step is
+     * resumed by the generator, from a frame of its own, and gets none.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    public function testOnlyMethodsCalledDirectlyGetAFrame(): void
+    {
+        $c = $this->compileZep(
+            'Frames',
+            <<<'ZEP'
+                namespace Stub\Issue2021;
+
+                class Frames
+                {
+                    public function run()
+                    {
+                        return this->helper();
+                    }
+
+                    internal function helper()
+                    {
+                        return 1;
+                    }
+
+                    public function numbers()
+                    {
+                        yield 1;
+                    }
+                }
+                ZEP
+        );
+
+        $this->assertStringContainsString(
+            'zephir_init_internal_frame(&zephir_frame_zep_Stub_Issue2021_Frames_helper, stub_issue2021_frames_ce, SL("helper"));',
+            $c
+        );
+        $this->assertStringNotContainsString('zephir_frame_zep_Stub_Issue2021_Frames_zephir_gen_step_numbers', $c);
+    }
+
     /**
      * `__FUNCTION__`/`__METHOD__` are folded at compile time from the method
      * being compiled. The twin is compiled as a method in its own right, so the

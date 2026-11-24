@@ -1,0 +1,193 @@
+--TEST--
+Issue #2789: calling an abstract method throws PHP's Error instead of returning null, except a constructor named literally
+--FILE--
+namespace Stub;
+
+abstract class Issue2789Base
+{
+	abstract public function __construct();
+
+	abstract public function op();
+
+	abstract public static function sop();
+
+	public static function run()
+	{
+		return static::sop();
+	}
+
+	public static function runSelf()
+	{
+		return self::sop();
+	}
+
+	public function viaSelf()
+	{
+		return self::op();
+	}
+
+	public static function direct()
+	{
+		return Issue2789Base::sop();
+	}
+
+	public static function byName(string name)
+	{
+		return Issue2789Base::{name}();
+	}
+}
+--FILE--
+namespace Stub;
+
+interface Issue2789Iface
+{
+	public function im();
+
+	public static function ism();
+}
+--FILE--
+namespace Stub;
+
+class Issue2789Impl extends Issue2789Base
+{
+	public function __construct()
+	{
+	}
+
+	public function op()
+	{
+		return "op";
+	}
+
+	public static function sop()
+	{
+		return "sop";
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2789 extends Issue2789Base implements Issue2789Iface
+{
+	public function __construct(bool callParent = false)
+	{
+		if callParent {
+			parent::__construct();
+		}
+	}
+
+	public function op()
+	{
+		return parent::op();
+	}
+
+	public static function sop()
+	{
+		return parent::sop();
+	}
+
+	public function im()
+	{
+		return "im";
+	}
+
+	public static function ism()
+	{
+		return "ism";
+	}
+
+	public function callInterfaceMethod()
+	{
+		var iface = "Stub\\Issue2789Iface";
+
+		return {iface}::im();
+	}
+
+	public static function callInterfaceStaticMethod()
+	{
+		return Issue2789Iface::ism();
+	}
+
+	public static function callInterfaceStaticMethodByClass()
+	{
+		var iface = "Stub\\Issue2789Iface";
+
+		return {iface}::ism();
+	}
+
+	public function callParentByName(string name)
+	{
+		return parent::{name}();
+	}
+}
+--USAGE--
+/**
+ * Every call below reaches an abstract method. PHP refuses each one with
+ * "Cannot call abstract method", naming the class that declares the method;
+ * Zephir ran the empty C body and returned null.
+ *
+ * The one exception is a constructor named literally, as in
+ * `parent::__construct()`: PHP calls the class's constructor without looking
+ * the method up, so an abstract one runs its empty body. Named through a
+ * variable, the constructor is looked up and refused like any other method.
+ *
+ * The concrete Issue2789Impl runs `static::sop()` on either side of the
+ * refused call, twice, so neither the call cache nor the call-site cache can
+ * hand the abstract method back, or keep the concrete one for the base class.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2789
+ */
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ': ', is_object($result) ? get_class($result) : var_export($result, true), "\n";
+    } catch (\Throwable $e) {
+        echo $label, ': ', get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+$child = new \Stub\Issue2789();
+
+t('parent::op()', fn() => $child->op());
+t('parent::sop()', fn() => \Stub\Issue2789::sop());
+t('parent::__construct()', fn() => new \Stub\Issue2789(true));
+t('parent::{"__construct"}()', fn() => $child->callParentByName('__construct'));
+t('parent::{"op"}()', fn() => $child->callParentByName('op'));
+t('static::sop() of the abstract class', fn() => \Stub\Issue2789Base::run());
+t('self::sop()', fn() => \Stub\Issue2789Base::runSelf());
+t('self::op()', fn() => $child->viaSelf());
+t('Issue2789Base::sop()', fn() => \Stub\Issue2789Base::direct());
+t('Issue2789Base::{"sop"}()', fn() => \Stub\Issue2789Base::byName('sop'));
+t('Issue2789Base::{"op"}()', fn() => \Stub\Issue2789Base::byName('op'));
+t('Issue2789Base::{"__construct"}()', fn() => \Stub\Issue2789Base::byName('__construct'));
+
+for ($i = 0; $i < 2; $i++) {
+    t('static::sop() of Issue2789Impl', fn() => \Stub\Issue2789Impl::run());
+    t('static::sop() of Issue2789Base', fn() => \Stub\Issue2789Base::run());
+}
+
+// An interface registers its methods without a body at all.
+t('{iface}::im()', fn() => $child->callInterfaceMethod());
+t('Issue2789Iface::ism()', fn() => \Stub\Issue2789::callInterfaceStaticMethod());
+t('{iface}::ism()', fn() => \Stub\Issue2789::callInterfaceStaticMethodByClass());
+--EXPECT--
+parent::op(): Error: Cannot call abstract method Stub\Issue2789Base::op()
+parent::sop(): Error: Cannot call abstract method Stub\Issue2789Base::sop()
+parent::__construct(): Stub\Issue2789
+parent::{"__construct"}(): Error: Cannot call abstract method Stub\Issue2789Base::__construct()
+parent::{"op"}(): Error: Cannot call abstract method Stub\Issue2789Base::op()
+static::sop() of the abstract class: Error: Cannot call abstract method Stub\Issue2789Base::sop()
+self::sop(): Error: Cannot call abstract method Stub\Issue2789Base::sop()
+self::op(): Error: Cannot call abstract method Stub\Issue2789Base::op()
+Issue2789Base::sop(): Error: Cannot call abstract method Stub\Issue2789Base::sop()
+Issue2789Base::{"sop"}(): Error: Cannot call abstract method Stub\Issue2789Base::sop()
+Issue2789Base::{"op"}(): Error: Cannot call abstract method Stub\Issue2789Base::op()
+Issue2789Base::{"__construct"}(): Error: Cannot call abstract method Stub\Issue2789Base::__construct()
+static::sop() of Issue2789Impl: 'sop'
+static::sop() of Issue2789Base: Error: Cannot call abstract method Stub\Issue2789Base::sop()
+static::sop() of Issue2789Impl: 'sop'
+static::sop() of Issue2789Base: Error: Cannot call abstract method Stub\Issue2789Base::sop()
+{iface}::im(): Error: Cannot call abstract method Stub\Issue2789Iface::im()
+Issue2789Iface::ism(): Error: Cannot call abstract method Stub\Issue2789Iface::ism()
+{iface}::ism(): Error: Cannot call abstract method Stub\Issue2789Iface::ism()

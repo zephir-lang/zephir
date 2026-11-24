@@ -141,8 +141,10 @@ PHP_METHOD(Stub_Properties_ReadonlyProperties, __construct)
 	ZEPHIR_INIT_NVAR(&_1);
 	object_init_ex(&_1, stub_properties_publicproperties_ce);
 	if (zephir_has_constructor(&_1)) {
+		zephir_constructor_start(&_1);
 		ZEPHIR_CALL_METHOD_CACHED(NULL, &_1, "__construct", &_zephir_call_cache[0]);
 		zephir_check_call_status();
+		zephir_constructor_finish(&_1);
 	}
 
 	zephir_update_property_zval_cached(this_ptr, _zephir_prop_4, 124, &_1);

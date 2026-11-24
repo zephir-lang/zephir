@@ -1,0 +1,211 @@
+--TEST--
+Issue #2791: an argument given to the C copy of a method gives what PHP's own parameter parsing gives
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--INI--
+display_errors=stdout
+--FILE--
+namespace Stub;
+
+/**
+ * Final methods, so `this->take*()` has always been a direct call to the C
+ * copy. The copy converted any argument, where PHP throws a TypeError or
+ * reports a deprecation.
+ */
+class Args
+{
+	final public function takeLong(long a) -> string
+	{
+		return "long:" . a;
+	}
+
+	final public function takeDouble(double a) -> string
+	{
+		return "double:" . a;
+	}
+
+	final public function takeBool(bool a) -> string
+	{
+		return a ? "bool:true" : "bool:false";
+	}
+
+	final public function takeString(string a) -> string
+	{
+		return "string:" . a;
+	}
+
+	final public function takeArray(array a) -> string
+	{
+		return "array:" . count(a);
+	}
+
+	final public function takeArgs(<Args> a) -> string
+	{
+		return "object:" . get_class(a);
+	}
+
+	final public function takeObject(object a) -> string
+	{
+		return "object:" . get_class(a);
+	}
+
+	final public function takeNullableString(string a = null) -> string
+	{
+		return "string:" . var_export(a, true);
+	}
+
+	final public function takeUnion(int|string a) -> string
+	{
+		return "union:" . var_export(a, true);
+	}
+
+	public function viaUnion(var a) -> string
+	{
+		return this->takeUnion(a);
+	}
+
+	public function viaLong(var a) -> string
+	{
+		return this->takeLong(a);
+	}
+
+	public function viaDouble(var a) -> string
+	{
+		return this->takeDouble(a);
+	}
+
+	public function viaBool(var a) -> string
+	{
+		return this->takeBool(a);
+	}
+
+	public function viaString(var a) -> string
+	{
+		return this->takeString(a);
+	}
+
+	public function viaArray(var a) -> string
+	{
+		return this->takeArray(a);
+	}
+
+	public function viaArgs(var a) -> string
+	{
+		return this->takeArgs(a);
+	}
+
+	public function viaObject(var a) -> string
+	{
+		return this->takeObject(a);
+	}
+
+	public function viaNullableString(var a) -> string
+	{
+		return this->takeNullableString(a);
+	}
+}
+--FILE--
+namespace Stub;
+
+/**
+ * The copy changes its parameter: the value it was given must keep its
+ * references, and the value it made must be released.
+ */
+class Mut
+{
+	final public function push(var a) -> array
+	{
+		let a[] = 9;
+
+		return a;
+	}
+
+	public function viaPush(var a) -> array
+	{
+		return this->push(a);
+	}
+}
+--USAGE--
+function outcome(callable $fn): string
+{
+    $notes = [];
+    set_error_handler(function (int $no, string $message) use (&$notes): bool {
+        $notes[] = $no . ':' . $message;
+
+        return true;
+    });
+
+    try {
+        $result = 'returned ' . var_export($fn(), true);
+    } catch (\Throwable $e) {
+        $result = get_class($e) . ': ' . $e->getMessage();
+    } finally {
+        restore_error_handler();
+    }
+
+    return $result . ($notes ? ' [' . implode(' | ', $notes) . ']' : '');
+}
+
+class Printable
+{
+    public function __toString(): string
+    {
+        return 'printable';
+    }
+}
+
+$args = new \Stub\Args();
+$values = [
+    'int 5'          => 5,
+    'string "5"'     => '5',
+    'string "abc"'   => 'abc',
+    'string "1.5"'   => '1.5',
+    'float 1.5'      => 1.5,
+    'float 2.0'      => 2.0,
+    'true'           => true,
+    'null'           => null,
+    'array'          => [1, 2],
+    'object'         => new \stdClass(),
+    'Printable'      => new Printable(),
+    'Args'           => $args,
+];
+
+foreach (['Long', 'Double', 'Bool', 'String', 'Array', 'Args', 'Object', 'NullableString', 'Union'] as $type) {
+    foreach ($values as $label => $value) {
+        $via    = outcome(fn () => $args->{'via' . $type}($value));
+        $direct = outcome(fn () => $args->{'take' . $type}($value));
+
+        if ($via !== $direct) {
+            echo $type, ' ', $label, ": DIFF\n  via:    ", $via, "\n  direct: ", $direct, "\n";
+        }
+    }
+    echo $type, ": done\n";
+}
+
+$mut  = new \Stub\Mut();
+$arr  = [1, 2, str_repeat('x', 3)];
+$copy = $arr;
+$made = $mut->viaPush($arr);
+unset($arr);
+echo json_encode($copy), ' ', json_encode($made), "\n";
+
+$kept = [1, 2, str_repeat('y', 3)];
+$mut->viaPush($kept);
+$before = memory_get_usage();
+for ($i = 0; $i < 1000; $i++) {
+    $mut->viaPush($kept);
+}
+$growth = memory_get_usage() - $before;
+echo $growth < 4096 ? "no growth\n" : "grew by $growth bytes\n";
+--EXPECT--
+Long: done
+Double: done
+Bool: done
+String: done
+Array: done
+Args: done
+Object: done
+NullableString: done
+Union: done
+[1,2,"xxx"] [1,2,"xxx",9]
+no growth

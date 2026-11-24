@@ -53,8 +53,10 @@ use function implode;
 use function in_array;
 use function is_array;
 use function is_object;
+use function is_string;
 use function json_decode;
 use function json_encode;
+use function ltrim;
 use function preg_replace;
 use function sprintf;
 use function str_replace;
@@ -94,6 +96,12 @@ class Method
     private const LOOP_TYPES = ['while', 'do-while', 'for', 'loop'];
 
     private ?array $attributes = null;
+
+    /**
+     * Whether this is the C copy `internal-call-transformation` makes of a
+     * method. Its call sites check every argument's type first (#2791).
+     */
+    private bool $isTwin = false;
 
     public bool $optimizable = true;
 
@@ -407,152 +415,17 @@ class Method
 
         $paramVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext);
 
-        /**
-         * TODO: Refactoring this place, move to one - static-constant-access
-         */
         $dataType = $this->getParamDataType($parameter);
         switch ($dataType) {
             case 'int':
             case 'uint':
             case 'long':
             case 'ulong':
-                switch ($parameter['default']['type']) {
-                    case 'static-constant-access':
-                        /**
-                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
-                         *
-                         * TODO: Rewrite all to codePrinter
-                         */
-                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite(
-                            $parameter['name'],
-                            $compilationContext,
-                            $parameter['default']
-                        );
-                        $compiledExpression = $this->foldDefaultConstant($parameter['default'], $symbolVariable, $compilationContext);
-
-                        if ('int' != $compiledExpression->getType()) {
-                            throw new CompilerException(
-                                'Default parameter value type: '
-                                . $compiledExpression->getType()
-                                . ' cannot be assigned to variable(int)',
-                                $parameter
-                            );
-                        }
-
-                        $parameter['default']['type']  = $compiledExpression->getType();
-                        $parameter['default']['value'] = $compiledExpression->getCode();
-
-                        $compilationContext->codePrinter = $oldCodePrinter;
-
-                        return $this->assignDefaultValue($parameter, $compilationContext);
-
-                    case 'null':
-                        $codePrinter->output($parameter['name'] . ' = 0;');
-                        break;
-
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                        $codePrinter->output($parameter['name'] . ' = ' . $parameter['default']['value'] . ';');
-                        break;
-
-                    case 'double':
-                        $codePrinter->output($parameter['name'] . ' = (int) ' . $parameter['default']['value'] . ';');
-                        break;
-
-                    default:
-                        throw new CompilerException(
-                            'Default parameter value type: ' . $parameter['default']['type'] . ' cannot be assigned to variable(int)',
-                            $parameter
-                        );
-                }
-                break;
-
             case 'double':
-                switch ($parameter['default']['type']) {
-                    case 'static-constant-access':
-                        return $this->processStaticConstantAccess(
-                            $compilationContext,
-                            $parameter,
-                            $oldCodePrinter,
-                            'double'
-                        );
-
-                    case 'null':
-                        $codePrinter->output($parameter['name'] . ' = 0;');
-                        break;
-
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                        $codePrinter->output(
-                            $parameter['name'] . ' = (double) ' . $parameter['default']['value'] . ';'
-                        );
-                        break;
-
-                    case 'double':
-                        $codePrinter->output($parameter['name'] . ' = ' . $parameter['default']['value'] . ';');
-                        break;
-
-                    default:
-                        throw new CompilerException(
-                            'Default parameter value type: ' . $parameter['default']['type'] . ' cannot be assigned to variable(double)',
-                            $parameter
-                        );
-                }
-                break;
-
             case 'bool':
-                switch ($parameter['default']['type']) {
-                    case 'static-constant-access':
-                        /**
-                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
-                         *
-                         * TODO: Rewrite all to codePrinter
-                         */
-                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite(
-                            $parameter['name'],
-                            $compilationContext,
-                            $parameter['default']
-                        );
-                        $compiledExpression = $this->foldDefaultConstant($parameter['default'], $symbolVariable, $compilationContext);
-
-                        if ('bool' !== $compiledExpression->getType()) {
-                            throw new CompilerException(
-                                'Default parameter value type: '
-                                . $compiledExpression->getType()
-                                . ' cannot be assigned to variable(bool)',
-                                $parameter
-                            );
-                        }
-
-                        $parameter['default']['type']  = $compiledExpression->getType();
-                        $parameter['default']['value'] = $compiledExpression->getCode();
-
-                        $compilationContext->codePrinter = $oldCodePrinter;
-
-                        return $this->assignDefaultValue($parameter, $compilationContext);
-
-                    case 'null':
-                        $codePrinter->output($parameter['name'] . ' = 0;');
-                        break;
-
-                    case 'bool':
-                        if ('true' === $parameter['default']['value']) {
-                            $codePrinter->output($parameter['name'] . ' = 1;');
-                        } else {
-                            $codePrinter->output($parameter['name'] . ' = 0;');
-                        }
-                        break;
-
-                    default:
-                        throw new CompilerException(
-                            'Default parameter value type: '
-                            . $parameter['default']['type']
-                            . ' cannot be assigned to variable(bool)',
-                            $parameter
-                        );
-                }
+                $codePrinter->output(
+                    $parameter['name'] . ' = ' . $this->scalarDefaultValue($parameter, $compilationContext) . ';'
+                );
                 break;
 
             case 'string':
@@ -1333,8 +1206,13 @@ class Method
                              * mixed methods), which an internal method does not
                              * own. They take the zval path so the trailing _ext
                              * pointer stays the single source of truth (#2021).
+                             *
+                             * A method's C copy is the exception: its call
+                             * sites pass a string, or null where the parameter
+                             * allows it, so it borrows the zend_string * from
+                             * its _ext pointer (#2791).
                              */
-                            $canUseNativeString = !$this->isInternal()
+                            $canUseNativeString = (!$this->isInternal() || $this->isTwin)
                                 && $mutations <= 1
                                 && (!isset($parameter['default']) || $defaultType === 'string' || $defaultType === 'null');
 
@@ -1493,19 +1371,18 @@ class Method
                 $symbol->setIsInitialized(true, $compilationContext);
 
                 /**
-                 * Variables with class/type must be objects across the execution
+                 * Variables with class/type must be objects across the execution.
+                 * Any other zval parameter gets a dynamic type too: one left
+                 * 'unknown' failed every property write as not initialized (#2770).
                  */
+                $declaredType = $parameter['data-type'] ?? 'variable';
                 if (isset($parameter['cast'])) {
                     $symbol->setDynamicTypes('object');
                     $symbol->setClassTypes($compilationContext->getFullName($parameter['cast']['value']));
-                } else {
-                    if (isset($parameter['data-type'])) {
-                        if ('variable' === $parameter['data-type']) {
-                            $symbol->setDynamicTypes('undefined');
-                        }
-                    } else {
-                        $symbol->setDynamicTypes('undefined');
-                    }
+                } elseif ('object' === $declaredType) {
+                    $symbol->setDynamicTypes('object');
+                } elseif (in_array($declaredType, ['variable', 'mixed', 'callable', 'resource'], true)) {
+                    $symbol->setDynamicTypes('undefined');
                 }
             }
 
@@ -1624,7 +1501,15 @@ class Method
                 }
             }
 
+            /**
+             * An internal method takes every argument from its _ext pointers,
+             * native strings included, so it keeps its whole list.
+             */
             $perParamFetchCode = '';
+            if ($this->isInternal()) {
+                $nativeStringCount = 0;
+            }
+
             if ($nativeStringCount === $totalParamCount && $totalParamCount > 0) {
                 // All params are native strings — skip zephir_fetch_params
                 $params = [];
@@ -1783,6 +1668,30 @@ class Method
                 $mandatory = $parameter['mandatory'] ?? 0;
                 $dataType  = $this->getParamDataType($parameter);
 
+                /**
+                 * ZEND_PARSE_PARAMETERS writes a `bool`, `int` or `double`
+                 * local only when the argument is passed, so the local is
+                 * declared with its default, as PHP's own functions do. Given
+                 * the default afterwards in `if (!x_param)`, it held nothing
+                 * until then, and gcc 11 merged the two into a read of it: a
+                 * bool that was neither 0 nor 1.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2857
+                 */
+                if (
+                    $this->parsesParameters()
+                    && in_array($dataType, ['bool', 'int', 'uint', 'long', 'ulong', 'double'], true)
+                ) {
+                    $compilationContext->symbolTable
+                        ->getVariableForWrite($parameter['name'], $compilationContext)
+                        ->setDefaultInitValue($this->scalarDefaultValue($parameter, $compilationContext));
+
+                    /* The strict type check of a `!` parameter still needs its block. */
+                    if (!$mandatory) {
+                        continue;
+                    }
+                }
+
                 $name = match ($dataType) {
                     'object',
                     'callable',
@@ -1900,7 +1809,26 @@ class Method
                     }
                 }
             } else {
-                foreach ($params as $param) {
+                $declaredNames = [];
+                foreach ($this->parameters->getParameters() as $parameter) {
+                    if (empty($parameter['variadic'])) {
+                        $declaredNames[] = $this->shadowName($parameter['name']);
+                    }
+                }
+
+                foreach ($params as $position => $param) {
+                    $declared = $declaredNames[$position] ?? null;
+                    $native   = null !== $declared
+                        ? $compilationContext->symbolTable->getVariable($declared)
+                        : null;
+
+                    if (null !== $native && $native->isNativeString()) {
+                        $compilationContext->headersManager->add('kernel/main');
+                        $code .= "\t" . $declared . ' = zephir_internal_str_arg(' . $param . '_ext);' . PHP_EOL;
+
+                        continue;
+                    }
+
                     /* TODO: Migrate all this code to codeprinter, get rid of temp code printer */
                     $tempCodePrinter                 = new Printer();
                     $realCodePrinter                 = $compilationContext->codePrinter;
@@ -2205,8 +2133,7 @@ class Method
         if (
             $this->parameters instanceof Parameters
             && $this->parameters->count() > 0
-            && !$this->isGeneratorStep()
-            && !$this->isInternal()
+            && $this->parsesParameters()
         ) {
             // Do not declare variable when it is not needed.
             if ($this->parameters->hasNullableParameters()) {
@@ -2636,7 +2563,11 @@ class Method
     }
 
     /**
-     * Returns the C-modifier flags.
+     * Returns the C-modifier flags the method of a class or a trait registers with.
+     *
+     * An `abstract static` method registers without ZEND_ACC_ABSTRACT, which
+     * zend_register_functions() refuses there with a startup warning; the class
+     * marks it once registered (see Definition::compileAbstractStaticMethods()).
      *
      * @throws Exception
      */
@@ -2687,6 +2618,10 @@ class Method
             $modifiers['ZEND_ACC_CTOR'] = true;
         } elseif ('__destruct' === $this->name) {
             $modifiers['ZEND_ACC_DTOR'] = true;
+        }
+
+        if (isset($modifiers['ZEND_ACC_STATIC'])) {
+            unset($modifiers['ZEND_ACC_ABSTRACT']);
         }
 
         return implode('|', array_keys($modifiers));
@@ -3683,6 +3618,16 @@ class Method
     }
 
     /**
+     * Whether ZEND_PARSE_PARAMETERS reads the arguments into the parameter
+     * locals. A generator step and an internal method get theirs from the C
+     * caller instead (see the ZEND_PARSE_PARAMETERS block in compile()).
+     */
+    private function parsesParameters(): bool
+    {
+        return !$this->isGeneratorStep() && !$this->isInternal();
+    }
+
+    /**
      * Checks whether the method is internal.
      */
     public function isInternal(): bool
@@ -4380,30 +4325,17 @@ class Method
             return $this;
         }
 
-        if (!$this->isInternal() && !$classDefinition->isBundled()) {
-            /* Not supported for now */
-            if ($this->getNumberOfRequiredParameters() != $this->getNumberOfParameters()) {
-                return $this;
-            }
-
-            if ($this->isConstructor()) {
-                return $this;
-            }
+        if (!$this->isInternal() && !$classDefinition->isBundled() && $this->canHaveTwin()) {
+            $optimizedName = $this->getName() . '_zephir_internal_call';
 
             /**
-             * A method with no body of its own cannot be turned into a C
-             * function. The twin's visibility is just `internal`, so it does not
-             * inherit `isAbstract()` and would be emitted as a body-less
-             * function that silently returns nothing. Generator creators are the
-             * same shape: GeneratorTransformer moves the body into a step and
-             * nulls the statements before this runs, and the twin carries no
-             * generator step, so it would return null instead of a Generator.
+             * Twins are made for every class before any of them compiles, so
+             * that a call into a class compiled later finds one, and again
+             * when a class compiles on its own.
              */
-            if ($this->isAbstract() || null === $this->statements || $this->isGeneratorCreator()) {
+            if (null !== $classDefinition->getMethod($optimizedName, false)) {
                 return $this;
             }
-
-            $optimizedName = $this->getName() . '_zephir_internal_call';
 
             /**
              * `static` has to be carried over: the twin's body is compiled with
@@ -4442,13 +4374,84 @@ class Method
                 null,
                 $this->expression
             );
-            $optimizedMethod->typeInference = $this->typeInference;
             $optimizedMethod->setReturnTypes($this->returnTypes);
             $optimizedMethod->setDeclaredName($this->getName());
+            $optimizedMethod->isTwin = true;
+
+            /**
+             * The twin's body gets its own analysis, as the method's did:
+             * which locals every path assigns (#2679), which hold only native
+             * arrays (#2682), how often each is written. Without it a local
+             * assigned on one path only was returned uninitialized (#2791).
+             * The results are not shared, since compiling a body adds to them.
+             */
+            $currentMethod = $compilationContext->currentMethod;
+            $optimizedMethod->preCompile($compilationContext);
+            $compilationContext->currentMethod = $currentMethod;
+
             $classDefinition->addMethod($optimizedMethod);
         }
 
         return $this;
+    }
+
+    /**
+     * Whether the method can be copied into a C function that is called
+     * C-to-C, on a frame that holds no arguments (`internal-call-transformation`).
+     *
+     * Left out:
+     *  - a method with no body of its own: the twin's visibility is just
+     *    `internal`, so it does not inherit `isAbstract()` and would be
+     *    emitted as a body-less function that silently returns nothing.
+     *    Generator creators are the same shape: GeneratorTransformer moves the
+     *    body into a step and nulls the statements before this runs;
+     *  - a variadic method, whose rest parameter is read from the arguments in
+     *    the call frame;
+     *  - a deprecated method, which PHP reports in zend_call_function();
+     *  - a method calling func_get_args(), func_num_args() or func_get_arg(),
+     *    which read the arguments in the call frame;
+     *  - a trait's method, which runs with the scope of the class using it.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2791
+     */
+    private function canHaveTwin(): bool
+    {
+        if ($this->isAbstract() || null === $this->statements || $this->isGeneratorCreator()) {
+            return false;
+        }
+
+        if ($this->isVariadic() || $this->isDeprecated() || $this->getClassDefinition()->isTrait()) {
+            return false;
+        }
+
+        return !self::callsFunction(
+            $this->statements->getStatements(),
+            ['func_get_args', 'func_num_args', 'func_get_arg']
+        );
+    }
+
+    /**
+     * Whether the statements call one of the named functions anywhere.
+     *
+     * @param list<string> $names Lower-case function names.
+     */
+    private static function callsFunction(array $node, array $names): bool
+    {
+        if (
+            'fcall' === ($node['type'] ?? null)
+            && is_string($node['name'] ?? null)
+            && in_array(strtolower(ltrim($node['name'], '\\')), $names, true)
+        ) {
+            return true;
+        }
+
+        foreach ($node as $child) {
+            if (is_array($child) && self::callsFunction($child, $names)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -4491,6 +4494,63 @@ class Method
                 $compilationContext
             );
         }
+    }
+
+    /**
+     * The C value of the default of a `bool`, `int` or `double` parameter:
+     * `1`, `1337`, `(double) 2`, or the literal a class constant folds to.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function scalarDefaultValue(array $parameter, CompilationContext $compilationContext): string
+    {
+        $dataType     = $this->getParamDataType($parameter);
+        $variableType = in_array($dataType, ['int', 'uint', 'long', 'ulong'], true) ? 'int' : $dataType;
+        $default      = $parameter['default'];
+
+        if ('static-constant-access' === $default['type']) {
+            $symbolVariable = $compilationContext->symbolTable->getVariableForWrite(
+                $parameter['name'],
+                $compilationContext,
+                $default
+            );
+            $compiledExpression = $this->foldDefaultConstant($default, $symbolVariable, $compilationContext);
+
+            if ($variableType !== $compiledExpression->getType()) {
+                throw new CompilerException(
+                    'Default parameter value type: '
+                    . $compiledExpression->getType()
+                    . ' cannot be assigned to variable(' . $variableType . ')',
+                    $parameter
+                );
+            }
+
+            $parameter['default']['type']  = $compiledExpression->getType();
+            $parameter['default']['value'] = $compiledExpression->getCode();
+
+            return $this->scalarDefaultValue($parameter, $compilationContext);
+        }
+
+        $value = match ($variableType . ':' . $default['type']) {
+            'int:null', 'double:null', 'bool:null' => '0',
+            'int:int', 'int:uint', 'int:long', 'double:double' => (string) $default['value'],
+            'int:double'    => '(int) ' . $default['value'],
+            'double:int', 'double:uint', 'double:long' => '(double) ' . $default['value'],
+            'bool:bool'     => 'true' === $default['value'] ? '1' : '0',
+            default         => null,
+        };
+
+        if (null === $value) {
+            throw new CompilerException(
+                'Default parameter value type: '
+                . $default['type']
+                . ' cannot be assigned to variable(' . $variableType . ')',
+                $parameter
+            );
+        }
+
+        return $value;
     }
 
     /**

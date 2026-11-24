@@ -365,7 +365,6 @@ PHP_METHOD(Stub_Range, loopChars)
 				}
 		}
 	}
-	ZEPHIR_INIT_NVAR(&ch);
 	RETURN_CTOR(&out);
 }
 

@@ -1,0 +1,94 @@
+--TEST--
+Issue #2789: a "Class::method" string or a [class, method] array called as a function fails with PHP's Error, an abstract method included
+--FILE--
+namespace Stub;
+
+abstract class Issue2789CallableBase
+{
+	abstract public function op();
+
+	abstract public static function sop();
+
+	public static function ok()
+	{
+		return "ok";
+	}
+
+	public function inst()
+	{
+		return "inst";
+	}
+
+	private static function priv()
+	{
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2789Callable
+{
+	public static function call(var handler)
+	{
+		return {handler}();
+	}
+
+	public static function callUserFunc(var handler)
+	{
+		return call_user_func(handler);
+	}
+}
+--USAGE--
+/**
+ * A callable naming a method of a class, as a "Class::method" string or as a
+ * [class, method] array, fails the way PHP's dynamic call fails: the class is
+ * fetched, then the method is looked up and checked for visibility, for being
+ * abstract and for being static, each with PHP's own Error. Zephir reported
+ * the abstract array case, and every string case, as an undefined function.
+ *
+ * Successful calls of both forms stay as they were.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2789
+ */
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ': ', is_object($result) ? get_class($result) : var_export($result, true), "\n";
+    } catch (\Throwable $e) {
+        echo $label, ': ', get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+$base = \Stub\Issue2789CallableBase::class;
+
+$cases = [
+    'string, abstract static' => $base . '::sop',
+    'array, abstract static'  => [$base, 'sop'],
+    'string, abstract'        => $base . '::op',
+    'array, abstract'         => [$base, 'op'],
+    'string, undefined'       => $base . '::nope',
+    'string, private'         => $base . '::priv',
+    'string, non-static'      => $base . '::inst',
+    'string, unknown class'   => 'Stub\Issue2789Nope::sop',
+    'string, static'          => $base . '::ok',
+    'array, static'           => [$base, 'ok'],
+];
+
+foreach ($cases as $label => $handler) {
+    t('{handler}() ' . $label, fn() => \Stub\Issue2789Callable::call($handler));
+}
+
+t('call_user_func() abstract static', fn() => \Stub\Issue2789Callable::callUserFunc($base . '::sop'));
+--EXPECT--
+{handler}() string, abstract static: Error: Cannot call abstract method Stub\Issue2789CallableBase::sop()
+{handler}() array, abstract static: Error: Cannot call abstract method Stub\Issue2789CallableBase::sop()
+{handler}() string, abstract: Error: Cannot call abstract method Stub\Issue2789CallableBase::op()
+{handler}() array, abstract: Error: Cannot call abstract method Stub\Issue2789CallableBase::op()
+{handler}() string, undefined: Error: Call to undefined method Stub\Issue2789CallableBase::nope()
+{handler}() string, private: Error: Call to private method Stub\Issue2789CallableBase::priv() from scope Stub\Issue2789Callable
+{handler}() string, non-static: Error: Non-static method Stub\Issue2789CallableBase::inst() cannot be called statically
+{handler}() string, unknown class: Error: Class "Stub\Issue2789Nope" not found
+{handler}() string, static: 'ok'
+{handler}() array, static: 'ok'
+call_user_func() abstract static: TypeError: call_user_func(): Argument #1 ($callback) must be a valid callback, cannot call abstract method Stub\Issue2789CallableBase::sop()

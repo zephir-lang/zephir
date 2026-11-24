@@ -1320,6 +1320,18 @@ final class Compiler
         $this->files = $files;
 
         /**
+         * Round 2.6. Make the C copies of the methods that
+         * `internal-call-transformation` calls directly, for every class
+         * before any compiles: a call into a class that compiles later, such
+         * as `new` of it, then finds the copy whatever the order (#2791).
+         */
+        foreach ($this->files as $compileFile) {
+            if (!$compileFile->isExternal()) {
+                $compileFile->getClassDefinition()?->setupOptimizedMethods($traitMergeContext);
+            }
+        }
+
+        /**
          * Convert C-constants into PHP constants.
          */
         $constantsSources = $this->config->get('constants-sources');

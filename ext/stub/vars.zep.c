@@ -118,8 +118,6 @@ PHP_METHOD(Stub_Vars, testParam)
 				}
 		}
 	}
-	ZEPHIR_INIT_NVAR(&v);
-	ZEPHIR_INIT_NVAR(&k);
 	RETURN_CTOR(&config);
 }
 

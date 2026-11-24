@@ -17,6 +17,7 @@
 #include "kernel/array.h"
 #include "kernel/operators.h"
 #include "kernel/fcall.h"
+#include "kernel/main.h"
 
 
 /**
@@ -462,16 +463,19 @@ PHP_METHOD(Stub_Assign, testAssign39)
 
 PHP_METHOD(Stub_Assign, testAssign40)
 {
-	zval a, b;
+	zval a, b, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
+	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_INIT_VAR(&b);
-	object_init(&b);
+	ZEPHIR_INIT_VAR(&_0);
+	object_init(&_0);
+	ZEPHIR_CPY_WRT(&b, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
 	ZEPHIR_INIT_NVAR(&a);
@@ -3612,7 +3616,6 @@ PHP_METHOD(Stub_Assign, testAssignBitwiseX)
 			return;
 		}
 	} ZEND_HASH_FOREACH_END();
-	ZEPHIR_INIT_NVAR(&op);
 	RETURN_CCTOR(&result);
 }
 
@@ -3693,8 +3696,15 @@ PHP_METHOD(Stub_Assign, testAssignSuperGlobalsSERVER)
 	zephir_create_array(&_1, 2, 0);
 	add_assoc_stringl_ex(&_1, SL("g1"), SL("aaa"));
 	add_assoc_stringl_ex(&_1, SL("g2"), SL("bbb"));
+	ZEPHIR_INIT_NVAR(&_0);
 	zephir_fast_array_merge(&_0, &_SERVER, &_1);
-	ZEPHIR_HASH_COPY(&_SERVER, &_0);
+	zephir_set_global(SL("_SERVER"), &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	zephir_get_global(&_SERVER, SL("_SERVER"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -3719,8 +3729,15 @@ PHP_METHOD(Stub_Assign, testAssignSuperGlobalsGET)
 	zephir_create_array(&_1, 2, 0);
 	add_assoc_stringl_ex(&_1, SL("g1"), SL("aaa"));
 	add_assoc_stringl_ex(&_1, SL("g2"), SL("bbb"));
+	ZEPHIR_INIT_NVAR(&_0);
 	zephir_fast_array_merge(&_0, &_GET, &_1);
-	ZEPHIR_HASH_COPY(&_GET, &_0);
+	zephir_set_global(SL("_GET"), &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	zephir_get_global(&_GET, SL("_GET"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 }
 

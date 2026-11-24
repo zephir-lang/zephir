@@ -1,0 +1,36 @@
+--TEST--
+Issue #2791: func_get_args(), func_num_args() and func_get_arg() read the arguments of the method they are in
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--FILE--
+namespace Stub;
+
+/**
+ * The frame the C copy of a method runs on has no arguments, so these read
+ * none. run() deliberately has a different number of them.
+ */
+class ArgsReader
+{
+	final public function read(var a, var b) -> array
+	{
+		return [func_num_args(), func_get_args(), func_get_arg(1)];
+	}
+
+	public function run(var x) -> array
+	{
+		return this->read(1, 2);
+	}
+}
+--USAGE--
+function t(callable $fn): void
+{
+    try {
+        echo json_encode($fn()), "\n";
+    } catch (\Throwable $e) {
+        echo get_class($e), ": ", $e->getMessage(), "\n";
+    }
+}
+
+t(fn () => (new \Stub\ArgsReader())->run("x"));
+--EXPECT--
+[2,[1,2],2]
