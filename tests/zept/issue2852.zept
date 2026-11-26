@@ -1,0 +1,103 @@
+--TEST--
+Issue #2852: a constructor named literally with none to call throws "Cannot call constructor" when reached, as in PHP
+--FILE--
+namespace Stub;
+
+class Issue2852Base
+{
+}
+--FILE--
+namespace Stub;
+
+class Issue2852 extends Issue2852Base
+{
+	public function __construct()
+	{
+		parent::__construct();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2852Guarded extends Issue2852Base
+{
+	public function __construct(bool call = false)
+	{
+		if call {
+			parent::__construct();
+		}
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2852Std extends \stdClass
+{
+	public function __construct()
+	{
+		parent::__construct();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2852Self
+{
+	public function viaSelf()
+	{
+		self::__construct();
+	}
+
+	public function viaStatic()
+	{
+		static::__construct();
+	}
+
+	public function viaName()
+	{
+		return Issue2852Self::__construct();
+	}
+
+	public function viaClass(string cls)
+	{
+		{cls}::__construct();
+	}
+}
+--USAGE--
+/**
+ * A constructor named literally is not looked up: PHP reads the class's
+ * constructor when the call runs and throws "Cannot call constructor" when
+ * there is none. Zephir refused to compile the call, even one never reached.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2852
+ */
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ': ', is_object($result) ? get_class($result) : var_export($result, true), "\n";
+    } catch (\Throwable $e) {
+        echo $label, ': ', get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+t('parent::__construct()', fn() => new \Stub\Issue2852());
+t('guarded, not reached', fn() => new \Stub\Issue2852Guarded());
+t('guarded, reached', fn() => new \Stub\Issue2852Guarded(true));
+t('parent \stdClass', fn() => new \Stub\Issue2852Std());
+
+$o = new \Stub\Issue2852Self();
+
+t('self::__construct()', fn() => $o->viaSelf());
+t('static::__construct()', fn() => $o->viaStatic());
+t('Issue2852Self::__construct()', fn() => $o->viaName());
+t('{cls}::__construct()', fn() => $o->viaClass(\Stub\Issue2852Self::class));
+--EXPECT--
+parent::__construct(): Error: Cannot call constructor
+guarded, not reached: Stub\Issue2852Guarded
+guarded, reached: Error: Cannot call constructor
+parent \stdClass: Error: Cannot call constructor
+self::__construct(): Error: Cannot call constructor
+static::__construct(): Error: Cannot call constructor
+Issue2852Self::__construct(): Error: Cannot call constructor
+{cls}::__construct(): Error: Cannot call constructor

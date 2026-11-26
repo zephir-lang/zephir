@@ -173,20 +173,34 @@ class StaticCall extends Call
          * Check if the class implements the method
          */
         if (!$dynamicMethod && !$dynamicClass) {
+            /**
+             * PHP compiles `X::__construct()` without looking the method up:
+             * the class's constructor is taken when the call runs, with PHP's
+             * own checks (zephir_call_constructor() in kernel/fcall.c). So
+             * neither a missing constructor nor a private one stops the
+             * compilation.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2852
+             * @see https://github.com/zephir-lang/zephir/issues/2853
+             */
+            $isConstructor = '__construct' === $methodName;
+
             if (!$classDefinition->hasMethod($methodName)) {
-                $possibleMethod = $classDefinition->getPossibleMethodName($methodName);
-                if ($possibleMethod) {
-                    throw new CompilerException(
-                        "Class '"
-                        . $classDefinition->getCompleteName()
-                        . "' does not implement static method: '"
-                        . $expression['name']
-                        . "'. Did you mean '"
-                        . $possibleMethod
-                        . "'?",
-                        $expression
-                    );
-                } else {
+                if (!$isConstructor) {
+                    $possibleMethod = $classDefinition->getPossibleMethodName($methodName);
+                    if ($possibleMethod) {
+                        throw new CompilerException(
+                            "Class '"
+                            . $classDefinition->getCompleteName()
+                            . "' does not implement static method: '"
+                            . $expression['name']
+                            . "'. Did you mean '"
+                            . $possibleMethod
+                            . "'?",
+                            $expression
+                        );
+                    }
+
                     throw new CompilerException(
                         "Class '"
                         . $classDefinition->getCompleteName()
@@ -208,7 +222,8 @@ class StaticCall extends Call
                  * @see https://github.com/zephir-lang/zephir/issues/2734
                  */
                 if (
-                    !Visibility::canCallMethod($method, $compilationContext)
+                    !$isConstructor
+                    && !Visibility::canCallMethod($method, $compilationContext)
                     && !$classDefinition->hasMethod('__callStatic')
                     && !$classDefinition->hasMethod('__call')
                 ) {
@@ -222,7 +237,20 @@ class StaticCall extends Call
                     );
                 }
 
-                if (!in_array($className, ['self', 'static', 'parent']) && !$method->isStatic()) {
+                /**
+                 * PHP runs a non-static method named through a class on $this
+                 * when $this is an instance of that class, and throws when the
+                 * call runs otherwise; the kernel does the same. An internal
+                 * method has no PHP method such a call could reach, so only
+                 * `self::`, `static::`, `parent::` or an object reach it.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2854
+                 */
+                if (
+                    !in_array($className, ['self', 'static', 'parent'])
+                    && $method->isInternal()
+                    && !$method->isStatic()
+                ) {
                     throw new CompilerException(
                         "Cannot call non-static method '" . $expression['name'] . "' in a static way",
                         $expression
@@ -287,8 +315,11 @@ class StaticCall extends Call
         }
 
         /**
-         * Call static methods in the same class, use the special context 'self' or special context 'static'
-         * Call static methods in the 'self' context
+         * `self::` and `static::` forward the called class to a static method.
+         * A class name does not, the name of the class the call is written in
+         * included: PHP gives `Own::sm()` the called class `Own`.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2854
          */
         if (!$dynamicMethod) {
             if ($dynamicClass) {
@@ -301,10 +332,7 @@ class StaticCall extends Call
                     $compilationContext
                 );
             } else {
-                if (
-                    in_array($className, ['self', 'static']) ||
-                    $classDefinition === $compilationContext->lexicalClassDefinition()
-                ) {
+                if (in_array($className, ['self', 'static'])) {
                     $this->call(
                         strtoupper($className),
                         $expression['name'],
@@ -417,19 +445,25 @@ class StaticCall extends Call
         ?Variable $symbolVariable = null,
         ?Method $method = null
     ): void {
-        if (!in_array($context, ['SELF', 'STATIC'])) {
-            $context = 'SELF';
-        }
-
         /**
          * Do not optimize static:: calls, to allow late static binding. A
          * closure calls the method itself: the internal call would hand it
-         * the closure's own $this.
+         * the closure's own $this. Neither is `self::__construct()` optimized:
+         * PHP refuses a private constructor there when $this is an object of
+         * a subclass, which the kernel checks (#2853). Without a constructor
+         * there is no method at all (#2852).
          */
         $insideClosure = true === $compilationContext->classDefinition?->isClosure();
         $named         = FunctionCall::hasNamedArgument($expression);
         $twin          = null;
-        if ('SELF' === $context && !$insideClosure && !$named && !$method->isInternal()) {
+        if (
+            'SELF' === $context
+            && null !== $method
+            && !$insideClosure
+            && !$named
+            && !$method->isInternal()
+            && '__construct' !== strtolower($callName)
+        ) {
             $twin = $method->getOptimizedMethod();
             if ($twin === $method) {
                 $twin = null;
@@ -532,18 +566,27 @@ class StaticCall extends Call
     }
 
     /**
-     * Calls static methods on some class context.
+     * Calls a method through a class name, `Other::m()`, the name of the class
+     * the call is written in included. The class named is the called class of
+     * a static method, which runs in the scope of the class declaring it.
+     *
+     * A constructor, with or without a method behind it, or a non-static
+     * method runs on the current $this when that is an instance of the class
+     * named, so $this goes along and the kernel checks it; PHP throws without
+     * one. A static method gets none, which keeps its call as it was.
      *
      * @param string             $callName
      * @param array              $expression
-     * @param Variable           $symbolVariable
+     * @param Variable|null      $symbolVariable
      * @param bool               $mustInit
      * @param bool               $isExpecting
      * @param Definition         $classDefinition
      * @param CompilationContext $compilationContext
-     * @param Method             $method
+     * @param Method|null        $method
      *
      * @throws Exception
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2854
      */
     protected function callFromClass(
         $callName,
@@ -553,7 +596,7 @@ class StaticCall extends Call
         $isExpecting,
         Definition $classDefinition,
         CompilationContext $compilationContext,
-        Method $method
+        ?Method $method
     ): void {
         $codePrinter = $compilationContext->codePrinter;
         $classEntry  = $this->classEntryOf($classDefinition, $compilationContext);
@@ -568,6 +611,11 @@ class StaticCall extends Call
             $symbolVariable->trackVariant($compilationContext);
         }
 
+        $object = null;
+        if ((null === $method || !$method->isStatic()) && !$this->inStaticContext($compilationContext)) {
+            $object = $compilationContext->enclosingObjectCode();
+        }
+
         /**
          * A direct call to the transformed twin skips the engine, so it is
          * only taken where the engine would run this very method.
@@ -576,7 +624,8 @@ class StaticCall extends Call
          */
         $twin = null;
         if (
-            Visibility::canCallMethod($method, $compilationContext)
+            null !== $method
+            && Visibility::canCallMethod($method, $compilationContext)
             && !FunctionCall::hasNamedArgument($expression)
             && !$method->isInternal()
             && $method->isStatic()
@@ -597,16 +646,17 @@ class StaticCall extends Call
         $paramCount = count($params);
         $paramsStr  = $paramCount ? ', ' . implode(', ', $params) : '';
 
-        $this->assertNamedArgumentsReachEngine($named, $method->isInternal(), $expression);
+        $isInternal = null !== $method && $method->isInternal();
+        $this->assertNamedArgumentsReachEngine($named, $isInternal, $expression);
 
         /**
          * `Other::m()` names the class: it is the called class, and the method
          * runs in the scope of the class that declares it.
          */
-        $target = $method->getClassDefinition()->getClassEntry($compilationContext)
+        $target = null === $method ? '' : $method->getClassDefinition()->getClassEntry($compilationContext)
             . ', ' . $classDefinition->getClassEntry($compilationContext);
 
-        if (null === $named && $method->isInternal()) {
+        if (null === $named && $isInternal) {
             $this->emitInternalMethodCall(
                 $method,
                 true,
@@ -621,6 +671,7 @@ class StaticCall extends Call
                 $symbolVariable,
                 $isExpecting,
                 $classEntry,
+                $object,
                 $callName,
                 $paramsStr,
                 $compilationContext,
@@ -686,7 +737,13 @@ class StaticCall extends Call
 
         $paramsStr = count($params) ? ', ' . implode(', ', $params) : '';
 
-        $this->emitClassCall($symbolVariable, $isExpecting, $classEntry, $callName, $paramsStr, $compilationContext, $named);
+        /**
+         * Which method that is, static or not, is only known at run time, so
+         * the current $this goes along for the kernel to check (#2854).
+         */
+        $object = $this->inStaticContext($compilationContext) ? null : $compilationContext->enclosingObjectCode();
+
+        $this->emitClassCall($symbolVariable, $isExpecting, $classEntry, $object, $callName, $paramsStr, $compilationContext, $named);
 
         /**
          * Temporary variables must be copied if they have more than one reference
@@ -717,9 +774,15 @@ class StaticCall extends Call
         [$params, $classEntry] = $this->fetchClassParams($expression, $compilationContext, $symbolVariable, $mustInit);
         [$params, $named]      = $this->splitNamedArguments($params, $compilationContext);
 
+        /**
+         * A closure passes on the object it was created with, which its own
+         * $this is not when that is its capture carrier (#2825, #2854).
+         */
+        $insideClosure = true === $compilationContext->classDefinition?->isClosure();
+
         $this->emitDynamicMethodCall(
-            'CE_STATIC_ZVAL',
-            [$classEntry],
+            $insideClosure ? 'CE_STATIC_THIS_ZVAL' : 'CE_STATIC_ZVAL',
+            $insideClosure ? [$classEntry, $compilationContext->enclosingObjectCode()] : [$classEntry],
             $this->methodNameVariable($expression, $compilationContext),
             $params,
             $symbolVariable,
@@ -782,8 +845,10 @@ class StaticCall extends Call
                 break;
 
             default:
-                $macro            = 'CE_STATIC_ZVAL';
-                $leadingArguments = [$this->classEntryOf($classDefinition, $compilationContext)];
+                $macro            = $insideClosure ? 'CE_STATIC_THIS_ZVAL' : 'CE_STATIC_ZVAL';
+                $leadingArguments = $insideClosure
+                    ? [$this->classEntryOf($classDefinition, $compilationContext), $object]
+                    : [$this->classEntryOf($classDefinition, $compilationContext)];
                 break;
         }
 
@@ -921,7 +986,7 @@ class StaticCall extends Call
      * @param bool               $isExpecting
      * @param Definition         $classDefinition
      * @param CompilationContext $compilationContext
-     * @param Method             $method
+     * @param Method|null        $method             null for a constructor the parent does not have (#2852)
      *
      * @throws Exception
      */
@@ -933,7 +998,7 @@ class StaticCall extends Call
         $isExpecting,
         Definition $classDefinition,
         CompilationContext $compilationContext,
-        Method $method
+        ?Method $method
     ): void {
         $codePrinter = $compilationContext->codePrinter;
         $classCe     = $classDefinition->getClassEntry($compilationContext);
@@ -1002,22 +1067,28 @@ class StaticCall extends Call
 
     /**
      * Emits `Class::method()` for a class entry known in C, through the call
-     * site's own inline cache (#2790).
+     * site's own inline cache (#2790). With `$object`, the C code of the
+     * current $this, a non-static method runs on it when it is an instance of
+     * the class (#2854).
      */
     private function emitClassCall(
         ?Variable $symbolVariable,
         bool $isExpecting,
         string $classEntry,
+        ?string $object,
         string $callName,
         string $paramsStr,
         CompilationContext $compilationContext,
         ?string $named = null
     ): void {
+        $macro   = null === $object ? 'CE_STATIC_CACHED' : 'CE_STATIC_THIS_CACHED';
+        $leading = null === $object ? [$classEntry] : [$classEntry, $object];
+
         if (null !== $named) {
             $compilationContext->backend->emitCall(
                 $isExpecting ? $symbolVariable : null,
                 'CALL_CLASS_METHOD_NAMED',
-                $this->namedCallScope('CE_STATIC_CACHED', [$classEntry]) . ', "' . $callName . '", ' . $named . $paramsStr,
+                $this->namedCallScope($macro, $leading) . ', "' . $callName . '", ' . $named . $paramsStr,
                 $compilationContext
             );
             $this->releaseNamedArguments($compilationContext);
@@ -1026,15 +1097,15 @@ class StaticCall extends Call
         }
 
         $cachePointer = $compilationContext->cacheManager->getMethodCache()->get($compilationContext);
-        $target       = $classEntry . ', "' . $callName . '", ' . $cachePointer . $paramsStr;
+        $target       = implode(', ', $leading) . ', "' . $callName . '", ' . $cachePointer . $paramsStr;
 
         if (!$isExpecting) {
-            $compilationContext->codePrinter->output('ZEPHIR_CALL_CE_STATIC_CACHED(NULL, ' . $target . ');');
+            $compilationContext->codePrinter->output('ZEPHIR_CALL_' . $macro . '(NULL, ' . $target . ');');
         } elseif ('return_value' == $symbolVariable->getName()) {
-            $compilationContext->codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(' . $target . ');');
+            $compilationContext->codePrinter->output('ZEPHIR_RETURN_CALL_' . $macro . '(' . $target . ');');
         } else {
             $compilationContext->codePrinter->output(
-                'ZEPHIR_CALL_CE_STATIC_CACHED('
+                'ZEPHIR_CALL_' . $macro . '('
                 . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $target . ');'
             );
         }
@@ -1062,18 +1133,20 @@ class StaticCall extends Call
         $called  = 'zephir_get_called_scope(EG(current_execute_data))';
 
         return implode(', ', match ($macro) {
-            'SELF_CACHED'        => ['zephir_fcall_self', $calling, 'getThis()'],
-            'SELF_THIS_CACHED'   => ['zephir_fcall_self', $calling, $leading[0]],
-            'STATIC_CACHED'      => ['zephir_fcall_static', $called, 'getThis()'],
-            'STATIC_THIS_CACHED' => ['zephir_fcall_static', $called, $leading[0]],
-            'PARENT_CACHED'      => ['zephir_fcall_parent', $leading[0], $leading[1]],
-            'CE_STATIC_CACHED'   => ['zephir_fcall_ce', $leading[0], 'NULL'],
-            'SELF_ZVAL'          => ['zephir_fcall_self', $leading[0], 'getThis()'],
-            'SELF_THIS_ZVAL'     => ['zephir_fcall_self', $leading[0], $leading[1]],
-            'PARENT_ZVAL'        => ['zephir_fcall_parent', $leading[0], $leading[1]],
-            'STATIC_ZVAL'        => ['zephir_fcall_static', $called, 'getThis()'],
-            'STATIC_THIS_ZVAL'   => ['zephir_fcall_static', $called, $leading[0]],
-            'CE_STATIC_ZVAL'     => ['zephir_fcall_ce', $leading[0], 'getThis()'],
+            'SELF_CACHED'           => ['zephir_fcall_self', $calling, 'getThis()'],
+            'SELF_THIS_CACHED'      => ['zephir_fcall_self', $calling, $leading[0]],
+            'STATIC_CACHED'         => ['zephir_fcall_static', $called, 'getThis()'],
+            'STATIC_THIS_CACHED'    => ['zephir_fcall_static', $called, $leading[0]],
+            'PARENT_CACHED'         => ['zephir_fcall_parent', $leading[0], $leading[1]],
+            'CE_STATIC_CACHED'      => ['zephir_fcall_ce', $leading[0], 'NULL'],
+            'CE_STATIC_THIS_CACHED' => ['zephir_fcall_ce', $leading[0], $leading[1]],
+            'SELF_ZVAL'             => ['zephir_fcall_self', $leading[0], 'getThis()'],
+            'SELF_THIS_ZVAL'        => ['zephir_fcall_self', $leading[0], $leading[1]],
+            'PARENT_ZVAL'           => ['zephir_fcall_parent', $leading[0], $leading[1]],
+            'STATIC_ZVAL'           => ['zephir_fcall_static', $called, 'getThis()'],
+            'STATIC_THIS_ZVAL'      => ['zephir_fcall_static', $called, $leading[0]],
+            'CE_STATIC_ZVAL'        => ['zephir_fcall_ce', $leading[0], 'getThis()'],
+            'CE_STATIC_THIS_ZVAL'   => ['zephir_fcall_ce', $leading[0], $leading[1]],
         });
     }
 

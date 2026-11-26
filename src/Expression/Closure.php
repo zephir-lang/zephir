@@ -111,27 +111,27 @@ class Closure
     }
 
     /**
-     * Whether an AST node calls a method through `self::`, `parent::` or
-     * `static::`: PHP passes the closure's $this on to such a call, so a
-     * closure written in an instance method binds it, as PHP binds it there.
+     * Whether an AST node makes a static call: `self::`, `parent::`,
+     * `static::`, a class name or a class in a variable. PHP passes the
+     * closure's $this on to such a call, which runs a non-static method on it,
+     * so a closure written in an instance method binds it, as PHP binds it
+     * there.
      *
      * @see https://github.com/zephir-lang/zephir/issues/2825
+     * @see https://github.com/zephir-lang/zephir/issues/2854
      */
-    protected static function astCallsClassScope(mixed $node): bool
+    protected static function astMakesStaticCall(mixed $node): bool
     {
         if (!is_array($node)) {
             return false;
         }
 
-        if (
-            'scall' === ($node['type'] ?? null)
-            && in_array($node['class'] ?? null, ['self', 'parent', 'static'], true)
-        ) {
+        if ('scall' === ($node['type'] ?? null)) {
             return true;
         }
 
         foreach ($node as $child) {
-            if (is_array($child) && self::astCallsClassScope($child)) {
+            if (is_array($child) && self::astMakesStaticCall($child)) {
                 return true;
             }
         }
@@ -291,7 +291,7 @@ class Closure
             || (
                 !$compilationContext->staticContext
                 && null !== $compilationContext->lexicalClassDefinition()
-                && self::astCallsClassScope($block)
+                && self::astMakesStaticCall($block)
             );
         if ($bindThis) {
             // Ensure this_ptr is declared and not stripped in the enclosing method
