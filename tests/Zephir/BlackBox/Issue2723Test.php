@@ -69,7 +69,7 @@ final class Issue2723Test extends TestCase
         ];
         yield 'dynamic class, literal name, statement' => [
             'public function m(var className) { {className}::target(); }',
-            'ZEPHIR_CALL_CE_STATIC_CACHED(NULL, _0, "target", &_zephir_call_cache[0]);',
+            'ZEPHIR_CALL_CE_STATIC_THIS_CACHED(NULL, _0, getThis(), "target", &_zephir_call_cache[0]);',
         ];
         yield 'mixed class' => [
             'public function m(mixed className) { return {className}::target(); }',
@@ -125,7 +125,7 @@ final class Issue2723Test extends TestCase
         ];
         yield 'dynamic class, string name' => [
             'public function m(var className) { return {className}::{"target"}(); }',
-            'ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(_0, "target", &_zephir_call_cache[0]);',
+            'ZEPHIR_RETURN_CALL_CE_STATIC_THIS_CACHED(_0, getThis(), "target", &_zephir_call_cache[0]);',
         ];
         yield 'parent result into a parameter' => [
             'public function m(var p) { let p = parent::baseTarget(); return p; }',
@@ -133,7 +133,7 @@ final class Issue2723Test extends TestCase
         ];
         yield 'named class, dynamic name, in a closure' => [
             'public function m() { return function (name) { return ProbeBase::{name}(); }; }',
-            'ZEPHIR_RETURN_CALL_CE_STATIC_ZVAL(stub_probebase_ce, name, NULL, 0);',
+            'ZEPHIR_RETURN_CALL_CE_STATIC_THIS_ZVAL(stub_probebase_ce, getThis(), name, NULL, 0);',
         ];
     }
 

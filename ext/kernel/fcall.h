@@ -455,6 +455,27 @@ void zephir_init_internal_frame(zend_internal_function *frame, zend_class_entry 
 	} while (0)
 
 /**
+ * `Class::method()` for a method that may not be static: a constructor, a
+ * non-static method or one only known at run time. PHP runs a non-static
+ * method on the current `$this` when that is an instance of the class the call
+ * names, so `this_ptr` goes along; the kernel drops it otherwise.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2854
+ */
+#define ZEPHIR_CALL_CE_STATIC_THIS_CACHED(return_value_ptr, class_entry, this_ptr, method, cache, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_cached(return_value_ptr, class_entry, zephir_fcall_ce, this_ptr, method, strlen(method), cache, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+#define ZEPHIR_RETURN_CALL_CE_STATIC_THIS_CACHED(class_entry, this_ptr, method, cache, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method_cached(return_value, class_entry, zephir_fcall_ce, this_ptr, method, strlen(method), cache, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+/**
  * Static calls whose method name is a variable: `{cls}::{name}()`,
  * `Cls::{name}()`, `self::{name}()`, `parent::{name}()` and
  * `static::{name}()`. Each passes the class PHP looks the method up in, and the
@@ -590,6 +611,23 @@ void zephir_init_internal_frame(zend_internal_function *frame, zend_class_entry 
 	do { \
 		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
 		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method_zval(return_value, zephir_get_called_scope(EG(current_execute_data)), zephir_fcall_static, this_ptr, method, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
+/* `Class::{name}()` and `{cls}::{name}()` in a closure (#2854). */
+#define ZEPHIR_CALL_CE_STATIC_THIS_ZVAL(return_value_ptr, class_entry, this_ptr, method, cache, cache_slot, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		zval method_name_; \
+		ZVAL_COPY(&method_name_, method); \
+		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_zval(return_value_ptr, class_entry, zephir_fcall_ce, this_ptr, &method_name_, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+		zval_ptr_dtor(&method_name_); \
+	} while (0)
+
+#define ZEPHIR_RETURN_CALL_CE_STATIC_THIS_ZVAL(class_entry, this_ptr, method, cache, cache_slot, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method_zval(return_value, class_entry, zephir_fcall_ce, this_ptr, method, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
 	} while (0)
 
 /** Use these functions to call functions in the PHP userland using an arbitrary zval as callable */

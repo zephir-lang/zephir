@@ -468,7 +468,7 @@ PHP_METHOD(Stub_Issue2824, dynamicClass)
 	zephir_create_array(&_3, 2, 0);
 	zephir_array_update_string(&_3, SL("b"), &_1, PH_COPY);
 	zephir_array_update_string(&_3, SL("a"), &_2, PH_COPY);
-	ZEPHIR_RETURN_CALL_CLASS_METHOD_NAMED(zephir_fcall_ce, _0, NULL, "spair", Z_ARRVAL_P(&_3));
+	ZEPHIR_RETURN_CALL_CLASS_METHOD_NAMED(zephir_fcall_ce, _0, getThis(), "spair", Z_ARRVAL_P(&_3));
 	ZEPHIR_INIT_NVAR(&_3);
 	zephir_check_call_status();
 	RETURN_MM();

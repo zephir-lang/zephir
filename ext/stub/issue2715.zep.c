@@ -114,7 +114,7 @@ PHP_METHOD(Stub_Issue2715, callStaticMixedCase)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(_0, "NoPeCaSe", &_zephir_call_cache[0]);
+	ZEPHIR_RETURN_CALL_CE_STATIC_THIS_CACHED(_0, getThis(), "NoPeCaSe", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }

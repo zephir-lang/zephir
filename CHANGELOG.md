@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+- Fixed calling a non-static method or a constructor through a class name failing to compile instead of running on `this` [#2854](https://github.com/zephir-lang/zephir/issues/2854)
+- Fixed `{class}::method()`, and `Class::{name}()` in a closure, throwing instead of running a non-static method on `this` [#2854](https://github.com/zephir-lang/zephir/issues/2854)
+- Fixed a static method called through the name of its own class passing on the called class [#2854](https://github.com/zephir-lang/zephir/issues/2854)
+- Fixed `parent::__construct()` without a parent constructor failing to compile instead of throwing `Cannot call constructor` when reached [#2852](https://github.com/zephir-lang/zephir/issues/2852)
+- Fixed `parent::__construct()` on a private constructor failing to compile instead of throwing `Cannot call private X::__construct()` [#2853](https://github.com/zephir-lang/zephir/issues/2853)
+
 ## [1.10.0] - 2026-11-24
 
 ### Changed

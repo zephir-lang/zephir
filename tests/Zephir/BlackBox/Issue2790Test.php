@@ -142,7 +142,8 @@ final class Issue2790Test extends TestCase
         $this->assertMatchesRegularExpression('/ZEPHIR_CALL_STATIC_CACHED\(&_\d+, "sname", &_zephir_call_cache\[\d+\]\);/', $sites);
         $this->assertMatchesRegularExpression('/ZEPHIR_CALL_PARENT_CACHED\(&_\d+, callcache_child_ce, getThis\(\), "who", &_zephir_call_cache\[\d+\]\);/', $sites);
         $this->assertMatchesRegularExpression('/ZEPHIR_CALL_CE_STATIC_CACHED\(&_\d+, callcache_base_ce, "sname", &_zephir_call_cache\[\d+\]\);/', $sites);
-        $this->assertMatchesRegularExpression('/ZEPHIR_CALL_CE_STATIC_CACHED\(&_\d+, _\d+, "sname", &_zephir_call_cache\[\d+\]\);/', $sites);
+        // A class in a variable may name a non-static method, so $this goes along (#2854).
+        $this->assertMatchesRegularExpression('/ZEPHIR_CALL_CE_STATIC_THIS_CACHED\(&_\d+, _\d+, getThis\(\), "sname", &_zephir_call_cache\[\d+\]\);/', $sites);
 
         foreach (['rewind', 'next', 'valid', 'key', 'current'] as $iteratorMethod) {
             $this->assertMatchesRegularExpression(

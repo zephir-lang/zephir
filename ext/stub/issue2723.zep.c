@@ -219,7 +219,7 @@ PHP_METHOD(Stub_Issue2723, viaMixedClass)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(_0, "target", &_zephir_call_cache[0]);
+	ZEPHIR_RETURN_CALL_CE_STATIC_THIS_CACHED(_0, getThis(), "target", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -332,7 +332,7 @@ PHP_METHOD(Stub_Issue2723, statementLiteralName)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CALL_CE_STATIC_CACHED(NULL, _0, "target", &_zephir_call_cache[0]);
+	ZEPHIR_CALL_CE_STATIC_THIS_CACHED(NULL, _0, getThis(), "target", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_METHOD_CACHED(counter, "bump", &_zephir_call_cache[1]);
 	zephir_check_call_status();
@@ -364,7 +364,7 @@ PHP_METHOD(Stub_Issue2723, missingClassSkipsArguments)
 	}
 	ZEPHIR_CALL_METHOD_CACHED(&_1, counter, "bump", &_zephir_call_cache[0]);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(_0, "withArgument", &_zephir_call_cache[1], &_1);
+	ZEPHIR_RETURN_CALL_CE_STATIC_THIS_CACHED(_0, getThis(), "withArgument", &_zephir_call_cache[1], &_1);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -697,7 +697,7 @@ PHP_METHOD(Stub_Issue2723, dynamicClassString)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(_0, "target", &_zephir_call_cache[0]);
+	ZEPHIR_RETURN_CALL_CE_STATIC_THIS_CACHED(_0, getThis(), "target", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
