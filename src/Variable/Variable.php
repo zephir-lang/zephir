@@ -313,6 +313,15 @@ class Variable implements TypeAwareInterface
     }
 
     /**
+     * Renames the variable, e.g. a closure capture of a local declared in a
+     * nested block (`x$$N`), which is a plain `x` inside the closure.
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
      * Returns the number of mutations performed over the variable.
      */
     public function getNumberMutations(): int

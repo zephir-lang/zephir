@@ -1281,11 +1281,12 @@ class Call
 
     /**
      * The variable a by-reference named argument passes, made a reference.
-     * A closure's `use (&x)` capture is one already.
+     * A closure's `use (&x)` capture is one already, also as `x$$N` when it
+     * is declared in a nested block (#2772).
      */
     private function namedReference(string $code, int $written, CompilationContext $compilationContext): string
     {
-        if (preg_match('/^Z_REFVAL_P\\((&[a-zA-Z0-9_]+)\\)$/', $code, $slot)) {
+        if (preg_match('/^Z_REFVAL_P\\((&[a-zA-Z0-9_$]+)\\)$/', $code, $slot)) {
             return $slot[1];
         }
 

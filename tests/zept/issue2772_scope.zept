@@ -1,0 +1,175 @@
+--TEST--
+Issue #2772: closures, fetch and reads before assignment treat a local declared in a nested block as PHP does
+--FILE--
+namespace Stub;
+
+class Issue2772Scope
+{
+	public function captureByValue() -> var
+	{
+		var f;
+
+		if true {
+			var x = strtoupper("v");
+			int n = 5;
+
+			let f = function() use (x, n) {
+				return x . n;
+			};
+		}
+
+		return {f}();
+	}
+
+	public function captureByReference() -> var
+	{
+		var r = null;
+
+		if true {
+			var x = strtoupper("a"), f;
+
+			let f = function() use (&x) {
+				let x = x . "b";
+			};
+
+			{f}();
+			let r = x;
+		}
+
+		return r;
+	}
+
+	public function referenceArgument() -> array
+	{
+		var r = [];
+
+		if true {
+			var m = null, f;
+
+			let f = function() use (&m) {
+				return m;
+			};
+
+			parse_str("a=1", m);
+			let r[] = {f}();
+
+			parse_str(string: "b=2", result: m);
+			let r[] = {f}();
+		}
+
+		return r;
+	}
+
+	public function fetchSelf() -> array
+	{
+		var r = [];
+
+		if true {
+			var a, k;
+
+			let a = ["k": str_repeat("v", 3)];
+			if fetch a, a["k"] {
+				let r[] = a;
+			}
+
+			let a = ["K": str_repeat("w", 2)];
+			let k = strtoupper("k");
+			if fetch k, a[k] {
+				let r[] = k;
+			}
+		}
+
+		return r;
+	}
+
+	public function readBeforeAssignment(array flags) -> array
+	{
+		var out = [], flag;
+
+		for flag in flags {
+			var x;
+
+			if flag {
+				let x = strtoupper("a");
+			}
+
+			let out[] = x;
+		}
+
+		return out;
+	}
+
+	public function readBeforeAssignmentOnce(bool flag)
+	{
+		var r = "unset";
+
+		if true {
+			var x;
+
+			if flag {
+				let x = strtoupper("a");
+			}
+
+			let r = x;
+		}
+
+		return r;
+	}
+}
+--USAGE--
+/**
+ * A local declared in a nested block is `x$$N` in C, and handing that name to
+ * code that looks the local up by its written name `x` lost it: a closure
+ * could not capture it, a `use (&x)` reference passed to a by-reference
+ * parameter was passed by value, `fetch a, a[k]` released `a` before reading
+ * it, and a read before any assignment saw an undefined value.
+ *
+ * The expected output is what PHP prints for the same code with every block
+ * local renamed apart from the outer one; a declaration without a value does
+ * nothing in PHP, so a local keeps what the previous pass of a loop left in it.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2772
+ */
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ': ', var_export($result, true), "\n";
+    } catch (\Throwable $e) {
+        echo $label, ': ', get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+$o = new \Stub\Issue2772Scope();
+
+t('capture by value', fn() => $o->captureByValue());
+t('capture by reference', fn() => $o->captureByReference());
+t('reference argument', fn() => $o->referenceArgument());
+t('fetch self', fn() => $o->fetchSelf());
+t('read before assignment', fn() => $o->readBeforeAssignment([false, true, false]));
+t('read before assignment, unassigned', fn() => $o->readBeforeAssignmentOnce(false));
+t('read before assignment, assigned', fn() => $o->readBeforeAssignmentOnce(true));
+--EXPECT--
+capture by value: 'V5'
+capture by reference: 'Ab'
+reference argument: array (
+  0 => 
+  array (
+    'a' => '1',
+  ),
+  1 => 
+  array (
+    'b' => '2',
+  ),
+)
+fetch self: array (
+  0 => 'vvv',
+  1 => 'ww',
+)
+read before assignment: array (
+  0 => NULL,
+  1 => 'A',
+  2 => 'A',
+)
+read before assignment, unassigned: NULL
+read before assignment, assigned: 'A'

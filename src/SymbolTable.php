@@ -181,7 +181,7 @@ class SymbolTable
      */
     public function isProvenNativeArray(string $variable): bool
     {
-        return $this->nativeArray?->isProvenNativeArray($variable) ?? false;
+        return $this->nativeArray?->isProvenNativeArray($this->writtenName($variable)) ?? false;
     }
 
     /**
@@ -190,10 +190,23 @@ class SymbolTable
     public function getExpectedMutations(string $variable): int
     {
         if ($this->localContext) {
-            return $this->localContext->getNumberOfMutations($variable);
+            return $this->localContext->getNumberOfMutations($this->writtenName($variable));
         }
 
         return 0;
+    }
+
+    /**
+     * The passes key a local by the name the source writes. Callers often hold
+     * the C name, which is `x$$N` for a local declared in a nested block.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2772
+     */
+    private function writtenName(string $name): string
+    {
+        $pos = strpos($name, Variable::BRANCH_MAGIC);
+
+        return false === $pos ? $name : substr($name, 0, $pos);
     }
 
     /**

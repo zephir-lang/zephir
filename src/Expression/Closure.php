@@ -279,6 +279,15 @@ class Closure
                 $capture->setIsClosureReference(!empty($parameter['reference']));
                 $capture->setReadOnly(!empty($parameter['const']));
 
+                /**
+                 * A local declared in a nested block is `x$$N` outside, but the
+                 * closure body reads it as `x`, and its carrier slot is named
+                 * after the capture too.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2772
+                 */
+                $capture->setName($parameter['name']);
+
                 $staticVariables[$parameter['name']] = $capture;
             }
         }
