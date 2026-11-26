@@ -714,9 +714,12 @@ class FunctionCall extends Call
                              * the shared one, and unwrapping it afterwards
                              * would tear the sharing down.
                              *
+                             * A local declared in a nested block is `x$$N`.
+                             *
                              * @see https://github.com/zephir-lang/zephir/issues/2668
+                             * @see https://github.com/zephir-lang/zephir/issues/2772
                              */
-                            if (preg_match('/^Z_REFVAL_P\(&([a-zA-Z0-9_]+)\)$/', $argument, $slot)) {
+                            if (preg_match('/^Z_REFVAL_P\(&([a-zA-Z0-9_$]+)\)$/', $argument, $slot)) {
                                 $captured = $compilationContext->symbolTable->getVariable($slot[1]);
                                 if ($captured) {
                                     $captured->increaseMutates();

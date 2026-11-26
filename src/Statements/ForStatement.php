@@ -552,7 +552,7 @@ class ForStatement extends StatementAbstract
             $codePrinter->output(
                 "\t"
                 . 'ZEPHIR_GET_IMKEY('
-                . $this->statement['key']
+                . $keyVariable->getName()
                 . ', '
                 . $iteratorVariable->getName()
                 . ');'

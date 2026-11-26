@@ -194,10 +194,6 @@ class LetStatement extends StatementAbstract
                 $resolvedExpr = $expr->compile($compilationContext);
             }
 
-            if ($symbolVariable) {
-                $variable = $symbolVariable->getName();
-            }
-
             /**
              * Process assignment using factory pattern
              */

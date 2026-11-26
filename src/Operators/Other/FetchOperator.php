@@ -58,10 +58,14 @@ class FetchOperator extends AbstractOperator
          * the fetch looks at it, so the value is fetched into a temporary and
          * copied in afterwards, as `let` does.
          *
+         * The source is searched for the written name: a local declared in a
+         * nested block is `x$$N` in C only.
+         *
          * @see https://github.com/zephir-lang/zephir/issues/2832
+         * @see https://github.com/zephir-lang/zephir/issues/2772
          */
         $readsTarget = 'return_value' !== $variable->getName()
-            && $this->readsVariable($expression['right'], $variable->getName());
+            && $this->readsVariable($expression['right'], $expression['left']['value']);
 
         /**
          * A superglobal only borrows the global, so it is fetched the same way

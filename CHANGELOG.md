@@ -12,6 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed a static method called through the name of its own class passing on the called class [#2854](https://github.com/zephir-lang/zephir/issues/2854)
 - Fixed `parent::__construct()` without a parent constructor failing to compile instead of throwing `Cannot call constructor` when reached [#2852](https://github.com/zephir-lang/zephir/issues/2852)
 - Fixed `parent::__construct()` on a private constructor failing to compile instead of throwing `Cannot call private X::__construct()` [#2853](https://github.com/zephir-lang/zephir/issues/2853)
+- Fixed `let`, `++` and `--` on a native or `string` local declared in a nested block failing to compile or changing an outer local of the same name [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed `for k, v in iterator(...)` failing to compile with `_` or a local declared in a nested block as the key [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed a closure failing to compile when it captures a local declared in a nested block [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed a `use (&x)` capture of a local declared in a nested block being passed by value to a by-reference parameter [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed `fetch a, a[k]` on a local declared in a nested block releasing `a` before reading it [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed a local declared without a value in a nested block being undefined instead of null when read before it is assigned [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed the TypeError of an `array` local declared in a nested block naming `$a$$N` instead of `$a` [#2772](https://github.com/zephir-lang/zephir/issues/2772)
 
 ## [1.10.0] - 2026-11-24
 
