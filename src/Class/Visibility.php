@@ -33,7 +33,7 @@ use function property_exists;
 use function strtolower;
 
 /**
- * PHP's visibility rules for methods and static properties, applied while
+ * PHP's visibility rules for methods and properties, applied while
  * compiling.
  *
  * Each check gives the answer the engine gives when the same code runs. The
@@ -60,11 +60,13 @@ final class Visibility
     }
 
     /**
-     * Whether the code being compiled may access the static $property.
+     * Whether the code being compiled may access $property, static or not.
      *
      * A protected property is checked against its root class, the rule PHP
      * applies from 8.4 on. Up to 8.3 PHP checks the declaring class, which
      * refuses more, and a generated extension is built for every version.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2784
      */
     public static function canAccessProperty(Property $property, CompilationContext $context): bool
     {

@@ -48,15 +48,16 @@ static zend_always_inline zend_class_entry *zephir_get_calling_scope(void)
 	zend_class_entry *scope;
 
 	if (EG(fake_scope)) {
-		return (zend_class_entry *) EG(fake_scope);
+		scope = (zend_class_entry *) EG(fake_scope);
+	} else {
+		ex    = EG(current_execute_data);
+		scope = ex && ex->func ? ex->func->common.scope : NULL;
 	}
-
-	ex    = EG(current_execute_data);
-	scope = ex && ex->func ? ex->func->common.scope : NULL;
 
 	/* A closure written in a function binds its capture carrier as $this,
 	 * and the engine gives a bound closure without a class the Closure class
-	 * as a stand-in scope. PHP's own closure there has no scope at all. */
+	 * as a stand-in scope. PHP's own closure there has no scope at all. A
+	 * function body runs in the same stand-in (ZEPHIR_RUN_FUNCTION_BODY). */
 	return scope == zend_ce_closure ? NULL : scope;
 }
 

@@ -12,6 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/fcall.h"
 #include "kernel/object.h"
 #include "kernel/memory.h"
 
@@ -25,13 +26,21 @@ ZEPHIR_INIT_CLASS(stub_79__closure)
 
 PHP_METHOD(stub_79__closure, __invoke)
 {
-	zval *n, n_sub;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
 
-	ZVAL_UNDEF(&n_sub);
-	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(n)
-	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &n);
-	RETURN_BOOL(zephir_instance_of_ev(n, stub_namespaces_a_b_sub_ce));
+	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	object_init_ex(return_value, stub_namespaces_a_b_sub_ce);
+	if (zephir_has_constructor(return_value)) {
+		zephir_constructor_start(return_value);
+		ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0]);
+		zephir_check_call_status();
+		zephir_constructor_finish(return_value);
+	}
+
+	RETURN_MM();
 }
 

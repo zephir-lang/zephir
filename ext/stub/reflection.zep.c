@@ -90,7 +90,7 @@ PHP_METHOD(Stub_Reflection, setReflectionParameter)
 		Z_PARAM_OBJECT_OF_CLASS(parameter, zephir_get_internal_ce(SL("reflectionparameter")))
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &parameter);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 127, parameter);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 129, parameter);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}

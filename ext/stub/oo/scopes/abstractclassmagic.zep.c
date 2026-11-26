@@ -59,7 +59,7 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 112, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 114, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
@@ -72,7 +72,7 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 112, &_2);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 114, &_2);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;

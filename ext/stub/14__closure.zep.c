@@ -25,6 +25,6 @@ ZEPHIR_INIT_CLASS(stub_14__closure)
 PHP_METHOD(stub_14__closure, __invoke)
 {
 
-	RETURN_MEMBER(getThis(), "property1873");
+	RETURN_MEMBER(getThis(), "_name");
 }
 

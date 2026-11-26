@@ -15,6 +15,7 @@ namespace Zephir\Statements;
 
 use ReflectionException;
 use Zephir\Class\Definition\GeneratorTransformer;
+use Zephir\Class\Visibility;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
@@ -113,37 +114,50 @@ final class ReturnStatement extends StatementAbstract
                                 $classDefinition = $enclosingClassDefinition;
                             }
 
-                            $this->checkClassHasProperty(
-                                $classDefinition,
-                                $property,
-                                $statement['expr']['right']
-                            );
-
-                            $compilationContext->headersManager->add('kernel/object');
-
                             /**
-                             * If the method declares a strict scalar return type, emit a
-                             * runtime type check after reading the property. PHP's engine
-                             * does not verify return types of internal/extension methods in
-                             * release builds, so without this `return this->prop` could leak
-                             * a NULL (or other mismatching type) past a `-> string` hint.
+                             * Only a property this class reaches is returned
+                             * straight from the object. Any other read compiles
+                             * as one, which is checked as PHP checks it, and
+                             * may be answered by __get(). A static property
+                             * keeps the read it always had, which is what the
+                             * getter of a shortcut on one returns.
                              *
-                             * @see https://github.com/zephir-lang/zephir/issues/1991
+                             * @see https://github.com/zephir-lang/zephir/issues/2784
                              */
-                            $expectedType = $this->resolveStrictScalarReturnTypeConst($currentMethod);
-                            $thisAccessor = $this->thisAccessor($compilationContext);
-                            if ($expectedType !== null) {
-                                $codePrinter->output(
-                                    'RETURN_MM_MEMBER_TYPED(' . $thisAccessor . ', "' . $property . '", '
-                                    . $expectedType . ');'
-                                );
-                            } else {
-                                $codePrinter->output(
-                                    'RETURN_MM_MEMBER(' . $thisAccessor . ', "' . $property . '");'
-                                );
-                            }
+                            $propertyDefinition = $classDefinition->getProperty($property);
+                            if (
+                                null !== $propertyDefinition
+                                && (
+                                    $propertyDefinition->isStatic()
+                                    || Visibility::canAccessProperty($propertyDefinition, $compilationContext)
+                                )
+                            ) {
+                                $compilationContext->headersManager->add('kernel/object');
 
-                            return;
+                                /**
+                                 * If the method declares a strict scalar return type, emit a
+                                 * runtime type check after reading the property. PHP's engine
+                                 * does not verify return types of internal/extension methods in
+                                 * release builds, so without this `return this->prop` could leak
+                                 * a NULL (or other mismatching type) past a `-> string` hint.
+                                 *
+                                 * @see https://github.com/zephir-lang/zephir/issues/1991
+                                 */
+                                $expectedType = $this->resolveStrictScalarReturnTypeConst($currentMethod);
+                                $thisAccessor = $this->thisAccessor($compilationContext);
+                                if ($expectedType !== null) {
+                                    $codePrinter->output(
+                                        'RETURN_MM_MEMBER_TYPED(' . $thisAccessor . ', "' . $property . '", '
+                                        . $expectedType . ');'
+                                    );
+                                } else {
+                                    $codePrinter->output(
+                                        'RETURN_MM_MEMBER(' . $thisAccessor . ', "' . $property . '");'
+                                    );
+                                }
+
+                                return;
+                            }
                         }
                     }
                 }

@@ -834,7 +834,7 @@ PHP_METHOD(Stub_Issue2824, closure)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&f);
-	zephir_create_closure_ex(&f, NULL, stub_75__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&f, NULL, stub_76__closure_ce, SL("__invoke"));
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "2");
 	ZEPHIR_INIT_VAR(&_1);
@@ -886,7 +886,13 @@ PHP_METHOD(Stub_Issue2824, callUserFunc)
 	RETURN_MM();
 }
 
+static void zep_f_Stub_issue2824_pair(INTERNAL_FUNCTION_PARAMETERS);
+
 PHP_FUNCTION(f_Stub_issue2824_pair) {
+	ZEPHIR_RUN_FUNCTION_BODY(zep_f_Stub_issue2824_pair);
+}
+
+static void zep_f_Stub_issue2824_pair(INTERNAL_FUNCTION_PARAMETERS) {
 	zval *a, a_sub, *b, b_sub;
 		ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);

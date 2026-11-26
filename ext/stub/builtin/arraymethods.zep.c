@@ -110,7 +110,7 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, getMap1)
 	zephir_array_fast_append(&_0, &_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
-	zephir_create_closure_ex(&_1, NULL, stub_0__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&_1, NULL, stub_1__closure_ce, SL("__invoke"));
 	ZEPHIR_CALL_FUNCTION(&_2, "array_map", NULL, 8, &_1, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_2);

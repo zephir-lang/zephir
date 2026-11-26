@@ -896,7 +896,7 @@ PHP_METHOD(Stub_Mcall, testCallablePass)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_closure_ex(&_0, NULL, stub_76__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&_0, NULL, stub_77__closure_ce, SL("__invoke"));
 	ZEPHIR_RETURN_CALL_METHOD_CACHED(&a, "setCallable", &_zephir_call_cache[1], &_0);
 	zephir_check_call_status();
 	RETURN_MM();

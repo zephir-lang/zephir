@@ -114,7 +114,7 @@ PHP_METHOD(Stub_Requires, setContent)
 		Z_PARAM_ZVAL(content)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &content);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 128, content);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 130, content);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}

@@ -157,7 +157,7 @@ PHP_METHOD(Stub_Issue2167, reduceWithClosureWrapper)
 	}
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
-	zephir_create_closure_ex(&_1, this_ptr, stub_66__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&_1, this_ptr, stub_67__closure_ce, SL("__invoke"));
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "");
 	ZEPHIR_CALL_FUNCTION(&_3, "array_reduce", NULL, 43, &_0, &_1, &_2);

@@ -53,7 +53,7 @@ PHP_METHOD(Stub_Properties_NestedProperty, __construct)
 		zephir_constructor_finish(&_0);
 	}
 
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 114, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 116, &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
@@ -87,7 +87,7 @@ PHP_METHOD(Stub_Properties_NestedProperty, setData)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &value_param);
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 114, PH_NOISY_CC);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 116, PH_NOISY_CC);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
@@ -128,7 +128,7 @@ PHP_METHOD(Stub_Properties_NestedProperty, setName)
 	zephir_memory_observe(&value_zv);
 	ZVAL_STR_COPY(&value_zv, value);
 	ZEPHIR_OBS_NVAR(&_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 114, PH_NOISY_CC);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 116, PH_NOISY_CC);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;

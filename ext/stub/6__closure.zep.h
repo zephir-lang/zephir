@@ -6,7 +6,7 @@ ZEPHIR_INIT_CLASS(stub_6__closure);
 PHP_METHOD(stub_6__closure, __invoke);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_6__closure___invoke, 0, 0, 1)
-	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, param1)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_6__closure_method_entry) {
