@@ -389,35 +389,25 @@ class Issue2799PhpInherits extends Issue2799Php
 {
 }
 
+/**
+ * Zephir writes a line break spelled in the source as "\n", whatever the
+ * checkout's line endings, so the mirror spells its breaks as escapes.
+ */
 class Issue2799PhpMultiline
 {
-    public const TEXT = "c1
-c2";
+    public const TEXT = "c1\nc2";
 
-    public const LINES = ["l1
-l2", "k1
-k2" => "v1
-v2"];
+    public const LINES = ["l1\nl2", "k1\nk2" => "v1\nv2"];
 
-    public static $shared = "s1
-s2";
+    public static $shared = "s1\ns2";
 
-    public $template = ["main" => "
-<nav>
-    <ol>
-%items%
-    </ol>
-</nav>", "k1
-k2" => 1];
+    public $template = ["main" => "\n<nav>\n    <ol>\n%items%\n    </ol>\n</nav>", "k1\nk2" => 1];
 
-    public $text = "t1
-t2";
+    public $text = "t1\nt2";
 
-    public string $typedText = "y1
-y2";
+    public string $typedText = "y1\ny2";
 
-    public function withDefault(string $x = "p1
-p2"): string
+    public function withDefault(string $x = "p1\np2"): string
     {
         return $x;
     }
