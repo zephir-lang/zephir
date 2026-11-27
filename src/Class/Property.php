@@ -168,13 +168,15 @@ class Property
 
             case 'array':
             case 'empty-array':
-                if ($this->classDefinition->isTrait() && !$this->isStatic()) {
+                if (!$this->isStatic() && ($this->classDefinition->isTrait() || self::isLiteralArray($this->defaultValue))) {
                     /**
-                     * A trait cannot use the runtime create_object initializer to
-                     * build an array default: it is not carried over when a PHP
-                     * userland class binds the trait. Materialize a persistent
-                     * immutable array on the trait ce instead, so native trait
-                     * binding copies it — matching PHP semantics [#2607].
+                     * The array is the class's default, as PHP declares one:
+                     * object_properties_init() hands every object the class's
+                     * immutable array, shared until the object writes to it, so
+                     * creating an object runs no code for it [#2799]. A trait
+                     * always goes this way, since binding a trait carries its
+                     * defaults but never its create_object [#2607]. An array
+                     * reading a constant is still built when the object is.
                      */
                     $compilationContext->backend->declareArrayProperty(
                         $this->getName(),
@@ -210,6 +212,44 @@ class Property
             || 'constant' === $type
             || 'static-constant-access' === $type
             || ('array' === $type && $this->classDefinition->isTrait() && !$this->isStatic());
+    }
+
+    /**
+     * The node types an array default can be built from when the class is
+     * declared (Backend::buildConstantArray()), as a key or as a value.
+     */
+    private const LITERAL_TYPES = [
+        'int', 'long', 'uint', 'ulong', 'double', 'float', 'bool', 'null', 'char', 'string', 'istring',
+    ];
+
+    /**
+     * Whether every key and value of the array default, nested arrays
+     * included, is a literal. A key holding a constant's C macro (`native`,
+     * #2825) is one too.
+     */
+    private static function isLiteralArray(array $node): bool
+    {
+        foreach ($node['left'] ?? [] as $item) {
+            $key = $item['key'] ?? null;
+            if (null !== $key && !isset($key['native']) && !in_array($key['type'], self::LITERAL_TYPES, true)) {
+                return false;
+            }
+
+            $value = $item['value'];
+            if (in_array($value['type'], ['array', 'empty-array'], true)) {
+                if (!self::isLiteralArray($value)) {
+                    return false;
+                }
+
+                continue;
+            }
+
+            if (!in_array($value['type'], self::LITERAL_TYPES, true)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

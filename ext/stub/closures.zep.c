@@ -489,7 +489,7 @@ PHP_METHOD(Stub_Closures, issue2321filterQuery)
 	zephir_create_closure_ex(&_0, this_ptr, stub_21__closure_ce, SL("__invoke"));
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "/(?:[^%:!\\$&'\\(\\)\\*\\+,;=@\\/\\?]+|%(?![A-Fa-f0-9]{2}))/u");
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 29, &_1, &_0, &value_zv);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 30, &_1, &_0, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -515,7 +515,7 @@ PHP_METHOD(Stub_Closures, issue2321doUrlEncode)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_RETURN_CALL_FUNCTION("rawurlencode", NULL, 30, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("rawurlencode", NULL, 31, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -550,7 +550,7 @@ PHP_METHOD(Stub_Closures, issue2321ProtectedCallback)
 	zephir_create_closure_ex(&_0, this_ptr, stub_22__closure_ce, SL("__invoke"));
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "/[a-z]/");
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 29, &_1, &_0, &value_zv);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 30, &_1, &_0, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -605,7 +605,7 @@ PHP_METHOD(Stub_Closures, issue2321ArrayMapPrivate)
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	zephir_create_closure_ex(&_0, this_ptr, stub_23__closure_ce, SL("__invoke"));
-	ZEPHIR_RETURN_CALL_FUNCTION("array_map", NULL, 8, &_0, &values);
+	ZEPHIR_RETURN_CALL_FUNCTION("array_map", NULL, 9, &_0, &values);
 	zephir_check_call_status();
 	RETURN_MM();
 }

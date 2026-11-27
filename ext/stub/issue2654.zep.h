@@ -18,7 +18,6 @@ PHP_METHOD(Stub_Issue2654, optionalParam);
 PHP_METHOD(Stub_Issue2654, leakProbe);
 PHP_METHOD(Stub_Issue2654, leakProbeControl);
 void zep_Stub_Issue2654_zephir_gen_step_yieldUnassigned(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext );
-zend_object *zephir_init_properties_Stub_Issue2654(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2654_readvar, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -67,9 +66,6 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2654_zephir_gen_step_yieldunassigned, 0, 0, 1)
 	ZEND_ARG_INFO(0, zephir_gen)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2654_zephir_init_properties_stub_issue2654, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_issue2654_method_entry) {

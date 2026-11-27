@@ -96,6 +96,12 @@ final class NameTest extends TestCase
             // Greedy "\x": only two hex digits are consumed, rest stays literal.
             'with x and three hex' => ['\xAAA', '\252A'],
             'with x lower then hex' => ['\xabc', '\253c'],
+            // C ends a string literal at a raw line break, so one spelled in
+            // the source goes out as "\n", CRLF and lone CR alike (#2799).
+            'with raw line feed' => ["a\nb", 'a\nb'],
+            'with raw CRLF' => ["a\r\nb", 'a\nb'],
+            'with raw carriage return' => ["a\rb", 'a\nb'],
+            'with backslash before raw line feed' => ["a\\\nb", 'a\\\\\nb'],
         ];
     }
 
@@ -125,13 +131,16 @@ final class NameTest extends TestCase
             'x bad hex' => ['\xZZ'],
             'null byte' => ["\0"],
             'esc and quote' => ['\e"'],
+            'raw line feed' => ["a\nb"],
+            'raw CRLF' => ["\r\n"],
+            'backslash then raw line feed' => ["\\\n"],
         ];
     }
 
     /**
      * Whatever the input, the escaped result must be a safe C string literal:
-     * every double quote is escaped and the value cannot terminate the literal
-     * early via a dangling backslash.
+     * every double quote is escaped, the value cannot terminate the literal
+     * early via a dangling backslash, and no raw line break ends it (#2799).
      *
      * @dataProvider dangerousStringProvider
      */
@@ -164,6 +173,7 @@ final class NameTest extends TestCase
             $backslashRun % 2,
             sprintf('Dangling backslash would escape the closing quote in: %s', $output)
         );
+        $this->assertDoesNotMatchRegularExpression('/[\r\n]/', $output, 'Raw line break in: ' . $output);
     }
 
     /**

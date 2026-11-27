@@ -9,7 +9,6 @@ PHP_METHOD(Stub_PropertyCacheMagic, __isset);
 PHP_METHOD(Stub_PropertyCacheMagic, __unset);
 PHP_METHOD(Stub_PropertyCacheMagic, readVirtual);
 PHP_METHOD(Stub_PropertyCacheMagic, writeVirtual);
-zend_object *zephir_init_properties_Stub_PropertyCacheMagic(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_propertycachemagic___get, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
@@ -38,9 +37,6 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_propertycachemagic_writevir
 
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
 	ZEND_ARG_INFO(0, value)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_propertycachemagic_zephir_init_properties_stub_propertycachemagic, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_propertycachemagic_method_entry) {

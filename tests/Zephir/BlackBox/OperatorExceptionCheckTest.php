@@ -197,9 +197,10 @@ final class OperatorExceptionCheckTest extends TestCase
     {
         $generated = $this->generateOk(
             'oeinit',
-            "    protected p = [1, 2];\n\n    public function run()\n    {\n        return this->p;\n    }"
+            "    protected p = [1, PHP_INT_SIZE];\n\n    public function run()\n    {\n        return this->p;\n    }"
         );
 
+        $this->assertStringContainsString('zend_object *zephir_init_properties_', $generated);
         $this->assertDoesNotMatchRegularExpression('/zend_object \*zephir_init_properties[^}]*\breturn;/s', $generated);
     }
 

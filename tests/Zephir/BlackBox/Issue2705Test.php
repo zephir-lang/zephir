@@ -155,7 +155,7 @@ final class Issue2705Test extends TestCase
         return [
             $result['exitCode'],
             $result['stderr'],
-            is_file($generated) ? (string) file_get_contents($generated) : '',
+            is_file($generated) ? str_replace("\r\n", "\n", (string) file_get_contents($generated)) : '',
         ];
     }
 }

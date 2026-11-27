@@ -77,7 +77,6 @@ PHP_METHOD(Stub_NativeArray, issue743c);
 PHP_METHOD(Stub_NativeArray, issue709);
 PHP_METHOD(Stub_NativeArray, Issue1140);
 PHP_METHOD(Stub_NativeArray, Issue1159);
-zend_object *zephir_init_properties_Stub_NativeArray(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_nativearray_testarray1, 0, 0, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
@@ -307,9 +306,6 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_nativearray_issue1140, 0, 0, 2)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_nativearray_issue1159, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_nativearray_zephir_init_properties_stub_nativearray, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_nativearray_method_entry) {

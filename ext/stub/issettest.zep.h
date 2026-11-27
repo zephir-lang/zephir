@@ -13,7 +13,6 @@ PHP_METHOD(Stub_IssetTest, testIssetProperty2);
 PHP_METHOD(Stub_IssetTest, testIssetProperty3);
 PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty1);
 PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty2);
-zend_object *zephir_init_properties_Stub_IssetTest(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issettest_testissetarray1, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
@@ -56,9 +55,6 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issettest_testissetdynamicproperty2, 0, 0, 1)
 	ZEND_ARG_INFO(0, inp)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issettest_zephir_init_properties_stub_issettest, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_issettest_method_entry) {
