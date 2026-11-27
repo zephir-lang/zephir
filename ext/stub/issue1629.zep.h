@@ -26,7 +26,6 @@ PHP_METHOD(Stub_Issue1629, boolFromChar);
 PHP_METHOD(Stub_Issue1629, dynamicFromCharCast);
 PHP_METHOD(Stub_Issue1629, returnCharLiteral);
 PHP_METHOD(Stub_Issue1629, appendCharLiteral);
-zend_object *zephir_init_properties_Stub_Issue1629(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue1629_stringtarget, 0, 2, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, keyspace, IS_STRING, 0)
@@ -129,9 +128,6 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue1629_returncharliteral
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue1629_appendcharliteral, 0, 0, IS_ARRAY, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue1629_zephir_init_properties_stub_issue1629, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue1629_zephir_init_static_properties_stub_issue1629, 0, 0, 0)

@@ -25,7 +25,6 @@ PHP_METHOD(Stub_Issue2679, conditionalHeap);
 PHP_METHOD(Stub_Issue2679, leakProbe);
 PHP_METHOD(Stub_Issue2679, leakProbeControl);
 void zep_Stub_Issue2679_zephir_gen_step_conditionalInGenerator(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext );
-zend_object *zephir_init_properties_Stub_Issue2679(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2679_conditional, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, flag, _IS_BOOL, 0)
@@ -113,9 +112,6 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2679_zephir_gen_step_conditionalingenerator, 0, 0, 1)
 	ZEND_ARG_INFO(0, zephir_gen)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2679_zephir_init_properties_stub_issue2679, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_issue2679_method_entry) {

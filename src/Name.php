@@ -167,6 +167,21 @@ final class Name
                 continue;
             }
 
+            /**
+             * A line break spelled in the source is a raw byte, and C ends a
+             * string literal at it. It goes out as "\n", CRLF and a lone CR
+             * alike, as Expression::escapeNewlines() writes one in a method
+             * body, so a declared default holds the same string. See #2799.
+             */
+            if ("\r" === $ch || "\n" === $ch) {
+                $new .= $escape . 'n';
+                if ("\r" === $ch && "\n" === $after) {
+                    ++$i;
+                    ++$next;
+                }
+                continue;
+            }
+
             $new .= $ch;
         }
 

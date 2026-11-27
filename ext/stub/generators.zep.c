@@ -32,8 +32,11 @@ ZEPHIR_INIT_CLASS(Stub_Generators)
 	ZEPHIR_REGISTER_CLASS(Stub, Generators, stub, generators, stub_generators_method_entry, 0);
 
 	zend_declare_property_long(stub_generators_ce, SL("sideEffects"), 0, ZEND_ACC_PUBLIC);
-	zend_declare_property_null(stub_generators_ce, SL("items"), ZEND_ACC_PUBLIC);
-	stub_generators_ce->create_object = zephir_init_properties_Stub_Generators;
+	{
+		zval _zc0;
+		array_init_size(&_zc0, 1);
+		zephir_declare_property_array(stub_generators_ce, SL("items"), &_zc0, ZEND_ACC_PUBLIC);
+	}
 
 	return SUCCESS;
 }
@@ -1158,30 +1161,5 @@ void zep_Stub_Generators_zephir_gen_step_relay(int ht, zend_execute_data *execut
 	}
 	zephir_generator_finish(zephir_gen, NULL);
 	ZEPHIR_MM_RESTORE();
-}
-
-zend_object *zephir_init_properties_Stub_Generators(zend_class_entry *class_type)
-{
-		zval _0, _1$$3;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-		ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_1$$3);
-	
-
-		ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-		zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	
-	{
-		zval local_this_ptr, *this_ptr = &local_this_ptr;
-		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
-		zephir_read_property_ex(&_0, this_ptr, ZEND_STRL("items"), PH_NOISY_CC | PH_READONLY);
-		if (Z_TYPE_P(&_0) == IS_NULL) {
-			ZEPHIR_INIT_VAR(&_1$$3);
-			array_init(&_1$$3);
-			zephir_update_property_zval_ex(this_ptr, ZEND_STRL("items"), &_1$$3);
-		}
-		ZEPHIR_MM_RESTORE();
-		return Z_OBJ_P(this_ptr);
-	}
 }
 

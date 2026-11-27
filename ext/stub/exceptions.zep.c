@@ -214,7 +214,7 @@ PHP_METHOD(Stub_Exceptions, testExceptionSprintf)
 	ZVAL_STR_COPY(&name_zv, name);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "Hello, %s");
-	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, 18, &_0, &name_zv);
+	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, 19, &_0, &name_zv);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&_1, "stub/exceptions.zep", 68);
 	ZEPHIR_MM_RESTORE();

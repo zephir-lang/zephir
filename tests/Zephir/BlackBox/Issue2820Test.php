@@ -211,12 +211,13 @@ final class Issue2820Test extends TestCase
     }
 
     /**
-     * An array default is assigned when the object is created, under a
-     * compiler-made `this->p === null` check that must stay a type test.
+     * An array default reading a constant is assigned when the object is
+     * created, under a compiler-made `this->p === null` check that must stay
+     * a type test. A literal one is declared on the class instead [#2799].
      */
     public function testArrayPropertyDefaultIsInitializedUnderATypeTest(): void
     {
-        [$generated, $output] = $this->generateClass('i2820property', "    protected p = [];\n");
+        [$generated, $output] = $this->generateClass('i2820property', "    protected p = [PHP_INT_SIZE];\n");
 
         $this->assertMatchesRegularExpression('/if \\(Z_TYPE_P\\(&_\\d+\\) == IS_NULL\\) \\{/', $generated);
         $this->assertStringNotContainsString('ZEPHIR_IS_EQUAL_NULL', $generated);

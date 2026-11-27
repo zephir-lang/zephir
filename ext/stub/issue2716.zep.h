@@ -14,7 +14,6 @@ PHP_METHOD(Stub_Issue2716, arrayProbe);
 PHP_METHOD(Stub_Issue2716, commentProbe);
 PHP_METHOD(Stub_Issue2716, throwProbe);
 PHP_METHOD(Stub_Issue2716, leakProbeControl);
-zend_object *zephir_init_properties_Stub_Issue2716(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2716___construct, 0, 0, 0)
 ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, options, IS_ARRAY, 0, "[]")
@@ -62,9 +61,6 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2716_leakprobecontrol, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, iterations, IS_LONG, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2716_zephir_init_properties_stub_issue2716, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_issue2716_method_entry) {

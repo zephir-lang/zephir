@@ -56,7 +56,6 @@ PHP_METHOD(Stub_Issue2747, orderStringOffset);
 PHP_METHOD(Stub_Issue2747, orderVariableIndex);
 PHP_METHOD(Stub_Issue2747, orderVariableExpressionIndex);
 PHP_METHOD(Stub_Issue2747, orderLiteralIndex);
-zend_object *zephir_init_properties_Stub_Issue2747(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2747_add, 0, 0, 3)
 	ZEND_ARG_INFO(0, a)
@@ -304,9 +303,6 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2747_ordervariableexpr
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2747_orderliteralindex, 0, 0, IS_ARRAY, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2747_zephir_init_properties_stub_issue2747, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2747_zephir_init_static_properties_stub_issue2747, 0, 0, 0)

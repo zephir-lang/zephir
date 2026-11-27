@@ -23,7 +23,6 @@ PHP_METHOD(Stub_Issue2702, literalProbe);
 PHP_METHOD(Stub_Issue2702, longLiteralProbe);
 PHP_METHOD(Stub_Issue2702, localArrayProbe);
 PHP_METHOD(Stub_Issue2702, growthProbe);
-zend_object *zephir_init_properties_Stub_Issue2702(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2702_getdata, 0, 0, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
@@ -101,9 +100,6 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2702_growthprobe, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, iterations, IS_LONG, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2702_zephir_init_properties_stub_issue2702, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_issue2702_method_entry) {

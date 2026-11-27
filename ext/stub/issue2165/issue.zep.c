@@ -129,11 +129,11 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 	zephir_fetch_params(1, 1, 1, &a_param, &validate_param);
 	zephir_get_arrval(&a, a_param);
 	m = zephir_fast_count_int(&a);
-	ZEPHIR_CALL_FUNCTION(&_0, "current", NULL, 38, &a);
+	ZEPHIR_CALL_FUNCTION(&_0, "current", NULL, 39, &a);
 	zephir_check_call_status();
 	n = zephir_fast_count_int(&_0);
 	if (validate) {
-		ZEPHIR_CALL_FUNCTION(&_1$$3, "array_values", &_2, 40, &a);
+		ZEPHIR_CALL_FUNCTION(&_1$$3, "array_values", &_2, 41, &a);
 		zephir_check_call_status();
 		if (UNEXPECTED(Z_TYPE_P(&_1$$3) != IS_ARRAY)) {
 			zephir_throw_variable_type_error(&_1$$3, "a", "array");
@@ -157,7 +157,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 				object_init_ex(&_6$$5, spl_ce_InvalidArgumentException);
 				zephir_constructor_start(&_6$$5);
 				ZVAL_LONG(&_7$$5, n);
-				ZEPHIR_CALL_FUNCTION(&_8$$5, "strval", &_9, 41, &_7$$5);
+				ZEPHIR_CALL_FUNCTION(&_8$$5, "strval", &_9, 42, &_7$$5);
 				zephir_check_call_status();
 				ZEPHIR_INIT_NVAR(&_10$$5);
 				ZVAL_LONG(&_10$$5, zephir_fast_count_int(&rowA));
@@ -189,7 +189,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 					ZVAL_COPY(&valueA, _14$$4);
 					_15$$6 = !((Z_TYPE_P(&valueA) == IS_LONG));
 					if (_15$$6) {
-						ZEPHIR_CALL_FUNCTION(&_16$$6, "is_float", &_17, 42, &valueA);
+						ZEPHIR_CALL_FUNCTION(&_16$$6, "is_float", &_17, 43, &valueA);
 						zephir_check_call_status();
 						_15$$6 = !zephir_is_true(&_16$$6);
 					}
@@ -233,7 +233,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 					zephir_check_call_status();
 						_23$$8 = !((Z_TYPE_P(&valueA) == IS_LONG));
 						if (_23$$8) {
-							ZEPHIR_CALL_FUNCTION(&_24$$8, "is_float", &_17, 42, &valueA);
+							ZEPHIR_CALL_FUNCTION(&_24$$8, "is_float", &_17, 43, &valueA);
 							zephir_check_call_status();
 							_23$$8 = !zephir_is_true(&_24$$8);
 						}
@@ -258,7 +258,7 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 						}
 				}
 			}
-			ZEPHIR_CALL_FUNCTION(&_28$$4, "array_values", &_2, 40, &rowA);
+			ZEPHIR_CALL_FUNCTION(&_28$$4, "array_values", &_2, 41, &rowA);
 			zephir_check_call_status();
 			zephir_array_append(&rowA, &_28$$4, PH_SEPARATE, "stub/issue2165/issue.zep", 45);
 			if (UNEXPECTED(EG(exception))) {
@@ -382,7 +382,7 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 	zephir_fetch_params(1, 3, 0, &value, &m_param, &n_param);
 	_0 = !((Z_TYPE_P(value) == IS_LONG));
 	if (_0) {
-		ZEPHIR_CALL_FUNCTION(&_1, "is_float", NULL, 42, value);
+		ZEPHIR_CALL_FUNCTION(&_1, "is_float", NULL, 43, value);
 		zephir_check_call_status();
 		_0 = !zephir_is_true(&_1);
 	}
@@ -410,7 +410,7 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 		object_init_ex(&_5$$4, spl_ce_InvalidArgumentException);
 		zephir_constructor_start(&_5$$4);
 		ZVAL_LONG(&_6$$4, m);
-		ZEPHIR_CALL_FUNCTION(&_7$$4, "strval", &_8, 41, &_6$$4);
+		ZEPHIR_CALL_FUNCTION(&_7$$4, "strval", &_8, 42, &_6$$4);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&_9$$4);
 		ZEPHIR_CONCAT_SSVS(&_9$$4, "M must be", " greater than 0, ", &_7$$4, " given.");
@@ -430,7 +430,7 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 		object_init_ex(&_10$$5, spl_ce_InvalidArgumentException);
 		zephir_constructor_start(&_10$$5);
 		ZVAL_LONG(&_11$$5, n);
-		ZEPHIR_CALL_FUNCTION(&_12$$5, "strval", &_8, 41, &_11$$5);
+		ZEPHIR_CALL_FUNCTION(&_12$$5, "strval", &_8, 42, &_11$$5);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&_13$$5);
 		ZEPHIR_CONCAT_SSVS(&_13$$5, "N must be", " greater than 0, ", &_12$$5, " given.");
@@ -447,11 +447,11 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 	}
 	ZVAL_LONG(&_14, 0);
 	ZVAL_LONG(&_15, n);
-	ZEPHIR_CALL_FUNCTION(&_16, "array_fill", &_17, 4, &_14, &_15, value);
+	ZEPHIR_CALL_FUNCTION(&_16, "array_fill", &_17, 5, &_14, &_15, value);
 	zephir_check_call_status();
 	ZVAL_LONG(&_14, 0);
 	ZVAL_LONG(&_15, m);
-	ZEPHIR_CALL_FUNCTION(&_18, "array_fill", &_17, 4, &_14, &_15, &_16);
+	ZEPHIR_CALL_FUNCTION(&_18, "array_fill", &_17, 5, &_14, &_15, &_16);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_SELF_CACHED("quick", &_zephir_call_cache[3], &_18);
 	zephir_check_call_status();

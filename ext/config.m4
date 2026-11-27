@@ -33,6 +33,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2537.zep.c
 	stub/issue2635/base.zep.c
 	stub/issue2723base.zep.c
+	stub/issue2799.zep.c
 	stub/issue2831base.zep.c
 	stub/methodinterface.zep.c
 	stub/oo/abstractstatic.zep.c
@@ -200,6 +201,10 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2784child.zep.c
 	stub/issue2784magic.zep.c
 	stub/issue2790.zep.c
+	stub/issue2799arrayobject.zep.c
+	stub/issue2799child.zep.c
+	stub/issue2799exception.zep.c
+	stub/issue2799multiline.zep.c
 	stub/issue2805.zep.c
 	stub/issue2805request.zep.c
 	stub/issue2808.zep.c

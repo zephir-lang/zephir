@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Changed
+- Changed an array property default that reads no constant to be declared on the class like PHP does, instead of being built for each new object [#2799](https://github.com/zephir-lang/zephir/issues/2799)
+
 ### Fixed
+- Fixed `ReflectionProperty::getDefaultValue()`, `ReflectionClass::getDefaultProperties()` and `get_class_vars()` reporting `null` for an array property default [#2799](https://github.com/zephir-lang/zephir/issues/2799)
+- Fixed a PHP subclass that redeclares an array property of a Zephir class getting the parent's array instead of its own default [#2799](https://github.com/zephir-lang/zephir/issues/2799)
+- Fixed a class with an array property default that extends `\Exception`, `\ArrayObject` or another class with its own object handler skipping that handler [#2799](https://github.com/zephir-lang/zephir/issues/2799)
+- Fixed a string spanning lines in a constant, a property default or a parameter default generating C that does not compile [#2799](https://github.com/zephir-lang/zephir/issues/2799)
 - Fixed calling a non-static method or a constructor through a class name failing to compile instead of running on `this` [#2854](https://github.com/zephir-lang/zephir/issues/2854)
 - Fixed `{class}::method()`, and `Class::{name}()` in a closure, throwing instead of running a non-static method on `this` [#2854](https://github.com/zephir-lang/zephir/issues/2854)
 - Fixed a static method called through the name of its own class passing on the called class [#2854](https://github.com/zephir-lang/zephir/issues/2854)

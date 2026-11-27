@@ -156,7 +156,6 @@ PHP_METHOD(Stub_Issue2706, keyLiteralDoublePropIsset);
 PHP_METHOD(Stub_Issue2706, keyLiteralTruePropIsset);
 PHP_METHOD(Stub_Issue2706, keyLiteralNullPropIsset);
 PHP_METHOD(Stub_Issue2706, keyExistsStops);
-zend_object *zephir_init_properties_Stub_Issue2706(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2706_write, 0, 1, IS_ARRAY, 0)
 	ZEND_ARG_INFO(0, key)
@@ -857,9 +856,6 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2706_keyexistsstops, 0, 2, _IS_BOOL, 0)
 	ZEND_ARG_INFO(0, key)
 	ZEND_ARG_INFO(0, a)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_zephir_init_properties_stub_issue2706, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2706_zephir_init_static_properties_stub_issue2706, 0, 0, 0)
