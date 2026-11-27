@@ -454,7 +454,13 @@ PHP_METHOD(Stub_Fcall, testArrayFill)
 	RETURN_MM();
 }
 
+static void zep_g_stub_zephir_global_method_test(INTERNAL_FUNCTION_PARAMETERS);
+
 PHP_FUNCTION(g_stub_zephir_global_method_test) {
+	ZEPHIR_RUN_FUNCTION_BODY(zep_g_stub_zephir_global_method_test);
+}
+
+static void zep_g_stub_zephir_global_method_test(INTERNAL_FUNCTION_PARAMETERS) {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *str, str_sub, _0;
@@ -481,7 +487,13 @@ PHP_FUNCTION(g_stub_zephir_global_method_test) {
 	RETURN_MM();
 }
 
+static void zep_g_stub_zephir_global_method_with_type_casting(INTERNAL_FUNCTION_PARAMETERS);
+
 PHP_FUNCTION(g_stub_zephir_global_method_with_type_casting) {
+	ZEPHIR_RUN_FUNCTION_BODY(zep_g_stub_zephir_global_method_with_type_casting);
+}
+
+static void zep_g_stub_zephir_global_method_with_type_casting(INTERNAL_FUNCTION_PARAMETERS) {
 	zval *variable, variable_sub;
 		ZVAL_UNDEF(&variable_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -492,7 +504,13 @@ PHP_FUNCTION(g_stub_zephir_global_method_with_type_casting) {
 	return;
 }
 
+static void zep_f_Stub_zephir_namespaced_method_test(INTERNAL_FUNCTION_PARAMETERS);
+
 PHP_FUNCTION(f_Stub_zephir_namespaced_method_test) {
+	ZEPHIR_RUN_FUNCTION_BODY(zep_f_Stub_zephir_namespaced_method_test);
+}
+
+static void zep_f_Stub_zephir_namespaced_method_test(INTERNAL_FUNCTION_PARAMETERS) {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *str, str_sub, _0, _1;
@@ -521,7 +539,13 @@ PHP_FUNCTION(f_Stub_zephir_namespaced_method_test) {
 	RETURN_MM();
 }
 
+static void zep_f_Stub_test_call_relative_object_hint(INTERNAL_FUNCTION_PARAMETERS);
+
 PHP_FUNCTION(f_Stub_test_call_relative_object_hint) {
+	ZEPHIR_RUN_FUNCTION_BODY(zep_f_Stub_test_call_relative_object_hint);
+}
+
+static void zep_f_Stub_test_call_relative_object_hint(INTERNAL_FUNCTION_PARAMETERS) {
 	zval *a, a_sub;
 		ZVAL_UNDEF(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -531,7 +555,13 @@ PHP_FUNCTION(f_Stub_test_call_relative_object_hint) {
 	RETURN_BOOL(1);
 }
 
+static void zep_f_Stub_zephir_namespaced_method_with_type_casting(INTERNAL_FUNCTION_PARAMETERS);
+
 PHP_FUNCTION(f_Stub_zephir_namespaced_method_with_type_casting) {
+	ZEPHIR_RUN_FUNCTION_BODY(zep_f_Stub_zephir_namespaced_method_with_type_casting);
+}
+
+static void zep_f_Stub_zephir_namespaced_method_with_type_casting(INTERNAL_FUNCTION_PARAMETERS) {
 	zval *variable, variable_sub;
 		ZVAL_UNDEF(&variable_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -542,7 +572,13 @@ PHP_FUNCTION(f_Stub_zephir_namespaced_method_with_type_casting) {
 	return;
 }
 
+static void zep_f_Stub_test_call_object_hint(INTERNAL_FUNCTION_PARAMETERS);
+
 PHP_FUNCTION(f_Stub_test_call_object_hint) {
+	ZEPHIR_RUN_FUNCTION_BODY(zep_f_Stub_test_call_object_hint);
+}
+
+static void zep_f_Stub_test_call_object_hint(INTERNAL_FUNCTION_PARAMETERS) {
 	zval *a, a_sub;
 		ZVAL_UNDEF(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)

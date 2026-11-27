@@ -50,7 +50,7 @@ PHP_METHOD(Stub_Issue2808Counter, increment)
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("counter", 7, 1);
 	}
-	zephir_property_incdec(this_ptr, _zephir_prop_0, 89, 1);
+	zephir_property_incdec(this_ptr, _zephir_prop_0, 91, 1);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
@@ -64,7 +64,7 @@ PHP_METHOD(Stub_Issue2808Counter, decrement)
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("counter", 7, 1);
 	}
-	zephir_property_incdec(this_ptr, _zephir_prop_0, 89, 0);
+	zephir_property_incdec(this_ptr, _zephir_prop_0, 91, 0);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
@@ -85,7 +85,7 @@ PHP_METHOD(Stub_Issue2808Counter, addCounter)
 		Z_PARAM_ZVAL(v)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &v);
-	zephir_property_assign_op(this_ptr, _zephir_prop_0, 89, v, add_function);
+	zephir_property_assign_op(this_ptr, _zephir_prop_0, 91, v, add_function);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
@@ -106,7 +106,7 @@ PHP_METHOD(Stub_Issue2808Counter, appendText)
 		Z_PARAM_ZVAL(v)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &v);
-	zephir_property_assign_op(this_ptr, _zephir_prop_0, 90, v, concat_function);
+	zephir_property_assign_op(this_ptr, _zephir_prop_0, 92, v, concat_function);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
@@ -127,7 +127,7 @@ PHP_METHOD(Stub_Issue2808Counter, addPlain)
 		Z_PARAM_ZVAL(v)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &v);
-	zephir_property_assign_op(this_ptr, _zephir_prop_0, 91, v, add_function);
+	zephir_property_assign_op(this_ptr, _zephir_prop_0, 93, v, add_function);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
@@ -148,7 +148,7 @@ PHP_METHOD(Stub_Issue2808Counter, appendPlain)
 		Z_PARAM_ZVAL(v)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &v);
-	zephir_property_assign_op(this_ptr, _zephir_prop_0, 91, v, concat_function);
+	zephir_property_assign_op(this_ptr, _zephir_prop_0, 93, v, concat_function);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}
@@ -162,7 +162,7 @@ PHP_METHOD(Stub_Issue2808Counter, incrementPlain)
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("plain", 5, 1);
 	}
-	zephir_property_incdec(this_ptr, _zephir_prop_0, 91, 1);
+	zephir_property_incdec(this_ptr, _zephir_prop_0, 93, 1);
 	if (UNEXPECTED(EG(exception))) {
 		return;
 	}

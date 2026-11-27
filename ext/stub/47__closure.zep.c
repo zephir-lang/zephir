@@ -19,12 +19,19 @@ ZEPHIR_INIT_CLASS(stub_47__closure)
 {
 	ZEPHIR_REGISTER_CLASS(stub, 47__closure, stub, 47__closure, stub_47__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
+	zend_declare_property_null(stub_47__closure_ce, SL("counter"), ZEND_ACC_PUBLIC);
 	return SUCCESS;
 }
 
 PHP_METHOD(stub_47__closure, __invoke)
 {
+	zval counter;
+	zval *this_ptr = getThis();
 
-	RETURN_STRING("plain");
+	ZVAL_UNDEF(&counter);
+	zephir_read_property(&counter, this_ptr, SL("counter"), PH_NOISY_CC | PH_READONLY);
+
+	RETVAL_ZVAL(Z_REFVAL_P(&counter), 1, 0);
+	return;
 }
 

@@ -272,7 +272,13 @@ PHP_METHOD(Stub_Variadic, classNames)
 	RETURN_CTOR(&names);
 }
 
+static void zep_f_Stub_variadicSum(INTERNAL_FUNCTION_PARAMETERS);
+
 PHP_FUNCTION(f_Stub_variadicSum) {
+	ZEPHIR_RUN_FUNCTION_BODY(zep_f_Stub_variadicSum);
+}
+
+static void zep_f_Stub_variadicSum(INTERNAL_FUNCTION_PARAMETERS) {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, total;
 	zval numbers, n, *_0, _1, *_2;

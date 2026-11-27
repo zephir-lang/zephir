@@ -32,6 +32,5 @@ PHP_METHOD(stub_5__closure, __invoke)
 		Z_PARAM_ZVAL(param1)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &param1);
-	RETURN_NULL();
 }
 

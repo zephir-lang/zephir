@@ -13,7 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/array.h"
+#include "kernel/operators.h"
 #include "kernel/object.h"
 
 
@@ -38,12 +38,13 @@ PHP_METHOD(stub_9__closure, __invoke)
 	zephir_memory_observe(&abc);
 	zephir_read_property(&abc, this_ptr, SL("abc"), PH_NOISY_CC);
 
-	zephir_memory_observe(&_0);
-	zephir_array_fetch_string(&_0, &abc, SL("a"), PH_NOISY, "stub/closures.zep", 70);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, 1);
+	zephir_add_function(return_value, &abc, &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	RETURN_CCTOR(&_0);
+	RETURN_MM();
 }
 

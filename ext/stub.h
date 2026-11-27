@@ -10,6 +10,7 @@
 #include "stub/oo/extend/exception.zep.h"
 #include "stub/issue2165/issueextendinterface.zep.h"
 #include "stub/issue2635/outer.zep.h"
+#include "stub/issue2784base.zep.h"
 #include "stub/issue2824pair.zep.h"
 #include "stub/oo/extend/db/exception.zep.h"
 #include "stub/scallparent.zep.h"
@@ -190,6 +191,9 @@
 #include "stub/issue2761/accessors.zep.h"
 #include "stub/issue2761/collaborator.zep.h"
 #include "stub/issue2774.zep.h"
+#include "stub/issue2784.zep.h"
+#include "stub/issue2784child.zep.h"
+#include "stub/issue2784magic.zep.h"
 #include "stub/issue2790.zep.h"
 #include "stub/issue2805.zep.h"
 #include "stub/issue2805request.zep.h"
@@ -425,5 +429,6 @@
 #include "stub/77__closure.zep.h"
 #include "stub/78__closure.zep.h"
 #include "stub/79__closure.zep.h"
+#include "stub/80__closure.zep.h"
 
 #endif

@@ -39,7 +39,7 @@ PHP_METHOD(stub_49__closure, __invoke)
 	zephir_read_property(&seed, this_ptr, SL("seed"), PH_NOISY_CC | PH_READONLY);
 
 	ZEPHIR_INIT_VAR(&_0);
-	ZVAL_LONG(&_0, 10);
+	ZVAL_LONG(&_0, 1);
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_add_function(&_1, Z_REFVAL_P(&seed), &_0);
 	if (UNEXPECTED(EG(exception))) {

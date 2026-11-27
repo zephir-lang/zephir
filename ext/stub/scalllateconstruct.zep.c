@@ -67,7 +67,7 @@ PHP_METHOD(Stub_ScallLateConstruct, testPublicInit)
 
 	ZEPHIR_CALL_SELF_CACHED(&_0, "testStaticInit", &_zephir_call_cache[0]);
 	zephir_check_call_status();
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 154, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 156, &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;

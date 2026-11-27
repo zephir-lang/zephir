@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `fetch a, a[k]` on a local declared in a nested block releasing `a` before reading it [#2772](https://github.com/zephir-lang/zephir/issues/2772)
 - Fixed a local declared without a value in a nested block being undefined instead of null when read before it is assigned [#2772](https://github.com/zephir-lang/zephir/issues/2772)
 - Fixed the TypeError of an `array` local declared in a nested block naming `$a$$N` instead of `$a` [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed reading a protected property of an object of a known class from an unrelated class compiling instead of failing like a private one [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `isset`, `empty` and `fetch` through a private, protected or undeclared property, such as `isset o->priv["k"]`, failing to compile where PHP answers quietly [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed a read that `__get()` answers, such as a parent's private property or an undeclared one, failing to compile [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed a closure failing to compile when it reads a private property of its class on another object [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `return this->x` compiling for a parent's private property that `let v = this->x` refuses [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `unset o->x` removing a protected or private property from outside its class, or skipping `__unset()`, instead of throwing PHP's Error [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `unset this->x` in a parent's method leaving its private property on a subclass instance [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `unset o->{n}` with a non-string name, such as an `int`, doing nothing [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `unset o->x[k]` calling `__isset()` before `__get()` and missing PHP's "Indirect modification" notice [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed an offset write or a by-reference argument on an inaccessible property throwing the same Error twice [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed a function reaching the protected and private properties of the class that calls it [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `let o->x = v` in a function crashing the compiler [#2784](https://github.com/zephir-lang/zephir/issues/2784)
 
 ## [1.10.0] - 2026-11-24
 

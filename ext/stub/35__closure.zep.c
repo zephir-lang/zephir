@@ -21,33 +21,34 @@ ZEPHIR_INIT_CLASS(stub_35__closure)
 {
 	ZEPHIR_REGISTER_CLASS(stub, 35__closure, stub, 35__closure, stub_35__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
-	zend_declare_property_null(stub_35__closure_ce, SL("counter"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(stub_35__closure_ce, SL("n"), ZEND_ACC_PUBLIC);
 	return SUCCESS;
 }
 
 PHP_METHOD(stub_35__closure, __invoke)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval counter, _0, _1;
+	zval n, _0, _1;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&counter);
+	ZVAL_UNDEF(&n);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_read_property(&counter, this_ptr, SL("counter"), PH_NOISY_CC | PH_READONLY);
+	zephir_memory_observe(&n);
+	zephir_read_property(&n, this_ptr, SL("n"), PH_NOISY_CC);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	ZEPHIR_INIT_VAR(&_1);
-	zephir_add_function(&_1, Z_REFVAL_P(&counter), &_0);
+	zephir_add_function(&_1, &n, &_0);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CPY_WRT(Z_REFVAL_P(&counter), &_1);
-	RETVAL_ZVAL(Z_REFVAL_P(&counter), 1, 0);
+	ZEPHIR_CPY_WRT(&n, &_1);
+	RETVAL_ZVAL(&n, 1, 0);
 	RETURN_MM();
 }
 

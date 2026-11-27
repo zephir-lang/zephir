@@ -512,8 +512,23 @@ final class CompilerFile implements FileInterface
         $compilationContext->classDefinition = null;
         $compilationContext->currentMethod   = $functionDefinition;
 
+        /**
+         * The body runs in no class, as a PHP function does: the engine would
+         * otherwise lend it the class of whatever called it.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2784
+         */
+        $name = $functionDefinition->getInternalName();
+        $body = 'zep_' . $name;
+
         $codePrinter = $compilationContext->codePrinter;
-        $codePrinter->output('PHP_FUNCTION(' . $functionDefinition->getInternalName() . ') {');
+        $codePrinter->output('static void ' . $body . '(INTERNAL_FUNCTION_PARAMETERS);');
+        $codePrinter->outputBlankLine();
+        $codePrinter->output('PHP_FUNCTION(' . $name . ') {');
+        $codePrinter->output("\t" . 'ZEPHIR_RUN_FUNCTION_BODY(' . $body . ');');
+        $codePrinter->output('}');
+        $codePrinter->outputBlankLine();
+        $codePrinter->output('static void ' . $body . '(INTERNAL_FUNCTION_PARAMETERS) {');
         $functionDefinition->compile($compilationContext);
         $codePrinter->output('}');
         $codePrinter->outputBlankLine();

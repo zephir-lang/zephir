@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/fcall.h"
+#include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
 
@@ -28,18 +29,20 @@ PHP_METHOD(stub_22__closure, __invoke)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *val, val_sub;
+	zval *matches_param = NULL;
+	zval matches;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&val_sub);
+	ZVAL_UNDEF(&matches);
 	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(val)
+		ZEPHIR_Z_PARAM_ARRAY(matches, matches_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &val);
-	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "issue2321Doubled", &_zephir_call_cache[0], val);
+	zephir_fetch_params(1, 1, 0, &matches_param);
+	zephir_get_arrval(&matches, matches_param);
+	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "issue2321ProtectedUpper", &_zephir_call_cache[0], &matches);
 	zephir_check_call_status();
 	RETURN_MM();
 }

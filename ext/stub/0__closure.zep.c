@@ -13,7 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/operators.h"
 #include "kernel/object.h"
 
 
@@ -27,23 +26,27 @@ ZEPHIR_INIT_CLASS(stub_0__closure)
 PHP_METHOD(stub_0__closure, __invoke)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *x, x_sub, _0;
+	zval *o, o_sub, _0;
 
-	ZVAL_UNDEF(&x_sub);
+	ZVAL_UNDEF(&o_sub);
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("priv", 4, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(x)
+		Z_PARAM_OBJECT_OF_CLASS(o, zephir_get_internal_ce(SL("stub\\issue2784base")))
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &x);
-	ZEPHIR_INIT_VAR(&_0);
-	ZVAL_LONG(&_0, 100);
-	mul_function(return_value, x, &_0);
+	zephir_fetch_params(1, 1, 0, &o);
+	zephir_memory_observe(&_0);
+	zephir_read_property_cached(&_0, o, _zephir_prop_0, 0, PH_NOISY_CC);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	RETURN_MM();
+	RETURN_CCTOR(&_0);
 }
 

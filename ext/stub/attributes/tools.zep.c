@@ -51,7 +51,13 @@ PHP_METHOD(Stub_Attributes_Tools, callTagged)
 	RETURN_MM();
 }
 
+static void zep_f_Stub_Attributes_tagged(INTERNAL_FUNCTION_PARAMETERS);
+
 PHP_FUNCTION(f_Stub_Attributes_tagged) {
+	ZEPHIR_RUN_FUNCTION_BODY(zep_f_Stub_Attributes_tagged);
+}
+
+static void zep_f_Stub_Attributes_tagged(INTERNAL_FUNCTION_PARAMETERS) {
 	zval *a_param = NULL;
 	zend_long a;
 	ZEND_PARSE_PARAMETERS_START(1, 1)

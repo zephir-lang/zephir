@@ -12,8 +12,8 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(stub_53__closure)
@@ -33,10 +33,10 @@ PHP_METHOD(stub_53__closure, __invoke)
 	ZVAL_UNDEF(&seed);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_read_property(&seed, this_ptr, SL("seed"), PH_NOISY_CC | PH_READONLY);
+	zephir_memory_observe(&seed);
+	zephir_read_property(&seed, this_ptr, SL("seed"), PH_NOISY_CC);
 
-	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&seed));
-	ZVAL_LONG(Z_REFVAL_P(&seed), 999);
-	ZEPHIR_MM_RESTORE();
+	RETVAL_ZVAL(&seed, 1, 0);
+	RETURN_MM();
 }
 
