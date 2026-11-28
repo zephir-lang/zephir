@@ -26,6 +26,21 @@
 #endif
 
 /**
+ * Runs a required file's op_array. zend_execute() leaves EG(jit_trace_num) at
+ * whatever trace the file's code entered last; when the require itself runs
+ * inside a tracing-JIT trace, that trace's next side exit then deoptimizes with
+ * another trace's exit table (a crash in zend_jit_trace_exit() or a frame resumed
+ * at a wrong opline). zend_call_function() restores it the same way.
+ */
+static void zephir_require_execute(zend_op_array *op_array, zval *retval)
+{
+	uint32_t orig_jit_trace_num = EG(jit_trace_num);
+
+	zend_execute(op_array, retval);
+	EG(jit_trace_num) = orig_jit_trace_num;
+}
+
+/**
  * Do an internal require to a plain php file taking care of the value returned by the file
  */
 int zephir_require_ret(zval *return_value_ptr, const char *require_path)
@@ -75,7 +90,7 @@ int zephir_require_ret(zval *return_value_ptr, const char *require_path)
 		 * made `const zend_class_entry *` in PHP 8.5. The cast is safe: the
 		 * class entry itself is the same object — only the access path differs. */
 		new_op_array->scope = (zend_class_entry *) (EG(fake_scope) ? EG(fake_scope) : zend_get_executed_scope());
-		zend_execute(new_op_array, &local_retval);
+		zephir_require_execute(new_op_array, &local_retval);
 
 		if (return_value_ptr) {
 			zval_ptr_dtor(return_value_ptr);
@@ -166,7 +181,7 @@ int zephir_require_once_ret(zval *return_value_ptr, const char *require_path)
 		 * made `const zend_class_entry *` in PHP 8.5. The cast is safe: the
 		 * class entry itself is the same object — only the access path differs. */
 		new_op_array->scope = (zend_class_entry *) (EG(fake_scope) ? EG(fake_scope) : zend_get_executed_scope());
-		zend_execute(new_op_array, &local_retval);
+		zephir_require_execute(new_op_array, &local_retval);
 
 		if (return_value_ptr) {
 			zval_ptr_dtor(return_value_ptr);

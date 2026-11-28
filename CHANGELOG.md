@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+- Fixed `require` and `require_once` crashing the tracing JIT or making it resume the wrong code when they run inside a JIT trace: `zend_execute()` left `EG(jit_trace_num)` at another trace [phalcon/cphalcon#17767](https://github.com/phalcon/cphalcon/issues/17767)
+
 ## [1.11.0] - 2026-11-28
 
 ### Changed
