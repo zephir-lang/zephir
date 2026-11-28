@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Changed
+- Changed a constant of a PHP class or of another extension's class read in a method to be read when the code runs like PHP, instead of taking the value of the PHP that runs `zephir generate` [#2869](https://github.com/zephir-lang/zephir/issues/2869)
 - Changed an array property default that reads no constant to be declared on the class like PHP does, instead of being built for each new object [#2799](https://github.com/zephir-lang/zephir/issues/2799)
 
 ### Fixed
+- Fixed `PDO::FETCH_GROUP`, `FETCH_UNIQUE`, `FETCH_CLASSTYPE`, `FETCH_PROPS_LATE` and `FETCH_SERIALIZE` taking the value of the PHP that runs `zephir generate` instead of the PHP that compiles the extension [#2869](https://github.com/zephir-lang/zephir/issues/2869)
+- Fixed `FilesystemIterator::FOLLOW_SYMLINKS` and `OTHER_MODE_MASK` taking the value of the PHP that runs `zephir generate` instead of the PHP that compiles the extension [#2869](https://github.com/zephir-lang/zephir/issues/2869)
+- Fixed reading a constant of a class that is not loaded stopping PHP with a fatal error instead of throwing `Error` like PHP [#2869](https://github.com/zephir-lang/zephir/issues/2869)
 - Fixed `ReflectionProperty::getDefaultValue()`, `ReflectionClass::getDefaultProperties()` and `get_class_vars()` reporting `null` for an array property default [#2799](https://github.com/zephir-lang/zephir/issues/2799)
 - Fixed a PHP subclass that redeclares an array property of a Zephir class getting the parent's array instead of its own default [#2799](https://github.com/zephir-lang/zephir/issues/2799)
 - Fixed a class with an array property default that extends `\Exception`, `\ArrayObject` or another class with its own object handler skipping that handler [#2799](https://github.com/zephir-lang/zephir/issues/2799)

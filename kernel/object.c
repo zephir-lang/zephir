@@ -124,7 +124,16 @@ void zephir_get_called_class(zval *return_value)
  */
 void zephir_get_class_constant(zval *return_value, zend_class_entry *ce, const char *constant_name, size_t constant_length)
 {
-	zend_string *name = zend_string_init(constant_name, constant_length, 0);
+	zend_string *name;
+
+	/* The class fetch threw `Class "X" not found`, as ZEND_FETCH_CLASS_CONSTANT
+	 * does; the caller's exception check hands it on (#2869). */
+	if (UNEXPECTED(ce == NULL)) {
+		ZVAL_NULL(return_value);
+		return;
+	}
+
+	name = zend_string_init(constant_name, constant_length, 0);
 
 #if PHP_VERSION_ID >= 80100
 	zval *value = zend_get_class_constant_ex(ce->name, name, ce, 0);
