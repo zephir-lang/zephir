@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.11.0] - 2026-11-28
+
 ### Changed
 - Changed a constant of a PHP class or of another extension's class read in a method to be read when the code runs like PHP, instead of taking the value of the PHP that runs `zephir generate` [#2869](https://github.com/zephir-lang/zephir/issues/2869)
 - Changed an array property default that reads no constant to be declared on the class like PHP does, instead of being built for each new object [#2799](https://github.com/zephir-lang/zephir/issues/2799)
