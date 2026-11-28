@@ -100,6 +100,8 @@ final class Issue2714Test extends TestCase
                 {
                     protected items = [1];
 
+                    protected sized = [PHP_INT_SIZE];
+
                     protected static shared = [2];
                 }
                 ZEP,
@@ -108,6 +110,8 @@ final class Issue2714Test extends TestCase
         $this->assertSame(0, $result['exitCode'], $result['stdout'] . $result['stderr']);
         $generated = (string) file_get_contents($this->projectDir . '/ext/stub/probe.zep.c');
         $this->assertStringContainsString('zephir_get_internal_ce(SL("other\\\\missing"))', $generated);
+        // A literal array is the class's default; one reading a constant is built per object (#2799).
+        $this->assertStringContainsString('zephir_declare_property_array(stub_probe_ce, SL("items"), ', $generated);
         $this->assertStringContainsString('zephir_init_properties_Stub_Probe', $generated);
     }
 

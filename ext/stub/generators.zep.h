@@ -32,7 +32,6 @@ void zep_Stub_Generators_zephir_gen_step_overItems(int ht, zend_execute_data *ex
 void zep_Stub_Generators_zephir_gen_step_range4(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext );
 void zep_Stub_Generators_zephir_gen_step_viaSwitch(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext );
 void zep_Stub_Generators_zephir_gen_step_relay(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext );
-zend_object *zephir_init_properties_Stub_Generators(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_generators_countto, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
@@ -145,9 +144,6 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_generators_zephir_gen_step_relay, 0, 0, 1)
 	ZEND_ARG_INFO(0, zephir_gen)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_generators_zephir_init_properties_stub_generators, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_generators_method_entry) {

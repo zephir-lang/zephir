@@ -12,9 +12,8 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/fcall.h"
-#include "kernel/object.h"
 #include "kernel/memory.h"
+#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(stub_11__closure)
@@ -26,16 +25,14 @@ ZEPHIR_INIT_CLASS(stub_11__closure)
 
 PHP_METHOD(stub_11__closure, __invoke)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
+	zval *config, config_sub;
 
-	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_RETURN_CALL_METHOD_CACHED(this_ptr, "issue2497Helper", &_zephir_call_cache[0]);
-	zephir_check_call_status();
-	RETURN_MM();
+	ZVAL_UNDEF(&config_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(config)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &config);
+	RETVAL_ZVAL(config, 1, 0);
+	return;
 }
 

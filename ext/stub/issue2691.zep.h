@@ -25,7 +25,6 @@ PHP_METHOD(Stub_Issue2691, getValue);
 PHP_METHOD(Stub_Issue2691, getPrefixes);
 PHP_METHOD(Stub_Issue2691, writeLeakProbe);
 PHP_METHOD(Stub_Issue2691, leakProbeControl);
-zend_object *zephir_init_properties_Stub_Issue2691(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2691___construct, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -119,9 +118,6 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2691_leakprobecontrol, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, iterations, IS_LONG, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2691_zephir_init_properties_stub_issue2691, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2691_zephir_init_static_properties_stub_issue2691, 0, 0, 0)

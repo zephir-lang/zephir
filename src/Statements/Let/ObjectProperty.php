@@ -20,8 +20,6 @@ use Zephir\Exception\CompilerException as Exception;
 use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
-use function sprintf;
-
 /**
  * Adds/Updates an array index
  */
@@ -54,25 +52,6 @@ class ObjectProperty
         }
 
         $propertyName = $statement['property'];
-        $className    = $context->classDefinition->getCompleteName();
-
-        if (!$symbolVariable->isInitialized()) {
-            throw new Exception(
-                sprintf(
-                    "Cannot mutate static property '%s::%s' because it is not initialized",
-                    $className,
-                    $propertyName
-                ),
-                $statement
-            );
-        }
-
-        if (!$symbolVariable->isVariable()) {
-            throw new Exception(
-                "Cannot use variable type: {$symbolVariable->getType()} as an object",
-                $statement
-            );
-        }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
             throw CompilerException::cannotUseNonInitializedVariableAsObject($statement);

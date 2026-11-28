@@ -33,14 +33,8 @@ PHP_METHOD(stub_78__closure, __invoke)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	object_init_ex(return_value, stub_namespaces_a_b_sub_ce);
-	if (zephir_has_constructor(return_value)) {
-		zephir_constructor_start(return_value);
-		ZEPHIR_CALL_METHOD_CACHED(NULL, return_value, "__construct", &_zephir_call_cache[0]);
-		zephir_check_call_status();
-		zephir_constructor_finish(return_value);
-	}
-
+	ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(stub_mcall_caller_ce, "perform", &_zephir_call_cache[0]);
+	zephir_check_call_status();
 	RETURN_MM();
 }
 

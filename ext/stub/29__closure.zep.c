@@ -12,9 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/concat.h"
 #include "kernel/memory.h"
-#include "kernel/fcall.h"
 #include "kernel/object.h"
 
 
@@ -22,36 +20,33 @@ ZEPHIR_INIT_CLASS(stub_29__closure)
 {
 	ZEPHIR_REGISTER_CLASS(stub, 29__closure, stub, 29__closure, stub_29__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
-	zend_declare_property_null(stub_29__closure_ce, SL("name"), ZEND_ACC_PUBLIC);
-	zend_declare_property_null(stub_29__closure_ce, SL("__$zephir_this"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(stub_29__closure_ce, SL("box"), ZEND_ACC_PUBLIC);
 	return SUCCESS;
 }
 
 PHP_METHOD(stub_29__closure, __invoke)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval name, __$zephir_this, _0;
+	zval box, _0;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&name);
-	ZVAL_UNDEF(&__$zephir_this);
+	ZVAL_UNDEF(&box);
 	ZVAL_UNDEF(&_0);
-	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("value", 5, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_read_property(&__$zephir_this, this_ptr, SL("__$zephir_this"), PH_NOISY_CC | PH_READONLY);
-	zephir_memory_observe(&name);
-	zephir_read_property(&name, this_ptr, SL("name"), PH_NOISY_CC);
-	this_ptr = &__$zephir_this;
+	zephir_memory_observe(&box);
+	zephir_read_property(&box, this_ptr, SL("box"), PH_NOISY_CC);
 
-	ZEPHIR_CALL_METHOD_CACHED(&_0, this_ptr, "issue2497Helper", &_zephir_call_cache[0]);
-	zephir_check_call_status();
-	ZEPHIR_CONCAT_VSV(return_value, &_0, ":", &name);
+	zephir_memory_observe(&_0);
+	zephir_read_property_cached(&_0, &box, _zephir_prop_0, 0, PH_NOISY_CC);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	RETURN_MM();
+	RETURN_CCTOR(&_0);
 }
 

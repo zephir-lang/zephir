@@ -14,7 +14,6 @@ PHP_METHOD(Stub_Issue2682, pushShared);
 PHP_METHOD(Stub_Issue2682, pushIntoDefault);
 PHP_METHOD(Stub_Issue2682, pushIntoContainer);
 PHP_METHOD(Stub_Issue2682, writeLeakProbe);
-zend_object *zephir_init_properties_Stub_Issue2682(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2682_fetchreleasedearly, 0, 1, _IS_BOOL, 0)
 	ZEND_ARG_INFO(0, container)
@@ -62,9 +61,6 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_issue2682_writeleakprobe, 0, 2, IS_LONG, 0)
 	ZEND_ARG_INFO(0, container)
 	ZEND_ARG_TYPE_INFO(0, iterations, IS_LONG, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2682_zephir_init_properties_stub_issue2682, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_issue2682_method_entry) {

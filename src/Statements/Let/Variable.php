@@ -70,12 +70,22 @@ class Variable
 
         $type = $symbolVariable->getType();
 
+        /**
+         * `$variable` is the name the statement wrote. A local declared in a
+         * nested block is `x$$N` in C, so everything below prints, and
+         * compares against, the C name of the symbol instead. Printing `x`
+         * either failed to compile or wrote an outer local of the same name.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2772
+         */
+        $target = $symbolVariable->getName();
+
         // Use TypeRegistry for type classification
         if (TypeRegistry::isIntegerOrChar($type)) {
             $this->doNumericAssignment(
                 $codePrinter,
                 $resolvedExpr,
-                $variable,
+                $target,
                 $statement,
                 $compilationContext
             );
@@ -83,7 +93,7 @@ class Variable
             $this->doDoubleAssignment(
                 $codePrinter,
                 $resolvedExpr,
-                $variable,
+                $target,
                 $statement,
                 $compilationContext
             );
@@ -92,7 +102,7 @@ class Variable
                 $codePrinter,
                 $resolvedExpr,
                 $symbolVariable,
-                $variable,
+                $target,
                 $statement,
                 $compilationContext
             );
@@ -101,7 +111,7 @@ class Variable
                 $codePrinter,
                 $resolvedExpr,
                 $symbolVariable,
-                $variable,
+                $target,
                 $statement,
                 $compilationContext
             );
@@ -109,7 +119,7 @@ class Variable
             $this->doBoolAssignment(
                 $codePrinter,
                 $resolvedExpr,
-                $variable,
+                $target,
                 $statement,
                 $compilationContext
             );
@@ -118,7 +128,7 @@ class Variable
                 $codePrinter,
                 $resolvedExpr,
                 $symbolVariable,
-                $variable,
+                $target,
                 $statement,
                 $compilationContext,
                 $readDetector
@@ -241,7 +251,12 @@ class Variable
                     $value  = $compilationContext->backend->resolveValue($resolvedExpr, $compilationContext);
 
                     if ('array' === $symbolVariable->getType() && 'variable' === $resolvedExpr->getType()) {
-                        $this->emitArrayTypeGuard($value, $variable, $compilationContext, $codePrinter);
+                        $this->emitArrayTypeGuard(
+                            $value,
+                            $statement['variable'] ?? $variable,
+                            $compilationContext,
+                            $codePrinter
+                        );
                     }
 
                     $codePrinter->output('ZEPHIR_CPY_WRT(' . $symbol . ', ' . $value . ');');

@@ -19,6 +19,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Operators\AbstractOperator;
 
+use function array_unique;
+use function array_values;
 use function in_array;
 use function is_bool;
 use function is_finite;
@@ -140,6 +142,10 @@ final class ConstantExpressionEvaluator
             $node = $node['left'];
         }
 
+        if (isset($node['native'])) {
+            return $this->alreadyNative($node, $compilationContext);
+        }
+
         $native = $this->native($node, $compilationContext);
         if (null !== $native) {
             return $native;
@@ -181,6 +187,10 @@ final class ConstantExpressionEvaluator
         // `(expr)` parses to a single-child `list` node.
         while ('list' === $node['type']) {
             $node = $node['left'];
+        }
+
+        if (isset($node['native'])) {
+            return $this->alreadyNative($node, $compilationContext);
         }
 
         $native = $this->native($node, $compilationContext);
@@ -225,19 +235,20 @@ final class ConstantExpressionEvaluator
     /**
      * Rebuilds $node as an `int` node whose `value` is a C expression, when it
      * reads a constant whose value depends on the PHP that compiles the C (an
-     * `Attribute::*` flag, see {@see AttributeConstants}). Returns null for any
-     * other node, which then folds as usual.
+     * engine macro, see {@see EngineConstants}). Returns null for any other
+     * node, which then folds as usual.
      *
      * Folding such a node would freeze the value of the PHP running Zephir. The
      * node keeps two PHP spellings next to the C one: `source`, as written, for
      * a stub that carries the same `use` statements, and `qualified`, for an
-     * arg_info default the engine evaluates without them.
+     * arg_info default the engine evaluates without them. It also keeps the
+     * `headers` its C needs, which the file being compiled includes.
      *
      * Only `|`, `&`, `^` and `~` may combine such a constant: PHP and C agree on
      * both their precedence and their result for any int, so the source
      * parentheses alone make every spelling correct.
      *
-     * @return array{type: 'int', value: string, native: array{source: string, qualified: string}}|null
+     * @return array{type: 'int', value: string, native: array{source: string, qualified: string, headers: list<string>}}|null
      *
      * @throws CompilerException
      *
@@ -251,15 +262,33 @@ final class ConstantExpressionEvaluator
             return null;
         }
 
+        EngineConstants::addHeaders($spelling['headers'], $compilationContext);
+
         return [
             'type'   => 'int',
             'value'  => $spelling['c'],
-            'native' => ['source' => $spelling['source'], 'qualified' => $spelling['qualified']],
+            'native' => [
+                'source'    => $spelling['source'],
+                'qualified' => $spelling['qualified'],
+                'headers'   => $spelling['headers'],
+            ],
         ];
     }
 
     /**
-     * @return array{c: string, source: string, qualified: string}|null
+     * A node {@see native()} already built, cached on its constant. That may
+     * have happened while another file was compiled, so the file being
+     * compiled asks for the headers again.
+     */
+    private function alreadyNative(array $node, CompilationContext $compilationContext): array
+    {
+        EngineConstants::addNodeHeaders($node, $compilationContext);
+
+        return $node;
+    }
+
+    /**
+     * @return array{c: string, source: string, qualified: string, headers: list<string>}|null
      *
      * @throws CompilerException
      */
@@ -277,6 +306,7 @@ final class ConstantExpressionEvaluator
                     'c'         => $leaf['c'],
                     'source'    => $node['left']['value'] . '::' . $node['right']['value'],
                     'qualified' => $leaf['qualified'],
+                    'headers'   => $leaf['headers'],
                 ];
 
             case 'list':
@@ -286,6 +316,7 @@ final class ConstantExpressionEvaluator
                     'c'         => '(' . $inner['c'] . ')',
                     'source'    => '(' . $inner['source'] . ')',
                     'qualified' => '(' . $inner['qualified'] . ')',
+                    'headers'   => $inner['headers'],
                 ];
 
             case 'bitwise_not':
@@ -295,6 +326,7 @@ final class ConstantExpressionEvaluator
                     'c'         => '~' . $inner['c'],
                     'source'    => '~' . $inner['source'],
                     'qualified' => '~' . $inner['qualified'],
+                    'headers'   => $inner['headers'],
                 ];
 
             case 'bitwise_or':
@@ -315,6 +347,7 @@ final class ConstantExpressionEvaluator
                     'c'         => $left['c'] . $operator . $right['c'],
                     'source'    => $left['source'] . $operator . $right['source'],
                     'qualified' => $left['qualified'] . $operator . $right['qualified'],
+                    'headers'   => array_values(array_unique([...$left['headers'], ...$right['headers']])),
                 ];
         }
 
@@ -334,7 +367,7 @@ final class ConstantExpressionEvaluator
      * version-dependent constant. A written integer is kept verbatim (a hex
      * literal reads the same in both), anything else is folded to an int.
      *
-     * @return array{c: string, source: string, qualified: string}
+     * @return array{c: string, source: string, qualified: string, headers: list<string>}
      *
      * @throws CompilerException
      */
@@ -343,7 +376,7 @@ final class ConstantExpressionEvaluator
         if (in_array($node['type'], ['int', 'uint', 'long', 'ulong'], true)) {
             $value = (string) $node['value'];
 
-            return ['c' => $value, 'source' => $value, 'qualified' => $value];
+            return ['c' => $value, 'source' => $value, 'qualified' => $value, 'headers' => []];
         }
 
         $value = $this->evaluate($node, $compilationContext);
@@ -355,7 +388,7 @@ final class ConstantExpressionEvaluator
             );
         }
 
-        return ['c' => (string) $value, 'source' => (string) $value, 'qualified' => (string) $value];
+        return ['c' => (string) $value, 'source' => (string) $value, 'qualified' => (string) $value, 'headers' => []];
     }
 
     /**

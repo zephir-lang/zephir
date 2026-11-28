@@ -36,7 +36,7 @@ PHP_METHOD(stub_72__closure, __invoke)
 	zephir_memory_observe(&x);
 	zephir_read_property(&x, this_ptr, SL("x"), PH_NOISY_CC);
 
-	zephir_gettype(return_value, &x);
+	RETVAL_ZVAL(&x, 1, 0);
 	RETURN_MM();
 }
 

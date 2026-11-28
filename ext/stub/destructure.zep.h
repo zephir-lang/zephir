@@ -18,7 +18,6 @@ PHP_METHOD(Stub_Destructure, keyedSource);
 PHP_METHOD(Stub_Destructure, inLoop);
 PHP_METHOD(Stub_Destructure, chained);
 PHP_METHOD(Stub_Destructure, fromProperty);
-zend_object *zephir_init_properties_Stub_Destructure(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_destructure_basic, 0, 0, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
@@ -63,9 +62,6 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_destructure_chained, 0, 0, 
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_destructure_fromproperty, 0, 0, IS_ARRAY, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_destructure_zephir_init_properties_stub_destructure, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_destructure_method_entry) {

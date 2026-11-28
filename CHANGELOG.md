@@ -6,6 +6,45 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.11.0] - 2026-11-28
+
+### Changed
+- Changed a constant of a PHP class or of another extension's class read in a method to be read when the code runs like PHP, instead of taking the value of the PHP that runs `zephir generate` [#2869](https://github.com/zephir-lang/zephir/issues/2869)
+- Changed an array property default that reads no constant to be declared on the class like PHP does, instead of being built for each new object [#2799](https://github.com/zephir-lang/zephir/issues/2799)
+
+### Fixed
+- Fixed `PDO::FETCH_GROUP`, `FETCH_UNIQUE`, `FETCH_CLASSTYPE`, `FETCH_PROPS_LATE` and `FETCH_SERIALIZE` taking the value of the PHP that runs `zephir generate` instead of the PHP that compiles the extension [#2869](https://github.com/zephir-lang/zephir/issues/2869)
+- Fixed `FilesystemIterator::FOLLOW_SYMLINKS` and `OTHER_MODE_MASK` taking the value of the PHP that runs `zephir generate` instead of the PHP that compiles the extension [#2869](https://github.com/zephir-lang/zephir/issues/2869)
+- Fixed reading a constant of a class that is not loaded stopping PHP with a fatal error instead of throwing `Error` like PHP [#2869](https://github.com/zephir-lang/zephir/issues/2869)
+- Fixed `ReflectionProperty::getDefaultValue()`, `ReflectionClass::getDefaultProperties()` and `get_class_vars()` reporting `null` for an array property default [#2799](https://github.com/zephir-lang/zephir/issues/2799)
+- Fixed a PHP subclass that redeclares an array property of a Zephir class getting the parent's array instead of its own default [#2799](https://github.com/zephir-lang/zephir/issues/2799)
+- Fixed a class with an array property default that extends `\Exception`, `\ArrayObject` or another class with its own object handler skipping that handler [#2799](https://github.com/zephir-lang/zephir/issues/2799)
+- Fixed a string spanning lines in a constant, a property default or a parameter default generating C that does not compile [#2799](https://github.com/zephir-lang/zephir/issues/2799)
+- Fixed calling a non-static method or a constructor through a class name failing to compile instead of running on `this` [#2854](https://github.com/zephir-lang/zephir/issues/2854)
+- Fixed `{class}::method()`, and `Class::{name}()` in a closure, throwing instead of running a non-static method on `this` [#2854](https://github.com/zephir-lang/zephir/issues/2854)
+- Fixed a static method called through the name of its own class passing on the called class [#2854](https://github.com/zephir-lang/zephir/issues/2854)
+- Fixed `parent::__construct()` without a parent constructor failing to compile instead of throwing `Cannot call constructor` when reached [#2852](https://github.com/zephir-lang/zephir/issues/2852)
+- Fixed `parent::__construct()` on a private constructor failing to compile instead of throwing `Cannot call private X::__construct()` [#2853](https://github.com/zephir-lang/zephir/issues/2853)
+- Fixed `let`, `++` and `--` on a native or `string` local declared in a nested block failing to compile or changing an outer local of the same name [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed `for k, v in iterator(...)` failing to compile with `_` or a local declared in a nested block as the key [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed a closure failing to compile when it captures a local declared in a nested block [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed a `use (&x)` capture of a local declared in a nested block being passed by value to a by-reference parameter [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed `fetch a, a[k]` on a local declared in a nested block releasing `a` before reading it [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed a local declared without a value in a nested block being undefined instead of null when read before it is assigned [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed the TypeError of an `array` local declared in a nested block naming `$a$$N` instead of `$a` [#2772](https://github.com/zephir-lang/zephir/issues/2772)
+- Fixed reading a protected property of an object of a known class from an unrelated class compiling instead of failing like a private one [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `isset`, `empty` and `fetch` through a private, protected or undeclared property, such as `isset o->priv["k"]`, failing to compile where PHP answers quietly [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed a read that `__get()` answers, such as a parent's private property or an undeclared one, failing to compile [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed a closure failing to compile when it reads a private property of its class on another object [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `return this->x` compiling for a parent's private property that `let v = this->x` refuses [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `unset o->x` removing a protected or private property from outside its class, or skipping `__unset()`, instead of throwing PHP's Error [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `unset this->x` in a parent's method leaving its private property on a subclass instance [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `unset o->{n}` with a non-string name, such as an `int`, doing nothing [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `unset o->x[k]` calling `__isset()` before `__get()` and missing PHP's "Indirect modification" notice [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed an offset write or a by-reference argument on an inaccessible property throwing the same Error twice [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed a function reaching the protected and private properties of the class that calls it [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+- Fixed `let o->x = v` in a function crashing the compiler [#2784](https://github.com/zephir-lang/zephir/issues/2784)
+
 ## [1.10.0] - 2026-11-24
 
 ### Changed

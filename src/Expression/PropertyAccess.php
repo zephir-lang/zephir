@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Zephir\Expression;
 
 use ReflectionException;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Property;
+use Zephir\Class\Visibility;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -24,6 +27,7 @@ use Zephir\Traits\WriteContextSlotTrait;
 use Zephir\Variable\Variable;
 
 use function current;
+use function sprintf;
 
 /**
  * Resolves expressions that read properties
@@ -90,15 +94,12 @@ class PropertyAccess
 
         $property = $propertyAccess['right']['value'];
 
-        $propertyDefinition     = null;
-        $classDefinition        = null;
-        $currentClassDefinition = $compilationContext->classDefinition;
+        $propertyDefinition = null;
+        $classDefinition    = null;
+        $className          = '';
 
-        /**
-         * If the property is accessed on 'this', we check if the method does exist
-         */
         if ('this' == $variableVariable->getRealName()) {
-            $classDefinition = $currentClassDefinition;
+            $classDefinition = $compilationContext->classDefinition;
 
             /**
              * If this is a closure class with an enclosing class, resolve
@@ -109,91 +110,31 @@ class PropertyAccess
             if ($enclosingClassDefinition !== null) {
                 $classDefinition = $enclosingClassDefinition;
             }
-
-            $this->checkClassHasProperty(
-                $classDefinition,
-                $property,
-                $expression
-            );
-
-            $propertyDefinition = $classDefinition->getProperty($property);
-        } else {
+        } elseif ($variableVariable->hasAnyDynamicType('object')) {
             /**
              * If we know the class related to a variable we could check if the property
              * is defined on that class
              */
-            if ($variableVariable->hasAnyDynamicType('object')) {
-                $classType = current($variableVariable->getClassTypes());
-                $compiler  = $compilationContext->compiler;
+            $classType = current($variableVariable->getClassTypes());
+            $compiler  = $compilationContext->compiler;
 
-                if ($classType !== false && $compiler->isClass($classType)) {
-                    $classDefinition = $compiler->getClassDefinition($classType);
-                    if (!$classDefinition) {
-                        throw new CompilerException(
-                            'Cannot locate class definition for class: ' . $classType,
-                            $expression
-                        );
-                    }
-
-                    $this->checkClassHasProperty(
-                        $classDefinition,
-                        $property,
-                        $expression,
-                        $classType
+            if ($classType !== false && $compiler->isClass($classType)) {
+                $classDefinition = $compiler->getClassDefinition($classType);
+                if (!$classDefinition) {
+                    throw new CompilerException(
+                        'Cannot locate class definition for class: ' . $classType,
+                        $expression
                     );
-
-                    $propertyDefinition = $classDefinition->getProperty($property);
                 }
+
+                $className = $classType;
             }
         }
 
-        /**
-         * Having a proper propertyDefinition we can check if the property is readable
-         * according to its modifiers
-         */
-        if ($propertyDefinition) {
-            if ($propertyDefinition->isStatic()) {
-                throw new CompilerException(
-                    "Attempt to access static property '" . $property . "' as non static",
-                    $expression
-                );
-            }
+        if (null !== $classDefinition) {
+            $propertyDefinition = $classDefinition->getProperty($property);
 
-            if (!$propertyDefinition->isPublic()) {
-                /**
-                 * Protected variables only can be read in the class context
-                 * where they were declared
-                 */
-                if ($classDefinition === $currentClassDefinition) {
-                    if ($propertyDefinition->isPrivate()) {
-                        $declarationDefinition = $propertyDefinition->getClassDefinition();
-                        if ($declarationDefinition !== $currentClassDefinition) {
-                            throw new CompilerException(
-                                "Attempt to access private property '"
-                                . $property
-                                . "' outside of its declared class context: '"
-                                . $declarationDefinition->getCompleteName()
-                                . "'",
-                                $expression
-                            );
-                        }
-                    }
-                } else {
-                    if (!$propertyDefinition->isProtected() && $propertyDefinition->isPrivate()) {
-                        $declarationDefinition = $propertyDefinition->getClassDefinition();
-                        if ($declarationDefinition !== $currentClassDefinition) {
-                            throw new CompilerException(
-                                "Attempt to access private property '"
-                                . $property
-                                . "' outside of its declared class context: '"
-                                . $declarationDefinition->getCompleteName()
-                                . "'",
-                                $expression
-                            );
-                        }
-                    }
-                }
-            }
+            $this->checkReadable($classDefinition, $className, $propertyDefinition, $property, $expression, $compilationContext);
         }
 
         /**
@@ -212,11 +153,16 @@ class PropertyAccess
          * value __get() returns lives in no such table, and borrowed it would
          * have no owner and leak, so only a declared property of `this` is
          * borrowed: PHP asks __get() for a declared property only once it has
-         * been unset.
+         * been unset. A property this class cannot reach goes to __get() on
+         * every read.
          *
          * @see https://github.com/zephir-lang/zephir/issues/2805
+         * @see https://github.com/zephir-lang/zephir/issues/2784
          */
-        $canBorrow = 'this' === $variableVariable->getRealName() && null !== $propertyDefinition;
+        $canBorrow = 'this' === $variableVariable->getRealName()
+            && null !== $propertyDefinition
+            && !$propertyDefinition->isStatic()
+            && Visibility::canAccessProperty($propertyDefinition, $compilationContext);
 
         /**
          * Resolves the symbol that expects the value.
@@ -351,6 +297,58 @@ class PropertyAccess
     {
         $this->writeThrough = $writeThrough;
         $this->readWrite    = $readWrite;
+    }
+
+    /**
+     * Rejects a read of a known class that PHP refuses or warns about: an
+     * undeclared property, a static one, or one the class being compiled
+     * cannot reach, checked as PHP checks it from that class (for a closure,
+     * the class around it).
+     *
+     * A read PHP answers quietly is left to the run time: `__get()` answers
+     * any property a read cannot reach, and `isset`, `empty` and `fetch` fetch
+     * the containers of their chain silently.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2784
+     */
+    private function checkReadable(
+        Definition $receiver,
+        string $className,
+        ?Property $propertyDefinition,
+        string $property,
+        array $expression,
+        CompilationContext $compilationContext
+    ): void {
+        if (!$this->noisy || $receiver->hasMethod('__get')) {
+            return;
+        }
+
+        if (null === $propertyDefinition) {
+            $this->checkClassHasProperty($receiver, $property, $expression, $className);
+
+            return;
+        }
+
+        if ($propertyDefinition->isStatic()) {
+            throw new CompilerException(
+                "Attempt to access static property '" . $property . "' as non static",
+                $expression
+            );
+        }
+
+        if (Visibility::canAccessProperty($propertyDefinition, $compilationContext)) {
+            return;
+        }
+
+        throw new CompilerException(
+            sprintf(
+                "Attempt to access %s property '%s' outside of its declared class context: '%s'",
+                $propertyDefinition->isPrivate() ? 'private' : 'protected',
+                $property,
+                $propertyDefinition->getClassDefinition()->getCompleteName()
+            ),
+            $expression
+        );
     }
 
     /**

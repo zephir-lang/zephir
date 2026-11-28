@@ -78,7 +78,7 @@ class ClosureArrow extends Closure
             || (
                 !$compilationContext->staticContext
                 && null !== $compilationContext->lexicalClassDefinition()
-                && self::astCallsClassScope($expression['right'])
+                && self::astMakesStaticCall($expression['right'])
             );
         if ($bindThis) {
             // Ensure this_ptr is declared and not stripped in the enclosing method

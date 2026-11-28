@@ -20,7 +20,6 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithout
 PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetKeyFromArrayInternalVariable);
 PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetStringKeyFromArrayProperty);
 PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetLongKeyFromArrayProperty);
-zend_object *zephir_init_properties_Stub_ArrayAccessTest(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_exits, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -80,9 +79,6 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1259un
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1259unsetlongkeyfromarrayproperty, 0, 0, IS_ARRAY, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_zephir_init_properties_stub_arrayaccesstest, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_arrayaccesstest_method_entry) {

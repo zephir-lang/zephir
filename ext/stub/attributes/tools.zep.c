@@ -46,12 +46,18 @@ PHP_METHOD(Stub_Attributes_Tools, callTagged)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a_param);
 	ZVAL_LONG(&_0, a);
-	ZEPHIR_RETURN_CALL_FUNCTION("Stub\\Attributes\\tagged", NULL, 6, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("Stub\\Attributes\\tagged", NULL, 7, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
 
+static void zep_f_Stub_Attributes_tagged(INTERNAL_FUNCTION_PARAMETERS);
+
 PHP_FUNCTION(f_Stub_Attributes_tagged) {
+	ZEPHIR_RUN_FUNCTION_BODY(zep_f_Stub_Attributes_tagged);
+}
+
+static void zep_f_Stub_Attributes_tagged(INTERNAL_FUNCTION_PARAMETERS) {
 	zval *a_param = NULL;
 	zend_long a;
 	ZEND_PARSE_PARAMETERS_START(1, 1)

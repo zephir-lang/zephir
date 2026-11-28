@@ -27,8 +27,14 @@ ZEPHIR_INIT_CLASS(Stub_ArrayAccessTest)
 
 	zend_declare_property_null(stub_arrayaccesstest_ce, SL("data"), ZEND_ACC_PROTECTED);
 	zend_declare_property_null(stub_arrayaccesstest_ce, SL("assigedFromMethod"), ZEND_ACC_PROTECTED);
-	zend_declare_property_null(stub_arrayaccesstest_ce, SL("unsetData"), ZEND_ACC_PROTECTED);
-	stub_arrayaccesstest_ce->create_object = zephir_init_properties_Stub_ArrayAccessTest;
+	{
+		zval _zc0;
+		array_init_size(&_zc0, 4);
+		add_assoc_stringl_ex(&_zc0, SL("key_a"), SL("marcin"));
+		add_assoc_stringl_ex(&_zc0, SL("key_b"), SL("paula"));
+		add_index_stringl(&_zc0, 3, SL("long value"));
+		zephir_declare_property_array(stub_arrayaccesstest_ce, SL("unsetData"), &_zc0, ZEND_ACC_PROTECTED);
+	}
 
 	return SUCCESS;
 }
@@ -583,34 +589,5 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetLongKeyFromArrayProperty)
 		return;
 	}
 	RETURN_CTOR(&ret);
-}
-
-zend_object *zephir_init_properties_Stub_ArrayAccessTest(zend_class_entry *class_type)
-{
-		zval _1$$3;
-	zval _0;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-		ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_1$$3);
-	
-
-		ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-		zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	
-	{
-		zval local_this_ptr, *this_ptr = &local_this_ptr;
-		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
-		zephir_read_property_ex(&_0, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
-		if (Z_TYPE_P(&_0) == IS_NULL) {
-			ZEPHIR_INIT_VAR(&_1$$3);
-			zephir_create_array(&_1$$3, 3, 0);
-			add_assoc_stringl_ex(&_1$$3, SL("key_a"), SL("marcin"));
-			add_assoc_stringl_ex(&_1$$3, SL("key_b"), SL("paula"));
-			add_index_stringl(&_1$$3, 3, SL("long value"));
-			zephir_update_property_zval_ex(this_ptr, ZEND_STRL("unsetData"), &_1$$3);
-		}
-		ZEPHIR_MM_RESTORE();
-		return Z_OBJ_P(this_ptr);
-	}
 }
 

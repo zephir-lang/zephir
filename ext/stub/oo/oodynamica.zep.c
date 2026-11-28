@@ -78,7 +78,7 @@ PHP_METHOD(Stub_Oo_OoDynamicA, call2)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_SELF_CACHED("getNew", &_zephir_call_cache[0]);
+	ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(stub_oo_oodynamica_ce, "getNew", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -92,7 +92,7 @@ PHP_METHOD(Stub_Oo_OoDynamicA, call1)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_SELF_CACHED("call2", &_zephir_call_cache[0]);
+	ZEPHIR_RETURN_CALL_CE_STATIC_CACHED(stub_oo_oodynamica_ce, "call2", &_zephir_call_cache[0]);
 	zephir_check_call_status();
 	RETURN_MM();
 }

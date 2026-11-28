@@ -12,9 +12,8 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/concat.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(stub_17__closure)
@@ -26,29 +25,31 @@ ZEPHIR_INIT_CLASS(stub_17__closure)
 
 PHP_METHOD(stub_17__closure, __invoke)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *value_param = NULL;
-	zval value;
+	zval _0, _1;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&value);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("_name", 5, 1);
 	}
-
-	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(value_param)
-	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &value_param);
-	zephir_get_strval(&value, value_param);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 169, &value);
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("property1873", 12, 1);
+	}
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 169, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
-		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_MM_RESTORE();
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 170, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	ZEPHIR_CONCAT_VSV(return_value, &_0, ":", &_1);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	return;
 }
 

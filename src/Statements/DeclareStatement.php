@@ -18,6 +18,7 @@ use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
+use Zephir\Variable\Variable;
 
 use function is_string;
 
@@ -108,8 +109,14 @@ class DeclareStatement extends StatementAbstract
             /**
              * Variables are added to the symbol table.
              */
+            /**
+             * `$varName` stays the written name: the `let` below finds the
+             * local just declared by it, and the passes asked about it here
+             * key every local by it, never by its C name `x$$N`.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2772
+             */
             $symbolVariable = $symbolTable->addVariable($currentType, $varName, $compilationContext);
-            $varName        = $symbolVariable->getName();
 
             /**
              * Set the node where the variable is declared
@@ -172,11 +179,35 @@ class DeclareStatement extends StatementAbstract
                  *
                  * A native local has no IS_UNDEF to hand to userland and is not
                  * in the memory frame, so it is only reported, never touched.
+                 *
+                 * Inside a loop the declaration runs on every pass. PHP has no
+                 * declaration there: the variable keeps what the last pass left
+                 * in it, so only a still undefined one becomes null.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2772
                  */
                 if ($symbolVariable->isReadBeforeAssignment() && $symbolVariable->isComplexZval()) {
-                    $symbolVariable->initVariant($compilationContext);
+                    $this->initializeToNull($symbolVariable, $compilationContext);
                 }
             }
         }
+    }
+
+    private function initializeToNull(Variable $symbolVariable, CompilationContext $compilationContext): void
+    {
+        if (!$compilationContext->insideCycle) {
+            $symbolVariable->initVariant($compilationContext);
+
+            return;
+        }
+
+        $codePrinter = $compilationContext->codePrinter;
+        $codePrinter->output(
+            'if (Z_TYPE_P(' . $compilationContext->backend->getVariableCode($symbolVariable) . ') == IS_UNDEF) {'
+        );
+        $codePrinter->increaseLevel();
+        $symbolVariable->initVariant($compilationContext);
+        $codePrinter->decreaseLevel();
+        $codePrinter->output('}');
     }
 }

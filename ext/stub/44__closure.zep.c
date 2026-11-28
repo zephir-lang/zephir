@@ -12,42 +12,50 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/memory.h"
-#include "kernel/operators.h"
+#include "kernel/concat.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(stub_44__closure)
 {
 	ZEPHIR_REGISTER_CLASS(stub, 44__closure, stub, 44__closure, stub_44__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
-	zend_declare_property_null(stub_44__closure_ce, SL("counter"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(stub_44__closure_ce, SL("tag"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(stub_44__closure_ce, SL("__$zephir_this"), ZEND_ACC_PUBLIC);
 	return SUCCESS;
 }
 
 PHP_METHOD(stub_44__closure, __invoke)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval counter, _0, _1;
+	zval tag, __$zephir_this, _0;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&counter);
+	ZVAL_UNDEF(&tag);
+	ZVAL_UNDEF(&__$zephir_this);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_1);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("_name", 5, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_read_property(&counter, this_ptr, SL("counter"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&__$zephir_this, this_ptr, SL("__$zephir_this"), PH_NOISY_CC | PH_READONLY);
+	zephir_memory_observe(&tag);
+	zephir_read_property(&tag, this_ptr, SL("tag"), PH_NOISY_CC);
+	this_ptr = &__$zephir_this;
 
-	ZEPHIR_INIT_VAR(&_0);
-	ZVAL_LONG(&_0, 1);
-	ZEPHIR_INIT_VAR(&_1);
-	zephir_add_function(&_1, Z_REFVAL_P(&counter), &_0);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 174, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CPY_WRT(Z_REFVAL_P(&counter), &_1);
-	RETVAL_ZVAL(Z_REFVAL_P(&counter), 1, 0);
+	ZEPHIR_CONCAT_VSV(return_value, &tag, ":", &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

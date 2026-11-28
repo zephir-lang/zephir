@@ -25,8 +25,11 @@ ZEPHIR_INIT_CLASS(Stub_NativeArray)
 {
 	ZEPHIR_REGISTER_CLASS(Stub, NativeArray, stub, nativearray, stub_nativearray_method_entry, 0);
 
-	zend_declare_property_null(stub_nativearray_ce, SL("prefixes"), ZEND_ACC_PROTECTED);
-	stub_nativearray_ce->create_object = zephir_init_properties_Stub_NativeArray;
+	{
+		zval _zc0;
+		array_init_size(&_zc0, 1);
+		zephir_declare_property_array(stub_nativearray_ce, SL("prefixes"), &_zc0, ZEND_ACC_PROTECTED);
+	}
 
 	return SUCCESS;
 }
@@ -2156,7 +2159,7 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 	ZVAL_STR_COPY(&prefix_zv, prefix);
 	zephir_memory_observe(&baseDir_zv);
 	ZVAL_STR_COPY(&baseDir_zv, baseDir);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 96, PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 98, PH_READONLY);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
@@ -2184,7 +2187,7 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 		return;
 	}
 	ZEPHIR_MAKE_WRITE_REF(&_5);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 44, &_5, &baseDir_zv);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 45, &_5, &baseDir_zv);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER(getThis(), "prefixes");
 }
@@ -2206,30 +2209,5 @@ PHP_METHOD(Stub_NativeArray, Issue1159)
 	zephir_array_fast_append(&_0, &myvar);
 	ZEPHIR_CPY_WRT(&myvar, &_0);
 	RETURN_CCTOR(&myvar);
-}
-
-zend_object *zephir_init_properties_Stub_NativeArray(zend_class_entry *class_type)
-{
-		zval _0, _1$$3;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-		ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_1$$3);
-	
-
-		ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-		zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	
-	{
-		zval local_this_ptr, *this_ptr = &local_this_ptr;
-		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
-		zephir_read_property_ex(&_0, this_ptr, ZEND_STRL("prefixes"), PH_NOISY_CC | PH_READONLY);
-		if (Z_TYPE_P(&_0) == IS_NULL) {
-			ZEPHIR_INIT_VAR(&_1$$3);
-			array_init(&_1$$3);
-			zephir_update_property_zval_ex(this_ptr, ZEND_STRL("prefixes"), &_1$$3);
-		}
-		ZEPHIR_MM_RESTORE();
-		return Z_OBJ_P(this_ptr);
-	}
 }
 

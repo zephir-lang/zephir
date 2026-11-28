@@ -79,7 +79,7 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, getReversed1)
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 3);
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_CALL_FUNCTION(&_2, "array_reverse", NULL, 7, &_0);
+	ZEPHIR_CALL_FUNCTION(&_2, "array_reverse", NULL, 8, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_2);
 }
@@ -110,8 +110,8 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, getMap1)
 	zephir_array_fast_append(&_0, &_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
-	zephir_create_closure_ex(&_1, NULL, stub_0__closure_ce, SL("__invoke"));
-	ZEPHIR_CALL_FUNCTION(&_2, "array_map", NULL, 8, &_1, &_0);
+	zephir_create_closure_ex(&_1, NULL, stub_1__closure_ce, SL("__invoke"));
+	ZEPHIR_CALL_FUNCTION(&_2, "array_map", NULL, 9, &_1, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_2);
 }
@@ -184,7 +184,7 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, issue733BuiltInJoinSpecialChars)
 	ZVAL_STRING(&_4, "#[-\\[\\]:\\\\^/]#");
 	ZEPHIR_INIT_VAR(&_5);
 	ZVAL_STRING(&_5, "\\\\$0");
-	ZEPHIR_CALL_FUNCTION(&_6, "preg_replace", &_7, 9, &_4, &_5, b);
+	ZEPHIR_CALL_FUNCTION(&_6, "preg_replace", &_7, 10, &_4, &_5, b);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(b, &_6);
 	ZEPHIR_INIT_VAR(&_8);
@@ -195,7 +195,7 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, issue733BuiltInJoinSpecialChars)
 	}
 	ZEPHIR_INIT_NVAR(&_4);
 	ZVAL_STRING(&_4, "");
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace", &_7, 9, &_8, &_4, &a_zv);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace", &_7, 10, &_8, &_4, &a_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -255,7 +255,7 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, issue733ReversedOnVar)
 	zephir_fetch_params(1, 1, 0, &input);
 	ZEPHIR_INIT_VAR(&_0);
 	if (Z_TYPE_P(input) == IS_ARRAY) {
-		ZEPHIR_CALL_FUNCTION(&_1, "array_reverse", NULL, 7, input);
+		ZEPHIR_CALL_FUNCTION(&_1, "array_reverse", NULL, 8, input);
 		zephir_check_call_status();
 		ZEPHIR_CPY_WRT(&_0, &_1);
 	} else {

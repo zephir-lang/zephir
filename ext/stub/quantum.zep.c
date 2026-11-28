@@ -135,7 +135,7 @@ PHP_METHOD(Stub_Quantum, harmos)
 	ZVAL_STRING(&_0, "harmos.txt");
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "w");
-	ZEPHIR_CALL_FUNCTION(&fp, "fopen", NULL, 32, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&fp, "fopen", NULL, 33, &_0, &_1);
 	zephir_check_call_status();
 	if (!(zephir_is_true(&fp))) {
 		RETURN_MM_LONG(1);
@@ -146,7 +146,7 @@ PHP_METHOD(Stub_Quantum, harmos)
 		}
 		ZVAL_DOUBLE(&_2$$4, (k0 * x));
 		ZVAL_DOUBLE(&_3$$4, ((x * x) * 2.0));
-		ZEPHIR_CALL_FUNCTION(&_4$$4, "exp", &_5, 3, &_3$$4);
+		ZEPHIR_CALL_FUNCTION(&_4$$4, "exp", &_5, 4, &_3$$4);
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(&_6$$4);
 		zephir_div_double_zval(&_6$$4, sin((k0 * x)), &_4$$4);
@@ -157,7 +157,7 @@ PHP_METHOD(Stub_Quantum, harmos)
 		item_psi = zephir_get_numberval(&_6$$4);
 		ZVAL_DOUBLE(&_3$$4, (k0 * x));
 		ZVAL_DOUBLE(&_7$$4, ((x * x) * 2.0));
-		ZEPHIR_CALL_FUNCTION(&_4$$4, "exp", &_5, 3, &_7$$4);
+		ZEPHIR_CALL_FUNCTION(&_4$$4, "exp", &_5, 4, &_7$$4);
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(&_8$$4);
 		zephir_div_double_zval(&_8$$4, cos((k0 * x)), &_4$$4);

@@ -96,6 +96,7 @@ PHP_METHOD(Stub_McallDynamic, testCallAnonymousFunctionWithContext)
 	zval result, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&_0);
@@ -105,7 +106,7 @@ PHP_METHOD(Stub_McallDynamic, testCallAnonymousFunctionWithContext)
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_closure_ex(&_0, NULL, stub_77__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&_0, this_ptr, stub_78__closure_ce, SL("__invoke"));
 	ZEPHIR_CALL_CE_STATIC_CACHED(&result, stub_mcall_caller_ce, "start", &_zephir_call_cache[0], &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&result);

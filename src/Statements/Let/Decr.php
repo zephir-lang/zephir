@@ -64,7 +64,8 @@ class Decr
             case Types::T_DOUBLE:
             case Types::T_CHAR:
             case Types::T_UCHAR:
-                $compilationContext->codePrinter->output($variable . $this->operator . ';');
+                // The C name: a local declared in a nested block is `x$$N`; see #2772.
+                $compilationContext->codePrinter->output($symbolVariable->getName() . $this->operator . ';');
                 break;
 
             case Types::T_VARIABLE:

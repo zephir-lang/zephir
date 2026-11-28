@@ -1,0 +1,111 @@
+--TEST--
+Issue #2853: a private constructor named literally throws "Cannot call private X::__construct()" when reached, as in PHP
+--FILE--
+namespace Stub;
+
+class Issue2853Base
+{
+	private function __construct()
+	{
+		echo "Base ctor on " . get_class(this) . "\n";
+	}
+
+	public static function create()
+	{
+		return new Issue2853Base();
+	}
+
+	public function again()
+	{
+		self::__construct();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2853 extends Issue2853Base
+{
+	public function __construct()
+	{
+		parent::__construct();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2853Middle extends Issue2853Base
+{
+}
+--FILE--
+namespace Stub;
+
+class Issue2853Deep extends Issue2853Middle
+{
+	public function __construct()
+	{
+		parent::__construct();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2853Prot
+{
+	protected function __construct(string label)
+	{
+		echo "Prot ctor " . label . " on " . get_class(this) . "\n";
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2853ProtChild extends Issue2853Prot
+{
+	public function __construct()
+	{
+		parent::__construct(label: "named");
+	}
+}
+--USAGE--
+/**
+ * A constructor named literally skips the visibility check. A private one
+ * throws "Cannot call private X::__construct()", naming the class written in
+ * the call, unless $this is an instance of exactly the class declaring it.
+ * Zephir refused to compile the call.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2853
+ */
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ': ', is_object($result) ? get_class($result) : var_export($result, true), "\n";
+    } catch (\Throwable $e) {
+        echo $label, ': ', get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+t('parent::__construct()', fn() => new \Stub\Issue2853());
+t('parent::__construct() inherited', fn() => new \Stub\Issue2853Deep());
+t('protected parent::__construct()', fn() => new \Stub\Issue2853ProtChild());
+
+$base = \Stub\Issue2853Base::create();
+
+t('self::__construct() on the declaring class', fn() => $base->again());
+
+try {
+    $child = new \Stub\Issue2853();
+} catch (\Throwable $e) {
+    $child = (new \ReflectionClass(\Stub\Issue2853::class))->newInstanceWithoutConstructor();
+}
+
+t('self::__construct() on a subclass', fn() => $child->again());
+--EXPECT--
+parent::__construct(): Error: Cannot call private Stub\Issue2853Base::__construct()
+parent::__construct() inherited: Error: Cannot call private Stub\Issue2853Middle::__construct()
+Prot ctor named on Stub\Issue2853ProtChild
+protected parent::__construct(): Stub\Issue2853ProtChild
+Base ctor on Stub\Issue2853Base
+Base ctor on Stub\Issue2853Base
+self::__construct() on the declaring class: NULL
+self::__construct() on a subclass: Error: Cannot call private Stub\Issue2853Base::__construct()

@@ -1,0 +1,370 @@
+--TEST--
+Issue #2854: a non-static method or constructor named through a class runs on $this, as in PHP
+--FILE--
+namespace Stub;
+
+class Issue2854Grand
+{
+	public function __construct()
+	{
+		echo "Grand ctor on " . get_class(this) . "\n";
+	}
+
+	public function m(string x = "-") -> string
+	{
+		return "Grand::m on " . get_class(this) . " static=" . get_called_class() . " x=" . x;
+	}
+
+	public function show()
+	{
+		echo "Grand::show on " . get_class(this) . "\n";
+	}
+
+	public static function sm() -> string
+	{
+		return "Grand::sm static=" . get_called_class();
+	}
+
+	protected function prot() -> string
+	{
+		return "Grand::prot on " . get_class(this);
+	}
+
+	/**
+	 * One call site, reached with $this an instance of Issue2854Par or not.
+	 */
+	public function viaPar() -> string
+	{
+		return Issue2854Par::m();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2854Par extends Issue2854Grand
+{
+	public function __construct()
+	{
+		echo "Par ctor\n";
+	}
+
+	public function m(string x = "-") -> string
+	{
+		return "Par::m on " . get_class(this);
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2854 extends Issue2854Par
+{
+	public function __construct()
+	{
+		Issue2854Grand::__construct();
+	}
+
+	public function statement()
+	{
+		Issue2854Grand::show();
+	}
+
+	public function assign() -> string
+	{
+		var result;
+
+		let result = Issue2854Grand::m();
+
+		return result;
+	}
+
+	public function returned() -> string
+	{
+		return Issue2854Grand::m();
+	}
+
+	public function named() -> string
+	{
+		return Issue2854Grand::m(x: "named");
+	}
+
+	public function staticMethod() -> string
+	{
+		return Issue2854Grand::sm();
+	}
+
+	public function protectedMethod() -> string
+	{
+		return Issue2854Grand::prot();
+	}
+
+	public function own() -> string
+	{
+		return "own on " . get_class(this);
+	}
+
+	public function viaOwn() -> string
+	{
+		return Issue2854::own();
+	}
+
+	public static function fromStatic() -> string
+	{
+		return Issue2854Grand::m();
+	}
+
+	public static function ownFromStatic() -> string
+	{
+		return Issue2854::own();
+	}
+
+	public function byClass(string cls) -> string
+	{
+		return {cls}::m();
+	}
+
+	public function byName(string name) -> string
+	{
+		return Issue2854Grand::{name}();
+	}
+
+	public function inClosure() -> string
+	{
+		var suffix, f;
+
+		let suffix = "!";
+		let f = function () use (suffix) {
+			return Issue2854Grand::m() . suffix;
+		};
+
+		return {f}();
+	}
+
+	public function inClosureByName(string name) -> string
+	{
+		var suffix, f;
+
+		let suffix = "!";
+		let f = function () use (suffix, name) {
+			return Issue2854Grand::{name}() . suffix;
+		};
+
+		return {f}();
+	}
+}
+--FILE--
+namespace Stub;
+
+function issue2854Function()
+{
+	return Issue2854Grand::m();
+}
+
+function issue2854FunctionConstructor()
+{
+	Issue2854Grand::__construct();
+}
+
+class Issue2854Unrelated
+{
+	public function m() -> string
+	{
+		return "Unrelated::m";
+	}
+
+	public function call() -> string
+	{
+		return Issue2854Grand::m();
+	}
+
+	public function construct()
+	{
+		Issue2854Grand::__construct();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2854Exception extends \Exception
+{
+	public function __construct(string message)
+	{
+		\Exception::__construct("wrapped: " . message);
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2854Lsb
+{
+	public static function make() -> string
+	{
+		return Issue2854Lsb::name();
+	}
+
+	public static function makeSelf() -> string
+	{
+		return self::name();
+	}
+
+	public function inst() -> string
+	{
+		return Issue2854Lsb::name();
+	}
+
+	public static function name() -> string
+	{
+		return get_called_class();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2854LsbChild extends Issue2854Lsb
+{
+}
+--FILE--
+namespace Stub;
+
+interface Issue2854Iface
+{
+	public function __construct();
+}
+--FILE--
+namespace Stub;
+
+class Issue2854Impl implements Issue2854Iface
+{
+	public function __construct()
+	{
+	}
+
+	public function viaIface()
+	{
+		return Issue2854Iface::__construct();
+	}
+
+	public static function viaIfaceStatically()
+	{
+		return Issue2854Iface::__construct();
+	}
+}
+--FILE--
+namespace Stub;
+
+abstract class Issue2854Abstract
+{
+	abstract public function __construct();
+}
+--FILE--
+namespace Stub;
+
+class Issue2854AbstractImpl extends Issue2854Abstract
+{
+	public function __construct()
+	{
+	}
+
+	public function viaAbstract()
+	{
+		return Issue2854Abstract::__construct();
+	}
+}
+--USAGE--
+/**
+ * PHP runs a non-static method named through a class, or a constructor named
+ * that way, on $this when $this is an instance of that class, and throws
+ * "Non-static method X::m() cannot be called statically" otherwise. Zephir
+ * refused to compile the call, and `{cls}::m()` threw even with $this at hand.
+ *
+ * A static method named through the class's own name does not pass the called
+ * class on, unlike `self::`.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2854
+ */
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ': ', is_object($result) ? get_class($result) : (is_string($result) ? $result : var_export($result, true)), "\n";
+    } catch (\Throwable $e) {
+        echo $label, ': ', get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+$o = new \Stub\Issue2854();
+
+t('Grand::__construct()', fn() => new \Stub\Issue2854());
+t('statement', fn() => $o->statement());
+t('let', fn() => $o->assign());
+t('return', fn() => $o->returned());
+t('named', fn() => $o->named());
+t('static method', fn() => $o->staticMethod());
+t('protected', fn() => $o->protectedMethod());
+t('own name', fn() => $o->viaOwn());
+t('from a static method', fn() => \Stub\Issue2854::fromStatic());
+t('own name from a static method', fn() => \Stub\Issue2854::ownFromStatic());
+t('{cls}::m() ancestor', fn() => $o->byClass(\Stub\Issue2854Grand::class));
+t('{cls}::m() unrelated', fn() => $o->byClass(\Stub\Issue2854Unrelated::class));
+t('Grand::{"m"}()', fn() => $o->byName('m'));
+t('Grand::{"sm"}()', fn() => $o->byName('sm'));
+t('closure', fn() => $o->inClosure());
+t('closure, name in a variable', fn() => $o->inClosureByName('m'));
+t('unrelated', fn() => (new \Stub\Issue2854Unrelated())->call());
+t('unrelated constructor', fn() => (new \Stub\Issue2854Unrelated())->construct());
+t('\Exception::__construct()', fn() => (new \Stub\Issue2854Exception('boom'))->getMessage());
+
+$g = new \Stub\Issue2854Grand();
+
+for ($i = 0; $i < 2; $i++) {
+    t('Par::m() on Grand', fn() => $g->viaPar());
+    t('Par::m() on Issue2854', fn() => $o->viaPar());
+}
+
+t('Lsb::name() from LsbChild::make()', fn() => \Stub\Issue2854LsbChild::make());
+t('self::name() from LsbChild::makeSelf()', fn() => \Stub\Issue2854LsbChild::makeSelf());
+t('Lsb::name() on an LsbChild', fn() => (new \Stub\Issue2854LsbChild())->inst());
+
+// An abstract constructor named literally runs its empty body, as with parent::.
+t('Iface::__construct()', fn() => (new \Stub\Issue2854Impl())->viaIface());
+t('Iface::__construct() from a static method', fn() => \Stub\Issue2854Impl::viaIfaceStatically());
+t('Abstract::__construct()', fn() => (new \Stub\Issue2854AbstractImpl())->viaAbstract());
+
+// A function has no $this to run either on.
+t('from a function', fn() => \Stub\issue2854Function());
+t('constructor from a function', fn() => \Stub\issue2854FunctionConstructor());
+--EXPECT--
+Grand ctor on Stub\Issue2854
+Grand ctor on Stub\Issue2854
+Grand::__construct(): Stub\Issue2854
+Grand::show on Stub\Issue2854
+statement: NULL
+let: Grand::m on Stub\Issue2854 static=Stub\Issue2854 x=-
+return: Grand::m on Stub\Issue2854 static=Stub\Issue2854 x=-
+named: Grand::m on Stub\Issue2854 static=Stub\Issue2854 x=named
+static method: Grand::sm static=Stub\Issue2854Grand
+protected: Grand::prot on Stub\Issue2854
+own name: own on Stub\Issue2854
+from a static method: Error: Non-static method Stub\Issue2854Grand::m() cannot be called statically
+own name from a static method: Error: Non-static method Stub\Issue2854::own() cannot be called statically
+{cls}::m() ancestor: Grand::m on Stub\Issue2854 static=Stub\Issue2854 x=-
+{cls}::m() unrelated: Error: Non-static method Stub\Issue2854Unrelated::m() cannot be called statically
+Grand::{"m"}(): Grand::m on Stub\Issue2854 static=Stub\Issue2854 x=-
+Grand::{"sm"}(): Grand::sm static=Stub\Issue2854Grand
+closure: Grand::m on Stub\Issue2854 static=Stub\Issue2854 x=-!
+closure, name in a variable: Grand::m on Stub\Issue2854 static=Stub\Issue2854 x=-!
+unrelated: Error: Non-static method Stub\Issue2854Grand::m() cannot be called statically
+unrelated constructor: Error: Non-static method Stub\Issue2854Grand::__construct() cannot be called statically
+\Exception::__construct(): wrapped: boom
+Grand ctor on Stub\Issue2854Grand
+Par::m() on Grand: Error: Non-static method Stub\Issue2854Par::m() cannot be called statically
+Par::m() on Issue2854: Par::m on Stub\Issue2854
+Par::m() on Grand: Error: Non-static method Stub\Issue2854Par::m() cannot be called statically
+Par::m() on Issue2854: Par::m on Stub\Issue2854
+Lsb::name() from LsbChild::make(): Stub\Issue2854Lsb
+self::name() from LsbChild::makeSelf(): Stub\Issue2854LsbChild
+Lsb::name() on an LsbChild: Stub\Issue2854Lsb
+Iface::__construct(): NULL
+Iface::__construct() from a static method: Error: Non-static method Stub\Issue2854Iface::__construct() cannot be called statically
+Abstract::__construct(): NULL
+from a function: Error: Non-static method Stub\Issue2854Grand::m() cannot be called statically
+constructor from a function: Error: Non-static method Stub\Issue2854Grand::__construct() cannot be called statically

@@ -15,6 +15,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/oo/extend/exception.zep.c
 	stub/issue2165/issueextendinterface.zep.c
 	stub/issue2635/outer.zep.c
+	stub/issue2784base.zep.c
 	stub/issue2824pair.zep.c
 	stub/oo/extend/db/exception.zep.c
 	stub/scallparent.zep.c
@@ -32,6 +33,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2537.zep.c
 	stub/issue2635/base.zep.c
 	stub/issue2723base.zep.c
+	stub/issue2799.zep.c
 	stub/issue2831base.zep.c
 	stub/methodinterface.zep.c
 	stub/oo/abstractstatic.zep.c
@@ -195,7 +197,14 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2761/accessors.zep.c
 	stub/issue2761/collaborator.zep.c
 	stub/issue2774.zep.c
+	stub/issue2784.zep.c
+	stub/issue2784child.zep.c
+	stub/issue2784magic.zep.c
 	stub/issue2790.zep.c
+	stub/issue2799arrayobject.zep.c
+	stub/issue2799child.zep.c
+	stub/issue2799exception.zep.c
+	stub/issue2799multiline.zep.c
 	stub/issue2805.zep.c
 	stub/issue2805request.zep.c
 	stub/issue2808.zep.c
@@ -213,6 +222,9 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2832base.zep.c
 	stub/issue2839.zep.c
 	stub/issue2839pair.zep.c
+	stub/issue2869.zep.c
+	stub/issue2869connection.zep.c
+	stub/issue2869directory.zep.c
 	stub/issue663.zep.c
 	stub/issue760.zep.c
 	stub/issue808.zep.c
@@ -429,7 +441,8 @@ if test "$PHP_STUB" = "yes"; then
 	stub/76__closure.zep.c
 	stub/77__closure.zep.c
 	stub/78__closure.zep.c
-	stub/79__closure.zep.c "
+	stub/79__closure.zep.c
+	stub/80__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
 	for dir in "stub stub/args/single stub/attributes stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/issue2635 stub/issue2761 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/traits stub/typehinting stub/types"; do

@@ -187,6 +187,25 @@ jobs:
         # fast on its own (~hundreds of fixtures, no Xdebug instrumentation).
         run: php vendor/bin/phpunit --no-coverage tests/Zephir/Parser
 
+      - name: Line coverage only (Windows)
+        # Xdebug 3.5, the last line that supports PHP 8.0 and 8.1, reads past
+        # the end of a builtin function whenever branch/path coverage is on:
+        # xdebug_add_stack_frame() hands &execute_data->func->op_array of an
+        # internal call to a check that reads op_array->reserved[], which lies
+        # beyond the smaller zend_internal_function. On Windows that read hits
+        # an uncommitted page often enough to kill a PHP process with
+        # 0xC0000005, which PHPUnit reports for an isolated test as "Test was
+        # run in child process and ended unexpectedly". Line coverage never
+        # makes that read. Fixed upstream only after 8.1 support was dropped:
+        # https://github.com/xdebug/xdebug/commit/c3dafbb349
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          (Get-Content phpunit.xml.dist) -replace 'pathCoverage="true"', 'pathCoverage="false"' | Set-Content phpunit.xml.dist
+          if (-not (Select-String -Path phpunit.xml.dist -Pattern 'pathCoverage="false"' -Quiet)) {
+            throw 'phpunit.xml.dist no longer sets pathCoverage="true"; update this step'
+          }
+
       - name: Unit Tests (Zephir)
         if: always()
         # Force the pure-PHP parser so the compiler suites cover src/Parser/Php

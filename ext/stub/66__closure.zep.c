@@ -12,7 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/fcall.h"
+#include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
 
@@ -26,22 +26,17 @@ ZEPHIR_INIT_CLASS(stub_66__closure)
 
 PHP_METHOD(stub_66__closure, __invoke)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *carry, carry_sub, *row, row_sub;
+	zval *x, x_sub;
 
-	ZVAL_UNDEF(&carry_sub);
-	ZVAL_UNDEF(&row_sub);
-	ZEND_TLS zephir_method_cache _zephir_call_cache[1];
-	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(carry)
-		Z_PARAM_ZVAL(row)
+	ZVAL_UNDEF(&x_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(x)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &carry, &row);
-	ZEPHIR_RETURN_CALL_SELF_THIS_CACHED(getThis(), "implodeRow", &_zephir_call_cache[0], carry, row);
-	zephir_check_call_status();
-	RETURN_MM();
+	zephir_fetch_params_without_memory_grow(1, 0, &x);
+	mul_function(return_value, x, x);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	return;
 }
 

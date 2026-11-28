@@ -13,7 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/operators.h"
 #include "kernel/object.h"
 
 
@@ -26,24 +25,13 @@ ZEPHIR_INIT_CLASS(stub_6__closure)
 
 PHP_METHOD(stub_6__closure, __invoke)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *x, x_sub, _0;
+	zval *param1, param1_sub;
 
-	ZVAL_UNDEF(&x_sub);
-	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&param1_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(x)
+		Z_PARAM_ZVAL(param1)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &x);
-	ZEPHIR_INIT_VAR(&_0);
-	ZVAL_LONG(&_0, 100);
-	zephir_add_function(return_value, x, &_0);
-	if (UNEXPECTED(EG(exception))) {
-		ZEPHIR_MM_RESTORE();
-		return;
-	}
-	RETURN_MM();
+	zephir_fetch_params_without_memory_grow(1, 0, &param1);
+	RETURN_NULL();
 }
 

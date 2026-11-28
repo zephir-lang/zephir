@@ -12,7 +12,6 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/concat.h"
 #include "kernel/object.h"
 
 
@@ -25,31 +24,7 @@ ZEPHIR_INIT_CLASS(stub_16__closure)
 
 PHP_METHOD(stub_16__closure, __invoke)
 {
-	zval _0, _1;
-	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_1);
-	static zend_string *_zephir_prop_0 = NULL;
-	static zend_string *_zephir_prop_1 = NULL;
-	if (UNEXPECTED(!_zephir_prop_0)) {
-		_zephir_prop_0 = zend_string_init("_name", 5, 1);
-	}
-	if (UNEXPECTED(!_zephir_prop_1)) {
-		_zephir_prop_1 = zend_string_init("property1873", 12, 1);
-	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 167, PH_NOISY_CC | PH_READONLY);
-	if (UNEXPECTED(EG(exception))) {
-		return;
-	}
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 168, PH_NOISY_CC | PH_READONLY);
-	if (UNEXPECTED(EG(exception))) {
-		return;
-	}
-	ZEPHIR_CONCAT_VSV(return_value, &_0, ":", &_1);
-	if (UNEXPECTED(EG(exception))) {
-		return;
-	}
-	return;
+	RETURN_MEMBER(getThis(), "_argument");
 }
 

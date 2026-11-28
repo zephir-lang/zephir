@@ -30,8 +30,13 @@ ZEPHIR_INIT_CLASS(Stub_Destructure)
 	ZEPHIR_REGISTER_CLASS(Stub, Destructure, stub, destructure, stub_destructure_method_entry, 0);
 
 	zend_declare_property_long(stub_destructure_ce, SL("calls"), 0, ZEND_ACC_PROTECTED);
-	zend_declare_property_null(stub_destructure_ce, SL("data"), ZEND_ACC_PROTECTED);
-	stub_destructure_ce->create_object = zephir_init_properties_Stub_Destructure;
+	{
+		zval _zc0;
+		array_init_size(&_zc0, 3);
+		add_next_index_long(&_zc0, 7);
+		add_next_index_long(&_zc0, 8);
+		zephir_declare_property_array(stub_destructure_ce, SL("data"), &_zc0, ZEND_ACC_PROTECTED);
+	}
 
 	return SUCCESS;
 }
@@ -703,38 +708,5 @@ PHP_METHOD(Stub_Destructure, fromProperty)
 	zephir_array_fast_append(return_value, &a);
 	zephir_array_fast_append(return_value, &b);
 	RETURN_MM();
-}
-
-zend_object *zephir_init_properties_Stub_Destructure(zend_class_entry *class_type)
-{
-		zval _1$$3;
-	zval _0, _2$$3;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-		ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_2$$3);
-	ZVAL_UNDEF(&_1$$3);
-	
-
-		ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-		zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	
-	{
-		zval local_this_ptr, *this_ptr = &local_this_ptr;
-		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
-		zephir_read_property_ex(&_0, this_ptr, ZEND_STRL("data"), PH_NOISY_CC | PH_READONLY);
-		if (Z_TYPE_P(&_0) == IS_NULL) {
-			ZEPHIR_INIT_VAR(&_1$$3);
-			zephir_create_array(&_1$$3, 2, 0);
-			ZEPHIR_INIT_VAR(&_2$$3);
-			ZVAL_LONG(&_2$$3, 7);
-			zephir_array_fast_append(&_1$$3, &_2$$3);
-			ZEPHIR_INIT_NVAR(&_2$$3);
-			ZVAL_LONG(&_2$$3, 8);
-			zephir_array_fast_append(&_1$$3, &_2$$3);
-			zephir_update_property_zval_ex(this_ptr, ZEND_STRL("data"), &_1$$3);
-		}
-		ZEPHIR_MM_RESTORE();
-		return Z_OBJ_P(this_ptr);
-	}
 }
 

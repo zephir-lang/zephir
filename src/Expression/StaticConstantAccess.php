@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
+use ReflectionClassConstant;
 use ReflectionException;
 use Zephir\Class\Constant;
 use Zephir\Class\Definition\AbstractDefinition;
@@ -27,6 +28,7 @@ use Zephir\Variable\Variable;
 
 use function gettype;
 use function in_array;
+use function ltrim;
 use function sprintf;
 
 /**
@@ -84,9 +86,16 @@ class StaticConstantAccess
          * A version-shaped engine constant is emitted as its C macro, before
          * the existence check: the PHP running Zephir may not have it at all
          * (`Attribute::TARGET_CONSTANT` before 8.5). See #2738.
+         *
+         * `static::` names the called class, which a PHP subclass may give a
+         * constant of its own, so it is always read at run time.
          */
-        $native = $this->nativeOf($className, $classDefinition, $constant, $compilationContext);
+        $native = 'static' === $className
+            ? null
+            : $this->nativeOf($className, $classDefinition, $constant, $compilationContext);
         if (null !== $native) {
+            EngineConstants::addHeaders($native['headers'], $compilationContext);
+
             return new CompiledExpression('int', $native['c'], $expression);
         }
 
@@ -113,10 +122,22 @@ class StaticConstantAccess
          * value. A declaration default (class constant, property, parameter)
          * is always folded, since it is emitted where no run time read can go.
          *
+         * A constant of a class this project does not compile (a PHP class, or
+         * one of another extension) is not folded either: its value is the one
+         * of the PHP running the extension, which may differ from the PHP
+         * running Zephir (a library version, another build). See #2869.
+         *
          * @see https://github.com/zephir-lang/zephir/issues/2711
          */
         $folding = $compilationContext->config->get('static-constant-class-folding', 'optimizations');
-        if (!$this->alwaysFold && ('static' === $className || !$folding)) {
+        if (
+            !$this->alwaysFold
+            && (
+                'static' === $className
+                || !$folding
+                || null !== $this->foreignDeclaringClass($classDefinition, $constant)
+            )
+        ) {
             return $this->compileRuntimeRead($className, $classDefinition, $constant, $expression, $compilationContext);
         }
 
@@ -130,6 +151,8 @@ class StaticConstantAccess
             $constantDefinition instanceof Constant &&
             in_array($constantDefinition->getValueType(), ['array', 'empty-array'], true)
         ) {
+            EngineConstants::addNodeHeaders($constantDefinition->getValue(), $compilationContext);
+
             $expression = new Expression($constantDefinition->getValue());
             $expression->setExpectReturn($this->expecting, $this->expectingVariable);
             $expression->setReadOnly($this->readOnly);
@@ -279,17 +302,20 @@ class StaticConstantAccess
 
     /**
      * The C and fully-qualified PHP spellings of a constant whose value depends
-     * on the PHP version that compiles the C, or null for any other constant.
+     * on the PHP version that compiles the C, with the headers the C needs, or
+     * null for any other constant.
      *
-     * That is an `Attribute::*` flag, or a Zephir class constant initialized
-     * from one, so `self::FLAGS` keeps the macro of what it was declared as.
+     * That is a constant with an engine macro (see {@see EngineConstants}), or
+     * a Zephir class constant initialized from one, so `self::FLAGS` keeps the
+     * macro of what it was declared as.
      *
-     * @return array{c: string, qualified: string}|null
+     * @return array{c: string, qualified: string, headers: list<string>}|null
      *
      * @throws Exception
      * @throws ReflectionException
      *
      * @see https://github.com/zephir-lang/zephir/issues/2738
+     * @see https://github.com/zephir-lang/zephir/issues/2869
      */
     public function resolveNative(array $expression, CompilationContext $compilationContext): ?array
     {
@@ -322,7 +348,7 @@ class StaticConstantAccess
     }
 
     /**
-     * @return array{c: string, qualified: string}|null
+     * @return array{c: string, qualified: string, headers: list<string>}|null
      *
      * @throws Exception
      * @throws ReflectionException
@@ -333,9 +359,16 @@ class StaticConstantAccess
         string $constant,
         CompilationContext $compilationContext
     ): ?array {
-        $macro = AttributeConstants::macro($className, $constant);
-        if (null !== $macro) {
-            return ['c' => $macro, 'qualified' => '\\Attribute::' . $constant];
+        /**
+         * The written name first: the PHP running Zephir may not have the
+         * constant at all. Then the class that declares it, which a subclass
+         * name (`RecursiveDirectoryIterator::FOLLOW_SYMLINKS`) or `self::` and
+         * `parent::` in a Zephir subclass read it through.
+         */
+        $engine = EngineConstants::lookup($className, $constant)
+            ?? EngineConstants::lookup($this->foreignDeclaringClass($classDefinition, $constant), $constant);
+        if (null !== $engine) {
+            return $engine;
         }
 
         if (!$classDefinition->hasConstant($constant)) {
@@ -357,7 +390,38 @@ class StaticConstantAccess
         return [
             'c'         => '(' . $value['value'] . ')',
             'qualified' => '\\' . $classDefinition->getCompleteName() . '::' . $constant,
+            'headers'   => $value['native']['headers'] ?? [],
         ];
+    }
+
+    /**
+     * The PHP name of the class that declares $constant, when that is not a
+     * class of this project: a PHP class, or one of another extension. Null
+     * when this project declares it, or when no class has it.
+     *
+     * @throws ReflectionException
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2869
+     */
+    private function foreignDeclaringClass(AbstractDefinition $classDefinition, string $constant): ?string
+    {
+        if (!$classDefinition instanceof Definition || !$classDefinition->hasConstant($constant)) {
+            return null;
+        }
+
+        $owner = $classDefinition->getConstant($constant)?->getDefinition();
+        if (!$owner instanceof Definition || !$owner->isBundled()) {
+            return null;
+        }
+
+        /**
+         * A reflected class lists the constants it inherits as its own, and
+         * PHP knows the class that declares one: `FilesystemIterator` for
+         * `RecursiveDirectoryIterator::FOLLOW_SYMLINKS`.
+         */
+        return (new ReflectionClassConstant(ltrim($owner->getCompleteName(), '\\'), $constant))
+            ->getDeclaringClass()
+            ->getName();
     }
 
     /**
@@ -432,8 +496,8 @@ class StaticConstantAccess
     }
 
     /**
-     * Reads the constant when the code runs, for `static::` and when folding
-     * is off.
+     * Reads the constant when the code runs, for `static::`, for a constant of
+     * a class this project does not compile, and when folding is off.
      *
      * @throws Exception
      * @throws ReflectionException
@@ -462,14 +526,19 @@ class StaticConstantAccess
 
         /**
          * A PHP class (`\PDO`, or a Zephir class's internal parent) has no
-         * Zephir `*_ce` symbol, so it is looked up the way `new` and
-         * `instanceof` look it up.
+         * Zephir `*_ce` symbol, so it is fetched by name the way the VM's
+         * ZEND_FETCH_CLASS_CONSTANT fetches it: autoloaded, and a class that
+         * is not loaded throws `Class "X" not found`, which the exception
+         * check below hands on. See #2869.
          */
         $classEntry = match (true) {
             'static' === $className => $compilationContext->lateStaticClassEntry(),
             $classDefinition instanceof Definition && !$classDefinition->isBundled()
                 => $classDefinition->getClassEntry($compilationContext),
-            default => (new ClassEntry('\\' . ltrim($classDefinition->getCompleteName(), '\\'), $compilationContext))->get(),
+            default => sprintf(
+                'zephir_fetch_class_str_ex(SL("%s"), ZEND_FETCH_CLASS_DEFAULT | ZEND_FETCH_CLASS_EXCEPTION)',
+                ClassEntry::escape(ltrim('parent' === $className ? $classDefinition->getCompleteName() : $className, '\\'))
+            ),
         };
 
         $symbolVariable->setDynamicTypes('undefined');

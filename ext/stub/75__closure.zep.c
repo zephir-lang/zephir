@@ -12,7 +12,6 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/concat.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
 
@@ -21,24 +20,23 @@ ZEPHIR_INIT_CLASS(stub_75__closure)
 {
 	ZEPHIR_REGISTER_CLASS(stub, 75__closure, stub, 75__closure, stub_75__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
+	zend_declare_property_null(stub_75__closure_ce, SL("i"), ZEND_ACC_PUBLIC);
 	return SUCCESS;
 }
 
 PHP_METHOD(stub_75__closure, __invoke)
 {
-	zval *a, a_sub, *b, b_sub;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval i;
+	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
-	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(a)
-		Z_PARAM_ZVAL(b)
-	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
-	ZEPHIR_CONCAT_VSV(return_value, a, ",", b);
-	if (UNEXPECTED(EG(exception))) {
-		return;
-	}
-	return;
+	ZVAL_UNDEF(&i);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_read_property(&i, this_ptr, SL("i"), PH_NOISY_CC | PH_READONLY);
+
+	ZEPHIR_INIT_NVAR(Z_REFVAL_P(&i));
+	ZVAL_LONG(Z_REFVAL_P(&i), 5);
+	RETURN_MM_STRING("v");
 }
 

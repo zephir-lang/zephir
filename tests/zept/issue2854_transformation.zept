@@ -1,0 +1,102 @@
+--TEST--
+Issue #2854: with internal-call-transformation on, a call named through a class gives what PHP's call gives
+--CONFIG--
+{"optimizations": {"internal-call-transformation": true}}
+--FILE--
+namespace Stub;
+
+class Issue2854TLsb
+{
+	public static function make() -> string
+	{
+		return Issue2854TLsb::name();
+	}
+
+	public function inst() -> string
+	{
+		return Issue2854TLsb::name();
+	}
+
+	public static function name() -> string
+	{
+		return get_called_class();
+	}
+
+	public function m() -> string
+	{
+		return "TLsb::m on " . get_class(this) . " static=" . get_called_class();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2854TLsbChild extends Issue2854TLsb
+{
+	public function viaAncestor() -> string
+	{
+		return Issue2854TLsb::m();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2854TPriv
+{
+	private function __construct()
+	{
+		echo "TPriv ctor on " . get_class(this) . "\n";
+	}
+
+	public static function create()
+	{
+		return new Issue2854TPriv();
+	}
+
+	public function again()
+	{
+		self::__construct();
+	}
+}
+--FILE--
+namespace Stub;
+
+class Issue2854TPrivChild extends Issue2854TPriv
+{
+	public function __construct()
+	{
+	}
+}
+--USAGE--
+/**
+ * With internal-call-transformation on, a call the compiler resolves can run
+ * the method's C copy. It must give what PHP's call gives: a static method
+ * named through its own class gets that class as the called class, and a
+ * private constructor named literally is refused unless $this is an instance
+ * of exactly its class.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2854
+ * @see https://github.com/zephir-lang/zephir/issues/2853
+ */
+function t(string $label, callable $fn): void
+{
+    try {
+        $result = $fn();
+        echo $label, ': ', is_object($result) ? get_class($result) : (is_string($result) ? $result : var_export($result, true)), "\n";
+    } catch (\Throwable $e) {
+        echo $label, ': ', get_class($e), ': ', $e->getMessage(), "\n";
+    }
+}
+
+t('TLsb::name() from TLsbChild::make()', fn() => \Stub\Issue2854TLsbChild::make());
+t('TLsb::name() on a TLsbChild', fn() => (new \Stub\Issue2854TLsbChild())->inst());
+t('TLsb::m() on a TLsbChild', fn() => (new \Stub\Issue2854TLsbChild())->viaAncestor());
+t('self::__construct() on the declaring class', fn() => \Stub\Issue2854TPriv::create()->again());
+t('self::__construct() on a subclass', fn() => (new \Stub\Issue2854TPrivChild())->again());
+--EXPECT--
+TLsb::name() from TLsbChild::make(): Stub\Issue2854TLsb
+TLsb::name() on a TLsbChild: Stub\Issue2854TLsb
+TLsb::m() on a TLsbChild: TLsb::m on Stub\Issue2854TLsbChild static=Stub\Issue2854TLsbChild
+TPriv ctor on Stub\Issue2854TPriv
+TPriv ctor on Stub\Issue2854TPriv
+self::__construct() on the declaring class: NULL
+self::__construct() on a subclass: Error: Cannot call private Stub\Issue2854TPriv::__construct()
