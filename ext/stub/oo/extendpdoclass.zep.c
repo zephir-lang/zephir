@@ -15,8 +15,8 @@
 #include "ext/pdo/php_pdo_driver.h"
 #include "kernel/memory.h"
 #include "kernel/array.h"
-#include "kernel/fcall.h"
 #include "kernel/object.h"
+#include "kernel/fcall.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Oo_ExtendPdoClass)
@@ -80,7 +80,13 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "Stub\\PdoStatement");
 	zephir_array_fast_append(&_0, &_1);
-	zephir_array_update_long(attrs, 13, &_0, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+	ZEPHIR_INIT_NVAR(&_1);
+	zephir_get_class_constant(&_1, zephir_fetch_class_str_ex(SL("PDO"), ZEND_FETCH_CLASS_DEFAULT | ZEND_FETCH_CLASS_EXCEPTION), SL("ATTR_STATEMENT_CLASS"));
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	zephir_array_update_zval(attrs, &_1, &_0, PH_COPY | PH_SEPARATE);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;

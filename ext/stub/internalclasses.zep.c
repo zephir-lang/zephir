@@ -43,6 +43,10 @@ PHP_METHOD(Stub_InternalClasses, testStaticCall)
 PHP_METHOD(Stub_InternalClasses, testStaticPropertyFetch)
 {
 
-	RETURN_LONG(303);
+	zephir_get_class_constant(return_value, zephir_fetch_class_str_ex(SL("Phalcon\\Mvc\\Model\\Query"), ZEND_FETCH_CLASS_DEFAULT | ZEND_FETCH_CLASS_EXCEPTION), SL("TYPE_DELETE"));
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
+	return;
 }
 

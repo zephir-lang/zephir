@@ -70,6 +70,15 @@ class Constant
     }
 
     /**
+     * The class that declares the constant, which is a reflected PHP class
+     * for one Zephir did not compile.
+     */
+    public function getDefinition(): ?Definition
+    {
+        return $this->definition;
+    }
+
+    /**
      * @return Attribute[]
      */
     public function getAttributes(): array

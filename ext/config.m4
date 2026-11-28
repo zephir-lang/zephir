@@ -222,6 +222,9 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2832base.zep.c
 	stub/issue2839.zep.c
 	stub/issue2839pair.zep.c
+	stub/issue2869.zep.c
+	stub/issue2869connection.zep.c
+	stub/issue2869directory.zep.c
 	stub/issue663.zep.c
 	stub/issue760.zep.c
 	stub/issue808.zep.c

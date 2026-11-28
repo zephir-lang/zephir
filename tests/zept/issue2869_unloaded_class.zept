@@ -1,0 +1,43 @@
+--TEST--
+Issue #2869: a constant of a class this project does not compile is read when the code runs, and throws like PHP when the class is not loaded
+--FILE--
+namespace Stub;
+
+class Reader
+{
+    public static function props()
+    {
+        return \ArrayObject::ARRAY_AS_PROPS;
+    }
+
+    public static function query()
+    {
+        // Known at generate time only through prototypes/phalcon.php.
+        return \Phalcon\Mvc\Model\Query::TYPE_DELETE;
+    }
+
+    public static function caught()
+    {
+        var e;
+
+        try {
+            return \Phalcon\Mvc\Model\Query::TYPE_DELETE;
+        } catch \Error, e {
+            return "caught: " . e->getMessage();
+        }
+    }
+}
+--USAGE--
+echo \Stub\Reader::props(), "\n";
+
+try {
+    var_dump(\Stub\Reader::query());
+} catch (\Error $e) {
+    echo get_class($e), ": ", $e->getMessage(), "\n";
+}
+
+echo \Stub\Reader::caught(), "\n";
+--EXPECT--
+2
+Error: Class "Phalcon\Mvc\Model\Query" not found
+caught: Class "Phalcon\Mvc\Model\Query" not found
